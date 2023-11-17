@@ -1,5 +1,5 @@
 [submodule "JUCE"]
-	path = JUCE
+	path = third_party/JUCE
 	url = https://github.com/juce-framework/JUCE/
 	branch = develop
 [submodule "modules/melatonin_inspector"]
@@ -10,3 +10,6 @@
 	path = cmake
 	url = git@github.com:sudara/cmake-includes.git
 	branch = main
+[submodule "third_party/chowdsp_utils"]
+	path = third_party/chowdsp_utils
+	url = git@github.com:Chowdhury-DSP/chowdsp_utils.git
