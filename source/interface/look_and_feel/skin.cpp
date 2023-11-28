@@ -24,7 +24,10 @@ namespace {
   const std::string kOverrideNames[Skin::kNumSectionOverrides] = {
     "All",
     "Logo",
-    "Header"
+    "Header",
+        "Overlays",
+        "Popup Browser",
+        "Preset Browser",
   };
 
   const std::string kValueNames[Skin::kNumSkinValueIds] = {
@@ -73,6 +76,17 @@ namespace {
       "Popup Background",
       "Popup Border",
         "Shadow",
+
+      "Overlay Screen",
+      "Widget Center Line",
+      "Widget Primary 1",
+      "Widget Primary 2",
+      "Widget Primary Disabled",
+      "Widget Secondary 1",
+      "Widget Secondary 2",
+      "Widget Secondary Disabled",
+      "Widget Accent 1",
+      "Widget Accent 2",
       "Widget Background",
 
   };

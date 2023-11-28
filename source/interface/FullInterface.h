@@ -7,14 +7,16 @@
 
 #include <juce_opengl/juce_opengl.h>
 #include "open_gl_background.h"
+#include "header_section.h"
 #include "synth_section.h"
+class HeaderSection;
 namespace bitklavier{
     constexpr int kMinWindowWidth = 350;
     constexpr int kMinWindowHeight = 205;
     constexpr int kDefaultWindowWidth = 1400;
     constexpr int kDefaultWindowHeight = 820;
 }
-class FullInterface : public SynthSection, public juce::OpenGLRenderer, DragAndDropContainer
+class FullInterface : public SynthSection, public juce::OpenGLRenderer, public HeaderSection::Listener, DragAndDropContainer
 {
 
 public :
@@ -61,6 +63,8 @@ public :
 
     SynthSection* full_screen_section_;
 private :
+
+    std::unique_ptr<HeaderSection> header_;
     int width_;
     int resized_width_;
     bool animate_;

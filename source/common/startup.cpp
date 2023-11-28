@@ -19,6 +19,12 @@
 
 void Startup::doStartupChecks(MidiManager* midi_manager) {
 
+
+
+
+
+
+
 }
 
 bool Startup::isComputerCompatible() {

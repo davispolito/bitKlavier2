@@ -751,3 +751,5 @@ void SynthSection::animate(bool animate) {
 ////  if (all_buttons_.count(name))
 ////    all_buttons_[name]->setToggleState(value, notification);
 //}
+
+

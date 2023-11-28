@@ -29,7 +29,9 @@ FullInterface::FullInterface() : SynthSection("full_interface"), width_(0), resi
    //default_skin.copyValuesToLookAndFeel(DefaultLookAndFeel::instance());
 
    
-
+   header_ = std::make_unique<HeaderSection>();
+   addSubSection(header_.get());
+   header_->addListener(this);
  
 
   
@@ -79,8 +81,8 @@ void FullInterface::paintBackground(Graphics& g) {
 
    int padding = getPadding();
    int bar_width = 6 * padding;
-//   g.setColour(header_->findColour(Skin::kBody, true));
-//   int y = header_->getBottom();
+   g.setColour(header_->findColour(Skin::kBody, true));
+   int y = header_->getBottom();
 //   int height = keyboard_interface_->getY() - y;
 //   int x1 = extra_mod_section_->getRight() + padding;
 //   g.fillRect(x1, y, bar_width, height);
@@ -109,8 +111,8 @@ void FullInterface::reloadSkin(const Skin& skin) {
 
 
 void FullInterface::repaintChildBackground(SynthSection* child) {
-//   if (!background_image_.isValid() || setting_all_values_)
-//       return;
+   if (!background_image_.isValid())
+       return;
 //
 //   if (child->getParentComponent() == synthesis_interface_.get()) {
 //       repaintSynthesisSection();
@@ -128,8 +130,8 @@ void FullInterface::repaintChildBackground(SynthSection* child) {
 }
 
 void FullInterface::repaintSynthesisSection() {
-//   if (synthesis_interface_ == nullptr || !synthesis_interface_->isVisible() || !background_image_.isValid())
-//       return;
+   if (!background_image_.isValid())
+      return;
 
    background_.lock();
    Graphics g(background_image_);
@@ -178,6 +180,7 @@ void FullInterface::checkShouldReposition(bool resize) {
 
    if (resize && (old_scale != display_scale_ || old_pixel_multiple != pixel_multiple_))
        resized();
+
 }
 
 void FullInterface::resized() {
@@ -216,6 +219,20 @@ void FullInterface::resized() {
    }
 
    setSizeRatio(ratio);
+
+   int padding = getPadding();
+   int voice_padding = findValue(Skin::kLargePadding);
+
+   int main_x = left + 2 * voice_padding;
+   int top_height = kTopHeight * ratio;
+   int section_one_width = 350 * ratio;
+   int section_two_width = section_one_width;
+   int audio_width = section_one_width + section_two_width + padding;
+
+
+   header_->setTabOffset(2 * voice_padding);
+   header_->setBounds(left, top, width, top_height);
+   Rectangle<int> main_bounds(main_x, top + top_height, audio_width, height - top_height);
 
 
 

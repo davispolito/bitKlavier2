@@ -45,9 +45,6 @@ class SynthGuiInterface {
     virtual void updateGuiControl(const std::string& name, bitklavier::mono_float value);
     bitklavier::mono_float getControlValue(const std::string& name);
 
-    void notifyModulationsChanged();
-    void notifyModulationValueChanged(int index);
-
 
 
     void setFocus();

@@ -116,7 +116,7 @@ class SynthBase : public MidiManager::Listener {
     void writeAudio(juce::AudioSampleBuffer* buffer, int channels, int samples, int offset);
     void processMidi(juce::MidiBuffer& buffer, int start_sample = 0, int end_sample = 0);
     void processKeyboardEvents(juce::MidiBuffer& buffer, int num_samples);
-    void processModulationChanges();
+    //void processModulationChanges();
     void updateMemoryOutput(int samples, const bitklavier::poly_float* audio);
 
     std::unique_ptr<bitklavier::SoundEngine> engine_;

@@ -30,6 +30,9 @@ class Skin {
       kNone,
       kLogo,
       kHeader,
+          kOverlay,
+          kPopupBrowser,
+          kPresetBrowser,
           kNumSectionOverrides
     };
 
@@ -86,7 +89,20 @@ class Skin {
         kPopupBackground,
         kPopupBorder,
         kShadow,
+
+        kOverlayScreen,
+
+        kWidgetCenterLine,
+        kWidgetPrimary1,
+        kWidgetPrimary2,
+        kWidgetPrimaryDisabled,
+        kWidgetSecondary1,
+        kWidgetSecondary2,
+        kWidgetSecondaryDisabled,
+        kWidgetAccent1,
+        kWidgetAccent2,
         kWidgetBackground,
+
 
       kFinalColor
     };

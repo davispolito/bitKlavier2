@@ -44,8 +44,11 @@ namespace bitklavier {
       }
       void process(int num_samples);
 
-//      void correctToTime(double seconds) override;
-
+      //void correctToTime(double seconds) override;
+      int getSampleRate()
+      {
+          return kDefaultSampleRate;
+      }
       int getNumPressedNotes();
 
       int getNumActiveVoices();

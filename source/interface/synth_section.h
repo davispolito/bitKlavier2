@@ -202,17 +202,17 @@ class SynthSection : public Component, public Slider::Listener,
     virtual void paintHeadingText(Graphics& g);
     virtual void paintBackground(Graphics& g);
     virtual void repaintBackground();
-//    void showPopupBrowser(SynthSection* owner, Rectangle<int> bounds, std::vector<File> directories,
-//                          String extensions, std::string passthrough_name, std::string additional_folders_name);
+    void showPopupBrowser(SynthSection* owner, Rectangle<int> bounds, std::vector<File> directories,
+                          String extensions, std::string passthrough_name, std::string additional_folders_name);
 //    void updatePopupBrowser(SynthSection* owner);
 //
-//    void showPopupSelector(Component* source, Point<int> position, const PopupItems& options,
-//                           std::function<void(int)> callback, std::function<void()> cancel = { });
+    void showPopupSelector(Component* source, Point<int> position, const PopupItems& options,
+                           std::function<void(int)> callback, std::function<void()> cancel = { });
 //    void showDualPopupSelector(Component* source, Point<int> position, int width,
 //                               const PopupItems& options, std::function<void(int)> callback);
-//    void showPopupDisplay(Component* source, const std::string& text,
-//                          BubbleComponent::BubblePlacement placement, bool primary);
-//    void hidePopupDisplay(bool primary);
+    void showPopupDisplay(Component* source, const std::string& text,
+                          BubbleComponent::BubblePlacement placement, bool primary);
+    void hidePopupDisplay(bool primary);
 
     virtual void loadFile(const File& file) { }
     virtual File getCurrentFile() { return File(); }

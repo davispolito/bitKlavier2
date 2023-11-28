@@ -99,7 +99,13 @@ add_library(SharedCode INTERFACE
         source/interface/FullInterface.h
         source/synthesis/framework/common.h
         source/synthesis/framework/note_handler.h
-        source/synthesis/lookups/lookup_table.h)
+        source/synthesis/lookups/lookup_table.h
+        source/standalone/synth_editor.h
+        source/standalone/synth_editor.h
+        source/standalone/main.cpp
+        source/interface/header_section.h
+        source/interface/header_section.cpp
+        source/interface/popup_browser.cpp)
 
 # C++20, please
 # Use cxx_std_23 for C++23 (as of CMake v 3.20)
@@ -118,11 +124,18 @@ include(Assets)
 
 # MacOS only: Cleans up folder and target organization on Xcode.
 include(XcodePrettify)
-
+include_directories(source/common)
+include_directories(source/interface/look_and_feel)
+include_directories(source/interface)
+include_directories(source/synthesis)
+include_directories(source/synthesis/framework)
+include_directories(source/synthesis/lookups)
+include_directories(source/synthesis/synth_engine)
 # This is where you can set preprocessor definitions for JUCE and your plugin
 target_compile_definitions(SharedCode
     INTERFACE
-
+        #JUCE_USE_CUSTOM_PLUGIN_STANDALONE_ENTRYPOINT=1
+        JUCE_USE_CUSTOM_PLUGIN_STANDALONE_APP=1
     # JUCE_WEB_BROWSER and JUCE_USE_CURL off by default
     JUCE_WEB_BROWSER=0  # If you set this to 1, add `NEEDS_WEB_BROWSER TRUE` to the `juce_add_plugin` call
     JUCE_USE_CURL=0     # If you set this to 1, add `NEEDS_CURL TRUE` to the `juce_add_plugin` call

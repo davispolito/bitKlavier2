@@ -15,22 +15,24 @@
  */
 
 #pragma once
-
-
-#include "../synthesis/framework/common.h"
 #include "juce_audio_basics/juce_audio_basics.h"
-#include <string>
-#include <map>
-#include "juce_events/juce_events.h"
+#include <juce_audio_devices/juce_audio_devices.h>
 #include "juce_core/juce_core.h"
+#include "juce_events/juce_events.h"
+#include "common.h"
+
+#include <map>
+
+#include <string>
 #if !defined(JUCE_AUDIO_DEVICES_H_INCLUDED)
 
-class MidiInput { };
+class MidiInput {};
 
 class MidiInputCallback {
   public:
-    virtual ~MidiInputCallback() { }
+    virtual ~MidiInputCallback() = default;
     virtual void handleIncomingMidiMessage(MidiInput *source, const juce::MidiMessage &midi_message) { }
+    virtual void 	handlePartialSysexMessage (MidiInput *source, const uint *messageData, int numBytesSoFar, double timestamp) { }
 };
 
 class MidiMessageCollector {
@@ -48,7 +50,7 @@ namespace bitklavier {
   class SoundEngine;
   struct ValueDetails;
 } // namespace bitklavier
-
+using namespace juce;
 class MidiManager : public MidiInputCallback {
   public:
     typedef std::map<int, std::map<std::string, const bitklavier::ValueDetails*>> midi_map;
@@ -89,7 +91,7 @@ class MidiManager : public MidiInputCallback {
 
     MidiManager(SynthBase* synth, juce::MidiKeyboardState* keyboard_state,
                 std::map<std::string, juce::String>* gui_state, Listener* listener = nullptr);
-    virtual ~MidiManager();
+    virtual ~MidiManager() override;
 
     void armMidiLearn(std::string name);
     void cancelMidiLearn();
@@ -146,7 +148,7 @@ class MidiManager : public MidiInputCallback {
     SynthBase* synth_;
     bitklavier::SoundEngine* engine_;
     juce::MidiKeyboardState* keyboard_state_;
-    MidiMessageCollector midi_collector_;
+    juce::MidiMessageCollector midi_collector_;
     std::map<std::string, juce::String>* gui_state_;
     Listener* listener_;
     int current_bank_;

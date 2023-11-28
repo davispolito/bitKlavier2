@@ -71,6 +71,7 @@ namespace bitklavier {
 
     constexpr int kPpq = 960; // Pulses per quarter note.
     constexpr mono_float kVoiceKillTime = 0.05f;
+    constexpr int kNumChannels = 2;
     constexpr int kNumMidiChannels = 16;
     constexpr int kFirstMidiChannel = 0;
     constexpr int kLastMidiChannel = kNumMidiChannels - 1;

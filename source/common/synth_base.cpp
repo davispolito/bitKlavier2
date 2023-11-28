@@ -21,7 +21,7 @@
 #include "startup.h"
 #include "../synthesis/synth_engine/sound_engine.h"
 #include "synth_gui_interface.h"
-#include "../synthesis/framework/utils.h"
+
 
 SynthBase::SynthBase() : expired_(false) {
 
@@ -231,6 +231,23 @@ void SynthBase::updateMemoryOutput(int samples, const bitklavier::poly_float* au
 //void SynthBase::clearMidiLearn(const std::string& name) {
 //  midi_manager_->clearMidiLearn(name);
 //}
+
+void SynthBase::valueChanged(const std::string& name, bitklavier::mono_float value) {
+//  controls_[name]->set(value);
+}
+
+
+
+void SynthBase::valueChangedThroughMidi(const std::string& name, bitklavier::mono_float value) {
+//  controls_[name]->set(value);
+//  ValueChangedCallback* callback = new ValueChangedCallback(self_reference_, name, value);
+//  setValueNotifyHost(name, value);
+//  callback->post();
+}
+
+int SynthBase::getSampleRate() {
+  return engine_->getSampleRate();
+}
 
 bool SynthBase::isMidiMapped(const std::string& name) {
   return midi_manager_->isMidiMapped(name);
