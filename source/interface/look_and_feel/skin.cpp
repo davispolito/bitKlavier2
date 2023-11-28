@@ -15,7 +15,7 @@
  */
 
 #include "skin.h"
-
+#include "BinaryData.h"
 #include "default_look_and_feel.h"
 #include "../FullInterface.h"
 #include "../synth_section.h"
@@ -112,15 +112,15 @@ void Skin::clearSkin() {
 }
 
 void Skin::loadDefaultSkin() {
-//  MemoryInputStream skin((const void*)BinaryData::default_vitalskin, BinaryData::default_vitalskinSize, false);
-//  std::string skin_string = skin.readEntireStreamAsString().toStdString();
-//
-//  try {
-//    json data = json::parse(skin_string, nullptr, false);
-//    jsonToState(data);
-//  }
-//  catch (const json::exception& e) {
-//  }
+  MemoryInputStream skin((const void*)BinaryData::default_bitklavierskin, BinaryData::default_bitklavierskinSize, false);
+  std::string skin_string = skin.readEntireStreamAsString().toStdString();
+
+  try {
+    json data = json::parse(skin_string, nullptr, false);
+    jsonToState(data);
+  }
+  catch (const json::exception& e) {
+  }
 }
 
 void Skin::setComponentColors(Component* component) const {

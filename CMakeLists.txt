@@ -105,7 +105,8 @@ add_library(SharedCode INTERFACE
         source/standalone/main.cpp
         source/interface/header_section.h
         source/interface/header_section.cpp
-        source/interface/popup_browser.cpp)
+        source/interface/popup_browser.cpp
+)
 
 # C++20, please
 # Use cxx_std_23 for C++23 (as of CMake v 3.20)
