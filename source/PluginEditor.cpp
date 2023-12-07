@@ -9,31 +9,32 @@ namespace ProjectInfo
     const int          versionNumber  = 0x30400;
 }
 PluginEditor::PluginEditor (PluginProcessor& p)
-    : AudioProcessorEditor (&p), processorRef (p), was_animating_(true)
+    : AudioProcessorEditor (&p), SynthGuiInterface(&p), processorRef (p), was_animating_(true)
 {
+    static constexpr int kHeightBuffer = 50;
     juce::ignoreUnused (processorRef);
     setLookAndFeel(DefaultLookAndFeel::instance());
-    addAndMakeVisible (inspectButton);
-
-    // this chunk of code instantiates and opens the melatonin inspector
-    inspectButton.onClick = [&] {
-        if (!inspector)
-        {
-            inspector = std::make_unique<melatonin::Inspector> (*this);
-            inspector->onClose = [this]() { inspector.reset(); };
-        }
-
-        inspector->setVisible (true);
-    };
+    gui_->reset();
+    addAndMakeVisible(gui_.get());
 
     constrainer_.setMinimumSize(bitklavier::kMinWindowWidth, bitklavier::kMinWindowHeight);
     double ratio = (1.0 * bitklavier::kDefaultWindowWidth) / bitklavier::kDefaultWindowHeight;
     constrainer_.setFixedAspectRatio(ratio);
     constrainer_.setGui(gui_.get());
     setConstrainer(&constrainer_);
-    // Make sure that before the constructor has finished, you've set the
-    // editor's size to whatever you need it to be.
-    setSize (400, 300);
+
+
+    Rectangle<int> total_bounds = Desktop::getInstance().getDisplays().getTotalBounds(true);
+    total_bounds.removeFromBottom(kHeightBuffer);
+
+    float window_size = 1.0f;
+    window_size = std::min(window_size, total_bounds.getWidth() / (1.0f * bitklavier::kDefaultWindowWidth));
+    window_size = std::min(window_size, total_bounds.getHeight() / (1.0f * bitklavier::kDefaultWindowHeight));
+    int width = std::round(window_size * bitklavier::kDefaultWindowWidth);
+    int height = std::round(window_size * bitklavier::kDefaultWindowHeight);
+
+    setResizable(true, true);
+    setSize(width, height);
 }
 
 PluginEditor::~PluginEditor()
@@ -59,7 +60,8 @@ void PluginEditor::resized()
     area.removeFromBottom(50);
     AudioProcessorEditor::resized();
     gui_->setBounds(getLocalBounds());
-    inspectButton.setBounds (getLocalBounds().withSizeKeepingCentre(100, 50));
+
+
 }
 
 
@@ -74,6 +76,6 @@ void PluginEditor::setScaleFactor(float newScale) {
 }
 
 void PluginEditor::updateFullGui() {
-    BitKlavierGuiInterface::updateFullGui();
+    SynthGuiInterface::updateFullGui();
     //synth_.updateHostDisplay();
 }

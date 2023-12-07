@@ -15,8 +15,8 @@
 */
 
 #include "FullInterface.h"
-
-
+//#include "default_look_and_feel.h"
+#include "text_look_and_feel.h"
 
 FullInterface::FullInterface() : SynthSection("full_interface"), width_(0), resized_width_(0),
                                                          last_render_scale_(0.0f), display_scale_(1.0f),
@@ -25,23 +25,18 @@ FullInterface::FullInterface() : SynthSection("full_interface"), width_(0), resi
                                                          open_gl_(open_gl_context_) {
    full_screen_section_ = nullptr;
    Skin default_skin;
-   //setSkinValues(default_skin, true);
-   //default_skin.copyValuesToLookAndFeel(DefaultLookAndFeel::instance());
+   setSkinValues(default_skin, true);
+   default_skin.copyValuesToLookAndFeel(DefaultLookAndFeel::instance());
 
-   
    header_ = std::make_unique<HeaderSection>();
    addSubSection(header_.get());
    header_->addListener(this);
- 
 
-  
 
-   
 
-   
-   
-
-   
+   //inspectButton->setLookAndFeel(TextLookAndFeel::instance());
+   //
+   //inspectButton->setButtonText("Inspect the UI");
 
    open_gl_context_.setContinuousRepainting(true);
    open_gl_context_.setOpenGLVersionRequired(OpenGLContext::openGL3_2);
@@ -49,6 +44,9 @@ FullInterface::FullInterface() : SynthSection("full_interface"), width_(0), resi
    open_gl_context_.setRenderer(this);
    open_gl_context_.setComponentPaintingEnabled(false);
    open_gl_context_.attachTo(*this);
+
+
+
 }
 
 //FullInterface::FullInterface() : SynthSection("EMPTY"), open_gl_(open_gl_context_) {
@@ -77,11 +75,10 @@ void FullInterface::paintBackground(Graphics& g) {
    g.fillAll(findColour(Skin::kBackground, true));
    paintChildrenShadows(g);
 
-   
-
    int padding = getPadding();
    int bar_width = 6 * padding;
    g.setColour(header_->findColour(Skin::kBody, true));
+   //g.setColour(inspectButton->findColour(Skin::k)
    int y = header_->getBottom();
 //   int height = keyboard_interface_->getY() - y;
 //   int x1 = extra_mod_section_->getRight() + padding;
@@ -233,11 +230,6 @@ void FullInterface::resized() {
    header_->setTabOffset(2 * voice_padding);
    header_->setBounds(left, top, width, top_height);
    Rectangle<int> main_bounds(main_x, top + top_height, audio_width, height - top_height);
-
-
-
-
-
 
    if (getWidth() && getHeight())
        redoBackground();

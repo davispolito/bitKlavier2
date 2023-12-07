@@ -9,6 +9,7 @@
 #include "open_gl_background.h"
 #include "header_section.h"
 #include "synth_section.h"
+
 class HeaderSection;
 namespace bitklavier{
     constexpr int kMinWindowWidth = 350;
@@ -79,6 +80,7 @@ private :
     OpenGlWrapper open_gl_;
     Image background_image_;
     OpenGlBackground background_;
+
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(FullInterface)
 };
 

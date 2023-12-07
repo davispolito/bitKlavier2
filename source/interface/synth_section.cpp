@@ -30,8 +30,16 @@ SynthSection::SynthSection(const String& name) : Component(name), parent_(nullpt
 }
 
 float SynthSection::findValue(Skin::ValueId value_id) const {
- 
+  if (value_lookup_.count(value_id)) {
+      if (Skin::shouldScaleValue(value_id))
+          return size_ratio_ * value_lookup_.at(value_id);
+      return value_lookup_.at(value_id);
+  }
+  if (parent_)
+      return parent_->findValue(value_id);
+
   return 0.0f;
+
 }
 
 void SynthSection::reset() {

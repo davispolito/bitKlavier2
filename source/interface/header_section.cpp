@@ -193,6 +193,23 @@ HeaderSection::HeaderSection() : SynthSection("header_section"), tab_offset_(0) 
 //  addOpenGlComponent(temporary_tab_.get());
 //  temporary_tab_->setFontType(PlainTextComponent::kLight);
 //  temporary_tab_->setJustification(Justification::centredLeft);
+  inspectButton = std::make_unique<OpenGlToggleButton>("Inspect the UI");
+  //inspectButton->setUiButton(false);
+  //inspectButton->
+  addAndMakeVisible(inspectButton.get());
+  addOpenGlComponent(inspectButton->getGlComponent());
+  inspectButton->setText("Inspect");
+  // this chunk of code instantiates and opens the melatonin inspector
+  inspectButton->onClick = [&] {
+      if (!inspector)
+      {
+          inspector = std::make_unique<melatonin::Inspector> (*this);
+          inspector->onClose = [this]() { inspector.reset(); };
+      }
+
+      inspector->setVisible (true);
+  };
+
 
   setSkinOverride(Skin::kHeader);
 }
@@ -236,7 +253,7 @@ void HeaderSection::resized() {
   int large_padding = findValue(Skin::kLargePadding);
   //int logo_width = findValue(Skin::kModulationButtonWidth);
  // logo_section_->setBounds(large_padding, 0, logo_width, height);
-
+  inspectButton->setBounds(large_padding, 0, 100, height);
   int preset_selector_width = width / 3;
   int preset_selector_height = height * 0.6f;
   int preset_selector_buffer = (height - preset_selector_height) * 0.5f;

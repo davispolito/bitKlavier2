@@ -235,6 +235,75 @@ class OpenGlButtonComponent : public OpenGlComponent {
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(OpenGlButtonComponent)
 };
+class OpenGlTextButton : public TextButton {
+public:
+    OpenGlTextButton(String name) : TextButton(name), active_(true), button_component_(this) {}
+    OpenGlButtonComponent* getGlComponent() { return &button_component_; }
+
+    void setActive(bool active = true) { active_ = active; }
+    bool isActive() const { return active_; }
+
+    void resized() override;
+
+    void setText(String text) {
+      setButtonText(text);
+      button_component_.setText();
+    }
+
+    void setPowerButton() {
+      button_component_.setStyle(OpenGlButtonComponent::kPowerButton);
+    }
+
+    void setNoBackground() {
+      button_component_.setStyle(OpenGlButtonComponent::kJustText);
+    }
+
+    void setJustification(Justification justification) {
+      button_component_.setJustification(justification);
+    }
+
+    void setLightenButton() {
+      button_component_.setStyle(OpenGlButtonComponent::kLightenButton);
+    }
+
+    void setShowOnColors(bool show) {
+      button_component_.setShowOnColors(show);
+    }
+
+    void setUiButton(bool primary) {
+      button_component_.setStyle(OpenGlButtonComponent::kUiButton);
+      button_component_.setPrimaryUiButton(primary);
+    }
+
+    virtual void enablementChanged() override {
+      TextButton::enablementChanged();
+      button_component_.setColors();
+    }
+
+    void mouseEnter(const MouseEvent& e) override {
+      TextButton::mouseEnter(e);
+      button_component_.setHover(true);
+    }
+
+    void mouseExit(const MouseEvent& e) override {
+      TextButton::mouseExit(e);
+      button_component_.setHover(false);
+    }
+
+    void mouseDown(const MouseEvent& e) override {
+      TextButton::mouseDown(e);
+      button_component_.setDown(true);
+    }
+
+    void mouseUp(const MouseEvent& e) override {
+      TextButton::mouseUp(e);
+      button_component_.setDown(false);
+    }
+private:
+        bool active_;
+    OpenGlButtonComponent button_component_;
+};
+
 
 class OpenGlToggleButton : public ToggleButton {
   public:

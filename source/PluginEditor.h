@@ -3,11 +3,11 @@
 #include "common/border_bounds_constrainer.h"
 #include "PluginProcessor.h"
 #include "BinaryData.h"
-#include "interface/bitKlavierGuiInterface.h"
+#include "synth_gui_interface.h"
 #include "melatonin_inspector/melatonin_inspector.h"
 
 //==============================================================================
-class PluginEditor : public juce::AudioProcessorEditor, public BitKlavierGuiInterface
+class PluginEditor : public juce::AudioProcessorEditor, public SynthGuiInterface
 {
 public:
     explicit PluginEditor (PluginProcessor&);
@@ -24,8 +24,8 @@ private:
     // access the processor object that created it.
     PluginProcessor& processorRef;
     BorderBoundsConstrainer constrainer_;
-    std::unique_ptr<melatonin::Inspector> inspector;
+
     bool was_animating_;
-    juce::TextButton inspectButton { "Inspect the UI" };
+
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PluginEditor)
 };

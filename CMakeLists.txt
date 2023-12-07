@@ -106,6 +106,7 @@ add_library(SharedCode INTERFACE
         source/interface/header_section.h
         source/interface/header_section.cpp
         source/interface/popup_browser.cpp
+        source/interface/look_and_feel/text_look_and_feel.cpp
 )
 
 # C++20, please

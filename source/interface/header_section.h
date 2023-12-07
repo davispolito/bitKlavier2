@@ -19,6 +19,7 @@
 
 
 #include "synth_section.h"
+#include "melatonin_inspector/melatonin_inspector.h"
 //class LogoButton;
 //
 //class LogoSection : public SynthSection {
@@ -84,8 +85,9 @@ class HeaderSection : public SynthSection {
     std::unique_ptr<OpenGlShapeButton> exit_temporary_button_;
 
     std::unique_ptr<SynthButton> click_me;
-
-
+   // juce::TextButton inspectButton { "Inspect the UI" };
+    std::unique_ptr<melatonin::Inspector> inspector;
+    std::unique_ptr<OpenGlToggleButton> inspectButton;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(HeaderSection)
 };
 

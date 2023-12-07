@@ -264,11 +264,6 @@ class SynthApplication : public JUCEApplication {
       }
       else if (command.contains(" --tabletowav ")) {
 
-
-
-
-
-
       }
       else if (command.contains(" --tableimages ")) {
 

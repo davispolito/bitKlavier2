@@ -184,3 +184,18 @@ juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {
     return new PluginProcessor();
 }
+
+const CriticalSection& PluginProcessor::getCriticalSection() {
+    return getCallbackLock();
+}
+
+void PluginProcessor::pauseProcessing(bool pause) {
+    suspendProcessing(pause);
+}
+
+SynthGuiInterface* PluginProcessor::getGuiInterface() {
+    AudioProcessorEditor* editor = getActiveEditor();
+    if (editor)
+        return dynamic_cast<SynthGuiInterface*>(editor);
+    return nullptr;
+}

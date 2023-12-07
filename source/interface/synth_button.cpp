@@ -228,6 +228,24 @@ void OpenGlButtonComponent::incrementHover() {
     hover_amount_ = std::max(0.0f, hover_amount_ - kHoverInc);
 }
 
+void OpenGlTextButton::resized() {
+  static constexpr float kUiButtonSizeMult = 0.45f;
+
+  TextButton::resized();
+  SynthSection* section = findParentComponentOfClass<SynthSection>();
+  getGlComponent()->setText();
+  getGlComponent()->background().markDirty();
+  if (section) {
+    if (getGlComponent()->style() == OpenGlButtonComponent::kUiButton) {
+      getGlComponent()->text().setFontType(PlainTextComponent::kLight);
+      getGlComponent()->text().setTextSize(kUiButtonSizeMult * getHeight());
+    }
+    else
+      getGlComponent()->text().setTextSize(section->findValue(Skin::kButtonFontSize));
+    button_component_.setColors();
+  }
+}
+
 void OpenGlToggleButton::resized() {
   static constexpr float kUiButtonSizeMult = 0.45f;
  
