@@ -17,27 +17,36 @@
 #include "FullInterface.h"
 //#include "default_look_and_feel.h"
 #include "text_look_and_feel.h"
+#include "Identifiers.h"
 
-FullInterface::FullInterface() : SynthSection("full_interface"), width_(0), resized_width_(0),
+FullInterface::FullInterface(SynthGuiData* synth_data) : SynthSection("full_interface"), width_(0), resized_width_(0),
                                                          last_render_scale_(0.0f), display_scale_(1.0f),
                                                          pixel_multiple_(1),unsupported_(false), animate_(true),
-                                 enable_redo_background_(true),
-                                                         open_gl_(open_gl_context_) {
+                                                        enable_redo_background_(true),
+                                                         open_gl_(open_gl_context_),
+                                                          data(synth_data)
+{
    full_screen_section_ = nullptr;
    Skin default_skin;
    setSkinValues(default_skin, true);
    default_skin.copyValuesToLookAndFeel(DefaultLookAndFeel::instance());
 
-   header_ = std::make_unique<HeaderSection>();
-   addSubSection(header_.get());
-   header_->addListener(this);
+//   header_ = std::make_unique<HeaderSection>();
+//   addSubSection(header_.get());
+//   header_->addListener(this);
 
+   ValueTree t(IDs::PIANO);
+   t.setProperty(IDs::name, "default", nullptr);
 
+   data->tree.addChild(t, -1, nullptr);
+   //main_ = std::make_unique<MainSection>(data->tree.getChildWithName(IDs::PIANO), data->um, open_gl_);
+   //addSubSection(main_.get());
+   //main_->addListener(this);
 
    //inspectButton->setLookAndFeel(TextLookAndFeel::instance());
    //
    //inspectButton->setButtonText("Inspect the UI");
-
+   //setOpaque(true);
    open_gl_context_.setContinuousRepainting(true);
    open_gl_context_.setOpenGLVersionRequired(OpenGLContext::openGL3_2);
    open_gl_context_.setSwapInterval(0);
@@ -77,9 +86,10 @@ void FullInterface::paintBackground(Graphics& g) {
 
    int padding = getPadding();
    int bar_width = 6 * padding;
-   g.setColour(header_->findColour(Skin::kBody, true));
+   //g.setColour(header_->findColour(Skin::kBody, true));
+   //g.setColour(main_->findColour(Skin::kBody, true));
    //g.setColour(inspectButton->findColour(Skin::k)
-   int y = header_->getBottom();
+   //int y = header_->getBottom();
 //   int height = keyboard_interface_->getY() - y;
 //   int x1 = extra_mod_section_->getRight() + padding;
 //   g.fillRect(x1, y, bar_width, height);
@@ -89,12 +99,12 @@ void FullInterface::paintBackground(Graphics& g) {
 //       g.fillRect(x2, y, bar_width, height);
 //   }
 
-   paintKnobShadows(g);
+   //paintKnobShadows(g);
    paintChildrenBackgrounds(g);
 }
 
 void FullInterface::copySkinValues(const Skin& skin) {
-   ScopedLock open_gl_lock(open_gl_critical_section_);
+//   ScopedLock open_gl_lock(open_gl_critical_section_);
 //   skin.copyValuesToLookAndFeel(DefaultLookAndFeel::instance());
 //   setSkinValues(skin, true);
 }
@@ -181,11 +191,12 @@ void FullInterface::checkShouldReposition(bool resize) {
 }
 
 void FullInterface::resized() {
+   //open_gl_context_.detach();
    checkShouldReposition(false);
 
    width_ = getWidth();
-//   if (!enable_redo_background_)
-//       return;
+   if (!enable_redo_background_)
+       return;
 
    resized_width_ = width_;
 
@@ -227,12 +238,14 @@ void FullInterface::resized() {
    int audio_width = section_one_width + section_two_width + padding;
 
 
-   header_->setTabOffset(2 * voice_padding);
-   header_->setBounds(left, top, width, top_height);
-   Rectangle<int> main_bounds(main_x, top + top_height, audio_width, height - top_height);
-
+//   header_->setTabOffset(2 * voice_padding);
+//   header_->setBounds(left, top, width, top_height);
+   Rectangle<int> main_bounds(main_x, top + top_height, 2 * audio_width, height - top_height);
+   //main_->setBounds(main_bounds);
    if (getWidth() && getHeight())
        redoBackground();
+
+   //open_gl_context_.attachTo(*this);
 }
 
 
@@ -274,6 +287,7 @@ void FullInterface::newOpenGLContextCreated() {
 
    background_.init(open_gl_);
    initOpenGlComponents(open_gl_);
+   //main_.setContext(open_gl_);
 }
 
 void FullInterface::renderOpenGL() {
@@ -285,7 +299,13 @@ void FullInterface::renderOpenGL() {
        last_render_scale_ = render_scale;
        MessageManager::callAsync([=] { checkShouldReposition(true); });
    }
+   if(!open_gl_.init_comp.empty())
+    {
+       OpenGlComponent* comp = dynamic_cast<OpenGlComponent*>(open_gl_.init_comp.back());
+       comp->init(open_gl_);
+       open_gl_.init_comp.pop_back();
 
+    }
    ScopedLock lock(open_gl_critical_section_);
    open_gl_.display_scale = display_scale_;
    background_.render(open_gl_);
@@ -339,8 +359,9 @@ void FullInterface::showFullScreenSection(SynthSection* full_screen) {
 //   for (int i = 0; i < bitklavier::kNumOscillators; ++i)
 //       wavetable_edits_[i]->setVisible(false);
 //
-//   bool show_rest = full_screen == nullptr;
-//   header_->setVisible(show_rest);
+
+ bool show_rest = full_screen == nullptr;
+  // header_->setVisible(show_rest);
 //   synthesis_interface_->setVisible(show_rest);
 //   modulation_interface_->setVisible(show_rest);
 //   keyboard_interface_->setVisible(show_rest);

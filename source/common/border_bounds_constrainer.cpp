@@ -17,7 +17,7 @@
 #include "border_bounds_constrainer.h"
 
 #include "../interface/FullInterface.h"
-#include "../interface/bitKlavierGuiInterface.h"
+#include "synth_gui_interface.h"
 
 void BorderBoundsConstrainer::checkBounds(Rectangle<int>& bounds, const Rectangle<int>& previous,
                                           const Rectangle<int>& limits,

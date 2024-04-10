@@ -28,6 +28,8 @@ namespace {
         "Overlays",
         "Popup Browser",
         "Preset Browser",
+        "Construction Site",
+        "direct"
   };
 
   const std::string kValueNames[Skin::kNumSkinValueIds] = {
@@ -88,6 +90,7 @@ namespace {
       "Widget Accent 1",
       "Widget Accent 2",
       "Widget Background",
+
 
   };
 } // namespace

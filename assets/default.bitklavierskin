@@ -24,7 +24,7 @@
     "Popup Background": "ff1d2125",
     "Popup Border": "ff000000",
     "Popup Selector Background": "ff2c3033",
-    "Shadow": "66000000",
+    "Shadow": "0x66000000",
     "Overlay Screen": "22000000",
     "Widget Center Line": "ffffffff",
     "Widget Primary 1": "ffaa88ff",
@@ -102,7 +102,15 @@
             "UI Action Button Hover": "ff64ffda",
             "UI Action Button Press": "ff11cbb2",
             "Widget Rounded Corner": 5.0
+        },
+        "Construction Site": {
+            "Body" : "0xffdeb887"
+        },
+        "direct": {
+             "Body" : "333333",
+             "Shadow": "0xff000000"
         }
+
     },
     "synth_version": 65541
 }

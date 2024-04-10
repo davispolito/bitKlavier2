@@ -90,17 +90,17 @@ class SynthApplication : public JUCEApplication {
           }
 
           editor_ = new SynthEditor(visible);
-          constrainer_.setGui(editor_->getGui());
+          //constrainer_.setGui(editor_->getGui());
           if (visible) {
             editor_->animate(true);
             setContentOwned(editor_, true);
 
-            constrainer_.setMinimumSize(bitklavier::kMinWindowWidth, bitklavier::kMinWindowHeight);
-            constrainer_.setBorder(getPeer()->getFrameSize());
+            //constrainer_.setMinimumSize(bitklavier::kMinWindowWidth, bitklavier::kMinWindowHeight);
+           // constrainer_.setBorder(getPeer()->getFrameSize());
             float ratio = (1.0f * bitklavier::kDefaultWindowWidth) / bitklavier::kDefaultWindowHeight;
 
-            constrainer_.setFixedAspectRatio(ratio);
-            setConstrainer(&constrainer_);
+            //constrainer_.setFixedAspectRatio(ratio);
+            //setConstrainer(&constrainer_);
 
             centreWithSize(getWidth(), getHeight());
             setVisible(visible);
@@ -227,7 +227,7 @@ class SynthApplication : public JUCEApplication {
         File file_to_load_;
         SynthEditor* editor_;
         std::unique_ptr<ApplicationCommandManager> command_manager_;
-        BorderBoundsConstrainer constrainer_;
+        //BorderBoundsConstrainer constrainer_;
       
         JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(MainWindow)
     };

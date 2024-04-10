@@ -19,16 +19,15 @@
 
 #include "midi_manager.h"
 #include "../synthesis/framework/poly_utils.h"
-
+#include "juce_data_structures/juce_data_structures.h"
 
 #include <set>
 #include <string>
 
 
-
 class SynthGuiInterface;
 
-class SynthBase : public MidiManager::Listener {
+class SynthBase : public MidiManager::Listener, public juce::ValueTree::Listener {
   public:
     static constexpr float kOutputWindowMinNote = 16.0f;
     static constexpr float kOutputWindowMaxNote = 128.0f;
@@ -101,9 +100,13 @@ class SynthBase : public MidiManager::Listener {
       bitklavier::mono_float value;
     };
 
+    juce::ValueTree& getValueTree();
+    juce::UndoManager& getUndoManager();
+
   protected:
 
-
+    juce::ValueTree tree;
+    juce::UndoManager um;
     virtual SynthGuiInterface* getGuiInterface() = 0;
 
 

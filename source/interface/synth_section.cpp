@@ -20,7 +20,7 @@
 #include "look_and_feel/fonts.h"
 #include "FullInterface.h"
 #include "open_gl_component.h"
-#include "bitKlavierGuiInterface.h"
+#include "synth_gui_interface.h"
 
 SynthSection::SynthSection(const String& name) : Component(name), parent_(nullptr), activator_(nullptr),
                                                  preset_selector_(nullptr), preset_selector_half_width_(false),
@@ -343,7 +343,9 @@ void SynthSection::renderOpenGlComponents(OpenGlWrapper& open_gl, bool animate) 
   for (auto& open_gl_component : open_gl_components_) {
     if (open_gl_component->isVisible() && !open_gl_component->isAlwaysOnTop()) {
       open_gl_component->render(open_gl, animate);
-      BITKLAVIER_ASSERT(juce::gl::glGetError() == juce::gl::GL_NO_ERROR);
+      GLenum gl =  juce::gl::glGetError();
+      //DBG(String(gl));
+      BITKLAVIER_ASSERT(gl == juce::gl::GL_NO_ERROR);
     }
   }
 

@@ -16,9 +16,11 @@
 
 #pragma once
 
+#include "../../../cmake-build-debug/juce_binarydata_Assets/JuceLibraryCode/BinaryData.h"
+#include "../../synthesis/framework/utils.h"
+#include "BinaryData.h"
 #include <juce_graphics/juce_graphics.h>
 #include <juce_gui_basics/juce_gui_basics.h>
-#include "../../synthesis/framework/utils.h"
 class Paths {
   public:
     static constexpr int kLogoWidth = 1701;
@@ -30,6 +32,15 @@ class Paths {
       return drawable->getOutlineAsPath();
     }
 
+    static Path fromPngData(const void* data, size_t data_size) {
+      std::unique_ptr<Drawable> drawable(Drawable::createFromImageData(data, data_size));
+      return drawable->getOutlineAsPath();
+    }
+
+    static Path direct() {
+      int size;
+      return fromSvgData((const void*)BinaryData::direct_icon_svg,BinaryData::direct_icon_svgSize);
+    }
 //    static Path vitalRing() {
 //      Path path = fromSvgData((const void*)BinaryData::vital_ring_svg, BinaryData::vital_ring_svgSize);
 //      path.addLineSegment(Line<float>(0.0f, 0.0f, 0.0f, 0.0f), 0.2f);

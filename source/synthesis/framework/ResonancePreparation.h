@@ -1,0 +1,12 @@
+//
+// Created by Davis Polito on 12/13/23.
+//
+
+#ifndef BITKLAVIER2_RESONANCEPREPARATION_H
+#define BITKLAVIER2_RESONANCEPREPARATION_H
+
+class Preparation
+{
+};
+
+#endif //BITKLAVIER2_RESONANCEPREPARATION_H

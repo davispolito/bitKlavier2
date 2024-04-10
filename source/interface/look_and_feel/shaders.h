@@ -20,7 +20,9 @@
 
 #include "../../synthesis/framework/common.h"
 #include <map>
+//#include "open_gl_image_component.h"
 using namespace juce;
+
 class Shaders {
   public:
     enum VertexShader {
@@ -108,6 +110,7 @@ class Shaders {
 struct OpenGlWrapper {
   OpenGlWrapper(OpenGLContext& c) : context(c), shaders(nullptr), display_scale(1.0f) { }
 
+  std::vector<Component*> init_comp;
   OpenGLContext& context;
   Shaders* shaders;
   float display_scale;

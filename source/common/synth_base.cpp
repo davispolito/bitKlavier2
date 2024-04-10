@@ -21,6 +21,7 @@
 #include "startup.h"
 #include "../synthesis/synth_engine/sound_engine.h"
 #include "synth_gui_interface.h"
+#include "Identifiers.h"
 
 
 SynthBase::SynthBase() : expired_(false) {
@@ -46,9 +47,13 @@ SynthBase::SynthBase() : expired_(false) {
 
 
   Startup::doStartupChecks(midi_manager_.get());
+  tree = ValueTree(IDs::TREE);
+  tree.addListener(this);
 }
 
-SynthBase::~SynthBase() { }
+SynthBase::~SynthBase() {
+  tree.removeListener(this);
+}
 
 //void SynthBase::valueChanged(const std::string& name, bitklavier::mono_float value) {
 //
@@ -314,4 +319,14 @@ void SynthBase::ValueChangedCallback::messageCallback() {
         gui_interface->notifyChange();
     }
   }
+}
+
+juce::ValueTree& SynthBase::getValueTree()
+{
+  return tree;
+}
+
+juce::UndoManager& SynthBase::getUndoManager()
+{
+  return um;
 }

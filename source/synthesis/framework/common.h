@@ -44,8 +44,8 @@
     #endif
 #endif
 
-
-
+#include "juce_core/juce_core.h"
+#include "juce_data_structures/juce_data_structures.h"
 namespace bitklavier {
 
     typedef float mono_float;
@@ -86,7 +86,46 @@ namespace bitklavier {
         kVoiceKill,
         kNumVoiceEvents
     };
+
+    typedef enum BKPreparationType {
+        PreparationTypeDirect = 0,
+        PreparationTypeSynchronic,
+        PreparationTypeNostalgic,
+        PreparationTypeBlendronic,
+        PreparationTypeResonance,
+        PreparationTypeTuning,
+        PreparationTypeTempo,
+        PreparationTypeKeymap,
+        PreparationTypeDirectMod,
+        PreparationTypeSynchronicMod,
+        PreparationTypeNostalgicMod,
+        PreparationTypeBlendronicMod,
+        PreparationTypeResonanceMod,
+        PreparationTypeTuningMod,
+        PreparationTypeTempoMod,
+        PreparationTypeGenericMod,
+        PreparationTypePianoMap,
+        PreparationTypeReset,
+        PreparationTypePiano,
+        PreparationTypeComment,
+        PreparationTypeCompressor,
+        BKPreparationTypeNil
+    } BKPreparationType;
+
+    //==============================================================================
+    /**
+    Utility wrapper for ValueTree::Listener's that only want to override valueTreePropertyChanged.
+*/
+    struct ValueTreePropertyChangeListener  : public juce::ValueTree::Listener
+    {
+        void valueTreeChildAdded (juce::ValueTree&, juce::ValueTree&) override {}
+        void valueTreeChildRemoved (juce::ValueTree&, juce::ValueTree&, int) override {}
+        void valueTreeChildOrderChanged (juce::ValueTree&, int, int) override {}
+        void valueTreeParentChanged (juce::ValueTree&) override {}
+        void valueTreeRedirected (juce::ValueTree&) override {}
+    };
 } // namespace vital
+
 
 
 #endif //BITKLAVIER2_COMMON_H

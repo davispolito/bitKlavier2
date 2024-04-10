@@ -4,7 +4,7 @@
 #include "PluginProcessor.h"
 #include "BinaryData.h"
 #include "synth_gui_interface.h"
-#include "melatonin_inspector/melatonin_inspector.h"
+//#include "melatonin_inspector/melatonin_inspector.h"
 
 //==============================================================================
 class PluginEditor : public juce::AudioProcessorEditor, public SynthGuiInterface

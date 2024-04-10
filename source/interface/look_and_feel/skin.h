@@ -33,6 +33,8 @@ class Skin {
           kOverlay,
           kPopupBrowser,
           kPresetBrowser,
+          kConstructionSite,
+          kDirect,
           kNumSectionOverrides
     };
 
@@ -102,6 +104,7 @@ class Skin {
         kWidgetAccent1,
         kWidgetAccent2,
         kWidgetBackground,
+
 
 
       kFinalColor

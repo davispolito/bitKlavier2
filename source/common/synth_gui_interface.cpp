@@ -18,11 +18,16 @@
 
 #include "synth_base.h"
 #include "../synthesis/synth_engine/sound_engine.h"
+#include "Preparations/DirectPreparation.h"
 
-SynthGuiData::SynthGuiData(SynthBase* synth_base) : synth(synth_base) {
 
+SynthGuiData::SynthGuiData(SynthBase* synth_base) : synth(synth_base),
+                                                     tree(synth_base->getValueTree()),
+                                                     um(synth_base->getUndoManager())
+{
+    //tree = synth->getValueTree();
+//    um = synth_base->getUndoManager();
 }
-
 #if HEADLESS
 
 SynthGuiInterface::SynthGuiInterface(SynthBase* synth, bool use_gui) : synth_(synth) { }
@@ -48,11 +53,13 @@ void SynthGuiInterface::setGuiSize(float scale) { }
 #include "../interface/look_and_feel/default_look_and_feel.h"
 #include "../interface/fullInterface.h"
 
+#include "Preparations/DirectPreparation.h"
 SynthGuiInterface::SynthGuiInterface(SynthBase* synth, bool use_gui) : synth_(synth) {
   if (use_gui) {
-    //SynthGuiData synth_data(synth_);
-    gui_ = std::make_unique<FullInterface>();
+    SynthGuiData synth_data(synth_);
+    gui_ = std::make_unique<FullInterface>(&synth_data);
   }
+
 }
 
 SynthGuiInterface::~SynthGuiInterface() { }

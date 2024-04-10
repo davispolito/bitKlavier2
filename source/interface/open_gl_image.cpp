@@ -47,7 +47,9 @@ OpenGlImage::OpenGlImage() : dirty_(true), image_(nullptr), image_width_(0), ima
 OpenGlImage::~OpenGlImage() { }
 
 void OpenGlImage::init(OpenGlWrapper& open_gl) {
+
   open_gl.context.extensions.glGenBuffers(1, &vertex_buffer_);
+
   open_gl.context.extensions.glBindBuffer(juce::gl::GL_ARRAY_BUFFER, vertex_buffer_);
 
   GLsizeiptr vert_size = static_cast<GLsizeiptr>(static_cast<size_t>(kNumPositions * sizeof(float)));
@@ -55,6 +57,7 @@ void OpenGlImage::init(OpenGlWrapper& open_gl) {
                                          position_vertices_.get(), juce::gl::GL_STATIC_DRAW);
 
   open_gl.context.extensions.glGenBuffers(1, &triangle_buffer_);
+
   open_gl.context.extensions.glBindBuffer(juce::gl::GL_ELEMENT_ARRAY_BUFFER, triangle_buffer_);
 
   GLsizeiptr tri_size = static_cast<GLsizeiptr>(static_cast<size_t>(kNumTriangleIndices * sizeof(float)));
@@ -64,9 +67,11 @@ void OpenGlImage::init(OpenGlWrapper& open_gl) {
   image_shader_ = open_gl.shaders->getShaderProgram(Shaders::kImageVertex, Shaders::kTintedImageFragment);
 
   image_shader_->use();
+
   image_color_ = OpenGlComponent::getUniform(open_gl, *image_shader_, "color");
   image_position_ = OpenGlComponent::getAttribute(open_gl, *image_shader_, "position");
   texture_coordinates_ = OpenGlComponent::getAttribute(open_gl, *image_shader_, "tex_coord_in");
+
 }
 
 void OpenGlImage::drawImage(OpenGlWrapper& open_gl) {
@@ -102,6 +107,7 @@ void OpenGlImage::drawImage(OpenGlWrapper& open_gl) {
   dirty_ = false;
 
   open_gl.context.extensions.glBindBuffer(juce::gl::GL_ELEMENT_ARRAY_BUFFER, triangle_buffer_);
+
   texture_.bind();
   open_gl.context.extensions.glActiveTexture(juce::gl::GL_TEXTURE0);
   mutex_.unlock();

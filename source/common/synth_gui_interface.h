@@ -18,21 +18,23 @@
 
 #include "synth_base.h"
 #include "juce_audio_devices/juce_audio_devices.h"
-
+#include <juce_data_structures/juce_data_structures.h>
 #if HEADLESS
 
 class FullInterface { };
 class AudioDeviceManager { };
 
 #endif
-
+#include "templates/Factory.h"
 class FullInterface;
 
 struct SynthGuiData {
   SynthGuiData(SynthBase* synth_base);
-
+  juce::ValueTree& tree;
+  UndoManager& um;
   SynthBase* synth;
 };
+
 
 class SynthGuiInterface {
   public:

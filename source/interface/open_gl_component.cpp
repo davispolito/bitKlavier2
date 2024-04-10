@@ -136,7 +136,7 @@ void OpenGlComponent::resized() {
   if (corners_)
     corners_->setBounds(getLocalBounds());
 
-  body_color_ = findColour(Skin::kBody, true);
+  body_color_ = findColour (Skin::kBody, true);
 }
 
 void OpenGlComponent::parentHierarchyChanged() {

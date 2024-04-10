@@ -8,21 +8,25 @@
 #include <juce_opengl/juce_opengl.h>
 #include "open_gl_background.h"
 #include "header_section.h"
+#include "main_section.h"
 #include "synth_section.h"
 
+struct SynthGuiData;
 class HeaderSection;
+class MainSection;
 namespace bitklavier{
     constexpr int kMinWindowWidth = 350;
     constexpr int kMinWindowHeight = 205;
     constexpr int kDefaultWindowWidth = 1400;
     constexpr int kDefaultWindowHeight = 820;
 }
-class FullInterface : public SynthSection, public juce::OpenGLRenderer, public HeaderSection::Listener, DragAndDropContainer
+class FullInterface : public SynthSection, public juce::OpenGLRenderer, public HeaderSection::Listener,
+                      public MainSection::Listener, DragAndDropContainer
 {
 
 public :
     static constexpr double kMinOpenGlVersion = 1.4;
-    FullInterface();
+    FullInterface(SynthGuiData *synth_gui_data);
      ~FullInterface() override;
 
      void paintBackground(Graphics& g) override;
@@ -61,10 +65,10 @@ public :
             resized();
     }
 
-
+    SynthGuiData* data;
     SynthSection* full_screen_section_;
 private :
-
+    std::unique_ptr<MainSection> main_;
     std::unique_ptr<HeaderSection> header_;
     int width_;
     int resized_width_;

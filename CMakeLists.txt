@@ -52,6 +52,7 @@ add_subdirectory(JUCE)
 # Add any other modules you want modules here, before the juce_add_plugin call
 # juce_add_module(modules/my_module)
 add_subdirectory(third_party/chowdsp_utils)
+#add_subdirectory(third_party/tracktion_engine)
 # This adds the melatonin inspector module
 add_subdirectory (modules/melatonin_inspector)
 # If you only include this third party in PRIVATE source files, you do not
@@ -91,8 +92,6 @@ juce_generate_juce_header("${PROJECT_NAME}")
 # This lets us use our code in both the JUCE targets and our Test target
 # Without running into ODR violations
 add_library(SharedCode INTERFACE
-        source/interface/bitKlavierGuiInterface.h
-        source/interface/bitKlavierGuiInterface.cpp
         source/interface/open_gl_line_renderer.h
         source/interface/open_gl_line_renderer.cpp
         source/interface/FullInterface.cpp
@@ -107,6 +106,8 @@ add_library(SharedCode INTERFACE
         source/interface/header_section.cpp
         source/interface/popup_browser.cpp
         source/interface/look_and_feel/text_look_and_feel.cpp
+        source/interface/Preparations/DirectPreparation.cpp
+        source/interface/Preparations/DirectPreparation.h
 )
 
 # C++20, please
@@ -133,6 +134,7 @@ include_directories(source/synthesis)
 include_directories(source/synthesis/framework)
 include_directories(source/synthesis/lookups)
 include_directories(source/synthesis/synth_engine)
+include_directories(third_party/tracktion_engine/modules/tracktion_engine)
 # This is where you can set preprocessor definitions for JUCE and your plugin
 target_compile_definitions(SharedCode
     INTERFACE
@@ -156,6 +158,7 @@ target_compile_definitions(SharedCode
 )
 
 # Link to any other modules you added (with juce_add_module) here!
+juce_add_modules(third_party/tracktion_engine/modules/tracktion_engine)
 # Usually JUCE modules must have PRIVATE visibility
 # See https://github.com/juce-framework/JUCE/blob/master/docs/CMake%20API.md#juce_add_module
 # However, with bitKlavier2, you'll link modules to SharedCode with INTERFACE visibility
@@ -176,6 +179,7 @@ target_link_libraries(SharedCode
         chowdsp::chowdsp_dsp_utils
         chowdsp::chowdsp_gui
         chowdsp::chowdsp_plugin_base
+        #tracktion::engine
         )
 
 # Link the JUCE plugin targets our SharedCode target

@@ -13,3 +13,8 @@
 [submodule "third_party/chowdsp_utils"]
 	path = third_party/chowdsp_utils
 	url = git@github.com:Chowdhury-DSP/chowdsp_utils.git
+[submodule "third_party/tracktion_engine"]
+	path = third_party/tracktion_engine
+	url = git@github.com:Tracktion/tracktion_engine.git
+	branch = develop
+
