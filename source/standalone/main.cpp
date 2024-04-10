@@ -64,7 +64,7 @@ int loadAudioFile(AudioSampleBuffer& destination, InputStream* audio_stream) {
 
 class SynthApplication : public JUCEApplication {
   public:
-    class MainWindow : public DocumentWindow, public ApplicationCommandTarget, private AsyncUpdater , public Timer{
+    class MainWindow : public DocumentWindow, public ApplicationCommandTarget, private AsyncUpdater {
       public:
         enum PresetCommand {
           kSave = 0x5001,
@@ -128,22 +128,11 @@ class SynthApplication : public JUCEApplication {
           return findFirstTargetParentComponent();
         }
 
-        void timerCallback()
-        {
-//          editor_->getGui()->open_gl_context_.attachTo(*editor_->getGui());
-//          stopTimer();
-        }
 
+
+        //empty resized function fixes flickering
         void resized() override
         {
-//          if ( editor_ != nullptr)
-//          {
-//            editor_->getGui()->open_gl_context_.detach();// to avoid flickering when resizing the window
-//            DocumentWindow::resized();
-//            editor_->resized();
-//            startTimer(100);
-//          }
-
         }
         void getAllCommands(Array<CommandID>& commands) override {
           commands.add(kSave);
