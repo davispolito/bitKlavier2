@@ -16,7 +16,7 @@
 
 #pragma once
 
-#include "../../../cmake-build-debug/juce_binarydata_Assets/JuceLibraryCode/BinaryData.h"
+
 #include "../../synthesis/framework/utils.h"
 #include "BinaryData.h"
 #include <juce_graphics/juce_graphics.h>

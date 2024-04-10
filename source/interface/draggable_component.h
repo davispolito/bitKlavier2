@@ -7,6 +7,8 @@
 #include <juce_graphics/juce_graphics.h>
 #include <juce_gui_basics/juce_gui_basics.h>
 #include "open_gl_image_component.h"
+#include "OpenGLImageFileComponent.h"
+#include "open_gl_multi_image.h"
 #include "common.h"
 #include "synth_section.h"
 #include "common.h"
@@ -148,8 +150,8 @@ public:
         virtual ~Listener() = default;
     };
 
-    OpenGlImageComponent* getImageComponent() { return &image_component_; }
-    void redoImage() { image_component_.redrawImage(true); }
+    OpenGlImageFileComponent* getImageComponent() { return &image_component_; }
+    void redoImage() { image_component_.redrawImage(true); }//image_component_.redrawImage(true); }
 private :
 
     //void valueTreePropertyChanged (juce::ValueTree& v, const juce::Identifier& i) override;
@@ -157,7 +159,8 @@ private :
 //    juce::UndoManager &um;
     Image shadow_;
     std::vector<Listener*> listeners_;
-    OpenGlImageComponent image_component_;
+    OpenGlImageFileComponent image_component_;
+    OpenGlMultiImage image__;
     juce::Path icon_;
     bool wasJustDragged;
    // std::unique_ptr<OpenGlImageComponent> background_;

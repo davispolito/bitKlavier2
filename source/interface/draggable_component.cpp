@@ -13,15 +13,18 @@ namespace
     }
 }
 
-BKItem::BKItem (bitklavier::BKPreparationType type) :
-                                                                                                Button("bkitem")
+BKItem::BKItem (bitklavier::BKPreparationType type) : Button("bkitem"),
+                                                      image__(20)
                                                                                                  //state(v),
 //um(um)
                                                       //DraggableComponent(true, false, true, 50, 50, 50, 50)
 {
 
     //setSize(120,120);
+    Image im = ImageCache::getFromMemory(BinaryData::direct_icon_png, BinaryData::direct_icon_pngSize);
+    ///image__.setOwnImage(im);
     image_component_.setComponent(this);
+    image_component_.setOwnImage(im);
     //state.addListener(this);
     icon_ = getPathForPreparation(type);
     //setSkinOverride(Skin::kBKItem);
@@ -40,7 +43,7 @@ void BKItem::paintButton (juce::Graphics& g, bool shouldDrawButtonAsHighlighted,
 //    float icon_y = (getHeight() - icon_width) / 2.0f;
 //    Rectangle<float> icon_bounds(icon_x, icon_y, icon_width, icon_width);
 
-    //redoImage();
+   // redoImage();
     g.setColour(findColour(Skin::kShadow, true));
     g.drawImageAt(shadow_, 0, 0, true);
     //g.setColour(Colours::red);
@@ -73,7 +76,7 @@ void BKItem::resized()
     Rectangle<float> bounds = getLocalBounds().toFloat();
     icon_.applyTransform(icon_.getTransformToScaleToFit(bounds,true));
     shadow_ = Image(Image::SingleChannel, getWidth(), getHeight(), true);
-
+    //image__.setBounds(255,255, getWidth(), getHeight());
     Graphics shadow_g(shadow_);
     shadow.drawForPath(shadow_g, icon_);
     //shadow.drawForPath(shadow_g, ring_);

@@ -55,6 +55,9 @@ class OpenGlImageComponent : public OpenGlComponent {
     bool isActive() const { return active_; }
 
   protected:
+      int image_width_;
+      int image_height_;
+      std::mutex mutex_;
     Component* component_;
     bool active_;
     bool static_image_;

@@ -10,6 +10,7 @@ set(JSON_BuildTests OFF CACHE INTERNAL "")
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 include (bitKlavier2Version)
 
+
 # Change me!
 # This is the internal name of the project and the name of JUCE's shared code "target"
 # Note: This cannot have spaces (it may be 2023, but you can't have it all!)
@@ -139,6 +140,7 @@ include_directories(third_party/tracktion_engine/modules/tracktion_engine)
 target_compile_definitions(SharedCode
     INTERFACE
         #JUCE_USE_CUSTOM_PLUGIN_STANDALONE_ENTRYPOINT=1
+
         JUCE_USE_CUSTOM_PLUGIN_STANDALONE_APP=1
     # JUCE_WEB_BROWSER and JUCE_USE_CURL off by default
     JUCE_WEB_BROWSER=0  # If you set this to 1, add `NEEDS_WEB_BROWSER TRUE` to the `juce_add_plugin` call
@@ -148,7 +150,7 @@ target_compile_definitions(SharedCode
         JUCE_OPENGL3=1
     # Uncomment if you are paying for a an Indie/Pro license or releasing under GPLv3
     # JUCE_DISPLAY_SPLASH_SCREEN=0
-
+        #JUCE_ENABLE_REPAINT_DEBUGGING=1
     # lets the app known if we're Debug or Release
     CMAKE_BUILD_TYPE="${CMAKE_BUILD_TYPE}"
     VERSION="${CURRENT_VERSION}"
@@ -179,11 +181,20 @@ target_link_libraries(SharedCode
         chowdsp::chowdsp_dsp_utils
         chowdsp::chowdsp_gui
         chowdsp::chowdsp_plugin_base
+
         #tracktion::engine
         )
+include (FetchContent)
 
+FetchContent_Declare (melatonin_perfetto
+        GIT_REPOSITORY https://github.com/sudara/melatonin_perfetto.git
+        GIT_TAG origin/main)
+
+FetchContent_MakeAvailable (melatonin_perfetto)
 # Link the JUCE plugin targets our SharedCode target
-target_link_libraries("${PROJECT_NAME}" PRIVATE SharedCode)
+target_link_libraries("${PROJECT_NAME}" PRIVATE
+        SharedCode
+        Melatonin::Perfetto)
 
 # IPP support, comment out to disable
 include(bitKlavier2IPP)

@@ -10,7 +10,7 @@
 #include "header_section.h"
 #include "main_section.h"
 #include "synth_section.h"
-
+#include "melatonin_inspector/melatonin_inspector.h"
 struct SynthGuiData;
 class HeaderSection;
 class MainSection;
@@ -21,7 +21,7 @@ namespace bitklavier{
     constexpr int kDefaultWindowHeight = 820;
 }
 class FullInterface : public SynthSection, public juce::OpenGLRenderer, public HeaderSection::Listener,
-                      public MainSection::Listener, DragAndDropContainer
+                      public MainSection::Listener, DragAndDropContainer, private Timer
 {
 
 public :
@@ -34,6 +34,12 @@ public :
     void parentHierarchyChanged() override {
         SynthSection::parentHierarchyChanged();
         checkShouldReposition();
+    }
+    void timerCallback()   // to avoid flickering when resizing the window
+    {
+
+        open_gl_context_.attachTo(*this);
+        stopTimer();
     }
     void copySkinValues(const Skin& skin);
     void reloadSkin(const Skin& skin);
@@ -67,6 +73,7 @@ public :
 
     SynthGuiData* data;
     SynthSection* full_screen_section_;
+    OpenGLContext open_gl_context_;
 private :
     std::unique_ptr<MainSection> main_;
     std::unique_ptr<HeaderSection> header_;
@@ -79,12 +86,14 @@ private :
     float display_scale_;
     int pixel_multiple_;
     CriticalSection open_gl_critical_section_;
-    OpenGLContext open_gl_context_;
+    //OpenGLContext open_gl_context_;
     std::unique_ptr<Shaders> shaders_;
     OpenGlWrapper open_gl_;
     Image background_image_;
     OpenGlBackground background_;
-
+    //juce::TextButton inspectButton { "Inspect the UI" };
+    std::unique_ptr<melatonin::Inspector> inspector;
+    std::unique_ptr<OpenGlToggleButton> inspectButton;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(FullInterface)
 };
 

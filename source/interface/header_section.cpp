@@ -200,7 +200,7 @@ HeaderSection::HeaderSection() : SynthSection("header_section"), tab_offset_(0) 
   //addAndMakeVisible(inspectButton.get());
   //addChildComponent(inspectButton.get());
 
-  //addOpenGlComponent(inspectButton->getGlComponent());
+//  addOpenGlComponent(inspectButton->getGlComponent());
 //  inspectButton->setText("Inspect");
 //  // this chunk of code instantiates and opens the melatonin inspector
 //  inspectButton->onClick = [&] {

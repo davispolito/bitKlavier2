@@ -21,6 +21,7 @@
 #include "synth_base.h"
 #include "synth_gui_interface.h"
 #include <juce_audio_utils/juce_audio_utils.h>
+#include <melatonin_perfetto/melatonin_perfetto.h>
 //class SynthComputerKeyboard;
 
 class SynthEditor : public AudioAppComponent, public SynthBase, public SynthGuiInterface, public Timer {
@@ -54,7 +55,9 @@ class SynthEditor : public AudioAppComponent, public SynthBase, public SynthGuiI
     CriticalSection critical_section_;
     StringArray current_midi_ins_;
     double current_time_;
-
+#if PERFETTO
+    std::unique_ptr<perfetto::TracingSession> tracingSession;
+#endif
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(SynthEditor)
 };
 

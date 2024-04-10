@@ -19,7 +19,7 @@
 
 
 #include "synth_section.h"
-//#include "melatonin_inspector/melatonin_inspector.h"
+
 //class LogoButton;
 //
 //class LogoSection : public SynthSection {

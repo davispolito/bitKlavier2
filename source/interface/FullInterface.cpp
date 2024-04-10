@@ -39,13 +39,24 @@ FullInterface::FullInterface(SynthGuiData* synth_data) : SynthSection("full_inte
    t.setProperty(IDs::name, "default", nullptr);
 
    data->tree.addChild(t, -1, nullptr);
-   //main_ = std::make_unique<MainSection>(data->tree.getChildWithName(IDs::PIANO), data->um, open_gl_);
-   //addSubSection(main_.get());
-   //main_->addListener(this);
+   main_ = std::make_unique<MainSection>(data->tree.getChildWithName(IDs::PIANO), data->um, open_gl_);
+   addSubSection(main_.get());
+   main_->addListener(this);
 
-   //inspectButton->setLookAndFeel(TextLookAndFeel::instance());
-   //
-   //inspectButton->setButtonText("Inspect the UI");
+   inspectButton = std::make_unique<OpenGlToggleButton>("Inspect the UI");
+   addAndMakeVisible(inspectButton.get());
+   addOpenGlComponent(inspectButton->getGlComponent());
+   inspectButton->setText("Inspect");
+   // this chunk of code instantiates and opens the melatonin inspector
+   inspectButton->onClick = [&] {
+       if (!inspector)
+       {
+           inspector = std::make_unique<melatonin::Inspector> (*this);
+           inspector->onClose = [this]() { inspector.reset(); };
+       }
+
+       inspector->setVisible (true);
+   };
    //setOpaque(true);
    open_gl_context_.setContinuousRepainting(true);
    open_gl_context_.setOpenGLVersionRequired(OpenGLContext::openGL3_2);
@@ -54,7 +65,7 @@ FullInterface::FullInterface(SynthGuiData* synth_data) : SynthSection("full_inte
    open_gl_context_.setComponentPaintingEnabled(false);
    open_gl_context_.attachTo(*this);
 
-
+   startTimer(100);
 
 }
 
@@ -191,12 +202,18 @@ void FullInterface::checkShouldReposition(bool resize) {
 }
 
 void FullInterface::resized() {
-   //open_gl_context_.detach();
+   //
    checkShouldReposition(false);
 
    width_ = getWidth();
    if (!enable_redo_background_)
+   {
+      // open_gl_context_.detach();
+      //DocumentWindow::resized();
+      // startTimer(100);
        return;
+   }
+
 
    resized_width_ = width_;
 
@@ -241,7 +258,8 @@ void FullInterface::resized() {
 //   header_->setTabOffset(2 * voice_padding);
 //   header_->setBounds(left, top, width, top_height);
    Rectangle<int> main_bounds(main_x, top + top_height, 2 * audio_width, height - top_height);
-   //main_->setBounds(main_bounds);
+   main_->setBounds(main_bounds);
+   inspectButton->setBounds(10, 0, 100, 100);
    if (getWidth() && getHeight())
        redoBackground();
 

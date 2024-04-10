@@ -15,7 +15,6 @@
  */
 
 #include "open_gl_image_component.h"
-#include "../../cmake-build-debug/juce_binarydata_Assets/JuceLibraryCode/BinaryData.h"
 #include "../synthesis/framework/utils.h"
 #include "BinaryData.h"
 OpenGlImageComponent::OpenGlImageComponent(String name) : OpenGlComponent(name), component_(nullptr),
@@ -50,10 +49,10 @@ void OpenGlImageComponent::redrawImage(bool force) {
   image_.lock();
 
   if (new_image)
-    draw_image_ = std::make_unique<Image>(ImageCache::getFromMemory(BinaryData::direct_icon_png, BinaryData::direct_icon_pngSize));
-    //draw_image_ = std::make_unique<Image>(Image::ARGB, width, height, false);
+    //draw_image_ = std::make_unique<Image>(ImageCache::getFromMemory(BinaryData::direct_icon_png, BinaryData::direct_icon_pngSize));
+    draw_image_ = std::make_unique<Image>(Image::ARGB, width, height, false);
 
-  //draw_image_->clear(Rectangle<int>(0, 0, width, height));
+  draw_image_->clear(Rectangle<int>(0, 0, width, height));
   Graphics g(*draw_image_);
   g.addTransform(AffineTransform::scale(pixel_scale));
   paintToImage(g);

@@ -64,7 +64,7 @@ int loadAudioFile(AudioSampleBuffer& destination, InputStream* audio_stream) {
 
 class SynthApplication : public JUCEApplication {
   public:
-    class MainWindow : public DocumentWindow, public ApplicationCommandTarget, private AsyncUpdater {
+    class MainWindow : public DocumentWindow, public ApplicationCommandTarget, private AsyncUpdater , public Timer{
       public:
         enum PresetCommand {
           kSave = 0x5001,
@@ -90,17 +90,17 @@ class SynthApplication : public JUCEApplication {
           }
 
           editor_ = new SynthEditor(visible);
-          //constrainer_.setGui(editor_->getGui());
+          constrainer_.setGui(editor_->getGui());
           if (visible) {
             editor_->animate(true);
             setContentOwned(editor_, true);
 
-            //constrainer_.setMinimumSize(bitklavier::kMinWindowWidth, bitklavier::kMinWindowHeight);
-           // constrainer_.setBorder(getPeer()->getFrameSize());
+            constrainer_.setMinimumSize(bitklavier::kMinWindowWidth, bitklavier::kMinWindowHeight);
+            constrainer_.setBorder(getPeer()->getFrameSize());
             float ratio = (1.0f * bitklavier::kDefaultWindowWidth) / bitklavier::kDefaultWindowHeight;
 
-            //constrainer_.setFixedAspectRatio(ratio);
-            //setConstrainer(&constrainer_);
+            constrainer_.setFixedAspectRatio(ratio);
+            setConstrainer(&constrainer_);
 
             centreWithSize(getWidth(), getHeight());
             setVisible(visible);
@@ -108,6 +108,7 @@ class SynthApplication : public JUCEApplication {
           }
           else
             editor_->animate(false);
+         // startTimer(100);
         }
 
         void closeButtonPressed() override {
@@ -127,6 +128,23 @@ class SynthApplication : public JUCEApplication {
           return findFirstTargetParentComponent();
         }
 
+        void timerCallback()
+        {
+//          editor_->getGui()->open_gl_context_.attachTo(*editor_->getGui());
+//          stopTimer();
+        }
+
+        void resized() override
+        {
+//          if ( editor_ != nullptr)
+//          {
+//            editor_->getGui()->open_gl_context_.detach();// to avoid flickering when resizing the window
+//            DocumentWindow::resized();
+//            editor_->resized();
+//            startTimer(100);
+//          }
+
+        }
         void getAllCommands(Array<CommandID>& commands) override {
           commands.add(kSave);
           commands.add(kSaveAs);
@@ -227,7 +245,7 @@ class SynthApplication : public JUCEApplication {
         File file_to_load_;
         SynthEditor* editor_;
         std::unique_ptr<ApplicationCommandManager> command_manager_;
-        //BorderBoundsConstrainer constrainer_;
+        BorderBoundsConstrainer constrainer_;
       
         JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(MainWindow)
     };

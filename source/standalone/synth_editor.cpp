@@ -27,9 +27,13 @@
 #include "startup.h"
 #include "utils.h"
 #include <memory>
+
+
 SynthEditor::SynthEditor(bool use_gui) : SynthGuiInterface(this, use_gui) {
   static constexpr int kHeightBuffer = 50;
-
+#if PERFETTO
+  MelatoninPerfetto::get().beginSession();
+#endif
   //computer_keyboard_ = std::make_unique<SynthComputerKeyboard>(engine_.get(), keyboard_state_.get());
   current_time_ = 0.0;
 
@@ -82,6 +86,9 @@ SynthEditor::SynthEditor(bool use_gui) : SynthGuiInterface(this, use_gui) {
 }
 
 SynthEditor::~SynthEditor() {
+#if PERFETTO
+  MelatoninPerfetto::get().endSession();
+#endif
   PopupMenu::dismissAllActiveMenus();
   shutdownAudio();
 }
