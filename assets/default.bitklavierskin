@@ -108,8 +108,14 @@
         },
         "direct": {
              "Body" : "333333",
+             "Widget Primary 1" : "0xfffbb040",
              "Shadow": "0xff000000"
-        }
+        },
+          "nostalgic": {
+                     "Body" : "333333",
+                     "Widget Primary 1" : "0xff2596be",
+                     "Shadow": "0xff000000"
+                }
 
     },
     "synth_version": 65541

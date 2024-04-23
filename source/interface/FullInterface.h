@@ -38,8 +38,8 @@ public :
     void timerCallback()   // to avoid flickering when resizing the window
     {
 
-        open_gl_context_.attachTo(*this);
-        stopTimer();
+//        open_gl_context_.attachTo(*this);
+//        stopTimer();
     }
     void copySkinValues(const Skin& skin);
     void reloadSkin(const Skin& skin);

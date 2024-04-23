@@ -11,7 +11,7 @@
 #include "open_gl_multi_image.h"
 #include "common.h"
 #include "synth_section.h"
-#include "common.h"
+
 class DraggableComponent    : public juce::Component, public juce::DragAndDropTarget
 {
 public:
@@ -127,45 +127,6 @@ private:
     JUCE_LEAK_DETECTOR (DraggableComponent)
 };
 
-
-class BKItem : /*public DraggableComponent,*/ public Button
-{
-public:
-    BKItem( bitklavier::BKPreparationType type);
-    void mouseDown(const MouseEvent& e) override;
-    void mouseDoubleClick(const MouseEvent& e) override;
-
-   // void paint(Graphics& g) override;
-
-    void resized() override;
-
-    //void itemIsBeingDragged(const MouseEvent&) override;
-    void paintButton (juce::Graphics& g, bool shouldDrawButtonAsHighlighted, bool shouldDrawButtonAsDown);
-    //void paintBackground(Graphics& g) override;
-    //void parentHierarchyChanged() override;
-
-    class Listener
-    {
-    public:
-        virtual ~Listener() = default;
-    };
-
-    OpenGlImageFileComponent* getImageComponent() { return &image_component_; }
-    void redoImage() { image_component_.redrawImage(true); }//image_component_.redrawImage(true); }
-private :
-
-    //void valueTreePropertyChanged (juce::ValueTree& v, const juce::Identifier& i) override;
-//    juce::ValueTree &state;
-//    juce::UndoManager &um;
-    Image shadow_;
-    std::vector<Listener*> listeners_;
-    OpenGlImageFileComponent image_component_;
-    OpenGlMultiImage image__;
-    juce::Path icon_;
-    bool wasJustDragged;
-   // std::unique_ptr<OpenGlImageComponent> background_;
-
-};
 
 
 #endif //BITKLAVIER2_DRAGGABLE_COMPONENT_H

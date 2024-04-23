@@ -23,7 +23,7 @@
 #include <mutex>
 
 class OpenGlImage {
-  public:
+public:
     OpenGlImage();
     virtual ~OpenGlImage();
 
@@ -35,24 +35,24 @@ class OpenGlImage {
     void unlock() { mutex_.unlock(); }
 
     void setOwnImage(Image& image) {
-      mutex_.lock();
-      owned_image_ = std::make_unique<Image>(image);
-      setImage(owned_image_.get());
-      mutex_.unlock();
+        mutex_.lock();
+        owned_image_ = std::make_unique<Image>(image);
+        setImage(owned_image_.get());
+        mutex_.unlock();
     }
 
     void setImage(Image* image) {
-      image_ = image;
-      image_width_ = image->getWidth();
-      image_height_ = image->getHeight();
+        image_ = image;
+        image_width_ = image->getWidth();
+        image_height_ = image->getHeight();
     }
 
     void setColor(Colour color) { color_ = color; }
 
     inline void setPosition(float x, float y, int index) {
-      position_vertices_[index] = x;
-      position_vertices_[index + 1] = y;
-      dirty_ = true;
+        position_vertices_[index] = x;
+        position_vertices_[index + 1] = y;
+        dirty_ = true;
     }
     inline void setTopLeft(float x, float y) { setPosition(x, y, 0); }
     inline void setBottomLeft(float x, float y) { setPosition(x, y, 4); }
@@ -66,7 +66,7 @@ class OpenGlImage {
     void setUseAlpha(bool use_alpha) { use_alpha_ = use_alpha; }
     void setScissor(bool scissor) { scissor_ = scissor; }
 
-  private:
+private:
     std::mutex mutex_;
     bool dirty_;
 
@@ -92,4 +92,5 @@ class OpenGlImage {
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(OpenGlImage)
 };
+
 

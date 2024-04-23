@@ -109,6 +109,8 @@ add_library(SharedCode INTERFACE
         source/interface/look_and_feel/text_look_and_feel.cpp
         source/interface/Preparations/DirectPreparation.cpp
         source/interface/Preparations/DirectPreparation.h
+        source/interface/BKitems/BKItem.cpp
+        source/interface/BKitems/BKItem.h
 )
 
 # C++20, please
@@ -131,6 +133,8 @@ include(XcodePrettify)
 include_directories(source/common)
 include_directories(source/interface/look_and_feel)
 include_directories(source/interface)
+include_directories(source/interface/Preparations)
+include_directories(source/interface/BKitems)
 include_directories(source/synthesis)
 include_directories(source/synthesis/framework)
 include_directories(source/synthesis/lookups)

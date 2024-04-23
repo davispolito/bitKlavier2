@@ -16,15 +16,18 @@ ConstructionSite.cpp
 #include "ConstructionSite.h"
 #include "synth_gui_interface.h"
 #include "Preparations/DirectPreparation.h"
+#include "Preparations/NostalgicPreparation.h"
 ConstructionSite::ConstructionSite( juce::ValueTree &v,  juce::UndoManager &um, OpenGlWrapper &open_gl) : SynthSection("Construction Site"),
                                                                                  tracktion::engine::ValueTreeObjectList<PreparationSection>(v),
                                                                                      state(v), undo(um), open_gl(open_gl)
 {
    // prepList = std::make_unique<PreparationList>(state, um);
     //_parent = findParentComponentOfClass<SynthGuiInterface>();
-    setWantsKeyboardFocus(false);
+    setWantsKeyboardFocus(true);
+    addKeyListener(this);
     setSkinOverride(Skin::kConstructionSite);
-    prepFactory.Register(0, DirectPreparation::createDirectSection);
+    prepFactory.Register(bitklavier::BKPreparationType::PreparationTypeDirect, DirectPreparation::createDirectSection);
+    prepFactory.Register(bitklavier::BKPreparationType::PreparationTypeNostalgic, NostalgicPreparation::createNostalgicSection);
 //    ValueTree t(IDs::PREPARATION);
 //
 //    t.setProperty(IDs::type,bitklavier::BKPreparationType::PreparationTypeDirect, nullptr);
@@ -40,6 +43,12 @@ PreparationSection* ConstructionSite::createNewObject (const juce::ValueTree& v)
     //s->initOpenGlComponents(open_gl);
     open_gl.init_comp.push_back(s->item->getImageComponent());
     addSubSection(s);
+    Skin default_skin;
+    s->setSkinValues(default_skin, false);
+    s->setSizeRatio(size_ratio_);
+    addMouseListener(s,false);
+    s->setCentrePosition(lastX * size_ratio_, lastY * size_ratio_);
+    s->setSize(260, 132);
 //    FullInterface* a = findParentComponentOfClass<FullInterface>();
 //    initOpenGlComponents();
 
@@ -53,104 +62,62 @@ ConstructionSite::~ConstructionSite(void)
 }
 void ConstructionSite::paintBackground (juce::Graphics& g)
 {
-//    paintContainer(g);
-//    paintHeadingText(g);
-//
-//    paintKnobShadows(g);
-//    paintChildrenBackgrounds(g);
-//    paintBorder(g);
+
     SynthSection::paintBackground(g);
 }
 
 void ConstructionSite::resized()
 {
     //prepList->setBounds(0, 0, getWidth(), getHeight());
-    for (auto prep: objects)
-    {
-        prep->setBounds(prep->x *size_ratio_, prep->y * size_ratio_,350, 350 ); //prep->getWidth(), prep->getHeight());
-    }
-    //repaint();
-    SynthSection::resized();
+//    for (auto prep: objects)
+//    {
+//        float proportion = prep->width / prep->height;
+//        prep->setBounds(prep->x , prep->y , prep->width * size_ratio_, prep->height*  size_ratio_); //prep->getWidth(), prep->getHeight());
+//    }
+
+    //SynthSection::resized();
 }
 
-//void ConstructionSite::paint(Graphics& g)
-//{
-//    g.setColour(Colours::burlywood.withMultipliedBrightness(0.4));
-//    g.fillAll();
-//
-////    if (connect)
-////    {
-////        g.setColour(Colours::lightgrey);
-////        g.drawLine(lineOX, lineOY, lineEX, lineEY, (processor.platform == BKIOS) ? 2 : 3);
-////
-////    }
-////
-////    for (auto line : graph->getLines())
-////    {
-////        g.setColour(Colours::goldenrod);
-////
-////        g.drawLine(line.getStartX(), line.getStartY(), line.getEndX(), line.getEndY(), (processor.platform == BKIOS) ? 1 : 2);
-////    }
-////
-////#if DRAW_MULTITOUCH
-////    for (int i = 0; i < touches.size(); ++i)
-////        drawTouch (*touches.getUnchecked(i), g);
-////#endif
-//    SynthSection::paintBackground(g);
-//}
+
 
 
 void ConstructionSite::redraw(void)
 {
-//    if (processor.prevPiano != nullptr)
-//    {
-//        for (auto item : processor.prevPiano->getItems())
-//        {
-//            item->removeMouseListener(this);
-//        }
-//    }
-
-//    removeAllChildren();
-//
-//    //graph->deselectAll();
-//    graph->reconstruct();
-//    getParentComponent()->grabKeyboardFocus();
-
     draw();
 }
 
-//void ConstructionSite::move(int which, bool fine)
-//{
-////    if (processor.updateState->currentDisplay != DisplayNil) return;
-////
-////    float changeX = 0;
-////    float changeY = 0;
-////
-////    if (which == 0) // Up
-////        changeY = fine ? -2 : -10;
-////    else if (which == 1) // Right
-////        changeX = fine ? 2 : 10;
-////    else if (which == 2) // Down
-////        changeY = fine ? 2 : 10;
-////    else if (which == 3) // Left
-////        changeX = fine ? -2 : -10;
-////
-////    for (auto item : graph->getSelectedItems())
-////    {
-////        item->setTopLeftPosition(item->getX() + changeX, item->getY() + changeY);
-////    }
-//////    if (!graph->getSelectedItems().isEmpty()) processor.saveGalleryToHistory("Move");
-//
-//    repaint();
-//}
 
 
+bool ConstructionSite::keyPressed (const juce::KeyPress& k, juce::Component* c)
+{
+    int code = k.getKeyCode();
 
+    if (code == 68) //D Direct
+    {
+        ValueTree t(IDs::PREPARATION);
 
+        t.setProperty(IDs::type,bitklavier::BKPreparationType::PreparationTypeDirect, nullptr);
+        t.setProperty(IDs::width, 260, nullptr);
+        t.setProperty(IDs::height, 132, nullptr);
+        t.setProperty(IDs::x,lastX /* - (260/2)*/, nullptr);
+        t.setProperty(IDs::y,lastY /*- (132/2)*/, nullptr);
+        //DBG("Position" + String(lastX) + " " + String(lastY))
+        state.addChild(t,-1, nullptr);
+        DBG("place" + String(lastX) + " " + String(lastY));
+    } else if (code == 78) //N nostalgic
+    {
+        ValueTree t(IDs::PREPARATION);
 
+        t.setProperty(IDs::type,bitklavier::BKPreparationType::PreparationTypeNostalgic, nullptr);
+        t.setProperty(IDs::width, 260, nullptr);
+        t.setProperty(IDs::height, 132, nullptr);
+        t.setProperty(IDs::x,lastX  - (260/2), nullptr);
+        t.setProperty(IDs::y,lastY - (132/2), nullptr);
 
-
-
+        state.addChild(t,-1, nullptr);
+    }
+    return true;
+}
 
 
 
@@ -205,12 +172,14 @@ void ConstructionSite::mouseMove (const MouseEvent& eo)
 {
     MouseEvent e = eo.getEventRelativeTo(this);
 
-    if (e.x != lastEX) lastX = e.x;
+    if (e.x != lastEX) lastX = eo.x;
 
-    if (e.y != lastEY) lastY = e.y;
+    if (e.y != lastEY) lastY = eo.y;
 
-    lastEX = e.x;
-    lastEY = e.y;
+    lastEX = eo.x;
+    lastEY = eo.y;
+    DBG("screen" + String(lastX) + " " + String(lastY));
+//    DBG("global" + String(eo.getMouseDownX()) +" " + String(eo.getMouseDownY()));
 
     if (connect)
     {
@@ -233,12 +202,13 @@ void ConstructionSite::mouseDown (const MouseEvent& eo)
 
     held = false;
 
-    lastX = e.x; lastY = e.y;
+    lastX = eo.x; lastY = eo.y;
+
 
 
 
     // This must happen before the right-click menu or the menu will close
-    getParentComponent()->grabKeyboardFocus();
+   grabKeyboardFocus();
 
     // Clicking on an item
     if (itemToSelect != nullptr )
@@ -417,14 +387,9 @@ void ConstructionSite::mouseUp (const MouseEvent& eo)
 //    DBG(e.y);
 //    DBG(eo.x);
 //    DBG(eo.y);
-    getParentComponent()->grabKeyboardFocus();
-    ValueTree t(IDs::PREPARATION);
+    //getParentComponent()->grabKeyboardFocus();
 
-    t.setProperty(IDs::type,bitklavier::BKPreparationType::PreparationTypeDirect, nullptr);
-    t.setProperty(IDs::x,lastX, nullptr);
-    t.setProperty(IDs::y,lastY, nullptr);
-    state.addChild(t,-1, nullptr);
-
+    grabKeyboardFocus();
     if (itemToSelect == nullptr)
     {
         //lasso->endLasso();

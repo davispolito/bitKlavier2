@@ -9,13 +9,15 @@
 #include "tracktion_engine.h"
 #include "common.h"
 #include "Identifiers.h"
-
-
+#include "BKItem.h"
+#include "opengl_ComponentDragger.h"
 class SynthGuiInterface;
 class PreparationSection : public SynthSection, public BKItem::Listener,  public bitklavier::ValueTreePropertyChangeListener
 {
 public:
     static constexpr float kItemPaddingY = 2.0f;
+    static constexpr float kItemPaddingX = 2.0f;
+    //static constexpr float kItemPaddingY = 2.0f;
     PreparationSection(String name, ValueTree v, UndoManager &um);
     ~PreparationSection();
 
@@ -23,7 +25,25 @@ public:
     void resized() override;
     ValueTree state;
     std::unique_ptr<BKItem> item;
-    int x, y;
+    int x, y, width, height;
+    void setSizeRatio(float ratio) override
+    {
+        size_ratio_ = ratio;
+        item->size_ratio = ratio;
+        myDragger.size_ratio_ = ratio;
+    }
+    openGLComponentDragger myDragger;
+
+    void mouseDown (const MouseEvent& e) override
+    {
+        myDragger.startDraggingComponent (this, e);
+    }
+
+    void mouseDrag (const MouseEvent& e) override
+    {
+        myDragger.dragComponent (this, e, nullptr);
+        //setBounds(getX() - getX() * size_ratio_,getY() - getY() * size_ratio_, getWidth(), getHeight());
+    }
 private:
 
 

@@ -108,7 +108,7 @@ void OpenGlBackground::render(OpenGlWrapper& open_gl) {
   if ((new_background_ || background_.getWidth() == 0) && background_image_.getWidth() > 0) {
     new_background_ = false;
     background_.loadImage(background_image_);
-
+    DBG(background_.getWidth());
     float width_ratio = (1.0f * background_.getWidth()) / background_image_.getWidth();
     float height_ratio = (1.0f * background_.getHeight()) / background_image_.getHeight();
     float width_end = 2.0f * width_ratio - 1.0f;
@@ -128,7 +128,7 @@ void OpenGlBackground::render(OpenGlWrapper& open_gl) {
   image_shader_->use();
   bind(open_gl.context);
   open_gl.context.extensions.glActiveTexture(juce::gl::GL_TEXTURE0);
-
+  //DBG(background_.getWidth());
   if (texture_uniform_ != nullptr && background_.getWidth())
     texture_uniform_->set(0);
 

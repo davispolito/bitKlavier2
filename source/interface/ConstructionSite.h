@@ -10,7 +10,7 @@
 class SynthGuiInterface;
 typedef Loki::Factory<PreparationSection, int,  juce::ValueTree,  juce::UndoManager&> PreparationFactory;
 class ConstructionSite : public LassoSource<BKItem*>, public SynthSection, public juce::ValueTree::Listener,
-                         public tracktion::engine::ValueTreeObjectList<PreparationSection>
+                         public tracktion::engine::ValueTreeObjectList<PreparationSection>,private KeyListener
 {
 public:
     ConstructionSite(juce::ValueTree &v, juce::UndoManager &um, OpenGlWrapper &open_gl);
@@ -21,6 +21,7 @@ public:
 
     //void paint(Graphics& g) override;
 
+    bool keyPressed(const KeyPress &k, Component *c) override;
     void itemIsBeingDragged(BKItem* thisItem, const MouseEvent& e);
 
     void paintBackground(Graphics& g) override;

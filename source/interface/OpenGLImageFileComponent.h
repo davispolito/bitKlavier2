@@ -54,16 +54,19 @@ public:
    void paintEntireComponent(bool paint_entire_component) { paint_entire_component_ = paint_entire_component; }
    bool isActive() const { return active_; }
 
-   void setOwnImage(Image& image) {
+   void setOwnImage(Image image) {
       image_.setOwnImage(image);
+      image_height_ = image_.getImageHeight();
+      image_width_ = image_.getImageWidth();
    }
 
    void setImage(Image* image) {
        image_.setImage(image);
    }
-protected:
    int image_width_;
    int image_height_;
+protected:
+
    std::mutex mutex_;
    Component* component_;
    bool active_;

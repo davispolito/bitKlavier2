@@ -35,6 +35,7 @@ class Skin {
           kPresetBrowser,
           kConstructionSite,
           kDirect,
+          kNostalgic,
           kNumSectionOverrides
     };
 
@@ -62,37 +63,42 @@ class Skin {
     };
 
     enum ColorId {
-      kInitialColor = 0x42345678,
-      kBackground = kInitialColor,
-      kBody,
-      kBodyHeading,
-      kHeadingText,
-      kPresetText,
-      kBodyText,
-      kBorder,
-      kLabelBackground,
-        kTextEditorBackground,
-        kTextEditorBorder,
-        kTextEditorCaret,
-        kTextEditorSelection,
-        kLightenScreen,
+        kInitialColor = 0x42345678,
+        kBackground = kInitialColor,
+        kBody,
+        kBodyHeading,
+        kHeadingText,
+        kPresetText,
+        kBodyText,
+        kBorder,
+        kLabelBackground,
+        kLabelConnection,
+        kPowerButtonOn,
+        kPowerButtonOff,
 
-        kIconButtonOff,
-        kIconButtonOffHover,
-        kIconButtonOffPressed,
-        kIconButtonOn,
-        kIconButtonOnHover,
-        kIconButtonOnPressed,
+        kOverlayScreen,
+        kLightenScreen,
+        kShadow,
+        kPopupSelectorBackground,
+        kPopupBackground,
+        kPopupBorder,
 
         kTextComponentBackground,
         kTextComponentText,
 
-        kPopupSelectorBackground,
-        kPopupBackground,
-        kPopupBorder,
-        kShadow,
+        kRotaryArc,
+        kRotaryArcDisabled,
+        kRotaryArcUnselected,
+        kRotaryArcUnselectedDisabled,
+        kRotaryHand,
+        kRotaryBody,
+        kRotaryBodyBorder,
 
-        kOverlayScreen,
+        kLinearSlider,
+        kLinearSliderDisabled,
+        kLinearSliderUnselected,
+        kLinearSliderThumb,
+        kLinearSliderThumbDisabled,
 
         kWidgetCenterLine,
         kWidgetPrimary1,
@@ -105,9 +111,37 @@ class Skin {
         kWidgetAccent2,
         kWidgetBackground,
 
+        kModulationMeter,
+        kModulationMeterLeft,
+        kModulationMeterRight,
+        kModulationMeterControl,
+        kModulationButtonSelected,
+        kModulationButtonDragging,
+        kModulationButtonUnselected,
 
+        kIconSelectorIcon,
 
-      kFinalColor
+        kIconButtonOff,
+        kIconButtonOffHover,
+        kIconButtonOffPressed,
+        kIconButtonOn,
+        kIconButtonOnHover,
+        kIconButtonOnPressed,
+
+        kUiButton,
+        kUiButtonText,
+        kUiButtonHover,
+        kUiButtonPressed,
+        kUiActionButton,
+        kUiActionButtonHover,
+        kUiActionButtonPressed,
+
+        kTextEditorBackground,
+        kTextEditorBorder,
+        kTextEditorCaret,
+        kTextEditorSelection,
+
+        kFinalColor
     };
 
     static constexpr int kNumColors = kFinalColor - kInitialColor;

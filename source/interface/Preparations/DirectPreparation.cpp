@@ -3,13 +3,15 @@
 //
 
 #include "DirectPreparation.h"
+#include "BKitems/BKItem.h"
 DirectPreparation::DirectPreparation (juce::ValueTree v, juce::UndoManager& um) : PreparationSection("direct", v, um)
 {
-    item = std::make_unique<BKItem>(bitklavier::BKPreparationType::PreparationTypeDirect);
-    addOpenGlComponent(item->getImageComponent());
-    addAndMakeVisible(item.get());
-    setSkinOverride(Skin::kDirect);
-    //setSize(120,120);
+    item = std::make_unique<DirectItem> ();
+    addOpenGlComponent (item->getImageComponent());
+    addAndMakeVisible (item.get());
+
+    setSkinOverride (Skin::kDirect);
+
 
 }
 DirectPreparation::~DirectPreparation()

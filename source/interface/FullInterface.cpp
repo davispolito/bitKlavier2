@@ -62,10 +62,11 @@ FullInterface::FullInterface(SynthGuiData* synth_data) : SynthSection("full_inte
    open_gl_context_.setOpenGLVersionRequired(OpenGLContext::openGL3_2);
    open_gl_context_.setSwapInterval(0);
    open_gl_context_.setRenderer(this);
+   //componentpaintingenabled fixes flickering
    open_gl_context_.setComponentPaintingEnabled(false);
    open_gl_context_.attachTo(*this);
 
-   startTimer(100);
+   ///startTimer(100);
 
 }
 
@@ -202,10 +203,9 @@ void FullInterface::checkShouldReposition(bool resize) {
 }
 
 void FullInterface::resized() {
-   //
-   checkShouldReposition(false);
 
-   width_ = getWidth();
+//SynthSection::resized();
+
    if (!enable_redo_background_)
    {
       // open_gl_context_.detach();
@@ -213,7 +213,8 @@ void FullInterface::resized() {
       // startTimer(100);
        return;
    }
-
+   width_ = getWidth();
+   checkShouldReposition(false);
 
    resized_width_ = width_;
 
@@ -313,6 +314,7 @@ void FullInterface::renderOpenGL() {
        return;
 
    float render_scale = open_gl_.context.getRenderingScale();
+   //DBG(render_scale);
    if (render_scale != last_render_scale_) {
        last_render_scale_ = render_scale;
        MessageManager::callAsync([=] { checkShouldReposition(true); });
@@ -326,7 +328,7 @@ void FullInterface::renderOpenGL() {
     }
    ScopedLock lock(open_gl_critical_section_);
    open_gl_.display_scale = display_scale_;
-   background_.render(open_gl_);
+   background_.render (open_gl_);
 
    renderOpenGlComponents(open_gl_, animate_);
 }

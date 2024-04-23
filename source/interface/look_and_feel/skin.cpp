@@ -29,7 +29,8 @@ namespace {
         "Popup Browser",
         "Preset Browser",
         "Construction Site",
-        "direct"
+        "direct",
+        "nostalgic"
   };
 
   const std::string kValueNames[Skin::kNumSkinValueIds] = {
@@ -53,33 +54,42 @@ namespace {
   };
 
   const std::string kColorNames[Skin::kNumColors] = {
-    "Background",
-    "Body",
-    "Body Heading Background",
-    "Heading Text",
-    "Preset Text",
-    "Body Text",
-    "Border",
-    "Label Background",
-      "Text Editor Background",
-      "Text Editor Border",
-      "Text Editor Caret",
-      "Text Editor Selection"
+      "Background",
+      "Body",
+      "Body Heading Background",
+      "Heading Text",
+      "Preset Text",
+      "Body Text",
+      "Border",
+      "Label Background",
+      "Label Connection",
+      "Power Button On",
+      "Power Button Off",
+
+      "Overlay Screen",
       "Lighten Screen",
-      "Icon Button Off",
-      "Icon Button Off Hover",
-      "Icon Button Off Pressed",
-      "Icon Button On",
-      "Icon Button On Hover",
-      "Icon Button On Pressed",
-      "Text Component Background",
-      "Text Component Text",
+      "Shadow",
       "Popup Selector Background",
       "Popup Background",
       "Popup Border",
-        "Shadow",
 
-      "Overlay Screen",
+      "Text Component Background",
+      "Text Component Text",
+
+      "Rotary Arc",
+      "Rotary Arc Disabled",
+      "Rotary Arc Unselected",
+      "Rotary Arc Unselected Disabled",
+      "Rotary Hand",
+      "Rotary Body",
+      "Rotary Body Border",
+
+      "Linear Slider",
+      "Linear Slider Disabled",
+      "Linear Slider Unselected",
+      "Linear Slider Thumb",
+      "Linear Slider Thumb Disabled",
+
       "Widget Center Line",
       "Widget Primary 1",
       "Widget Primary 2",
@@ -91,6 +101,35 @@ namespace {
       "Widget Accent 2",
       "Widget Background",
 
+      "Modulation Meter",
+      "Modulation Meter Left",
+      "Modulation Meter Right",
+      "Modulation Meter Control",
+      "Modulation Button Selected",
+      "Modulation Button Dragging",
+      "Modulation Button Unselected",
+
+      "Icon Selector Icon",
+
+      "Icon Button Off",
+      "Icon Button Off Hover",
+      "Icon Button Off Pressed",
+      "Icon Button On",
+      "Icon Button On Hover",
+      "Icon Button On Pressed",
+
+      "UI Button",
+      "UI Button Text",
+      "UI Button Hover",
+      "UI Button Press",
+      "UI Action Button",
+      "UI Action Button Hover",
+      "UI Action Button Press",
+
+      "Text Editor Background",
+      "Text Editor Border",
+      "Text Editor Caret",
+      "Text Editor Selection"
 
   };
 } // namespace

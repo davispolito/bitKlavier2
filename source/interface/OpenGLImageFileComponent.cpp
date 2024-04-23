@@ -36,7 +36,7 @@ void OpenGlImageFileComponent::redrawImage(bool force) {
 
    Component* component = component_ ? component_ : this;
 
-   int pixel_scale = Desktop::getInstance().getDisplays().findDisplayForPoint(getScreenPosition()).scale;
+   float pixel_scale = Desktop::getInstance().getDisplays().getDisplayForPoint(getScreenPosition())->scale;
    int width = component->getWidth() * pixel_scale;
    int height = component->getHeight() * pixel_scale;
    if (width <= 0 || height <= 0)
@@ -66,6 +66,7 @@ void OpenGlImageFileComponent::redrawImage(bool force) {
    float right = -1.0f + 2.0f * width_ratio;
    float bottom = 1.0f - 2.0f * height_ratio;
    image_.setTopRight(right, 1.0f);
+   //image_.setTopLeft(-1.0, 1.0f * width_ratio);
    image_.setBottomLeft(-1.0f, bottom);
    image_.setBottomRight(right, bottom);
    image_.unlock();

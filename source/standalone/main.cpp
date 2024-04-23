@@ -131,9 +131,11 @@ class SynthApplication : public JUCEApplication {
 
 
         //empty resized function fixes flickering
-        void resized() override
-        {
-        }
+//        void resized() override
+//        {
+//          //if (editor_ != nullptr)
+//          //  editor_->setBounds(getBounds());
+//        }
         void getAllCommands(Array<CommandID>& commands) override {
           commands.add(kSave);
           commands.add(kSaveAs);

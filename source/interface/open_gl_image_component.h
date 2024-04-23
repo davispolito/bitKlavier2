@@ -23,20 +23,20 @@
 class SynthSection;
 
 class OpenGlImageComponent : public OpenGlComponent {
-  public:
+public:
     OpenGlImageComponent(String name = "");
     virtual ~OpenGlImageComponent() = default;
 
     virtual void paintBackground(Graphics& g) override {
-      redrawImage(false);
+        redrawImage(false);
     }
 
     virtual void paintToImage(Graphics& g) {
-      Component* component = component_ ? component_ : this;
-      if (paint_entire_component_)
-        component->paintEntireComponent(g, false);
-      else
-        component->paint(g);
+        Component* component = component_ ? component_ : this;
+        if (paint_entire_component_)
+            component->paintEntireComponent(g, false);
+        else
+            component->paint(g);
     }
 
     virtual void init(OpenGlWrapper& open_gl) override;
@@ -54,10 +54,7 @@ class OpenGlImageComponent : public OpenGlComponent {
     void paintEntireComponent(bool paint_entire_component) { paint_entire_component_ = paint_entire_component; }
     bool isActive() const { return active_; }
 
-  protected:
-      int image_width_;
-      int image_height_;
-      std::mutex mutex_;
+protected:
     Component* component_;
     bool active_;
     bool static_image_;

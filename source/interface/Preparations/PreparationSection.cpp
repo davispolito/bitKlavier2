@@ -10,29 +10,36 @@ PreparationSection::PreparationSection(String name, ValueTree v, UndoManager &um
     //_parent = findParentComponentOfClass<SynthGuiInterface>();
     x = v.getProperty(IDs::x);
     y = v.getProperty(IDs::y);
+    width = v.getProperty(IDs::width);
+    height = v.getProperty(IDs::height);
 
 }
 
 void PreparationSection::paintBackground(Graphics& g)
 {
-    g.saveState();
-    Rectangle<int> bounds = getLocalArea(item.get(), item->getLocalBounds());
-    g.reduceClipRegion(bounds);
-    g.setOrigin(bounds.getTopLeft());
-    //item->paintBackground(g);
+//    g.saveState();
+//    Rectangle<int> bounds = getLocalArea(item.get(), item->getLocalBounds());
+//    g.reduceClipRegion(bounds);
+//    g.setOrigin(bounds.getTopLeft());
+//    //item->paintBackground(g);
+
     if(item)
-    {item->redoImage();}
-    g.restoreState();
+    {
+        item->setColor(findColour (Skin::kWidgetPrimary1, true));
+        item->redoImage();
+    }
+//    g.restoreState();
 }
 
 void PreparationSection::resized()
 {
-    //Rectangle<float> bounds = getLocalBounds().toFloat();
+    Rectangle<float> bounds = getLocalBounds().toFloat();
     int item_padding_y = kItemPaddingY * size_ratio_;
-    int item_height = 120 - 2 * item_padding_y;
-    int item_padding_x = (120 - item_height) / 2;
-
-    item->setBounds(item_padding_x, item_padding_y, 250, 250);
+    int item_height = getHeight() - 2 * item_padding_y;
+    int item_padding_x = kItemPaddingX * size_ratio_;
+    int item_width = getWidth() - 2 * item_padding_x;
+    item->setBounds(item_padding_y, item_padding_y, item_width,item_height) ;
+    //SynthSection::resized();
 }
 PreparationSection::~PreparationSection()
 {
