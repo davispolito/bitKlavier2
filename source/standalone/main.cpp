@@ -88,12 +88,13 @@ class SynthApplication : public JUCEApplication {
             setUsingNativeTitleBar(true);
             setResizable(true, true);
           }
-
+          //setConstrainer(constrainer_);
           editor_ = new SynthEditor(visible);
           constrainer_.setGui(editor_->getGui());
           if (visible) {
             editor_->animate(true);
             setContentOwned(editor_, true);
+
 
             constrainer_.setMinimumSize(bitklavier::kMinWindowWidth, bitklavier::kMinWindowHeight);
             constrainer_.setBorder(getPeer()->getFrameSize());
@@ -250,26 +251,26 @@ class SynthApplication : public JUCEApplication {
     void initialise(const String& command_line) override {
       String command = " " + command_line + " ";
       if (command.contains(" --version ") || command.contains(" -v ")) {
-        std::cout << getApplicationName() << " " << getApplicationVersion() << newLine;
-        quit();
+//        std::cout << getApplicationName() << " " << getApplicationVersion() << newLine;
+//        quit();
       }
       else if (command.contains(" --help ") || command.contains(" -h ")) {
-        std::cout << "Usage:" << newLine;
-        std::cout << "  " << getApplicationName().toLowerCase() << " [OPTION...]" << newLine << newLine;
-        std::cout << getApplicationName() << " polyphonic wavetable synthesizer." << newLine << newLine;
-        std::cout << "Help Options:" << newLine;
-        std::cout << "  -h, --help                          Show help options" << newLine << newLine;
-        std::cout << "Application Options:" << newLine;
-        std::cout << "  -v, --version                       Show version information and exit" << newLine;
-        std::cout << "  --headless                          Run without graphical interface." << newLine;
-        std::cout << "  --tabletowav                        Converts a vitaltable to wav file." << newLine;
-        std::cout << "  --tableimages                       Renders an image for the table." << newLine;
-        std::cout << "  --render                            Render to an audio file." << newLine;
-        std::cout << "  -m, --midi                          Note to play (with --render)." << newLine;
-        std::cout << "  -l, --length                        Not length to play (with --render)." << newLine;
-        std::cout << "  -b, --bpm                           BPM to play (with --render)." << newLine;
-        std::cout << "  --images                            Render oscilloscope images (with --render)." << newLine << newLine;
-        quit();
+//        std::cout << "Usage:" << newLine;
+//        std::cout << "  " << getApplicationName().toLowerCase() << " [OPTION...]" << newLine << newLine;
+//        std::cout << getApplicationName() << " polyphonic wavetable synthesizer." << newLine << newLine;
+//        std::cout << "Help Options:" << newLine;
+//        std::cout << "  -h, --help                          Show help options" << newLine << newLine;
+//        std::cout << "Application Options:" << newLine;
+//        std::cout << "  -v, --version                       Show version information and exit" << newLine;
+//        std::cout << "  --headless                          Run without graphical interface." << newLine;
+//        std::cout << "  --tabletowav                        Converts a vitaltable to wav file." << newLine;
+//        std::cout << "  --tableimages                       Renders an image for the table." << newLine;
+//        std::cout << "  --render                            Render to an audio file." << newLine;
+//        std::cout << "  -m, --midi                          Note to play (with --render)." << newLine;
+//        std::cout << "  -l, --length                        Not length to play (with --render)." << newLine;
+//        std::cout << "  -b, --bpm                           BPM to play (with --render)." << newLine;
+//        std::cout << "  --images                            Render oscilloscope images (with --render)." << newLine << newLine;
+//        quit();
       }
       else if (command.contains(" --tabletowav ")) {
 
@@ -320,6 +321,19 @@ class SynthApplication : public JUCEApplication {
     }
 
   private:
+      void updateContent()
+      {
+//      auto* content = new MainContentComponent (*this);
+//      decoratorConstrainer.setMainContentComponent (content);
+
+#if JUCE_IOS || JUCE_ANDROID
+      constexpr auto resizeAutomatically = false;
+#else
+      constexpr auto resizeAutomatically = true;
+#endif
+
+//      setContentOwned (content, resizeAutomatically);
+      }
     std::unique_ptr<MainWindow> main_window_;
 };
 

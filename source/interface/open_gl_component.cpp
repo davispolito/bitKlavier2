@@ -59,7 +59,7 @@ bool OpenGlComponent::setViewPort(Component* component, Rectangle<int> bounds, O
   float resize_scale = top_level->getResizingScale();
   float render_scale = 1.0f;
   if (scale == 1.0f)
-    render_scale *= open_gl.context.getRenderingScale();
+    render_scale = open_gl.context.getRenderingScale();
 
   float gl_scale = render_scale * resize_scale;
 

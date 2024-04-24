@@ -10,7 +10,7 @@
 class SynthGuiInterface;
 typedef Loki::Factory<PreparationSection, int,  juce::ValueTree,  juce::UndoManager&> PreparationFactory;
 class ConstructionSite : public LassoSource<BKItem*>, public SynthSection, public juce::ValueTree::Listener,
-                         public tracktion::engine::ValueTreeObjectList<PreparationSection>,private KeyListener
+                         public tracktion::engine::ValueTreeObjectList<PreparationSection>,private KeyListener, public DragAndDropContainer
 {
 public:
     ConstructionSite(juce::ValueTree &v, juce::UndoManager &um, OpenGlWrapper &open_gl);

@@ -46,9 +46,11 @@ PreparationSection* ConstructionSite::createNewObject (const juce::ValueTree& v)
     Skin default_skin;
     s->setSkinValues(default_skin, false);
     s->setSizeRatio(size_ratio_);
-    addMouseListener(s,false);
-    s->setCentrePosition(lastX * size_ratio_, lastY * size_ratio_);
-    s->setSize(260, 132);
+    s->setBounds(s->x, s->y , s->width, s->height);
+    //addMouseListener(s,false);
+//    Desktop::getMousePosition().getX();
+//    s->setCentrePosition(Desktop::getMousePosition().getX(), Desktop::getMousePosition().getY());
+//    s->setSize(260, 132);
 //    FullInterface* a = findParentComponentOfClass<FullInterface>();
 //    initOpenGlComponents();
 
@@ -68,14 +70,10 @@ void ConstructionSite::paintBackground (juce::Graphics& g)
 
 void ConstructionSite::resized()
 {
-    //prepList->setBounds(0, 0, getWidth(), getHeight());
-//    for (auto prep: objects)
-//    {
-//        float proportion = prep->width / prep->height;
-//        prep->setBounds(prep->x , prep->y , prep->width * size_ratio_, prep->height*  size_ratio_); //prep->getWidth(), prep->getHeight());
-//    }
+    //objects->setBounds(0, 0, getWidth(), getHeight());
 
-    //SynthSection::resized();
+
+    SynthSection::resized();
 }
 
 
@@ -99,11 +97,11 @@ bool ConstructionSite::keyPressed (const juce::KeyPress& k, juce::Component* c)
         t.setProperty(IDs::type,bitklavier::BKPreparationType::PreparationTypeDirect, nullptr);
         t.setProperty(IDs::width, 260, nullptr);
         t.setProperty(IDs::height, 132, nullptr);
-        t.setProperty(IDs::x,lastX /* - (260/2)*/, nullptr);
-        t.setProperty(IDs::y,lastY /*- (132/2)*/, nullptr);
+        t.setProperty(IDs::x,lastX  - (260/2), nullptr);
+        t.setProperty(IDs::y,lastY - (132/2), nullptr);
         //DBG("Position" + String(lastX) + " " + String(lastY))
         state.addChild(t,-1, nullptr);
-        DBG("place" + String(lastX) + " " + String(lastY));
+        //DBG("place" + String(lastX) + " " + String(lastY));
     } else if (code == 78) //N nostalgic
     {
         ValueTree t(IDs::PREPARATION);
@@ -178,7 +176,7 @@ void ConstructionSite::mouseMove (const MouseEvent& eo)
 
     lastEX = eo.x;
     lastEY = eo.y;
-    DBG("screen" + String(lastX) + " " + String(lastY));
+    //DBG("screen" + String(lastX) + " " + String(lastY));
 //    DBG("global" + String(eo.getMouseDownX()) +" " + String(eo.getMouseDownY()));
 
     if (connect)

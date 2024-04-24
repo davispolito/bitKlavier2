@@ -30,20 +30,28 @@ public:
     {
         size_ratio_ = ratio;
         item->size_ratio = ratio;
-        myDragger.size_ratio_ = ratio;
+        //myDragger.size_ratio_ = ratio;
     }
-    openGLComponentDragger myDragger;
-
+   ComponentDragger myDragger;
+   ComponentBoundsConstrainer constrainer;
     void mouseDown (const MouseEvent& e) override
     {
-        myDragger.startDraggingComponent (this, e);
+
+            myDragger.startDraggingComponent (this, e);
     }
 
     void mouseDrag (const MouseEvent& e) override
     {
-        myDragger.dragComponent (this, e, nullptr);
+
+            //setMouseCursor (MouseCursor::DraggingHandCursor);
+            myDragger.dragComponent (this, e, &constrainer);
         //setBounds(getX() - getX() * size_ratio_,getY() - getY() * size_ratio_, getWidth(), getHeight());
     }
+
+//    void mouseEnter(const juce::MouseEvent &event) override
+//    {
+//        i
+//    }
 private:
 
 

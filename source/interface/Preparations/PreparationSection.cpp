@@ -12,7 +12,9 @@ PreparationSection::PreparationSection(String name, ValueTree v, UndoManager &um
     y = v.getProperty(IDs::y);
     width = v.getProperty(IDs::width);
     height = v.getProperty(IDs::height);
+    //constrainer.setBoundsForComponent(this,getParentComponent()->getLocalBounds() );
 
+    constrainer.setMinimumOnscreenAmounts(0xffffff,0xffffff,0xffffff,0xffffff);
 }
 
 void PreparationSection::paintBackground(Graphics& g)
@@ -38,6 +40,11 @@ void PreparationSection::resized()
     int item_height = getHeight() - 2 * item_padding_y;
     int item_padding_x = kItemPaddingX * size_ratio_;
     int item_width = getWidth() - 2 * item_padding_x;
+    auto newBounds = getBoundsInParent();
+//    constrainer.checkBounds (newBounds, getBoundsInParent(),
+//        getParentComponent()->getLocalBounds(),
+//        false, false, false, false);
+
     item->setBounds(item_padding_y, item_padding_y, item_width,item_height) ;
     //SynthSection::resized();
 }

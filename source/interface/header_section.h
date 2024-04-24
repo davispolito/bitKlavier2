@@ -19,7 +19,7 @@
 
 
 #include "synth_section.h"
-
+#include "open_gl_background.h"
 //class LogoButton;
 //
 //class LogoSection : public SynthSection {
@@ -83,7 +83,8 @@ class HeaderSection : public SynthSection {
     int tab_offset_;
     std::unique_ptr<PlainTextComponent> temporary_tab_;
     std::unique_ptr<OpenGlShapeButton> exit_temporary_button_;
-
+    OpenGlBackground background_;
+    Image background_image_;
     //std::unique_ptr<SynthButton> click_me;
    // juce::TextButton inspectButton { "Inspect the UI" };
     //std::unique_ptr<melatonin::Inspector> inspector;

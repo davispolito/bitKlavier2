@@ -38,7 +38,12 @@ void BKItem::paintButton (juce::Graphics& g, bool shouldDrawButtonAsHighlighted,
 
 void BKItem::mouseDown(const MouseEvent& e)
 {
+    getParentComponent()->mouseDown(e);
+}
 
+void BKItem::mouseDrag(const MouseEvent& e)
+{
+    getParentComponent()->mouseDrag(e);
 }
 
 void BKItem::mouseDoubleClick(const MouseEvent& e)

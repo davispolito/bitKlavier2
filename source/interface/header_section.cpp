@@ -212,8 +212,7 @@ HeaderSection::HeaderSection() : SynthSection("header_section"), tab_offset_(0) 
 //
 //      inspector->setVisible (true);
 //  };
-
-
+  setAlwaysOnTop(true);
   setSkinOverride(Skin::kHeader);
 }
 

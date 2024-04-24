@@ -51,7 +51,7 @@ void SynthSection::resized() {
   Component::resized();
 //  if (off_overlay_) {
 //    off_overlay_->setBounds(getLocalBounds());
-//    off_overlay_->setColor(findColour(Skin::kBackground, true).withMultipliedAlpha(0.8f));
+//    off_overlay_->setColor(findColour(Skin:kBackground, true).withMultipliedAlpha(0.8f));
 //  }
 //  if (activator_)
 //    activator_->setBounds(getPowerButtonBounds());

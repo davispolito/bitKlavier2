@@ -31,9 +31,7 @@ FullInterface::FullInterface(SynthGuiData* synth_data) : SynthSection("full_inte
    setSkinValues(default_skin, true);
    default_skin.copyValuesToLookAndFeel(DefaultLookAndFeel::instance());
 
-//   header_ = std::make_unique<HeaderSection>();
-//   addSubSection(header_.get());
-//   header_->addListener(this);
+
 
    ValueTree t(IDs::PIANO);
    t.setProperty(IDs::name, "default", nullptr);
@@ -57,6 +55,11 @@ FullInterface::FullInterface(SynthGuiData* synth_data) : SynthSection("full_inte
 
        inspector->setVisible (true);
    };
+
+   header_ = std::make_unique<HeaderSection>();
+
+   addSubSection(header_.get());
+   header_->addListener(this);
    //setOpaque(true);
    open_gl_context_.setContinuousRepainting(true);
    open_gl_context_.setOpenGLVersionRequired(OpenGLContext::openGL3_2);
@@ -245,7 +248,9 @@ void FullInterface::resized() {
    }
 
    setSizeRatio(ratio);
-
+   DBG("");
+    DBG( "ratio: " + String(ratio));
+    DBG("display scale" + String(display_scale_));
    int padding = getPadding();
    int voice_padding = findValue(Skin::kLargePadding);
 
@@ -257,10 +262,10 @@ void FullInterface::resized() {
 
 
 //   header_->setTabOffset(2 * voice_padding);
-//   header_->setBounds(left, top, width, top_height);
-   Rectangle<int> main_bounds(main_x, top + top_height, 2 * audio_width, height - top_height);
+   header_->setBounds(left, top, width, top_height);
+   Rectangle<int> main_bounds(0, 0, width, height);
    main_->setBounds(main_bounds);
-   inspectButton->setBounds(10, 0, 100, 100);
+   //inspectButton->setBounds(10, 0, 100, 100);
    if (getWidth() && getHeight())
        redoBackground();
 

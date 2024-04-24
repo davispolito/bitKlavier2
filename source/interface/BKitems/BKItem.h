@@ -14,7 +14,7 @@ public:
     BKItem (bitklavier::BKPreparationType type);
     void mouseDown (const MouseEvent& e) override;
     void mouseDoubleClick (const MouseEvent& e) override;
-
+    void mouseDrag(const MouseEvent& e) override;
     // void paint(Graphics& g) override;
     void setIcons (const Path& layer_1, const Path& layer_2, const Path& layer_3, const Path& layer_4)
     {
@@ -31,6 +31,7 @@ public:
     {
     public:
         virtual ~Listener() = default;
+
     };
 
     OpenGlImageComponent* getImageComponent() { return &image_component_; }
@@ -99,8 +100,8 @@ public:
     {
         Rectangle<float> bounds = getLocalBounds().toFloat();
 
-        layer_2_.applyTransform(layer_2_.getTransformToScaleToFit(bounds.reduced(40.f * size_ratio).withX(80 * size_ratio),true));
-        layer_3_.applyTransform(layer_3_.getTransformToScaleToFit(bounds.reduced(20 * size_ratio),true));
+        layer_2_.applyTransform(layer_2_.getTransformToScaleToFit(bounds.reduced(40.f ).withX(80 ),true));
+        layer_3_.applyTransform(layer_3_.getTransformToScaleToFit(bounds.reduced(20 ),true));
         Rectangle<float> s = bounds.getProportion<float>({0.0f, 0.0f, 0.9f, 0.9f});
         s.setCentre(bounds.getCentre());
         layer_4_.applyTransform(layer_4_.getTransformToScaleToFit(s,true));
