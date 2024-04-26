@@ -262,7 +262,7 @@ void FullInterface::resized() {
 
 
 //   header_->setTabOffset(2 * voice_padding);
-   header_->setBounds(left, top, width, top_height);
+   //header_->setBounds(left, top, width, top_height);
    Rectangle<int> main_bounds(0, 0, width, height);
    main_->setBounds(main_bounds);
    //inspectButton->setBounds(10, 0, 100, 100);

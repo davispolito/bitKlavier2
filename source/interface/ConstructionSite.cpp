@@ -3,6 +3,7 @@
 //
 
 #include "ConstructionSite.h"
+#include "FullInterface.h"
 /*
   ==============================================================================
 
@@ -46,7 +47,29 @@ PreparationSection* ConstructionSite::createNewObject (const juce::ValueTree& v)
     Skin default_skin;
     s->setSkinValues(default_skin, false);
     s->setSizeRatio(size_ratio_);
-    s->setBounds(s->x, s->y , s->width, s->height);
+    FullInterface* top_level = findParentComponentOfClass<FullInterface>();
+    float scale = open_gl.display_scale;
+    float resize_scale = top_level->getResizingScale();
+
+    float render_scale = open_gl.context.getRenderingScale();
+    DBG(" ");
+    DBG(" ****************");
+    DBG("size" + String(size_ratio_));
+    DBG("resize scale" + String(resize_scale));
+    DBG("display" + String(getDisplayScale()));
+    DBG("rendering scale" + String (render_scale) );
+    DBG(String (" local x ") + String(s->x) + " y " + String(s->y));
+    s->setCentrePosition(s->x, s->y);
+    s->setSize(s->width, s->height);
+    //s->setBounds( s->x *getDisplayScale(), s->y *getDisplayScale()  , s->width, s->height);
+    DBG(String (" poiont x ") + String(mouse.x) + " y " + String(mouse.y));
+    //s->setCentreRelative(mouse.x, mouse.y);
+   // s->setSize( s->width, s->height);
+    DBG(String ("scaled x ") + String(s->getX()) + " y " + String(s->getY()));
+    DBG(String ("screen x ") + String(s->getScreenX()) + " screen y " + String(s->getScreenY()));
+
+    DBG(" ****************");
+    DBG(" ");
     //addMouseListener(s,false);
 //    Desktop::getMousePosition().getX();
 //    s->setCentrePosition(Desktop::getMousePosition().getX(), Desktop::getMousePosition().getY());
@@ -64,8 +87,13 @@ ConstructionSite::~ConstructionSite(void)
 }
 void ConstructionSite::paintBackground (juce::Graphics& g)
 {
-
-    SynthSection::paintBackground(g);
+    //paintContainer(g);
+    //paintHeadingText(g);
+paintBody(g);
+    //paintKnobShadows(g);
+    paintChildrenBackgrounds(g);
+    //paintBorder(g);
+    //SynthSection::paintBackground(g);
 }
 
 void ConstructionSite::resized()
@@ -97,9 +125,9 @@ bool ConstructionSite::keyPressed (const juce::KeyPress& k, juce::Component* c)
         t.setProperty(IDs::type,bitklavier::BKPreparationType::PreparationTypeDirect, nullptr);
         t.setProperty(IDs::width, 260, nullptr);
         t.setProperty(IDs::height, 132, nullptr);
-        t.setProperty(IDs::x,lastX  - (260/2), nullptr);
-        t.setProperty(IDs::y,lastY - (132/2), nullptr);
-        //DBG("Position" + String(lastX) + " " + String(lastY))
+        t.setProperty(IDs::x,lastX - 260/2, nullptr);
+        t.setProperty(IDs::y,lastY - 132 /2, nullptr);
+       // DBG("Position" + String(lastX) + " " + String(lastY));
         state.addChild(t,-1, nullptr);
         //DBG("place" + String(lastX) + " " + String(lastY));
     } else if (code == 78) //N nostalgic
@@ -169,16 +197,19 @@ void ConstructionSite::prepareItemDrag(BKItem* item, const MouseEvent& e, bool c
 void ConstructionSite::mouseMove (const MouseEvent& eo)
 {
     MouseEvent e = eo.getEventRelativeTo(this);
+    //MouseEvent a = eo.getEventRelativeTo(this);
+//    if (e.x != lastEX) lastX = e.x;
+//
+//    if (e.y != lastEY) lastY = e.y;
 
-    if (e.x != lastEX) lastX = eo.x;
-
-    if (e.y != lastEY) lastY = eo.y;
-
-    lastEX = eo.x;
-    lastEY = eo.y;
+//    lastEX = eo.x;
+//    lastEY = eo.y;mouse = e.position;
+    mouse = e.position;
+    lastX = e.x;
+    lastY = e.y;
     //DBG("screen" + String(lastX) + " " + String(lastY));
-//    DBG("global" + String(eo.getMouseDownX()) +" " + String(eo.getMouseDownY()));
-
+    //DBG("global" + String(e.getMouseDownX()) +" " + String(e.getMouseDownY()));
+    //DBG("site" + String(a.getMouseDownX()) +" " + String(a.getMouseDownY()));
     if (connect)
     {
         lineEX = e.getEventRelativeTo(this).x;
@@ -192,7 +223,7 @@ void ConstructionSite::mouseMove (const MouseEvent& eo)
 
 void ConstructionSite::mouseDown (const MouseEvent& eo)
 {
-     //DBG("mousedown");
+     DBG("mousedown");
     MouseEvent e = eo.getEventRelativeTo(this);
 
 
@@ -203,7 +234,7 @@ void ConstructionSite::mouseDown (const MouseEvent& eo)
     lastX = eo.x; lastY = eo.y;
 
 
-
+    mouse = e.position;
 
     // This must happen before the right-click menu or the menu will close
    grabKeyboardFocus();

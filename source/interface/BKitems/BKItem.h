@@ -23,10 +23,53 @@ public:
         layer_3_ = layer_3;
         layer_4_ = layer_4;
     }
-    void resized() override;
+    void resized() override
+    {
+        //redoImage();
+        const DropShadow shadow(Colours::white, 5, Point<int>(0, 0));
 
-    void paintButton (juce::Graphics& g, bool shouldDrawButtonAsHighlighted, bool shouldDrawButtonAsDown);
+        if (shadow_.getWidth() == getWidth() && shadow_.getHeight() == getHeight())
+            return;
 
+        Rectangle<float> bounds = getLocalBounds().toFloat();//.reduced(10).withX(0).withY(0);
+
+        Rectangle<float> s = bounds.getProportion<float>({0.0f, 0.0f, 0.9f, 0.9f});
+        s.setCentre(bounds.getCentre());
+        layer_1_.applyTransform(layer_1_.getTransformToScaleToFit(s,true));
+        int width = getWidth();
+        int height = getHeight();
+
+        shadow_ = Image(Image::SingleChannel,width, height, true);
+
+        Graphics shadow_g(shadow_);
+        shadow.drawForPath(shadow_g, layer_1_);
+
+        redoImage();
+    };
+
+    void paintButton (juce::Graphics& g, bool shouldDrawButtonAsHighlighted, bool shouldDrawButtonAsDown)
+    {
+        Rectangle<float> bounds = getLocalBounds().toFloat();
+
+        layer_3_.applyTransform(layer_3_.getTransformToScaleToFit(bounds.reduced(40.f ).withX(80 ),true));
+        layer_2_.applyTransform(layer_2_.getTransformToScaleToFit(bounds.reduced(20 ),true));
+        Rectangle<float> s = bounds.getProportion<float>({0.0f, 0.0f, 0.9f, 0.9f});
+        s.setCentre(bounds.getCentre());
+        layer_1_.applyTransform(layer_1_.getTransformToScaleToFit(s,true));
+
+        g.setColour(findColour(Skin::kShadow, true));
+        g.drawImageAt(shadow_, 0, 0, true);
+
+
+        g.fillPath(layer_1_);
+        Colour c = findColour(Skin::kWidgetPrimary1, true);
+        g.setColour(c);
+
+        g.fillPath(layer_2_);
+        g.fillPath(layer_3_);
+        g.strokePath(layer_1_,juce::PathStrokeType (2, juce::PathStrokeType::mitered) );
+
+    }
     class Listener
     {
     public:
@@ -72,53 +115,9 @@ public:
 
     }
 
-    void resized() override
-    {
-        //redoImage();
-        const DropShadow shadow(Colours::white, 5, Point<int>(0, 0));
-
-        if (shadow_.getWidth() == getWidth() && shadow_.getHeight() == getHeight())
-            return;
-
-        Rectangle<float> bounds = getLocalBounds().toFloat();//.reduced(10).withX(0).withY(0);
-
-        Rectangle<float> s = bounds.getProportion<float>({0.0f, 0.0f, 0.9f, 0.9f});
-        s.setCentre(bounds.getCentre());
-        layer_4_.applyTransform(layer_4_.getTransformToScaleToFit(s,true));
-        int width = getWidth();
-        int height = getHeight();
-
-        shadow_ = Image(Image::SingleChannel,width, height, true);
-
-        Graphics shadow_g(shadow_);
-        shadow.drawForPath(shadow_g, layer_4_);
-
-        redoImage();
-    }
-
-    void paintButton (juce::Graphics& g, bool shouldDrawButtonAsHighlighted, bool shouldDrawButtonAsDown) override
-    {
-        Rectangle<float> bounds = getLocalBounds().toFloat();
-
-        layer_2_.applyTransform(layer_2_.getTransformToScaleToFit(bounds.reduced(40.f ).withX(80 ),true));
-        layer_3_.applyTransform(layer_3_.getTransformToScaleToFit(bounds.reduced(20 ),true));
-        Rectangle<float> s = bounds.getProportion<float>({0.0f, 0.0f, 0.9f, 0.9f});
-        s.setCentre(bounds.getCentre());
-        layer_4_.applyTransform(layer_4_.getTransformToScaleToFit(s,true));
-
-        g.setColour(findColour(Skin::kShadow, true));
-        g.drawImageAt(shadow_, 0, 0, true);
 
 
-        g.fillPath(layer_4_);
-        Colour c = findColour(Skin::kWidgetPrimary1, true);
-        g.setColour(c);
 
-        g.fillPath(layer_2_);
-        g.fillPath(layer_3_);
-        g.strokePath(layer_4_,juce::PathStrokeType (2, juce::PathStrokeType::mitered) );
-
-    }
 };
 
 class NostalgicItem : public BKItem
@@ -129,53 +128,9 @@ public:
 
     }
 
-    void resized() override
-    {
-        //redoImage();
-        const DropShadow shadow(Colours::white, 5, Point<int>(0, 0));
-
-        if (shadow_.getWidth() == getWidth() && shadow_.getHeight() == getHeight())
-            return;
-
-        Rectangle<float> bounds = getLocalBounds().toFloat();//.reduced(10).withX(0).withY(0);
-
-        Rectangle<float> s = bounds.getProportion<float>({0.0f, 0.0f, 0.9f, 0.9f});
-        s.setCentre(bounds.getCentre());
-        layer_1_.applyTransform(layer_1_.getTransformToScaleToFit(s,true));
-        int width = getWidth();
-        int height = getHeight();
-
-        shadow_ = Image(Image::SingleChannel,width, height, true);
-
-        Graphics shadow_g(shadow_);
-        shadow.drawForPath(shadow_g, layer_1_);
-
-        redoImage();
-    }
-
-    void paintButton (juce::Graphics& g, bool shouldDrawButtonAsHighlighted, bool shouldDrawButtonAsDown) override
-    {
-        Rectangle<float> bounds = getLocalBounds().toFloat();
-
-        layer_3_.applyTransform(layer_3_.getTransformToScaleToFit(bounds.reduced(40.f * size_ratio).withX(80 * size_ratio),true));
-        layer_2_.applyTransform(layer_2_.getTransformToScaleToFit(bounds.reduced(20 * size_ratio),true));
-        Rectangle<float> s = bounds.getProportion<float>({0.0f, 0.0f, 0.9f, 0.9f});
-        s.setCentre(bounds.getCentre());
-        layer_1_.applyTransform(layer_1_.getTransformToScaleToFit(s,true));
-
-        g.setColour(findColour(Skin::kShadow, true));
-        g.drawImageAt(shadow_, 0, 0, true);
 
 
-        g.fillPath(layer_1_);
-        Colour c = findColour(Skin::kWidgetPrimary1, true);
-        g.setColour(c);
 
-        g.fillPath(layer_2_);
-        g.fillPath(layer_3_);
-        g.strokePath(layer_1_,juce::PathStrokeType (5, juce::PathStrokeType::mitered) );
-
-    }
 };
 
 

@@ -31,10 +31,6 @@ BKItem::BKItem (bitklavier::BKPreparationType type) : Button("bkitem")
 
 }
 
-void BKItem::paintButton (juce::Graphics& g, bool shouldDrawButtonAsHighlighted, bool shouldDrawButtonAsDown)
-{
-
-}
 
 void BKItem::mouseDown(const MouseEvent& e)
 {
@@ -48,11 +44,5 @@ void BKItem::mouseDrag(const MouseEvent& e)
 
 void BKItem::mouseDoubleClick(const MouseEvent& e)
 {
-
-}
-
-void BKItem::resized()
-{
-
 
 }

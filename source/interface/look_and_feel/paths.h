@@ -37,25 +37,7 @@ class Paths {
       return drawable->getOutlineAsPath();
     }
 
-    static Path direct_outline() {
-      int size;
-      Path p = fromSvgData((const void*)BinaryData::Outline_direct_svg,BinaryData::Outline_direct_svgSize);
-      //Path p = fromSvgData((const void*)BinaryData::chorus_svg,BinaryData::chorus_svgSize);
-      //p.applyTransform(p.getTransformToScaleToFit(0, 0, .9, .9, true));
-      return p;
-    }
-    static Path direct_arrow() {
-      int size;
-      return fromSvgData((const void*)BinaryData::Arrow_direct_svg,BinaryData::Arrow_direct_svgSize);
-    }
-    static Path direct_background() {
-      int size;
-      return fromSvgData((const void*)BinaryData::Background_direct_svg,BinaryData::Background_direct_svgSize);
-    }
-    static Path direct_D() {
-      int size;
-      return fromSvgData((const void*)BinaryData::D_direct_svg,BinaryData::D_direct_svgSize);
-    }
+   
 
     static Array<Path> nostalgicPaths()
     {
@@ -71,10 +53,10 @@ class Paths {
     static Array<Path> directPaths()
     {
       Array<Path> arr;
-      arr.add(direct_outline());
-      arr.add(direct_D());
-      arr.add(direct_arrow());
-      arr.add(direct_background());
+      arr.add(fromSvgData((const void*)BinaryData::Layer_1_direct_svg,BinaryData::Layer_1_direct_svgSize));
+      arr.add(fromSvgData((const void*)BinaryData::Layer_2_direct_svg,BinaryData::Layer_2_direct_svgSize));
+      arr.add(fromSvgData((const void*)BinaryData::Layer_3_direct_svg,BinaryData::Layer_3_direct_svgSize));
+      arr.add(fromSvgData((const void*)BinaryData::Layer_4_direct_svg,BinaryData::Layer_4_direct_svgSize));
 
       return arr;
     }

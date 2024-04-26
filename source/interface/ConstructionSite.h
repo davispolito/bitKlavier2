@@ -143,7 +143,9 @@ public:
     void objectRemoved (PreparationSection*) override     { resized();}//resized(); }
     void objectOrderChanged() override              {resized(); }//resized(); }
 
-PreparationSection * preparation;
+//PreparationSection * preparation;
+    juce::Viewport* view;
+    Point<float> mouse;
 private:
     //std::unique_ptr<PreparationList> prepList;
     SynthGuiInterface* _parent;

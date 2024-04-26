@@ -10,12 +10,12 @@ MainSection::MainSection(juce::ValueTree v, juce::UndoManager &um, OpenGlWrapper
     constructionSite_ = std::make_unique<ConstructionSite>(v, um, open_gl);
 
     //addAndMakeVisible(constructionSite_.get());
-    constructionPort.setViewedComponent(constructionSite_.get());
-
-    constructionPort.setScrollBarsShown(false, false, true, true);
-    addSubSection(constructionSite_.get(), false);
+    //constructionPort.setViewedComponent(constructionSite_.get());
+    constructionSite_->view = &constructionPort;
+    //constructionPort.setScrollBarsShown(false, false, true, true);
+    addSubSection(constructionSite_.get(), true);
     //addAndMakeVisible(constructionSite_.get());
-    addAndMakeVisible(constructionPort);
+    //addAndMakeVisible(constructionPort);
 //    ValueTree t(IDs::PREPARATION);
 //
 //    t.setProperty(IDs::type,bitklavier::BKPreparationType::PreparationTypeDirect, nullptr);
@@ -47,7 +47,7 @@ void MainSection::resized()
     int widget_margin = findValue(Skin::kWidgetMargin);
     int large_padding = findValue(Skin::kLargePadding);
     constructionSite_->setBounds(large_padding, 0, getDisplayScale() * width + 1500,getDisplayScale() * height + 1500);
-    constructionPort.setBounds(large_padding, 0,getDisplayScale()* width, getDisplayScale() * height);
+    //constructionPort.setBounds(large_padding, 0,getDisplayScale()* width, getDisplayScale() * height);
     //constructionPort.setBounds(large_padding, 0,width, height);
     DBG (":");
     DBG("main section");
