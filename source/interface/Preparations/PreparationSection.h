@@ -11,19 +11,23 @@
 #include "Identifiers.h"
 #include "BKItem.h"
 #include "opengl_ComponentDragger.h"
+
 class SynthGuiInterface;
-class PreparationSection : public SynthSection, public BKItem::Listener,  public bitklavier::ValueTreePropertyChangeListener
+
+
+class PreparationSection : public SynthSection, public BKItem::Listener /* public bitklavier::ValueTreePropertyChangeListener*/
 {
 public:
     static constexpr float kItemPaddingY = 2.0f;
     static constexpr float kItemPaddingX = 2.0f;
     //static constexpr float kItemPaddingY = 2.0f;
-    PreparationSection(String name, ValueTree v, UndoManager &um);
+    PreparationSection(String name, ValueTree v, OpenGlWrapper &um);
     ~PreparationSection();
 
     void paintBackground(Graphics& g) override;
     void resized() override;
     ValueTree state;
+    OpenGlWrapper &_open_gl;
     std::unique_ptr<BKItem> item;
     int x, y, width, height;
     void setSizeRatio(float ratio) override
@@ -36,7 +40,12 @@ public:
    ComponentBoundsConstrainer constrainer;
     void mouseDown (const MouseEvent& e) override
     {
+        DBG(e.getNumberOfClicks());
+            if(e.getNumberOfClicks() == 2)
+            {
+                showPrepPopup(this);
 
+            }
             myDragger.startDraggingComponent (this, e);
     }
 
@@ -48,14 +57,45 @@ public:
         //setBounds(getX() - getX() * size_ratio_,getY() - getY() * size_ratio_, getWidth(), getHeight());
     }
 
+    void mouseDoubleClick(const juce::MouseEvent &event) override
+    {
+        DBG("sc");
+        showPrepPopup(this);
+    }
+
 //    void mouseEnter(const juce::MouseEvent &event) override
 //    {
 //        i
 //    }
+
+    class PreparationPopup : public SynthSection
+    {
+    public:
+        PreparationPopup (OpenGlWrapper &open_gl) : SynthSection("prep_popup"), _open_gl(open_gl)
+        {
+
+        }
+
+        void initOpenGlComponents(OpenGlWrapper &open_gl){}
+
+        void resized(){}
+        OpenGlWrapper &_open_gl;
+    private:
+
+    };
+
+
+    virtual std::shared_ptr<SynthSection> getPrepPopup(){}
+
+//juce::AudioProcessor _proc;
+    virtual std::shared_ptr<juce::AudioProcessor> getProcessor(){}
+//std::shared_ptr<juce::AudioProcessor> _proc;
+protected:
+    std::shared_ptr<PreparationPopup> popup_view;
 private:
 
 
-    void valueTreePropertyChanged (juce::ValueTree& v, const juce::Identifier& i) override;
+    //void valueTreePropertyChanged (juce::ValueTree& v, const juce::Identifier& i) override;
     //SynthGuiInterface *_parent;
 
 

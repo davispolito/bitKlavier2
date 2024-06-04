@@ -19,7 +19,7 @@
 
 #include "midi_manager.h"
 #include "../synthesis/framework/poly_utils.h"
-#include "juce_data_structures/juce_data_structures.h"
+
 
 #include <set>
 #include <string>
@@ -34,6 +34,7 @@ class SynthBase : public MidiManager::Listener, public juce::ValueTree::Listener
 
     SynthBase();
     virtual ~SynthBase();
+
 
     void valueChanged(const std::string& name, bitklavier::mono_float value);
     void valueChangedThroughMidi(const std::string& name, bitklavier::mono_float value) override;
@@ -100,9 +101,12 @@ class SynthBase : public MidiManager::Listener, public juce::ValueTree::Listener
       bitklavier::mono_float value;
     };
 
+    void addProcessor(std::shared_ptr<juce::AudioProcessor> );
     juce::ValueTree& getValueTree();
     juce::UndoManager& getUndoManager();
-
+    static constexpr size_t actionSize = 16; // sizeof ([this, i = index] { callMessageThreadBroadcaster (i); })
+    using AudioThreadAction = juce::dsp::FixedSizeFunction<actionSize, void()>;
+    moodycamel::ReaderWriterQueue<AudioThreadAction> processorInitQueue { 10 };
   protected:
 
     juce::ValueTree tree;

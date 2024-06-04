@@ -84,14 +84,17 @@ namespace bitklavier {
     last_sample_rate_ = sample_rate;
   }
 
-  void SoundEngine::process(int num_samples)
+  void SoundEngine::process(int num_samples, AudioSampleBuffer &buffer)
   {
     //VITAL_ASSERT(num_samples <= output()->buffer_size);
-
     juce::FloatVectorOperations::disableDenormalisedNumberSupport();
     //voice_handler_->setLegato(legato_->value());
     // ProcessorRouter::process(num_samples);
-
+    MidiBuffer midimessages;
+    for(auto proc : processors)
+    {
+        proc->processBlock(buffer, midimessages);
+    }
     if (getNumActiveVoices() == 0)
     {
       //      CircularQueue<ModulationConnectionProcessor*>& connections = voice_handler_->enabledModulationConnection();

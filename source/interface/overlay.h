@@ -16,7 +16,7 @@
 
 #pragma once
 
-#include <juce_opengl/juce_opengl.h>
+#include <JuceHeader.h>
 #include "synth_section.h"
 
 #include <set>

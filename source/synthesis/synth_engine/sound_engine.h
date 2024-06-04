@@ -16,8 +16,8 @@
 
 #pragma once
 #include "../framework/note_handler.h"
-#include "juce_core/juce_core.h"
-#include "juce_audio_basics/juce_audio_basics.h"
+
+
 
 namespace bitklavier {
 
@@ -42,13 +42,40 @@ namespace bitklavier {
 
 
       }
-      void process(int num_samples);
+      void process(int num_samples, AudioSampleBuffer& buffer);
+
+      void prepareToPlay(double sampleRate, int samplesPerBlock)
+      {
+          setSampleRate(sampleRate);
+          setBufferSize(samplesPerBlock);
+      }
 
       //void correctToTime(double seconds) override;
-      int getSampleRate()
+      int getDefaultSampleRate()
       {
           return kDefaultSampleRate;
       }
+
+      int getSampleRate()
+      {
+          return curr_sample_rate;
+      }
+
+      void setSampleRate(int sampleRate)
+      {
+          curr_sample_rate = sampleRate;
+      }
+
+      void setBufferSize(int bufferSize)
+      {
+          buffer_size = bufferSize;
+      }
+
+      int getBufferSize()
+      {
+          return buffer_size;
+      }
+
       int getNumPressedNotes();
 
       int getNumActiveVoices();
@@ -87,12 +114,14 @@ namespace bitklavier {
       force_inline int getOversamplingAmount() const { return last_oversampling_amount_; }
 
       void checkOversampling();
-
+      std::vector<std::shared_ptr<AudioProcessor>> processors;
     private:
       void setOversamplingAmount(int oversampling_amount, int sample_rate);
 
       int last_oversampling_amount_;
       int last_sample_rate_;
+      int buffer_size;
+      int curr_sample_rate;
 //      Value* oversampling_;
 //      Value* bps_;
 //      Value* legato_;

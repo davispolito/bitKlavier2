@@ -4,7 +4,7 @@
 
 #ifndef BITKLAVIER2_OPENGL_COMPONENTDRAGGER_H
 #define BITKLAVIER2_OPENGL_COMPONENTDRAGGER_H
-#include "juce_gui_basics/juce_gui_basics.h"
+#include <JuceHeader.h>
 class openGLComponentDragger
 {
 

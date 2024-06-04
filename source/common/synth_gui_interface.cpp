@@ -18,7 +18,6 @@
 
 #include "synth_base.h"
 #include "../synthesis/synth_engine/sound_engine.h"
-#include "Preparations/DirectPreparation.h"
 
 
 SynthGuiData::SynthGuiData(SynthBase* synth_base) : synth(synth_base),
@@ -53,7 +52,7 @@ void SynthGuiInterface::setGuiSize(float scale) { }
 #include "../interface/look_and_feel/default_look_and_feel.h"
 #include "../interface/fullInterface.h"
 
-#include "Preparations/DirectPreparation.h"
+
 SynthGuiInterface::SynthGuiInterface(SynthBase* synth, bool use_gui) : synth_(synth) {
   if (use_gui) {
     SynthGuiData synth_data(synth_);
@@ -137,7 +136,7 @@ void SynthGuiInterface::setGuiSize(float scale) {
   if (gui_ == nullptr)
     return;
 
-  Point<int> position = gui_->getScreenBounds().getCentre();
+  juce::Point<int> position = gui_->getScreenBounds().getCentre();
   const Displays::Display& display = Desktop::getInstance().getDisplays().findDisplayForPoint(position);
 
   Rectangle<int> display_area = Desktop::getInstance().getDisplays().getTotalBounds(true);

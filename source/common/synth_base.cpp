@@ -15,12 +15,12 @@
  */
 
 #include "synth_base.h"
-
+#include "synth_gui_interface.h"
 
 
 #include "startup.h"
 #include "../synthesis/synth_engine/sound_engine.h"
-#include "synth_gui_interface.h"
+
 #include "Identifiers.h"
 
 
@@ -141,11 +141,18 @@ void SynthBase::setMpeEnabled(bool enabled) {
   midi_manager_->setMpeEnabled(enabled);
 }
 
+void SynthBase::addProcessor(std::shared_ptr<juce::AudioProcessor> processor)
+{
+    engine_->processors.push_back(processor);
+    processor->prepareToPlay(engine_->getSampleRate(), engine_->getBufferSize());
+}
 void SynthBase::processAudio(AudioSampleBuffer* buffer, int channels, int samples, int offset) {
   if (expired_)
     return;
-
-  engine_->process(samples);
+  AudioThreadAction action;
+  while (processorInitQueue.try_dequeue (action))
+      action();
+  engine_->process(samples, *buffer);
   writeAudio(buffer, channels, samples, offset);
 }
 

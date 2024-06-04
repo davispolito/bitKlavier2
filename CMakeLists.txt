@@ -51,8 +51,9 @@ include(JUCEDefaults)
 add_subdirectory(JUCE)
 
 # Add any other modules you want modules here, before the juce_add_plugin call
-# juce_add_module(modules/my_module)
+
 add_subdirectory(third_party/chowdsp_utils)
+#add_subdirectory(third_party/readerwriterqueue)
 #add_subdirectory(third_party/tracktion_engine)
 # This adds the melatonin inspector module
 add_subdirectory (modules/melatonin_inspector)
@@ -89,7 +90,7 @@ juce_add_plugin("${PROJECT_NAME}"
     # This can be different from PROJECT_NAME and can have spaces!
     # You might want to use v${MAJOR_VERSION} here once you go to v2...
     PRODUCT_NAME "${PRODUCT_NAME}")
-juce_generate_juce_header("${PROJECT_NAME}")
+
 # This lets us use our code in both the JUCE targets and our Test target
 # Without running into ODR violations
 add_library(SharedCode INTERFACE
@@ -111,6 +112,7 @@ add_library(SharedCode INTERFACE
         source/interface/Preparations/DirectPreparation.h
         source/interface/BKitems/BKItem.cpp
         source/interface/BKitems/BKItem.h
+        source/interface/synth_slider.h
 )
 
 # C++20, please
@@ -141,6 +143,19 @@ include_directories(source/synthesis/lookups)
 include_directories(source/synthesis/synth_engine)
 include_directories(third_party/tracktion_engine/modules/tracktion_engine)
 # This is where you can set preprocessor definitions for JUCE and your plugin
+set(JUCE_DEPENDENCIES
+
+        chowdsp::chowdsp_plugin_base
+        chowdsp::chowdsp_plugin_state
+        chowdsp::chowdsp_sources
+        chowdsp::chowdsp_plugin_utils
+        chowdsp::chowdsp_gui
+        chowdsp::chowdsp_dsp_utils
+        chowdsp::chowdsp_data_structures
+        juce::juce_audio_utils
+        juce::juce_dsp
+       #juce::juce_open_gl
+)
 target_compile_definitions(SharedCode
     INTERFACE
         #JUCE_USE_CUSTOM_PLUGIN_STANDALONE_ENTRYPOINT=1
@@ -158,13 +173,18 @@ target_compile_definitions(SharedCode
     # lets the app known if we're Debug or Release
     CMAKE_BUILD_TYPE="${CMAKE_BUILD_TYPE}"
     VERSION="${CURRENT_VERSION}"
-
+        JUCE_MODULE_AVAILABLE_chowdsp_plugin_state=1
     # JucePlugin_Name is for some reason doesn't use the nicer PRODUCT_NAME
     PRODUCT_NAME_WITHOUT_VERSION="bitKlavier2"
 )
 
 # Link to any other modules you added (with juce_add_module) here!
 juce_add_modules(third_party/tracktion_engine/modules/tracktion_engine)
+#juce_add_module(third_party/chowdsp_utils/modules/gui/chowdsp_gui)
+#juce_add_modules(chowdsp_utils)
+#juce_add_module(third_party/chowdsp_utils/modules/plugin/chowdsp_plugin_state)
+#juce_add_module(third_party/chowdsp_utils/modules/dsp/chowdsp_sources)
+#juce_add_module(third_party/chowdsp_utils/modules/plugin/chowdsp_plugin_utils)
 # Usually JUCE modules must have PRIVATE visibility
 # See https://github.com/juce-framework/JUCE/blob/master/docs/CMake%20API.md#juce_add_module
 # However, with bitKlavier2, you'll link modules to SharedCode with INTERFACE visibility
@@ -172,19 +192,20 @@ juce_add_modules(third_party/tracktion_engine/modules/tracktion_engine)
 target_link_libraries(SharedCode
     INTERFACE
     Assets
+
+        ${JUCE_DEPENDENCIES}
     melatonin_inspector
-    juce_audio_utils
-    juce_audio_processors
-    juce_dsp
-    juce_gui_basics
-    juce_gui_extra
+    #juce_audio_utils
+    #juce_audio_processors
+    #juce_dsp
+    #juce_gui_basics
+    #juce_gui_extra
         juce_opengl
+        #chowdsp_utils
     juce::juce_recommended_config_flags
     juce::juce_recommended_lto_flags
     juce::juce_recommended_warning_flags
-        chowdsp::chowdsp_dsp_utils
-        chowdsp::chowdsp_gui
-        chowdsp::chowdsp_plugin_base
+
 
         #tracktion::engine
         )
@@ -198,6 +219,7 @@ FetchContent_MakeAvailable (melatonin_perfetto)
 # Link the JUCE plugin targets our SharedCode target
 target_link_libraries("${PROJECT_NAME}" PRIVATE
         SharedCode
+
         Melatonin::Perfetto)
 
 # IPP support, comment out to disable
@@ -211,3 +233,4 @@ include(Benchmarks)
 
 # Pass some config to GA (like our PRODUCT_NAME)
 include(GitHubENV)
+juce_generate_juce_header("${PROJECT_NAME}")

@@ -16,7 +16,7 @@
 
 #pragma once
 
-#include "juce_opengl/juce_opengl.h"
+#include <JuceHeader.h>
 #include "look_and_feel/fonts.h"
 #include "paths.h"
 #include "open_gl_image_component.h"
@@ -33,7 +33,8 @@ class ModulationButton;
 class OpenGlComponent;
 class PresetSelector;
 class SynthSlider;
-
+class PreparationSection;
+class OpenGlBackground;
 struct PopupItems {
   int id;
   std::string name;
@@ -116,7 +117,7 @@ struct PopupItems {
 //    }
 //
 //    void paint(Graphics& g) override {
-//      const DropShadow shadow(findColour(Skin::kShadow, true), 10.0f, Point<int>(0, 0));
+//      const DropShadow shadow(findColour(Skin::kShadow, true), 10.0f,juce::Point<int>(0, 0));
 //
 //      logo_letter_.applyTransform(logo_letter_.getTransformToScaleToFit(getLocalBounds().toFloat(), true));
 //      logo_ring_.applyTransform(logo_ring_.getTransformToScaleToFit(getLocalBounds().toFloat(), true));
@@ -143,6 +144,43 @@ struct PopupItems {
 //
 //    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(AppLogo)
 //};
+
+
+class AppLogo : public OpenGlImageComponent {
+public:
+    AppLogo(String name) : OpenGlImageComponent(std::move(name)) {
+        logo_letter_ = Paths::vitalV();
+        logo_ring_ = Paths::vitalRing();
+    }
+
+    void paint(Graphics& g) override {
+        const DropShadow shadow(findColour(Skin::kShadow, true), 10.0f, juce::Point<int>(0, 0));
+
+        logo_letter_.applyTransform(logo_letter_.getTransformToScaleToFit(getLocalBounds().toFloat(), true));
+        logo_ring_.applyTransform(logo_ring_.getTransformToScaleToFit(getLocalBounds().toFloat(), true));
+
+        shadow.drawForPath(g, logo_letter_);
+        shadow.drawForPath(g, logo_ring_);
+
+        Colour letter_top_color = findColour(Skin::kWidgetSecondary1, true);
+        Colour letter_bottom_color = findColour(Skin::kWidgetSecondary2, true);
+        Colour ring_top_color = findColour(Skin::kWidgetPrimary1, true);
+        Colour ring_bottom_color = findColour(Skin::kWidgetPrimary2, true);
+        ColourGradient letter_gradient(letter_top_color, 0.0f, 12.0f, letter_bottom_color, 0.0f, 96.0f, false);
+        ColourGradient ring_gradient(ring_top_color, 0.0f, 12.0f, ring_bottom_color, 0.0f, 96.0f, false);
+        g.setGradientFill(letter_gradient);
+        g.fillPath(logo_letter_);
+
+        g.setGradientFill(ring_gradient);
+        g.fillPath(logo_ring_);
+    }
+
+private:
+    Path logo_letter_;
+    Path logo_ring_;
+
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(AppLogo)
+};
 
 class SynthSection : public Component, public Slider::Listener,
                      public Button::Listener, public SynthButton::ButtonListener {
@@ -206,9 +244,9 @@ class SynthSection : public Component, public Slider::Listener,
                           String extensions, std::string passthrough_name, std::string additional_folders_name);
 //    void updatePopupBrowser(SynthSection* owner);
 //
-    void showPopupSelector(Component* source, Point<int> position, const PopupItems& options,
+    void showPopupSelector(Component* source,juce::Point<int> position, const PopupItems& options,
                            std::function<void(int)> callback, std::function<void()> cancel = { });
-//    void showDualPopupSelector(Component* source, Point<int> position, int width,
+//    void showDualPopupSelector(Component* source,juce::Point<int> position, int width,
 //                               const PopupItems& options, std::function<void(int)> callback);
     void showPopupDisplay(Component* source, const std::string& text,
                           BubbleComponent::BubblePlacement placement, bool primary);
@@ -276,7 +314,7 @@ class SynthSection : public Component, public Slider::Listener,
     void removeSubSection(SynthSection* section);
     virtual void setScrollWheelEnabled(bool enabled);
     ToggleButton* activator() const { return activator_; }
-
+    void showPrepPopup(PreparationSection* prep);
     float getTitleWidth();
     float getPadding();
     float getPowerButtonOffset() const { return size_ratio_ * kDefaultPowerButtonOffset; }
@@ -306,6 +344,7 @@ class SynthSection : public Component, public Slider::Listener,
     void addButton(OpenGlShapeButton* button, bool show = true);
     void addSlider(SynthSlider* slider, bool show = true, bool listen = true);
     void addOpenGlComponent(OpenGlComponent* open_gl_component, bool to_beginning = false);
+    void addBackgroundComponent(OpenGlBackground* open_gl_component, bool to_beginning = false);
     void setActivator(SynthButton* activator);
     void createOffOverlay();
     void setPresetSelector(PresetSelector* preset_selector, bool half = false) {
@@ -333,7 +372,7 @@ class SynthSection : public Component, public Slider::Listener,
 
     std::vector<SynthSection*> sub_sections_;
     std::vector<OpenGlComponent*> open_gl_components_;
-
+    OpenGlBackground* background_;
     std::map<std::string, SynthSlider*> slider_lookup_;
     std::map<std::string, Button*> button_lookup_;
 

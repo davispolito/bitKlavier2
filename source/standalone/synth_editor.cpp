@@ -95,6 +95,7 @@ SynthEditor::~SynthEditor() {
 
 void SynthEditor::prepareToPlay(int buffer_size, double sample_rate) {
   //engine_->setSampleRate(sample_rate);
+  engine_->prepareToPlay(sample_rate, buffer_size);
   midi_manager_->setSampleRate(sample_rate);
 }
 

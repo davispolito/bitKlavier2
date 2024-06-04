@@ -23,7 +23,7 @@
 #pragma once
 
 
-
+#include <JuceHeader.h>
 // Debugging.
 #if DEBUG
     #include <cassert>
@@ -44,8 +44,7 @@
     #endif
 #endif
 
-#include "juce_core/juce_core.h"
-#include "juce_data_structures/juce_data_structures.h"
+
 namespace bitklavier {
 
     typedef float mono_float;
@@ -112,18 +111,18 @@ namespace bitklavier {
         BKPreparationTypeNil
     } BKPreparationType;
 
-    //==============================================================================
-    /**
-    Utility wrapper for ValueTree::Listener's that only want to override valueTreePropertyChanged.
-*/
-    struct ValueTreePropertyChangeListener  : public juce::ValueTree::Listener
-    {
-        void valueTreeChildAdded (juce::ValueTree&, juce::ValueTree&) override {}
-        void valueTreeChildRemoved (juce::ValueTree&, juce::ValueTree&, int) override {}
-        void valueTreeChildOrderChanged (juce::ValueTree&, int, int) override {}
-        void valueTreeParentChanged (juce::ValueTree&) override {}
-        void valueTreeRedirected (juce::ValueTree&) override {}
-    };
+//    //==============================================================================
+//    /**
+//    Utility wrapper for ValueTree::Listener's that only want to override valueTreePropertyChanged.
+//*/
+//    struct ValueTreePropertyChangeListener  : public juce::ValueTree::Listener
+//    {
+//        void valueTreeChildAdded (juce::ValueTree&, juce::ValueTree&) override {}
+//        void valueTreeChildRemoved (juce::ValueTree&, juce::ValueTree&, int) override {}
+//        void valueTreeChildOrderChanged (juce::ValueTree&, int, int) override {}
+//        void valueTreeParentChanged (juce::ValueTree&) override {}
+//        void valueTreeRedirected (juce::ValueTree&) override {}
+//    };
 } // namespace vital
 
 

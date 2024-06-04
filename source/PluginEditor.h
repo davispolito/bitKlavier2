@@ -1,5 +1,5 @@
 #pragma once
-#include "juce_graphics/juce_graphics.h"
+//#include "juce_graphics/juce_graphics.h"
 #include "common/border_bounds_constrainer.h"
 #include "PluginProcessor.h"
 #include "BinaryData.h"

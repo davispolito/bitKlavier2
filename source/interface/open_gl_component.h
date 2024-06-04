@@ -17,7 +17,7 @@
 #pragma once
 #include "../synthesis/framework/common.h"
 #include "../interface/look_and_feel/skin.h"
-#include "juce_opengl/juce_opengl.h"
+#include <JuceHeader.h>
 #include "look_and_feel/shaders.h"
 
 using namespace juce;

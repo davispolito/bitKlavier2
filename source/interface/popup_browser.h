@@ -22,6 +22,7 @@
 #include "open_gl_multi_quad.h"
 #include "overlay.h"
 #include "synth_section.h"
+#include "open_gl_background.h"
 
 class PopupDisplay : public SynthSection {
   public:
@@ -37,6 +38,33 @@ class PopupDisplay : public SynthSection {
     OpenGlQuad border_;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PopupDisplay)
+};
+
+
+class PreparationPopup : public SynthSection {
+public:
+    PreparationPopup();
+    void paintBackground(Graphics& g) override { }
+    void paintBackgroundShadow(Graphics& g) override { }
+    void resized() override;
+
+    void setContent(std::shared_ptr<SynthSection>);
+
+    void buttonClicked(Button* clicked_button) override;
+
+
+
+private:
+
+
+
+    std::unique_ptr<OpenGlShapeButton> exit_button_;
+    OpenGlQuad body_;
+    OpenGlQuad border_;
+
+    std::shared_ptr<SynthSection> prep_view;
+
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PreparationPopup)
 };
 
 class PopupList : public SynthSection, ScrollBar::Listener {
@@ -261,7 +289,7 @@ class SinglePopupSelector : public SynthSection, public PopupList::Listener {
         grabKeyboardFocus();
     }
 
-    void setPosition(Point<int> position, Rectangle<int> bounds);
+    void setPosition(juce::Point<int> position, Rectangle<int> bounds);
 
     void newSelection(PopupList* list, int id, int index) override {
       if (id >= 0) {
@@ -309,7 +337,7 @@ class DualPopupSelector : public SynthSection, public PopupList::Listener {
         grabKeyboardFocus();
     }
 
-    void setPosition(Point<int> position, int width, Rectangle<int> bounds);
+    void setPosition(juce::Point<int> position, int width, Rectangle<int> bounds);
 
     void newSelection(PopupList* list, int id, int index) override;
     void doubleClickedSelected(PopupList* list, int id, int index) override { setVisible(false); }

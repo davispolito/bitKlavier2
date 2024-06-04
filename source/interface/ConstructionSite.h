@@ -8,7 +8,7 @@
 #include "common.h"
 #include "Preparations/PreparationSection.h"
 class SynthGuiInterface;
-typedef Loki::Factory<PreparationSection, int,  juce::ValueTree,  juce::UndoManager&> PreparationFactory;
+typedef Loki::Factory<PreparationSection, int,  juce::ValueTree,  OpenGlWrapper&> PreparationFactory;
 class ConstructionSite : public LassoSource<BKItem*>, public SynthSection, public juce::ValueTree::Listener,
                          public tracktion::engine::ValueTreeObjectList<PreparationSection>,private KeyListener, public DragAndDropContainer
 {
@@ -145,7 +145,7 @@ public:
 
 //PreparationSection * preparation;
     juce::Viewport* view;
-    Point<float> mouse;
+   juce::Point<float> mouse;
 private:
     //std::unique_ptr<PreparationList> prepList;
     SynthGuiInterface* _parent;
@@ -229,6 +229,10 @@ private:
     //ReferenceCountedArray<PreparationSection,
 
     PreparationFactory prepFactory;
+    std::shared_ptr<juce::AudioProcessor> last_proc;
+ //    std::vector<chowdsp::Broadcaster<void()>> audioThreadBroadcasters { 10 };
+//    using AudioThreadAction = juce::dsp::FixedSizeFunction<actionSize, void()>;
+//    moodycamel::ReaderWriterQueue<AudioThreadAction> audioThreadBroadcastQueue { 10 };
 
     JUCE_LEAK_DETECTOR(ConstructionSite)
 };

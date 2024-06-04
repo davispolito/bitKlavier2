@@ -1,6 +1,5 @@
 #pragma once
-
-#include <juce_audio_processors/juce_audio_processors.h>
+#include <JuceHeader.h>
 #include "synth_base.h"
 #if (MSVC)
 #include "ipps.h"
@@ -41,6 +40,7 @@ public:
     const CriticalSection& getCriticalSection() override;
     void pauseProcessing(bool pause) override;
     SynthGuiInterface* getGuiInterface() override;
+
 
 private:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PluginProcessor)

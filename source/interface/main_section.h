@@ -6,7 +6,7 @@
 #define BITKLAVIER2_MAIN_SECTION_H
 #include "synth_section.h"
 #include "ConstructionSite.h"
-#include <juce_gui_basics/juce_gui_basics.h>
+#include <JuceHeader.h>
 class MainSection : public SynthSection
 {
 public:
@@ -35,6 +35,7 @@ private:
     juce::Viewport constructionPort;
     std::unique_ptr<ConstructionSite> constructionSite_;
     std::vector<Listener*> listeners_;
+
 };
 
 #endif //BITKLAVIER2_MAIN_SECTION_H

@@ -16,7 +16,7 @@
 
 #pragma once
 
-#include <juce_opengl/juce_opengl.h>
+#include <JuceHeader.h>
 #include "open_gl_component.h"
 
 #include <mutex>

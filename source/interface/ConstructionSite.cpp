@@ -5,14 +5,14 @@
 #include "ConstructionSite.h"
 #include "FullInterface.h"
 /*
-  ==============================================================================
+==============================================================================
 
 ConstructionSite.cpp
-        Created: 4 Apr 2017 5:46:38pm
-    Author:  Michael R Mulshine
+Created: 4 Apr 2017 5:46:38pm
+Author:  Michael R Mulshine
 
-    ==============================================================================
-    */
+==============================================================================
+*/
 
 #include "ConstructionSite.h"
 #include "synth_gui_interface.h"
@@ -22,64 +22,34 @@ ConstructionSite::ConstructionSite( juce::ValueTree &v,  juce::UndoManager &um, 
                                                                                  tracktion::engine::ValueTreeObjectList<PreparationSection>(v),
                                                                                      state(v), undo(um), open_gl(open_gl)
 {
-   // prepList = std::make_unique<PreparationList>(state, um);
-    //_parent = findParentComponentOfClass<SynthGuiInterface>();
     setWantsKeyboardFocus(true);
     addKeyListener(this);
     setSkinOverride(Skin::kConstructionSite);
     prepFactory.Register(bitklavier::BKPreparationType::PreparationTypeDirect, DirectPreparation::createDirectSection);
     prepFactory.Register(bitklavier::BKPreparationType::PreparationTypeNostalgic, NostalgicPreparation::createNostalgicSection);
-//    ValueTree t(IDs::PREPARATION);
-//
-//    t.setProperty(IDs::type,bitklavier::BKPreparationType::PreparationTypeDirect, nullptr);
-//    t.setProperty(IDs::x,lastX, nullptr);
-//    t.setProperty(IDs::y,lastY, nullptr);
-//    state.addChild(t,-1, nullptr);
-   // addSubSection(prepList.get());
 }
 PreparationSection* ConstructionSite::createNewObject (const juce::ValueTree& v)
 {
 
-    auto s = prepFactory.CreateObject((int)v.getProperty(IDs::type), v, undo);
-    //s->initOpenGlComponents(open_gl);
-    open_gl.init_comp.push_back(s->item->getImageComponent());
+    auto s = prepFactory.CreateObject((int)v.getProperty(IDs::type), v, open_gl);
+
+    last_proc = s->getProcessor();
     addSubSection(s);
     Skin default_skin;
     s->setSkinValues(default_skin, false);
     s->setSizeRatio(size_ratio_);
-    FullInterface* top_level = findParentComponentOfClass<FullInterface>();
-    float scale = open_gl.display_scale;
-    float resize_scale = top_level->getResizingScale();
-
-    float render_scale = open_gl.context.getRenderingScale();
-    DBG(" ");
-    DBG(" ****************");
-    DBG("size" + String(size_ratio_));
-    DBG("resize scale" + String(resize_scale));
-    DBG("display" + String(getDisplayScale()));
-    DBG("rendering scale" + String (render_scale) );
-    DBG(String (" local x ") + String(s->x) + " y " + String(s->y));
     s->setCentrePosition(s->x, s->y);
     s->setSize(s->width, s->height);
-    //s->setBounds( s->x *getDisplayScale(), s->y *getDisplayScale()  , s->width, s->height);
-    DBG(String (" poiont x ") + String(mouse.x) + " y " + String(mouse.y));
-    //s->setCentreRelative(mouse.x, mouse.y);
-   // s->setSize( s->width, s->height);
-    DBG(String ("scaled x ") + String(s->getX()) + " y " + String(s->getY()));
-    DBG(String ("screen x ") + String(s->getScreenX()) + " screen y " + String(s->getScreenY()));
 
-    DBG(" ****************");
-    DBG(" ");
-    //addMouseListener(s,false);
-//    Desktop::getMousePosition().getX();
-//    s->setCentrePosition(Desktop::getMousePosition().getX(), Desktop::getMousePosition().getY());
-//    s->setSize(260, 132);
-//    FullInterface* a = findParentComponentOfClass<FullInterface>();
-//    initOpenGlComponents();
+    SynthGuiInterface* parent = findParentComponentOfClass<SynthGuiInterface>();
+    parent->getSynth()->processorInitQueue.try_enqueue([this]
+                                                       {
+                                                           SynthGuiInterface* _parent = findParentComponentOfClass<SynthGuiInterface>();
+                                                        _parent->getSynth()->addProcessor(last_proc);
 
+                                                        last_proc.reset();
+                                                       });
     return s;
-
-
 }
 ConstructionSite::~ConstructionSite(void)
 {
@@ -87,20 +57,12 @@ ConstructionSite::~ConstructionSite(void)
 }
 void ConstructionSite::paintBackground (juce::Graphics& g)
 {
-    //paintContainer(g);
-    //paintHeadingText(g);
-paintBody(g);
-    //paintKnobShadows(g);
+    paintBody(g);
     paintChildrenBackgrounds(g);
-    //paintBorder(g);
-    //SynthSection::paintBackground(g);
 }
 
 void ConstructionSite::resized()
 {
-    //objects->setBounds(0, 0, getWidth(), getHeight());
-
-
     SynthSection::resized();
 }
 

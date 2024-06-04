@@ -5,12 +5,15 @@
 #ifndef BITKLAVIER2_FULLINTERFACE_H
 #define BITKLAVIER2_FULLINTERFACE_H
 
-#include <juce_opengl/juce_opengl.h>
+#include <JuceHeader.h>
 #include "open_gl_background.h"
 #include "header_section.h"
 #include "main_section.h"
 #include "synth_section.h"
 #include "melatonin_inspector/melatonin_inspector.h"
+#include "popup_browser.h"
+
+class AboutSection;
 struct SynthGuiData;
 class HeaderSection;
 class MainSection;
@@ -43,7 +46,7 @@ public :
     }
     void copySkinValues(const Skin& skin);
     void reloadSkin(const Skin& skin);
-
+    void showAboutSection() override;
     void repaintChildBackground(SynthSection* child);
     void repaintSynthesisSection();
     void repaintOpenGlBackground(OpenGlComponent* component);
@@ -70,11 +73,25 @@ public :
         if (enable)
             resized();
     }
+    void hideDisplay(bool primary);
+    void popupSelector(Component* source, juce::Point<int> position, const PopupItems& options,
+        std::function<void(int)> callback, std::function<void()> cancel);
 
+    void popupDisplay(Component* source, const std::string& text,
+        BubbleComponent::BubblePlacement placement, bool primary);
+
+    void prepDisplay(PreparationSection* source);
+    std::unique_ptr<SinglePopupSelector> popup_selector_;
+    std::unique_ptr<PreparationPopup> prep_popup;
+    std::unique_ptr<PopupDisplay> popup_display_1_;
+    std::unique_ptr<PopupDisplay> popup_display_2_;
     SynthGuiData* data;
     SynthSection* full_screen_section_;
     OpenGLContext open_gl_context_;
+    CriticalSection open_gl_critical_section_;
 private :
+
+    std::unique_ptr<AboutSection> about_section_;
     std::unique_ptr<MainSection> main_;
     std::unique_ptr<HeaderSection> header_;
     int width_;
@@ -85,7 +102,7 @@ private :
     bool enable_redo_background_{};
     float display_scale_;
     int pixel_multiple_;
-    CriticalSection open_gl_critical_section_;
+
     //OpenGLContext open_gl_context_;
     std::unique_ptr<Shaders> shaders_;
     OpenGlWrapper open_gl_;

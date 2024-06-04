@@ -22,6 +22,7 @@
 #include "paths.h"
 #include "open_gl_component.h"
 #include "synth_section.h"
+#include "FullInterface.h"
 
 namespace {
   template<class Comparator>
@@ -278,6 +279,9 @@ void PopupList::redoImage() {
   }
   rows_.setOwnImage(rows_image);
 }
+
+
+
 
 void PopupList::moveQuadToRow(OpenGlQuad& quad, int row) {
   int row_height = getRowHeight();
@@ -805,7 +809,7 @@ void SelectionList::loadBrowserCache(int start_index, int end_index) {
     String name = selection.getFileNameWithoutExtension();
     if (selection.isDirectory()) {
       int parents = getFolderDepth(selection);
-      g.addTransform(AffineTransform::translation(Point<int>(parents * folder_draw_width, 0)));
+      g.addTransform(AffineTransform::translation(juce::Point<int>(parents * folder_draw_width, 0)));
 
       if (name == String(passthrough_name_))
         name = selection.getParentDirectory().getFileNameWithoutExtension();
@@ -959,7 +963,7 @@ void SinglePopupSelector::resized() {
   border_.setColor(findColour(Skin::kBorder, true));
 }
 
-void SinglePopupSelector::setPosition(Point<int> position, Rectangle<int> bounds) {
+void SinglePopupSelector::setPosition(juce::Point<int> position, Rectangle<int> bounds) {
   int rounding = findValue(Skin::kBodyRounding);
   int width = popup_list_->getBrowseWidth();
   int height = popup_list_->getBrowseHeight() + 2 * rounding;
@@ -1024,7 +1028,7 @@ void DualPopupSelector::resized() {
   divider_.setColor(border);
 }
 
-void DualPopupSelector::setPosition(Point<int> position, int width, Rectangle<int> bounds) {
+void DualPopupSelector::setPosition(juce::Point<int> position, int width, Rectangle<int> bounds) {
   int rounding = findValue(Skin::kBodyRounding);
   int height = left_list_->getBrowseHeight() + 2 * rounding;
   int x = position.x;
@@ -1391,3 +1395,76 @@ void PopupBrowser::buttonClicked(Button* clicked_button) {
 //    url.launchInDefaultBrowser();
 //  }
 }
+
+PreparationPopup::PreparationPopup() : SynthSection("prep_popup"),
+                                       body_(Shaders::kRoundedRectangleFragment),
+                                       border_(Shaders::kRoundedRectangleBorderFragment){
+
+    addOpenGlComponent(&body_);
+    addOpenGlComponent(&border_);
+    //addBackgroundComponent(&background_);
+    //image_component_.setComponent(this);
+    //addOpenGlComponent(&image_component_);
+    exit_button_ = std::make_unique<OpenGlShapeButton>("Exit");
+    addAndMakeVisible(exit_button_.get());
+    addOpenGlComponent(exit_button_->getGlComponent());
+    exit_button_->addListener(this);
+    exit_button_->setShape(Paths::exitX());
+}
+void PreparationPopup::setContent(std::shared_ptr<SynthSection> prep)
+{
+    if(prep_view.get() != nullptr )
+    {
+        removeSubSection(prep_view.get());
+    }
+    prep_view.reset();
+    prep_view = prep;
+    addSubSection(prep_view.get());
+    Skin default_skin;
+
+    prep_view->setSkinValues(default_skin,false);
+    prep_view->setAlwaysOnTop(true);
+
+    resized();
+}
+
+void PreparationPopup::buttonClicked(juce::Button *clicked_button)
+{
+    if (clicked_button == exit_button_.get())
+    {
+        setVisible(false);
+        removeSubSection(prep_view.get());
+        prep_view.reset();
+        // this might be a race condition on the opengl thread. Might want to pass to opengl thread for destruction?
+        /// to do
+        // reset Preparation Section shared_ptr as well
+    }
+
+}
+void PreparationPopup::resized() {
+    Rectangle<int> bounds = getLocalBounds();
+    int rounding = findValue(Skin::kBodyRounding);
+
+    body_.setBounds(bounds);
+    body_.setRounding(rounding);
+    body_.setColor(findColour(Skin::kBody, true));
+
+    border_.setBounds(bounds);
+    border_.setRounding(rounding);
+    border_.setThickness(1.0f, true);
+    border_.setColor(findColour(Skin::kBorder, true));
+    auto header_bounds = bounds.removeFromTop(35);
+    exit_button_->setBounds(header_bounds.removeFromLeft(35).reduced(5));
+    if(prep_view != nullptr)
+    {
+        prep_view->setBounds(bounds);
+        //Image image(Image::ARGB, 1, 1, false);
+        //Graphics g(image);
+        //paintOpenGlChildrenBackgrounds(g);
+        //paintChildBackground(g, prep_view.get());
+        //prep_view->paintKnobShadows(g);
+    }
+
+
+}
+

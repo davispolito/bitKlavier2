@@ -38,11 +38,11 @@ namespace {
     return y;
   }
 
-  force_inline float inverseMagnitudeOfPoint(Point<float> point) {
+  force_inline float inverseMagnitudeOfPoint(juce::Point<float> point) {
     return inverseSqrt(point.x * point.x + point.y * point.y);
   }
 
-  force_inline Point<float> normalize(Point<float> point) {
+  force_inline juce::Point<float> normalize(juce::Point<float> point) {
     return point * inverseMagnitudeOfPoint(point);
   }
 }
@@ -251,15 +251,15 @@ void OpenGlLineRenderer::setFillVertices(bool left) {
 void OpenGlLineRenderer::setLineVertices(bool left) {
   float* boosts = left ? boost_left_.get() : boost_right_.get();
 
-  Point<float> prev_normalized_delta;
+ juce::Point<float> prev_normalized_delta;
   for (int i = 0; i < num_points_ - 1; ++i) {
     if (x_[i] != x_[i + 1] || y_[i] != y_[i + 1]) {
-      prev_normalized_delta = normalize(Point<float>(x_[i + 1] - x_[i], y_[i + 1] - y_[i]));
+      prev_normalized_delta = normalize(juce::Point<float>(x_[i + 1] - x_[i], y_[i + 1] - y_[i]));
       break;
     }
   }
 
-  Point<float> prev_delta_normal(-prev_normalized_delta.y, prev_normalized_delta.x);
+ juce::Point<float> prev_delta_normal(-prev_normalized_delta.y, prev_normalized_delta.x);
   float line_radius = line_width_ / 2.0f + 0.5f;
   float prev_magnitude = line_radius;
 
@@ -268,12 +268,12 @@ void OpenGlLineRenderer::setLineVertices(bool left) {
 
   for (int i = 0; i < num_points_; ++i) {
     float radius = line_radius * (1.0f + boost_amount_ * boosts[i]);
-    Point<float> point(x_[i], y_[i]);
+   juce::Point<float> point(x_[i], y_[i]);
     int next_index = i + 1;
     int clamped_next_index = std::min(next_index, num_points_ - 1);
 
-    Point<float> next_point(x_[clamped_next_index], y_[clamped_next_index]);
-    Point<float> delta = next_point - point;
+   juce::Point<float> next_point(x_[clamped_next_index], y_[clamped_next_index]);
+   juce::Point<float> delta = next_point - point;
     if (point == next_point) {
       delta = prev_normalized_delta;
       next_point = point + delta;
@@ -281,11 +281,11 @@ void OpenGlLineRenderer::setLineVertices(bool left) {
 
     float inverse_magnitude = inverseMagnitudeOfPoint(delta);
     float magnitude = 1.0f / std::max(0.00001f, inverse_magnitude);
-    Point<float> normalized_delta(delta.x * inverse_magnitude, delta.y * inverse_magnitude);
-    Point<float> delta_normal = Point<float>(-normalized_delta.y, normalized_delta.x);
+   juce::Point<float> normalized_delta(delta.x * inverse_magnitude, delta.y * inverse_magnitude);
+   juce::Point<float> delta_normal =juce::Point<float>(-normalized_delta.y, normalized_delta.x);
 
-    Point<float> angle_bisect_delta = normalized_delta - prev_normalized_delta;
-    Point<float> bisect_line;
+   juce::Point<float> angle_bisect_delta = normalized_delta - prev_normalized_delta;
+   juce::Point<float> bisect_line;
     bool straight = angle_bisect_delta.x < 0.001f && angle_bisect_delta.x > -0.001f && 
                     angle_bisect_delta.y < 0.001f && angle_bisect_delta.y > -0.001f;
     if (straight)
@@ -301,12 +301,12 @@ void OpenGlLineRenderer::setLineVertices(bool left) {
 
     float bisect_normal_dot_product = bisect_line.getDotProduct(delta_normal);
     float inner_mult = 1.0f / std::max(0.1f, std::fabs(bisect_normal_dot_product));
-    Point<float> inner_point = point + std::min(inner_mult * radius, max_inner_radius) * bisect_line;
-    Point<float> outer_point = point - bisect_line * radius;
+   juce::Point<float> inner_point = point + std::min(inner_mult * radius, max_inner_radius) * bisect_line;
+   juce::Point<float> outer_point = point - bisect_line * radius;
 
     if (bisect_normal_dot_product < 0.0f) {
-      Point<float> outer_point_start = outer_point;
-      Point<float> outer_point_end = outer_point;
+     juce::Point<float> outer_point_start = outer_point;
+     juce::Point<float> outer_point_end = outer_point;
       if (!straight) {
         outer_point_start = point + prev_delta_normal * radius;
         outer_point_end = point + delta_normal * radius;
@@ -321,8 +321,8 @@ void OpenGlLineRenderer::setLineVertices(bool left) {
       y2 = y4 = y6 = inner_point.y;
     }
     else {
-      Point<float> outer_point_start = outer_point;
-      Point<float> outer_point_end = outer_point;
+     juce::Point<float> outer_point_start = outer_point;
+     juce::Point<float> outer_point_end = outer_point;
       if (!straight) {
         outer_point_start = point - prev_delta_normal * radius;
         outer_point_end = point - delta_normal * radius;
@@ -381,10 +381,10 @@ void OpenGlLineRenderer::setLineVertices(bool left) {
     }
   }
   else {
-    Point<float> delta_start(xAt(0) - xAt(1), yAt(0) - yAt(1));
-    Point<float> delta_start_offset = normalize(delta_start) * line_radius;
-    Point<float> delta_end(xAt(num_points_ - 1) - xAt(num_points_ - 2), yAt(num_points_ - 1) - yAt(num_points_ - 2));
-    Point<float> delta_end_offset = normalize(delta_end) * line_radius;
+   juce::Point<float> delta_start(xAt(0) - xAt(1), yAt(0) - yAt(1));
+   juce::Point<float> delta_start_offset = normalize(delta_start) * line_radius;
+   juce::Point<float> delta_end(xAt(num_points_ - 1) - xAt(num_points_ - 2), yAt(num_points_ - 1) - yAt(num_points_ - 2));
+   juce::Point<float> delta_end_offset = normalize(delta_end) * line_radius;
     for (int i = 0; i < kLineVerticesPerPoint; ++i) {
       line_data_[i * kLineFloatsPerVertex] = (xAt(0) + delta_start_offset.x) * x_adjust - 1.0f;
       line_data_[i * kLineFloatsPerVertex + 1] = 1.0f - (yAt(0) + delta_start_offset.y) * y_adjust;

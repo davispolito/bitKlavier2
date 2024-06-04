@@ -19,140 +19,50 @@
 #include "fonts.h"
 #include <memory>
 
-//class LogoButton : public Button {
-//  public:
-//    LogoButton(const String& name) : Button(name) {
-//      image_component_.setComponent(this);
-//    }
 
-//
-//    void setPaths(const Path& letter, const Path& ring) {
-//      letter_ = letter;
-//      ring_ = ring;
-//    }
-//
-//    void resized() override {
-//      const DropShadow shadow(Colours::white, 5, Point<int>(0, 0));
-//
-//      if (shadow_.getWidth() == getWidth() && shadow_.getHeight() == getHeight())
-//        return;
-//
-//      Rectangle<float> bounds = getLocalBounds().toFloat();
-//      letter_.applyTransform(letter_.getTransformToScaleToFit(bounds, true));
-//      ring_.applyTransform(ring_.getTransformToScaleToFit(bounds, true));
-//
-//      shadow_ = Image(Image::SingleChannel, getWidth(), getHeight(), true);
-//
-//      Graphics shadow_g(shadow_);
-//      shadow.drawForPath(shadow_g, letter_);
-//      shadow.drawForPath(shadow_g, ring_);
-//
-//      redoImage();
-//    }
-//
-//    void paintButton(Graphics& g, bool hover, bool down) override {
-//      Rectangle<float> bounds = getLocalBounds().toFloat();
-//      letter_.applyTransform(letter_.getTransformToScaleToFit(bounds, true));
-//      ring_.applyTransform(ring_.getTransformToScaleToFit(bounds, true));
-//
-//      g.setColour(findColour(Skin::kShadow, true));
-//      g.drawImageAt(shadow_, 0, 0, true);
-//
-//      ColourGradient letter_gradient(letter_top_color_, 0.0f, 0.0f, letter_bottom_color_, 0.0f, getHeight(), false);
-//      ColourGradient ring_gradient(ring_top_color_, 0.0f, 0.0f, ring_bottom_color_, 0.0f, getHeight(), false);
-//      g.setGradientFill(letter_gradient);
-//      g.fillPath(letter_);
-//
-//      g.setGradientFill(ring_gradient);
-//      g.fillPath(ring_);
-//
-//      if (hover) {
-//        g.setColour(findColour(Skin::kLightenScreen, true));
-//        g.fillEllipse(getLocalBounds().toFloat());
-//      }
-//      else if (down) {
-//        g.setColour(findColour(Skin::kOverlayScreen, true));
-//        g.fillEllipse(getLocalBounds().toFloat());
-//      }
-//    }
-//
-//    void setLetterColors(Colour top, Colour bottom) {
-//      letter_top_color_ = top;
-//      letter_bottom_color_ = bottom;
-//      redoImage();
-//    }
-//
-//    void setRingColors(Colour top, Colour bottom) {
-//      ring_top_color_ = top;
-//      ring_bottom_color_ = bottom;
-//      redoImage();
-//    }
-//
-//    void mouseEnter(const MouseEvent& e) override {
-//      Button::mouseEnter(e);
-//      image_component_.setColor(Colour(0xffdddddd));
-//    }
-//
-//    void mouseExit(const MouseEvent& e) override {
-//      Button::mouseExit(e);
-//      image_component_.setColor(Colours::white);
-//    }
-//
-//    OpenGlImageComponent* getImageComponent() { return &image_component_; }
-//    void redoImage() { image_component_.redrawImage(true); }
-//
-//  private:
-//    OpenGlImageComponent image_component_;
-//
-//    Path letter_;
-//    Path ring_;
-//
-//    Image shadow_;
-//
-//    Colour letter_top_color_;
-//    Colour letter_bottom_color_;
-//
-//    Colour ring_top_color_;
-//    Colour ring_bottom_color_;
-//};
 
-//LogoSection::LogoSection() : SynthSection("logo_section") {
-//#if !defined(NO_TEXT_ENTRY)
-//  logo_button_ = std::make_unique<LogoButton>("logo");
-//  logo_button_->setPaths(Paths::vitalV(), Paths::vitalRing());
-//  addAndMakeVisible(logo_button_.get());
-//  addOpenGlComponent(logo_button_->getImageComponent());
-//  logo_button_->addListener(this);
-//#endif
-//
-//  setSkinOverride(Skin::kLogo);
-//}
+LogoSection::LogoSection() : SynthSection("logo_section") {
+#if !defined(NO_TEXT_ENTRY)
+  logo_button_ = std::make_unique<LogoButton>("logo");
 
-//void LogoSection::resized() {
-//  int logo_padding_y = kLogoPaddingY * size_ratio_;
-//  int logo_height = getHeight() - 2 * logo_padding_y;
-//  int logo_padding_x = (getWidth() - logo_height) / 2;
-//  if (logo_button_)
-//    logo_button_->setBounds(logo_padding_x, logo_padding_y, logo_height, logo_height);
-//}
+  addAndMakeVisible(logo_button_.get());
+  addOpenGlComponent(logo_button_->getImageComponent());
+  logo_button_->addListener(this);
+#endif
 
-//void LogoSection::paintBackground(Graphics& g) {
-//  if (logo_button_) {
-//    logo_button_->setRingColors(findColour(Skin::kWidgetPrimary1, true), findColour(Skin::kWidgetPrimary2, true));
-//    logo_button_->setLetterColors(findColour(Skin::kWidgetSecondary1, true), findColour(Skin::kWidgetSecondary2, true));
-//  }
-//}
+  setSkinOverride(Skin::kLogo);
+}
 
-//void LogoSection::buttonClicked(Button* clicked_button) {
-//  for (Listener* listener : listeners_)
-//    listener->showAboutSection();
-//}
+void LogoSection::resized() {
+  int logo_padding_y = kLogoPaddingY * size_ratio_;
+  int logo_height = getHeight() - 2 * logo_padding_y;
+  int logo_padding_x = (getWidth() - logo_height) / 2;
+  if (logo_button_)
+    logo_button_->setBounds(logo_padding_x, logo_padding_y, logo_height, logo_height);
+}
 
-HeaderSection::HeaderSection() : SynthSection("header_section"), tab_offset_(0) {
+void LogoSection::paintBackground(Graphics& g) {
+  if (logo_button_) {
+    logo_button_->setRingColors(findColour(Skin::kWidgetPrimary1, true), findColour(Skin::kWidgetPrimary2, true));
+    logo_button_->setLetterColors(findColour(Skin::kWidgetSecondary1, true), findColour(Skin::kWidgetSecondary2, true));
+  }
+}
+
+void LogoSection::buttonClicked(Button* clicked_button) {
+  for (Listener* listener : listeners_)
+    listener->showAboutSection();
+}
+
+HeaderSection::HeaderSection() : SynthSection("header_section"), tab_offset_(0), body_(Shaders::kRoundedRectangleFragment) {
   //logo_section_ = std::make_unique<LogoSection>();
   //addSubSection(logo_section_.get());
   //logo_section_->addListener(this);
 
+    addOpenGlComponent(&body_);
+    logo_section_ = std::make_unique<LogoSection>();
+    logo_section_->setAlwaysOnTop(true);
+    logo_section_->addListener(this);
+    addSubSection(logo_section_.get());
 //  tab_selector_ = std::make_unique<TabSelector>("tab_selector");
 //  addAndMakeVisible(tab_selector_.get());
 //  addOpenGlComponent(tab_selector_->getImageComponent());
@@ -251,8 +161,15 @@ void HeaderSection::resized() {
 //  spectrogram_->setColour(Skin::kBody, findColour(Skin::kBackground, true));
   int height = getHeight();
   int width = getWidth();
+
+    body_.setBounds(getLocalBounds());
+    body_.setRounding(findValue(Skin::kBodyRounding));
+    body_.setColor(findColour(Skin::kBody, true));
   int widget_margin = findValue(Skin::kWidgetMargin);
   int large_padding = findValue(Skin::kLargePadding);
+
+    int logo_width = findValue(Skin::kModulationButtonWidth);
+    logo_section_->setBounds(0, -10, logo_width , height );
   //int logo_width = findValue(Skin::kModulationButtonWidth);
  // logo_section_->setBounds(large_padding, 0, logo_width, height);
   //inspectButton->setBounds(large_padding, 0, 100, height);

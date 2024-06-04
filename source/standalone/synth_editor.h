@@ -21,7 +21,7 @@
 #include "synth_base.h"
 #include "synth_gui_interface.h"
 #include <juce_audio_utils/juce_audio_utils.h>
-#include <melatonin_perfetto/melatonin_perfetto.h>
+//#include <melatonin_perfetto/melatonin_perfetto.h>
 //class SynthComputerKeyboard;
 
 class SynthEditor : public AudioAppComponent, public SynthBase, public SynthGuiInterface, public Timer {

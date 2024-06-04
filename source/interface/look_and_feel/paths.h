@@ -19,8 +19,8 @@
 
 #include "../../synthesis/framework/utils.h"
 #include "BinaryData.h"
-#include <juce_graphics/juce_graphics.h>
-#include <juce_gui_basics/juce_gui_basics.h>
+#include <JuceHeader.h>
+
 class Paths {
   public:
     static constexpr int kLogoWidth = 1701;
@@ -37,7 +37,7 @@ class Paths {
       return drawable->getOutlineAsPath();
     }
 
-   
+
 
     static Array<Path> nostalgicPaths()
     {
@@ -60,19 +60,30 @@ class Paths {
 
       return arr;
     }
-//    static Path vitalRing() {
-//      Path path = fromSvgData((const void*)BinaryData::vital_ring_svg, BinaryData::vital_ring_svgSize);
-//      path.addLineSegment(Line<float>(0.0f, 0.0f, 0.0f, 0.0f), 0.2f);
-//      path.addLineSegment(Line<float>(kLogoWidth, kLogoWidth, kLogoWidth, kLogoWidth), 0.2f);
-//      return path;
-//    }
-//
-//    static Path vitalV() {
-//      Path path = fromSvgData((const void*)BinaryData::vital_v_svg, BinaryData::vital_ring_svgSize);
-//      path.addLineSegment(Line<float>(0.0f, 0.0f, 0.0f, 0.0f), 0.2f);
-//      path.addLineSegment(Line<float>(kLogoWidth, kLogoWidth, kLogoWidth, kLogoWidth), 0.2f);
-//      return path;
-//    }
+
+    static Array<Path> logoPaths()
+    {
+        Array<Path> arr;
+        arr.add(fromSvgData((const void*)BinaryData::layer_1_logo_svg,BinaryData::layer_1_logo_svgSize));
+        arr.add(fromSvgData((const void*)BinaryData::layer_2_logo_svg,BinaryData::layer_2_logo_svgSize));
+        arr.add(fromSvgData((const void*)BinaryData::layer_3_logo_svg,BinaryData::layer_3_logo_svgSize));
+        arr.add(fromSvgData((const void*)BinaryData::layer_4_logo_svg,BinaryData::layer_4_logo_svgSize));
+        arr.add(fromSvgData((const void*)BinaryData::layer_5_logo_svg,BinaryData::layer_5_logo_svgSize));
+        return arr;
+    }
+    static Path vitalRing() {
+      Path path = fromSvgData((const void*)BinaryData::vital_ring_svg, BinaryData::vital_ring_svgSize);
+      path.addLineSegment(Line<float>(0.0f, 0.0f, 0.0f, 0.0f), 0.2f);
+      path.addLineSegment(Line<float>(kLogoWidth, kLogoWidth, kLogoWidth, kLogoWidth), 0.2f);
+      return path;
+    }
+
+    static Path vitalV() {
+      Path path = fromSvgData((const void*)BinaryData::vital_v_svg, BinaryData::vital_ring_svgSize);
+      path.addLineSegment(Line<float>(0.0f, 0.0f, 0.0f, 0.0f), 0.2f);
+      path.addLineSegment(Line<float>(kLogoWidth, kLogoWidth, kLogoWidth, kLogoWidth), 0.2f);
+      return path;
+    }
 //
 //    static Path vitalWord() {
 //      return fromSvgData((const void*)BinaryData::vital_word_svg, BinaryData::vital_word_svgSize);
@@ -384,7 +395,7 @@ class Paths {
 
     static Path star() {
       Path path;
-      path.addStar(Point<float>(0.5f, 0.5f), 5, 0.2f, 0.4f);
+      path.addStar(juce::Point<float>(0.5f, 0.5f), 5, 0.2f, 0.4f);
       path.addLineSegment(Line<float>(0.0f, 0.0f, 0.0f, 0.0f), 0.2f);
       path.addLineSegment(Line<float>(1.0f, 1.0f, 1.0f, 1.0f), 0.2f);
       return path;

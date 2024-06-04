@@ -29,7 +29,7 @@ OpenGlImageComponent::OpenGlImageComponent(String name) : OpenGlComponent(name),
        setInterceptsMouseClicks(false, false);
 }
 
-void OpenGlImageComponent::redrawImage(bool force) {
+void OpenGlImageComponent::redrawImage(bool force, bool clear) {
    if (!active_)
        return;
 
@@ -63,9 +63,9 @@ void OpenGlImageComponent::redrawImage(bool force) {
 
    float right = -1.0f + 2.0f * width_ratio;
    float bottom = 1.0f - 2.0f * height_ratio;
-   image_.setTopRight(right, 1.0f);
-   image_.setBottomLeft(-1.0f, bottom);
-   image_.setBottomRight(right, bottom);
+//   image_.setTopRight(right, 1.0f);
+//   image_.setBottomLeft(-1.0f, bottom);
+//   image_.setBottomRight(right, bottom);
    image_.unlock();
 }
 

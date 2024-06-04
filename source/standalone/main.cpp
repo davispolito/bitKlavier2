@@ -27,13 +27,13 @@
 void handleBitklavierCrash(void* data) {
   //LoadSave::writeCrashLog(SystemStats::getStackBacktrace());
 }
-namespace ProjectInfo
-{
-  const char* const  projectName    = "bitKlavier";
-  const char* const  companyName    = "Many Arrows Music";
-  const char* const  versionString  = "3.4a";
-  const int          versionNumber  = 0x30400;
-}
+//namespace ProjectInfo
+//{
+//  const char* const  projectName    = "bitKlavier";
+//  const char* const  companyName    = "Many Arrows Music";
+//  const char* const  versionString  = "3.4a";
+//  const int          versionNumber  = 0x30400;
+//}
 String getArgumentValue(const StringArray& args, const String& flag, const String& full_flag) {
   int index = 0;
   for (String arg : args) {

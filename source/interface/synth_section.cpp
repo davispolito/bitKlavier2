@@ -21,11 +21,12 @@
 #include "FullInterface.h"
 #include "open_gl_component.h"
 #include "synth_gui_interface.h"
+#include "synth_slider.h"
 
 SynthSection::SynthSection(const String& name) : Component(name), parent_(nullptr), activator_(nullptr),
                                                  preset_selector_(nullptr), preset_selector_half_width_(false),
                                                  skin_override_(Skin::kNone), size_ratio_(1.0f),
-                                                 active_(true), sideways_heading_(true) {
+                                                 active_(true), sideways_heading_(true), background_(nullptr) {
   setWantsKeyboardFocus(true);
 }
 
@@ -68,7 +69,7 @@ void SynthSection::paintSidewaysHeadingText(Graphics& g) {
   g.setColour(findColour(Skin::kHeadingText, true));
   g.setFont(Fonts::instance()->proportional_light().withPointHeight(size_ratio_ * 14.0f));
   g.saveState();
-  g.setOrigin(Point<int>(0, getHeight()));
+  g.setOrigin(juce::Point<int>(0, getHeight()));
   g.addTransform(AffineTransform::rotation(-bitklavier::kPi / 2.0f));
   int height = getHeight();
   if (activator_)
@@ -231,10 +232,10 @@ void SynthSection::setSizeRatio(float ratio) {
 }
 
 void SynthSection::paintKnobShadows(Graphics& g) {
-//  for (auto& slider : slider_lookup_) {
-//    if (slider.second->isVisible() && slider.second->getWidth() && slider.second->getHeight())
-//      slider.second->drawShadow(g);
-//  }
+  for (auto& slider : slider_lookup_) {
+    if (slider.second->isVisible() && slider.second->getWidth() && slider.second->getHeight())
+      slider.second->drawShadow(g);
+  }
 }
 
 void SynthSection::paintChildrenShadows(Graphics& g) {
@@ -332,6 +333,9 @@ void SynthSection::initOpenGlComponents(OpenGlWrapper& open_gl) {
 
   for (auto& sub_section : sub_sections_)
     sub_section->initOpenGlComponents(open_gl);
+
+  if(background_)
+      background_->init(open_gl);
 }
 
 void SynthSection::renderOpenGlComponents(OpenGlWrapper& open_gl, bool animate) {
@@ -360,6 +364,8 @@ void SynthSection::renderOpenGlComponents(OpenGlWrapper& open_gl, bool animate) 
       BITKLAVIER_ASSERT(juce::gl::glGetError() == juce::gl::GL_NO_ERROR);
     }
   }
+    if(background_)
+        background_->render(open_gl);
 }
 
 void SynthSection::destroyOpenGlComponents(OpenGlWrapper& open_gl) {
@@ -368,6 +374,9 @@ void SynthSection::destroyOpenGlComponents(OpenGlWrapper& open_gl) {
 
   for (auto& sub_section : sub_sections_)
     sub_section->destroyOpenGlComponents(open_gl);
+
+  if(background_)
+      background_->destroy(open_gl);
 }
 
 void SynthSection::sliderValueChanged(Slider* moved_slider) {
@@ -420,15 +429,15 @@ void SynthSection::addButton(OpenGlShapeButton* button, bool show) {
 
 
 void SynthSection::addSlider(SynthSlider* slider, bool show, bool listen) {
-//  slider_lookup_[slider->getName().toStdString()] = slider;
-//  all_sliders_[slider->getName().toStdString()] = slider;
+  slider_lookup_[slider->getName().toStdString()] = slider;
+  all_sliders_[slider->getName().toStdString()] = slider;
 //  if (listen)
 //    slider->addListener(this);
-//  if (show)
-//    addAndMakeVisible(slider);
-//  addOpenGlComponent(slider->getImageComponent());
-//  addOpenGlComponent(slider->getQuadComponent());
-//  addOpenGlComponent(slider->getTextEditorComponent());
+  if (show)
+    addAndMakeVisible(slider);
+ addOpenGlComponent(slider->getImageComponent());
+ addOpenGlComponent(slider->getQuadComponent());
+ addOpenGlComponent(slider->getTextEditorComponent());
 }
 
 void SynthSection::addSubSection(SynthSection* sub_section, bool show) {
@@ -462,6 +471,11 @@ void SynthSection::setScrollWheelEnabled(bool enabled) {
 //    sub_section->setScrollWheelEnabled(enabled);
 }
 
+void SynthSection::addBackgroundComponent(OpenGlBackground *open_gl_component, bool to_beginning)
+{
+    background_ = open_gl_component;
+
+}
 void SynthSection::addOpenGlComponent(OpenGlComponent* open_gl_component, bool to_beginning) {
   if (open_gl_component == nullptr)
     return;
@@ -748,6 +762,24 @@ void SynthSection::animate(bool animate) {
   for (auto& sub_section : sub_sections_)
     sub_section->animate(animate);
 }
+void SynthSection::showPopupDisplay(Component* source, const std::string& text,
+    BubbleComponent::BubblePlacement placement, bool primary) {
+  FullInterface* parent = findParentComponentOfClass<FullInterface>();
+  if (parent)
+    parent->popupDisplay(source, text, placement, primary);
+}
+
+void SynthSection::hidePopupDisplay(bool primary) {
+  FullInterface* parent = findParentComponentOfClass<FullInterface>();
+  if (parent)
+    parent->hideDisplay(primary);
+}
+void SynthSection::showPopupSelector(Component* source, juce::Point<int> position, const PopupItems& options,
+    std::function<void(int)> callback, std::function<void()> cancel) {
+  FullInterface* parent = findParentComponentOfClass<FullInterface>();
+  if (parent)
+    parent->popupSelector(source, position, options, callback, cancel);
+}
 
 
 
@@ -763,3 +795,9 @@ void SynthSection::animate(bool animate) {
 //}
 
 
+void SynthSection::showPrepPopup(PreparationSection* prep)
+{
+    FullInterface* parent = findParentComponentOfClass<FullInterface>();
+    if (parent)
+        parent->prepDisplay(prep);
+}

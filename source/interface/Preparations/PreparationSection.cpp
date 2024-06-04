@@ -5,7 +5,7 @@
 #include "PreparationSection.h"
 #include "synth_gui_interface.h"
 #include "DirectPreparation.h"
-PreparationSection::PreparationSection(String name, ValueTree v, UndoManager &um) : SynthSection(name), state(v)
+PreparationSection::PreparationSection(String name, ValueTree v, OpenGlWrapper &open_gl) : SynthSection(name), state(v), _open_gl(open_gl)
 {
     //_parent = findParentComponentOfClass<SynthGuiInterface>();
     x = v.getProperty(IDs::x);
@@ -52,12 +52,12 @@ PreparationSection::~PreparationSection()
 {
 }
 
-void PreparationSection::valueTreePropertyChanged (juce::ValueTree& v, const juce::Identifier& i)
-{
-    //if (v == state)
-    //        if (i == IDs::name || i == IDs::colour)
-    //            repaint();
-}
+//void PreparationSection::valueTreePropertyChanged (juce::ValueTree& v, const juce::Identifier& i)
+//{
+//    //if (v == state)
+//    //        if (i == IDs::name || i == IDs::colour)
+//    //            repaint();
+//}
 
 //PreparationSection* PreparationList::createNewObject (const juce::ValueTree& v)
 //{
@@ -76,4 +76,9 @@ void PreparationSection::valueTreePropertyChanged (juce::ValueTree& v, const juc
 //{
 //
 //
+//}
+
+//void PreparationSection::mouseDoubleClick(const juce::MouseEvent &event)
+//{
+//    showPrepPopup(this);
 //}

@@ -1,5 +1,5 @@
 [submodule "JUCE"]
-	path = third_party/JUCE
+	path = JUCE
 	url = https://github.com/juce-framework/JUCE/
 	branch = develop
 [submodule "modules/melatonin_inspector"]

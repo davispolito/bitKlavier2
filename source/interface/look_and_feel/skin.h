@@ -16,9 +16,9 @@
 
 #pragma once
 
-#include "juce_core/juce_core.h"
-#include <juce_gui_basics/juce_gui_basics.h>
-#include "juce_graphics/juce_graphics.h"
+#include <JuceHeader.h>
+#include <JuceHeader.h>
+#include <JuceHeader.h>
 #include "json.hpp"
 using json = nlohmann::json;
 class FullInterface;
@@ -40,26 +40,53 @@ class Skin {
     };
 
     enum ValueId {
-      kBodyRounding,
-      kLabelHeight,
-      kLabelBackgroundHeight,
-      kLabelBackgroundRounding,
-      kLabelOffset,
-      kTextComponentLabelOffset,
-      kTitleWidth,
-      kPadding,
-      kLargePadding,
-      kSliderWidth,
-      kTextComponentHeight,
-      kTextComponentOffset,
-      kTextComponentFontSize,
-      kTextButtonHeight,
-      kButtonFontSize,
-        kWidgetRoundedCorner,
+        kBodyRounding,
+        kLabelHeight,
+        kLabelBackgroundHeight,
+        kLabelBackgroundRounding,
+        kLabelOffset,
+        kTextComponentLabelOffset,
+        kRotaryOptionXOffset,
+        kRotaryOptionYOffset,
+        kRotaryOptionWidth,
+        kTitleWidth,
+        kPadding,
+        kLargePadding,
+        kSliderWidth,
+        kTextComponentHeight,
+        kTextComponentOffset,
+        kTextComponentFontSize,
+        kTextButtonHeight,
+        kButtonFontSize,
+        kKnobArcSize,
+        kKnobArcThickness,
+        kKnobBodySize,
+        kKnobHandleLength,
+        kKnobModAmountArcSize,
+        kKnobModAmountArcThickness,
+        kKnobModMeterArcSize,
+        kKnobModMeterArcThickness,
+        kKnobOffset,
+        kKnobSectionHeight,
+        kKnobShadowWidth,
+        kKnobShadowOffset,
+        kModulationButtonWidth,
+        kModulationFontSize,
         kWidgetMargin,
-      kNumSkinValueIds,
-      kFrequencyDisplay = kNumSkinValueIds,
-      kNumAllValueIds,
+        kWidgetRoundedCorner,
+        kWidgetLineWidth,
+        kWidgetLineBoost,
+        kWidgetFillCenter,
+        kWidgetFillFade,
+        kWidgetFillBoost,
+        kWavetableHorizontalAngle,
+        kWavetableVerticalAngle,
+        kWavetableDrawWidth,
+        kWavetableWaveHeight,
+        kWavetableYOffset,
+        kNumSkinValueIds,
+        kFrequencyDisplay = kNumSkinValueIds,
+        kNumAllValueIds,
     };
 
     enum ColorId {

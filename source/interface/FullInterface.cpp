@@ -18,6 +18,7 @@
 //#include "default_look_and_feel.h"
 #include "text_look_and_feel.h"
 #include "Identifiers.h"
+#include "about_section.h"
 
 FullInterface::FullInterface(SynthGuiData* synth_data) : SynthSection("full_interface"), width_(0), resized_width_(0),
                                                          last_render_scale_(0.0f), display_scale_(1.0f),
@@ -57,9 +58,40 @@ FullInterface::FullInterface(SynthGuiData* synth_data) : SynthSection("full_inte
    };
 
    header_ = std::make_unique<HeaderSection>();
-
    addSubSection(header_.get());
    header_->addListener(this);
+
+   popup_selector_ = std::make_unique<SinglePopupSelector>();
+   addSubSection(popup_selector_.get());
+   popup_selector_->setVisible(false);
+   popup_selector_->setAlwaysOnTop(true);
+   popup_selector_->setWantsKeyboardFocus(true);
+
+
+    prep_popup = std::make_unique<PreparationPopup>();
+    addSubSection(prep_popup.get());
+    prep_popup->setVisible(false);
+    prep_popup->setAlwaysOnTop(true);
+    prep_popup->setWantsKeyboardFocus(true);
+
+   popup_display_1_ = std::make_unique<PopupDisplay>();
+   addSubSection(popup_display_1_.get());
+   popup_display_1_->setVisible(false);
+   popup_display_1_->setAlwaysOnTop(true);
+   popup_display_1_->setWantsKeyboardFocus(false);
+
+   popup_display_2_ = std::make_unique<PopupDisplay>();
+   addSubSection(popup_display_2_.get());
+   popup_display_2_->setVisible(false);
+   popup_display_2_->setAlwaysOnTop(true);
+   popup_display_2_->setWantsKeyboardFocus(false);
+
+    about_section_ = std::make_unique<AboutSection>("about");
+    addSubSection(about_section_.get(), false);
+    addChildComponent(about_section_.get());
+
+
+    about_section_->toFront(true);
    //setOpaque(true);
    open_gl_context_.setContinuousRepainting(true);
    open_gl_context_.setOpenGLVersionRequired(OpenGLContext::openGL3_2);
@@ -114,7 +146,7 @@ void FullInterface::paintBackground(Graphics& g) {
 //       g.fillRect(x2, y, bar_width, height);
 //   }
 
-   //paintKnobShadows(g);
+   paintKnobShadows(g);
    paintChildrenBackgrounds(g);
 }
 
@@ -262,9 +294,11 @@ void FullInterface::resized() {
 
 
 //   header_->setTabOffset(2 * voice_padding);
-   //header_->setBounds(left, top, width, top_height);
+   header_->setBounds(left, top, width,  top_height);
    Rectangle<int> main_bounds(0, 0, width, height);
    main_->setBounds(main_bounds);
+   prep_popup->setBounds(100, 100, 500, 500);
+   about_section_->setBounds(bounds);
    //inspectButton->setBounds(10, 0, 100, 100);
    if (getWidth() && getHeight())
        redoBackground();
@@ -273,7 +307,11 @@ void FullInterface::resized() {
 }
 
 
-
+void FullInterface::showAboutSection()
+{
+    ScopedLock lock(open_gl_critical_section_);
+    about_section_->setVisible(true);
+}
 void FullInterface::animate(bool animate) {
    if (animate_ != animate)
        open_gl_context_.setContinuousRepainting(animate);
@@ -290,7 +328,34 @@ void FullInterface::reset() {
    repaintSynthesisSection();
 }
 
+void FullInterface::popupDisplay(Component* source, const std::string& text,
+    BubbleComponent::BubblePlacement placement, bool primary) {
+   PopupDisplay* display = primary ? popup_display_1_.get() : popup_display_2_.get();
+   display->setContent(text, getLocalArea(source, source->getLocalBounds()), placement);
+   display->setVisible(true);
+}
 
+void FullInterface::prepDisplay(PreparationSection* prep)
+{
+    prep_popup->setContent(prep->getPrepPopup());
+    prep_popup->setVisible(true);
+}
+
+void FullInterface::hideDisplay(bool primary) {
+   PopupDisplay* display = primary ? popup_display_1_.get() : popup_display_2_.get();
+   if (display)
+       display->setVisible(false);
+}
+
+void FullInterface::popupSelector(Component* source, juce::Point<int> position, const PopupItems& options,
+    std::function<void(int)> callback, std::function<void()> cancel) {
+   popup_selector_->setCallback(callback);
+   popup_selector_->setCancelCallback(cancel);
+   popup_selector_->showSelections(options);
+   Rectangle<int> bounds(0, 0, std::ceil(display_scale_ * getWidth()), std::ceil(display_scale_ * getHeight()));
+   popup_selector_->setPosition(getLocalPoint(source, position), bounds);
+   popup_selector_->setVisible(true);
+}
 
 
 
@@ -324,13 +389,21 @@ void FullInterface::renderOpenGL() {
        last_render_scale_ = render_scale;
        MessageManager::callAsync([=] { checkShouldReposition(true); });
    }
-   if(!open_gl_.init_comp.empty())
-    {
-       OpenGlComponent* comp = dynamic_cast<OpenGlComponent*>(open_gl_.init_comp.back());
-       comp->init(open_gl_);
-       open_gl_.init_comp.pop_back();
+//   if(!open_gl_.init_comp.empty())
+//    {
+//       OpenGlComponent* comp = dynamic_cast<OpenGlComponent*>(open_gl_.init_comp.back());
+//       comp->init(open_gl_);
+//       open_gl_.init_comp.pop_back();
+//
+//    }
 
-    }
+
+/// initialize opengl components dynamically
+   OpenGlWrapper::glInitAction action;
+   while (open_gl_.initOpenGlComp.try_dequeue(action))
+       action();
+
+
    ScopedLock lock(open_gl_critical_section_);
    open_gl_.display_scale = display_scale_;
    background_.render (open_gl_);

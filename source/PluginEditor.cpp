@@ -1,13 +1,13 @@
 #include "PluginEditor.h"
 #include "interface/FullInterface.h"
 #include "interface/look_and_feel/default_look_and_feel.h"
-namespace ProjectInfo
-{
-    const char* const  projectName    = "bitKlavier";
-    const char* const  companyName    = "Many Arrows Music";
-    const char* const  versionString  = "3.4a";
-    const int          versionNumber  = 0x30400;
-}
+//namespace ProjectInfo
+//{
+//    const char* const  projectName    = "bitKlavier";
+//    const char* const  companyName    = "Many Arrows Music";
+//    const char* const  versionString  = "3.4a";
+//    const int          versionNumber  = 0x30400;
+//}
 PluginEditor::PluginEditor (PluginProcessor& p)
     : AudioProcessorEditor (&p), SynthGuiInterface(&p), processorRef (p), was_animating_(true)
 {

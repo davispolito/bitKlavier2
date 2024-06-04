@@ -16,7 +16,6 @@
 
 #pragma once
 
-#include "juce_opengl/juce_opengl.h"
 
 #include "open_gl_image_component.h"
 #include "open_gl_multi_quad.h"

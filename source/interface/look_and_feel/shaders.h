@@ -16,11 +16,11 @@
 
 #pragma once
 
-#include <juce_opengl/juce_opengl.h>
+#include <JuceHeader.h>
 
 #include "../../synthesis/framework/common.h"
 #include <map>
-//#include "open_gl_image_component.h"
+
 using namespace juce;
 
 class Shaders {
@@ -75,7 +75,7 @@ class Shaders {
       kNumFragmentShaders
     };
 
-    Shaders(OpenGLContext& open_gl_context);
+    Shaders(juce::OpenGLContext& open_gl_context);
 
     GLuint getVertexShaderId(VertexShader shader) {
       if (vertex_shader_ids_[shader] == 0)
@@ -110,6 +110,12 @@ class Shaders {
 struct OpenGlWrapper {
   OpenGlWrapper(OpenGLContext& c) : context(c), shaders(nullptr), display_scale(1.0f) { }
 
+  static constexpr size_t actionSize = 64;
+  //std::vector<Broadcaster<void()>> audioThreadBroadcasters { totalNumParams };
+  //using AudioThreadAction = juce::dsp::FixedSizeFunction<actionSize, void()>;
+  using glInitAction  = juce::dsp::FixedSizeFunction<actionSize, void()>;
+  moodycamel::ConcurrentQueue<glInitAction> initOpenGlComp { 20 };
+  //moodycamel::ReaderWriterQueue
   std::vector<Component*> init_comp;
   OpenGLContext& context;
   Shaders* shaders;

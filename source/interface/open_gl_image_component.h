@@ -28,7 +28,7 @@ public:
     virtual ~OpenGlImageComponent() = default;
 
     virtual void paintBackground(Graphics& g) override {
-        redrawImage(false);
+        redrawImage(false, true);
     }
 
     virtual void paintToImage(Graphics& g) {
@@ -43,7 +43,7 @@ public:
     virtual void render(OpenGlWrapper& open_gl, bool animate) override;
     virtual void destroy(OpenGlWrapper& open_gl) override;
 
-    virtual void redrawImage(bool force);
+    virtual void redrawImage(bool force, bool clear=true);
     void setComponent(Component* component) { component_ = component; }
     void setScissor(bool scissor) { image_.setScissor(scissor); }
     void setUseAlpha(bool use_alpha) { image_.setUseAlpha(use_alpha); }
@@ -53,13 +53,13 @@ public:
     void setStatic(bool static_image) { static_image_ = static_image; }
     void paintEntireComponent(bool paint_entire_component) { paint_entire_component_ = paint_entire_component; }
     bool isActive() const { return active_; }
-
+    std::unique_ptr<Image> draw_image_;
 protected:
     Component* component_;
     bool active_;
     bool static_image_;
     bool paint_entire_component_;
-    std::unique_ptr<Image> draw_image_;
+
     OpenGlImage image_;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(OpenGlImageComponent)

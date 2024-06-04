@@ -17,8 +17,7 @@
 #pragma once
 
 #include "synth_base.h"
-#include "juce_audio_devices/juce_audio_devices.h"
-#include <juce_data_structures/juce_data_structures.h>
+#include <JuceHeader.h>
 #if HEADLESS
 
 class FullInterface { };

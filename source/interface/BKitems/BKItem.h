@@ -4,8 +4,7 @@
 
 #ifndef BITKLAVIER2_BKITEM_H
 #define BITKLAVIER2_BKITEM_H
-#include <juce_graphics/juce_graphics.h>
-#include <juce_gui_basics/juce_gui_basics.h>
+
 #include "open_gl_image_component.h"
 #include "common.h"
 class BKItem : /*public DraggableComponent,*/ public Button
@@ -26,7 +25,7 @@ public:
     void resized() override
     {
         //redoImage();
-        const DropShadow shadow(Colours::white, 5, Point<int>(0, 0));
+        const DropShadow shadow(Colours::white, 5, juce::Point<int>(0, 0));
 
         if (shadow_.getWidth() == getWidth() && shadow_.getHeight() == getHeight())
             return;
@@ -67,7 +66,7 @@ public:
 
         g.fillPath(layer_2_);
         g.fillPath(layer_3_);
-        g.strokePath(layer_1_,juce::PathStrokeType (2, juce::PathStrokeType::mitered) );
+        g.strokePath(layer_1_,juce::PathStrokeType (5, juce::PathStrokeType::mitered) );
 
     }
     class Listener
@@ -114,8 +113,6 @@ public:
     {
 
     }
-
-
 
 
 };
