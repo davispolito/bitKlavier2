@@ -8,7 +8,7 @@ set(JSON_BuildTests OFF CACHE INTERNAL "")
 
 # This tells cmake we have goodies in the /cmake folder
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
-include (bitKlavier2Version)
+include (PamplejuceVersion)
 
 
 # Change me!
@@ -39,7 +39,7 @@ set(FORMATS Standalone AU VST3 AUv3)
 project(${PROJECT_NAME} VERSION ${CURRENT_VERSION})
 
 # Configures universal binaries in CI
-include(bitKlavier2MacOS)
+include(PamplejuceMacOS)
 
 # Couple tweaks that IMO should be JUCE defaults
 include(JUCEDefaults)
@@ -223,7 +223,7 @@ target_link_libraries("${PROJECT_NAME}" PRIVATE
         Melatonin::Perfetto)
 
 # IPP support, comment out to disable
-include(bitKlavier2IPP)
+include(PamplejuceIPP)
 
 # Everything related to the tests target
 include(Tests)
