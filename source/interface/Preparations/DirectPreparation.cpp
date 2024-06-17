@@ -1,41 +1,30 @@
-//
-// Created by Davis Polito on 2/13/24.
-//
+/*********************************************************************************************/
+/*                           Created by Davis Polito and Joshua Warner                       */
+/*********************************************************************************************/
 
 #include "DirectPreparation.h"
 #include "BKitems/BKItem.h"
+
 #include "synth_slider.h"
-DirectPreparation::DirectPreparation (std::shared_ptr<PolygonalOscProcessor>  p,juce::ValueTree v, OpenGlWrapper& um) : PreparationSection("direct", v, um), proc(p)
+
+// Definition for the DirectPreparation constructor.  It takes three parameters: a pointer to
+// a Direct Processor p, a ValueTree v, and a reference to an OpenGlWrapper object.  Initializes
+// the base class members and private DirectPreparation member proc with an initialization list.
+DirectPreparation::DirectPreparation (std::shared_ptr<DirectProcessor> p,
+    juce::ValueTree v, OpenGlWrapper& um) :
+                         PreparationSection(juce::String("direct"), v, um),
+                         proc(p)
 {
-    item = std::make_unique<DirectItem> ();
-    addOpenGlComponent (item->getImageComponent());
+
+    item = std::make_unique<DirectItem> (); // Initializes member variable `item` of PreparationSection class
+    addOpenGlComponent (item->getImageComponent()); // Calls member function of SynthSection (parent class to PreparationSection)
+    _open_gl.initOpenGlComp.try_enqueue([this]
+        {item->getImageComponent()->init(_open_gl); });
     addAndMakeVisible (item.get());
 
     setSkinOverride (Skin::kDirect);
 
-    //slider = std::make_unique<SynthSlider>("sliderino", p.getState().params.gainParam, p.getState());
-
-    //addSlider(slider.get());
-    _open_gl.init_comp.push_back(item->getImageComponent());
-    _open_gl.initOpenGlComp.enqueue([this]
-                                {item->getImageComponent()->init(_open_gl); });
-
-//    _open_gl.initOpenGlComp.enqueue([this]
-//                                    {slider->getImageComponent()->init(_open_gl); });
-//    _open_gl.initOpenGlComp.enqueue([this]
-//                                    {slider->getTextEditorComponent()->init(_open_gl); });
-//    _open_gl.initOpenGlComp.enqueue([this]
-//                                    {slider->getQuadComponent()->init(_open_gl); });
-//    _open_gl.init_comp.push_back(slider->getImageComponent());
-//    _open_gl.init_comp.push_back(slider->getQuadComponent());
-//    _open_gl.init_comp.push_back(slider->getTextEditorComponent());
-
 }
-
-
-
-
-
 
 std::shared_ptr<SynthSection> DirectPreparation::getPrepPopup()
 {
@@ -94,17 +83,50 @@ void DirectPreparation::DirectPopup::renderOpenGlComponents(OpenGlWrapper& open_
         background_->render(open_gl);
     }
 }
-DirectPreparation::DirectPopup::DirectPopup(std::shared_ptr<PolygonalOscProcessor> _proc, OpenGlWrapper &open_gl): proc(_proc), PreparationPopup(_open_gl)
+
+/*************************************************************************************************/
+/*                     NESTED CLASS: DirectPopup, inherits from PreparationPopup                 */
+/*************************************************************************************************/
+DirectPreparation::DirectPopup::DirectPopup(std::shared_ptr<DirectProcessor> _proc, OpenGlWrapper &open_gl): proc(_proc), PreparationPopup(_open_gl)
 {
 
     auto& _params = proc->getState().params;
-    slider = std::make_unique<SynthSlider>("sliderino", _params.gainParam ,proc->getState());
-    addSlider(slider.get());
-    //addAndMakeVisible(slider.get());
-//    addOpenGlComponent(slider->getImageComponent());
-//    addOpenGlComponent(slider->getQuadComponent());
 
-    slider->setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
+    /************************************** WHAT IS THIS? *****************************************/
+
+    // slider = std::make_unique<SynthSlider>("sliderino", _params.gainParam ,proc->getState());
+    // addSlider(slider.get());
+    // addAndMakeVisible(slider.get());
+    // addOpenGlComponent(slider->getImageComponent());
+    // addOpenGlComponent(slider->getQuadComponent());
+    // slider->setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
+
+    /****************************************   CHANGES    ******************************************/
+
+    // GAIN PARAMETER SLIDER
+    gainSlider = std::make_unique<SynthSlider>("gainSlider", _params.gainParam, proc->getState());
+    addSlider(gainSlider.get());
+    gainSlider->setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
+
+
+    // FREQ PARAMETER SLIDER
+    sustainSlider = std::make_unique<SynthSlider>("sustainSlider", _params.sustainParam, proc->getState());
+    SynthSection::addSlider(sustainSlider.get());
+    sustainSlider->setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
+
+
+    // ORDER PARAMETER SLIDER
+    attackSlider = std::make_unique<SynthSlider>("attackSlider", _params.attackParam, proc->getState());
+    SynthSection::addSlider(attackSlider.get());
+    attackSlider->setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
+
+
+
+
+
+
+
+    /*********************************************************************************************/
 }
 void DirectPreparation::DirectPopup::redoImage()
 {
@@ -120,28 +142,102 @@ void DirectPreparation::DirectPopup::redoImage()
 }
 void DirectPreparation::DirectPopup::initOpenGlComponents(OpenGlWrapper &open_gl) {
 
-//    open_gl.initOpenGlComp.try_enqueue([this,&open_gl]
-//                                    {slider->getTextEditorComponent()->init(open_gl); });
+    // GAIN SLIDER
     open_gl.initOpenGlComp.try_enqueue([this,&open_gl]
-                                    {slider->getQuadComponent()->init(open_gl); });
+                                    {gainSlider->getQuadComponent()->init(open_gl); });
     open_gl.initOpenGlComp.try_enqueue([this, &open_gl]
-                                       {slider->getImageComponent()->init(open_gl); });
+                                       {gainSlider->getImageComponent()->init(open_gl); });
+
+    // ATTACK SLIDER
+    open_gl.initOpenGlComp.try_enqueue([this,&open_gl]
+        {attackSlider->getQuadComponent()->init(open_gl); });
+    open_gl.initOpenGlComp.try_enqueue([this, &open_gl]
+        {attackSlider->getImageComponent()->init(open_gl); });
+
+    // SUSTAIN SLIDER
+    open_gl.initOpenGlComp.try_enqueue([this,&open_gl]
+        {sustainSlider->getQuadComponent()->init(open_gl); });
+    open_gl.initOpenGlComp.try_enqueue([this, &open_gl]
+        {sustainSlider->getImageComponent()->init(open_gl); });
+
 
 }
 
+// DISPLAY SLIDERS ON-SCREEN
 void DirectPreparation::DirectPopup::resized() {
-    Rectangle<int> bounds = getLocalBounds();
 
+    int widget_margin = findValue(Skin::kWidgetMargin);
+    int title_width = getTitleWidth();
+    int section_height = getHeight();
 
+    Rectangle<int> bounds = getLocalBounds().withLeft(title_width);
+    Rectangle<int> knobs_area = getDividedAreaBuffered(bounds, 2, 1, widget_margin);
+    Rectangle<int> settings_area = getDividedAreaUnbuffered(bounds, 4, 0, widget_margin);
 
-    slider->setBounds(100, 100,80,80);
-//    Image image(Image::ARGB, 1, 1, false);
-//    Graphics g(image);
-//    paintKnobShadows(g);
-    slider->redoImage();
-//    Image image(Image::ARGB, 1, 1, false);
-//    Graphics g(image);
-//    paintOpenGlChildrenBackgrounds(g);
-//    paintKnobShadows(g);
+    int widget_x = settings_area.getRight() + widget_margin;
+    int widget_width = knobs_area.getX() - widget_x;
+
+    int knob_y2 = section_height - widget_margin;
+    // gainSlider->setBounds(settings_area.getX(), widget_margin, settings_area.getWidth(), section_height - 2 * widget_margin);
+    // attackSlider->setBounds(settings_area.getX(), knob_y2 + widget_margin,
+    //                         settings_area.getWidth(), section_height - 2 * widget_margin);
+    gainSlider->setBounds(settings_area.getX(), widget_margin, 100, 100);
+    attackSlider->setBounds(2 * settings_area.getRight(), widget_margin, 100, 100);
+    //attackSlider->setBounds(settings_area.getX(), knob_y2 + widget_margin, // NOT VISIBLE
+    //                        100, 100);
+
+    int sustain_slider_height = (getHeight() - 3 * widget_margin) / 2;
+    // sustainSlider->setBounds(widget_x, widget_margin, widget_width, sustain_slider_height);
+    sustainSlider->setBounds(widget_x, widget_margin, 100, 100);
+
+    sustainSlider->redoImage();
+    gainSlider->redoImage();
+    attackSlider->redoImage();
     redoImage();
+
+    SynthSection::resized();
+
+
+//
+//    placeKnobsInArea(Rectangle<int>(knobs_area.getX(), 0, knobs_area.getWidth(), section_height),
+//                     { drive_.get(), mix_.get() });
+//
+//    placeKnobsInArea(Rectangle<int>(knobs_area.getX(), knob_y2, knobs_area.getWidth(), section_height),
+//                     { filter_cutoff_.get(), filter_resonance_.get(), filter_blend_.get() });
+//    setFilterActive(filter_order_->getValue() != 0.0f && isActive());
+//
+//    SynthSection::resized();
+
+
+
+/*******************************************************************************************/
+/*                                      CODE THAT WORKS                                    */
+/*******************************************************************************************/
+
+//    int widget_margin = findValue(Skin::kWidgetMargin);
+//    Rectangle<int> bounds = getLocalBounds();
+//
+//    // GAIN SLIDER
+//    gainSlider->setBounds(100, 100,80,80);
+//
+//    // FREQ SLIDER
+//    attackSlider->setBounds(170, 100,80,80);
+//
+//    // ORDER SLIDER
+//    sustainSlider->setBounds(220, 100,80,80);
+//
+//    sustainSlider->redoImage();
+//    gainSlider->redoImage();
+//    attackSlider->redoImage();
+//    redoImage();
+/*******************************************************************************************/
+
+    // Image image(Image::ARGB, 1, 1, false);
+    // Graphics g(image);
+    // paintKnobShadows(g);
+    //gainSlider->redoImage();
+    // Image image(Image::ARGB, 1, 1, false);
+    // Graphics g(image);
+    // paintOpenGlChildrenBackgrounds(g);
+    // paintKnobShadows(g);
 }

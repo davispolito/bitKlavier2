@@ -4,6 +4,7 @@
 
 #ifndef BITKLAVIER2_PREPARATIONSECTION_H
 #define BITKLAVIER2_PREPARATIONSECTION_H
+
 #include "synth_section.h"
 #include "draggable_component.h"
 #include "tracktion_engine.h"
@@ -12,33 +13,48 @@
 #include "BKItem.h"
 #include "opengl_ComponentDragger.h"
 
+
+/************************************************************************************/
+/*                            CLASS: SynthGuiInterface                              */
+/************************************************************************************/
+
 class SynthGuiInterface;
 
-
-class PreparationSection : public SynthSection, public BKItem::Listener /* public bitklavier::ValueTreePropertyChangeListener*/
+/************************************************************************************/
+/*     CLASS: PreparationSection, inherits from SynthSection and Listener           */
+/************************************************************************************/
+class PreparationSection : public SynthSection, public BKItem::Listener
 {
 public:
     static constexpr float kItemPaddingY = 2.0f;
     static constexpr float kItemPaddingX = 2.0f;
-    //static constexpr float kItemPaddingY = 2.0f;
-    PreparationSection(String name, ValueTree v, OpenGlWrapper &um);
+
+    // Constructor Declaration
+    PreparationSection(juce::String name, juce::ValueTree v, OpenGlWrapper &um);
+
+    // Destructor Declaration
     ~PreparationSection();
 
-    void paintBackground(Graphics& g) override;
-    void resized() override;
-    ValueTree state;
+    // Public member variables for a PreparationSection object
+    juce::ValueTree state;
     OpenGlWrapper &_open_gl;
     std::unique_ptr<BKItem> item;
     int x, y, width, height;
+    juce::ComponentDragger myDragger;
+    juce::ComponentBoundsConstrainer constrainer;
+
+    // Public function declarations, which override base class (SynthSection) virtual functions
+    void paintBackground(juce::Graphics& g) override;
+    void resized() override;
+
+    // Public function definitions, which override base class (SynthSection) virtual functions
     void setSizeRatio(float ratio) override
     {
         size_ratio_ = ratio;
         item->size_ratio = ratio;
-        //myDragger.size_ratio_ = ratio;
     }
-   ComponentDragger myDragger;
-   ComponentBoundsConstrainer constrainer;
-    void mouseDown (const MouseEvent& e) override
+
+    void mouseDown (const juce::MouseEvent& e) override
     {
         DBG(e.getNumberOfClicks());
             if(e.getNumberOfClicks() == 2)
@@ -49,12 +65,9 @@ public:
             myDragger.startDraggingComponent (this, e);
     }
 
-    void mouseDrag (const MouseEvent& e) override
+    void mouseDrag (const juce::MouseEvent& e) override
     {
-
-            //setMouseCursor (MouseCursor::DraggingHandCursor);
-            myDragger.dragComponent (this, e, &constrainer);
-        //setBounds(getX() - getX() * size_ratio_,getY() - getY() * size_ratio_, getWidth(), getHeight());
+        myDragger.dragComponent (this, e, &constrainer);
     }
 
     void mouseDoubleClick(const juce::MouseEvent &event) override
@@ -63,10 +76,10 @@ public:
         showPrepPopup(this);
     }
 
-//    void mouseEnter(const juce::MouseEvent &event) override
-//    {
-//        i
-//    }
+
+    /************************************************************************************/
+    /*            NESTED CLASS: PreparationPopup, inherits from SynthSection            */
+    /************************************************************************************/
 
     class PreparationPopup : public SynthSection
     {
@@ -153,4 +166,4 @@ private:
 //    PreparationFactory prepFactory;
 //    SynthGuiInterface* _parent;
 //};
-#endif //BITKLAVIER2_PREPARATIONSECTION_H
+#endif // BITKLAVIER2_PREPARATIONSECTION_H

@@ -113,6 +113,8 @@ add_library(SharedCode INTERFACE
         source/interface/BKitems/BKItem.cpp
         source/interface/BKitems/BKItem.h
         source/interface/synth_slider.h
+        source/.
+        cmake-build-debug/bitKlavier2_artefacts/JuceLibraryCode/JuceHeader.h
 )
 
 # C++20, please

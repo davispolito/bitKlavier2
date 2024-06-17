@@ -23,6 +23,8 @@
 #include "curve_look_and_feel.h"
 #include "FullInterface.h"
 
+#include "chowdsp_parameters/ParamUtils/chowdsp_ParameterTypes.h"
+#include "chowdsp_plugin_state/Backend/chowdsp_PluginState.h"
 #include "synth_gui_interface.h"
 #include "synth_section.h"
 
@@ -219,7 +221,7 @@ void OpenGlSlider::setColors() {
 //    setVelocityModeParameters(1.0, 0, 0.0, false, ModifierKeys::ctrlAltCommandModifiers);
 //}
 
-SynthSlider::SynthSlider(String name, chowdsp::FloatParameter& param, chowdsp::PluginState& pluginState) : OpenGlSlider(name), show_popup_on_hover_(false), scroll_enabled_(true),
+SynthSlider::SynthSlider(juce::String name, chowdsp::FloatParameter& param, chowdsp::PluginState& pluginState) : OpenGlSlider(name), show_popup_on_hover_(false), scroll_enabled_(true),
                                         bipolar_modulation_(false), stereo_modulation_(false),
                                         bypass_modulation_(false), modulation_bar_right_(true),
                                         snap_to_value_(false), hovering_(false),
@@ -428,10 +430,10 @@ String SynthSlider::getRawTextFromValue(double value) {
 }
 
 String SynthSlider::getSliderTextFromValue(double value) {
-  if (string_lookup_) {
-    int lookup = bitklavier::utils::iclamp(value, 0, getMaximum());
-    return string_lookup_[lookup];
-  }
+//  if (string_lookup_) {
+//    int lookup = bitklavier::utils::iclamp(value, 0, getMaximum());
+//    return string_lookup_[lookup];
+//  }
 
   if (!has_parameter_assignment_)
     return OpenGlSlider::getTextFromValue(value);
