@@ -21,7 +21,8 @@
 namespace bitklavier {
 
   SoundEngine::SoundEngine() : /*voice_handler_(nullptr),*/
-                                last_oversampling_amount_(-1), last_sample_rate_(-1)
+                                last_oversampling_amount_(-1), last_sample_rate_(-1),
+                                processorGraph(new juce::AudioProcessorGraph())
                                 {
     //SoundEngine::init();
 
@@ -84,7 +85,7 @@ namespace bitklavier {
     last_sample_rate_ = sample_rate;
   }
 
-  void SoundEngine::process(int num_samples, AudioSampleBuffer &buffer)
+  void SoundEngine::process(int num_samples, AudioSampleBuffer &buffer )
   {
     //VITAL_ASSERT(num_samples <= output()->buffer_size);
     juce::FloatVectorOperations::disableDenormalisedNumberSupport();

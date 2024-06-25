@@ -37,7 +37,7 @@ SynthBase::SynthBase() : expired_(false) {
 
 
   keyboard_state_ = std::make_unique<MidiKeyboardState>();
-  midi_manager_ = std::make_unique<MidiManager>(this, keyboard_state_.get(), &save_info_, this);
+  midi_manager_ = std::make_unique<MidiManager>( keyboard_state_.get(), this);
 
   last_played_note_ = 0.0f;
   last_num_pressed_ = 0;
@@ -141,10 +141,13 @@ void SynthBase::setMpeEnabled(bool enabled) {
   midi_manager_->setMpeEnabled(enabled);
 }
 
-void SynthBase::addProcessor(std::shared_ptr<juce::AudioProcessor> processor)
+juce::AudioProcessorGraph::Node::Ptr SynthBase::addProcessor(std::unique_ptr<juce::AudioProcessor> processor)
 {
-    engine_->processors.push_back(processor);
+    //engine_->processors.push_back(processor);
+
     processor->prepareToPlay(engine_->getSampleRate(), engine_->getBufferSize());
+    return engine_->processorGraph->addNode(std::move(processor));
+
 }
 void SynthBase::processAudio(AudioSampleBuffer* buffer, int channels, int samples, int offset) {
   if (expired_)
@@ -155,7 +158,18 @@ void SynthBase::processAudio(AudioSampleBuffer* buffer, int channels, int sample
   engine_->process(samples, *buffer);
   writeAudio(buffer, channels, samples, offset);
 }
+void SynthBase::processAudioAndMidi(juce::AudioBuffer<float>& audio_buffer, juce::MidiBuffer& midi_buffer) //, int channels, int samples, int offset, int start_sample = 0, int end_sample = 0)
+{
 
+    if (expired_)
+        return;
+    AudioThreadAction action;
+    while (processorInitQueue.try_dequeue (action))
+        action();
+
+    engine_->processorGraph->processBlock(audio_buffer, midi_buffer);
+
+}
 void SynthBase::processAudioWithInput(AudioSampleBuffer* buffer, const bitklavier::mono_float* input_buffer,
                                       int channels, int samples, int offset) {
   if (expired_)

@@ -16,12 +16,17 @@ void DirectProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
     gain.setRampDurationSeconds (0.05);
 }
 
-void DirectProcessor::processAudioBlock (juce::AudioBuffer<float>& buffer)
+//void DirectProcessor::processAudioBlock (juce::AudioBuffer<float>& buffer)
+//{
+//    buffer.clear();
+//
+//
+//
+//    gain.setGainDecibels (*state.params.gainParam);
+//    gain.process (buffer);
+//}
+
+void DirectProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
 {
-    buffer.clear();
 
-
-
-    gain.setGainDecibels (*state.params.gainParam);
-    gain.process (buffer);
 }

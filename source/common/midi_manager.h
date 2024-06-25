@@ -46,8 +46,10 @@ class SynthBase;
 namespace bitklavier {
   class SoundEngine;
   struct ValueDetails;
+
 } // namespace bitklavier
 using namespace juce;
+
 class MidiManager : public MidiInputCallback {
   public:
     typedef std::map<int, std::map<std::string, const bitklavier::ValueDetails*>> midi_map;
@@ -86,8 +88,8 @@ class MidiManager : public MidiInputCallback {
         virtual void presetChangedThroughMidi(juce::File preset) = 0;
     };
 
-    MidiManager(SynthBase* synth, juce::MidiKeyboardState* keyboard_state,
-                std::map<std::string, juce::String>* gui_state, Listener* listener = nullptr);
+    MidiManager( juce::MidiKeyboardState* keyboard_state,
+                 Listener* listener = nullptr);
     virtual ~MidiManager() override;
 
     void armMidiLearn(std::string name);
@@ -138,14 +140,17 @@ class MidiManager : public MidiInputCallback {
       Listener* listener;
       juce::File preset;
     };
-
+    juce::MidiMessageCollector midi_collector_;
+    std::vector<String> enabledMidiInputs;
   protected:
     void readMpeMessage(const juce::MidiMessage& message);
 
-    SynthBase* synth_;
-    bitklavier::SoundEngine* engine_;
+//    SynthBase* synth_;
+//    bitklavier::SoundEngine* engine_;
     juce::MidiKeyboardState* keyboard_state_;
-    juce::MidiMessageCollector midi_collector_;
+
+
+
     std::map<std::string, juce::String>* gui_state_;
     Listener* listener_;
     int current_bank_;

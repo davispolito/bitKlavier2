@@ -296,9 +296,10 @@ void FullInterface::resized() {
 //   header_->setTabOffset(2 * voice_padding);
    header_->setBounds(left, top, width,  top_height);
    Rectangle<int> main_bounds(0, 0, width, height);
+   Rectangle<int> new_bounds(0, 0, width, height);
    main_->setBounds(main_bounds);
    prep_popup->setBounds(100, 100, 500, 500);
-   about_section_->setBounds(bounds);
+   about_section_->setBounds(new_bounds);
    //inspectButton->setBounds(10, 0, 100, 100);
    if (getWidth() && getHeight())
        redoBackground();

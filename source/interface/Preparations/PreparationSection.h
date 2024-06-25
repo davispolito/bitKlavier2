@@ -99,9 +99,10 @@ public:
 
 
     virtual std::shared_ptr<SynthSection> getPrepPopup(){}
-
+    juce::AudioProcessorGraph::Node::Ptr node;
 //juce::AudioProcessor _proc;
-    virtual std::shared_ptr<juce::AudioProcessor> getProcessor(){}
+    virtual juce::AudioProcessor* getProcessor(){}
+    virtual std::unique_ptr<juce::AudioProcessor> getProcessorPtr(){}
 //std::shared_ptr<juce::AudioProcessor> _proc;
 protected:
     std::shared_ptr<PreparationPopup> popup_view;

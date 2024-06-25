@@ -113,7 +113,7 @@ void AboutSection::resized() {
   if (device_selector_) {
     int y = size_y;
     device_selector_->setBounds(info_rect.getX(),info_rect.getY(),
-                                400 , info_rect.getHeight() - padding_y);
+                                info_rect.getWidth(), info_rect.getHeight() - padding_y);
   }
 
   if (device_selector_) {

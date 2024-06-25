@@ -30,6 +30,7 @@ namespace {
         "Preset Browser",
         "Construction Site",
         "direct",
+        "keymap",
         "nostalgic"
   };
 

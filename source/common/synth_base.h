@@ -27,6 +27,7 @@
 
 class SynthGuiInterface;
 
+
 class SynthBase : public MidiManager::Listener, public juce::ValueTree::Listener {
   public:
     static constexpr float kOutputWindowMinNote = 16.0f;
@@ -101,7 +102,7 @@ class SynthBase : public MidiManager::Listener, public juce::ValueTree::Listener
       bitklavier::mono_float value;
     };
 
-    void addProcessor(std::shared_ptr<juce::AudioProcessor> );
+    juce::AudioProcessorGraph::Node::Ptr addProcessor(std::unique_ptr<juce::AudioProcessor> processor);
     juce::ValueTree& getValueTree();
     juce::UndoManager& getUndoManager();
     static constexpr size_t actionSize = 16; // sizeof ([this, i = index] { callMessageThreadBroadcaster (i); })
@@ -114,10 +115,11 @@ class SynthBase : public MidiManager::Listener, public juce::ValueTree::Listener
     virtual SynthGuiInterface* getGuiInterface() = 0;
 
 
-  
+
 
 
     void processAudio(juce::AudioSampleBuffer* buffer, int channels, int samples, int offset);
+    void processAudioAndMidi(juce::AudioBuffer<float>& audio_buffer, juce::MidiBuffer& midi_buffer); // , int channels, int samples, int offset, int start_sample = 0, int end_sample = 0);
     void processAudioWithInput(juce::AudioSampleBuffer* buffer, const bitklavier::mono_float* input_buffer,
                                int channels, int samples, int offset);
     void writeAudio(juce::AudioSampleBuffer* buffer, int channels, int samples, int offset);

@@ -23,7 +23,7 @@
 #include "overlay.h"
 #include "synth_section.h"
 #include "open_gl_background.h"
-
+#include "default_look_and_feel.h"
 class PopupDisplay : public SynthSection {
   public:
     PopupDisplay();
@@ -41,6 +41,24 @@ class PopupDisplay : public SynthSection {
 };
 
 
+class OpenGlBorder : public OpenGlAutoImageComponent<juce::ResizableBorderComponent> {
+public:
+    OpenGlBorder(Component* componentToResize, ComponentBoundsConstrainer* constrainer) :
+            OpenGlAutoImageComponent<juce::ResizableBorderComponent>(componentToResize, constrainer) {
+        setLookAndFeel(DefaultLookAndFeel::instance());
+        image_component_.setComponent(this);
+    }
+
+    virtual void resized() override {
+        OpenGlAutoImageComponent<juce::ResizableBorderComponent>::resized();
+        if (isShowing())
+            redoImage();
+    }
+
+private:
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(OpenGlBorder)
+};
+
 class PreparationPopup : public SynthSection {
 public:
     PreparationPopup();
@@ -52,11 +70,28 @@ public:
 
     void buttonClicked(Button* clicked_button) override;
 
+    void mouseDown (const juce::MouseEvent& e) override
+    {
+        DBG(e.getNumberOfClicks());
+//        if(e.getNumberOfClicks() == 2)
+//        {
+//            showPrepPopup(this);
+//
+//        }
+        myDragger.startDraggingComponent (this, e);
+    }
 
+    void mouseDrag (const juce::MouseEvent& e) override
+    {
+        myDragger.dragComponent (this, e, &constrainer);
+    }
+    //juce::ResizableBorderComponent _border;
+    juce::ComponentDragger myDragger;
+    juce::ComponentBoundsConstrainer constrainer;
 
 private:
 
-
+    std::unique_ptr<OpenGlBorder> _border;
 
     std::unique_ptr<OpenGlShapeButton> exit_button_;
     OpenGlQuad body_;

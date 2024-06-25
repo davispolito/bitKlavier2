@@ -1398,10 +1398,14 @@ void PopupBrowser::buttonClicked(Button* clicked_button) {
 
 PreparationPopup::PreparationPopup() : SynthSection("prep_popup"),
                                        body_(Shaders::kRoundedRectangleFragment),
-                                       border_(Shaders::kRoundedRectangleBorderFragment){
+                                       border_(Shaders::kRoundedRectangleBorderFragment)
+                                       {
+
 
     addOpenGlComponent(&body_);
     addOpenGlComponent(&border_);
+    //_border = std::make_unique<OpenGlBorder>(this, nullptr);
+
     //addBackgroundComponent(&background_);
     //image_component_.setComponent(this);
     //addOpenGlComponent(&image_component_);
@@ -1410,6 +1414,11 @@ PreparationPopup::PreparationPopup() : SynthSection("prep_popup"),
     addOpenGlComponent(exit_button_->getGlComponent());
     exit_button_->addListener(this);
     exit_button_->setShape(Paths::exitX());
+    constrainer.setMinimumOnscreenAmounts(0xffffff,0xffffff,0xffffff,0xffffff);
+    //addAndMakeVisible(_border.get());
+    //addOpenGlComponent(_border->getImageComponent());
+    //_border->setBorderThickness(juce::BorderSize<int>(20));
+    //borderDrawer = std::make_unique<OpenGlAutoImageComponent<juce::ResizableBorderComponent>>()
 }
 void PreparationPopup::setContent(std::shared_ptr<SynthSection> prep)
 {
@@ -1455,6 +1464,7 @@ void PreparationPopup::resized() {
     border_.setColor(findColour(Skin::kBorder, true));
     auto header_bounds = bounds.removeFromTop(35);
     exit_button_->setBounds(header_bounds.removeFromLeft(35).reduced(5));
+
     if(prep_view != nullptr)
     {
         prep_view->setBounds(bounds);
@@ -1464,6 +1474,8 @@ void PreparationPopup::resized() {
         //paintChildBackground(g, prep_view.get());
         //prep_view->paintKnobShadows(g);
     }
+    //_border->setBounds(bounds);
+
 
 
 }

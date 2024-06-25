@@ -21,7 +21,8 @@
 
 namespace bitklavier {
 
-
+    using AudioGraphIOProcessor = juce::AudioProcessorGraph::AudioGraphIOProcessor;
+    using Node = juce::AudioProcessorGraph::Node;
   class SoundEngine : public NoteHandler {
     public:
       static constexpr int kDefaultOversamplingAmount = 2;
@@ -44,10 +45,15 @@ namespace bitklavier {
       }
       void process(int num_samples, AudioSampleBuffer& buffer);
 
+      void releaseResources()
+      {processorGraph->releaseResources();}
       void prepareToPlay(double sampleRate, int samplesPerBlock)
       {
           setSampleRate(sampleRate);
           setBufferSize(samplesPerBlock);
+
+          processorGraph->prepareToPlay (sampleRate, samplesPerBlock);
+          initialiseGraph();
       }
 
       //void correctToTime(double seconds) override;
@@ -112,12 +118,40 @@ namespace bitklavier {
       void sostenutoOnRange(int from_channel, int to_channel);
       void sostenutoOffRange(int sample, int from_channel, int to_channel);
       force_inline int getOversamplingAmount() const { return last_oversampling_amount_; }
+      void connectAudioNodes()
+      {
+//          for (int channel = 0; channel < 2; ++channel)
+//              mainProcessor->addConnection ({ { audioInputNode->nodeID,  channel },
+//                                              { audioOutputNode->nodeID, channel } });
+      }
+
+      void connectMidiNodes()
+      {
+          processorGraph->addConnection ({ { midiInputNode->nodeID,  juce::AudioProcessorGraph::midiChannelIndex },
+                                          { midiOutputNode->nodeID, juce::AudioProcessorGraph::midiChannelIndex } });
+      }
+      void initialiseGraph()
+      {
+          processorGraph->clear();
+
+          //audioInputNode  = mainProcessor->addNode (std::make_unique<AudioGraphIOProcessor> (AudioGraphIOProcessor::audioInputNode));
+          audioOutputNode = processorGraph->addNode (std::make_unique<AudioGraphIOProcessor> (AudioGraphIOProcessor::audioOutputNode));
+          midiInputNode   = processorGraph->addNode (std::make_unique<AudioGraphIOProcessor> (AudioGraphIOProcessor::midiInputNode));
+          midiOutputNode  = processorGraph->addNode (std::make_unique<AudioGraphIOProcessor> (AudioGraphIOProcessor::midiOutputNode));
+
+          connectAudioNodes();
+          connectMidiNodes();
+      }
+
 
       void checkOversampling();
       std::vector<std::shared_ptr<AudioProcessor>> processors;
+      std::unique_ptr<juce::AudioProcessorGraph> processorGraph;
+      Node::Ptr audioOutputNode;
+      Node::Ptr midiInputNode;
+      Node::Ptr midiOutputNode;
     private:
       void setOversamplingAmount(int oversampling_amount, int sample_rate);
-
       int last_oversampling_amount_;
       int last_sample_rate_;
       int buffer_size;

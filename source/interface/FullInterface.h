@@ -89,6 +89,7 @@ public :
     SynthSection* full_screen_section_;
     OpenGLContext open_gl_context_;
     CriticalSection open_gl_critical_section_;
+    OpenGlWrapper open_gl_;
 private :
 
     std::unique_ptr<AboutSection> about_section_;
@@ -105,7 +106,7 @@ private :
 
     //OpenGLContext open_gl_context_;
     std::unique_ptr<Shaders> shaders_;
-    OpenGlWrapper open_gl_;
+
     Image background_image_;
     OpenGlBackground background_;
     //juce::TextButton inspectButton { "Inspect the UI" };

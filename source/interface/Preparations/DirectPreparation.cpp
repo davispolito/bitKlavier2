@@ -10,10 +10,11 @@
 // Definition for the DirectPreparation constructor.  It takes three parameters: a pointer to
 // a Direct Processor p, a ValueTree v, and a reference to an OpenGlWrapper object.  Initializes
 // the base class members and private DirectPreparation member proc with an initialization list.
-DirectPreparation::DirectPreparation (std::shared_ptr<DirectProcessor> p,
+DirectPreparation::DirectPreparation (std::unique_ptr<DirectProcessor> p,
     juce::ValueTree v, OpenGlWrapper& um) :
                          PreparationSection(juce::String("direct"), v, um),
-                         proc(p)
+                         proc(*p.get()),
+                         _proc_ptr(std::move(p))
 {
 
     item = std::make_unique<DirectItem> (); // Initializes member variable `item` of PreparationSection class
@@ -28,6 +29,8 @@ DirectPreparation::DirectPreparation (std::shared_ptr<DirectProcessor> p,
 
 std::shared_ptr<SynthSection> DirectPreparation::getPrepPopup()
 {
+    if(popup_view)
+        popup_view->destroyOpenGlComponents(_open_gl);
     popup_view = std::make_shared<DirectPopup>(proc, _open_gl);
     popup_view->initOpenGlComponents(_open_gl);
     return popup_view;
@@ -44,9 +47,14 @@ DirectPreparation::~DirectPreparation()
 {
 }
 
-std::shared_ptr<juce::AudioProcessor> DirectPreparation::getProcessor()
+juce::AudioProcessor* DirectPreparation::getProcessor()
 {
-    return proc;
+    return &proc;
+}
+
+std::unique_ptr<juce::AudioProcessor> DirectPreparation::getProcessorPtr()
+{
+    return std::move(_proc_ptr);
 }
 
 void DirectPreparation::DirectPopup::renderOpenGlComponents(OpenGlWrapper& open_gl, bool animate) {
@@ -87,10 +95,10 @@ void DirectPreparation::DirectPopup::renderOpenGlComponents(OpenGlWrapper& open_
 /*************************************************************************************************/
 /*                     NESTED CLASS: DirectPopup, inherits from PreparationPopup                 */
 /*************************************************************************************************/
-DirectPreparation::DirectPopup::DirectPopup(std::shared_ptr<DirectProcessor> _proc, OpenGlWrapper &open_gl): proc(_proc), PreparationPopup(_open_gl)
+DirectPreparation::DirectPopup::DirectPopup(DirectProcessor& _proc, OpenGlWrapper &open_gl):  proc(_proc), PreparationPopup(_open_gl)
 {
 
-    auto& _params = proc->getState().params;
+    auto& _params = proc.getState().params;
 
     /************************************** WHAT IS THIS? *****************************************/
 
@@ -104,19 +112,19 @@ DirectPreparation::DirectPopup::DirectPopup(std::shared_ptr<DirectProcessor> _pr
     /****************************************   CHANGES    ******************************************/
 
     // GAIN PARAMETER SLIDER
-    gainSlider = std::make_unique<SynthSlider>("gainSlider", _params.gainParam, proc->getState());
+    gainSlider = std::make_unique<SynthSlider>("gainSlider", _params.gainParam, proc.getState());
     addSlider(gainSlider.get());
     gainSlider->setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
 
 
     // FREQ PARAMETER SLIDER
-    sustainSlider = std::make_unique<SynthSlider>("sustainSlider", _params.sustainParam, proc->getState());
+    sustainSlider = std::make_unique<SynthSlider>("sustainSlider", _params.sustainParam, proc.getState());
     SynthSection::addSlider(sustainSlider.get());
     sustainSlider->setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
 
 
     // ORDER PARAMETER SLIDER
-    attackSlider = std::make_unique<SynthSlider>("attackSlider", _params.attackParam, proc->getState());
+    attackSlider = std::make_unique<SynthSlider>("attackSlider", _params.attackParam, proc.getState());
     SynthSection::addSlider(attackSlider.get());
     attackSlider->setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
 
@@ -127,6 +135,12 @@ DirectPreparation::DirectPopup::DirectPopup(std::shared_ptr<DirectProcessor> _pr
 
 
     /*********************************************************************************************/
+}
+
+DirectPreparation::DirectPopup::~DirectPopup()
+{
+    //TODO
+    //constructor sends destroy message to opengl thread
 }
 void DirectPreparation::DirectPopup::redoImage()
 {

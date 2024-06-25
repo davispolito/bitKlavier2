@@ -16,8 +16,7 @@
 
 #include "midi_manager.h"
 
-#include "../synthesis/synth_engine/sound_engine.h"
-#include "synth_base.h"
+
 
 namespace {
   constexpr int kMidiControlBits = 7;
@@ -32,12 +31,12 @@ namespace {
   }
 } // namespace
 
-MidiManager::MidiManager(SynthBase* synth, MidiKeyboardState* keyboard_state,
-                         std::map<std::string, String>* gui_state, Listener* listener) :
-    synth_(synth), keyboard_state_(keyboard_state), gui_state_(gui_state),
+MidiManager::MidiManager(MidiKeyboardState* keyboard_state,
+                          Listener* listener) :
+     keyboard_state_(keyboard_state),
     listener_(listener), armed_value_(nullptr),
     msb_pressure_values_(), msb_slide_values_() {
-  engine_ = synth_->getEngine();
+  //engine_ = synth_->get//engine();
   current_bank_ = -1;
   current_folder_ = -1;
   current_preset_ = -1;
@@ -118,59 +117,59 @@ void MidiManager::readMpeMessage(const MidiMessage& message) {
 }
 
 void MidiManager::processAllNotesOff(const MidiMessage& midi_message, int sample_position, int channel) {
-  if (isMpeChannelMasterLowerZone(channel))
-    engine_->allNotesOffRange(sample_position, lowerZoneStartChannel(), lowerZoneEndChannel());
-  else if (isMpeChannelMasterUpperZone(channel))
-    engine_->allNotesOffRange(sample_position, upperZoneStartChannel(), upperZoneEndChannel());
-  else
-    engine_->allNotesOff(sample_position, channel);
+//  if (isMpeChannelMasterLowerZone(channel))
+//    //engine_->allNotesOffRange(sample_position, lowerZoneStartChannel(), lowerZoneEndChannel());
+//  else if (isMpeChannelMasterUpperZone(channel))
+//    //engine_->allNotesOffRange(sample_position, upperZoneStartChannel(), upperZoneEndChannel());
+//  else
+//    //engine_->allNotesOff(sample_position, channel);
 }
 
 void MidiManager::processAllSoundsOff() {
-  engine_->allSoundsOff();
+  //engine_->allSoundsOff();
 }
 
 void MidiManager::processSustain(const MidiMessage& midi_message, int sample_position, int channel) {
   bool on = midi_message.isSustainPedalOn();
   if (isMpeChannelMasterLowerZone(channel)) {
-    if (on)
-      engine_->sustainOnRange(lowerZoneStartChannel(), lowerZoneEndChannel());
-    else
-      engine_->sustainOffRange(sample_position, lowerZoneStartChannel(), lowerZoneEndChannel());
+    //if (on)
+      //engine_->sustainOnRange(lowerZoneStartChannel(), lowerZoneEndChannel());
+    //else
+      //engine_->sustainOffRange(sample_position, lowerZoneStartChannel(), lowerZoneEndChannel());
   }
   else if (isMpeChannelMasterUpperZone(channel)) {
-    if (on)
-      engine_->sustainOnRange(upperZoneStartChannel(), upperZoneEndChannel());
-    else
-      engine_->sustainOffRange(sample_position, upperZoneStartChannel(), upperZoneEndChannel());
+    //if (on)
+      //engine_->sustainOnRange(upperZoneStartChannel(), upperZoneEndChannel());
+    //else
+      //engine_->sustainOffRange(sample_position, upperZoneStartChannel(), upperZoneEndChannel());
   }
   else {
-    if (on)
-      engine_->sustainOn(channel);
-    else
-      engine_->sustainOff(sample_position, channel);
+    //if (on)
+      //engine_->sustainOn(channel);
+    //else
+      //engine_->sustainOff(sample_position, channel);
   }
 }
 
 void MidiManager::processSostenuto(const MidiMessage& midi_message, int sample_position, int channel) {
   bool on = midi_message.isSostenutoPedalOn();
   if (isMpeChannelMasterLowerZone(channel)) {
-    if (on)
-      engine_->sostenutoOnRange(lowerZoneStartChannel(), lowerZoneEndChannel());
-    else
-      engine_->sostenutoOffRange(sample_position, lowerZoneStartChannel(), lowerZoneEndChannel());
+    //if (on)
+      //engine_->sostenutoOnRange(lowerZoneStartChannel(), lowerZoneEndChannel());
+    //else
+      //engine_->sostenutoOffRange(sample_position, lowerZoneStartChannel(), lowerZoneEndChannel());
   }
   else if (isMpeChannelMasterUpperZone(channel)) {
-    if (on)
-      engine_->sostenutoOnRange(upperZoneStartChannel(), upperZoneEndChannel());
-    else
-      engine_->sostenutoOffRange(sample_position, upperZoneStartChannel(), upperZoneEndChannel());
+    //if (on)
+      //engine_->sostenutoOnRange(upperZoneStartChannel(), upperZoneEndChannel());
+    //else
+      //engine_->sostenutoOffRange(sample_position, upperZoneStartChannel(), upperZoneEndChannel());
   }
   else {
-    if (on)
-      engine_->sostenutoOn(channel);
-    else
-      engine_->sostenutoOff(sample_position, channel);
+   // if (on)
+      //engine_->sostenutoOn(channel);
+   // else
+      //engine_->sostenutoOff(sample_position, channel);
   }
 }
 
@@ -179,41 +178,41 @@ void MidiManager::processPitchBend(const MidiMessage& midi_message, int sample_p
   bitklavier::mono_float value = 2 * percent - 1.0f;
 
   if (isMpeChannelMasterLowerZone(channel)) {
-    engine_->setZonedPitchWheel(value, lowerMasterChannel(), lowerMasterChannel() + 1);
-    engine_->setZonedPitchWheel(value, lowerZoneStartChannel(), lowerZoneEndChannel());
+    //engine_->setZonedPitchWheel(value, lowerMasterChannel(), lowerMasterChannel() + 1);
+    //engine_->setZonedPitchWheel(value, lowerZoneStartChannel(), lowerZoneEndChannel());
     listener_->pitchWheelMidiChanged(value);
   }
   else if (isMpeChannelMasterUpperZone(channel)) {
-    engine_->setZonedPitchWheel(value, upperMasterChannel(), upperMasterChannel() + 1);
-    engine_->setZonedPitchWheel(value, upperZoneStartChannel(), upperZoneEndChannel());
+    //engine_->setZonedPitchWheel(value, upperMasterChannel(), upperMasterChannel() + 1);
+    //engine_->setZonedPitchWheel(value, upperZoneStartChannel(), upperZoneEndChannel());
     listener_->pitchWheelMidiChanged(value);
   }
-  else if (mpe_enabled_)
-    engine_->setPitchWheel(value, channel);
-  else {
-    engine_->setZonedPitchWheel(value, channel, channel);
-    listener_->pitchWheelMidiChanged(value);
-  }
+  //else if (mpe_enabled_)
+    //engine_->setPitchWheel(value, channel);
+ // else {
+    //engine_->setZonedPitchWheel(value, channel, channel);
+   // listener_->pitchWheelMidiChanged(value);
+  //}
 }
 
 void MidiManager::processPressure(const MidiMessage& midi_message, int sample_position, int channel) {
   bitklavier::mono_float value = toHighResolutionValue(msb_pressure_values_[channel], lsb_pressure_values_[channel]);
-  if (isMpeChannelMasterLowerZone(channel))
-    engine_->setChannelRangeAftertouch(lowerZoneStartChannel(), lowerZoneEndChannel(), value, 0);
-  else if (isMpeChannelMasterUpperZone(channel))
-    engine_->setChannelRangeAftertouch(upperZoneStartChannel(), upperZoneEndChannel(), value, 0);
-  else
-    engine_->setChannelAftertouch(channel, value, sample_position);
+ // if (isMpeChannelMasterLowerZone(channel))
+    //engine_->setChannelRangeAftertouch(lowerZoneStartChannel(), lowerZoneEndChannel(), value, 0);
+ // else if (isMpeChannelMasterUpperZone(channel))
+    //engine_->setChannelRangeAftertouch(upperZoneStartChannel(), upperZoneEndChannel(), value, 0);
+ // else
+    //engine_->setChannelAftertouch(channel, value, sample_position);
 }
 
 void MidiManager::processSlide(const MidiMessage& midi_message, int sample_position, int channel) {
   bitklavier::mono_float value = toHighResolutionValue(msb_slide_values_[channel], lsb_slide_values_[channel]);
-  if (isMpeChannelMasterLowerZone(channel))
-    engine_->setChannelRangeSlide(value, lowerZoneStartChannel(), lowerZoneEndChannel(), 0);
-  else if (isMpeChannelMasterUpperZone(channel))
-    engine_->setChannelRangeSlide(value, upperZoneStartChannel(), upperZoneEndChannel(), 0);
-  else
-    engine_->setChannelSlide(channel, value, sample_position);
+  //if (isMpeChannelMasterLowerZone(channel))
+    //engine_->setChannelRangeSlide(value, lowerZoneStartChannel(), lowerZoneEndChannel(), 0);
+  //else if (isMpeChannelMasterUpperZone(channel))
+    //engine_->setChannelRangeSlide(value, upperZoneStartChannel(), upperZoneEndChannel(), 0);
+ // else
+    //engine_->setChannelSlide(channel, value, sample_position);
 }
 
 force_inline bool MidiManager::isMpeChannelMasterLowerZone(int channel) {
@@ -235,21 +234,21 @@ void MidiManager::processMidiMessage(const MidiMessage& midi_message, int sample
       return;
     case kNoteOn: {
       uint8 velocity = midi_message.getVelocity();
-      if (velocity)
-        engine_->noteOn(midi_message.getNoteNumber(), velocity / kControlMax, sample_position, channel);
-      else
-        engine_->noteOff(midi_message.getNoteNumber(), velocity / kControlMax, sample_position, channel);
+    //  if (velocity)
+        //engine_->noteOn(midi_message.getNoteNumber(), velocity / kControlMax, sample_position, channel);
+    //  else
+        //engine_->noteOff(midi_message.getNoteNumber(), velocity / kControlMax, sample_position, channel);
       return;
     }
     case kNoteOff: {
       bitklavier::mono_float velocity = midi_message.getVelocity() / kControlMax;
-      engine_->noteOff(midi_message.getNoteNumber(), velocity, sample_position, channel);
+      //engine_->noteOff(midi_message.getNoteNumber(), velocity, sample_position, channel);
       return;
     }
     case kAftertouch: {
       int note = midi_message.getNoteNumber();
       bitklavier::mono_float value = midi_message.getAfterTouchValue() / kControlMax;
-      engine_->setAftertouch(note, value, sample_position, channel);
+      //engine_->setAftertouch(note, value, sample_position, channel);
       return;
     }
     case kChannelPressure: {
@@ -291,7 +290,7 @@ void MidiManager::processMidiMessage(const MidiMessage& midi_message, int sample
           break;
         case kModWheel: {
           bitklavier::mono_float percent = (1.0f * midi_message.getControllerValue()) / kControlMax;
-          engine_->setModWheel(percent, channel);
+          //engine_->setModWheel(percent, channel);
           listener_->modWheelMidiChanged(percent);
           break;
         }

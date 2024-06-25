@@ -229,7 +229,7 @@ private:
     //ReferenceCountedArray<PreparationSection,
 
     PreparationFactory prepFactory;
-    std::shared_ptr<juce::AudioProcessor> last_proc;
+    //std::shared_ptr<juce::AudioProcessor> last_proc;
  //    std::vector<chowdsp::Broadcaster<void()>> audioThreadBroadcasters { 10 };
 //    using AudioThreadAction = juce::dsp::FixedSizeFunction<actionSize, void()>;
 //    moodycamel::ReaderWriterQueue<AudioThreadAction> audioThreadBroadcastQueue { 10 };

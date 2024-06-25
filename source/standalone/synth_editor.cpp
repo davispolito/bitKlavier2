@@ -111,17 +111,19 @@ void SynthEditor::getNextAudioBlock(const AudioSourceChannelInfo& buffer) {
   processKeyboardEvents(midi_messages, num_samples);
 
   double sample_time = 1.0 / getSampleRate();
-  for (int b = 0; b < num_samples; b += synth_samples) {
-    int current_samples = std::min<int>(synth_samples, num_samples - b);
-    //engine_->correctToTime(current_time_);
-
-    processMidi(midi_messages, b, b + current_samples);
-    processAudio(buffer.buffer, bitklavier::kNumChannels, current_samples, b);
-    current_time_ += current_samples * sample_time;
-  }
+//  for (int b = 0; b < num_samples; b += synth_samples) {
+//    int current_samples = std::min<int>(synth_samples, num_samples - b);
+//    //engine_->correctToTime(current_time_);
+//
+////    processMidi(midi_messages, b, b + current_samples);
+////    processAudio(buffer.buffer, bitklavier::kNumChannels, current_samples, b);
+//    current_time_ += current_samples * sample_time;
+//  }
+    processAudioAndMidi(*buffer.buffer, midi_messages);
 }
 
 void SynthEditor::releaseResources() {
+    engine_->releaseResources();
 }
 
 void SynthEditor::resized() {

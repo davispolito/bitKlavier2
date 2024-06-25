@@ -435,11 +435,11 @@ String SynthSlider::getSliderTextFromValue(double value) {
 //    return string_lookup_[lookup];
 //  }
 
-  if (!has_parameter_assignment_)
+  //if (!has_parameter_assignment_)
     return OpenGlSlider::getTextFromValue(value);
 
-  double adjusted_value = getAdjustedValue(value);
-  return popup_prefix_ + formatValue(adjusted_value);
+  //double adjusted_value = getAdjustedValue(value);
+ // return popup_prefix_ + formatValue(adjusted_value);
 }
 
 String SynthSlider::getTextFromValue(double value) {

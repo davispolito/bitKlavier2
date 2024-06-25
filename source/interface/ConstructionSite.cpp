@@ -18,6 +18,7 @@ Author:  Michael R Mulshine
 #include "synth_gui_interface.h"
 #include "Preparations/DirectPreparation.h"
 #include "Preparations/NostalgicPreparation.h"
+#include "Preparations/KeymapPreparation.h"
 ConstructionSite::ConstructionSite( juce::ValueTree &v,  juce::UndoManager &um, OpenGlWrapper &open_gl) : SynthSection("Construction Site"),
                                                                                  tracktion::engine::ValueTreeObjectList<PreparationSection>(v),
                                                                                      state(v), undo(um), open_gl(open_gl)
@@ -27,13 +28,14 @@ ConstructionSite::ConstructionSite( juce::ValueTree &v,  juce::UndoManager &um, 
     setSkinOverride(Skin::kConstructionSite);
     prepFactory.Register(bitklavier::BKPreparationType::PreparationTypeDirect, DirectPreparation::createDirectSection);
     prepFactory.Register(bitklavier::BKPreparationType::PreparationTypeNostalgic, NostalgicPreparation::createNostalgicSection);
+    prepFactory.Register(bitklavier::BKPreparationType::PreparationTypeKeymap, KeymapPreparation::createKeymapSection);
 }
 PreparationSection* ConstructionSite::createNewObject (const juce::ValueTree& v)
 {
 
     auto s = prepFactory.CreateObject((int)v.getProperty(IDs::type), v, open_gl);
 
-    last_proc = s->getProcessor();
+//    last_proc = s->getProcessor();
     addSubSection(s);
     Skin default_skin;
     s->setSkinValues(default_skin, false);
@@ -45,9 +47,9 @@ PreparationSection* ConstructionSite::createNewObject (const juce::ValueTree& v)
     parent->getSynth()->processorInitQueue.try_enqueue([this]
                                                        {
                                                            SynthGuiInterface* _parent = findParentComponentOfClass<SynthGuiInterface>();
-                                                        _parent->getSynth()->addProcessor(last_proc);
+                                                           objects.getLast()->node = _parent->getSynth()->addProcessor(std::move(objects.getLast()->getProcessorPtr()));
 
-                                                        last_proc.reset();
+                                                        //last_proc.reset();
                                                        });
     return s;
 }
@@ -103,6 +105,18 @@ bool ConstructionSite::keyPressed (const juce::KeyPress& k, juce::Component* c)
         t.setProperty(IDs::y,lastY - (132/2), nullptr);
 
         state.addChild(t,-1, nullptr);
+    } else if (code == 75) //K Keymap
+    {
+        ValueTree t(IDs::PREPARATION);
+
+        t.setProperty(IDs::type,bitklavier::BKPreparationType::PreparationTypeKeymap, nullptr);
+        t.setProperty(IDs::width, 260, nullptr);
+        t.setProperty(IDs::height, 132, nullptr);
+        t.setProperty(IDs::x,lastX - 260/2, nullptr);
+        t.setProperty(IDs::y,lastY - 132 /2, nullptr);
+        // DBG("Position" + String(lastX) + " " + String(lastY));
+        state.addChild(t,-1, nullptr);
+        //DBG("place" + String(lastX) + " " + String(lastY));
     }
     return true;
 }

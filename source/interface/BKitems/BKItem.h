@@ -130,5 +130,16 @@ public:
 
 };
 
+class KeymapItem : public BKItem
+{
+public:
+    KeymapItem() : BKItem(bitklavier::BKPreparationType::PreparationTypeKeymap)
+    {
+
+    }
+
+
+};
+
 
 #endif //BITKLAVIER2_BKITEM_H

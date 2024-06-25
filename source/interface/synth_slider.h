@@ -108,11 +108,11 @@ class OpenGlSlider : public Slider {
             }
 
             g.setColour(body);
-            DBG("x: " + String(center_x- body_radius));
-            DBG("y: " + String(center_y- body_radius));
-            DBG("body radius: " + String(body_radius));
-            DBG("knob size scale " + String(knob_size_scale_));
-            DBG("knob body size" + String(findValue(Skin::kKnobBodySize)));
+//            DBG("x: " + String(center_x- body_radius));
+//            DBG("y: " + String(center_y- body_radius));
+//            DBG("body radius: " + String(body_radius));
+//            DBG("knob size scale " + String(knob_size_scale_));
+//            DBG("knob body size" + String(findValue(Skin::kKnobBodySize)));
             Rectangle<float> ellipse(10 - 1.5f*body_radius ,10 - 1.5f*body_radius, 1.5f*body_radius,1.5f*body_radius);
             //ellipse.setCentre(getWidth() / 2.0f, getHeight()/2);
             //Rectangle<float> ellipse(0, 0,  2.0f * body_radius, 2.0f * body_radius);

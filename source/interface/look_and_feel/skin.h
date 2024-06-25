@@ -35,6 +35,7 @@ class Skin {
           kPresetBrowser,
           kConstructionSite,
           kDirect,
+          kKeymap,
           kNostalgic,
           kNumSectionOverrides
     };
