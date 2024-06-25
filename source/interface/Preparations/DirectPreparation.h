@@ -86,10 +86,17 @@ private:
         DirectParams* params = nullptr;
         std::shared_ptr<DirectProcessor> proc;
 
-        // Change based on other names
-        std::unique_ptr<SynthSlider> attackSlider;
+        // Parameter sliders for the Direct Popup
         std::unique_ptr<SynthSlider> gainSlider;
+        std::unique_ptr<SynthSlider> hammerSlider;
+        std::unique_ptr<SynthSlider> velocitySlider;
+        std::unique_ptr<SynthSlider> resonanceSlider;
+        std::unique_ptr<SynthSlider> attackSlider;
+        std::unique_ptr<SynthSlider> decaySlider;
         std::unique_ptr<SynthSlider> sustainSlider;
+        std::unique_ptr<SynthSlider> releaseSlider;
+//        std::unique_ptr<SynthSlider> transpositionsSlider;
+//        std::unique_ptr<SynthSlider> blendronicSendSlider;
 
 
         OpenGlImage sliderShadows;

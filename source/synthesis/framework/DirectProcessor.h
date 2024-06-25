@@ -13,15 +13,11 @@
 struct DirectParams : chowdsp::ParamHolder
 {
 
-
-    /****************************************************************************************/
-
+    // Adds the appropriate parameters to the Direct Processor
     DirectParams()
     {
-        add (gainParam,
-            sustainParam,
-            attackParam
-            );
+        add (gainParam, hammerParam, velocityParam, resonanceParam, attackParam,
+             decayParam, sustainParam, releaseParam);
     }
 
     // Gain param
@@ -32,22 +28,84 @@ struct DirectParams : chowdsp::ParamHolder
         -24.0f
     };
 
-    // Float param
-    chowdsp::FloatParameter::Ptr sustainParam {
-        juce::ParameterID { "sustain", 100 },
-        "Sustain",
-        chowdsp::ParamUtils::createNormalisableRange (20.0f, 20000.0f, 2000.0f),
-        1000.0f,
-        &chowdsp::ParamUtils::floatValToString,
-        &chowdsp::ParamUtils::stringToFloatVal
+    // Hammer param
+    chowdsp::GainDBParameter::Ptr hammerParam {
+            juce::ParameterID { "hammer", 100 },
+            "Hammer",
+            juce::NormalisableRange { -30.0f, 0.0f }, // FIX
+            -24.0f
     };
 
-    chowdsp::TimeMsParameter::Ptr attackParam {
-        juce::ParameterID { "attack", 100 },
-        "attack",
-        chowdsp::ParamUtils::createNormalisableRange (2.01f, 10.0f, 4.0f),
-        3.5f,
+    // Velocity param
+    chowdsp::FloatParameter::Ptr velocityParam {
+            juce::ParameterID { "Velocity", 100 },
+            "Velocity",
+            chowdsp::ParamUtils::createNormalisableRange (20.0f, 20000.0f, 2000.0f), // FIX
+            1000.0f,
+            &chowdsp::ParamUtils::floatValToString,
+            &chowdsp::ParamUtils::stringToFloatVal
     };
+
+    // Resonance param
+    chowdsp::GainDBParameter::Ptr resonanceParam {
+            juce::ParameterID { "resonance", 100 },
+            "Resonance",
+            juce::NormalisableRange { -30.0f, 0.0f }, // FIX
+            -24.0f
+    };
+
+    // Attack param
+    chowdsp::TimeMsParameter::Ptr attackParam {
+            juce::ParameterID { "attack", 100 },
+            "attack",
+            chowdsp::ParamUtils::createNormalisableRange (2.01f, 10.0f, 4.0f),
+            3.5f,
+    };
+
+    // Decay param
+    chowdsp::TimeMsParameter::Ptr decayParam {
+            juce::ParameterID { "decay", 100 },
+            "Decay",
+            chowdsp::ParamUtils::createNormalisableRange (2.01f, 10.0f, 4.0f), // FIX
+            3.5f,
+    };
+
+    // Sustain param
+    chowdsp::FloatParameter::Ptr sustainParam {
+            juce::ParameterID { "sustain", 100 },
+            "Sustain",
+            chowdsp::ParamUtils::createNormalisableRange (20.0f, 20000.0f, 2000.0f),
+            1000.0f,
+            &chowdsp::ParamUtils::floatValToString,
+            &chowdsp::ParamUtils::stringToFloatVal
+    };
+
+    // Release param
+    chowdsp::TimeMsParameter::Ptr releaseParam {
+            juce::ParameterID { "release", 100 },
+            "Release",
+            chowdsp::ParamUtils::createNormalisableRange (2.01f, 10.0f, 4.0f), // FIX
+            3.5f,
+    };
+
+//    // Transpositions param
+//    chowdsp::FloatParameter::Ptr transpositionsParam {
+//            juce::ParameterID { "transpositions", 100 },
+//            "Transpositions",
+//            chowdsp::ParamUtils::createNormalisableRange (20.0f, 20000.0f, 2000.0f), // FIX
+//            1000.0f,
+//            &chowdsp::ParamUtils::floatValToString,
+//            &chowdsp::ParamUtils::stringToFloatVal
+//    };
+//
+//
+//    // Blendronic Send param
+//    chowdsp::GainDBParameter::Ptr blendronicSendParam {
+//            juce::ParameterID { "blendronicSend", 100 },
+//            "BlendronicSend",
+//            juce::NormalisableRange { -30.0f, 0.0f }, // FIX
+//            -24.0f
+//    };
 
 
     /****************************************************************************************/
