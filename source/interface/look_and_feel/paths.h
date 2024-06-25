@@ -61,6 +61,16 @@ class Paths {
       return arr;
     }
 
+    static Array<Path> keymapPaths()
+    {
+        Array<Path> arr;
+        arr.add(fromSvgData((const void*)BinaryData::Layer_1_keymap_svg,BinaryData::Layer_1_keymap_svgSize));
+        arr.add(fromSvgData((const void*)BinaryData::Layer_2_keymap_svg,BinaryData::Layer_2_keymap_svgSize));
+        arr.add(fromSvgData((const void*)BinaryData::Layer_3_keymap_svg,BinaryData::Layer_3_keymap_svgSize));
+        arr.add(fromSvgData((const void*)BinaryData::Layer_4_keymap_svg,BinaryData::Layer_4_keymap_svgSize));
+        return arr;
+    }
+
     static Array<Path> logoPaths()
     {
         Array<Path> arr;

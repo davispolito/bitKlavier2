@@ -111,27 +111,59 @@ DirectPreparation::DirectPopup::DirectPopup(DirectProcessor& _proc, OpenGlWrappe
 
     /****************************************   CHANGES    ******************************************/
 
+
+    // CREATES THE SLIDERS FOR EACH PARAMETER
+
+
     // GAIN PARAMETER SLIDER
-    gainSlider = std::make_unique<SynthSlider>("gainSlider", _params.gainParam, proc.getState());
+    gainSlider = std::make_unique<SynthSlider>("gainSlider",_params.gainParam,proc->getState());
     addSlider(gainSlider.get());
     gainSlider->setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
 
+    // HAMMER PARAMETER SLIDER
+    hammerSlider = std::make_unique<SynthSlider>("hammerSlider",_params.hammerParam,proc->getState());
+    addSlider(hammerSlider.get());
+    hammerSlider->setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
 
-    // FREQ PARAMETER SLIDER
-    sustainSlider = std::make_unique<SynthSlider>("sustainSlider", _params.sustainParam, proc.getState());
-    SynthSection::addSlider(sustainSlider.get());
-    sustainSlider->setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
+    // VELOCITY PARAMETER SLIDER
+    velocitySlider = std::make_unique<SynthSlider>("velocitySlider",_params.velocityParam,proc->getState());
+    addSlider(velocitySlider.get());
+    velocitySlider->setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
 
+    // RESONANCE PARAMETER SLIDER
+    resonanceSlider = std::make_unique<SynthSlider>("resonanceSlider",_params.resonanceParam,proc->getState());
+    addSlider(resonanceSlider.get());
+    resonanceSlider->setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
 
-    // ORDER PARAMETER SLIDER
-    attackSlider = std::make_unique<SynthSlider>("attackSlider", _params.attackParam, proc.getState());
+    // ATTACK PARAMETER SLIDER
+    attackSlider = std::make_unique<SynthSlider>("attackSlider",_params.attackParam,proc->getState());
     SynthSection::addSlider(attackSlider.get());
     attackSlider->setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
 
+    // DECAY PARAMETER SLIDER
+    decaySlider = std::make_unique<SynthSlider>("decaySlider",_params.decayParam,proc->getState());
+    SynthSection::addSlider(decaySlider.get());
+    decaySlider->setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
 
+    // SUSTAIN PARAMETER SLIDER
+    sustainSlider = std::make_unique<SynthSlider>("sustainSlider",_params.sustainParam,proc->getState());
+    SynthSection::addSlider(sustainSlider.get());
+    sustainSlider->setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
 
+    // RELEASE PARAMETER SLIDER
+    releaseSlider = std::make_unique<SynthSlider>("releaseSlider",_params.releaseParam,proc->getState());
+    SynthSection::addSlider(releaseSlider.get());
+    releaseSlider->setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
 
-
+//    // TRANSPOSITIONS PARAMETER SLIDER
+//    transpositionsSlider = std::make_unique<SynthSlider>("transpositionsSlider",_params.transpositionsParam,proc->getState());
+//    SynthSection::addSlider(transpositionsSlider.get());
+//    transpositionsSlider->setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
+//
+//    // BLENDRONIC SEND PARAMETER SLIDER
+//    blendronicSendSlider = std::make_unique<SynthSlider>("blendronicSendSlider",_params.blendronicSendParam,proc->getState());
+//    SynthSection::addSlider(blendronicSendSlider.get());
+//    blendronicSendSlider->setSliderStyle(Slider::LinearHorizontal);
 
 
     /*********************************************************************************************/
@@ -156,63 +188,126 @@ void DirectPreparation::DirectPopup::redoImage()
 }
 void DirectPreparation::DirectPopup::initOpenGlComponents(OpenGlWrapper &open_gl) {
 
+
+    // ADDS EACH DIRECT PREPARATION SLIDER TO THE OPEN_GL THREAD SAFE QUEUE
+
+
     // GAIN SLIDER
-    open_gl.initOpenGlComp.try_enqueue([this,&open_gl]
-                                    {gainSlider->getQuadComponent()->init(open_gl); });
-    open_gl.initOpenGlComp.try_enqueue([this, &open_gl]
-                                       {gainSlider->getImageComponent()->init(open_gl); });
+    open_gl.initOpenGlComp.try_enqueue([this,&open_gl]{ gainSlider->getQuadComponent()->init(open_gl); });
+    open_gl.initOpenGlComp.try_enqueue([this, &open_gl]{ gainSlider->getImageComponent()->init(open_gl); });
+
+    // HAMMER SLIDER
+    open_gl.initOpenGlComp.try_enqueue([this, &open_gl] { hammerSlider->getQuadComponent()->init(open_gl); });
+    open_gl.initOpenGlComp.try_enqueue([this, &open_gl] { hammerSlider->getImageComponent()->init(open_gl); });
+
+    // VELOCITY SLIDER
+    open_gl.initOpenGlComp.try_enqueue([this, &open_gl] { velocitySlider->getQuadComponent()->init(open_gl); });
+    open_gl.initOpenGlComp.try_enqueue([this, &open_gl] { velocitySlider->getImageComponent()->init(open_gl); });
+
+    // RESONANCE SLIDER
+    open_gl.initOpenGlComp.try_enqueue([this, &open_gl] { resonanceSlider->getQuadComponent()->init(open_gl); });
+    open_gl.initOpenGlComp.try_enqueue([this, &open_gl] { resonanceSlider->getImageComponent()->init(open_gl); });
 
     // ATTACK SLIDER
-    open_gl.initOpenGlComp.try_enqueue([this,&open_gl]
-        {attackSlider->getQuadComponent()->init(open_gl); });
-    open_gl.initOpenGlComp.try_enqueue([this, &open_gl]
-        {attackSlider->getImageComponent()->init(open_gl); });
+    open_gl.initOpenGlComp.try_enqueue([this,&open_gl]{ attackSlider->getQuadComponent()->init(open_gl); });
+    open_gl.initOpenGlComp.try_enqueue([this, &open_gl]{ attackSlider->getImageComponent()->init(open_gl); });
+
+    // DECAY SLIDER
+    open_gl.initOpenGlComp.try_enqueue([this,&open_gl]{ decaySlider->getQuadComponent()->init(open_gl); });
+    open_gl.initOpenGlComp.try_enqueue([this, &open_gl]{ decaySlider->getImageComponent()->init(open_gl); });
 
     // SUSTAIN SLIDER
-    open_gl.initOpenGlComp.try_enqueue([this,&open_gl]
-        {sustainSlider->getQuadComponent()->init(open_gl); });
-    open_gl.initOpenGlComp.try_enqueue([this, &open_gl]
-        {sustainSlider->getImageComponent()->init(open_gl); });
+    open_gl.initOpenGlComp.try_enqueue([this,&open_gl]{ sustainSlider->getQuadComponent()->init(open_gl); });
+    open_gl.initOpenGlComp.try_enqueue([this, &open_gl]{ sustainSlider->getImageComponent()->init(open_gl); });
 
+    // RELEASE SLIDER
+    open_gl.initOpenGlComp.try_enqueue([this,&open_gl]{ releaseSlider->getQuadComponent()->init(open_gl); });
+    open_gl.initOpenGlComp.try_enqueue([this, &open_gl]{ releaseSlider->getImageComponent()->init(open_gl); });
+
+//    // TRANSPOSITIONS SLIDER
+//    open_gl.initOpenGlComp.try_enqueue([this, &open_gl] { transpositionsSlider->getQuadComponent()->init(open_gl); });
+//    open_gl.initOpenGlComp.try_enqueue([this, &open_gl] { transpositionsSlider->getImageComponent()->init(open_gl); });
+//
+//    // BLENDRONIC SEND SLIDER
+//    open_gl.initOpenGlComp.try_enqueue([this, &open_gl] { blendronicSendSlider->getQuadComponent()->init(open_gl); });
+//    open_gl.initOpenGlComp.try_enqueue([this, &open_gl] { blendronicSendSlider->getImageComponent()->init(open_gl); });
 
 }
 
 // DISPLAY SLIDERS ON-SCREEN
 void DirectPreparation::DirectPopup::resized() {
 
+    // DYNAMICALLY POSITIONS SLIDER WITHIN THE DIRECT POPUP
+
+    // Retrieves the size specifications of the current popup
+    Rectangle<int> bounds = getLocalBounds();
     int widget_margin = findValue(Skin::kWidgetMargin);
-    int title_width = getTitleWidth();
     int section_height = getHeight();
+    int section_width = getWidth();
 
-    Rectangle<int> bounds = getLocalBounds().withLeft(title_width);
-    Rectangle<int> knobs_area = getDividedAreaBuffered(bounds, 2, 1, widget_margin);
-    Rectangle<int> settings_area = getDividedAreaUnbuffered(bounds, 4, 0, widget_margin);
+    // Relatively defines slider size
+    int sliderWidth = (section_width - (4 * widget_margin))  / 3;
+    int sliderHeight = (section_height - (4 * widget_margin))  / 3;
 
-    int widget_x = settings_area.getRight() + widget_margin;
-    int widget_width = knobs_area.getX() - widget_x;
+    // Relatively defines column locations
+    int column1 = bounds.getX() + widget_margin;
+    int column1andAHalf = bounds.getX() + (sliderWidth / 2) + widget_margin;
+    int column2 = bounds.getX() + sliderWidth + (2 * widget_margin);
+    int column2andAHalf = bounds.getX() + (3 * sliderWidth / 2) + (2 * widget_margin);
+    int column3 = bounds.getX() + (2 * sliderWidth) + (3 * widget_margin);
 
-    int knob_y2 = section_height - widget_margin;
-    // gainSlider->setBounds(settings_area.getX(), widget_margin, settings_area.getWidth(), section_height - 2 * widget_margin);
-    // attackSlider->setBounds(settings_area.getX(), knob_y2 + widget_margin,
-    //                         settings_area.getWidth(), section_height - 2 * widget_margin);
-    gainSlider->setBounds(settings_area.getX(), widget_margin, 100, 100);
-    attackSlider->setBounds(2 * settings_area.getRight(), widget_margin, 100, 100);
-    //attackSlider->setBounds(settings_area.getX(), knob_y2 + widget_margin, // NOT VISIBLE
-    //                        100, 100);
+    // Relatively defines row locations
+    int row1 = bounds.getY() + widget_margin;
+    int row2 = bounds.getY() + sliderHeight + (2 * widget_margin);
+    int row3 = bounds.getY() + (2 * sliderHeight) + (3 * widget_margin);
 
-    int sustain_slider_height = (getHeight() - 3 * widget_margin) / 2;
-    // sustainSlider->setBounds(widget_x, widget_margin, widget_width, sustain_slider_height);
-    sustainSlider->setBounds(widget_x, widget_margin, 100, 100);
+    // POSITIONS GAIN SLIDER
+    gainSlider->setBounds(column1, row1, sliderWidth, sliderHeight);
 
-    sustainSlider->redoImage();
+    // POSITIONS HAMMER SLIDER
+    hammerSlider->setBounds(column2, row1, sliderWidth, sliderHeight);
+
+    // POSITIONS VELOCITY SLIDER
+    velocitySlider->setBounds(column3, row1, sliderWidth, sliderHeight);
+
+    // POSITIONS RESONANCE SLIDER
+    resonanceSlider->setBounds(column1, row2, sliderWidth, sliderHeight);
+
+    // POSITIONS ATTACK SLIDER
+    attackSlider->setBounds(column2, row2, sliderWidth, sliderHeight);
+
+    // POSITIONS DECAY SLIDER
+    decaySlider->setBounds(column3, row2, sliderWidth, sliderHeight);
+
+    // POSITIONS SUSTAIN SLIDER
+    sustainSlider->setBounds(column1andAHalf, row3, sliderWidth, sliderHeight);
+
+    // POSITIONS RELEASE SLIDER
+    releaseSlider->setBounds(column2andAHalf, row3, sliderWidth, sliderHeight);
+
+//    // POSITIONS TRANSPOSITIONS SLIDER
+//    transpositionsSlider->setBounds(column3, row3, sliderWidth, sliderHeight);
+
+//    // POSITIONS BLENDRONIC SEND SLIDER
+//    blendronicSendSlider->setBounds();
+
     gainSlider->redoImage();
+    hammerSlider->redoImage();
+    velocitySlider->redoImage();
+    resonanceSlider->redoImage();
     attackSlider->redoImage();
-    redoImage();
+    decaySlider->redoImage();
+    sustainSlider->redoImage();
+    releaseSlider->redoImage();
 
+//    transpositionsSlider->redoImage();
+//    blendronicSendSlider->redoImage();
+
+    redoImage();
     SynthSection::resized();
 
 
-//
+
 //    placeKnobsInArea(Rectangle<int>(knobs_area.getX(), 0, knobs_area.getWidth(), section_height),
 //                     { drive_.get(), mix_.get() });
 //
@@ -223,28 +318,6 @@ void DirectPreparation::DirectPopup::resized() {
 //    SynthSection::resized();
 
 
-
-/*******************************************************************************************/
-/*                                      CODE THAT WORKS                                    */
-/*******************************************************************************************/
-
-//    int widget_margin = findValue(Skin::kWidgetMargin);
-//    Rectangle<int> bounds = getLocalBounds();
-//
-//    // GAIN SLIDER
-//    gainSlider->setBounds(100, 100,80,80);
-//
-//    // FREQ SLIDER
-//    attackSlider->setBounds(170, 100,80,80);
-//
-//    // ORDER SLIDER
-//    sustainSlider->setBounds(220, 100,80,80);
-//
-//    sustainSlider->redoImage();
-//    gainSlider->redoImage();
-//    attackSlider->redoImage();
-//    redoImage();
-/*******************************************************************************************/
 
     // Image image(Image::ARGB, 1, 1, false);
     // Graphics g(image);

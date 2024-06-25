@@ -125,9 +125,15 @@ public:
 
     }
 
+};
 
+class KeymapItem : public BKItem
+{
+public:
+    KeymapItem() : BKItem(bitklavier::BKPreparationType::PreparationTypeKeymap)
+    {
 
-
+    }
 };
 
 class KeymapItem : public BKItem
