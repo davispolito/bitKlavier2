@@ -12,6 +12,8 @@ namespace
             return Paths::directPaths();
         if (type == bitklavier::BKPreparationType::PreparationTypeNostalgic)
             return Paths::nostalgicPaths();
+        if (type == bitklavier::BKPreparationType::PreparationTypeKeymap)
+            return Paths::keymapPaths();
     }
 }
 

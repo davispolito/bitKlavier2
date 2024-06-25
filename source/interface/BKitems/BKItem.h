@@ -127,10 +127,10 @@ public:
 
 };
 
-class KeyMap : public BKItem
+class KeymapItem : public BKItem
 {
 public:
-    KeyMapItem() : BKItem(bitklavier::BKPreparationType::PreparationTypeKeyMap)
+    KeymapItem() : BKItem(bitklavier::BKPreparationType::PreparationTypeKeymap)
     {
 
     }
