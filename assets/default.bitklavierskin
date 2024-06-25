@@ -165,9 +165,15 @@
              "Widget Primary 1" : "0xfffbb040",
              "Shadow": "0xff000000"
         },
-          "nostalgic": {
+      "nostalgic": {
+                 "Body" : "333333",
+                 "Widget Primary 1" : "0xff2596be",
+                 "Shadow": "0xff000000"
+            },
+        "keymap": {
                      "Body" : "333333",
-                     "Widget Primary 1" : "0xff2596be",
+                     "Widget Primary 1" : "0xff000000",
+                     "Widget Primary 2" : "0xffffffff",
                      "Shadow": "0xff000000"
                 }
 

@@ -134,18 +134,34 @@ public:
     {
 
     }
-};
 
-class KeymapItem : public BKItem
-{
-public:
-    KeymapItem() : BKItem(bitklavier::BKPreparationType::PreparationTypeKeymap)
+    void paintButton (juce::Graphics& g, bool shouldDrawButtonAsHighlighted, bool shouldDrawButtonAsDown)
     {
+        Rectangle<float> bounds = getLocalBounds().toFloat();
+
+        layer_3_.applyTransform(layer_3_.getTransformToScaleToFit(bounds.reduced(20) ,true));
+        layer_2_.applyTransform(layer_2_.getTransformToScaleToFit(bounds.reduced(30. ),true));
+        Rectangle<float> s = bounds.getProportion<float>({0.0f, 0.0f, 0.9f, 0.9f});
+        s.setCentre(bounds.getCentre());
+        layer_1_.applyTransform(layer_1_.getTransformToScaleToFit(s,true));
+
+        g.setColour(findColour(Skin::kShadow, true));
+        g.drawImageAt(shadow_, 0, 0, true);
+        Colour c;
+        c = findColour(Skin::kWidgetPrimary2, true);
+        g.setColour(c);
+        g.fillPath(layer_1_);
+        c = findColour(Skin::kWidgetPrimary1, true);
+        g.setColour(c);
+
+        g.fillPath(layer_2_);
+        g.fillPath(layer_3_);
+        g.strokePath(layer_1_,juce::PathStrokeType (5, juce::PathStrokeType::mitered) );
 
     }
-
-
 };
+
+
 
 
 #endif //BITKLAVIER2_BKITEM_H

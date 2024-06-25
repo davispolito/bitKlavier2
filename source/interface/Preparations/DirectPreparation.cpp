@@ -100,68 +100,58 @@ DirectPreparation::DirectPopup::DirectPopup(DirectProcessor& _proc, OpenGlWrappe
 
     auto& _params = proc.getState().params;
 
-    /************************************** WHAT IS THIS? *****************************************/
-
-    // slider = std::make_unique<SynthSlider>("sliderino", _params.gainParam ,proc->getState());
-    // addSlider(slider.get());
-    // addAndMakeVisible(slider.get());
-    // addOpenGlComponent(slider->getImageComponent());
-    // addOpenGlComponent(slider->getQuadComponent());
-    // slider->setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
-
-    /****************************************   CHANGES    ******************************************/
 
 
     // CREATES THE SLIDERS FOR EACH PARAMETER
 
 
     // GAIN PARAMETER SLIDER
-    gainSlider = std::make_unique<SynthSlider>("gainSlider",_params.gainParam,proc->getState());
+    gainSlider = std::make_unique<SynthSlider>("gainSlider",_params.gainParam,proc.getState());
     addSlider(gainSlider.get());
     gainSlider->setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
 
     // HAMMER PARAMETER SLIDER
-    hammerSlider = std::make_unique<SynthSlider>("hammerSlider",_params.hammerParam,proc->getState());
+    hammerSlider = std::make_unique<SynthSlider>("hammerSlider",_params.hammerParam,proc.getState());
     addSlider(hammerSlider.get());
     hammerSlider->setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
 
     // VELOCITY PARAMETER SLIDER
-    velocitySlider = std::make_unique<SynthSlider>("velocitySlider",_params.velocityParam,proc->getState());
+    velocitySlider = std::make_unique<SynthSlider>("velocitySlider",_params.velocityParam,proc.getState());
     addSlider(velocitySlider.get());
     velocitySlider->setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
 
     // RESONANCE PARAMETER SLIDER
-    resonanceSlider = std::make_unique<SynthSlider>("resonanceSlider",_params.resonanceParam,proc->getState());
+    resonanceSlider = std::make_unique<SynthSlider>("resonanceSlider",_params.resonanceParam,proc.getState());
     addSlider(resonanceSlider.get());
     resonanceSlider->setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
 
     // ATTACK PARAMETER SLIDER
-    attackSlider = std::make_unique<SynthSlider>("attackSlider",_params.attackParam,proc->getState());
+    attackSlider = std::make_unique<SynthSlider>("attackSlider",_params.attackParam,proc.getState());
     SynthSection::addSlider(attackSlider.get());
     attackSlider->setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
 
     // DECAY PARAMETER SLIDER
-    decaySlider = std::make_unique<SynthSlider>("decaySlider",_params.decayParam,proc->getState());
+    decaySlider = std::make_unique<SynthSlider>("decaySlider",_params.decayParam,proc.getState());
     SynthSection::addSlider(decaySlider.get());
     decaySlider->setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
 
     // SUSTAIN PARAMETER SLIDER
-    sustainSlider = std::make_unique<SynthSlider>("sustainSlider",_params.sustainParam,proc->getState());
+    sustainSlider = std::make_unique<SynthSlider>("sustainSlider",_params.sustainParam,proc.getState());
     SynthSection::addSlider(sustainSlider.get());
     sustainSlider->setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
 
     // RELEASE PARAMETER SLIDER
-    releaseSlider = std::make_unique<SynthSlider>("releaseSlider",_params.releaseParam,proc->getState());
+    releaseSlider = std::make_unique<SynthSlider>("releaseSlider",_params.releaseParam,proc.getState());
     SynthSection::addSlider(releaseSlider.get());
     releaseSlider->setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
 
 //    // TRANSPOSITIONS PARAMETER SLIDER
-//    transpositionsSlider = std::make_unique<SynthSlider>("transpositionsSlider",_params.transpositionsParam,proc->getState());
+//    transpositionsSlider = std::make_unique<SynthSlider>("transpositionsSlider",_params.transpositionsParam,proc.getState());
 //    SynthSection::addSlider(transpositionsSlider.get());
 //    transpositionsSlider->setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
 //
 //    // BLENDRONIC SEND PARAMETER SLIDER
-//    blendronicSendSlider = std::make_unique<SynthSlider>("blendronicSendSlider",_params.blendronicSendParam,proc->getState());
+//    blendronicSendSlider = std::make_unique<SynthSlider>("blendronicSendSlider",_params.blendronicSendParam,proc.getState());
 //    SynthSection::addSlider(blendronicSendSlider.get());
 //    blendronicSendSlider->setSliderStyle(Slider::LinearHorizontal);
 
