@@ -2,14 +2,15 @@
 // Created by Joshua Warner on 6/27/24.
 //
 
-#ifndef BITKLAVIER2_NOSTALGICPREPARATION_H
-#define BITKLAVIER2_NOSTALGICPREPARATION_H
+#ifndef BITKLAVIER2_SYNCHRONICPREPARATION_H
+#define BITKLAVIER2_SYNCHRONICPREPARATION_H
+
 
 /************************************************************************************/
 /*                 Created by Davis Polito and Joshua Warner                        */
 /************************************************************************************/
 
-#include "NostalgicProcessor.h"
+#include "SynchronicProcessor.h"
 #include "PreparationSection.h"
 #include "popup_browser.h"
 
@@ -20,50 +21,49 @@
 class OpenGlSlider;
 
 /************************************************************************************/
-/*             CLASS: NostalgicPreparation, inherits from PreparationSection           */
+/*             CLASS: SynchronicPreparation, inherits from PreparationSection           */
 /************************************************************************************/
 
-class NostalgicPreparation : public PreparationSection {
+class SynchronicPreparation : public PreparationSection {
 public:
 
     // Constructor method that takes three arguments: a smart pointer to a PolygonalOscProcessor,
     // a value tree, and a reference to an OpenGlWrapper object
-    NostalgicPreparation(std::unique_ptr<NostalgicProcessor> proc, juce::ValueTree v, OpenGlWrapper& um);
+    SynchronicPreparation(std::unique_ptr<SynchronicProcessor> proc, juce::ValueTree v, OpenGlWrapper& um);
 
     // Destructor method
-    ~NostalgicPreparation();
+    ~SynchronicPreparation();
 
-    // Static function that returns a pointer to a NostalgicPreparation object
-    static PreparationSection* createNostalgicSection(ValueTree v, OpenGlWrapper &um) {
+    // Static function that returns a pointer to a SynchronicPreparation object
+    static PreparationSection* createSynchronicSection(ValueTree v, OpenGlWrapper &um) {
 
-        return new NostalgicPreparation(std::make_unique<NostalgicProcessor>(), v, um);
+        return new SynchronicPreparation(std::make_unique<SynchronicProcessor>(), v, um);
     }
 
-    // Public function definitions for the NostalgicPreparation class, which override functions
+    // Public function definitions for the SynchronicPreparation class, which override functions
     // in the PreparationSection base class
     std::shared_ptr<SynthSection> getPrepPopup() override;
     void resized() override;
 
     juce::AudioProcessor* getProcessor() override;
     std::unique_ptr<juce::AudioProcessor> getProcessorPtr() override;
-
 private:
 
-    // Private member variable for the NostalgicPreparation class: proc is a pointer to a
-    // NostalgicProcessor Object
-    NostalgicProcessor & proc;
-    std::unique_ptr<NostalgicProcessor> _proc_ptr;
+    // Private member variable for the SynchronicPreparation class: proc is a pointer to a
+    // SynchronicProcessor Object
+    SynchronicProcessor & proc;
+    std::unique_ptr<SynchronicProcessor> _proc_ptr;
 
     /************************************************************************************/
-    /*             NESTED CLASS: NostalgicPopup, inherits from PreparationPopup            */
+    /*             NESTED CLASS: SynchronicPopup, inherits from PreparationPopup            */
     /************************************************************************************/
 
-    class NostalgicPopup : public PreparationPopup {
+    class SynchronicPopup : public PreparationPopup {
     public:
 
-        // Constructor method that takes two arguments: a smart pointer to a NostalgicProcessor,
+        // Constructor method that takes two arguments: a smart pointer to a SynchronicProcessor,
         // and a reference to an OpenGlWrapper
-        NostalgicPopup (NostalgicProcessor& proc, OpenGlWrapper& open_gl);
+        SynchronicPopup (SynchronicProcessor& proc, OpenGlWrapper& open_gl);
 
         // Public function definitions for the class, which override the base class methods for
         // initializing, rendering, resizing, and painting OpenGl components
@@ -84,18 +84,18 @@ private:
             return view_height; //std::max(0, std::min<int>(selections_.size() * getRowHeight() - view_height, view_position_));
         }
 
-        ~NostalgicPopup();
+        ~SynchronicPopup();
 
 
     private:
 
-        // Private function definitions and member variables for the NostalgicPopup class
+        // Private function definitions and member variables for the SynchronicPopup class
         void redoImage();
-        NostalgicParams* params = nullptr;
-        NostalgicProcessor& proc;
+        SynchronicParams* params = nullptr;
+        SynchronicProcessor& proc;
 
     };
 };
 
 
-#endif //BITKLAVIER2_NostalgicPREPARATION_H
+#endif //BITKLAVIER2_SYNCHRONICPREPARATION_H

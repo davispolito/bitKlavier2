@@ -160,22 +160,47 @@
         "Construction Site": {
             "Body" : "0xffdeb887"
         },
-        "direct": {
-             "Body" : "333333",
-             "Widget Primary 1" : "0xfffbb040",
-             "Shadow": "0xff000000"
-        },
-      "nostalgic": {
-                 "Body" : "333333",
-                 "Widget Primary 1" : "0xff2596be",
-                 "Shadow": "0xff000000"
-            },
         "keymap": {
-                     "Body" : "333333",
-                     "Widget Primary 1" : "0xff000000",
-                     "Widget Primary 2" : "0xffffffff",
-                     "Shadow": "0xff000000"
-                }
+            "Body" : "333333",
+            "Widget Primary 1" : "0xff000000",
+            "Widget Primary 2" : "0xffffffff",
+            "Shadow": "0xff000000"
+        },
+        "direct": {
+            "Body" : "333333",
+            "Widget Primary 1" : "0xfffbb040",
+            "Shadow": "0xff000000"
+        },
+        "nostalgic": {
+            "Body" : "333333",
+            "Widget Primary 1" : "0xff2596be",
+            "Shadow": "0xff000000"
+        },
+        "synchronic": {
+            "Body" : "333333",
+            "Widget Primary 1" : "0xffED1C24",
+            "Shadow": "0xff000000"
+        },
+        "blendronic": {
+            "Body" : "333333",
+            "Widget Primary 1" : "0xff92278F",
+            "Shadow": "0xff000000"
+        },
+        "resonance": {
+            "Body" : "333333",
+            "Widget Primary 1" : "0xffE57A25",
+            "Shadow": "0xff000000"
+        },
+        "tuning": {
+            "Body" : "333333",
+            "Widget Primary 1" : "0xff00A651",
+            "Shadow": "0xff000000"
+        },
+        "tempo": {
+            "Body" : "333333",
+            "Widget Primary 1" : "0xffA97C50",
+            "Shadow": "0xff000000"
+        }
 
     },
     "synth_version": 65541

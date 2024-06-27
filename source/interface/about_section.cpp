@@ -33,8 +33,8 @@ namespace {
 
 AboutSection::AboutSection(const String& name) : Overlay(name), body_(Shaders::kRoundedRectangleFragment) {
   addOpenGlComponent(&body_);
-  logo_ = std::make_unique<AppLogo>("logo");
-  addOpenGlComponent(logo_.get());
+ // logo_ = std::make_unique<AppLogo>("logo");
+  //addOpenGlComponent(logo_.get());
 
   name_text_ = std::make_unique<PlainTextComponent>("plugin name", "VIAL");
   addOpenGlComponent(name_text_.get());
@@ -58,8 +58,8 @@ AboutSection::~AboutSection() = default;
 void AboutSection::setLogoBounds() {
   Rectangle<int> info_rect = getInfoRect();
   int left_buffer = kLeftLogoBuffer * size_ratio_;
-  logo_->setBounds(info_rect.getX() + left_buffer, info_rect.getY() + (kPaddingY + 12) * size_ratio_,
-                   kLogoWidth * size_ratio_, kLogoWidth * size_ratio_);
+  //logo_->setBounds(info_rect.getX() + left_buffer, info_rect.getY() + (kPaddingY + 12) * size_ratio_,
+  //                 kLogoWidth * size_ratio_, kLogoWidth * size_ratio_);
 }
 
 void AboutSection::resized() {

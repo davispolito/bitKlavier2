@@ -1,61 +1,63 @@
-//
-// Created by Davis Polito on 4/22/24.
-//
+/*********************************************************************************************/
+/*                           Created by Davis Polito and Joshua Warner                       */
+/*********************************************************************************************/
 
-#include "NostalgicPreparation.h"
+#include "ResonancePreparation.h"
 #include "BKitems/BKItem.h"
 
+#include "synth_slider.h"
 
-// Definition for the NostalgicPreparation constructor.  It takes three parameters: a pointer to
-// a Nostalgic Processor p, a ValueTree v, and a reference to an OpenGlWrapper object.  Initializes
-// the base class members and private NostalgicPreparation member proc with an initialization list.
-NostalgicPreparation::NostalgicPreparation (std::unique_ptr<NostalgicProcessor> p,
+// Definition for the ResonancePreparation constructor.  It takes three parameters: a pointer to
+// a Resonance Processor p, a ValueTree v, and a reference to an OpenGlWrapper object.  Initializes
+// the base class members and private ResonancePreparation member proc with an initialization list.
+ResonancePreparation::ResonancePreparation (std::unique_ptr<ResonanceProcessor> p,
                                       juce::ValueTree v, OpenGlWrapper& um) :
-        PreparationSection(juce::String("Nostalgic"), v, um),
+        PreparationSection(juce::String("resonance"), v, um),
         proc(*p.get()),
         _proc_ptr(std::move(p))
 {
 
-    item = std::make_unique<NostalgicItem> (); // Initializes member variable `item` of PreparationSection class
+    item = std::make_unique<ResonanceItem> (); // Initializes member variable `item` of PreparationSection class
     addOpenGlComponent (item->getImageComponent()); // Calls member function of SynthSection (parent class to PreparationSection)
     _open_gl.initOpenGlComp.try_enqueue([this]
                                         {item->getImageComponent()->init(_open_gl); });
     addAndMakeVisible (item.get());
 
-    setSkinOverride (Skin::kNostalgic);
+    setSkinOverride (Skin::kResonance);
 
 }
 
-std::shared_ptr<SynthSection> NostalgicPreparation::getPrepPopup()
+std::shared_ptr<SynthSection> ResonancePreparation::getPrepPopup()
 {
     if(popup_view)
         popup_view->destroyOpenGlComponents(_open_gl);
-    popup_view = std::make_shared<NostalgicPopup>(proc, _open_gl);
+    popup_view = std::make_shared<ResonancePopup>(proc, _open_gl);
     popup_view->initOpenGlComponents(_open_gl);
     return popup_view;
 }
 
 
-void NostalgicPreparation::resized()
+void ResonancePreparation::resized()
 {
     PreparationSection::resized();
+    //slider->setBounds(0, 0, 100, 100);
 }
 
-NostalgicPreparation::~NostalgicPreparation()
+ResonancePreparation::~ResonancePreparation()
 {
 }
 
-juce::AudioProcessor* NostalgicPreparation::getProcessor()
+juce::AudioProcessor* ResonancePreparation::getProcessor()
 {
     return &proc;
 }
 
-std::unique_ptr<juce::AudioProcessor> NostalgicPreparation::getProcessorPtr()
+std::unique_ptr<juce::AudioProcessor> ResonancePreparation::getProcessorPtr()
 {
     return std::move(_proc_ptr);
 }
 
-void NostalgicPreparation::NostalgicPopup::renderOpenGlComponents(OpenGlWrapper& open_gl, bool animate) {
+void ResonancePreparation::ResonancePopup::renderOpenGlComponents(OpenGlWrapper& open_gl, bool animate) {
 
 
     for (auto& sub_section : sub_sections_) {
@@ -71,6 +73,7 @@ void NostalgicPreparation::NostalgicPopup::renderOpenGlComponents(OpenGlWrapper&
             BITKLAVIER_ASSERT(gl == juce::gl::GL_NO_ERROR);
         }
     }
+
 
     for (auto& sub_section : sub_sections_) {
         if (sub_section->isVisible() && sub_section->isAlwaysOnTop())
@@ -90,32 +93,32 @@ void NostalgicPreparation::NostalgicPopup::renderOpenGlComponents(OpenGlWrapper&
 }
 
 /*************************************************************************************************/
-/*                     NESTED CLASS: NostalgicPopup, inherits from PreparationPopup                 */
+/*                     NESTED CLASS: ResonancePopup, inherits from PreparationPopup                 */
 /*************************************************************************************************/
-NostalgicPreparation::NostalgicPopup::NostalgicPopup(NostalgicProcessor& _proc, OpenGlWrapper &open_gl):  proc(_proc), PreparationPopup(_open_gl)
+ResonancePreparation::ResonancePopup::ResonancePopup(ResonanceProcessor& _proc, OpenGlWrapper &open_gl):  proc(_proc), PreparationPopup(_open_gl)
 {
     auto& _params = proc.getState().params;
 }
 
-NostalgicPreparation::NostalgicPopup::~NostalgicPopup()
+ResonancePreparation::ResonancePopup::~ResonancePopup()
 {
     //TODO
     //constructor sends destroy message to opengl thread
 }
-void NostalgicPreparation::NostalgicPopup::redoImage()
+void ResonancePreparation::ResonancePopup::redoImage()
 {
     int mult = getPixelMultiple();
     int image_width = getWidth() * mult;
     int image_height = getHeight() * mult;
 }
-void NostalgicPreparation::NostalgicPopup::initOpenGlComponents(OpenGlWrapper &open_gl)
+void ResonancePreparation::ResonancePopup::initOpenGlComponents(OpenGlWrapper &open_gl)
 {
 
 
 }
 
 // DISPLAY SLIDERS ON-SCREEN
-void NostalgicPreparation::NostalgicPopup::resized()
+void ResonancePreparation::ResonancePopup::resized()
 {
 
 

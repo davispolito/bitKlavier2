@@ -31,7 +31,12 @@ namespace {
         "Construction Site",
         "direct",
         "keymap",
-        "nostalgic"
+        "nostalgic",
+    "synchronic",
+    "blendronic",
+    "resonance",
+    "tuning",
+    "tempo"
   };
 
   const std::string kValueNames[Skin::kNumSkinValueIds] = {
