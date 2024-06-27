@@ -4,21 +4,10 @@
 
 #include "ConstructionSite.h"
 #include "FullInterface.h"
-/*
-==============================================================================
-
-ConstructionSite.cpp
-Created: 4 Apr 2017 5:46:38pm
-Author:  Michael R Mulshine
-
-==============================================================================
-*/
-
 #include "ConstructionSite.h"
 #include "synth_gui_interface.h"
-#include "Preparations/DirectPreparation.h"
-#include "Preparations/NostalgicPreparation.h"
-#include "Preparations/KeymapPreparation.h"
+#include "Preparations.h"
+
 ConstructionSite::ConstructionSite( juce::ValueTree &v,  juce::UndoManager &um, OpenGlWrapper &open_gl) : SynthSection("Construction Site"),
                                                                                  tracktion::engine::ValueTreeObjectList<PreparationSection>(v),
                                                                                      state(v), undo(um), open_gl(open_gl)
@@ -26,9 +15,15 @@ ConstructionSite::ConstructionSite( juce::ValueTree &v,  juce::UndoManager &um, 
     setWantsKeyboardFocus(true);
     addKeyListener(this);
     setSkinOverride(Skin::kConstructionSite);
+
     prepFactory.Register(bitklavier::BKPreparationType::PreparationTypeDirect, DirectPreparation::createDirectSection);
     prepFactory.Register(bitklavier::BKPreparationType::PreparationTypeNostalgic, NostalgicPreparation::createNostalgicSection);
     prepFactory.Register(bitklavier::BKPreparationType::PreparationTypeKeymap, KeymapPreparation::createKeymapSection);
+    prepFactory.Register(bitklavier::BKPreparationType::PreparationTypeResonance, ResonancePreparation::createResonanceSection);
+    prepFactory.Register(bitklavier::BKPreparationType::PreparationTypeSynchronic, SynchronicPreparation::createSynchronicSection);
+    prepFactory.Register(bitklavier::BKPreparationType::PreparationTypeBlendronic, BlendronicPreparation::createBlendronicSection);
+    prepFactory.Register(bitklavier::BKPreparationType::PreparationTypeTempo, TempoPreparation::createTempoSection);
+    prepFactory.Register(bitklavier::BKPreparationType::PreparationTypeTuning, TuningPreparation::createTuningSection);
 }
 PreparationSection* ConstructionSite::createNewObject (const juce::ValueTree& v)
 {
@@ -94,7 +89,7 @@ bool ConstructionSite::keyPressed (const juce::KeyPress& k, juce::Component* c)
        // DBG("Position" + String(lastX) + " " + String(lastY));
         state.addChild(t,-1, nullptr);
         //DBG("place" + String(lastX) + " " + String(lastY));
-    } else if (code == 78) //N nostalgic
+    } else if (code == 78) // N nostalgic
     {
         ValueTree t(IDs::PREPARATION);
 
@@ -105,7 +100,7 @@ bool ConstructionSite::keyPressed (const juce::KeyPress& k, juce::Component* c)
         t.setProperty(IDs::y,lastY - (132/2), nullptr);
 
         state.addChild(t,-1, nullptr);
-    } else if (code == 75) //K Keymap
+    } else if (code == 75) // K Keymap
     {
         ValueTree t(IDs::PREPARATION);
 
@@ -117,6 +112,57 @@ bool ConstructionSite::keyPressed (const juce::KeyPress& k, juce::Component* c)
         // DBG("Position" + String(lastX) + " " + String(lastY));
         state.addChild(t,-1, nullptr);
         //DBG("place" + String(lastX) + " " + String(lastY));
+    } else if (code == 82) // R resonance
+    {
+        ValueTree t(IDs::PREPARATION);
+
+        t.setProperty(IDs::type, bitklavier::BKPreparationType::PreparationTypeResonance, nullptr);
+        t.setProperty(IDs::width, 260, nullptr);
+        t.setProperty(IDs::height, 132, nullptr);
+        t.setProperty(IDs::x, lastX - 260 / 2, nullptr);
+        t.setProperty(IDs::y, lastY - 132 / 2, nullptr);
+        state.addChild(t, -1, nullptr);
+    } else if (code == 83) // S synchronic
+    {
+        ValueTree t(IDs::PREPARATION);
+
+        t.setProperty(IDs::type, bitklavier::BKPreparationType::PreparationTypeSynchronic, nullptr);
+        t.setProperty(IDs::width, 260, nullptr);
+        t.setProperty(IDs::height, 132, nullptr);
+        t.setProperty(IDs::x, lastX - 260 / 2, nullptr);
+        t.setProperty(IDs::y, lastY - 132 / 2, nullptr);
+        state.addChild(t, -1, nullptr);
+    } else if (code == 66) // B blendronic
+    {
+        ValueTree t(IDs::PREPARATION);
+
+        t.setProperty(IDs::type, bitklavier::BKPreparationType::PreparationTypeBlendronic, nullptr);
+        t.setProperty(IDs::width, 260, nullptr);
+        t.setProperty(IDs::height, 132, nullptr);
+        t.setProperty(IDs::x, lastX - 260 / 2, nullptr);
+        t.setProperty(IDs::y, lastY - 132 / 2, nullptr);
+        state.addChild(t, -1, nullptr);
+    } else if (code == 77) // M tempo
+    {
+        ValueTree t(IDs::PREPARATION);
+
+        t.setProperty(IDs::type, bitklavier::BKPreparationType::PreparationTypeTempo, nullptr);
+        t.setProperty(IDs::width, 132, nullptr);
+        t.setProperty(IDs::height, 260, nullptr);
+        t.setProperty(IDs::x, lastX - 132 / 2, nullptr);
+        t.setProperty(IDs::y, lastY -  260 / 2, nullptr);
+        state.addChild(t, -1, nullptr);
+    }
+    else if (code == 84) // T tuning
+    {
+        ValueTree t(IDs::PREPARATION);
+
+        t.setProperty(IDs::type, bitklavier::BKPreparationType::PreparationTypeTuning, nullptr);
+        t.setProperty(IDs::width, 132, nullptr);
+        t.setProperty(IDs::height, 260, nullptr);
+        t.setProperty(IDs::x, lastX - 132 / 2, nullptr);
+        t.setProperty(IDs::y, lastY -  260 / 2 , nullptr);
+        state.addChild(t, -1, nullptr);
     }
     return true;
 }

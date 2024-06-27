@@ -30,14 +30,19 @@ class Skin {
       kNone,
       kLogo,
       kHeader,
-          kOverlay,
-          kPopupBrowser,
-          kPresetBrowser,
-          kConstructionSite,
-          kDirect,
-          kKeymap,
-          kNostalgic,
-          kNumSectionOverrides
+      kOverlay,
+      kPopupBrowser,
+      kPresetBrowser,
+      kConstructionSite,
+      kDirect,
+      kKeymap,
+      kNostalgic,
+      kSynchronic,
+      kBlendronic,
+      kResonance,
+      kTuning,
+      kTempo,
+      kNumSectionOverrides
     };
 
     enum ValueId {

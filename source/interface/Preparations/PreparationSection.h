@@ -167,4 +167,5 @@ private:
 //    PreparationFactory prepFactory;
 //    SynthGuiInterface* _parent;
 //};
+
 #endif // BITKLAVIER2_PREPARATIONSECTION_H

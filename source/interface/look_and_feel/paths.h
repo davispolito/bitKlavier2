@@ -37,8 +37,18 @@ class Paths {
       return drawable->getOutlineAsPath();
     }
 
+    // Returns the paths for a keymap preparation window
+    static Array<Path> keymapPaths()
+    {
+        Array<Path> arr;
+        arr.add(fromSvgData((const void*)BinaryData::Layer_1_keymap_svg,BinaryData::Layer_1_keymap_svgSize));
+        arr.add(fromSvgData((const void*)BinaryData::Layer_2_keymap_svg,BinaryData::Layer_2_keymap_svgSize));
+        arr.add(fromSvgData((const void*)BinaryData::Layer_3_keymap_svg,BinaryData::Layer_3_keymap_svgSize));
+        arr.add(fromSvgData((const void*)BinaryData::Layer_4_keymap_svg,BinaryData::Layer_4_keymap_svgSize));
+        return arr;
+    }
 
-
+    // Returns the paths for a nostalgic preparation window
     static Array<Path> nostalgicPaths()
     {
       Array<Path> arr;
@@ -50,6 +60,7 @@ class Paths {
       return arr;
     }
 
+    // Returns the paths for a direct preparation window
     static Array<Path> directPaths()
     {
       Array<Path> arr;
@@ -61,13 +72,62 @@ class Paths {
       return arr;
     }
 
-    static Array<Path> keymapPaths()
+
+    // Returns the paths for a synchronic preparation window
+    static Array<Path> synchronicPaths()
     {
         Array<Path> arr;
-        arr.add(fromSvgData((const void*)BinaryData::Layer_1_keymap_svg,BinaryData::Layer_1_keymap_svgSize));
-        arr.add(fromSvgData((const void*)BinaryData::Layer_2_keymap_svg,BinaryData::Layer_2_keymap_svgSize));
-        arr.add(fromSvgData((const void*)BinaryData::Layer_3_keymap_svg,BinaryData::Layer_3_keymap_svgSize));
-        arr.add(fromSvgData((const void*)BinaryData::Layer_4_keymap_svg,BinaryData::Layer_4_keymap_svgSize));
+        arr.add(fromSvgData((const void*)BinaryData::Layer_1_synchronic_svg,BinaryData::Layer_1_synchronic_svgSize));
+        arr.add(fromSvgData((const void*)BinaryData::Layer_2_synchronic_svg,BinaryData::Layer_2_synchronic_svgSize));
+        arr.add(fromSvgData((const void*)BinaryData::Layer_3_synchronic_svg,BinaryData::Layer_3_synchronic_svgSize));
+        arr.add(fromSvgData((const void*)BinaryData::Layer_4_synchronic_svg,BinaryData::Layer_4_synchronic_svgSize));
+
+        return arr;
+    }
+
+    // Returns the paths for a blendronic preparation window
+    static Array<Path> blendronicPaths()
+    {
+        Array<Path> arr;
+        arr.add(fromSvgData((const void*)BinaryData::Layer_1_blendronic_svg,BinaryData::Layer_1_blendronic_svgSize));
+        arr.add(fromSvgData((const void*)BinaryData::Layer_2_blendronic_svg,BinaryData::Layer_2_blendronic_svgSize));
+        arr.add(fromSvgData((const void*)BinaryData::Layer_3_blendronic_svg,BinaryData::Layer_3_blendronic_svgSize));
+        arr.add(fromSvgData((const void*)BinaryData::Layer_4_blendronic_svg,BinaryData::Layer_4_blendronic_svgSize));
+
+        return arr;
+    }
+
+    // Returns the paths for a resonance preparation window
+    static Array<Path> resonancePaths()
+    {
+        Array<Path> arr;
+        arr.add(fromSvgData((const void*)BinaryData::Layer_1_resonance_svg,BinaryData::Layer_1_resonance_svgSize));
+        arr.add(fromSvgData((const void*)BinaryData::Layer_2_resonance_svg,BinaryData::Layer_2_resonance_svgSize));
+        arr.add(fromSvgData((const void*)BinaryData::Layer_3_resonance_svg,BinaryData::Layer_3_resonance_svgSize));
+        arr.add(fromSvgData((const void*)BinaryData::Layer_4_resonance_svg,BinaryData::Layer_4_resonance_svgSize));
+
+        return arr;
+    }
+
+    // Returns the paths for a tuning preparation window
+    static Array<Path> tuningPaths()
+    {
+        Array<Path> arr;
+        arr.add(fromSvgData((const void*)BinaryData::Layer_1_tuning_svg,BinaryData::Layer_1_tuning_svgSize));
+        arr.add(fromSvgData((const void*)BinaryData::Layer_2_tuning_svg,BinaryData::Layer_2_tuning_svgSize));
+        arr.add(fromSvgData((const void*)BinaryData::Layer_4_tuning_svg,BinaryData::Layer_4_tuning_svgSize));
+
+        return arr;
+    }
+
+    // Returns the paths for a tempo preparation window
+    static Array<Path> tempoPaths()
+    {
+        Array<Path> arr;
+        arr.add(fromSvgData((const void*)BinaryData::Layer_1_tempo_svg,BinaryData::Layer_1_tempo_svgSize));
+        arr.add(fromSvgData((const void*)BinaryData::Layer_2_tempo_svg,BinaryData::Layer_2_tempo_svgSize));
+        arr.add(fromSvgData((const void*)BinaryData::Layer_4_tempo_svg,BinaryData::Layer_4_tempo_svgSize));
+
         return arr;
     }
 
@@ -79,21 +139,11 @@ class Paths {
         arr.add(fromSvgData((const void*)BinaryData::layer_3_logo_svg,BinaryData::layer_3_logo_svgSize));
         arr.add(fromSvgData((const void*)BinaryData::layer_4_logo_svg,BinaryData::layer_4_logo_svgSize));
         arr.add(fromSvgData((const void*)BinaryData::layer_5_logo_svg,BinaryData::layer_5_logo_svgSize));
+
         return arr;
     }
-    static Path vitalRing() {
-      Path path = fromSvgData((const void*)BinaryData::vital_ring_svg, BinaryData::vital_ring_svgSize);
-      path.addLineSegment(Line<float>(0.0f, 0.0f, 0.0f, 0.0f), 0.2f);
-      path.addLineSegment(Line<float>(kLogoWidth, kLogoWidth, kLogoWidth, kLogoWidth), 0.2f);
-      return path;
-    }
 
-    static Path vitalV() {
-      Path path = fromSvgData((const void*)BinaryData::vital_v_svg, BinaryData::vital_ring_svgSize);
-      path.addLineSegment(Line<float>(0.0f, 0.0f, 0.0f, 0.0f), 0.2f);
-      path.addLineSegment(Line<float>(kLogoWidth, kLogoWidth, kLogoWidth, kLogoWidth), 0.2f);
-      return path;
-    }
+
 //
 //    static Path vitalWord() {
 //      return fromSvgData((const void*)BinaryData::vital_word_svg, BinaryData::vital_word_svgSize);

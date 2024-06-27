@@ -21,7 +21,7 @@
 #include "open_gl_multi_quad.h"
 #include "open_gl_image_component.h"
 #include "default_look_and_feel.h"
-class AppLogo;
+
 
 class OpenGlDeviceSelector : public OpenGlAutoImageComponent<AudioDeviceSelectorComponent> {
   public:
@@ -93,7 +93,7 @@ class AboutSection : public Overlay {
 
 
     OpenGlQuad body_;
-    std::unique_ptr<AppLogo> logo_;
+    //std::unique_ptr<AppLogo> logo_;
     std::unique_ptr<PlainTextComponent> name_text_;
     std::unique_ptr<PlainTextComponent> version_text_;
     std::unique_ptr<PlainTextComponent> check_updates_text_;
