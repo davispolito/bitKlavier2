@@ -1,24 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg id="Layer_2" data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 194.79 95.14">
+<svg id="Layer_2" data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40.02 79.26">
   <defs>
     <style>
       .cls-1 {
         fill: #92278f;
-        stroke-width: 0px;
-      }
-
-      .cls-2 {
-        fill: none;
+        font-family: MyriadPro-Regular, 'Myriad Pro';
+        font-size: 72px;
         stroke: #92278f;
-        stroke-miterlimit: 10;
-        stroke-width: 4px;
       }
     </style>
   </defs>
-  <g id="Layer_3">
-    <g>
-      <path class="cls-2" d="M1.91,51.83C28.74,139.06,327.36-48.27,119.92,15.53c-201.77,62.06-75.74-89.56,13.05,65.76"/>
-      <path class="cls-1" d="M140.36,95.14c-5.91-5.2-14.37-11.05-21.42-13.71l13.01-1.92,8.77-9.8c-1.67,7.35-1.44,17.63-.35,25.43Z"/>
-    </g>
+  <g id="Layer_4">
+    <text class="cls-1" transform="translate(.5 60.76)"><tspan x="0" y="0">B</tspan></text>
   </g>
 </svg>

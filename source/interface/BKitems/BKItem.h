@@ -16,12 +16,12 @@ public:
     void mouseDoubleClick (const MouseEvent& e) override;
     void mouseDrag(const MouseEvent& e) override;
     // void paint(Graphics& g) override;
-    void setIcons (const Path& layer_1, const Path& layer_2, const Path& layer_3, const Path& layer_4)
+    void setIcons (const Path& layer_1, const Path& layer_2, const Path& layer_3)
     {
         layer_1_ = layer_1;
         layer_2_ = layer_2;
         layer_3_ = layer_3;
-        layer_4_ = layer_4;
+
     }
     void resized() override
     {

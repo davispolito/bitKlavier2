@@ -44,7 +44,7 @@ class Paths {
         arr.add(fromSvgData((const void*)BinaryData::Layer_1_keymap_svg,BinaryData::Layer_1_keymap_svgSize));
         arr.add(fromSvgData((const void*)BinaryData::Layer_2_keymap_svg,BinaryData::Layer_2_keymap_svgSize));
         arr.add(fromSvgData((const void*)BinaryData::Layer_3_keymap_svg,BinaryData::Layer_3_keymap_svgSize));
-        arr.add(fromSvgData((const void*)BinaryData::Layer_4_keymap_svg,BinaryData::Layer_4_keymap_svgSize));
+
         return arr;
     }
 
@@ -55,7 +55,6 @@ class Paths {
       arr.add(fromSvgData((const void*)BinaryData::Layer_1_nostalgic_svg,BinaryData::Layer_1_nostalgic_svgSize));
       arr.add(fromSvgData((const void*)BinaryData::Layer_2_nostalgic_svg,BinaryData::Layer_2_nostalgic_svgSize));
       arr.add(fromSvgData((const void*)BinaryData::Layer_3_nostalgic_svg,BinaryData::Layer_3_nostalgic_svgSize));
-      arr.add(fromSvgData((const void*)BinaryData::Layer_4_nostalgic_svg,BinaryData::Layer_4_nostalgic_svgSize));
 
       return arr;
     }
@@ -67,7 +66,6 @@ class Paths {
       arr.add(fromSvgData((const void*)BinaryData::Layer_1_direct_svg,BinaryData::Layer_1_direct_svgSize));
       arr.add(fromSvgData((const void*)BinaryData::Layer_2_direct_svg,BinaryData::Layer_2_direct_svgSize));
       arr.add(fromSvgData((const void*)BinaryData::Layer_3_direct_svg,BinaryData::Layer_3_direct_svgSize));
-      arr.add(fromSvgData((const void*)BinaryData::Layer_4_direct_svg,BinaryData::Layer_4_direct_svgSize));
 
       return arr;
     }
@@ -80,7 +78,6 @@ class Paths {
         arr.add(fromSvgData((const void*)BinaryData::Layer_1_synchronic_svg,BinaryData::Layer_1_synchronic_svgSize));
         arr.add(fromSvgData((const void*)BinaryData::Layer_2_synchronic_svg,BinaryData::Layer_2_synchronic_svgSize));
         arr.add(fromSvgData((const void*)BinaryData::Layer_3_synchronic_svg,BinaryData::Layer_3_synchronic_svgSize));
-        arr.add(fromSvgData((const void*)BinaryData::Layer_4_synchronic_svg,BinaryData::Layer_4_synchronic_svgSize));
 
         return arr;
     }
@@ -92,7 +89,6 @@ class Paths {
         arr.add(fromSvgData((const void*)BinaryData::Layer_1_blendronic_svg,BinaryData::Layer_1_blendronic_svgSize));
         arr.add(fromSvgData((const void*)BinaryData::Layer_2_blendronic_svg,BinaryData::Layer_2_blendronic_svgSize));
         arr.add(fromSvgData((const void*)BinaryData::Layer_3_blendronic_svg,BinaryData::Layer_3_blendronic_svgSize));
-        arr.add(fromSvgData((const void*)BinaryData::Layer_4_blendronic_svg,BinaryData::Layer_4_blendronic_svgSize));
 
         return arr;
     }
@@ -104,7 +100,6 @@ class Paths {
         arr.add(fromSvgData((const void*)BinaryData::Layer_1_resonance_svg,BinaryData::Layer_1_resonance_svgSize));
         arr.add(fromSvgData((const void*)BinaryData::Layer_2_resonance_svg,BinaryData::Layer_2_resonance_svgSize));
         arr.add(fromSvgData((const void*)BinaryData::Layer_3_resonance_svg,BinaryData::Layer_3_resonance_svgSize));
-        arr.add(fromSvgData((const void*)BinaryData::Layer_4_resonance_svg,BinaryData::Layer_4_resonance_svgSize));
 
         return arr;
     }
@@ -115,7 +110,6 @@ class Paths {
         Array<Path> arr;
         arr.add(fromSvgData((const void*)BinaryData::Layer_1_tuning_svg,BinaryData::Layer_1_tuning_svgSize));
         arr.add(fromSvgData((const void*)BinaryData::Layer_2_tuning_svg,BinaryData::Layer_2_tuning_svgSize));
-        arr.add(fromSvgData((const void*)BinaryData::Layer_4_tuning_svg,BinaryData::Layer_4_tuning_svgSize));
 
         return arr;
     }
@@ -126,7 +120,6 @@ class Paths {
         Array<Path> arr;
         arr.add(fromSvgData((const void*)BinaryData::Layer_1_tempo_svg,BinaryData::Layer_1_tempo_svgSize));
         arr.add(fromSvgData((const void*)BinaryData::Layer_2_tempo_svg,BinaryData::Layer_2_tempo_svgSize));
-        arr.add(fromSvgData((const void*)BinaryData::Layer_4_tempo_svg,BinaryData::Layer_4_tempo_svgSize));
 
         return arr;
     }

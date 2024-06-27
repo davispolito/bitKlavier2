@@ -55,7 +55,7 @@ BKItem::BKItem (bitklavier::BKPreparationType type) : Button("bkitem")
     layer_1_ = paths.getUnchecked(0);
     layer_2_ = paths.getUnchecked(1);
     layer_3_ = paths.getUnchecked(2);
-    layer_4_ = paths.getUnchecked(3);
+
 
 }
 
