@@ -21,7 +21,8 @@ Author:  Michael R Mulshine
 #include "Preparations/KeymapPreparation.h"
 ConstructionSite::ConstructionSite( juce::ValueTree &v,  juce::UndoManager &um, OpenGlWrapper &open_gl) : SynthSection("Construction Site"),
                                                                                  tracktion::engine::ValueTreeObjectList<PreparationSection>(v),
-                                                                                     state(v), undo(um), open_gl(open_gl)
+                                                                                     state(v), undo(um), open_gl(open_gl),
+                                                                                     preparationSelector(*this)
 {
     setWantsKeyboardFocus(true);
     addKeyListener(this);
@@ -43,16 +44,22 @@ PreparationSection* ConstructionSite::createNewObject (const juce::ValueTree& v)
     s->setCentrePosition(s->x, s->y);
     s->setSize(s->width, s->height);
 
-    SynthGuiInterface* parent = findParentComponentOfClass<SynthGuiInterface>();
-    parent->getSynth()->processorInitQueue.try_enqueue([this]
-                                                       {
-                                                           SynthGuiInterface* _parent = findParentComponentOfClass<SynthGuiInterface>();
-                                                           objects.getLast()->node = _parent->getSynth()->addProcessor(std::move(objects.getLast()->getProcessorPtr()));
 
-                                                        //last_proc.reset();
-                                                       });
     return s;
 }
+
+void ConstructionSite::newObjectAdded (PreparationSection* object)
+{
+    SynthGuiInterface* parent = findParentComponentOfClass<SynthGuiInterface>();
+    parent->getSynth()->processorInitQueue.try_enqueue([this, object]
+                                                       {
+                                                           SynthGuiInterface* _parent = findParentComponentOfClass<SynthGuiInterface>();
+                                                           object->node = _parent->getSynth()->addProcessor(std::move(object->getProcessorPtr()));
+
+                                                           //last_proc.reset();
+                                                       });
+}
+
 ConstructionSite::~ConstructionSite(void)
 {
     freeObjects();
@@ -211,7 +218,10 @@ void ConstructionSite::mouseDown (const MouseEvent& eo)
 
 
     mouse = e.position;
+    if (itemToSelect == nullptr)
+    {
 
+    }
     // This must happen before the right-click menu or the menu will close
    grabKeyboardFocus();
 

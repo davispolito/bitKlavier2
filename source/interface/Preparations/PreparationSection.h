@@ -61,6 +61,9 @@ public:
             {
                 showPrepPopup(this);
 
+            } else
+            {
+                isSelected = true;
             }
             myDragger.startDraggingComponent (this, e);
     }
@@ -107,7 +110,7 @@ public:
 protected:
     std::shared_ptr<PreparationPopup> popup_view;
 private:
-
+    bool isSelected = true;
 
     //void valueTreePropertyChanged (juce::ValueTree& v, const juce::Identifier& i) override;
     //SynthGuiInterface *_parent;
@@ -118,53 +121,5 @@ private:
 
 
 
-//typedef Loki::Factory<PreparationSection, int,  juce::ValueTree,  juce::UndoManager&> PreparationFactory;
-//class PreparationList : public SynthSection,
-//                        public tracktion::engine::ValueTreeObjectList<PreparationSection>
-//{
-//public:
-//    PreparationList(ValueTree editTree, juce::UndoManager& um);
-//
-//
-//    ~PreparationList()
-//    {
-//        freeObjects();
-//    }
-//
-//    bool isSuitableType (const juce::ValueTree& v) const override
-//    {
-//        return v.hasType (IDs::PREPARATION);
-//    }
-//
-//    PreparationSection* createNewObject(const juce::ValueTree& v) override;
-//    void deleteObject (PreparationSection* at) override
-//    {
-//        delete at;
-//    }
-//
-//    void resized() override
-//    {
-//        for (auto prep: objects)
-//        {
-//            prep->setBounds(prep->x, prep->y, prep->getWidth(), prep->getHeight());
-//        }
-//    }
-//    void newObjectAdded (PreparationSection*) override    { } //resized(); }
-//    void objectRemoved (PreparationSection*) override     { }//resized(); }
-//    void objectOrderChanged() override              { }//resized(); }
-//
-//private :
-//    void valueTreePropertyChanged (juce::ValueTree& v, const juce::Identifier& i) override
-//    {
-////        if (isSuitableType (v))
-////            if (i == IDs::start || i == IDs::length)
-////                resized();
-//
-//        tracktion::engine::ValueTreeObjectList<PreparationSection>::valueTreePropertyChanged (v, i);
-//    }
-//    //ReferenceCountedArray<PreparationSection,
-//
-//    PreparationFactory prepFactory;
-//    SynthGuiInterface* _parent;
-//};
+
 #endif // BITKLAVIER2_PREPARATIONSECTION_H

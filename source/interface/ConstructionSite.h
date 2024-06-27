@@ -7,6 +7,7 @@
 #include  "draggable_component.h"
 #include "common.h"
 #include "Preparations/PreparationSection.h"
+#include "PreparationSelector.h"
 class SynthGuiInterface;
 typedef Loki::Factory<PreparationSection, int,  juce::ValueTree,  OpenGlWrapper&> PreparationFactory;
 class ConstructionSite : public LassoSource<BKItem*>, public SynthSection, public juce::ValueTree::Listener,
@@ -139,7 +140,7 @@ public:
     }
 
 
-    void newObjectAdded (PreparationSection*) override    { resized();} //resized(); }
+    void newObjectAdded (PreparationSection*) override;
     void objectRemoved (PreparationSection*) override     { resized();}//resized(); }
     void objectOrderChanged() override              {resized(); }//resized(); }
 
@@ -227,7 +228,8 @@ private:
         tracktion::engine::ValueTreeObjectList<PreparationSection>::valueTreePropertyChanged (v, i);
     }
     //ReferenceCountedArray<PreparationSection,
-
+    PreparationSelector preparationSelector;
+    LassoComponent<PreparationSection*> selectorLasso;
     PreparationFactory prepFactory;
     //std::shared_ptr<juce::AudioProcessor> last_proc;
  //    std::vector<chowdsp::Broadcaster<void()>> audioThreadBroadcasters { 10 };
