@@ -15,6 +15,7 @@ public:
     void mouseDown (const MouseEvent& e) override;
     void mouseDoubleClick (const MouseEvent& e) override;
     void mouseDrag(const MouseEvent& e) override;
+
     // void paint(Graphics& g) override;
     void setIcons (const Path& layer_1, const Path& layer_2, const Path& layer_3)
     {
@@ -23,6 +24,7 @@ public:
         layer_3_ = layer_3;
 
     }
+
     void resized() override
     {
         //redoImage();
@@ -47,29 +49,11 @@ public:
         redoImage();
     };
 
-    void paintButton (juce::Graphics& g, bool shouldDrawButtonAsHighlighted, bool shouldDrawButtonAsDown)
+    virtual void paintButton (juce::Graphics& g, bool shouldDrawButtonAsHighlighted, bool shouldDrawButtonAsDown)
     {
-        Rectangle<float> bounds = getLocalBounds().toFloat();
-
-        layer_3_.applyTransform(layer_3_.getTransformToScaleToFit(bounds.reduced(40.f ).withX(80 ),true));
-        layer_2_.applyTransform(layer_2_.getTransformToScaleToFit(bounds.reduced(20 ),true));
-        Rectangle<float> s = bounds.getProportion<float>({0.0f, 0.0f, 0.9f, 0.9f});
-        s.setCentre(bounds.getCentre());
-        layer_1_.applyTransform(layer_1_.getTransformToScaleToFit(s,true));
-
-        g.setColour(findColour(Skin::kShadow, true));
-        g.drawImageAt(shadow_, 0, 0, true);
-
-
-        g.fillPath(layer_1_);
-        Colour c = findColour(Skin::kWidgetPrimary1, true);
-        g.setColour(c);
-
-        g.fillPath(layer_2_);
-        g.fillPath(layer_3_);
-        g.strokePath(layer_1_,juce::PathStrokeType (5, juce::PathStrokeType::mitered) );
 
     }
+
     class Listener
     {
     public:
@@ -103,8 +87,6 @@ protected:
     Colour prep_color_;
     bool wasJustDragged;
 
-
-
 };
 
 class KeymapItem : public BKItem
@@ -117,6 +99,7 @@ public:
 
     void paintButton (juce::Graphics& g, bool shouldDrawButtonAsHighlighted, bool shouldDrawButtonAsDown)
     {
+        // Ascertains the current window size
         Rectangle<float> bounds = getLocalBounds().toFloat();
 
         // Ascertains the appropriate location for layer_2 based on the preparation
@@ -172,7 +155,53 @@ public:
 
     }
 
+    void paintButton (juce::Graphics& g, bool shouldDrawButtonAsHighlighted, bool shouldDrawButtonAsDown)
+    {
+        // Ascertains the current window size
+        Rectangle<float> bounds = getLocalBounds().toFloat();
 
+        // Ascertains the appropriate location for layer_2 based on the preparation
+        // window size
+        float layer_2_x = bounds.getX() + (bounds.getWidth() / 11);
+        float layer_2_y = bounds.getY() + (bounds.getHeight() / 5);
+        float layer_2_width = bounds.getWidth() * 9 / 11;
+        float layer_2_height = bounds.getHeight() * 3 / 5;
+
+        // Transforms layer_2 to fit appropriately in the preparation window
+        layer_2_.applyTransform(layer_2_.getTransformToScaleToFit(layer_2_x,
+                                                                  layer_2_y,
+                                                                  layer_2_width,
+                                                                  layer_2_height,
+                                                                  false));
+
+        // Ascertains the appropriate location for layer_3 based on the preparation
+        // window size
+        float layer_3_x = bounds.getX() + (bounds.getWidth() * 17 / 30);
+        float layer_3_y = bounds.getY() + (bounds.getHeight() * 8 / 30);
+        float layer_3_width = bounds.getWidth() / 6;
+        float layer_3_height = bounds.getHeight() * 11 / 20;
+
+        // Transforms layer_3 to fit appropriately in the preparation window
+        layer_3_.applyTransform(layer_3_.getTransformToScaleToFit(layer_3_x,
+                                                                  layer_3_y,
+                                                                  layer_3_width,
+                                                                  layer_3_height,
+                                                                  true));
+
+        // Retrieves and sets the color of each layer
+
+        g.setColour(findColour(Skin::kShadow, true));
+        g.drawImageAt(shadow_, 0, 0, true);
+        g.fillPath(layer_1_);
+
+        Colour c;
+        c = findColour(Skin::kWidgetPrimary1, true);
+        g.setColour(c);
+        g.fillPath(layer_2_);
+        g.fillPath(layer_3_);
+
+        g.strokePath(layer_1_, juce::PathStrokeType(5, juce::PathStrokeType::mitered));
+    }
 };
 
 class NostalgicItem : public BKItem
@@ -181,6 +210,54 @@ public:
     NostalgicItem() : BKItem(bitklavier::BKPreparationType::PreparationTypeNostalgic)
     {
 
+    }
+
+    void paintButton (juce::Graphics& g, bool shouldDrawButtonAsHighlighted, bool shouldDrawButtonAsDown)
+    {
+        // Ascertains the current window size
+        Rectangle<float> bounds = getLocalBounds().toFloat();
+
+        // Ascertains the appropriate location for layer_2 based on the preparation
+        // window size
+        float layer_2_x = bounds.getX() + (bounds.getWidth() / 11);
+        float layer_2_y = bounds.getY() + (bounds.getHeight() / 8);
+        float layer_2_width = bounds.getWidth() * 9 / 11;
+        float layer_2_height = bounds.getHeight() * 3 / 4;
+
+        // Transforms layer_2 to fit appropriately in the preparation window
+        layer_2_.applyTransform(layer_2_.getTransformToScaleToFit(layer_2_x,
+                                                                  layer_2_y,
+                                                                  layer_2_width,
+                                                                  layer_2_height,
+                                                                  false));
+
+        // Ascertains the appropriate location for layer_3 based on the preparation
+        // window size
+        float layer_3_x = bounds.getX() + (bounds.getWidth() * 18 / 30);
+        float layer_3_y = bounds.getY() + (bounds.getHeight() * 9 / 30);
+        float layer_3_width = bounds.getWidth() / 7;
+        float layer_3_height = bounds.getHeight() * 11 / 20;
+
+        // Transforms layer_3 to fit appropriately in the preparation window
+        layer_3_.applyTransform(layer_3_.getTransformToScaleToFit(layer_3_x,
+                                                                  layer_3_y,
+                                                                  layer_3_width,
+                                                                  layer_3_height,
+                                                                  true));
+
+        // Retrieves and sets the color of each layer
+
+        g.setColour(findColour(Skin::kShadow, true));
+        g.drawImageAt(shadow_, 0, 0, true);
+        g.fillPath(layer_1_);
+
+        Colour c;
+        c = findColour(Skin::kWidgetPrimary1, true);
+        g.setColour(c);
+        g.fillPath(layer_2_);
+        g.fillPath(layer_3_);
+
+        g.strokePath(layer_1_,juce::PathStrokeType (5, juce::PathStrokeType::mitered) );
     }
 
 };
@@ -193,6 +270,54 @@ public:
 
     }
 
+    void paintButton (juce::Graphics& g, bool shouldDrawButtonAsHighlighted, bool shouldDrawButtonAsDown)
+    {
+        // Ascertains the current window size
+        Rectangle<float> bounds = getLocalBounds().toFloat();
+
+        // Ascertains the appropriate location for layer_2 based on the preparation
+        // window size
+        float layer_2_x = bounds.getX() + (bounds.getWidth() / 15);
+        float layer_2_y = bounds.getY() + (bounds.getHeight() / 9);
+        float layer_2_width = bounds.getWidth() * 13 / 15;
+        float layer_2_height = bounds.getHeight() * 7 / 9;
+
+        // Transforms layer_2 to fit appropriately in the preparation window
+        layer_2_.applyTransform(layer_2_.getTransformToScaleToFit(layer_2_x,
+                                                                  layer_2_y,
+                                                                  layer_2_width,
+                                                                  layer_2_height,
+                                                                  false));
+
+        // Ascertains the appropriate location for layer_3 based on the preparation
+        // window size
+        float layer_3_x = bounds.getX() + (bounds.getWidth() * 2 / 3);
+        float layer_3_y = bounds.getY() + (bounds.getHeight() / 3);
+        float layer_3_width = bounds.getWidth() / 7;
+        float layer_3_height = bounds.getHeight() / 2;
+
+        // Transforms layer_3 to fit appropriately in the preparation window
+        layer_3_.applyTransform(layer_3_.getTransformToScaleToFit(layer_3_x,
+                                                                  layer_3_y,
+                                                                  layer_3_width,
+                                                                  layer_3_height,
+                                                                  true));
+
+        // Retrieves and sets the color of each layer
+
+        g.setColour(findColour(Skin::kShadow, true));
+        g.drawImageAt(shadow_, 0, 0, true);
+        g.fillPath(layer_1_);
+
+        Colour c;
+        c = findColour(Skin::kWidgetPrimary1, true);
+        g.setColour(c);
+        g.fillPath(layer_2_);
+        g.fillPath(layer_3_);
+
+        g.strokePath(layer_1_,juce::PathStrokeType (5, juce::PathStrokeType::mitered));
+    }
+
 };
 
 class BlendronicItem : public BKItem
@@ -201,6 +326,54 @@ public:
     BlendronicItem() : BKItem(bitklavier::BKPreparationType::PreparationTypeBlendronic)
     {
 
+    }
+
+    void paintButton (juce::Graphics& g, bool shouldDrawButtonAsHighlighted, bool shouldDrawButtonAsDown)
+    {
+        // Ascertains the current window size
+        Rectangle<float> bounds = getLocalBounds().toFloat();
+
+        // Ascertains the appropriate location for layer_2 based on the preparation
+        // window size
+        float layer_2_x = bounds.getX() + (bounds.getWidth() / 15);
+        float layer_2_y = bounds.getY() + (bounds.getHeight() / 7);
+        float layer_2_width = bounds.getWidth() * 23 / 30;
+        float layer_2_height = bounds.getHeight() * 5 / 7;
+
+        // Transforms layer_2 to fit appropriately in the preparation window
+        layer_2_.applyTransform(layer_2_.getTransformToScaleToFit(layer_2_x,
+                                                                  layer_2_y,
+                                                                  layer_2_width,
+                                                                  layer_2_height,
+                                                                  false));
+
+        // Ascertains the appropriate location for layer_3 based on the preparation
+        // window size
+        float layer_3_x = bounds.getX() + (bounds.getWidth() * 23 / 30);
+        float layer_3_y = bounds.getY() + (bounds.getHeight() * 12 / 30);
+        float layer_3_width = bounds.getWidth() / 7;
+        float layer_3_height = bounds.getHeight() * 9 / 20;
+
+        // Transforms layer_3 to fit appropriately in the preparation window
+        layer_3_.applyTransform(layer_3_.getTransformToScaleToFit(layer_3_x,
+                                                                  layer_3_y,
+                                                                  layer_3_width,
+                                                                  layer_3_height,
+                                                                  true));
+
+        // Retrieves and sets the color of each layer
+
+        g.setColour(findColour(Skin::kShadow, true));
+        g.drawImageAt(shadow_, 0, 0, true);
+        g.fillPath(layer_1_);
+
+        Colour c;
+        c = findColour(Skin::kWidgetPrimary1, true);
+        g.setColour(c);
+        g.fillPath(layer_2_);
+        g.fillPath(layer_3_);
+
+        g.strokePath(layer_1_,juce::PathStrokeType (5, juce::PathStrokeType::mitered) );
     }
 
 };
@@ -213,6 +386,53 @@ public:
 
     }
 
+    void paintButton (juce::Graphics& g, bool shouldDrawButtonAsHighlighted, bool shouldDrawButtonAsDown)
+    {
+        // Ascertains the current window size
+        Rectangle<float> bounds = getLocalBounds().toFloat();
+
+        // Ascertains the appropriate location for layer_2 based on the preparation
+        // window size
+        float layer_2_x = bounds.getX() + (bounds.getWidth() * 9 / 30);
+        float layer_2_y = bounds.getY() + (bounds.getHeight() / 7);
+        float layer_2_width = bounds.getWidth() * 18 / 30;
+        float layer_2_height = bounds.getHeight() * 5 / 7;
+
+        // Transforms layer_2 to fit appropriately in the preparation window
+        layer_2_.applyTransform(layer_2_.getTransformToScaleToFit(layer_2_x,
+                                                                  layer_2_y,
+                                                                  layer_2_width,
+                                                                  layer_2_height,
+                                                                  false));
+
+        // Ascertains the appropriate location for layer_3 based on the preparation
+        // window size
+        float layer_3_x = bounds.getX() + (bounds.getWidth() / 10);
+        float layer_3_y = bounds.getY() + (bounds.getHeight() * 10 / 30);
+        float layer_3_width = bounds.getWidth() / 7;
+        float layer_3_height = bounds.getHeight() / 2;
+
+        // Transforms layer_3 to fit appropriately in the preparation window
+        layer_3_.applyTransform(layer_3_.getTransformToScaleToFit(layer_3_x,
+                                                                  layer_3_y,
+                                                                  layer_3_width,
+                                                                  layer_3_height,
+                                                                  true));
+
+        // Retrieves and sets the color of each layer
+
+        g.setColour(findColour(Skin::kShadow, true));
+        g.drawImageAt(shadow_, 0, 0, true);
+        g.fillPath(layer_1_);
+
+        Colour c;
+        c = findColour(Skin::kWidgetPrimary1, true);
+        g.setColour(c);
+        g.fillPath(layer_2_);
+        g.fillPath(layer_3_);
+
+        g.strokePath(layer_1_, juce::PathStrokeType(5, juce::PathStrokeType::mitered));
+    }
 };
 
 class TuningItem : public BKItem
@@ -223,19 +443,84 @@ public:
 
     }
 
+    void paintButton (juce::Graphics& g, bool shouldDrawButtonAsHighlighted, bool shouldDrawButtonAsDown)
+    {
+        // Ascertains the current window size
+        Rectangle<float> bounds = getLocalBounds().toFloat();
+
+        // Ascertains the appropriate location for layer_2 based on the preparation
+        // window size
+        float layer_2_x = bounds.getX() + (bounds.getWidth() * 3 / 16 );
+        float layer_2_y = bounds.getY() + (bounds.getHeight() / 10);
+        float layer_2_width = bounds.getWidth() * 11 / 16;
+        float layer_2_height = bounds.getHeight() * 4 / 5;
+
+        // Transforms layer_2 to fit appropriately in the preparation window
+        layer_2_.applyTransform(layer_2_.getTransformToScaleToFit(layer_2_x,
+                                                                  layer_2_y,
+                                                                  layer_2_width,
+                                                                  layer_2_height,
+                                                                  false));
+
+
+        // Retrieves and sets the color of each layer
+
+        g.setColour(findColour(Skin::kShadow, true));
+        g.drawImageAt(shadow_, 0, 0, true);
+        g.fillPath(layer_1_);
+
+        Colour c;
+        c = findColour(Skin::kWidgetPrimary1, true);
+        g.setColour(c);
+        g.fillPath(layer_2_);
+
+        g.strokePath(layer_1_, juce::PathStrokeType(5, juce::PathStrokeType::mitered));
+    }
+
 };
 
 class TempoItem : public BKItem
 {
 public:
-TempoItem() : BKItem(bitklavier::BKPreparationType::PreparationTypeTempo)
-{
+    TempoItem() : BKItem(bitklavier::BKPreparationType::PreparationTypeTempo)
+    {
 
-}
+    }
 
+    void paintButton (juce::Graphics& g, bool shouldDrawButtonAsHighlighted, bool shouldDrawButtonAsDown)
+    {
+        // Ascertains the current window size
+        Rectangle<float> bounds = getLocalBounds().toFloat();
+
+        // Ascertains the appropriate location for layer_2 based on the preparation
+        // window size
+        float layer_2_x = bounds.getX() + (bounds.getWidth() / 2 );
+        float layer_2_y = bounds.getY() + (bounds.getHeight() / 8);
+        float layer_2_width = bounds.getWidth() / 2;
+        float layer_2_height = bounds.getHeight() * 19 / 30;
+
+        // Transforms layer_2 to fit appropriately in the preparation window
+        layer_2_.applyTransform(layer_2_.getTransformToScaleToFit(layer_2_x,
+                                                                  layer_2_y,
+                                                                  layer_2_width,
+                                                                  layer_2_height,
+                                                                  false));
+
+
+        // Retrieves and sets the color of each layer
+
+        g.setColour(findColour(Skin::kShadow, true));
+        g.drawImageAt(shadow_, 0, 0, true);
+        g.fillPath(layer_1_);
+
+        Colour c;
+        c = findColour(Skin::kWidgetPrimary1, true);
+        g.setColour(c);
+        g.fillPath(layer_2_);
+
+        g.strokePath(layer_1_, juce::PathStrokeType(5, juce::PathStrokeType::mitered));
+    }
 };
-
-
 
 
 #endif //BITKLAVIER2_BKITEM_H
