@@ -23,7 +23,8 @@
 
 class LogoButton : public Button {
 public:
-    LogoButton(const String& name) : Button(name) {
+    LogoButton(const String& name) : Button(name)
+    {
         image_component_.setComponent(this);
         auto paths = Paths::logoPaths();
         layer_1_ = paths.getUnchecked(0);
@@ -31,12 +32,12 @@ public:
         layer_3_ = paths.getUnchecked(2);
         layer_4_ = paths.getUnchecked(3);
         layer_5_ = paths.getUnchecked(4);
-
     }
 
 
-
     void resized() override {
+
+
         const DropShadow shadow(Colours::white, 5,juce::Point<int>(0, 0));
 
         if (shadow_.getWidth() == getWidth() && shadow_.getHeight() == getHeight())
@@ -57,19 +58,84 @@ public:
     }
 
     void paintButton(Graphics& g, bool hover, bool down) override {
+
+        // Ascertains the current section size
         Rectangle<float> bounds = getLocalBounds().toFloat();
-        //letter_.applyTransform(letter_.getTransformToScaleToFit(bounds, true));
-        //ring_.applyTransform(ring_.getTransformToScaleToFit(bounds, true));
-        layer_1_.applyTransform(layer_1_.getTransformToScaleToFit(bounds,true));
-        layer_2_.applyTransform(layer_2_.getTransformToScaleToFit(bounds,true));
-        layer_3_.applyTransform(layer_3_.getTransformToScaleToFit(bounds,true));
-        layer_4_.applyTransform(layer_4_.getTransformToScaleToFit(bounds,true));
-        layer_5_.applyTransform(layer_5_.getTransformToScaleToFit(bounds,true));
+
+
+        // Ascertains the appropriate location for layer_1 based on the section
+        // size
+        float layer_1_x = bounds.getX();
+        float layer_1_y = bounds.getY();
+        float layer_1_width = bounds.getWidth();
+        float layer_1_height = bounds.getHeight();
+
+        layer_2_.applyTransform(layer_2_.getTransformToScaleToFit(layer_1_x,
+                                                                  layer_1_y,
+                                                                  layer_1_width,
+                                                                  layer_1_height,
+                                                                  true));
+
+        // Ascertains the appropriate location for layer_2 based on the section
+        // size
+        float layer_2_x = bounds.getX();
+        float layer_2_y = bounds.getY() + (bounds.getHeight() / 5);
+        float layer_2_width = bounds.getWidth();
+        float layer_2_height = bounds.getHeight() * 4 / 5;
+
+        layer_2_.applyTransform(layer_2_.getTransformToScaleToFit(layer_2_x,
+                                                                  layer_2_y,
+                                                                  layer_2_width,
+                                                                  layer_2_height,
+                                                                  false));
+
+        // Ascertains the appropriate location for layer_3 based on the section
+        // size
+        float layer_3_x = bounds.getX() + (bounds.getWidth() / 20);
+        float layer_3_y = bounds.getY() + (bounds.getHeight() * 5 / 6);
+        float layer_3_width = bounds.getWidth() * 24 / 30;
+        float layer_3_height = bounds.getHeight() / 6;
+
+        layer_3_.applyTransform(layer_3_.getTransformToScaleToFit(layer_3_x,
+                                                                  layer_3_y,
+                                                                  layer_3_width,
+                                                                  layer_3_height,
+                                                                  false));
+
+        // Ascertains the appropriate location for layer_4 based on the section
+        // size
+        float layer_4_x = bounds.getX();
+        float layer_4_y = bounds.getY() + (bounds.getHeight() / 9);
+        float layer_4_width = bounds.getWidth();
+        float layer_4_height = bounds.getHeight() / 6;
+
+        layer_4_.applyTransform(layer_4_.getTransformToScaleToFit(layer_4_x,
+                                                                  layer_4_y,
+                                                                  layer_4_width,
+                                                                  layer_4_height,
+                                                                  false));
+
+        // Ascertains the appropriate location for layer_5 based on the section
+        // size
+        float layer_5_x = bounds.getX() + (bounds.getWidth() * 5 / 30);
+        float layer_5_y = bounds.getY() + (bounds.getHeight() * 10 / 30);
+        float layer_5_width = bounds.getWidth() * 20 / 30;
+        float layer_5_height = bounds.getHeight() * 14 / 30;
+
+        layer_5_.applyTransform(layer_5_.getTransformToScaleToFit(layer_5_x,
+                                                                  layer_5_y,
+                                                                  layer_5_width,
+                                                                  layer_5_height,
+                                                                  false));
+
+        // Retrieves and sets the color of each layer
+
         g.setColour(findColour(Skin::kShadow, true));
         g.drawImageAt(shadow_, 0, 0, true);
 
         ColourGradient letter_gradient(letter_top_color_, 0.0f, 0.0f, letter_bottom_color_, 0.0f, getHeight(), false);
         ColourGradient ring_gradient(ring_top_color_, 0.0f, 0.0f, ring_bottom_color_, 0.0f, getHeight(), false);
+
         g.setColour(Colours::brown);
         g.fillPath(layer_1_);
 
@@ -82,6 +148,7 @@ public:
         g.setColour(Colours::goldenrod);
         g.fillPath(layer_4_);
         g.fillPath(layer_5_);
+
 
         if (hover) {
             g.setColour(findColour(Skin::kLightenScreen, true));

@@ -51,6 +51,29 @@ public:
 
     virtual void paintButton (juce::Graphics& g, bool shouldDrawButtonAsHighlighted, bool shouldDrawButtonAsDown)
     {
+<<<<<<< HEAD
+        Rectangle<float> bounds = getLocalBounds().toFloat();
+
+        layer_3_.applyTransform(layer_3_.getTransformToScaleToFit(bounds.reduced(40.f ).withX(80 ),true));
+        layer_2_.applyTransform(layer_2_.getTransformToScaleToFit(bounds.reduced(20 ),true));
+        Rectangle<float> s = bounds.getProportion<float>({0.0f, 0.0f, 0.9f, 0.9f});
+        s.setCentre(bounds.getCentre());
+        layer_1_.applyTransform(layer_1_.getTransformToScaleToFit(s,true));
+
+        g.setColour(findColour(Skin::kShadow, true));
+        g.drawImageAt(shadow_, 0, 0, true);
+
+
+        g.fillPath(layer_1_);
+        Colour c = findColour(Skin::kWidgetPrimary1, true);
+        g.setColour(c);
+
+        g.fillPath(layer_2_);
+        g.fillPath(layer_3_);
+        g.setColour(prep_color_);
+        g.strokePath(layer_1_,juce::PathStrokeType (5, juce::PathStrokeType::mitered) );
+=======
+>>>>>>> e34bbc82f67e2987dcd4088f02e09f68f6ba8224
 
     }
 
@@ -143,7 +166,6 @@ public:
 
         g.fillPath(layer_2_);
         g.fillPath(layer_3_);
-        g.setColour(prep_color_);
         g.strokePath(layer_1_,juce::PathStrokeType (5, juce::PathStrokeType::mitered) );
     }
 };
@@ -200,7 +222,7 @@ public:
         g.setColour(c);
         g.fillPath(layer_2_);
         g.fillPath(layer_3_);
-        g.setColour(prep_color_);
+
         g.strokePath(layer_1_, juce::PathStrokeType(5, juce::PathStrokeType::mitered));
     }
 };
@@ -257,7 +279,7 @@ public:
         g.setColour(c);
         g.fillPath(layer_2_);
         g.fillPath(layer_3_);
-        g.setColour(prep_color_);
+
         g.strokePath(layer_1_,juce::PathStrokeType (5, juce::PathStrokeType::mitered) );
     }
 
@@ -315,7 +337,7 @@ public:
         g.setColour(c);
         g.fillPath(layer_2_);
         g.fillPath(layer_3_);
-        g.setColour(prep_color_);
+
         g.strokePath(layer_1_,juce::PathStrokeType (5, juce::PathStrokeType::mitered));
     }
 
@@ -373,7 +395,7 @@ public:
         g.setColour(c);
         g.fillPath(layer_2_);
         g.fillPath(layer_3_);
-        g.setColour(prep_color_);
+
         g.strokePath(layer_1_,juce::PathStrokeType (5, juce::PathStrokeType::mitered) );
     }
 
@@ -431,7 +453,7 @@ public:
         g.setColour(c);
         g.fillPath(layer_2_);
         g.fillPath(layer_3_);
-        g.setColour(prep_color_);
+
         g.strokePath(layer_1_, juce::PathStrokeType(5, juce::PathStrokeType::mitered));
     }
 };
@@ -474,7 +496,7 @@ public:
         c = findColour(Skin::kWidgetPrimary1, true);
         g.setColour(c);
         g.fillPath(layer_2_);
-        g.setColour(prep_color_);
+
         g.strokePath(layer_1_, juce::PathStrokeType(5, juce::PathStrokeType::mitered));
     }
 
@@ -518,7 +540,7 @@ public:
         c = findColour(Skin::kWidgetPrimary1, true);
         g.setColour(c);
         g.fillPath(layer_2_);
-        g.setColour(prep_color_);
+
         g.strokePath(layer_1_, juce::PathStrokeType(5, juce::PathStrokeType::mitered));
     }
 };

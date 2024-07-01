@@ -20,7 +20,6 @@
 #include <memory>
 
 
-
 LogoSection::LogoSection() : SynthSection("logo_section") {
 #if !defined(NO_TEXT_ENTRY)
   logo_button_ = std::make_unique<LogoButton>("logo");

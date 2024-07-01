@@ -1,17 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg id="Layer_2" data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256.03 191.92">
+<svg id="Layer_2" data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 269.35 305.36">
   <defs>
     <style>
       .cls-1 {
+        font-size: 280px;
+      }
+
+      .cls-2 {
+        font-size: 200px;
+      }
+
+      .cls-3 {
         fill: #fbb040;
+        font-family: MyriadPro-Regular, 'Myriad Pro';
         stroke: #fbb040;
       }
     </style>
   </defs>
-  <g id="Layer_5" data-name="Layer 5">
-    <g>
-      <path class="cls-1" d="M.53,189.22c.4-6.6.8-16.4.8-25V47.22h17.4v60.8h.4c6.2-10.8,17.4-17.8,33-17.8,24,0,41,20,40.8,49.4,0,34.6-21.8,51.8-43.4,51.8-14,0-25.2-5.4-32.4-18.2h-.6l-.8,16H.53h0ZM18.73,150.42c0,2.2.4,4.4.8,6.4,3.4,12.2,13.6,20.6,26.4,20.6,18.4,0,29.4-15,29.4-37.2,0-19.4-10-36-28.8-36-12,0-23.2,8.2-26.8,21.6-.4,2-1,4.4-1,7.2v17.4h0Z"/>
-      <path class="cls-1" d="M121.81.5h24.36v91h.84c5.04-7.28,10.08-14,14.84-20.16L219.53.5h30.24l-68.32,80.08,73.64,108.64h-28.84l-62.16-92.68-17.92,20.72v71.96h-24.36V.5h0Z"/>
-    </g>
+  <g id="Layer_2-2" data-name="Layer 2">
+    <text class="cls-3" transform="translate(.5 234.86)"><tspan class="cls-2" x="0" y="0">b</tspan><tspan class="cls-1" x="113.8" y="0">K</tspan></text>
   </g>
 </svg>
