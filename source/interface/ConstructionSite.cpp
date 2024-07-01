@@ -437,6 +437,8 @@ void ConstructionSite::mouseDown (const MouseEvent& eo)
 void ConstructionSite::mouseUp (const MouseEvent& eo)
 {
     //inLasso = false;
+    selectorLasso.endLasso();
+    removeChildComponent(&selectorLasso);
     if (edittingComment) return;
 
     MouseEvent e = eo.getEventRelativeTo(this);
@@ -487,8 +489,7 @@ void ConstructionSite::mouseUp (const MouseEvent& eo)
 //    }
 //    if (shouldStore && e.getDistanceFromDragStart() > 0) processor.saveGalleryToHistory("Move");
 
-    selectorLasso.endLasso();
-    removeChildComponent(&selectorLasso);
+
     redraw();
 }
 
