@@ -27,13 +27,13 @@ void PreparationSection::paintBackground(Graphics& g)
 
     if(item)
     {
-        item->setColor(findColour (Skin::kWidgetPrimary1, true));
+        //item->setColor(findColour (Skin::kWidgetPrimary1, true));
         item->redoImage();
     }
 //    g.restoreState();
 }
 
-void PreparationSection::resized()
+void PreparationSection:: resized()
 {
     Rectangle<float> bounds = getLocalBounds().toFloat();
     int item_padding_y = kItemPaddingY * size_ratio_;

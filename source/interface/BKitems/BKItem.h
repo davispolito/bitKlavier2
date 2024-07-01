@@ -67,6 +67,7 @@ public:
 
         g.fillPath(layer_2_);
         g.fillPath(layer_3_);
+        g.setColour(prep_color_);
         g.strokePath(layer_1_,juce::PathStrokeType (5, juce::PathStrokeType::mitered) );
 
     }

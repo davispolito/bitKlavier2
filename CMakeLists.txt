@@ -113,6 +113,8 @@ add_library(SharedCode INTERFACE
         source/interface/BKitems/BKItem.cpp
         source/interface/BKitems/BKItem.h
         source/interface/synth_slider.h
+        source/interface/Cable/CableView.cpp
+        source/interface/Cable/CableView.h
 )
 
 # C++20, please

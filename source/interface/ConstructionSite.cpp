@@ -16,7 +16,7 @@ ConstructionSite::ConstructionSite( juce::ValueTree &v,  juce::UndoManager &um, 
     setWantsKeyboardFocus(true);
     addKeyListener(this);
     setSkinOverride(Skin::kConstructionSite);
-
+setInterceptsMouseClicks(false,true);
     prepFactory.Register(bitklavier::BKPreparationType::PreparationTypeDirect, DirectPreparation::createDirectSection);
     prepFactory.Register(bitklavier::BKPreparationType::PreparationTypeNostalgic, NostalgicPreparation::createNostalgicSection);
     prepFactory.Register(bitklavier::BKPreparationType::PreparationTypeKeymap, KeymapPreparation::createKeymapSection);
@@ -38,8 +38,9 @@ PreparationSection* ConstructionSite::createNewObject (const juce::ValueTree& v)
     s->setSizeRatio(size_ratio_);
     s->setCentrePosition(s->x, s->y);
     s->setSize(s->width, s->height);
-
-
+    s->setDefaultColor();
+    s->selectedSet = &(preparationSelector.getLassoSelection());
+    preparationSelector.getLassoSelection().addChangeListener(s);
     return s;
 }
 
@@ -252,11 +253,24 @@ void ConstructionSite::mouseMove (const MouseEvent& eo)
 
 void ConstructionSite::mouseDown (const MouseEvent& eo)
 {
-     DBG("mousedown");
+
+
     MouseEvent e = eo.getEventRelativeTo(this);
+    auto itemToSelect = dynamic_cast<PreparationSection*> (e.originalComponent->getParentComponent());
+    if(itemToSelect == nullptr)
+    {
+        preparationSelector.getLassoSelection().deselectAll();
 
+    } else
+    {
+        DBG("mousedown");
+    }
+    addChildComponent(selectorLasso);
+    selectorLasso.beginLasso(e, &preparationSelector);
+    auto thisPoint = e.getPosition();
+    thisPoint.addXY(10,10);
+    selectorLasso.dragLasso(e.withNewPosition(thisPoint));
 
-    itemToSelect = dynamic_cast<BKItem*> (e.originalComponent->getParentComponent());
 
     held = false;
 
@@ -264,16 +278,10 @@ void ConstructionSite::mouseDown (const MouseEvent& eo)
 
 
     mouse = e.position;
-    if (itemToSelect == nullptr)
-    {
 
-    }
     // This must happen before the right-click menu or the menu will close
    grabKeyboardFocus();
 
-    // Clicking on an item
-    if (itemToSelect != nullptr )
-    {
 
 
 //        processor.gallery->setGalleryDirty(true);
@@ -372,10 +380,9 @@ void ConstructionSite::mouseDown (const MouseEvent& eo)
 //                prepareItemDrag(item, e, true);
 //            }
         }
-    }
+
     // Clicking on blank graph space
-    else
-    {
+
         if (e.mods.isRightButtonDown())
         {
 //            if (processor.wrapperType == juce::AudioPluginInstance::wrapperType_Standalone)
@@ -424,12 +431,12 @@ void ConstructionSite::mouseDown (const MouseEvent& eo)
         }
         // Stop trying to make a connection on blank space click
         connect = false;
-    }
+
 }
 
 void ConstructionSite::mouseUp (const MouseEvent& eo)
 {
-    inLasso = false;
+    //inLasso = false;
     if (edittingComment) return;
 
     MouseEvent e = eo.getEventRelativeTo(this);
@@ -441,7 +448,7 @@ void ConstructionSite::mouseUp (const MouseEvent& eo)
     if (e.mods.isCtrlDown()) return;
 #endif
 
-    touches.removeObject (getTouchEvent(e.source));
+
 
 
 //    DBG(e.x);
@@ -451,10 +458,7 @@ void ConstructionSite::mouseUp (const MouseEvent& eo)
     //getParentComponent()->grabKeyboardFocus();
 
     grabKeyboardFocus();
-    if (itemToSelect == nullptr)
-    {
-        //lasso->endLasso();
-    }
+
 
 //    if (lassoSelection.getNumSelected())
 //    {
@@ -483,6 +487,8 @@ void ConstructionSite::mouseUp (const MouseEvent& eo)
 //    }
 //    if (shouldStore && e.getDistanceFromDragStart() > 0) processor.saveGalleryToHistory("Move");
 
+    selectorLasso.endLasso();
+    removeChildComponent(&selectorLasso);
     redraw();
 }
 
@@ -493,34 +499,14 @@ void ConstructionSite::mouseDrag (const MouseEvent& e)
     // Do nothing on right click drag
     if (e.mods.isRightButtonDown()) return;
 
-#if JUCE_IOS
-    MouseEvent eo = (e.eventComponent != this) ? e.getEventRelativeTo(this) : e;
 
-    TouchEvent* t = getTouchEvent(eo.source);
 
-    if (t == nullptr)
-    {
-        t = new TouchEvent(eo.source);
-        t->path.startNewSubPath(eo.position);
-        touches.add(t);
+
+    if(e.mods.isCtrlDown()) {
+        selectorLasso.toFront(false);
+        selectorLasso.dragLasso(e);
     }
 
-    t->pushPoint(eo.position, eo.mods);
-
-    repaint();
-#endif
-
-
-
-    if (itemToSelect == nullptr) //lasso->dragLasso(e);
-
-//    if (!connect && !e.mods.isShiftDown() && !inLasso)
-//    {
-//        for (auto item : graph->getSelectedItems())
-//        {
-//            item->performDrag(e);
-//        }
-//    }
 
     lineEX = e.getEventRelativeTo(this).x;
     lineEY = e.getEventRelativeTo(this).y;
@@ -531,63 +517,6 @@ void ConstructionSite::mouseDrag (const MouseEvent& e)
 
 
 
-BKItem* ConstructionSite::getItemAtPoint(const int X, const int Y)
-{
-    BKItem* theItem = nullptr;
 
-    if (itemSource != nullptr)
-    {
-        int which = 0;
 
-//        for (auto item : graph->getItems())
-//        {
-//            int left = item->getX(); int right = left + item->getWidth();
-//            int top = item->getY(); int bottom = top + item->getHeight();
-//
-//            if (X >= left && X <= right && Y >= top && Y <= bottom) // is in item
-//            {
-//                theItem = dynamic_cast<BKItem*> (item);
-//                break;
-//            }
-//
-//            which++;
-//        }
-    }
 
-    return theItem;
-}
-
-void ConstructionSite::findLassoItemsInArea (Array <BKItem*>& itemsFound,
-    const Rectangle<int>& area)
-{
-    int areaX = area.getX(); int areaY = area.getY(); int areaWidth = area.getWidth(); int areaHeight = area.getHeight();
-
-    // psuedocode determine if collide: if (x1 + w1) - x2 >= 0 and (x2 + w2) - x1 >= 0
-
-//    for (auto item : graph->getItems())
-//    {
-//        int itemX = item->getX(); int itemWidth = item->getWidth();
-//        int itemY = item->getY(); int itemHeight = item->getHeight();
-//
-//        if (((itemX + itemWidth - areaX) >= 0) && ((areaX + areaWidth - itemX) >= 0) &&
-//            ((itemY + itemHeight - areaY) >= 0) && ((areaY + areaHeight - itemY) >= 0))
-//            itemsFound.add(item);
-//    }
-
-    /*
-    for (int x = area.getX(); x < area.getRight(); x++)
-    {
-        for (int y = area.getY(); y < area.getBottom(); y++)
-        {
-            BKItem* item = getItemAtPoint(x,y);
-
-            if (item != nullptr) itemsFound.add(item);
-        }
-    }
-     */
-}
-
-SelectedItemSet<BKItem*>& ConstructionSite::getLassoSelection(void)
-{
-    return lassoSelection;
-}

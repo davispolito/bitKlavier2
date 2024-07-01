@@ -17,10 +17,12 @@ namespace IDs
     DECLARE_ID (INPUT)
     DECLARE_ID (OUTPUT)
     DECLARE_ID (PIANO)
+    DECLARE_ID (CONNECTIONS)
+    DECLARE_ID (PREPARATIONS)
 
     DECLARE_ID (name)
 
-    DECLARE_ID (PREPARATION)
+DECLARE_ID (PREPARATION)
     DECLARE_ID (id)
     DECLARE_ID (type)
     DECLARE_ID (x)
@@ -28,6 +30,7 @@ namespace IDs
     DECLARE_ID (height)
     DECLARE_ID (width)
 
+    DECLARE_ID (CONNECTION)
     DECLARE_ID (uuid)
 }
 

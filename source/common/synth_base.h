@@ -23,7 +23,7 @@
 
 #include <set>
 #include <string>
-
+#include "Connection.h"
 
 class SynthGuiInterface;
 
@@ -103,6 +103,9 @@ class SynthBase : public MidiManager::Listener, public juce::ValueTree::Listener
     };
 
     juce::AudioProcessorGraph::Node::Ptr addProcessor(std::unique_ptr<juce::AudioProcessor> processor);
+
+    void addConnection(Connection& connect);
+
     juce::ValueTree& getValueTree();
     juce::UndoManager& getUndoManager();
     static constexpr size_t actionSize = 16; // sizeof ([this, i = index] { callMessageThreadBroadcaster (i); })

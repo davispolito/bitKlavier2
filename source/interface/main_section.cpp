@@ -8,7 +8,7 @@
 MainSection::MainSection(juce::ValueTree v, juce::UndoManager &um, OpenGlWrapper & open_gl) : SynthSection("main_section"), v(v), um(um)
 {
     constructionSite_ = std::make_unique<ConstructionSite>(v, um, open_gl);
-
+    addMouseListener(constructionSite_.get(), true);
     //addAndMakeVisible(constructionSite_.get());
     //constructionPort.setViewedComponent(constructionSite_.get());
     constructionSite_->view = &constructionPort;
