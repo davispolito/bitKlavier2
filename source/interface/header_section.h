@@ -62,7 +62,6 @@ public:
         // Ascertains the current section size
         Rectangle<float> bounds = getLocalBounds().toFloat();
 
-
         // Ascertains the appropriate location for layer_1 based on the section
         // size
         float layer_1_x = bounds.getX();
@@ -70,11 +69,11 @@ public:
         float layer_1_width = bounds.getWidth();
         float layer_1_height = bounds.getHeight();
 
-        layer_2_.applyTransform(layer_2_.getTransformToScaleToFit(layer_1_x,
+        layer_1_.applyTransform(layer_1_.getTransformToScaleToFit(layer_1_x,
                                                                   layer_1_y,
                                                                   layer_1_width,
                                                                   layer_1_height,
-                                                                  true));
+                                                                  false));
 
         // Ascertains the appropriate location for layer_2 based on the section
         // size
@@ -128,7 +127,7 @@ public:
                                                                   layer_5_height,
                                                                   false));
 
-        // Retrieves and sets the color of each layer
+        //Retrieves and sets the color of each layer
 
         g.setColour(findColour(Skin::kShadow, true));
         g.drawImageAt(shadow_, 0, 0, true);

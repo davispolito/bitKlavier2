@@ -21,7 +21,7 @@ SynchronicPreparation::SynchronicPreparation (std::unique_ptr<SynchronicProcesso
         _proc_ptr(std::move(p))
 {
 
-    item = std::make_unique<SynchronicItem> (); // Initializes member variable `item` of PreparationSection class
+    item = std::make_unique<BKItem> (bitklavier::BKPreparationType::PreparationTypeSynchronic, *this); // Initializes member variable `item` of PreparationSection class
     addOpenGlComponent (item->getImageComponent()); // Calls member function of SynthSection (parent class to PreparationSection)
     _open_gl.initOpenGlComp.try_enqueue([this]
                                         {item->getImageComponent()->init(_open_gl); });

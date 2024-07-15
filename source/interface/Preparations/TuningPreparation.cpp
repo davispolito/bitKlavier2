@@ -15,14 +15,12 @@
 // Definition for the TuningPreparation constructor.  It takes three parameters: a pointer to
 // a Tuning Processor p, a ValueTree v, and a reference to an OpenGlWrapper object.  Initializes
 // the base class members and private TuningPreparation member proc with an initialization list.
-TuningPreparation::TuningPreparation (std::unique_ptr<TuningProcessor> p,
-                                    juce::ValueTree v, OpenGlWrapper& um) :
-        PreparationSection(juce::String("tuning"), v, um),
-        proc(*p.get()),
-        _proc_ptr(std::move(p))
+TuningPreparation::TuningPreparation (std::unique_ptr<TuningProcessor> p, juce::ValueTree v, OpenGlWrapper& um) :
+                                    PreparationSection(juce::String("tuning"), v, um),
+                                    proc(*p.get()), _proc_ptr(std::move(p))
 {
 
-    item = std::make_unique<TuningItem> (); // Initializes member variable `item` of PreparationSection class
+    item = std::make_unique<BKItem> (bitklavier::BKPreparationType::PreparationTypeTuning, *this); // Initializes member variable `item` of PreparationSection class
     addOpenGlComponent (item->getImageComponent()); // Calls member function of SynthSection (parent class to PreparationSection)
     _open_gl.initOpenGlComp.try_enqueue([this]
                                         {item->getImageComponent()->init(_open_gl); });

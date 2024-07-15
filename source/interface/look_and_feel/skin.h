@@ -90,9 +90,24 @@ class Skin {
         kWavetableDrawWidth,
         kWavetableWaveHeight,
         kWavetableYOffset,
+        kLayer1XOffsetFactor,
+        kLayer1YOffsetFactor,
+        kLayer1WidthFactor,
+        kLayer1HeightFactor,
+        kLayer1PreserveProportions,
+        kLayer2XOffsetFactor,
+        kLayer2YOffsetFactor,
+        kLayer2WidthFactor,
+        kLayer2HeightFactor,
+        kLayer2PreserveProportions,
+//        kLayer3XOffsetFactor,
+//        kLayer3YOffsetFactor,
+//        kLayer3WidthFactor,
+//        kLayer3HeightFactor,
+//        kLayer3PreserveProportions,
         kNumSkinValueIds,
         kFrequencyDisplay = kNumSkinValueIds,
-        kNumAllValueIds,
+        kNumAllValueIds
     };
 
     enum ColorId {

@@ -107,6 +107,21 @@
         "Widget Secondary 1": "669f88ff",
         "Widget Secondary 2": "669f88ff",
         "Widget Secondary Disabled": "22666666",
+        "Layer 1 X Offset Factor": 1.0,
+        "Layer 1 Y Offset Factor": 1.0,
+        "Layer 1 Width Factor": 1.0,
+        "Layer 1 Height Factor": 1.0,
+        "Layer 1 Preserve Proportions": 1.0,
+        "Layer 2 X Offset Factor": 1.0,
+        "Layer 2 Y Offset Factor": 1.0,
+        "Layer 2 Width Factor": 1.0,
+        "Layer 2 Height Factor": 1.0,
+        "Layer 2 Preserve Proportions": 1.0,
+        "Layer 3 X Offset Factor": 1.0,
+        "Layer 3 Y Offset Factor": 1.0,
+        "Layer 3 Width Factor": 1.0,
+        "Layer 3 Height Factor": 1.0,
+        "Layer 3 Preserve Proportions": 1.0,
     "overrides": {
         "All": null,
         "Header": {
@@ -161,47 +176,116 @@
             "Body" : "0xffdeb887"
         },
         "keymap": {
-            "Body" : "333333",
+            "Body" : "0xffffffff",
             "Widget Primary 1" : "0xff000000",
             "Widget Primary 2" : "0xffffffff",
-            "Shadow": "0xff000000"
+            "Shadow": "0xff000000",
+            "Layer 2 X Offset Factor": 0.23,
+            "Layer 2 Y Offset Factor": 0.111111111111,
+            "Layer 2 Width Factor": 0.54,
+            "Layer 2 Height Factor": 0.55,
+            "Layer 2 Preserve Proportions": 0.0,
+            "Layer 3 X Offset Factor": 0.40625,
+            "Layer 3 Y Offset Factor": 0.111111111111,
+            "Layer 3 Width Factor": 0.1,
+            "Layer 3 Height Factor": 0.8055555555555,
+            "Layer 3 Preserve Proportions": 0.0
         },
         "direct": {
             "Body" : "333333",
             "Widget Primary 1" : "0xfffbb040",
-            "Shadow": "0xff000000"
+            "Shadow": "0xff000000",
+            "Layer 2 X Offset Factor": "0.090909090909",
+            "Layer 2 Y Offset Factor": "0.2",
+            "Layer 2 Width Factor": "0.81818181818181",
+            "Layer 2 Height Factor": "0.6",
+            "Layer 2 Preserve Proportions": "0.0",
+            "Layer 3 X Offset Factor": "0.566666666666",
+            "Layer 3 Y Offset Factor": "0.266666666666",
+            "Layer 3 Width Factor": "0.1666666666666",
+            "Layer 3 Height Factor": "0.55",
+            "Layer 3 Preserve Proportions": "1.0"
         },
         "nostalgic": {
             "Body" : "333333",
             "Widget Primary 1" : "0xff2596be",
-            "Shadow": "0xff000000"
+            "Shadow": "0xff000000",
+            "Layer 2 X Offset Factor": "0.090909090909",
+            "Layer 2 Y Offset Factor": "0.125",
+            "Layer 2 Width Factor": "0.81818181818181",
+            "Layer 2 Height Factor": "0.75",
+            "Layer 2 Preserve Proportions": "0.0",
+            "Layer 3 X Offset Factor": "0.6",
+            "Layer 3 Y Offset Factor": "0.3",
+            "Layer 3 Width Factor": "0.14285714",
+            "Layer 3 Height Factor": "0.55",
+            "Layer 3 Preserve Proportions": "1.0"
         },
         "synchronic": {
             "Body" : "333333",
             "Widget Primary 1" : "0xffED1C24",
-            "Shadow": "0xff000000"
+            "Shadow": "0xff000000",
+            "Layer 2 X Offset Factor": "0.066666666666",
+            "Layer 2 Y Offset Factor": "0.111111111111",
+            "Layer 2 Width Factor": "0.8666666666666",
+            "Layer 2 Height Factor": "0.77777777777",
+            "Layer 2 Preserve Proportions": "0.0",
+            "Layer 3 X Offset Factor": "0.666666666666",
+            "Layer 3 Y Offset Factor": "0.333333333333",
+            "Layer 3 Width Factor": "0.14285714",
+            "Layer 3 Height Factor": "0.5",
+            "Layer 3 Preserve Proportions": "1.0"
         },
         "blendronic": {
             "Body" : "333333",
             "Widget Primary 1" : "0xff92278F",
-            "Shadow": "0xff000000"
+            "Shadow": "0xff000000",
+            "Layer 2 X Offset Factor": "0.066666666666",
+            "Layer 2 Y Offset Factor": "0.14285714",
+            "Layer 2 Width Factor": "0.766666666666",
+            "Layer 2 Height Factor": "0.71428571",
+            "Layer 2 Preserve Proportions": "0.0",
+            "Layer 3 X Offset Factor": "0.766666666666",
+            "Layer 3 Y Offset Factor": "0.4",
+            "Layer 3 Width Factor": "0.14285714",
+            "Layer 3 Height Factor": "0.45",
+            "Layer 3 Preserve Proportions": "1.0"
         },
         "resonance": {
             "Body" : "333333",
             "Widget Primary 1" : "0xffE57A25",
-            "Shadow": "0xff000000"
+            "Shadow": "0xff000000",
+            "Layer 2 X Offset Factor": "0.3",
+            "Layer 2 Y Offset Factor": "0.14285714",
+            "Layer 2 Width Factor": "0.6",
+            "Layer 2 Height Factor": "0.71428571",
+            "Layer 2 Preserve Proportions": "0.0",
+            "Layer 3 X Offset Factor": "0.1",
+            "Layer 3 Y Offset Factor": "0.333333333333",
+            "Layer 3 Width Factor": "0.14285714",
+            "Layer 3 Height Factor": "0.5",
+            "Layer 3 Preserve Proportions": "1.0"
         },
         "tuning": {
             "Body" : "333333",
             "Widget Primary 1" : "0xff00A651",
-            "Shadow": "0xff000000"
+            "Shadow": "0xff000000",
+            "Layer 2 X Offset Factor": "0.1875",
+            "Layer 2 Y Offset Factor": "0.1",
+            "Layer 2 Width Factor": "0.6875",
+            "Layer 2 Height Factor": "0.8",
+            "Layer 2 Preserve Proportions": "0.0"
         },
         "tempo": {
             "Body" : "333333",
             "Widget Primary 1" : "0xffA97C50",
-            "Shadow": "0xff000000"
+            "Shadow": "0xff000000",
+            "Layer 2 X Offset Factor": "0.5",
+            "Layer 2 Y Offset Factor": "0.125",
+            "Layer 2 Width Factor": "0.5",
+            "Layer 2 Height Factor": "0.63333333333",
+            "Layer 2 Preserve Proportions": "0.0"
         }
-
     },
     "synth_version": 65541
 }

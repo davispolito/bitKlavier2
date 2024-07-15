@@ -39,7 +39,7 @@ namespace {
     "tempo"
   };
 
-  const std::string kValueNames[Skin::kNumSkinValueIds] = {
+  const std::string kValueNames[Skin::ValueId::kNumSkinValueIds] = {
       "Body Rounding",
       "Label Height",
       "Label Background Height",
@@ -84,6 +84,20 @@ namespace {
       "Wavetable Draw Width",
       "Wavetable Draw Height",
       "Wavetable Y Offset",
+      "Layer 1 X Offset Factor",
+      "Layer 1 Y Offset Factor",
+      "Layer 1 Width Factor",
+      "Layer 1 Height Factor",
+      "Layer 1 Preserve Proportions"
+      "Layer 2 Y Offset Factor",
+      "Layer 2 Width Factor",
+      "Layer 2 Height Factor",
+      "Layer 2 Preserve Proportions"
+//      "Layer 3 X Offset Factor",
+//      "Layer 3 Y Offset Factor",
+//      "Layer 3 Width Factor",
+//      "Layer 3 Height Factor",
+//      "Layer 3 Preserve Proportions"
   };
 
   const std::string kColorNames[Skin::kNumColors] = {

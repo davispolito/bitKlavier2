@@ -40,7 +40,6 @@ float SynthSection::findValue(Skin::ValueId value_id) const {
       return parent_->findValue(value_id);
 
   return 0.0f;
-
 }
 
 void SynthSection::reset() {
