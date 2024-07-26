@@ -31,18 +31,19 @@ namespace {
   }
 }
 
-AboutSection::AboutSection(const String& name) : Overlay(name), body_(Shaders::kRoundedRectangleFragment) {
-  addOpenGlComponent(&body_);
+AboutSection::AboutSection(const String& name) : Overlay(name), body_(new OpenGlQuad(Shaders::kRoundedRectangleFragment)) {
+
+  addOpenGlComponent(body_);
  // logo_ = std::make_unique<AppLogo>("logo");
   //addOpenGlComponent(logo_.get());
 
-  name_text_ = std::make_unique<PlainTextComponent>("plugin name", "VIAL");
-  addOpenGlComponent(name_text_.get());
+  name_text_ = std::make_shared<PlainTextComponent>("plugin name", "VIAL");
+  addOpenGlComponent(name_text_);
   name_text_->setFontType(PlainTextComponent::kRegular);
   name_text_->setTextSize(40.0f);
 
-  version_text_ = std::make_unique<PlainTextComponent>("version", String("version  ") + ProjectInfo::versionString);
-  addOpenGlComponent(version_text_.get());
+  version_text_ = std::make_shared<PlainTextComponent>("version", String("version  ") + ProjectInfo::versionString);
+  addOpenGlComponent(version_text_);
   version_text_->setFontType(PlainTextComponent::kLight);
   version_text_->setTextSize(12.0f);
 
@@ -75,9 +76,9 @@ void AboutSection::resized() {
   }
 
   Rectangle<int> info_rect = getInfoRect();
-  body_.setBounds(info_rect);
-  body_.setRounding(findValue(Skin::kBodyRounding));
-  body_.setColor(findColour(Skin::kBody, true));
+  body_->setBounds(info_rect);
+  body_->setRounding(findValue(Skin::kBodyRounding));
+  body_->setColor(findColour(Skin::kBody, true));
   Colour body_text = findColour(Skin::kBodyText, true);
 //  name_text_->setColor(body_text);
 //

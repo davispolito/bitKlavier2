@@ -47,16 +47,16 @@ class OpenGlSlider : public Slider {
     static constexpr float kRotaryAngle = 0.8f * bitklavier::kPi;
 
     OpenGlSlider(String name) : Slider(name), parent_(nullptr), modulation_knob_(false), modulation_amount_(0.0f),
-                                paint_to_image_(false), active_(true), bipolar_(false), slider_quad_(this),knob_size_scale_(1.0f) {
-      slider_quad_.setTargetComponent(this);
+                                paint_to_image_(false), active_(true), bipolar_(false), slider_quad_(new OpenGlSliderQuad(this)),knob_size_scale_(1.0f) {
+      slider_quad_->setTargetComponent(this);
       setMaxArc(kRotaryAngle);
 
-      image_component_.paintEntireComponent(true);
-      image_component_.setComponent(this);
-      image_component_.setScissor(true);
+      image_component_->paintEntireComponent(true);
+      image_component_->setComponent(this);
+      image_component_->setScissor(true);
 
-      slider_quad_.setActive(false);
-      image_component_.setActive(false);
+      slider_quad_->setActive(false);
+      image_component_->setActive(false);
     }
 
     virtual void resized() override {
@@ -173,16 +173,16 @@ class OpenGlSlider : public Slider {
       return !paint_to_image_ && getSliderStyle() == LinearBarVertical && !isTextOrCurve();
     }
 
-    OpenGlComponent* getImageComponent() {
-      return &image_component_;
+    std::shared_ptr<OpenGlComponent> getImageComponent() {
+      return image_component_;
     }
 
-    OpenGlComponent* getQuadComponent() {
-      return &slider_quad_;
+    std::shared_ptr<OpenGlComponent> getQuadComponent() {
+      return slider_quad_;
     }
 
     void setMaxArc(float arc) {
-      slider_quad_.setMaxArc(arc);
+      slider_quad_->setMaxArc(arc);
     }
 
     void setModulationKnob() { modulation_knob_ = true; }
@@ -268,8 +268,8 @@ class OpenGlSlider : public Slider {
       return 0.0f;
     }
 
-    void setAlpha(float alpha, bool reset = false) { slider_quad_.setAlpha(alpha, reset); }
-    void setDrawWhenNotVisible(bool draw) { slider_quad_.setDrawWhenNotVisible(draw); }
+    void setAlpha(float alpha, bool reset = false) { slider_quad_->setAlpha(alpha, reset); }
+    void setDrawWhenNotVisible(bool draw) { slider_quad_->setDrawWhenNotVisible(draw); }
 
     SynthSection* getSectionParent() { return parent_; }
 
@@ -289,8 +289,8 @@ class OpenGlSlider : public Slider {
     bool active_;
     bool bipolar_;
 
-    OpenGlSliderQuad slider_quad_;
-    OpenGlImageComponent image_component_;
+    std::shared_ptr<OpenGlSliderQuad> slider_quad_;
+    std::shared_ptr<OpenGlImageComponent> image_component_;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(OpenGlSlider)
 };
@@ -478,7 +478,7 @@ class SynthSlider : public OpenGlSlider, public TextEditor::Listener {
 
 
 
-    OpenGlComponent* getTextEditorComponent() { return text_entry_->getImageComponent(); }
+    std::shared_ptr<OpenGlComponent> getTextEditorComponent() { return text_entry_->getImageComponent(); }
 
 //    void setAttachment(chowdsp::FloatParameter& param, chowdsp::PluginState& pluginState)
 //    {

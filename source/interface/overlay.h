@@ -158,9 +158,9 @@ class Overlay : public SynthSection {
         JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(Listener)
     };
 
-    Overlay(String name) : SynthSection(name), size_ratio_(1.0f) {
+    Overlay(String name) : SynthSection(name), size_ratio_(1.0f) , background_(new OverlayBackgroundRenderer()){
       setSkinOverride(Skin::kOverlay);
-      addOpenGlComponent(&background_);
+      addOpenGlComponent(background_);
     }
     virtual ~Overlay() { }
 
@@ -175,8 +175,8 @@ class Overlay : public SynthSection {
     }
 
     virtual void resized() override {
-      background_.setColor(findColour(Skin::kOverlayScreen, true));
-      background_.setBounds(getLocalBounds());
+      background_->setColor(findColour(Skin::kOverlayScreen, true));
+      background_->setBounds(getLocalBounds());
     }
 
     virtual void paintBackground(Graphics& g) override { paintOpenGlChildrenBackgrounds(g); }
@@ -188,7 +188,7 @@ class Overlay : public SynthSection {
   protected:
     float size_ratio_;
     std::set<Listener*> listeners_;
-    OverlayBackgroundRenderer background_;
+    std::shared_ptr<OverlayBackgroundRenderer> background_;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(Overlay)
 };

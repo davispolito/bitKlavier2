@@ -76,6 +76,7 @@ private:
     std::unique_ptr<Image> owned_image_;
     Colour color_;
     OpenGLTexture texture_;
+    OpenGlWrapper *wrapper;
     bool additive_;
     bool use_alpha_;
     bool scissor_;

@@ -146,7 +146,6 @@ include_directories(source/synthesis/synth_engine)
 include_directories(third_party/tracktion_engine/modules/tracktion_engine)
 # This is where you can set preprocessor definitions for JUCE and your plugin
 set(JUCE_DEPENDENCIES
-
         chowdsp::chowdsp_plugin_base
         chowdsp::chowdsp_plugin_state
         chowdsp::chowdsp_sources
@@ -180,6 +179,8 @@ target_compile_definitions(SharedCode
     PRODUCT_NAME_WITHOUT_VERSION="bitKlavier2"
 )
 
+
+
 # Link to any other modules you added (with juce_add_module) here!
 juce_add_modules(third_party/tracktion_engine/modules/tracktion_engine)
 #juce_add_module(third_party/chowdsp_utils/modules/gui/chowdsp_gui)
@@ -197,11 +198,11 @@ target_link_libraries(SharedCode
 
         ${JUCE_DEPENDENCIES}
     melatonin_inspector
-    #juce_audio_utils
-    #juce_audio_processors
-    #juce_dsp
-    #juce_gui_basics
-    #juce_gui_extra
+    juce_audio_utils
+    juce_audio_processors
+    juce_dsp
+    juce_gui_basics
+    juce_gui_extra
         juce_opengl
         #chowdsp_utils
     juce::juce_recommended_config_flags
@@ -211,6 +212,10 @@ target_link_libraries(SharedCode
 
         #tracktion::engine
         )
+
+message(WARNING "The JUCE HEADERS WILL BE GENERATED FOR ${PROJECT_NAME} at ${CMAKE_BINARY_DIR}")
+juce_generate_juce_header(${PROJECT_NAME})
+include_directories(${CMAKE_BINARY_DIR}/${PROJECT_NAME}_artefacts/JuceLibraryCode)
 include (FetchContent)
 
 FetchContent_Declare (melatonin_perfetto
@@ -235,4 +240,4 @@ include(Benchmarks)
 
 # Pass some config to GA (like our PRODUCT_NAME)
 include(GitHubENV)
-juce_generate_juce_header("${PROJECT_NAME}")
+#juce_generate_juce_header("${PROJECT_NAME}")

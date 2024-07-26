@@ -61,8 +61,8 @@ public:
 
     };
 
-    OpenGlImageComponent* getImageComponent() { return &image_component_; }
-    void redoImage() { image_component_.redrawImage (true); } //image_component_.redrawImage(true); }
+    std::shared_ptr<OpenGlImageComponent> getImageComponent() { return image_component_; }
+    void redoImage() { image_component_->redrawImage (true); } //image_component_.redrawImage(true); }
 
     void setColor (Colour col)
     {
@@ -78,7 +78,7 @@ protected:
     //    juce::UndoManager &um;
     Image shadow_;
     std::vector<Listener*> listeners_;
-    OpenGlImageComponent image_component_;
+    std::shared_ptr<OpenGlImageComponent> image_component_;
 
     juce::Path layer_1_;
     juce::Path layer_2_;

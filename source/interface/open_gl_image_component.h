@@ -101,24 +101,26 @@ class OpenGlAutoImageComponent : public ComponentType {
       redoImage();
     }
 
-    OpenGlImageComponent* getImageComponent() { return &image_component_; }
-    virtual void redoImage() { image_component_.redrawImage(true); }
+    std::shared_ptr<OpenGlImageComponent> getImageComponent() { return image_component_; }
+    virtual void redoImage() { image_component_->redrawImage(true); }
 
   protected:
-    OpenGlImageComponent image_component_;
+    std::shared_ptr<OpenGlImageComponent> image_component_;
 };
 
 class OpenGlTextEditor : public OpenGlAutoImageComponent<TextEditor>, public TextEditor::Listener {
   public:
     OpenGlTextEditor(String name) : OpenGlAutoImageComponent(name) {
+        image_component_ = std::make_shared<OpenGlImageComponent>();
       monospace_ = false;
-      image_component_.setComponent(this);
+      image_component_->setComponent(this);
       addListener(this);
     }
   
     OpenGlTextEditor(String name, wchar_t password_char) : OpenGlAutoImageComponent(name, password_char) {
       monospace_ = false;
-      image_component_.setComponent(this);
+        image_component_ = std::make_shared<OpenGlImageComponent>();
+      image_component_->setComponent(this);
       addListener(this);
     }
 
@@ -157,7 +159,7 @@ class OpenGlTextEditor : public OpenGlAutoImageComponent<TextEditor>, public Tex
     void resized() override {
       TextEditor::resized();
       if (isMultiLine()) {
-        float indent = image_component_.findValue(Skin::kLabelBackgroundRounding);
+        float indent = image_component_->findValue(Skin::kLabelBackgroundRounding);
         setIndents(indent, indent);
         return;
       }

@@ -571,372 +571,372 @@ void PresetList::destroyOpenGlComponents(OpenGlWrapper& open_gl) {
   SynthSection::destroyOpenGlComponents(open_gl);
 }
 
-PresetBrowser::PresetBrowser() : SynthSection("preset_browser") {
-//  save_section_ = nullptr;
-//  delete_section_ = nullptr;
-
-  addKeyListener(this);
-
-  preset_list_ = std::make_unique<PresetList>();
-  preset_list_->addListener(this);
-  addSubSection(preset_list_.get());
-
-//  folder_list_ = std::make_unique<SelectionList>();
-//  folder_list_->addFavoritesOption();
-//  folder_list_->addListener(this);
-//  addSubSection(folder_list_.get());
-//  folder_list_->setPassthroughFolderName(LoadSave::kPresetFolderName);
-//  std::vector<File> directories = File::getSpecialLocation(File::userDocumentsDirectory);//LoadSave::getPresetDirectories();
-//  Array<File> selections;
-//  for (const File& directory : directories)
-//    selections.add(directory);
-//  folder_list_->setSelections(selections);
-
-//  for (int i = 0; i < LoadSave::kNumPresetStyles; ++i) {
-//    style_buttons_[i] = std::make_unique<OpenGlToggleButton>(strings::kPresetStyleNames[i]);
-//    style_buttons_[i]->addListener(this);
-//    style_buttons_[i]->setLookAndFeel(TextLookAndFeel::instance());
-//    addAndMakeVisible(style_buttons_[i].get());
-//    addOpenGlComponent(style_buttons_[i]->getGlComponent());
+//PresetBrowser::PresetBrowser() : SynthSection("preset_browser") {
+////  save_section_ = nullptr;
+////  delete_section_ = nullptr;
+//
+//  addKeyListener(this);
+//
+//  preset_list_ = std::make_unique<PresetList>();
+//  preset_list_->addListener(this);
+//  addSubSection(preset_list_.get());
+//
+////  folder_list_ = std::make_unique<SelectionList>();
+////  folder_list_->addFavoritesOption();
+////  folder_list_->addListener(this);
+////  addSubSection(folder_list_.get());
+////  folder_list_->setPassthroughFolderName(LoadSave::kPresetFolderName);
+////  std::vector<File> directories = File::getSpecialLocation(File::userDocumentsDirectory);//LoadSave::getPresetDirectories();
+////  Array<File> selections;
+////  for (const File& directory : directories)
+////    selections.add(directory);
+////  folder_list_->setSelections(selections);
+//
+////  for (int i = 0; i < LoadSave::kNumPresetStyles; ++i) {
+////    style_buttons_[i] = std::make_unique<OpenGlToggleButton>(strings::kPresetStyleNames[i]);
+////    style_buttons_[i]->addListener(this);
+////    style_buttons_[i]->setLookAndFeel(TextLookAndFeel::instance());
+////    addAndMakeVisible(style_buttons_[i].get());
+////    addOpenGlComponent(style_buttons_[i]->getGlComponent());
+////  }
+//
+////  store_button_ = std::make_unique<OpenGlToggleButton>("Store");
+////  addButton(store_button_.get());
+////  store_button_->setUiButton(true);
+////  store_button_->setVisible(false);
+//
+//  preset_text_ = std::make_shared<PlainTextComponent>("Preset", "Preset name");
+//  addOpenGlComponent(preset_text_);
+//  preset_text_->setFontType(PlainTextComponent::kLight);
+//  preset_text_->setJustification(Justification::centredLeft);
+//
+////  author_text_ = std::make_unique<PlainTextComponent>("Author", "Author");
+////  addOpenGlComponent(author_text_.get());
+////  author_text_->setFontType(PlainTextComponent::kLight);
+////  author_text_->setJustification(Justification::centredLeft);
+////
+////#if !defined(NO_TEXT_ENTRY)
+////  search_box_ = std::make_unique<OpenGlTextEditor>("Search");
+////  search_box_->addListener(this);
+////  search_box_->setSelectAllWhenFocused(true);
+////  search_box_->setMultiLine(false, false);
+////  search_box_->setJustification(Justification::centredLeft);
+////  addAndMakeVisible(search_box_.get());
+////  addOpenGlComponent(search_box_->getImageComponent());
+////
+////  comments_ = std::make_unique<OpenGlTextEditor>("Comments");
+////  comments_->setSelectAllWhenFocused(false);
+////  comments_->setJustification(Justification::topLeft);
+////  comments_->setReadOnly(true);
+////  addAndMakeVisible(comments_.get());
+////  addOpenGlComponent(comments_->getImageComponent());
+////  comments_->setMultiLine(true, true);
+////#endif
+//
+//  Array<File> presets;
+////  LoadSave::getAllPresets(presets);
+//  preset_list_->setPresets(presets);
+//
+//  setWantsKeyboardFocus(true);
+//  setMouseClickGrabsKeyboardFocus(true);
+//  setSkinOverride(Skin::kPresetBrowser);
+//}
+//
+//PresetBrowser::~PresetBrowser() { }
+//
+//void PresetBrowser::paintBackground(Graphics& g) {
+//  Rectangle<int> search_rect = getSearchRect();
+//  Rectangle<int> info_rect = getInfoRect();
+//  paintBody(g, search_rect);
+//  paintBorder(g, search_rect);
+//  paintBody(g, info_rect);
+//  paintBorder(g, info_rect);
+//
+//  int left_padding = kLeftPadding * size_ratio_;
+//  int top_padding = kTopPadding * size_ratio_;
+//  int middle_padding = kMiddlePadding * size_ratio_;
+//
+//  int text_x = info_rect.getX() + left_padding;
+//  int text_width = info_rect.getWidth() - 2 * left_padding;
+//  int name_y = info_rect.getY() + top_padding;
+//  int name_height = kNameFontHeight * size_ratio_;
+//  int author_y = name_y + name_height + middle_padding;
+//  int author_height = kAuthorFontHeight * size_ratio_;
+//  int comments_y = author_y + author_height + 2 * middle_padding;
+//
+//  g.setColour(findColour(Skin::kLightenScreen, true));
+//  g.drawRect(text_x, author_y, text_width, 1);
+//  g.drawRect(text_x, comments_y, text_width, 1);
+//
+//  g.setColour(findColour(Skin::kWidgetBackground, true));
+//  int rounding = findValue(Skin::kWidgetRoundedCorner);
+////  Rectangle<float> folder_bounds = folder_list_->getBounds().toFloat().expanded(1);
+////  g.fillRoundedRectangle(folder_bounds, rounding);
+//
+//  paintChildrenBackgrounds(g);
+//}
+//
+//void PresetBrowser::paintBackgroundShadow(Graphics& g) {
+//  paintTabShadow(g, getSearchRect());
+//  paintTabShadow(g, getInfoRect());
+//}
+//
+//void PresetBrowser::resized() {
+//  static constexpr float kBrowseWidthRatio = 0.68f;
+//  static constexpr float kSearchBoxRowHeightRatio = 1.3f;
+//
+//  SynthSection::resized();
+//
+//  Colour empty_color = findColour(Skin::kBodyText, true);
+//  empty_color = empty_color.withAlpha(0.5f * empty_color.getFloatAlpha());
+//
+////  if (search_box_) {
+////    search_box_->setTextToShowWhenEmpty(TRANS("Search"), empty_color);
+////    search_box_->setColour(CaretComponent::caretColourId, findColour(Skin::kTextEditorCaret, true));
+////    search_box_->setColour(TextEditor::textColourId, findColour(Skin::kBodyText, true));
+////    search_box_->setColour(TextEditor::highlightedTextColourId, findColour(Skin::kBodyText, true));
+////    search_box_->setColour(TextEditor::highlightColourId, findColour(Skin::kTextEditorSelection, true));
+////  }
+////  if (comments_) {
+////    comments_->setColour(TextEditor::textColourId, findColour(Skin::kBodyText, true));
+////    comments_->setColour(TextEditor::highlightedTextColourId, findColour(Skin::kBodyText, true));
+////    comments_->setColour(TextEditor::highlightColourId, findColour(Skin::kTextEditorSelection, true));
+////  }
+//
+//  int padding = findValue(Skin::kLargePadding);
+//  int preset_list_width = getWidth() * kBrowseWidthRatio;
+//  preset_list_->setBounds(getWidth() - preset_list_width - padding, 0, preset_list_width, getHeight());
+//  if (isVisible())
+//    preset_list_->redoCache();
+//
+//  Rectangle<int> search_rect = getSearchRect();
+//  Rectangle<int> info_rect = getInfoRect();
+//  int top_padding = kTopPadding * size_ratio_;
+//  int left_padding = kLeftPadding * size_ratio_;
+//  int middle_padding = kMiddlePadding * size_ratio_;
+//
+//  int name_y = info_rect.getY() + top_padding;
+//  int name_height = kNameFontHeight * size_ratio_;
+//  int author_y = name_y + name_height + middle_padding;
+//  int author_height = kAuthorFontHeight * size_ratio_;
+//  int text_x = info_rect.getX() + left_padding;
+//  int text_width = info_rect.getWidth() - 2 * left_padding;
+//  preset_text_->setTextSize(name_height);
+//  preset_text_->setBounds(text_x, name_y - middle_padding, text_width, name_height + 2 * middle_padding);
+//
+//
+//  int style_filter_y = search_rect.getY() + top_padding;
+//
+//
+//  int widget_margin = getWidgetMargin();
+//  int style_button_height = preset_list_->getRowHeight();
+//  int style_filter_x = search_rect.getX() + left_padding;
+//  int style_filter_width = search_rect.getWidth() - 2 * left_padding + widget_margin;
+//
+//
+//
+//  int folder_y = style_filter_y + 3 * style_button_height + 2 * widget_margin + top_padding + 1;
+//
+//  setCommentsBounds();
+//}
+//
+//void PresetBrowser::setCommentsBounds() {
+//  Rectangle<int> info_rect = getInfoRect();
+//  int left_padding = kLeftPadding * size_ratio_;
+//  int top_padding = kTopPadding * size_ratio_;
+//  int top_info_height = (kNameFontHeight + kAuthorFontHeight + kMiddlePadding * 4) * size_ratio_;
+//  int width = info_rect.getWidth() - 2 * left_padding;
+//
+//  int comments_x = info_rect.getX() + left_padding;
+//  int comments_y = info_rect.getY() + top_info_height + top_padding;
+//  int comments_height = info_rect.getBottom() - comments_y - top_padding;
+//
+//  if (comments_)
+//    comments_->setBounds(comments_x, comments_y, width, comments_height);
+//}
+//
+//void PresetBrowser::visibilityChanged() {
+//  SynthSection::visibilityChanged();
+//
+//
+//  if (isVisible())
+//  {
+//    preset_list_->redoCache();
+//
+//    more_author_presets_.clear();
 //  }
-
-//  store_button_ = std::make_unique<OpenGlToggleButton>("Store");
-//  addButton(store_button_.get());
-//  store_button_->setUiButton(true);
-//  store_button_->setVisible(false);
-
-  preset_text_ = std::make_unique<PlainTextComponent>("Preset", "Preset name");
-  addOpenGlComponent(preset_text_.get());
-  preset_text_->setFontType(PlainTextComponent::kLight);
-  preset_text_->setJustification(Justification::centredLeft);
-
-//  author_text_ = std::make_unique<PlainTextComponent>("Author", "Author");
-//  addOpenGlComponent(author_text_.get());
-//  author_text_->setFontType(PlainTextComponent::kLight);
-//  author_text_->setJustification(Justification::centredLeft);
+//  loadPresetInfo();
+//}
 //
-//#if !defined(NO_TEXT_ENTRY)
-//  search_box_ = std::make_unique<OpenGlTextEditor>("Search");
-//  search_box_->addListener(this);
-//  search_box_->setSelectAllWhenFocused(true);
-//  search_box_->setMultiLine(false, false);
-//  search_box_->setJustification(Justification::centredLeft);
-//  addAndMakeVisible(search_box_.get());
-//  addOpenGlComponent(search_box_->getImageComponent());
+//Rectangle<int> PresetBrowser::getSearchRect() {
+//  Rectangle<int> info_rect = getInfoRect();
+//  int padding = findValue(Skin::kLargePadding);
+//  int y = info_rect.getBottom() + padding;
+//  return Rectangle<int>(0, y, info_rect.getWidth(), getHeight() - y);
+//}
 //
-//  comments_ = std::make_unique<OpenGlTextEditor>("Comments");
-//  comments_->setSelectAllWhenFocused(false);
-//  comments_->setJustification(Justification::topLeft);
-//  comments_->setReadOnly(true);
-//  addAndMakeVisible(comments_.get());
-//  addOpenGlComponent(comments_->getImageComponent());
-//  comments_->setMultiLine(true, true);
-//#endif
-
-  Array<File> presets;
-//  LoadSave::getAllPresets(presets);
-  preset_list_->setPresets(presets);
-
-  setWantsKeyboardFocus(true);
-  setMouseClickGrabsKeyboardFocus(true);
-  setSkinOverride(Skin::kPresetBrowser);
-}
-
-PresetBrowser::~PresetBrowser() { }
-
-void PresetBrowser::paintBackground(Graphics& g) {
-  Rectangle<int> search_rect = getSearchRect();
-  Rectangle<int> info_rect = getInfoRect();
-  paintBody(g, search_rect);
-  paintBorder(g, search_rect);
-  paintBody(g, info_rect);
-  paintBorder(g, info_rect);
-
-  int left_padding = kLeftPadding * size_ratio_;
-  int top_padding = kTopPadding * size_ratio_;
-  int middle_padding = kMiddlePadding * size_ratio_;
-
-  int text_x = info_rect.getX() + left_padding;
-  int text_width = info_rect.getWidth() - 2 * left_padding;
-  int name_y = info_rect.getY() + top_padding;
-  int name_height = kNameFontHeight * size_ratio_;
-  int author_y = name_y + name_height + middle_padding;
-  int author_height = kAuthorFontHeight * size_ratio_;
-  int comments_y = author_y + author_height + 2 * middle_padding;
-
-  g.setColour(findColour(Skin::kLightenScreen, true));
-  g.drawRect(text_x, author_y, text_width, 1);
-  g.drawRect(text_x, comments_y, text_width, 1);
-
-  g.setColour(findColour(Skin::kWidgetBackground, true));
-  int rounding = findValue(Skin::kWidgetRoundedCorner);
-//  Rectangle<float> folder_bounds = folder_list_->getBounds().toFloat().expanded(1);
-//  g.fillRoundedRectangle(folder_bounds, rounding);
-
-  paintChildrenBackgrounds(g);
-}
-
-void PresetBrowser::paintBackgroundShadow(Graphics& g) {
-  paintTabShadow(g, getSearchRect());
-  paintTabShadow(g, getInfoRect());
-}
-
-void PresetBrowser::resized() {
-  static constexpr float kBrowseWidthRatio = 0.68f;
-  static constexpr float kSearchBoxRowHeightRatio = 1.3f;
-
-  SynthSection::resized();
-
-  Colour empty_color = findColour(Skin::kBodyText, true);
-  empty_color = empty_color.withAlpha(0.5f * empty_color.getFloatAlpha());
-
-//  if (search_box_) {
-//    search_box_->setTextToShowWhenEmpty(TRANS("Search"), empty_color);
-//    search_box_->setColour(CaretComponent::caretColourId, findColour(Skin::kTextEditorCaret, true));
-//    search_box_->setColour(TextEditor::textColourId, findColour(Skin::kBodyText, true));
-//    search_box_->setColour(TextEditor::highlightedTextColourId, findColour(Skin::kBodyText, true));
-//    search_box_->setColour(TextEditor::highlightColourId, findColour(Skin::kTextEditorSelection, true));
-//  }
-//  if (comments_) {
-//    comments_->setColour(TextEditor::textColourId, findColour(Skin::kBodyText, true));
-//    comments_->setColour(TextEditor::highlightedTextColourId, findColour(Skin::kBodyText, true));
-//    comments_->setColour(TextEditor::highlightColourId, findColour(Skin::kTextEditorSelection, true));
-//  }
-
-  int padding = findValue(Skin::kLargePadding);
-  int preset_list_width = getWidth() * kBrowseWidthRatio;
-  preset_list_->setBounds(getWidth() - preset_list_width - padding, 0, preset_list_width, getHeight());
-  if (isVisible())
-    preset_list_->redoCache();
-
-  Rectangle<int> search_rect = getSearchRect();
-  Rectangle<int> info_rect = getInfoRect();
-  int top_padding = kTopPadding * size_ratio_;
-  int left_padding = kLeftPadding * size_ratio_;
-  int middle_padding = kMiddlePadding * size_ratio_;
-
-  int name_y = info_rect.getY() + top_padding;
-  int name_height = kNameFontHeight * size_ratio_;
-  int author_y = name_y + name_height + middle_padding;
-  int author_height = kAuthorFontHeight * size_ratio_;
-  int text_x = info_rect.getX() + left_padding;
-  int text_width = info_rect.getWidth() - 2 * left_padding;
-  preset_text_->setTextSize(name_height);
-  preset_text_->setBounds(text_x, name_y - middle_padding, text_width, name_height + 2 * middle_padding);
-
-
-  int style_filter_y = search_rect.getY() + top_padding;
-
-
-  int widget_margin = getWidgetMargin();
-  int style_button_height = preset_list_->getRowHeight();
-  int style_filter_x = search_rect.getX() + left_padding;
-  int style_filter_width = search_rect.getWidth() - 2 * left_padding + widget_margin;
-
-
-
-  int folder_y = style_filter_y + 3 * style_button_height + 2 * widget_margin + top_padding + 1;
-
-  setCommentsBounds();
-}
-
-void PresetBrowser::setCommentsBounds() {
-  Rectangle<int> info_rect = getInfoRect();
-  int left_padding = kLeftPadding * size_ratio_;
-  int top_padding = kTopPadding * size_ratio_;
-  int top_info_height = (kNameFontHeight + kAuthorFontHeight + kMiddlePadding * 4) * size_ratio_;
-  int width = info_rect.getWidth() - 2 * left_padding;
-
-  int comments_x = info_rect.getX() + left_padding;
-  int comments_y = info_rect.getY() + top_info_height + top_padding;
-  int comments_height = info_rect.getBottom() - comments_y - top_padding;
-
-  if (comments_)
-    comments_->setBounds(comments_x, comments_y, width, comments_height);
-}
-
-void PresetBrowser::visibilityChanged() {
-  SynthSection::visibilityChanged();
-
-
-  if (isVisible())
-  {
-    preset_list_->redoCache();
-
-    more_author_presets_.clear();
-  }
-  loadPresetInfo();
-}
-
-Rectangle<int> PresetBrowser::getSearchRect() {
-  Rectangle<int> info_rect = getInfoRect();
-  int padding = findValue(Skin::kLargePadding);
-  int y = info_rect.getBottom() + padding;
-  return Rectangle<int>(0, y, info_rect.getWidth(), getHeight() - y);
-}
-
-Rectangle<int> PresetBrowser::getInfoRect() {
-  static constexpr float kInfoHeightRatio = 0.43f;
-  int width = preset_list_->getX() - findValue(Skin::kLargePadding);
-  int height = getHeight() * kInfoHeightRatio;
-  return Rectangle<int>(0, 0, width, height);
-}
-
-void PresetBrowser::loadPresets() {
-
-  preset_list_->reloadPresets();
-  preset_list_->filter("", std::set<std::string>());
-}
-
-void PresetBrowser::filterPresets() {
-//  std::set<std::string> styles;
+//Rectangle<int> PresetBrowser::getInfoRect() {
+//  static constexpr float kInfoHeightRatio = 0.43f;
+//  int width = preset_list_->getX() - findValue(Skin::kLargePadding);
+//  int height = getHeight() * kInfoHeightRatio;
+//  return Rectangle<int>(0, 0, width, height);
+//}
+//
+//void PresetBrowser::loadPresets() {
+//
+//  preset_list_->reloadPresets();
+//  preset_list_->filter("", std::set<std::string>());
+//}
+//
+//void PresetBrowser::filterPresets() {
+////  std::set<std::string> styles;
+////
+////
+////  preset_list_->filter(search_box_->getText(), styles);
+////  preset_list_->redoCache();
+//}
+//
+//void PresetBrowser::textEditorTextChanged(TextEditor& editor) {
+//  filterPresets();
+//}
+//
+//void PresetBrowser::textEditorEscapeKeyPressed(TextEditor& editor) {
+//  editor.setText("");
+//}
 //
 //
-//  preset_list_->filter(search_box_->getText(), styles);
-//  preset_list_->redoCache();
-}
-
-void PresetBrowser::textEditorTextChanged(TextEditor& editor) {
-  filterPresets();
-}
-
-void PresetBrowser::textEditorEscapeKeyPressed(TextEditor& editor) {
-  editor.setText("");
-}
-
-
-
-void PresetBrowser::buttonClicked(Button* clicked_button) {
-//  if (clicked_button == store_button_.get()) {
-//    String encoded_author = URL::addEscapeChars(author_text_->getText().toStdString(), true);
-//    encoded_author = encoded_author.replace("+", "%2B");
 //
-//    URL url(String(kPresetStoreUrl) + encoded_author);
-//    url.launchInDefaultBrowser();
-//  }
-//  else
-//    filterPresets();
-}
-
-bool PresetBrowser::keyPressed(const KeyPress &key, Component *origin) {
-//  if (!isVisible())
-//    return search_box_->hasKeyboardFocus(true);
-
-  if (key.getKeyCode() == KeyPress::escapeKey) {
-    for (Listener* listener : listeners_)
-      listener->hidePresetBrowser();
-    return true;
-  }
-  if (key.getKeyCode() == KeyPress::upKey || key.getKeyCode() == KeyPress::leftKey) {
-    loadPrevPreset();
-    return true;
-  }
-  if (key.getKeyCode() == KeyPress::downKey || key.getKeyCode() == KeyPress::rightKey) {
-    loadNextPreset();
-    return true;
-  }
-//  return search_box_->hasKeyboardFocus(true);
-}
-
-bool PresetBrowser::keyStateChanged(bool is_key_down, Component *origin) {
-//  if (is_key_down)
-//    return search_box_->hasKeyboardFocus(true);
-  return false;
-}
-
-void PresetBrowser::jumpToPreset(int indices) {
-//  static const LoadSave::FileSorterAscending kFileSorter;
-
-//  File parent = external_preset_.getParentDirectory();
-//  if (parent.exists()) {
-//    Array<File> presets;
-//    parent.findChildFiles(presets, File::findFiles, false, String("*.") + vital::kPresetExtension);
-//    presets.sort(kFileSorter);
-//    int index = presets.indexOf(external_preset_);
-//    index = (index + indices + presets.size()) % presets.size();
+//void PresetBrowser::buttonClicked(Button* clicked_button) {
+////  if (clicked_button == store_button_.get()) {
+////    String encoded_author = URL::addEscapeChars(author_text_->getText().toStdString(), true);
+////    encoded_author = encoded_author.replace("+", "%2B");
+////
+////    URL url(String(kPresetStoreUrl) + encoded_author);
+////    url.launchInDefaultBrowser();
+////  }
+////  else
+////    filterPresets();
+//}
 //
-//    File new_preset = presets[index];
-//    loadFromFile(new_preset);
-//    externalPresetLoaded(new_preset);
-//  }
-//  else
-//    preset_list_->shiftSelectedPreset(indices);
-}
-
-void PresetBrowser::loadPrevPreset() {
-  jumpToPreset(-1);
-}
-
-void PresetBrowser::loadNextPreset() {
-  jumpToPreset(1);
-}
-
-void PresetBrowser::externalPresetLoaded(File file) {
-  external_preset_ = file;
-  setPresetInfo(file);
-}
-
-bool PresetBrowser::loadFromFile(File& preset) {
-//  SynthGuiInterface* parent = findParentComponentOfClass<SynthGuiInterface>();
-//  if (parent == nullptr)
-//    return false;
+//bool PresetBrowser::keyPressed(const KeyPress &key, Component *origin) {
+////  if (!isVisible())
+////    return search_box_->hasKeyboardFocus(true);
 //
-//  SynthBase* synth = parent->getSynth();
-//  std::string error;
-//  if (synth->loadFromFile(preset, error)) {
-//    setPresetInfo(preset);
-//    synth->setPresetName(preset.getFileNameWithoutExtension());
-//    synth->setAuthor(author_);
-//
-//    String comments = parent->getSynth()->getComments();
-//    int comments_font_size = kCommentsFontHeight * size_ratio_;
-//    if (comments_) {
-//      comments_->setText(comments);
-//      comments_->setFont(Fonts::instance()->proportional_light().withPointHeight(comments_font_size));
-//      comments_->redoImage();
-//    }
+//  if (key.getKeyCode() == KeyPress::escapeKey) {
+//    for (Listener* listener : listeners_)
+//      listener->hidePresetBrowser();
 //    return true;
 //  }
-  return false;
-}
-
-void PresetBrowser::loadPresetInfo() {
-  SynthGuiInterface* parent = findParentComponentOfClass<SynthGuiInterface>();
-  if (parent == nullptr)
-    return;
-
-  Colour background = findColour(Skin::kBody, true);
-  Colour lighten = findColour(Skin::kLightenScreen, true);
-  lighten = background.overlaidWith(lighten);
-  Colour regular_text = findColour(Skin::kBodyText, true);
-
-  String preset = parent->getSynth()->getPresetName();
-  if (preset.isEmpty()) {
-    preset_text_->setText("Preset name");
-    preset_text_->setColor(lighten);
-  }
-  else
-  {
-    preset_text_->setText (preset);
-    preset_text_->setColor (regular_text);
-  }
-}
-
-void PresetBrowser::setPresetInfo(File& preset) {
-  if (preset.exists())
-  {
-  }
-}
-
-void PresetBrowser::addListener(Listener* listener) {
-  listeners_.push_back(listener);
-}
-
-
-
-void PresetBrowser::newSelection(File selection) {
-  if (selection.exists() && selection.isDirectory())
-    preset_list_->setCurrentFolder(selection);
-}
-
-
+//  if (key.getKeyCode() == KeyPress::upKey || key.getKeyCode() == KeyPress::leftKey) {
+//    loadPrevPreset();
+//    return true;
+//  }
+//  if (key.getKeyCode() == KeyPress::downKey || key.getKeyCode() == KeyPress::rightKey) {
+//    loadNextPreset();
+//    return true;
+//  }
+////  return search_box_->hasKeyboardFocus(true);
+//}
+//
+//bool PresetBrowser::keyStateChanged(bool is_key_down, Component *origin) {
+////  if (is_key_down)
+////    return search_box_->hasKeyboardFocus(true);
+//  return false;
+//}
+//
+//void PresetBrowser::jumpToPreset(int indices) {
+////  static const LoadSave::FileSorterAscending kFileSorter;
+//
+////  File parent = external_preset_.getParentDirectory();
+////  if (parent.exists()) {
+////    Array<File> presets;
+////    parent.findChildFiles(presets, File::findFiles, false, String("*.") + vital::kPresetExtension);
+////    presets.sort(kFileSorter);
+////    int index = presets.indexOf(external_preset_);
+////    index = (index + indices + presets.size()) % presets.size();
+////
+////    File new_preset = presets[index];
+////    loadFromFile(new_preset);
+////    externalPresetLoaded(new_preset);
+////  }
+////  else
+////    preset_list_->shiftSelectedPreset(indices);
+//}
+//
+//void PresetBrowser::loadPrevPreset() {
+//  jumpToPreset(-1);
+//}
+//
+//void PresetBrowser::loadNextPreset() {
+//  jumpToPreset(1);
+//}
+//
+//void PresetBrowser::externalPresetLoaded(File file) {
+//  external_preset_ = file;
+//  setPresetInfo(file);
+//}
+//
+//bool PresetBrowser::loadFromFile(File& preset) {
+////  SynthGuiInterface* parent = findParentComponentOfClass<SynthGuiInterface>();
+////  if (parent == nullptr)
+////    return false;
+////
+////  SynthBase* synth = parent->getSynth();
+////  std::string error;
+////  if (synth->loadFromFile(preset, error)) {
+////    setPresetInfo(preset);
+////    synth->setPresetName(preset.getFileNameWithoutExtension());
+////    synth->setAuthor(author_);
+////
+////    String comments = parent->getSynth()->getComments();
+////    int comments_font_size = kCommentsFontHeight * size_ratio_;
+////    if (comments_) {
+////      comments_->setText(comments);
+////      comments_->setFont(Fonts::instance()->proportional_light().withPointHeight(comments_font_size));
+////      comments_->redoImage();
+////    }
+////    return true;
+////  }
+//  return false;
+//}
+//
+//void PresetBrowser::loadPresetInfo() {
+//  SynthGuiInterface* parent = findParentComponentOfClass<SynthGuiInterface>();
+//  if (parent == nullptr)
+//    return;
+//
+//  Colour background = findColour(Skin::kBody, true);
+//  Colour lighten = findColour(Skin::kLightenScreen, true);
+//  lighten = background.overlaidWith(lighten);
+//  Colour regular_text = findColour(Skin::kBodyText, true);
+//
+//  String preset = parent->getSynth()->getPresetName();
+//  if (preset.isEmpty()) {
+//    preset_text_->setText("Preset name");
+//    preset_text_->setColor(lighten);
+//  }
+//  else
+//  {
+//    preset_text_->setText (preset);
+//    preset_text_->setColor (regular_text);
+//  }
+//}
+//
+//void PresetBrowser::setPresetInfo(File& preset) {
+//  if (preset.exists())
+//  {
+//  }
+//}
+//
+//void PresetBrowser::addListener(Listener* listener) {
+//  listeners_.push_back(listener);
+//}
+//
+//
+//
+//void PresetBrowser::newSelection(File selection) {
+//  if (selection.exists() && selection.isDirectory())
+//    preset_list_->setCurrentFolder(selection);
+//}
+//
+//

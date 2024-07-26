@@ -97,6 +97,10 @@ class OpenGlComponent : public Component {
     #endif
     }
 
+    bool operator==(OpenGlComponent const& other) const {
+        // Implement comparison logic based on your requirements
+        return this->id == other.id; // Example comparison based on an 'id' member
+    }
     void setBackgroundColor(const Colour& color) { background_color_ = color; }
 
   protected:
@@ -108,8 +112,14 @@ class OpenGlComponent : public Component {
     Colour body_color_;
     Skin::SectionOverride skin_override_;
     const SynthSection* parent_;
+private:
+    int id;
+    static int nID;
 
-
+    int generateID(){
+        nID++;
+        return nID;
+    }
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(OpenGlComponent)
 };

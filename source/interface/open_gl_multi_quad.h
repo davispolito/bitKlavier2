@@ -342,46 +342,46 @@ class OpenGlScrollQuad : public OpenGlQuad {
 
 class OpenGlScrollBar : public ScrollBar {
   public:
-    OpenGlScrollBar() : ScrollBar(true) {
-      bar_.setTargetComponent(this);
-      addAndMakeVisible(bar_);
-      bar_.setScrollBar(this);
+    OpenGlScrollBar() : ScrollBar(true), bar_(new OpenGlScrollQuad()) {
+      bar_->setTargetComponent(this);
+      addAndMakeVisible(bar_.get());
+      bar_->setScrollBar(this);
     }
 
-    OpenGlQuad* getGlComponent() { return &bar_; }
+    std::shared_ptr<OpenGlQuad> getGlComponent() { return bar_; }
 
     void resized() override {
       ScrollBar::resized();
-      bar_.setBounds(getLocalBounds());
-      bar_.setRounding(getWidth() * 0.25f);
+      bar_->setBounds(getLocalBounds());
+      bar_->setRounding(getWidth() * 0.25f);
     }
 
     void mouseEnter(const MouseEvent& e) override {
       ScrollBar::mouseEnter(e);
-      bar_.setHover(true);
+      bar_->setHover(true);
     }
 
     void mouseExit(const MouseEvent& e) override {
       ScrollBar::mouseExit(e);
-      bar_.setHover(false);
+      bar_->setHover(false);
     }
 
     void mouseDown(const MouseEvent& e) override {
       ScrollBar::mouseDown(e);
-      bar_.setColor(color_.overlaidWith(color_));
+      bar_->setColor(color_.overlaidWith(color_));
     }
 
     void mouseUp(const MouseEvent& e) override {
       ScrollBar::mouseDown(e);
-      bar_.setColor(color_);
+      bar_->setColor(color_);
     }
 
-    void setColor(Colour color) { color_ = color; bar_.setColor(color); }
-    void setShrinkLeft(bool shrink_left) { bar_.setShrinkLeft(shrink_left); }
+    void setColor(Colour color) { color_ = color; bar_->setColor(color); }
+    void setShrinkLeft(bool shrink_left) { bar_->setShrinkLeft(shrink_left); }
 
   private:
     Colour color_;
-    OpenGlScrollQuad bar_;
+    std::shared_ptr<OpenGlScrollQuad> bar_;
 };
 
 class OpenGlCorners : public OpenGlMultiQuad {

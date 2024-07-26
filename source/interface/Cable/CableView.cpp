@@ -3,16 +3,20 @@
 //
 
 #include "CableView.h"
-
-CableView::CableView (ConstructionSite &site) :site(site), pathTask (*this)
+#include "ConstructionSite.h"
+CableView::CableView (ConstructionSite &site) :site(site), /*pathTask (*this),*/ SynthSection("cableView")
 {
-    setInterceptsMouseClicks (false, true);
-    startTimerHz (36);
+    //setInterceptsMouseClicks (false, true);
+    //startTimerHz (36);
 
 }
 
 CableView::~CableView() = default;
 
+//void CableView::portClicked(const juce::Point<int>& pos, juce::AudioProcessorGraph::Node::Ptr node){
+//
+//
+//}
 bool CableView::mouseOverClickablePort()
 {
     if (! mousePosition.has_value())
@@ -55,6 +59,45 @@ bool CableView::mouseDraggingOverOutputPort()
     return false;
 }
 
+void CableView::beginConnectorDrag (AudioProcessorGraph::NodeAndChannel source,
+                         AudioProcessorGraph::NodeAndChannel dest,
+                         const MouseEvent& e)
+{
+    auto* c = dynamic_cast<Cable*> (e.originalComponent);
+    cables.removeObject (c, false);
+    draggingConnector.reset (c);
+
+    if (draggingConnector == nullptr)
+        draggingConnector.reset (new Cable (&site, *this));
+
+    DBG("portclickedcableview");
+    DBG("position x " + String(e.getPosition().getX()) + " y : " + String(e.getPosition().getY()));
+
+//    ScopedLock sl (cableMutex);
+
+    addChildComponent(draggingConnector.get(), 0);
+    //cables.getLast()->setBounds (getLocalBounds());
+    //isDraggingCable = true;
+    addOpenGlComponent(draggingConnector->getImageComponent(), false, false);
+    site.open_gl.initOpenGlComp.try_enqueue([this] {
+        draggingConnector->getImageComponent()->init(site.open_gl);
+        MessageManager::callAsync(
+            [safeComp = Component::SafePointer<Cable>(draggingConnector.get())] {
+                if (auto *comp = safeComp.getComponent()) {
+                comp->setVisible(true);
+               comp->getImageComponent()->setVisible(true);
+                }
+            });
+    });
+    draggingConnector->setInput (source);
+    draggingConnector->setOutput (dest);
+
+    addAndMakeVisible (draggingConnector.get());
+    draggingConnector->toFront (false);
+
+    dragConnector (e);
+}
+
 void CableView::paint (Graphics& g)
 {
 //    TRACE_COMPONENT();
@@ -86,9 +129,11 @@ void CableView::mouseExit (const MouseEvent&)
 void CableView::mouseDown (const MouseEvent& e)
 {
 //    TRACE_COMPONENT();
-
-    if (e.mods.isAnyModifierKeyDown() || e.mods.isPopupMenu() || e.eventComponent == nullptr)
+    DBG("cabledowns");
+    DBG(currentPort.getX());
+    if (!e.mods.isCommandDown() || e.mods.isPopupMenu() || e.eventComponent == nullptr)
         return; // not a valid mouse event
+
 
 //    const auto nearestPort = portLocationHelper->getNearestPort (e.getEventRelativeTo (this).getMouseDownPosition(), e.source.getComponentUnderMouse());
 //    if (nearestPort.editor == nullptr)
@@ -109,9 +154,10 @@ void CableView::mouseDrag (const MouseEvent& e)
 {
 //    TRACE_COMPONENT();
 
+
     if (e.eventComponent == nullptr)
         return;
-
+    mousePosition = e.getEventRelativeTo (this).getPosition();
     const auto eventCompName = e.eventComponent->getName();
 //    if (sst::cpputils::contains (std::initializer_list<std::string_view> { "Port", "Board", Cable::componentName },
 //                                 std::string_view { eventCompName.getCharPointer(), (size_t) eventCompName.length() }))
@@ -132,35 +178,100 @@ juce::Point<float> CableView::getCableMousePosition() const
 
 void CableView::mouseUp (const MouseEvent& e)
 {
+    //DBG("mousei[can");
     if (isDraggingCable)
     {
+        auto relMouse = e.getEventRelativeTo (this);
+        auto mousePos = relMouse.getPosition();
+
+        auto* cable = cables.getLast();
+        // not being connected... trash the latest cable
+        {
+            DBG("delete cable");
+//            ScopedLock sl (cableMutex);
+//            site.open_gl.initOpenGlComp.try_enqueue([this]
+//                                                    {
+//                                                        auto comp = std::remove(open_gl_components_.begin(), open_gl_components_.end(),cables.getLast()->getImageComponent());
+//                                                        delete *comp;
+//                                                        MessageManager::callAsync (
+//                                                                [safeComp = Component::SafePointer<CableView> (this)]
+//                                                                {
+//                                                                    safeComp->cables.removeObject (safeComp->cables.getLast());
+//
+//                                                                    //comp->repaint (cableBounds);
+//                                                                });
+//
+//                                                    });
+//
+//            std::remove(open_gl_components_.begin(), open_gl_components_.end(),cables.getLast()->getImageComponent());
+//                                                        cables.removeObject (cables.getLast());
+        }
+       //repaint();]
 //        if (connectionHelper->releaseCable (e))
-//            cables.getLast()->updateEndPoint();
+            //cables.getLast()->updateEndPoint();
         isDraggingCable = false;
     }
 }
 
-void CableView::timerCallback()
+
+void CableView::endDraggingConnector (const MouseEvent& e)
 {
-    TRACE_COMPONENT();
+    if (draggingConnector == nullptr)
+        return;
 
+    //draggingConnector->setTooltip ({});
 
-//
-//    // repaint port glow
-//    if (mouseDraggingOverOutputPort() || mouseOverClickablePort())
-//    {
-//        portGlow = true;
-//        repaint (getPortGlowBounds (portToPaint, scaleFactor).toNearestInt());
-//    }
-//    else if (portGlow)
-//    {
-//        portGlow = false;
-//        repaint (getPortGlowBounds (portToPaint, scaleFactor).toNearestInt());
-//    }
+    auto e2 = e.getEventRelativeTo (this);
+    auto connection = draggingConnector->connection;
+    objectToDelete = draggingConnector->getImageComponent().get();
 
-    if (isDraggingCable)
-        updateCablePositions();
+    draggingConnector = nullptr;
+    site.open_gl.initOpenGlComp.try_enqueue([this]{
+        destroyOpenGlComponent(*objectToDelete, site.open_gl);
+        objectToDelete = nullptr;
+    });
+    if (auto* pin = site.findPinAt (e2.position))
+    {
+        if (connection.source.nodeID == AudioProcessorGraph::NodeID())
+        {
+            if (pin->isInput)
+                return;
+
+            connection.source = pin->pin;
+        }
+        else
+        {
+            if (! pin->isInput)
+                return;
+
+            connection.destination = pin->pin;
+        }
+
+//        graph.graph.addConnection (connection);
+    }
 }
+//void CableView::timerCallback()
+//{
+//    TRACE_COMPONENT();
+//
+//
+////
+////    // repaint port glow
+////    if (mouseDraggingOverOutputPort() || mouseOverClickablePort())
+////    {
+////        portGlow = true;
+////        repaint (getPortGlowBounds (portToPaint, scaleFactor).toNearestInt());
+////    }
+////    else if (portGlow)
+////    {
+////        portGlow = false;
+////        repaint (getPortGlowBounds (portToPaint, scaleFactor).toNearestInt());
+////    }
+//
+//    if (isDraggingCable)
+//        updateCablePositions();
+//
+//}
 
 //void CableView::processorBeingAdded (BaseProcessor* newProc)
 //{
@@ -173,18 +284,18 @@ void CableView::timerCallback()
 //}
 
 //================================================================
-CableView::PathGeneratorTask::PathGeneratorTask (CableView& cv) : cableView (cv)
-{
-    sharedTimeSliceThread->addTimeSliceClient (this);
-
-    if (! sharedTimeSliceThread->isThreadRunning())
-        sharedTimeSliceThread->startThread();
-}
-
-CableView::PathGeneratorTask::~PathGeneratorTask()
-{
-    sharedTimeSliceThread->removeTimeSliceClient (this);
-}
+//CableView::PathGeneratorTask::PathGeneratorTask (CableView& cv) : cableView (cv)
+//{
+//    sharedTimeSliceThread->addTimeSliceClient (this);
+//
+//    if (! sharedTimeSliceThread->isThreadRunning())
+//        sharedTimeSliceThread->startThread();
+//}
+////
+//CableView::PathGeneratorTask::~PathGeneratorTask()
+//{
+//    sharedTimeSliceThread->removeTimeSliceClient (this);
+//}
 
 void CableView::updateCablePositions()
 {
@@ -195,25 +306,65 @@ void CableView::updateCablePositions()
     }
 }
 
-int CableView::PathGeneratorTask::useTimeSlice()
+void CableView::dragConnector(const MouseEvent& e)
 {
-    if (cableView.cableBeingDragged())
-    {
-        MessageManager::callAsync (
-                [safeCableView = Component::SafePointer (&cableView)]
+
+        auto e2 = e.getEventRelativeTo (this);
+
+        if (draggingConnector != nullptr)
+        {
+            //draggingConnector->setTooltip ({});
+
+            auto pos = e2.position;
+
+            if (auto* pin = site.findPinAt (pos))
+            {
+                auto connection = draggingConnector->connection;
+
+                if (connection.source.nodeID == AudioProcessorGraph::NodeID() && ! pin->isInput)
                 {
-                    if (auto* cv = safeCableView.getComponent())
-                    {
-                        ScopedLock sl (cv->cableMutex);
-                        if (! cv->cables.isEmpty())
-                            cv->cables.getLast()->repaint();
-                    }
-                });
-    }
+                    connection.source = pin->pin;
+                }
+                else if (connection.destination.nodeID == AudioProcessorGraph::NodeID() && pin->isInput)
+                {
+                    connection.destination = pin->pin;
+                }
 
-    ScopedLock sl (cableView.cableMutex);
-    for (auto* cable : cableView.cables)
-        cable->repaintIfNeeded();
+//                if (graph.graph.canConnect (connection))
+//                {
+//                    pos = (pin->getParentComponent()->getPosition() + pin->getBounds().getCentre()).toFloat();
+//                    draggingConnector->setTooltip (pin->getTooltip());
+//                }
+            }
 
-    return 18; // a little less than 60 frames / second
+            if (draggingConnector->connection.source.nodeID == AudioProcessorGraph::NodeID())
+                draggingConnector->dragStart (pos);
+            else
+                draggingConnector->dragEnd (pos);
+        }
 }
+
+
+//int CableView::PathGeneratorTask::useTimeSlice()
+//{
+////    if (cableView.cableBeingDragged())
+////    {
+////        MessageManager::callAsync (
+////                [safeCableView = Component::SafePointer (&cableView)]
+////                {
+////                    if (auto* cv = safeCableView.getComponent())
+////                    {
+////                        ScopedLock sl (cv->cableMutex);
+////                        if (! cv->cables.isEmpty())
+////                            cv->cables.getLast()->redoImage();
+////                            //cv->cables.getLast()->repaint();
+////                    }
+////                });
+////    }
+////
+////    ScopedLock sl (cableView.cableMutex);
+////    for (auto* cable : cableView.cables)
+////        cable->repaintIfNeeded();
+//
+//    return 18; // a little less than 60 frames / second
+//}

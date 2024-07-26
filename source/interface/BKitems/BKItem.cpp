@@ -46,8 +46,8 @@ namespace
 BKItem::BKItem (bitklavier::BKPreparationType type) : Button("bkitem")
 {
 
-
-    image_component_.setComponent(this);
+    image_component_ = std::make_shared<OpenGlImageComponent>();
+    image_component_->setComponent(this);
 
 
     Array<Path> paths;

@@ -54,7 +54,7 @@ int OpenGlSlider::getLinearSliderWidth() {
 void OpenGlSlider::setSliderDisplayValues() {
   if (isModulationKnob()) {
     float radius = 1.0f - 1.0f / getWidth();
-    slider_quad_.setQuad(0, -radius, -radius, 2.0f * radius, 2.0f * radius);
+    slider_quad_->setQuad(0, -radius, -radius, 2.0f * radius, 2.0f * radius);
   }
   else if (isRotaryQuad()) {
     float thickness = findValue(Skin::kKnobArcThickness);
@@ -63,16 +63,16 @@ void OpenGlSlider::setSliderDisplayValues() {
     float radius_x = (size + 0.5f) / getWidth();
     float center_y = 2.0f / getHeight();
     float radius_y = (size + 0.5f) / getHeight();
-    slider_quad_.setQuad(0, -radius_x, -center_y - radius_y, 2.0f * radius_x, 2.0f * radius_y);
-    slider_quad_.setThumbAmount(findValue(Skin::kKnobHandleLength));
+    slider_quad_->setQuad(0, -radius_x, -center_y - radius_y, 2.0f * radius_x, 2.0f * radius_y);
+    slider_quad_->setThumbAmount(findValue(Skin::kKnobHandleLength));
   }
   else if (isHorizontalQuad()) {
     float margin = 2.0f * (findValue(Skin::kWidgetMargin) - 0.5f) / getWidth();
-    slider_quad_.setQuad(0, -1.0f + margin, -1.0f, 2.0f - 2.0f * margin, 2.0f);
+    slider_quad_->setQuad(0, -1.0f + margin, -1.0f, 2.0f - 2.0f * margin, 2.0f);
   }
   else if (isVerticalQuad()) {
     float margin = 2.0f * (findValue(Skin::kWidgetMargin) - 0.5f) / getHeight();
-    slider_quad_.setQuad(0, -1.0f, -1.0f + margin, 2.0f, 2.0f - 2.0f * margin);
+    slider_quad_->setQuad(0, -1.0f, -1.0f + margin, 2.0f, 2.0f - 2.0f * margin);
   }
 }
 
@@ -85,70 +85,70 @@ void OpenGlSlider:: redoImage(bool skip_image) {
   bool horizontal = isHorizontalQuad();
   bool vertical = isVerticalQuad();
   if (modulation_amount_) {
-    slider_quad_.setModColor(mod_color_);
-    slider_quad_.setBackgroundColor(background_color_);
+    slider_quad_->setModColor(mod_color_);
+    slider_quad_->setBackgroundColor(background_color_);
   }
   else {
-    slider_quad_.setModColor(Colours::transparentBlack);
-    slider_quad_.setBackgroundColor(Colours::transparentBlack);
+    slider_quad_->setModColor(Colours::transparentBlack);
+    slider_quad_->setBackgroundColor(Colours::transparentBlack);
   }
 
   if (isModulationKnob()) {
-    slider_quad_.setActive(true);
+    slider_quad_->setActive(true);
     float t = getValue();
-    slider_quad_.setThumbColor(thumb_color_);
+    slider_quad_->setThumbColor(thumb_color_);
 
     if (t > 0.0f) {
-      slider_quad_.setShaderValue(0, bitklavier::utils::interpolate(bitklavier::kPi, -bitklavier::kPi, t));
-      slider_quad_.setColor(unselected_color_);
-      slider_quad_.setAltColor(selected_color_);
+      slider_quad_->setShaderValue(0, bitklavier::utils::interpolate(bitklavier::kPi, -bitklavier::kPi, t));
+      slider_quad_->setColor(unselected_color_);
+      slider_quad_->setAltColor(selected_color_);
     }
     else {
-      slider_quad_.setShaderValue(0, bitklavier::utils::interpolate(-bitklavier::kPi, bitklavier::kPi, -t));
-      slider_quad_.setColor(selected_color_);
-      slider_quad_.setAltColor(unselected_color_);
+      slider_quad_->setShaderValue(0, bitklavier::utils::interpolate(-bitklavier::kPi, bitklavier::kPi, -t));
+      slider_quad_->setColor(selected_color_);
+      slider_quad_->setAltColor(unselected_color_);
     }
 
     if (isMouseOverOrDragging())
-      slider_quad_.setThickness(1.8f);
+      slider_quad_->setThickness(1.8f);
     else
-      slider_quad_.setThickness(1.0f);
+      slider_quad_->setThickness(1.0f);
   }
   else if (isRotaryQuad()) {
-    slider_quad_.setActive(true);
-    float arc = slider_quad_.getMaxArc();
+    slider_quad_->setActive(true);
+    float arc = slider_quad_->getMaxArc();
     float t = valueToProportionOfLength(getValue());
-    slider_quad_.setShaderValue(0, bitklavier::utils::interpolate(-arc, arc, t));
-    slider_quad_.setColor(selected_color_);
-    slider_quad_.setAltColor(unselected_color_);
-    slider_quad_.setThumbColor(thumb_color_);
-    slider_quad_.setStartPos(bipolar_ ? 0.0f : -bitklavier::kPi);
+    slider_quad_->setShaderValue(0, bitklavier::utils::interpolate(-arc, arc, t));
+    slider_quad_->setColor(selected_color_);
+    slider_quad_->setAltColor(unselected_color_);
+    slider_quad_->setThumbColor(thumb_color_);
+    slider_quad_->setStartPos(bipolar_ ? 0.0f : -bitklavier::kPi);
 
     float thickness = findValue(Skin::kKnobArcThickness);
     if (isMouseOverOrDragging())
       thickness *= kRotaryHoverBoost;
-    slider_quad_.setThickness(thickness);
+    slider_quad_->setThickness(thickness);
   }
   else if (horizontal || vertical) {
-    slider_quad_.setActive(true);
+    slider_quad_->setActive(true);
     float t = valueToProportionOfLength(getValue());
-    slider_quad_.setShaderValue(0, t);
-    slider_quad_.setColor(selected_color_);
-    slider_quad_.setAltColor(unselected_color_);
-    slider_quad_.setThumbColor(thumb_color_);
-    slider_quad_.setStartPos(bipolar_ ? 0.0f : -1.0f);
+    slider_quad_->setShaderValue(0, t);
+    slider_quad_->setColor(selected_color_);
+    slider_quad_->setAltColor(unselected_color_);
+    slider_quad_->setThumbColor(thumb_color_);
+    slider_quad_->setStartPos(bipolar_ ? 0.0f : -1.0f);
 
     int total_width = horizontal ? getHeight() : getWidth();
     float slider_width = getLinearSliderWidth();
     float handle_width = SynthSlider::kLinearHandlePercent * total_width;
     if (isMouseOverOrDragging()) {
       int boost = std::round(slider_width / 8.0f) + 1.0f;
-      slider_quad_.setThickness(slider_width + 2 * boost);
+      slider_quad_->setThickness(slider_width + 2 * boost);
     }
     else
-      slider_quad_.setThickness(slider_width);
-    slider_quad_.setRounding(slider_width * kRoundingMult);
-    slider_quad_.setThumbAmount(handle_width);
+      slider_quad_->setThickness(slider_width);
+    slider_quad_->setRounding(slider_width * kRoundingMult);
+    slider_quad_->setThumbAmount(handle_width);
   }
   if (!skip_image) {
 //      Image _image(Image::SingleChannel, getWidth(), getHeight(), true);
@@ -157,8 +157,8 @@ void OpenGlSlider:: redoImage(bool skip_image) {
 //      g.fillAll();
 //      image_component_.image().setOwnImage(_image);
 //    image_component_.draw_image_ = std::make_unique<Image>(_image);
-    image_component_.setActive(true);
-    image_component_.redrawImage(true, false);
+    image_component_->setActive(true);
+    image_component_->redrawImage(true, false);
   }
 }
 

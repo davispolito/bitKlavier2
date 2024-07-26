@@ -294,6 +294,7 @@ class SynthSection : public Component, public Slider::Listener,
     virtual void initOpenGlComponents(OpenGlWrapper& open_gl);
     virtual void renderOpenGlComponents(OpenGlWrapper& open_gl, bool animate);
     virtual void destroyOpenGlComponents(OpenGlWrapper& open_gl);
+    void destroyOpenGlComponent(OpenGlComponent const& open_gl_component, OpenGlWrapper& open_gl);
 
     virtual void sliderValueChanged(Slider* moved_slider) override;
     virtual void buttonClicked(Button* clicked_button) override;
@@ -342,7 +343,8 @@ class SynthSection : public Component, public Slider::Listener,
     void addButton(OpenGlToggleButton* button, bool show = true);
     void addButton(OpenGlShapeButton* button, bool show = true);
     void addSlider(SynthSlider* slider, bool show = true, bool listen = true);
-    void addOpenGlComponent(OpenGlComponent* open_gl_component, bool to_beginning = false);
+    void addOpenGlComponent(std::shared_ptr<OpenGlComponent> open_gl_component, bool to_beginning = false, bool makeVisible = true);
+
     void addBackgroundComponent(OpenGlBackground* open_gl_component, bool to_beginning = false);
     void setActivator(SynthButton* activator);
     void createOffOverlay();
@@ -370,7 +372,7 @@ class SynthSection : public Component, public Slider::Listener,
 
 
     std::vector<SynthSection*> sub_sections_;
-    std::vector<OpenGlComponent*> open_gl_components_;
+    std::vector<std::shared_ptr<OpenGlComponent>> open_gl_components_;
     OpenGlBackground* background_;
     std::map<std::string, SynthSlider*> slider_lookup_;
     std::map<std::string, Button*> button_lookup_;
@@ -384,8 +386,9 @@ class SynthSection : public Component, public Slider::Listener,
     SynthButton* activator_;
     PresetSelector* preset_selector_;
     bool preset_selector_half_width_;
-    std::unique_ptr<OffOverlay> off_overlay_;
+    std::shared_ptr<OffOverlay> off_overlay_;
     Skin::SectionOverride skin_override_;
+    OpenGlComponent* objectToDelete;
     float size_ratio_;
     bool active_;
     bool sideways_heading_;

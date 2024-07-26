@@ -45,13 +45,16 @@ namespace {
   }
 }
 
+int OpenGlComponent::nID = 0;
 OpenGlComponent::OpenGlComponent(String name) : Component(name), only_bottom_corners_(false),
                                                 parent_(nullptr), skin_override_(Skin::kNone)
                                                 {
   background_color_ = Colours::transparentBlack;
+  id = generateID();
 }
 
-OpenGlComponent::~OpenGlComponent() { }
+OpenGlComponent::~OpenGlComponent() {
+}
 
 bool OpenGlComponent::setViewPort(Component* component, Rectangle<int> bounds, OpenGlWrapper& open_gl) {
   FullInterface* top_level = component->findParentComponentOfClass<FullInterface>();

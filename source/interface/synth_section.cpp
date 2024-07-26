@@ -248,7 +248,7 @@ void SynthSection::paintChildrenShadows(Graphics& g) {
 void SynthSection::paintOpenGlChildrenBackgrounds(Graphics& g) {
   for (auto& open_gl_component : open_gl_components_) {
     if (open_gl_component->isVisible())
-      paintOpenGlBackground(g, open_gl_component);
+      paintOpenGlBackground(g, open_gl_component.get());
   }
 }
 
@@ -379,6 +379,23 @@ void SynthSection::destroyOpenGlComponents(OpenGlWrapper& open_gl) {
       background_->destroy(open_gl);
 }
 
+void SynthSection::destroyOpenGlComponent(OpenGlComponent const& open_gl_component, OpenGlWrapper& open_gl)
+{
+    //moves the component to the end of the array
+    auto new_logical_end = std::remove_if(open_gl_components_.begin(), open_gl_components_.end(), [&](std::shared_ptr<OpenGlComponent> const& p)
+    {
+        return *p == open_gl_component;
+    });
+    //calls destroy function
+    new_logical_end->get()->destroy(open_gl);
+
+    //erases it from the vector
+    const MessageManagerLock mmLock;
+    open_gl_components_.erase(new_logical_end,open_gl_components_.end());
+
+
+}
+
 void SynthSection::sliderValueChanged(Slider* moved_slider) {
 //  std::string name = moved_slider->getName().toStdString();
 //  SynthGuiInterface* parent = findParentComponentOfClass<SynthGuiInterface>();
@@ -476,7 +493,7 @@ void SynthSection::addBackgroundComponent(OpenGlBackground *open_gl_component, b
     background_ = open_gl_component;
 
 }
-void SynthSection::addOpenGlComponent(OpenGlComponent* open_gl_component, bool to_beginning) {
+void SynthSection::addOpenGlComponent(std::shared_ptr<OpenGlComponent> open_gl_component, bool to_beginning, bool makeVisible ) {
   if (open_gl_component == nullptr)
     return;
   
@@ -484,12 +501,18 @@ void SynthSection::addOpenGlComponent(OpenGlComponent* open_gl_component, bool t
                          open_gl_component) == open_gl_components_.end());
 
   open_gl_component->setParent(this);
+    if (makeVisible)
+        addAndMakeVisible(open_gl_component.get());
+    else
+        addChildComponent(open_gl_component.get());
   if (to_beginning)
-    open_gl_components_.insert(open_gl_components_.begin(), open_gl_component);
+    open_gl_components_.insert(open_gl_components_.begin(), std::move(open_gl_component));
   else
-    open_gl_components_.push_back(open_gl_component);
-  addAndMakeVisible(open_gl_component);
+    open_gl_components_.push_back(std::move(open_gl_component));
+
 }
+
+
 
 void SynthSection::setActivator(SynthButton* activator) {
   createOffOverlay();
@@ -506,7 +529,7 @@ void SynthSection::createOffOverlay() {
     return;
 
   off_overlay_ = std::make_unique<OffOverlay>();
-  addOpenGlComponent(off_overlay_.get(), true);
+  addOpenGlComponent(off_overlay_, true);
   off_overlay_->setVisible(false);
   off_overlay_->setAlwaysOnTop(true);
   off_overlay_->setInterceptsMouseClicks(false, false);

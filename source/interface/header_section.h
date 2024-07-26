@@ -23,9 +23,9 @@
 
 class LogoButton : public Button {
 public:
-    LogoButton(const String& name) : Button(name)
+    LogoButton(const String& name) : Button(name), image_component_(new OpenGlImageComponent())
     {
-        image_component_.setComponent(this);
+        image_component_->setComponent(this);
         auto paths = Paths::logoPaths();
         layer_1_ = paths.getUnchecked(0);
         layer_2_ = paths.getUnchecked(1);
@@ -174,19 +174,19 @@ public:
 
     void mouseEnter(const MouseEvent& e) override {
         Button::mouseEnter(e);
-        image_component_.setColor(Colour(0xffdddddd));
+        image_component_->setColor(Colour(0xffdddddd));
     }
 
     void mouseExit(const MouseEvent& e) override {
         Button::mouseExit(e);
-        image_component_.setColor(Colours::white);
+        image_component_->setColor(Colours::white);
     }
 
-    OpenGlImageComponent* getImageComponent() { return &image_component_; }
-    void redoImage() { image_component_.redrawImage(true); }
+    std::shared_ptr<OpenGlImageComponent> getImageComponent() { return image_component_; }
+    void redoImage() { image_component_->redrawImage(true); }
 
 private:
-    OpenGlImageComponent image_component_;
+    std::shared_ptr<OpenGlImageComponent> image_component_;
 
     juce::Path layer_1_;
     juce::Path layer_2_;
@@ -268,7 +268,7 @@ class HeaderSection : public SynthSection, public LogoSection::Listener {
     int tab_offset_;
     std::unique_ptr<PlainTextComponent> temporary_tab_;
     std::unique_ptr<OpenGlShapeButton> exit_temporary_button_;
-    OpenGlQuad body_;
+    std::shared_ptr<OpenGlQuad> body_;
     std::unique_ptr<LogoSection> logo_section_;
     //Image background_image_;
     //std::unique_ptr<SynthButton> click_me;

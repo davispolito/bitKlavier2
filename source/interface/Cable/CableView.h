@@ -10,10 +10,14 @@
 
 #include <JuceHeader.h>
 #include "Cable.h"
+#include "PreparationSection.h"
+#include "Connection.h"
 
 class ConstructionSite;
-class CableView : public Component,
-                  private Timer
+class CableView :
+//                  private Timer,
+                  public PreparationSection::Listener,
+                  public SynthSection
 {
 public:
     explicit CableView (ConstructionSite &site);
@@ -37,10 +41,31 @@ public:
     juce::Point<float> getCableMousePosition() const;
     void updateCablePositions();
 
+    //void portClicked(const juce::Point<int>& pos, juce::AudioProcessorGraph::Node::Ptr node) override;
+
+    void paintBackground(juce::Graphics &g)
+    {
+//        DBG("paintbackground");
+//        for(auto cable : cables)
+//        {
+//            cable->paint(g);
+//        }
+    }
+
+    juce::Point<int> currentPort;
+    void dragConnector (const MouseEvent& e) override;
+
+    void beginConnectorDrag (AudioProcessorGraph::NodeAndChannel source,
+                             AudioProcessorGraph::NodeAndChannel dest,
+                             const MouseEvent& e) override;
+
+
+
+    void endDraggingConnector (const MouseEvent& e) override;
 
 
 private:
-    void timerCallback() override;
+//    void timerCallback() override;
 
     const ConstructionSite& site;
     OwnedArray<Cable> cables;
@@ -48,6 +73,7 @@ private:
     float scaleFactor = 1.0f;
     bool isDraggingCable = false;
     std::optional<juce::Point<int>> mousePosition;
+    std::unique_ptr<Cable> draggingConnector;
 
 
     juce::Point<int> portToPaint;
@@ -59,24 +85,24 @@ private:
 
     bool portGlow = false;
 
-    struct PathGeneratorTask : juce::TimeSliceClient
-    {
-    public:
-        explicit PathGeneratorTask (CableView& cv);
-        ~PathGeneratorTask() override;
-
-        int useTimeSlice() override;
-
-    private:
-        struct TimeSliceThread : juce::TimeSliceThread
-        {
-            TimeSliceThread() : juce::TimeSliceThread ("Cable Drawing Background Thread") {}
-        };
-
-        juce::SharedResourcePointer<TimeSliceThread> sharedTimeSliceThread;
-
-        CableView& cableView;
-    } pathTask;
+//    struct PathGeneratorTask : juce::TimeSliceClient
+//    {
+//    public:
+//        explicit PathGeneratorTask (CableView& cv);
+//        ~PathGeneratorTask() override;
+//
+//        int useTimeSlice() override;
+//
+//    private:
+//        struct TimeSliceThread : juce::TimeSliceThread
+//        {
+//            TimeSliceThread() : juce::TimeSliceThread ("Cable Drawing Background Thread") {}
+//        };
+//
+//        juce::SharedResourcePointer<TimeSliceThread> sharedTimeSliceThread;
+//
+//        CableView& cableView;
+//    } pathTask;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (CableView)
 };

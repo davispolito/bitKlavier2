@@ -19,10 +19,21 @@ DirectPreparation::DirectPreparation (std::unique_ptr<DirectProcessor> p,
 
     item = std::make_unique<DirectItem> (); // Initializes member variable `item` of PreparationSection class
     addOpenGlComponent (item->getImageComponent()); // Calls member function of SynthSection (parent class to PreparationSection)
+    ports.add(new BKPort(false));
+    //port = std::make_unique<BKPort> ();
     _open_gl.initOpenGlComp.try_enqueue([this]
-        {item->getImageComponent()->init(_open_gl); });
-    addAndMakeVisible (item.get());
+                                        {item->getImageComponent()->init(_open_gl); });
+    for (auto *port : ports)
+    {
+        addOpenGlComponent(port->getImageComponent());
 
+        _open_gl.initOpenGlComp.try_enqueue([this, port]
+                                            {port->getImageComponent()->init(_open_gl); });
+        addAndMakeVisible(port);
+        port->addListener(this);
+    }
+
+    addAndMakeVisible (item.get());
     setSkinOverride (Skin::kDirect);
 
 }
@@ -39,7 +50,24 @@ std::shared_ptr<SynthSection> DirectPreparation::getPrepPopup()
 
 void DirectPreparation::resized()
 {
+
     PreparationSection::resized();
+    Rectangle<float> bounds = getLocalBounds().toFloat();
+    int item_padding_y = kItemPaddingY * size_ratio_;
+    int item_height = getHeight() - 2 * item_padding_y;
+    int item_padding_x = kItemPaddingX * size_ratio_;
+    int item_width = getWidth() - 2 * item_padding_x;
+    auto newBounds = getBoundsInParent();
+//    constrainer.checkBounds (newBounds, getBoundsInParent(),
+//        getParentComponent()->getLocalBounds(),
+//        false, false, false, false);
+    DBG("item_padding x " + String(item_padding_x) + "item_padding y" + String(item_padding_y));
+
+    auto portDim = proportionOfWidth(0.1f);
+    for ( auto* port : ports )
+        port->setBounds(item_width  - 18, item_height/2, 15,15) ;
+    //port->setBounds(getRight(), getY() + getHeight()/2, 100, 100);
+    SynthSection::resized();
     //slider->setBounds(0, 0, 100, 100);
 }
 
@@ -92,6 +120,11 @@ void DirectPreparation::DirectPopup::renderOpenGlComponents(OpenGlWrapper& open_
     }
 }
 
+void DirectPreparation::paintBackground(juce::Graphics &g)  {
+    for (auto * port: ports)
+        port->redoImage();
+    PreparationSection::paintBackground(g);
+}
 /*************************************************************************************************/
 /*                     NESTED CLASS: DirectPopup, inherits from PreparationPopup                 */
 /*************************************************************************************************/

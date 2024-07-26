@@ -48,6 +48,14 @@ class Paths {
         return arr;
     }
 
+    static Array<Path> portPaths()
+    {
+        Array<Path> arr;
+        arr.add(fromSvgData((const void*)BinaryData::port_outline_svg,BinaryData::port_outline_svgSize));
+        arr.add(fromSvgData((const void*)BinaryData::port_fill_svg,BinaryData::port_fill_svgSize));
+
+        return arr;
+    }
     // Returns the paths for a nostalgic preparation window
     static Array<Path> nostalgicPaths()
     {

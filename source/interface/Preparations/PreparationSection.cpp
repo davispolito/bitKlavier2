@@ -24,12 +24,13 @@ void PreparationSection::paintBackground(Graphics& g)
 //    g.reduceClipRegion(bounds);
 //    g.setOrigin(bounds.getTopLeft());
 //    //item->paintBackground(g);
-
     if(item)
     {
         //item->setColor(findColour (Skin::kWidgetPrimary1, true));
         item->redoImage();
     }
+
+
 //    g.restoreState();
 }
 
@@ -44,9 +45,9 @@ void PreparationSection:: resized()
 //    constrainer.checkBounds (newBounds, getBoundsInParent(),
 //        getParentComponent()->getLocalBounds(),
 //        false, false, false, false);
-    DBG("item_padding x " + String(item_padding_x) + "item_padding y" + String(item_padding_y));
+    //DBG("item_padding x " + String(item_padding_x) + "item_padding y" + String(item_padding_y));
     item->setBounds(item_padding_y, item_padding_y, item_width,item_height) ;
-    SynthSection::resized();
+    //SynthSection::resized();
 }
 PreparationSection::~PreparationSection()
 {

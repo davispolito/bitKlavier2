@@ -19,7 +19,8 @@ class OpenGlSlider;
 /*             CLASS: DirectPreparation, inherits from PreparationSection           */
 /************************************************************************************/
 
-class DirectPreparation : public PreparationSection {
+class DirectPreparation : public PreparationSection
+                            {
 public:
 
     // Constructor method that takes three arguments: a smart pointer to a PolygonalOscProcessor,
@@ -35,11 +36,19 @@ public:
         return new DirectPreparation(std::make_unique<DirectProcessor>(), v, um);
     }
 
+//    void portClicked(const juce::Point<int>& pos
+//                     ) override
+//    {
+//        for(auto listener : listeners_)
+//        {
+//            listener->portClicked(pos, node);
+//        }
+//    }
     // Public function definitions for the DirectPreparation class, which override functions
     // in the PreparationSection base class
     std::shared_ptr<SynthSection> getPrepPopup() override;
     void resized() override;
-
+    void paintBackground(juce::Graphics &g);
     juce::AudioProcessor* getProcessor() override;
     std::unique_ptr<juce::AudioProcessor> getProcessorPtr() override;
 private:

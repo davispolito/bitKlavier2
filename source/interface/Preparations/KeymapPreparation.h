@@ -174,8 +174,9 @@ public:
             AudioDeviceManager& manager) :
             OpenGlAutoImageComponent<MidiInputSelectorComponentListBox>(midi,enabledMidiInputs,
                                                                          manager) {
+        image_component_ = std::make_shared<OpenGlImageComponent>();
         setLookAndFeel(DefaultLookAndFeel::instance());
-        image_component_.setComponent(this);
+        image_component_->setComponent(this);
     }
 
     virtual void resized() override {

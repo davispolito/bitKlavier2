@@ -7,6 +7,8 @@
 #include <JuceHeader.h>
 #include <Connection.h>
 #include "CubicBezier.h"
+#include "open_gl_image_component.h"
+class CableView;
 namespace CableConstants
 {
     const Colour cableColour (0xFFD0592C); // currently only used for "glow"
@@ -21,18 +23,161 @@ namespace CableConstants
 class ConstructionSite;
 class Cable : public Component {
 public:
-    Cable(const ConstructionSite* site, const Connection);
+    Cable(const ConstructionSite* site, CableView& cableView);
+    ~Cable();
 
     void paint (Graphics& g) override;
-    void resized() override;
-    bool hitTest (int x, int y) override;
-    Connection connection;
+//    void resized() override;
+//    bool hitTest (int x, int y) override;
+    //Connection connection;
     const ConstructionSite* site;
+    CableView& cableView;
     static constexpr std::string_view componentName = "Cable";
     void repaintIfNeeded (bool force = false);
 
     void updateStartPoint (bool repaintIfMoved = true);
     void updateEndPoint (bool repaintIfMoved = true);
+    std::shared_ptr<OpenGlImageComponent> getImageComponent() { return image_component_; }
+    void redoImage() { image_component_->redrawImage (true);}
+    std::shared_ptr<OpenGlImageComponent> image_component_;
+
+    void setInput (AudioProcessorGraph::NodeAndChannel newSource)
+    {
+        if (connection.source != newSource)
+        {
+            connection.source = newSource;
+            update();
+        }
+    }
+
+    void setOutput (AudioProcessorGraph::NodeAndChannel newDest)
+    {
+        if (connection.destination != newDest)
+        {
+            connection.destination = newDest;
+            update();
+        }
+    }
+
+    void dragStart (juce::Point<float> pos)
+    {
+        lastInputPos = pos;
+        resizeToFit();
+    }
+
+    void dragEnd (juce::Point<float> pos)
+    {
+        lastOutputPos = pos;
+        resizeToFit();
+    }
+
+    void update()
+    {
+        juce::Point<float> p1, p2;
+        getPoints (p1, p2);
+
+        if (lastInputPos != p1 || lastOutputPos != p2)
+            resizeToFit();
+    }
+
+    void resizeToFit()
+    {
+        juce::Point<float> p1, p2;
+        getPoints (p1, p2);
+
+        auto newBounds = Rectangle<float> (p1, p2).expanded (4.0f).getSmallestIntegerContainer();
+
+        if (newBounds != getBounds())
+            setBounds (newBounds);
+        else
+            resized();
+
+        repaint();
+    }
+    void getPoints (juce::Point<float>& p1, juce::Point<float>& p2) const;
+    AudioProcessorGraph::Connection connection { { {}, 0 }, { {}, 0 } };
+    bool hitTest (int x, int y) override
+    {
+        auto pos = juce::Point<int> (x, y).toFloat();
+
+        if (hitPath.contains (pos))
+        {
+            double distanceFromStart, distanceFromEnd;
+            getDistancesFromEnds (pos, distanceFromStart, distanceFromEnd);
+
+            // avoid clicking the connector when over a pin
+            return distanceFromStart > 7.0 && distanceFromEnd > 7.0;
+        }
+
+        return false;
+    }
+
+    void mouseDown (const MouseEvent&) override
+    {
+        dragging = false;
+    }
+
+    void mouseDrag (const MouseEvent& e) override;
+
+
+
+    void mouseUp (const MouseEvent& e) override;
+
+
+    void resized() override
+    {
+        juce::Point<float> p1, p2;
+        getPoints (p1, p2);
+
+        lastInputPos = p1;
+        lastOutputPos = p2;
+
+        p1 -= getPosition().toFloat();
+        p2 -= getPosition().toFloat();
+
+        linePath.clear();
+        linePath.startNewSubPath (p1);
+        linePath.cubicTo (p1.x, p1.y + (p2.y - p1.y) * 0.33f,
+                          p2.x, p1.y + (p2.y - p1.y) * 0.66f,
+                          p2.x, p2.y);
+
+        PathStrokeType wideStroke (8.0f);
+        wideStroke.createStrokedPath (hitPath, linePath);
+
+        PathStrokeType stroke (2.5f);
+        stroke.createStrokedPath (linePath, linePath);
+
+        auto arrowW = 5.0f;
+        auto arrowL = 4.0f;
+
+        Path arrow;
+        arrow.addTriangle (-arrowL, arrowW,
+                           -arrowL, -arrowW,
+                           arrowL, 0.0f);
+
+        arrow.applyTransform (AffineTransform()
+                                      .rotated (MathConstants<float>::halfPi - (float) atan2 (p2.x - p1.x, p2.y - p1.y))
+                                      .translated ((p1 + p2) * 0.5f));
+
+        linePath.addPath (arrow);
+        linePath.setUsingNonZeroWinding (true);
+        MessageManager::callAsync (
+                [safeComp = Component::SafePointer<Cable> (this)]
+                {
+                    if (auto* comp = safeComp.getComponent())
+                        comp->redoImage();
+                    //comp->repaint (cableBounds);
+                });
+    }
+
+    void getDistancesFromEnds (juce::Point<float> p, double& distanceFromStart, double& distanceFromEnd) const
+    {
+        juce::Point<float> p1, p2;
+        getPoints (p1, p2);
+
+        distanceFromStart = p1.getDistanceFrom (p);
+        distanceFromEnd   = p2.getDistanceFrom (p);
+    }
 private:
     float getCableThickness() const;
     void drawCableShadow (Graphics& g, float thickness);
@@ -53,6 +198,9 @@ private:
     AtomicPoint startPoint {};
     AtomicPoint endPoint {};
     std::atomic<float> scaleFactor = 1.0f;
+    juce::Point<float> lastInputPos, lastOutputPos;
+    Path linePath, hitPath;
+    bool dragging = false;
 
     Colour startColour;
     Colour endColour;

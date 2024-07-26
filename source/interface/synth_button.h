@@ -88,42 +88,42 @@ class OpenGlShapeButtonComponent : public OpenGlComponent {
 
 class OpenGlShapeButton : public ToggleButton {
   public:
-    OpenGlShapeButton(String name) : gl_component_(this) {
+    OpenGlShapeButton(String name) : gl_component_(new OpenGlShapeButtonComponent(this)) {
       setName(name);
     }
 
-    OpenGlComponent* getGlComponent() { return &gl_component_; }
+    std::shared_ptr<OpenGlComponent> getGlComponent() { return gl_component_; }
 
-    void setShape(const Path& shape) { gl_component_.setShape(shape); }
-    void useOnColors(bool use) { gl_component_.useOnColors(use); }
+    void setShape(const Path& shape) { gl_component_->setShape(shape); }
+    void useOnColors(bool use) { gl_component_->useOnColors(use); }
 
     void resized() override {
       ToggleButton::resized();
-      gl_component_.redoImage();
+      gl_component_->redoImage();
     }
   
     void mouseEnter(const MouseEvent& e) override {
       ToggleButton::mouseEnter(e);
-      gl_component_.setHover(true);
+      gl_component_->setHover(true);
     }
   
     void mouseExit(const MouseEvent& e) override {
       ToggleButton::mouseExit(e);
-      gl_component_.setHover(false);
+      gl_component_->setHover(false);
     }
     
     void mouseDown(const MouseEvent& e) override {
       ToggleButton::mouseDown(e);
-      gl_component_.setDown(true);
+      gl_component_->setDown(true);
     }
     
     void mouseUp(const MouseEvent& e) override {
       ToggleButton::mouseUp(e);
-      gl_component_.setDown(false);
+      gl_component_->setDown(false);
     }
 
   private:
-    OpenGlShapeButtonComponent gl_component_;
+    std::shared_ptr<OpenGlShapeButtonComponent> gl_component_;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(OpenGlShapeButton)
 };
@@ -306,9 +306,9 @@ private:
 
 class OpenGlToggleButton : public ToggleButton {
   public:
-    OpenGlToggleButton(String name) : ToggleButton(name), active_(true), button_component_(this) { }
+    OpenGlToggleButton(String name) : ToggleButton(name), active_(true), button_component_(new OpenGlButtonComponent(this)) { }
 
-    OpenGlButtonComponent* getGlComponent() { return &button_component_; }
+    std::shared_ptr<OpenGlButtonComponent> getGlComponent() { return button_component_; }
 
     void setActive(bool active = true) { active_ = active; }
     bool isActive() const { return active_; }
@@ -317,62 +317,62 @@ class OpenGlToggleButton : public ToggleButton {
 
     void setText(String text) {
       setButtonText(text);
-      button_component_.setText();
+      button_component_->setText();
     }
 
     void setPowerButton() {
-      button_component_.setStyle(OpenGlButtonComponent::kPowerButton);
+      button_component_->setStyle(OpenGlButtonComponent::kPowerButton);
     }
 
     void setNoBackground() {
-      button_component_.setStyle(OpenGlButtonComponent::kJustText);
+      button_component_->setStyle(OpenGlButtonComponent::kJustText);
     }
 
     void setJustification(Justification justification) {
-      button_component_.setJustification(justification);
+      button_component_->setJustification(justification);
     }
 
     void setLightenButton() {
-      button_component_.setStyle(OpenGlButtonComponent::kLightenButton);
+      button_component_->setStyle(OpenGlButtonComponent::kLightenButton);
     }
 
     void setShowOnColors(bool show) {
-      button_component_.setShowOnColors(show);
+      button_component_->setShowOnColors(show);
     }
 
     void setUiButton(bool primary) {
-      button_component_.setStyle(OpenGlButtonComponent::kUiButton);
-      button_component_.setPrimaryUiButton(primary);
+      button_component_->setStyle(OpenGlButtonComponent::kUiButton);
+      button_component_->setPrimaryUiButton(primary);
     }
   
     virtual void enablementChanged() override {
       ToggleButton::enablementChanged();
-      button_component_.setColors();
+      button_component_->setColors();
     }
   
     void mouseEnter(const MouseEvent& e) override {
       ToggleButton::mouseEnter(e);
-      button_component_.setHover(true);
+      button_component_->setHover(true);
     }
   
     void mouseExit(const MouseEvent& e) override {
       ToggleButton::mouseExit(e);
-      button_component_.setHover(false);
+      button_component_->setHover(false);
     }
     
     void mouseDown(const MouseEvent& e) override {
       ToggleButton::mouseDown(e);
-      button_component_.setDown(true);
+      button_component_->setDown(true);
     }
     
     void mouseUp(const MouseEvent& e) override {
       ToggleButton::mouseUp(e);
-      button_component_.setDown(false);
+      button_component_->setDown(false);
     }
 
   private:
     bool active_;
-    OpenGlButtonComponent button_component_;
+    std::shared_ptr<OpenGlButtonComponent> button_component_;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(OpenGlToggleButton)
 };

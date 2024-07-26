@@ -35,9 +35,11 @@ class OpenGlDeviceSelector : public OpenGlAutoImageComponent<AudioDeviceSelector
                                                                min_audio_output_channels, max_audioOutput_channels,
                                                                show_midi_input_options, show_midi_output_selector,
                                                                show_channels_as_stereo_pairs,
-                                                               hide_advanced_options_with_button) {
-      setLookAndFeel(DefaultLookAndFeel::instance());
-      image_component_.setComponent(this);
+                                                               hide_advanced_options_with_button)
+                                                               {
+        image_component_ = std::make_shared<OpenGlImageComponent>();
+        setLookAndFeel(DefaultLookAndFeel::instance());
+        image_component_->setComponent(this);
     }
 
     virtual void resized() override {
@@ -92,11 +94,11 @@ class AboutSection : public Overlay {
 
 
 
-    OpenGlQuad body_;
+    std::shared_ptr<OpenGlQuad> body_;
     //std::unique_ptr<AppLogo> logo_;
-    std::unique_ptr<PlainTextComponent> name_text_;
-    std::unique_ptr<PlainTextComponent> version_text_;
-    std::unique_ptr<PlainTextComponent> check_updates_text_;
+    std::shared_ptr<PlainTextComponent> name_text_;
+    std::shared_ptr<PlainTextComponent> version_text_;
+    std::shared_ptr<PlainTextComponent> check_updates_text_;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(AboutSection)
 };

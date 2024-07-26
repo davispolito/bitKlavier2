@@ -8,10 +8,10 @@
 #include "common.h"
 #include "Preparations/PreparationSection.h"
 #include "PreparationSelector.h"
-#include "Cable/Cable.h"
+#include "Cable/CableView.h"
 class SynthGuiInterface;
 typedef Loki::Factory<PreparationSection, int,  juce::ValueTree,  OpenGlWrapper&> PreparationFactory;
-class ConstructionSite : public SynthSection, public juce::ValueTree::Listener,
+class ConstructionSite : public SynthSection,
                          public tracktion::engine::ValueTreeObjectList<PreparationSection>,private KeyListener,
                          public DragAndDropContainer
 
@@ -23,39 +23,14 @@ public:
 
     void redraw(void);
 
-    //void paint(Graphics& g) override;
-
     bool keyPressed(const KeyPress &k, Component *c) override;
     void itemIsBeingDragged(BKItem* thisItem, const MouseEvent& e);
 
     void paintBackground(Graphics& g) override;
 
-
-
-    bool inPaste, inCopyDrag, inCut;
-
-
-
-
-
-
     void addItem(bitklavier::BKPreparationType type, bool center = false);
 
 
-    bool altDown;
-
-
-
-
-
-
-
-
-
-
-    bool edittingComment;
-
-    OwnedArray<HashMap<int,int>> pastemap;
     bool isSuitableType (const juce::ValueTree& v) const override
     {
         return v.hasType (IDs::PREPARATION);
@@ -71,29 +46,49 @@ public:
     void newObjectAdded (PreparationSection*) override;
     void objectRemoved (PreparationSection*) override     { resized();}//resized(); }
     void objectOrderChanged() override              {resized(); }//resized(); }
+    BKPort* findPinAt (juce::Point<float> pos) const
+    {
+        for (auto* fc : objects)
+        {
+            // NB: A Visual Studio optimiser error means we have to put this Component* in a local
+            // variable before trying to cast it, or it gets mysteriously optimised away..
+            auto* comp = fc->getComponentAt (pos.toInt() - fc->getPosition());
 
-//PreparationSection * preparation;
+            if (auto* pin = dynamic_cast<BKPort*> (comp))
+                return pin;
+        }
+
+        return nullptr;
+    }
+   PreparationSection* getComponentForPlugin (AudioProcessorGraph::NodeID nodeID) const
+    {
+        for (auto* fc : objects)
+            if (fc->pluginID == nodeID)
+                return fc;
+
+        return nullptr;
+    }
     juce::Viewport* view;
    juce::Point<float> mouse;
+    OpenGlWrapper &open_gl;
 private:
-    //std::unique_ptr<PreparationList> prepList;
+
     SynthGuiInterface* _parent;
 
-    OpenGlWrapper &open_gl;
 
 
 
-    int leftMost, rightMost, topMost, bottomMost;
+    bool edittingComment;
+
+    OwnedArray<HashMap<int,int>> pastemap;
+    friend class CableView;
+
 
 
     bool connect;
 
-    juce::Point<int> lastPosition;
-
     int lastX, lastY;
-    int lastEX,lastEY;
 
-    int lineOX, lineOY, lineEX, lineEY;
     bool multiple;
     bool held;
 
@@ -102,8 +97,8 @@ private:
     PreparationSelector preparationSelector;
     LassoComponent<PreparationSection*> selectorLasso;
 
-
-    //SelectedItemSet<PreparationSection*> lassoSelection;
+    friend class CableView;
+    CableView cableView;
     ValueTree state;
     UndoManager &undo;
 
@@ -128,19 +123,10 @@ private:
 
     void valueTreePropertyChanged (juce::ValueTree& v, const juce::Identifier& i) override
     {
-        //        if (isSuitableType (v))
-        //            if (i == IDs::start || i == IDs::length)
-        //                resized();
-
         tracktion::engine::ValueTreeObjectList<PreparationSection>::valueTreePropertyChanged (v, i);
     }
-    //ReferenceCountedArray<PreparationSection,
 
     PreparationFactory prepFactory;
-    //std::shared_ptr<juce::AudioProcessor> last_proc;
- //    std::vector<chowdsp::Broadcaster<void()>> audioThreadBroadcasters { 10 };
-//    using AudioThreadAction = juce::dsp::FixedSizeFunction<actionSize, void()>;
-//    moodycamel::ReaderWriterQueue<AudioThreadAction> audioThreadBroadcastQueue { 10 };
 
     JUCE_LEAK_DETECTOR(ConstructionSite)
 };

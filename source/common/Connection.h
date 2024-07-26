@@ -8,6 +8,7 @@
 #include <JuceHeader.h>
 using Node = juce::AudioProcessorGraph::Node;
 class Connection {
+public:
     Connection(juce::AudioProcessorGraph::Node::Ptr startNode, juce::AudioProcessorGraph::Node::Ptr endNode) : startNode(startNode), endNode(endNode)
     {
 

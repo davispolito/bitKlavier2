@@ -12,7 +12,7 @@
 #include "Identifiers.h"
 #include "BKItem.h"
 #include "opengl_ComponentDragger.h"
-
+#include "BKPort.h"
 
 /************************************************************************************/
 /*                            CLASS: SynthGuiInterface                              */
@@ -23,12 +23,52 @@ class SynthGuiInterface;
 /************************************************************************************/
 /*     CLASS: PreparationSection, inherits from SynthSection and Listener           */
 /************************************************************************************/
-class PreparationSection : public SynthSection, public BKItem::Listener, public ChangeListener
+class PreparationSection : public SynthSection, public BKItem::Listener, public BKPort::Listener,  public ChangeListener
 {
 public:
     static constexpr float kItemPaddingY = 2.0f;
     static constexpr float kItemPaddingX = 2.0f;
 
+    class Listener
+    {
+    public:
+        virtual ~Listener() = default;
+//        virtual void portClicked(const juce::Point<int>& pos, juce::AudioProcessorGraph::Node::Ptr) = 0;
+        virtual void beginConnectorDrag(AudioProcessorGraph::NodeAndChannel source,
+                                        AudioProcessorGraph::NodeAndChannel dest,
+                                        const MouseEvent& e) = 0;
+        virtual void dragConnector(const MouseEvent& e) = 0;
+        virtual void endDraggingConnector(const MouseEvent& e) = 0;
+    };
+
+    void beginConnectorDrag(AudioProcessorGraph::NodeAndChannel source,
+                                    AudioProcessorGraph::NodeAndChannel dest,
+                                    const MouseEvent& e)
+    {
+        for (auto listener: listeners_)
+        {
+            listener->beginConnectorDrag(source,
+                                         dest,
+                                         e);
+        }
+    }
+    void dragConnector(const MouseEvent& e)
+    {for (auto listener: listeners_)
+        {
+            listener->dragConnector(e);
+        }
+
+    }
+    void endDraggingConnector(const MouseEvent& e)
+    {
+        for (auto listener: listeners_)
+        {
+            listener->endDraggingConnector(
+                    e);
+        }
+    }
+    void addListener(Listener* listener) { listeners_.push_back(listener); }
+    std::vector<Listener*> listeners_;
     // Constructor Declaration
     PreparationSection(juce::String name, juce::ValueTree v, OpenGlWrapper &um);
 
@@ -43,13 +83,15 @@ public:
     int x, y, width, height;
     juce::ComponentDragger myDragger;
     juce::ComponentBoundsConstrainer constrainer;
+    OwnedArray<BKPort> ports;
+
 
     void changeListenerCallback(ChangeBroadcaster *source)
     {
-        DBG("changelistener");
+       //DBG("changelistener");
         if(selectedSet->isSelected(this))
         {
-            DBG("white");
+           // DBG("white");
             item->setColor(juce::Colours::white);
             isSelected = true;
         }
@@ -121,9 +163,28 @@ public:
 
     };
 
+    juce::Point<float> getPinPos (int index, bool isInput) const
+    {
+        for (auto* port : ports)
+            if (port->pin.channelIndex == index && isInput == port->isInput)
+                return getPosition().toFloat() + port->getBounds().getCentre().toFloat();
 
+        return {};
+    }
     virtual std::shared_ptr<SynthSection> getPrepPopup(){}
+    void setNodeAndPortInfo(juce::AudioProcessorGraph::Node::Ptr _node)
+    {
+        node = _node;
+        pluginID = node->nodeID;
+        int i = 0;
+        for (auto * port : ports)
+        {
+            port->pin = { pluginID, i++ };
+        }
+
+    }
     juce::AudioProcessorGraph::Node::Ptr node;
+    juce::AudioProcessorGraph::NodeID pluginID;
 //juce::AudioProcessor _proc;
     virtual juce::AudioProcessor* getProcessor(){}
     virtual std::unique_ptr<juce::AudioProcessor> getProcessorPtr(){}

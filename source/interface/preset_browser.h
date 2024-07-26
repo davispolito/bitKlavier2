@@ -295,106 +295,106 @@ class PresetList : public SynthSection, public TextEditor::Listener, ScrollBar::
     bool sort_ascending_;
 };
 
-class PresetBrowser : public SynthSection,
-                      public PresetList::Listener,
-                      public TextEditor::Listener,
-                      public KeyListener,
-                      public SelectionList::Listener {
-  public:
-    static constexpr int kLeftPadding = 24;
-    static constexpr int kTopPadding = 24;
-    static constexpr int kMiddlePadding = 15;
-    static constexpr int kNameFontHeight = 26;
-    static constexpr int kAuthorFontHeight = 19;
-    static constexpr int kStoreHeight = 33;
-    static constexpr int kCommentsFontHeight = 15;
-
-    class Listener {
-      public:
-        virtual ~Listener() { }
-
-        virtual void newPresetSelected(File preset) = 0;
-        virtual void deleteRequested(File preset) = 0;
-        virtual void hidePresetBrowser() = 0;
-    };
-
-    PresetBrowser();
-    ~PresetBrowser();
-
-    void paintBackground(Graphics& g) override;
-    void paintBackgroundShadow(Graphics& g) override;
-    void resized() override;
-    void buttonClicked(Button* clicked_button) override;
-    bool keyPressed(const KeyPress &key, Component *origin) override;
-    bool keyStateChanged(bool is_key_down, Component *origin) override;
-    void visibilityChanged() override;
-
-    Rectangle<int> getSearchRect();
-    Rectangle<int> getInfoRect();
-
-    void filterPresets();
-    void textEditorTextChanged(TextEditor& editor) override;
-    void textEditorEscapeKeyPressed(TextEditor& editor) override;
-
-    void newPresetSelected(File preset) override {
-      for (Listener* listener : listeners_)
-        listener->newPresetSelected(preset);
-//      loadPresetInfo();
+//class PresetBrowser : public SynthSection,
+//                      public PresetList::Listener,
+//                      public TextEditor::Listener,
+//                      public KeyListener,
+//                      public SelectionList::Listener {
+//  public:
+//    static constexpr int kLeftPadding = 24;
+//    static constexpr int kTopPadding = 24;
+//    static constexpr int kMiddlePadding = 15;
+//    static constexpr int kNameFontHeight = 26;
+//    static constexpr int kAuthorFontHeight = 19;
+//    static constexpr int kStoreHeight = 33;
+//    static constexpr int kCommentsFontHeight = 15;
 //
-//      String author = author_text_->getText();
-//      store_button_->setText("Get more presets by " + author);
-//      bool visible = more_author_presets_.count(author.removeCharacters(" _.").toLowerCase().toStdString());
-//      bool was_visible = store_button_->isVisible();
-//      store_button_->setVisible(visible);
-//      if (was_visible != visible)
-//        setCommentsBounds();
-    }
-
-    void deleteRequested(File preset) override {
-      for (Listener* listener : listeners_)
-        listener->deleteRequested(preset);
-    }
-
-    void loadPresets();
-
-
-    void jumpToPreset(int indices);
-    void loadNextPreset();
-    void loadPrevPreset();
-    void externalPresetLoaded(File file);
-    void clearExternalPreset() { external_preset_ = File(); }
-
-    void addListener(Listener* listener);
-
-
-    void newSelection(File selection) override;
-    void allSelected() override;
-    void favoritesSelected() override;
-    void doubleClickedSelected(File selection) override { }
-
-  private:
-    bool loadFromFile(File& preset);
-    void loadPresetInfo();
-    void setCommentsBounds();
-    void setPresetInfo(File& preset);
-
-    std::vector<Listener*> listeners_;
-    std::unique_ptr<PresetList> preset_list_;
-//    std::unique_ptr<OpenGlTextEditor> search_box_;
-//    std::unique_ptr<SelectionList> folder_list_;
-    std::unique_ptr<PlainTextComponent> preset_text_;
-//    std::unique_ptr<PlainTextComponent> author_text_;
-//    std::unique_ptr<OpenGlToggleButton> style_buttons_[LoadSave::kNumPresetStyles];
-//    std::unique_ptr<OpenGlToggleButton> store_button_;
+//    class Listener {
+//      public:
+//        virtual ~Listener() { }
 //
-//    SaveSection* save_section_;
-//    DeleteSection* delete_section_;
-
-    std::unique_ptr<OpenGlTextEditor> comments_;
-    File external_preset_;
-    String author_;
-    String license_;
-    std::set<std::string> more_author_presets_;
-
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PresetBrowser)
-};
+//        virtual void newPresetSelected(File preset) = 0;
+//        virtual void deleteRequested(File preset) = 0;
+//        virtual void hidePresetBrowser() = 0;
+//    };
+//
+//    PresetBrowser();
+//    ~PresetBrowser();
+//
+//    void paintBackground(Graphics& g) override;
+//    void paintBackgroundShadow(Graphics& g) override;
+//    void resized() override;
+//    void buttonClicked(Button* clicked_button) override;
+//    bool keyPressed(const KeyPress &key, Component *origin) override;
+//    bool keyStateChanged(bool is_key_down, Component *origin) override;
+//    void visibilityChanged() override;
+//
+//    Rectangle<int> getSearchRect();
+//    Rectangle<int> getInfoRect();
+//
+//    void filterPresets();
+//    void textEditorTextChanged(TextEditor& editor) override;
+//    void textEditorEscapeKeyPressed(TextEditor& editor) override;
+//
+//    void newPresetSelected(File preset) override {
+//      for (Listener* listener : listeners_)
+//        listener->newPresetSelected(preset);
+////      loadPresetInfo();
+////
+////      String author = author_text_->getText();
+////      store_button_->setText("Get more presets by " + author);
+////      bool visible = more_author_presets_.count(author.removeCharacters(" _.").toLowerCase().toStdString());
+////      bool was_visible = store_button_->isVisible();
+////      store_button_->setVisible(visible);
+////      if (was_visible != visible)
+////        setCommentsBounds();
+//    }
+//
+//    void deleteRequested(File preset) override {
+//      for (Listener* listener : listeners_)
+//        listener->deleteRequested(preset);
+//    }
+//
+//    void loadPresets();
+//
+//
+//    void jumpToPreset(int indices);
+//    void loadNextPreset();
+//    void loadPrevPreset();
+//    void externalPresetLoaded(File file);
+//    void clearExternalPreset() { external_preset_ = File(); }
+//
+//    void addListener(Listener* listener);
+//
+//
+//    void newSelection(File selection) override;
+//    void allSelected() override;
+//    void favoritesSelected() override;
+//    void doubleClickedSelected(File selection) override { }
+//
+//  private:
+//    bool loadFromFile(File& preset);
+//    void loadPresetInfo();
+//    void setCommentsBounds();
+//    void setPresetInfo(File& preset);
+//
+//    std::vector<Listener*> listeners_;
+//    std::unique_ptr<PresetList> preset_list_;
+////    std::unique_ptr<OpenGlTextEditor> search_box_;
+////    std::unique_ptr<SelectionList> folder_list_;
+//    std::shared_ptr<PlainTextComponent> preset_text_;
+////    std::unique_ptr<PlainTextComponent> author_text_;
+////    std::unique_ptr<OpenGlToggleButton> style_buttons_[LoadSave::kNumPresetStyles];
+////    std::unique_ptr<OpenGlToggleButton> store_button_;
+////
+////    SaveSection* save_section_;
+////    DeleteSection* delete_section_;
+//
+//    std::unique_ptr<OpenGlTextEditor> comments_;
+//    File external_preset_;
+//    String author_;
+//    String license_;
+//    std::set<std::string> more_author_presets_;
+//
+//    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PresetBrowser)
+//};

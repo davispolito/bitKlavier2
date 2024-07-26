@@ -260,7 +260,7 @@ void OpenGlToggleButton::resized() {
     }
     else
       getGlComponent()->text().setTextSize(section->findValue(Skin::kButtonFontSize));
-    button_component_.setColors();
+    button_component_->setColors();
   }
 }
 

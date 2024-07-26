@@ -11,12 +11,17 @@
 ConstructionSite::ConstructionSite( juce::ValueTree &v,  juce::UndoManager &um, OpenGlWrapper &open_gl) : SynthSection("Construction Site"),
                                                                                  tracktion::engine::ValueTreeObjectList<PreparationSection>(v),
                                                                                      state(v), undo(um), open_gl(open_gl),
+                                                                                     cableView(*this),
                                                                                      preparationSelector(*this)
 {
     setWantsKeyboardFocus(true);
     addKeyListener(this);
     setSkinOverride(Skin::kConstructionSite);
 setInterceptsMouseClicks(false,true);
+//addAndMakeVisible (cableView);
+cableView.toBack();
+addSubSection(&cableView);
+//addMouseListener (&cableView, true);
     prepFactory.Register(bitklavier::BKPreparationType::PreparationTypeDirect, DirectPreparation::createDirectSection);
     prepFactory.Register(bitklavier::BKPreparationType::PreparationTypeNostalgic, NostalgicPreparation::createNostalgicSection);
     prepFactory.Register(bitklavier::BKPreparationType::PreparationTypeKeymap, KeymapPreparation::createKeymapSection);
@@ -41,6 +46,7 @@ PreparationSection* ConstructionSite::createNewObject (const juce::ValueTree& v)
     s->setDefaultColor();
     s->selectedSet = &(preparationSelector.getLassoSelection());
     preparationSelector.getLassoSelection().addChangeListener(s);
+    s->addListener(&cableView);
     return s;
 }
 
@@ -50,7 +56,7 @@ void ConstructionSite::newObjectAdded (PreparationSection* object)
     parent->getSynth()->processorInitQueue.try_enqueue([this, object]
                                                        {
                                                            SynthGuiInterface* _parent = findParentComponentOfClass<SynthGuiInterface>();
-                                                           object->node = _parent->getSynth()->addProcessor(std::move(object->getProcessorPtr()));
+                                                           object->setNodeAndPortInfo(_parent->getSynth()->addProcessor(std::move(object->getProcessorPtr())));
 
                                                            //last_proc.reset();
                                                        });
@@ -58,6 +64,8 @@ void ConstructionSite::newObjectAdded (PreparationSection* object)
 
 ConstructionSite::~ConstructionSite(void)
 {
+    removeMouseListener(&cableView);
+    removeChildComponent(&selectorLasso);
     freeObjects();
 }
 void ConstructionSite::paintBackground (juce::Graphics& g)
@@ -68,6 +76,8 @@ void ConstructionSite::paintBackground (juce::Graphics& g)
 
 void ConstructionSite::resized()
 {
+    cableView.setBounds(getLocalBounds());
+    cableView.updateCablePositions();
     SynthSection::resized();
 }
 
@@ -242,8 +252,7 @@ void ConstructionSite::mouseMove (const MouseEvent& eo)
     //DBG("site" + String(a.getMouseDownX()) +" " + String(a.getMouseDownY()));
     if (connect)
     {
-        lineEX = e.getEventRelativeTo(this).x;
-        lineEY = e.getEventRelativeTo(this).y;
+
 
         repaint();
     }
@@ -260,13 +269,14 @@ void ConstructionSite::mouseDown (const MouseEvent& eo)
     if(itemToSelect == nullptr)
     {
         preparationSelector.getLassoSelection().deselectAll();
-
+        DBG("mousedown empty space");
     } else
     {
-        DBG("mousedown");
+        DBG("mousedown on object");
     }
     addChildComponent(selectorLasso);
     selectorLasso.beginLasso(e, &preparationSelector);
+    //////Fake drag so the lasso will select anything we click and drag////////
     auto thisPoint = e.getPosition();
     thisPoint.addXY(10,10);
     selectorLasso.dragLasso(e.withNewPosition(thisPoint));
@@ -437,12 +447,13 @@ void ConstructionSite::mouseDown (const MouseEvent& eo)
 void ConstructionSite::mouseUp (const MouseEvent& eo)
 {
     //inLasso = false;
+DBG("mouseupconst");
     selectorLasso.endLasso();
     removeChildComponent(&selectorLasso);
     if (edittingComment) return;
 
     MouseEvent e = eo.getEventRelativeTo(this);
-
+    cableView.mouseUp(e);
     // Do nothing on right click mouse up
     if (e.mods.isRightButtonDown()) return;
 #if JUCE_MAC
@@ -497,20 +508,18 @@ void ConstructionSite::mouseDrag (const MouseEvent& e)
 {
     if (edittingComment) return;
 
+    cableView.mouseDrag(e);
     // Do nothing on right click drag
     if (e.mods.isRightButtonDown()) return;
 
 
 
 
-    if(e.mods.isCtrlDown()) {
+    if(e.mods.isShiftDown()) {
         selectorLasso.toFront(false);
         selectorLasso.dragLasso(e);
     }
 
-
-    lineEX = e.getEventRelativeTo(this).x;
-    lineEY = e.getEventRelativeTo(this).y;
 
     repaint();
 

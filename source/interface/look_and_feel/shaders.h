@@ -114,6 +114,9 @@ struct OpenGlWrapper {
   //std::vector<Broadcaster<void()>> audioThreadBroadcasters { totalNumParams };
   //using AudioThreadAction = juce::dsp::FixedSizeFunction<actionSize, void()>;
   using glInitAction  = juce::dsp::FixedSizeFunction<actionSize, void()>;
+
+
+
   moodycamel::ConcurrentQueue<glInitAction> initOpenGlComp { 20 };
   //moodycamel::ReaderWriterQueue
   std::vector<Component*> init_comp;

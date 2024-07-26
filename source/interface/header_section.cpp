@@ -52,12 +52,12 @@ void LogoSection::buttonClicked(Button* clicked_button) {
     listener->showAboutSection();
 }
 
-HeaderSection::HeaderSection() : SynthSection("header_section"), tab_offset_(0), body_(Shaders::kRoundedRectangleFragment) {
+HeaderSection::HeaderSection() : SynthSection("header_section"), tab_offset_(0), body_(new OpenGlQuad(Shaders::kRoundedRectangleFragment)) {
   //logo_section_ = std::make_unique<LogoSection>();
   //addSubSection(logo_section_.get());
   //logo_section_->addListener(this);
 
-    addOpenGlComponent(&body_);
+    addOpenGlComponent(body_);
     logo_section_ = std::make_unique<LogoSection>();
     logo_section_->setAlwaysOnTop(true);
     logo_section_->addListener(this);
@@ -161,9 +161,9 @@ void HeaderSection::resized() {
   int height = getHeight();
   int width = getWidth();
 
-    body_.setBounds(getLocalBounds());
-    body_.setRounding(findValue(Skin::kBodyRounding));
-    body_.setColor(findColour(Skin::kBody, true));
+    body_->setBounds(getLocalBounds());
+    body_->setRounding(findValue(Skin::kBodyRounding));
+    body_->setColor(findColour(Skin::kBody, true));
   int widget_margin = findValue(Skin::kWidgetMargin);
   int large_padding = findValue(Skin::kLargePadding);
 
