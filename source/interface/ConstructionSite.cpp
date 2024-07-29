@@ -8,7 +8,7 @@
 #include "synth_gui_interface.h"
 #include "Preparations.h"
 
-ConstructionSite::ConstructionSite( juce::ValueTree &v,  juce::UndoManager &um, OpenGlWrapper &open_gl) : SynthSection("Construction Site"),
+ConstructionSite::ConstructionSite(juce::ValueTree &v,  juce::UndoManager &um, OpenGlWrapper &open_gl) : SynthSection("Construction Site"),
                                                                                  tracktion::engine::ValueTreeObjectList<PreparationSection>(v),
                                                                                      state(v), undo(um), open_gl(open_gl),
                                                                                      preparationSelector(*this)
@@ -16,7 +16,8 @@ ConstructionSite::ConstructionSite( juce::ValueTree &v,  juce::UndoManager &um, 
     setWantsKeyboardFocus(true);
     addKeyListener(this);
     setSkinOverride(Skin::kConstructionSite);
-setInterceptsMouseClicks(false,true);
+    setInterceptsMouseClicks(false,true);
+
     prepFactory.Register(bitklavier::BKPreparationType::PreparationTypeDirect, DirectPreparation::createDirectSection);
     prepFactory.Register(bitklavier::BKPreparationType::PreparationTypeNostalgic, NostalgicPreparation::createNostalgicSection);
     prepFactory.Register(bitklavier::BKPreparationType::PreparationTypeKeymap, KeymapPreparation::createKeymapSection);
@@ -85,7 +86,14 @@ bool ConstructionSite::keyPressed (const juce::KeyPress& k, juce::Component* c)
 {
     int code = k.getKeyCode();
 
-    if (code == 68) //D Direct
+    if ((code == KeyPress::deleteKey) || (code == KeyPress::backspaceKey)) // Delete
+    {
+        for (PreparationSection* p : preparationSelector.getLassoSelection())
+        {
+            state.removeChild(p->state, undo);
+        }
+
+    } else if (code == 68) //D Direct
     {
         ValueTree t(IDs::PREPARATION);
 
