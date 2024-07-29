@@ -10,7 +10,7 @@
 class BKPort : public Button
 {
 public:
-    BKPort(bool isIn);
+    BKPort(bool isIn, AudioProcessorGraph::NodeAndChannel pinToUse);
     class Listener
     {
     public:

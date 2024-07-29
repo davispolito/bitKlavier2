@@ -141,13 +141,21 @@ void SynthBase::setMpeEnabled(bool enabled) {
   midi_manager_->setMpeEnabled(enabled);
 }
 
+juce::AudioProcessorGraph::NodeID SynthBase::getNextUID() noexcept
+{
+    return juce::AudioProcessorGraph::NodeID (++(lastUID.uid));
+}
+
 juce::AudioProcessorGraph::Node::Ptr SynthBase::addProcessor(std::unique_ptr<juce::AudioProcessor> processor)
 {
     //engine_->processors.push_back(processor);
-
     processor->prepareToPlay(engine_->getSampleRate(), engine_->getBufferSize());
-    return engine_->processorGraph->addNode(std::move(processor));
+    return engine_->processorGraph->addNode(std::move(processor), getNextUID());
+}
 
+juce::AudioProcessorGraph::Node * SynthBase::getNodeForId(AudioProcessorGraph::NodeID id)
+{
+return engine_->processorGraph->getNodeForId(id);
 }
 void SynthBase::processAudio(AudioSampleBuffer* buffer, int channels, int samples, int offset) {
   if (expired_)

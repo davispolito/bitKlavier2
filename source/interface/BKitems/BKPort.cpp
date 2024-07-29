@@ -4,8 +4,12 @@
 
 #include "BKPort.h"
 #include "paths.h"
-BKPort::BKPort(bool isIn) : isInput(isIn), Button("port"), image_component_(new OpenGlImageComponent())
+#include "synth_gui_interface.h"
 
+BKPort::BKPort(bool isIn, AudioProcessorGraph::NodeAndChannel pinToUse) : isInput(isIn),
+Button("port"),
+image_component_(new OpenGlImageComponent()),
+pin(pinToUse)
 {
     setInterceptsMouseClicks(true, true);
     setAlwaysOnTop(true);
@@ -13,6 +17,31 @@ BKPort::BKPort(bool isIn) : isInput(isIn), Button("port"), image_component_(new 
     auto path = Paths::portPaths();
     port_fill = path.getUnchecked(1);
     port_outline = path.getUnchecked(0);
+    SynthGuiInterface* parent = findParentComponentOfClass<SynthGuiInterface>();
+    if (auto node = parent->getSynth()->getNodeForId(pin.nodeID))
+    {
+        String tip;
+
+        if (pin.isMIDI())
+        {
+            tip = isInput ? "MIDI Input"
+                          : "MIDI Output";
+        }
+        else
+        {
+            auto& processor = *node->getProcessor();
+            auto channel = processor.getOffsetInBusBufferForAbsoluteChannelIndex (isInput, pin.channelIndex, busIdx);
+
+            if (auto* bus = processor.getBus (isInput, busIdx))
+                tip = bus->getName() + ": " + AudioChannelSet::getAbbreviatedChannelTypeName (bus->getCurrentLayout().getTypeOfChannel (channel));
+            else
+                tip = (isInput ? "Main Input: "
+                               : "Main Output: ") + String (pin.channelIndex + 1);
+
+        }
+
+        setTooltip (tip);
+    }
 }
 //void BKPort::mouseDown(const MouseEvent& e)
 //{

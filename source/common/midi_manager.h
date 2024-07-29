@@ -142,6 +142,8 @@ class MidiManager : public MidiInputCallback {
     };
     juce::MidiMessageCollector midi_collector_;
     std::vector<String> enabledMidiInputs;
+
+
   protected:
     void readMpeMessage(const juce::MidiMessage& message);
 

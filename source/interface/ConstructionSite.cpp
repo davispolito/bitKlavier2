@@ -19,8 +19,7 @@ ConstructionSite::ConstructionSite( juce::ValueTree &v,  juce::UndoManager &um, 
     setSkinOverride(Skin::kConstructionSite);
 setInterceptsMouseClicks(false,true);
 //addAndMakeVisible (cableView);
-cableView.toBack();
-addSubSection(&cableView);
+
 //addMouseListener (&cableView, true);
     prepFactory.Register(bitklavier::BKPreparationType::PreparationTypeDirect, DirectPreparation::createDirectSection);
     prepFactory.Register(bitklavier::BKPreparationType::PreparationTypeNostalgic, NostalgicPreparation::createNostalgicSection);
@@ -30,6 +29,8 @@ addSubSection(&cableView);
     prepFactory.Register(bitklavier::BKPreparationType::PreparationTypeBlendronic, BlendronicPreparation::createBlendronicSection);
     prepFactory.Register(bitklavier::BKPreparationType::PreparationTypeTempo, TempoPreparation::createTempoSection);
     prepFactory.Register(bitklavier::BKPreparationType::PreparationTypeTuning, TuningPreparation::createTuningSection);
+    cableView.toBack();
+    addSubSection(&cableView);
 }
 PreparationSection* ConstructionSite::createNewObject (const juce::ValueTree& v)
 {
