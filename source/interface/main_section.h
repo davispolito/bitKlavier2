@@ -17,7 +17,7 @@ public:
         //virtual void showAboutSection() = 0;
     };
 
-    MainSection(juce::ValueTree v, juce::UndoManager &um, OpenGlWrapper &open_gl);
+    MainSection(juce::ValueTree v, juce::UndoManager &um, OpenGlWrapper &open_gl, SynthGuiData * data);
 
     void paintBackground(Graphics& g) override;
     void resized() override;

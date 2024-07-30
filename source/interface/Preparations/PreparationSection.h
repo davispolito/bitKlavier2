@@ -39,6 +39,7 @@ public:
                                         const MouseEvent& e) = 0;
         virtual void dragConnector(const MouseEvent& e) = 0;
         virtual void endDraggingConnector(const MouseEvent& e) = 0;
+        virtual void _update() = 0;
     };
 
     void beginConnectorDrag(AudioProcessorGraph::NodeAndChannel source,
@@ -85,6 +86,61 @@ public:
     juce::ComponentBoundsConstrainer constrainer;
     OwnedArray<BKPort> ports;
 
+    void update()
+    {
+//        const AudioProcessorGraph::Node::Ptr f (graph.graph.getNodeForId (pluginID));
+//        jassert (f != nullptr);
+//
+//        auto& processor = *f->getProcessor();
+//
+//        numIns = processor.getTotalNumInputChannels();
+//        if (processor.acceptsMidi())
+//            ++numIns;
+//
+//        numOuts = processor.getTotalNumOutputChannels();
+//        if (processor.producesMidi())
+//            ++numOuts;
+//
+//        int w = 100;
+//        int h = 60;
+//
+//        w = jmax (w, (jmax (numIns, numOuts) + 1) * 20);
+//
+//        const int textWidth = font.getStringWidth (processor.getName());
+//        w = jmax (w, 16 + jmin (textWidth, 300));
+//        if (textWidth > 300)
+//            h = 100;
+//
+//        setSize (w, h);
+//        setName (processor.getName() + formatSuffix);
+//
+//        {
+//            auto p = graph.getNodePosition (pluginID);
+//            setCentreRelative ((float) p.x, (float) p.y);
+//        }
+//
+//        if (numIns != numInputs || numOuts != numOutputs)
+//        {
+//            numInputs = numIns;
+//            numOutputs = numOuts;
+//
+//            pins.clear();
+//
+//            for (int i = 0; i < processor.getTotalNumInputChannels(); ++i)
+//                addAndMakeVisible (pins.add (new PinComponent (panel, { pluginID, i }, true)));
+//
+//            if (processor.acceptsMidi())
+//                addAndMakeVisible (pins.add (new PinComponent (panel, { pluginID, AudioProcessorGraph::midiChannelIndex }, true)));
+//
+//            for (int i = 0; i < processor.getTotalNumOutputChannels(); ++i)
+//                addAndMakeVisible (pins.add (new PinComponent (panel, { pluginID, i }, false)));
+//
+//            if (processor.producesMidi())
+//                addAndMakeVisible (pins.add (new PinComponent (panel, { pluginID, AudioProcessorGraph::midiChannelIndex }, false)));
+//
+//            resized();
+//        }
+    }
 
     void changeListenerCallback(ChangeBroadcaster *source)
     {
@@ -134,6 +190,10 @@ public:
     void mouseDrag (const juce::MouseEvent& e) override
     {
         myDragger.dragComponent (this, e, &constrainer);
+        for (auto listener: listeners_)
+        {
+            listener->_update();
+        }
     }
 
     void mouseDoubleClick(const juce::MouseEvent &event) override
@@ -177,10 +237,53 @@ public:
         node = _node;
         pluginID = node->nodeID;
         int i = 0;
-        for (auto * port : ports)
-        {
-            port->pin = { pluginID, i++ };
-        }
+        auto& processor = *_node->getProcessor();
+
+        numIns = processor.getTotalNumInputChannels();
+//        if (processor.acceptsMidi())
+//            ++numIns;
+
+        numOuts = processor.getTotalNumOutputChannels();
+//        if (processor.producesMidi())
+//            ++numOuts;
+        MessageManager::callAsync (
+                [safeComp = Component::SafePointer<PreparationSection> (this)]
+                {
+                    SynthGuiInterface* parent = safeComp->findParentComponentOfClass<SynthGuiInterface>();
+                    auto& processor = *safeComp->node->getProcessor();
+                    for (int i = 0; i < processor.getTotalNumInputChannels(); ++i)
+                        safeComp->ports.add (new BKPort (true, { safeComp->pluginID, i }, parent));
+
+                    if(processor.acceptsMidi())
+                        safeComp->ports.add (new BKPort (true, {safeComp-> pluginID, AudioProcessorGraph::midiChannelIndex}, parent));
+
+                    for(int i = 0; i < processor.getTotalNumInputChannels(); ++i)
+                        safeComp->ports.add (new BKPort (false, {safeComp->pluginID, i}, parent));
+
+                    if(processor.producesMidi())
+                        safeComp->ports.add (new BKPort (false, {safeComp->pluginID, AudioProcessorGraph::midiChannelIndex}, parent));
+
+
+
+
+                        safeComp->_open_gl.initOpenGlComp.try_enqueue([ safeComp] {
+                            for (auto *port: safeComp->ports) {
+
+                                port->getImageComponent()->init(safeComp->_open_gl);
+                                MessageManagerLock mm;
+                                safeComp->addOpenGlComponent(port->getImageComponent(), true, true);
+                                safeComp->addAndMakeVisible(port);
+                                port->addListener(safeComp);
+                            }
+                            MessageManagerLock mm;
+                            safeComp->resized();
+                        });
+
+
+                });
+
+
+
 
     }
     juce::AudioProcessorGraph::Node::Ptr node;
@@ -191,6 +294,8 @@ public:
 //std::shared_ptr<juce::AudioProcessor> _proc;
 protected:
     std::shared_ptr<PreparationPopup> popup_view;
+    int numIns, numOuts;
+    int portSize = 16;
 private:
     bool isSelected = true;
 

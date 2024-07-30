@@ -6,7 +6,7 @@
 #include "paths.h"
 #include "synth_gui_interface.h"
 
-BKPort::BKPort(bool isIn, AudioProcessorGraph::NodeAndChannel pinToUse) : isInput(isIn),
+BKPort::BKPort(bool isIn, AudioProcessorGraph::NodeAndChannel pinToUse, SynthGuiInterface* parent) : isInput(isIn),
 Button("port"),
 image_component_(new OpenGlImageComponent()),
 pin(pinToUse)
@@ -17,7 +17,7 @@ pin(pinToUse)
     auto path = Paths::portPaths();
     port_fill = path.getUnchecked(1);
     port_outline = path.getUnchecked(0);
-    SynthGuiInterface* parent = findParentComponentOfClass<SynthGuiInterface>();
+
     if (auto node = parent->getSynth()->getNodeForId(pin.nodeID))
     {
         String tip;

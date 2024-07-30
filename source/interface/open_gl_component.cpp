@@ -58,6 +58,8 @@ OpenGlComponent::~OpenGlComponent() {
 
 bool OpenGlComponent::setViewPort(Component* component, Rectangle<int> bounds, OpenGlWrapper& open_gl) {
   FullInterface* top_level = component->findParentComponentOfClass<FullInterface>();
+  if(top_level == nullptr)
+      return false;
   float scale = open_gl.display_scale;
   float resize_scale = top_level->getResizingScale();
   float render_scale = 1.0f;

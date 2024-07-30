@@ -77,13 +77,16 @@ public:
 
     bool acceptsMidi() const override
     {
-        return true;
+        return false;
     }
     bool producesMidi() const override { return true; }
-    bool isMidiEffect() const override { return true; }
+    bool isMidiEffect() const override { return false; }
     bool hasEditor() const override { return false; }
     juce::AudioProcessorEditor* createEditor() override { return nullptr; }
-
+    juce::AudioProcessor::BusesProperties  keymapBusLayout()
+    {
+        return BusesProperties();
+    }
     bool setMidiDevice(juce::AudioDeviceManager& deviceManager, String identifier)
     {
         deviceManager.addMidiInputDeviceCallback(identifier, static_cast<juce::MidiInputCallback*>(_midi.get()));

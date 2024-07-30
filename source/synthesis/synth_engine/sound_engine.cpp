@@ -25,7 +25,7 @@ namespace bitklavier {
                                 processorGraph(new juce::AudioProcessorGraph())
                                 {
     //SoundEngine::init();
-
+    processorGraph->clear();
   }
 
   SoundEngine::~SoundEngine() {

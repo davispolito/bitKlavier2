@@ -132,7 +132,18 @@ public:
 
     void processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages) override;
 
+    bool acceptsMidi() const override
+    {
+        return true;
+    }
 
+
+    juce::AudioProcessor::BusesProperties  directBusLayout()
+    {
+        return BusesProperties()
+                .withOutput ("Output1", juce::AudioChannelSet::stereo(), true);
+    }
+    bool isBusesLayoutSupported (const juce::AudioProcessor::BusesLayout& layouts) const override;
     bool hasEditor() const override { return false; }
     juce::AudioProcessorEditor* createEditor() override { return nullptr; }
 
@@ -142,4 +153,3 @@ private:
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (DirectProcessor)
 };
-

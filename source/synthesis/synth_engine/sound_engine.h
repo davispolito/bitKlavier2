@@ -133,21 +133,31 @@ namespace bitklavier {
       void initialiseGraph()
       {
           processorGraph->clear();
-
+          lastUID = juce::AudioProcessorGraph::NodeID(0);
           //audioInputNode  = mainProcessor->addNode (std::make_unique<AudioGraphIOProcessor> (AudioGraphIOProcessor::audioInputNode));
-          audioOutputNode = processorGraph->addNode (std::make_unique<AudioGraphIOProcessor> (AudioGraphIOProcessor::audioOutputNode));
-          midiInputNode   = processorGraph->addNode (std::make_unique<AudioGraphIOProcessor> (AudioGraphIOProcessor::midiInputNode));
-          midiOutputNode  = processorGraph->addNode (std::make_unique<AudioGraphIOProcessor> (AudioGraphIOProcessor::midiOutputNode));
+          audioOutputNode = processorGraph->addNode (std::make_unique<AudioGraphIOProcessor> (AudioGraphIOProcessor::audioOutputNode),getNextUID());
+          midiInputNode   = processorGraph->addNode (std::make_unique<AudioGraphIOProcessor> (AudioGraphIOProcessor::midiInputNode),getNextUID());
+          midiOutputNode  = processorGraph->addNode (std::make_unique<AudioGraphIOProcessor> (AudioGraphIOProcessor::midiOutputNode),getNextUID());
 
           connectAudioNodes();
           connectMidiNodes();
       }
 
+      juce::AudioProcessorGraph::NodeID lastUID;
 
+      juce::AudioProcessorGraph::NodeID getNextUID() noexcept
+      {
+          return juce::AudioProcessorGraph::NodeID (++(lastUID.uid));
+      }
+
+      Node::Ptr addNode (std::unique_ptr<AudioProcessor> newProcessor)
+      {
+          return processorGraph->addNode(std::move(newProcessor), getNextUID());
+      }
 
       void checkOversampling();
       std::vector<std::shared_ptr<AudioProcessor>> processors;
-      std::unique_ptr<juce::AudioProcessorGraph> processorGraph;
+      std::unique_ptr<juce::AudioProcessorGraph>  processorGraph;
       Node::Ptr audioOutputNode;
       Node::Ptr midiInputNode;
       Node::Ptr midiOutputNode;

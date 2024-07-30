@@ -4,8 +4,11 @@
 
 
 #include "DirectProcessor.h"
+#include "common.h"
+DirectProcessor::DirectProcessor() : PluginBase(nullptr, directBusLayout())
+{
 
-DirectProcessor::DirectProcessor() = default;
+}
 
 void DirectProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
@@ -25,7 +28,26 @@ void DirectProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 //    gain.process (buffer);
 //}
 
+
+bool DirectProcessor::isBusesLayoutSupported (const juce::AudioProcessor::BusesLayout& layouts) const
+{
+//    // only supports mono and stereo (for now)
+//    if (layouts.getMainOutputChannelSet() != juce::AudioChannelSet::mono()
+//        && layouts.getMainOutputChannelSet() != juce::AudioChannelSet::stereo())
+//        return false;
+//
+//    // input and output layout must be the same
+//    if (layouts.getMainOutputChannelSet() != layouts.getMainInputChannelSet())
+//        return false;
+
+    return true;
+}
+
 void DirectProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
 {
-
+    for(auto mi : midiMessages)
+    {
+        auto message = mi.getMessage();
+        DBG(bitklavier::printMidi(message, "direct"));
+    }
 }

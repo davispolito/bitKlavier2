@@ -7,10 +7,11 @@
 
 #include "open_gl_image_component.h"
 #include "common.h"
+class SynthGuiInterface;
 class BKPort : public Button
 {
 public:
-    BKPort(bool isIn, AudioProcessorGraph::NodeAndChannel pinToUse);
+    BKPort(bool isIn, AudioProcessorGraph::NodeAndChannel pinToUse, SynthGuiInterface* parent);
     class Listener
     {
     public:
@@ -85,8 +86,14 @@ public:
 
         }
 //        Rectangle<float> bounds = getLocalBounds().toFloat();
-        port_outline.applyTransform(port_outline.getTransformToScaleToFit(bounds,true));
-        port_fill.applyTransform(port_fill.getTransformToScaleToFit(bounds,true));
+
+        port_outline.applyTransform(port_outline.getTransformToScaleToFit(bounds,true).rotated(isInput ? pin.isMIDI()
+                                                                                                         ? (juce::MathConstants<float>::pi / 2) :
+                                                                                                         juce::MathConstants<float>::pi : pin.isMIDI() ? 3 * juce::MathConstants<float>::pi / 2 : 0, bounds.getWidth()/2, bounds.getHeight()/2));
+
+        port_fill.applyTransform(port_fill.getTransformToScaleToFit(bounds,true).rotated(isInput ? pin.isMIDI()
+                                                                                                   ? (juce::MathConstants<float>::pi / 2) :
+                                                                                                   juce::MathConstants<float>::pi : pin.isMIDI() ? 3 * juce::MathConstants<float>::pi / 2 : 0, bounds.getWidth()/2, bounds.getHeight()/2));
 
 
 

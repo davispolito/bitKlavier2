@@ -178,6 +178,8 @@ public:
         distanceFromStart = p1.getDistanceFrom (p);
         distanceFromEnd   = p2.getDistanceFrom (p);
     }
+
+
 private:
     float getCableThickness() const;
     void drawCableShadow (Graphics& g, float thickness);

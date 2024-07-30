@@ -7,8 +7,8 @@
 #include "ConstructionSite.h"
 #include "synth_gui_interface.h"
 #include "Preparations.h"
-
-ConstructionSite::ConstructionSite( juce::ValueTree &v,  juce::UndoManager &um, OpenGlWrapper &open_gl) : SynthSection("Construction Site"),
+#include "sound_engine.h"
+ConstructionSite::ConstructionSite( juce::ValueTree &v,  juce::UndoManager &um, OpenGlWrapper &open_gl, SynthGuiData* data) : SynthSection("Construction Site"),
                                                                                  tracktion::engine::ValueTreeObjectList<PreparationSection>(v),
                                                                                      state(v), undo(um), open_gl(open_gl),
                                                                                      cableView(*this),
@@ -17,9 +17,9 @@ ConstructionSite::ConstructionSite( juce::ValueTree &v,  juce::UndoManager &um, 
     setWantsKeyboardFocus(true);
     addKeyListener(this);
     setSkinOverride(Skin::kConstructionSite);
-setInterceptsMouseClicks(false,true);
+    setInterceptsMouseClicks(false,true);
 //addAndMakeVisible (cableView);
-
+    data->synth->getEngine()->processorGraph->addChangeListener(this);
 //addMouseListener (&cableView, true);
     prepFactory.Register(bitklavier::BKPreparationType::PreparationTypeDirect, DirectPreparation::createDirectSection);
     prepFactory.Register(bitklavier::BKPreparationType::PreparationTypeNostalgic, NostalgicPreparation::createNostalgicSection);
@@ -41,10 +41,11 @@ PreparationSection* ConstructionSite::createNewObject (const juce::ValueTree& v)
     addSubSection(s);
     Skin default_skin;
     s->setSkinValues(default_skin, false);
+    s->setDefaultColor();
     s->setSizeRatio(size_ratio_);
     s->setCentrePosition(s->x, s->y);
     s->setSize(s->width, s->height);
-    s->setDefaultColor();
+
     s->selectedSet = &(preparationSelector.getLassoSelection());
     preparationSelector.getLassoSelection().addChangeListener(s);
     s->addListener(&cableView);
@@ -63,6 +64,8 @@ void ConstructionSite::newObjectAdded (PreparationSection* object)
                                                        });
 }
 
+
+
 ConstructionSite::~ConstructionSite(void)
 {
     removeMouseListener(&cableView);
@@ -74,6 +77,8 @@ void ConstructionSite::paintBackground (juce::Graphics& g)
     paintBody(g);
     paintChildrenBackgrounds(g);
 }
+
+
 
 void ConstructionSite::resized()
 {
@@ -525,6 +530,37 @@ void ConstructionSite::mouseDrag (const MouseEvent& e)
     repaint();
 
 }
+
+void ConstructionSite::updateComponents()
+    {
+        SynthGuiInterface* parent = findParentComponentOfClass<SynthGuiInterface>();
+        for (int i = objects.size(); --i >= 0;) {
+            if (parent->getSynth()->getNodeForId(objects.getUnchecked(i)->pluginID) == nullptr) {
+                state.removeChild(objects.getUnchecked(i)->state, nullptr);
+            }
+        }
+
+
+
+
+        for (auto* fc : objects)
+            fc->update();
+
+        cableView.updateComponents();
+//        for (auto* f : graph.graph.getNodes())
+//        {
+//            if (getComponentForPlugin (f->nodeID) == nullptr)
+//            {
+//                auto* comp = nodes.add (new PluginComponent (*this, f->nodeID));
+//                addAndMakeVisible (comp);
+//                comp->update();
+//            }
+//        }
+
+
+
+    }
+
 
 
 

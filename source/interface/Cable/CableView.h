@@ -41,6 +41,9 @@ public:
     juce::Point<float> getCableMousePosition() const;
     void updateCablePositions();
 
+    void updateComponents();
+
+    void _update();
     //void portClicked(const juce::Point<int>& pos, juce::AudioProcessorGraph::Node::Ptr node) override;
 
     void paintBackground(juce::Graphics &g)
@@ -52,6 +55,14 @@ public:
 //        }
     }
 
+    Cable* getComponentForConnection (const AudioProcessorGraph::Connection& conn) const
+    {
+        for (auto* cc : cables)
+            if (cc->connection == conn)
+                return cc;
+
+        return nullptr;
+    }
     juce::Point<int> currentPort;
     void dragConnector (const MouseEvent& e) override;
 
@@ -64,11 +75,13 @@ public:
     void endDraggingConnector (const MouseEvent& e) override;
 
 
+
+    OwnedArray<Cable> cables;
 private:
 //    void timerCallback() override;
 
     const ConstructionSite& site;
-    OwnedArray<Cable> cables;
+
 
     float scaleFactor = 1.0f;
     bool isDraggingCable = false;

@@ -34,20 +34,45 @@ void PreparationSection::paintBackground(Graphics& g)
 //    g.restoreState();
 }
 
-void PreparationSection:: resized()
-{
+void PreparationSection:: resized() {
     Rectangle<float> bounds = getLocalBounds().toFloat();
     int item_padding_y = kItemPaddingY * size_ratio_;
     int item_height = getHeight() - 2 * item_padding_y;
     int item_padding_x = kItemPaddingX * size_ratio_;
     int item_width = getWidth() - 2 * item_padding_x;
     auto newBounds = getBoundsInParent();
-//    constrainer.checkBounds (newBounds, getBoundsInParent(),
-//        getParentComponent()->getLocalBounds(),
-//        false, false, false, false);
-    //DBG("item_padding x " + String(item_padding_x) + "item_padding y" + String(item_padding_y));
-    item->setBounds(item_padding_y, item_padding_y, item_width,item_height) ;
-    //SynthSection::resized();
+
+    item->setBounds(item_padding_y, item_padding_y, item_width, item_height);
+
+    if (auto *processor = getProcessor())
+    {
+        for (auto *port: ports) {
+            const bool isInput = port->isInput;
+            auto channelIndex = port->pin.channelIndex;
+            int busIdx = 0;
+            processor->getOffsetInBusBufferForAbsoluteChannelIndex(isInput, channelIndex, busIdx);
+
+            int total = isInput ? numIns : numOuts;
+            int index = port->pin.isMIDI() ? (total - 1) : channelIndex;
+
+            auto totalSpaces = static_cast<float> (total) +
+                               (static_cast<float> (jmax(0, processor->getBusCount(isInput) - 1)) * 0.5f);
+            auto indexPos = static_cast<float> (index) + (static_cast<float> (busIdx) * 0.5f);
+            if( port->pin.isMIDI())
+            {
+                port->setBounds(proportionOfWidth((1.0f + indexPos) / (totalSpaces + 1.0f)) - portSize / 2,
+                                port->isInput ? (getHeight() - portSize):0 ,
+                                portSize, portSize);
+            }
+            else {
+                port->setBounds(port->isInput ? 0 : (getWidth() - portSize),
+                                proportionOfHeight((1.0f + indexPos) / (totalSpaces + 1.0f)) - portSize / 2,
+                                portSize, portSize);
+            }
+        }
+    }
+
+    SynthSection::resized();
 }
 PreparationSection::~PreparationSection()
 {

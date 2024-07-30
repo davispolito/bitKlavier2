@@ -4,6 +4,8 @@
 
 #include "CableView.h"
 #include "ConstructionSite.h"
+#include "sound_engine.h"
+
 CableView::CableView (ConstructionSite &site) :site(site), /*pathTask (*this),*/ SynthSection("cableView")
 {
     setInterceptsMouseClicks (false,false);
@@ -63,7 +65,7 @@ void CableView::beginConnectorDrag (AudioProcessorGraph::NodeAndChannel source,
     draggingConnector->setOutput (dest);
 
     addAndMakeVisible (draggingConnector.get());
-    draggingConnector->toFront (false);
+    //draggingConnector->toFront (false);
 
     dragConnector (e);
 }
@@ -170,6 +172,8 @@ void CableView::endDraggingConnector (const MouseEvent& e)
             connection.destination = pin->pin;
         }
 //// add connection to actual rendered connections
+        SynthGuiInterface* parent = findParentComponentOfClass<SynthGuiInterface>();
+        parent->getSynth()->addConnection(connection);
 //        graph.graph.addConnection (connection);
     }
 }
@@ -181,6 +185,46 @@ void CableView::updateCablePositions()
     {
         cable->updateStartPoint();
         cable->updateEndPoint();
+    }
+}
+
+void CableView::updateComponents()
+{
+    SynthGuiInterface* parent = findParentComponentOfClass<SynthGuiInterface>();
+    for (int i = cables.size(); --i >= 0;)
+    {
+        if (! parent->getSynth()->getEngine()->processorGraph->isConnected (cables.getUnchecked (i)->connection))
+        {
+            cables.remove (i);
+        }
+    }
+
+    for (auto* cc : cables)
+        cc->update();
+
+    for (auto& c : parent->getSynth()->getEngine()->processorGraph->getConnections())
+    {
+        if (getComponentForConnection (c) == nullptr)
+        {
+            auto* comp = cables.add (new Cable(&site, *this));
+            addChildComponent(comp, 0);
+
+            addOpenGlComponent(comp->getImageComponent(), true, false);
+            site.open_gl.initOpenGlComp.try_enqueue([this, comp] {
+                comp->getImageComponent()->init(site.open_gl);
+                MessageManager::callAsync(
+                        [safeComp = Component::SafePointer<Cable>(comp)] {
+                            if (auto *_comp = safeComp.getComponent()) {
+                                _comp->setVisible(true);
+                                _comp->getImageComponent()->setVisible(true);
+                            }
+                        });
+            });
+            addAndMakeVisible (comp);
+
+            comp->setInput (c.source);
+            comp->setOutput (c.destination);
+        }
     }
 }
 
@@ -222,5 +266,10 @@ void CableView::dragConnector(const MouseEvent& e)
         }
 }
 
+
+void CableView::_update()
+{
+    updateComponents();
+}
 
 

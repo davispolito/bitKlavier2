@@ -13,11 +13,12 @@ class SynthGuiInterface;
 typedef Loki::Factory<PreparationSection, int,  juce::ValueTree,  OpenGlWrapper&> PreparationFactory;
 class ConstructionSite : public SynthSection,
                          public tracktion::engine::ValueTreeObjectList<PreparationSection>,private KeyListener,
-                         public DragAndDropContainer
+                         public DragAndDropContainer,
+                         public ChangeListener
 
 {
 public:
-    ConstructionSite(juce::ValueTree &v, juce::UndoManager &um, OpenGlWrapper &open_gl);
+    ConstructionSite(juce::ValueTree &v, juce::UndoManager &um, OpenGlWrapper &open_gl, SynthGuiData* data);
 
     ~ConstructionSite(void);
 
@@ -30,6 +31,12 @@ public:
 
     void addItem(bitklavier::BKPreparationType type, bool center = false);
 
+    void changeListenerCallback(juce::ChangeBroadcaster *source) override
+    {
+        updateComponents();
+    }
+
+    void updateComponents();
 
     bool isSuitableType (const juce::ValueTree& v) const override
     {

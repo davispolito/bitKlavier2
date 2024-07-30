@@ -382,15 +382,16 @@ void SynthSection::destroyOpenGlComponents(OpenGlWrapper& open_gl) {
 void SynthSection::destroyOpenGlComponent(OpenGlComponent const& open_gl_component, OpenGlWrapper& open_gl)
 {
     //moves the component to the end of the array
+    //erases it from the vector
+    const MessageManagerLock mmLock;
     auto new_logical_end = std::remove_if(open_gl_components_.begin(), open_gl_components_.end(), [&](std::shared_ptr<OpenGlComponent> const& p)
     {
         return *p == open_gl_component;
     });
-    //calls destroy function
-    new_logical_end->get()->destroy(open_gl);
-
-    //erases it from the vector
-    const MessageManagerLock mmLock;
+//    //calls destroy function
+//    new_logical_end->get()->destroy(open_gl);
+//
+//
     open_gl_components_.erase(new_logical_end,open_gl_components_.end());
 
 
