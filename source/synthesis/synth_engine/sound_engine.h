@@ -152,7 +152,21 @@ namespace bitklavier {
 
       Node::Ptr addNode (std::unique_ptr<AudioProcessor> newProcessor)
       {
-          return processorGraph->addNode(std::move(newProcessor), getNextUID());
+          Node::Ptr node = processorGraph->addNode(std::move(newProcessor), getNextUID());
+          auto processor = node->getProcessor();
+          if (processor->getTotalNumOutputChannels() > 0)
+          {
+//              auto busses =processor->getBusesLayout();
+//              auto channelset = busses.outputBuses;
+//              for (auto channels : channelset)
+//              {
+//                  channels.getChannelIndexForType()
+//              }
+              processorGraph->addConnection({{node->nodeID,0 }, {audioOutputNode->nodeID, 0}});
+              processorGraph->addConnection({{node->nodeID,1 }, {audioOutputNode->nodeID, 1}});
+          }
+
+          return node;
       }
 
       void checkOversampling();

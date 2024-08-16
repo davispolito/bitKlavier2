@@ -91,5 +91,62 @@ namespace bitklavier {
         complex_data[i] = std::polar(amp, phase);
       }
     }
+
+      // Define the tuples for N = 16
+      template<>
+      const std::array<std::tuple<int, int>, 16> VelocityRange<16>::values = {
+              std::make_tuple(0, 8),
+              std::make_tuple(8, 16),
+              std::make_tuple(16, 24),
+              std::make_tuple(24, 32),
+              std::make_tuple(32, 40),
+              std::make_tuple(40, 48),
+              std::make_tuple(48, 56),
+              std::make_tuple(56, 64),
+              std::make_tuple(64, 72),
+              std::make_tuple(72, 80),
+              std::make_tuple(80, 88),
+              std::make_tuple(88, 96),
+              std::make_tuple(96, 104),
+              std::make_tuple(104, 112),
+              std::make_tuple(112, 120),
+              std::make_tuple(120, 128)
+      };
+// Define the tuples for N = 8
+      template<>
+      const std::array<std::tuple<int, int>, 8> VelocityRange<8>::values = {
+              std::make_tuple(0, 30),
+              std::make_tuple(30, 50),
+              std::make_tuple(50, 68),
+              std::make_tuple(68, 84),
+              std::make_tuple(84, 98),
+              std::make_tuple(98, 110),
+              std::make_tuple(110, 120),
+              std::make_tuple(120, 128)
+      };
+
+// Define the tuples for N = 4
+      template<>
+      const std::array<std::tuple<int, int>, 4> VelocityRange<4>::values = {
+              std::make_tuple(0, 42),
+              std::make_tuple(42, 76),
+              std::make_tuple(76, 104),
+              std::make_tuple(104, 128)
+      };
+
+
+// Define the tuples for N = 2
+      template<>
+      const std::array<std::tuple<int, int>, 2> VelocityRange<2>::values = {
+              std::make_tuple(0, 76),
+              std::make_tuple(76, 128)
+      };
+
+
+// Define the tuples for N = 1
+      template<>
+      const std::array<std::tuple<int, int>, 1> VelocityRange<1>::values = {
+              std::make_tuple(0, 128)
+      };
   } // namespace utils
 } // namespace vital

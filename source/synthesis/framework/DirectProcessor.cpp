@@ -5,15 +5,19 @@
 
 #include "DirectProcessor.h"
 #include "common.h"
+#include "Synthesiser/Sample.h"
 DirectProcessor::DirectProcessor() : PluginBase(nullptr, directBusLayout())
 {
-
+    for (int i = 0; i < 300; i++)
+    {
+        synth.addVoice(new BKSamplerVoice());
+    }
 }
 
 void DirectProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
     const auto spec = juce::dsp::ProcessSpec { sampleRate, (uint32_t) samplesPerBlock, (uint32_t) getMainBusNumInputChannels() };
-
+    synth.setCurrentPlaybackSampleRate(sampleRate);
     gain.prepare (spec);
     gain.setRampDurationSeconds (0.05);
 }
@@ -48,6 +52,10 @@ void DirectProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::Midi
     for(auto mi : midiMessages)
     {
         auto message = mi.getMessage();
+
         DBG(bitklavier::printMidi(message, "direct"));
     }
+    buffer.clear();
+    synth.renderNextBlock (buffer, midiMessages,
+                           0, buffer.getNumSamples());
 }

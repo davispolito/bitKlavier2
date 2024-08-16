@@ -46,6 +46,10 @@ public:
 //    }
     // Public function definitions for the DirectPreparation class, which override functions
     // in the PreparationSection base class
+    void addSoundSet(juce::ReferenceCountedArray<BKSamplerSound<juce::AudioFormatReader>>* s) override
+    {
+        proc.addSoundSet(s);
+    }
     std::shared_ptr<SynthSection> getPrepPopup() override;
     void resized() override;
     void paintBackground(juce::Graphics &g);

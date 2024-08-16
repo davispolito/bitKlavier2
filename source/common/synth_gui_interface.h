@@ -25,7 +25,11 @@ class AudioDeviceManager { };
 
 #endif
 #include "templates/Factory.h"
+#include "tracktion_engine.h"
+#include "SampleLoadManager.h"
+#include "UserPreferences.h"
 class FullInterface;
+
 
 struct SynthGuiData {
   SynthGuiData(SynthBase* synth_base);
@@ -55,9 +59,11 @@ class SynthGuiInterface {
     void externalPresetLoaded(File preset);
     void setGuiSize(float scale);
     FullInterface* getGui() { return gui_.get(); }
-
-  protected:
+    UserPreferencesWrapper userPreferences;
     SynthBase* synth_;
+    SampleLoadManager sampleLoadManager ;
+  protected:
+
 
     std::unique_ptr<FullInterface> gui_;
   

@@ -10,6 +10,9 @@
 #include <chowdsp_plugin_utils/chowdsp_plugin_utils.h>
 #include <chowdsp_sources/chowdsp_sources.h>
 #include <chowdsp_plugin_state/chowdsp_plugin_state.h>
+#include "Synthesiser/BKSynthesiser.h"
+#include "Synthesiser/Sample.h"
+
 struct DirectParams : chowdsp::ParamHolder
 {
 
@@ -137,6 +140,11 @@ public:
         return true;
     }
 
+    void addSoundSet(juce::ReferenceCountedArray<BKSamplerSound<juce::AudioFormatReader>>* s)
+    {
+        synth.addSoundSet(s);
+    }
+//    truetruevoid addSamples();
 
     juce::AudioProcessor::BusesProperties  directBusLayout()
     {
@@ -150,6 +158,6 @@ public:
 private:
     //chowdsp::experimental::Directillator<float> oscillator;
     chowdsp::Gain<float> gain;
-
+    BKSynthesiser synth;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (DirectProcessor)
 };

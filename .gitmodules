@@ -18,3 +18,6 @@
 	url = git@github.com:Tracktion/tracktion_engine.git
 	branch = develop
 
+[submodule "third_party/sfzq"]
+	path = third_party/sfzq
+	url = git@github.com:stevefolta/sfzq.git

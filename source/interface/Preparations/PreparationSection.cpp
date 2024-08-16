@@ -42,7 +42,7 @@ void PreparationSection:: resized() {
     int item_width = getWidth() - 2 * item_padding_x;
     auto newBounds = getBoundsInParent();
 
-    item->setBounds(item_padding_y, item_padding_y, item_width, item_height);
+    item->setBounds(item_padding_x, item_padding_y, item_width, item_height);
 
     if (auto *processor = getProcessor())
     {
@@ -60,12 +60,12 @@ void PreparationSection:: resized() {
             auto indexPos = static_cast<float> (index) + (static_cast<float> (busIdx) * 0.5f);
             if( port->pin.isMIDI())
             {
-                port->setBounds(proportionOfWidth((1.0f + indexPos) / (totalSpaces + 1.0f)) - portSize / 2,
-                                port->isInput ? (getHeight() - portSize):0 ,
+                port->setBounds((proportionOfWidth((1.0f + indexPos) / (totalSpaces + 1.0f)) + portSize ) * 0.9,
+                                port->isInput ? floor((getHeight() * 0.9) - portSize / 2):(0 + item_padding_y) ,
                                 portSize, portSize);
             }
             else {
-                port->setBounds(port->isInput ? 0 : (getWidth() - portSize),
+                port->setBounds(port->isInput ? floor(item_padding_x + portSize/2 * 0.9) - 1: (getWidth() * 0.9),
                                 proportionOfHeight((1.0f + indexPos) / (totalSpaces + 1.0f)) - portSize / 2,
                                 portSize, portSize);
             }

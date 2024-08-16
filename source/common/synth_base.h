@@ -26,7 +26,8 @@
 #include "Connection.h"
 
 class SynthGuiInterface;
-
+template<typename T>
+class BKSamplerSound;
 
 class SynthBase : public MidiManager::Listener, public juce::ValueTree::Listener {
   public:
@@ -116,7 +117,11 @@ class SynthBase : public MidiManager::Listener, public juce::ValueTree::Listener
     juce::ValueTree tree;
     juce::UndoManager um;
     virtual SynthGuiInterface* getGuiInterface() = 0;
-
+//    OwnedArray<ReferenceCountedArray<BKSamplerSound<juce::AudioFormatReader>>> mainPianoSoundSet;
+//    OwnedArray<ReferenceCountedArray<BKSamplerSound<juce::AudioFormatReader>>> resonanceReleaseSoundSet;
+//    OwnedArray<ReferenceCountedArray<BKSamplerSound<juce::AudioFormatReader>>> hammerReleaseSoundSet;
+//    OwnedArray<ReferenceCountedArray<BKSamplerSound<juce::AudioFormatReader>>> emptySoundSet;
+//    OwnedArray<ReferenceCountedArray<BKSamplerSound<juce::AudioFormatReader>>> pedalReleaseSoundSet;
 
 
 

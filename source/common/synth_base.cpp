@@ -22,7 +22,7 @@
 #include "../synthesis/synth_engine/sound_engine.h"
 
 #include "Identifiers.h"
-
+#include "Synthesiser/Sample.h"
 
 SynthBase::SynthBase() : expired_(false) {
 

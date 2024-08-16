@@ -76,6 +76,7 @@ public:
     // Destructor Declaration
     ~PreparationSection();
 
+    virtual void addSoundSet(juce::ReferenceCountedArray<BKSamplerSound<juce::AudioFormatReader>>* s) {}
     // Public member variables for a PreparationSection object
     juce::ValueTree state;
     OpenGlWrapper &_open_gl;
@@ -271,7 +272,7 @@ public:
 
                                 port->getImageComponent()->init(safeComp->_open_gl);
                                 MessageManagerLock mm;
-                                safeComp->addOpenGlComponent(port->getImageComponent(), true, true);
+                                safeComp->addOpenGlComponent(port->getImageComponent(),false, true);
                                 safeComp->addAndMakeVisible(port);
                                 port->addListener(safeComp);
                             }

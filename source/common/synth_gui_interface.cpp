@@ -53,11 +53,12 @@ void SynthGuiInterface::setGuiSize(float scale) { }
 #include "../interface/fullInterface.h"
 
 
-SynthGuiInterface::SynthGuiInterface(SynthBase* synth, bool use_gui) : synth_(synth) {
+SynthGuiInterface::SynthGuiInterface(SynthBase* synth, bool use_gui) : synth_(synth), sampleLoadManager(userPreferences.userPreferences.get(), synth) {
   if (use_gui) {
     SynthGuiData synth_data(synth_);
     gui_ = std::make_unique<FullInterface>(&synth_data);
   }
+    sampleLoadManager.preferences = userPreferences.userPreferences.get();
 
 }
 

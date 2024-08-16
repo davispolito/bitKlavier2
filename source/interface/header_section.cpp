@@ -62,6 +62,17 @@ HeaderSection::HeaderSection() : SynthSection("header_section"), tab_offset_(0),
     logo_section_->setAlwaysOnTop(true);
     logo_section_->addListener(this);
     addSubSection(logo_section_.get());
+    sampleSelector = std::make_unique<ShapeButton>("Selector", Colour(0xff666666),
+                                  Colour(0xffaaaaaa), Colour(0xff888888));
+
+    addAndMakeVisible(sampleSelector.get());
+    sampleSelector->addListener(this);
+    sampleSelector->setTriggeredOnMouseDown(true);
+    sampleSelector->setShape(Path(), true, true, true);
+
+    currentSampleType = 0;
+    sampleSelectText = std::make_shared<PlainTextComponent>("Sample Select Text", "---");
+    addOpenGlComponent(sampleSelectText);
 //  tab_selector_ = std::make_unique<TabSelector>("tab_selector");
 //  addAndMakeVisible(tab_selector_.get());
 //  addOpenGlComponent(tab_selector_->getImageComponent());
@@ -127,20 +138,25 @@ HeaderSection::HeaderSection() : SynthSection("header_section"), tab_offset_(0),
 
 void HeaderSection::paintBackground(Graphics& g) {
   paintContainer(g);
-
+    paintChildrenBackgrounds(g);
   g.setColour(findColour(Skin::kBody, true));
   int logo_section_width = 32.0 + getPadding();
   g.fillRect(0, 0, logo_section_width, getHeight());
 
+    int label_rounding = findValue(Skin::kLabelBackgroundRounding);
+    //g.setColour(findColour(Skin::kTextComponentBackground, true));
+    g.setColour(Colours::white);
+    //g.fillRoundedRectangle(sampleSelector->getBounds().toFloat(), label_rounding);
+    g.fillRect(100, 50, 100, 100);
   paintKnobShadows(g);
-  paintChildrenBackgrounds(g);
 
-  g.saveState();
+
+  //g.saveState();
 //  Rectangle<int> bounds = getLocalArea(synth_preset_selector_.get(), synth_preset_selector_->getLocalBounds());
 //  g.reduceClipRegion(bounds);
 //  g.setOrigin(bounds.getTopLeft());
   //synth_preset_selector_->paintBackground(g);
-  g.restoreState();
+  //g.restoreState();
 
 //  if (LoadSave::doesExpire()) {
 //    String countdown = "Beta expires in: " + String(LoadSave::getDaysToExpire()) + " days";
@@ -155,7 +171,8 @@ void HeaderSection::paintBackground(Graphics& g) {
 void HeaderSection::resized() {
   static constexpr float kTextHeightRatio = 0.3f;
   static constexpr float kPaddingLeft = 0.25f;
-
+    Colour body_text = findColour(Skin::kBodyText, true);
+    sampleSelectText->setColor(body_text);
 //  oscilloscope_->setColour(Skin::kBody, findColour(Skin::kBackground, true));
 //  spectrogram_->setColour(Skin::kBody, findColour(Skin::kBackground, true));
   int height = getHeight();
@@ -168,10 +185,16 @@ void HeaderSection::resized() {
   int large_padding = findValue(Skin::kLargePadding);
 
     int logo_width = findValue(Skin::kModulationButtonWidth);
+    int label_height = findValue(Skin::kLabelBackgroundHeight);
     logo_section_->setBounds(0, -10, logo_width , height );
+    sampleSelector->setBounds(logo_width  + widget_margin, logo_section_->getBottom()/2, 100, label_height);
+    sampleSelectText->setBounds(sampleSelector->getBounds());
+    float label_text_height = findValue(Skin::kLabelHeight);
+    sampleSelectText->setTextSize(label_text_height);
   //int logo_width = findValue(Skin::kModulationButtonWidth);
  // logo_section_->setBounds(large_padding, 0, logo_width, height);
   //inspectButton->setBounds(large_padding, 0, 100, height);
+
   int preset_selector_width = width / 3;
   int preset_selector_height = height * 0.6f;
   int preset_selector_buffer = (height - preset_selector_height) * 0.5f;
@@ -212,7 +235,17 @@ void HeaderSection::reset() {
 ////  oscilloscope_->setVisible(!view_spectrogram);
 ////  spectrogram_->setVisible(view_spectrogram);
 //}
+namespace string_constants{
 
+
+    static const std::vector<std::string> cBKSampleLoadTypes = {
+            "Piano (litest)",
+            "Piano (lite)",
+            "Piano (medium)",
+            "Piano (heavy)"
+    };
+
+};
 void HeaderSection::buttonClicked(Button* clicked_button) {
   if (clicked_button == exit_temporary_button_.get()) {
 //    for (Listener* listener : listeners_)
@@ -225,7 +258,25 @@ void HeaderSection::buttonClicked(Button* clicked_button) {
 //    spectrogram_->setVisible(view_spectrogram);
 //    SynthSection::buttonClicked(clicked_button);
 //  }
-  else
+  else if (clicked_button == sampleSelector.get())
+    {
+      PopupItems options;
+      for(int i = 0; i < bitklavier::utils::BKSampleLoadType::BKNumSampleTypes; i++)
+      {
+            options.addItem(i, string_constants::cBKSampleLoadTypes[i]);
+      }
+
+      juce::Point<int> position(sampleSelector->getX(), sampleSelector->getBottom());
+      showPopupSelector(this,position, options, [=](int selection){
+
+          SynthGuiInterface* parent = findParentComponentOfClass<SynthGuiInterface>();
+          parent->sampleLoadManager.loadSamples(selection, true);
+          sampleSelectText->setText(string_constants::cBKSampleLoadTypes[selection]);
+          resized();
+      });
+
+    }
+      else
     SynthSection::buttonClicked(clicked_button);
 }
 

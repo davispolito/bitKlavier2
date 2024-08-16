@@ -388,10 +388,7 @@ void SynthSection::destroyOpenGlComponent(OpenGlComponent const& open_gl_compone
     {
         return *p == open_gl_component;
     });
-//    //calls destroy function
-//    new_logical_end->get()->destroy(open_gl);
-//
-//
+
     open_gl_components_.erase(new_logical_end,open_gl_components_.end());
 
 

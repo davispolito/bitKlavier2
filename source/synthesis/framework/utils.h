@@ -23,9 +23,11 @@
 #include <cstdlib>
 #include <random>
 using namespace juce;
-
+#define NAME_AND_VALUE(x) #x, x
 
   namespace bitklavier::utils {
+
+
     constexpr mono_float kDbGainConversionMult = 20.0f;
     constexpr int kMaxOrderLength = 10;
     constexpr mono_float kLogOf2 = 0.69314718056f;
@@ -240,6 +242,38 @@ using namespace juce;
     void complexToPcmData(int16_t* pcm_data, const std::complex<float>* complex_data, int size);
     void pcmToFloatData(float* float_data, const int16_t* pcm_data, int size);
     void pcmToComplexData(std::complex<float>* complex_data, const int16_t* pcm_data, int size);
+      typedef enum BKSampleLoadType
+      {
+          BKLoadLitest = 0,
+          BKLoadLite,
+          BKLoadMedium,
+          BKLoadHeavy,
+          BKNumSampleTypes
+      } BKSampleLoadType;
+     const std::string samplepaths[BKSampleLoadType::BKNumSampleTypes]
+             {
+         "/litest",
+         "/lite",
+         "/medium",
+         "/heavy"
+             };
+// Template structure to define velocity ranges based on the number
+      // Primary template declaration
+      template<int N>
+      struct VelocityRange
+      {
+          static const std::array<std::tuple<int, int>, N> values; // Declaration
+      };
+
+// Initialize the primary template's static member (empty in this case)
+      template<int N>
+      const std::array<std::tuple<int, int>, N> VelocityRange<N>::values = {};
+
+
+
+
+
   } // namespace bitklavier::utils
+
 // namespace vital
 
