@@ -44,7 +44,7 @@
     #endif
 #endif
 
-
+#include "melatonin_audio_sparklines/melatonin_audio_sparklines.h"
 namespace bitklavier {
 
     typedef float mono_float;

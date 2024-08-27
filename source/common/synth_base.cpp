@@ -16,7 +16,7 @@
 
 #include "synth_base.h"
 #include "synth_gui_interface.h"
-
+#include "melatonin_audio_sparklines/melatonin_audio_sparklines.h"
 
 #include "startup.h"
 #include "../synthesis/synth_engine/sound_engine.h"
@@ -176,6 +176,9 @@ void SynthBase::processAudioAndMidi(juce::AudioBuffer<float>& audio_buffer, juce
         action();
 
     engine_->processorGraph->processBlock(audio_buffer, midi_buffer);
+
+    //melatonin::printSparkline(audio_buffer);
+
 
 }
 void SynthBase::processAudioWithInput(AudioSampleBuffer* buffer, const bitklavier::mono_float* input_buffer,

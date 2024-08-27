@@ -183,7 +183,9 @@ target_compile_definitions(SharedCode
 
 
 # Link to any other modules you added (with juce_add_module) here!
-juce_add_modules(third_party/tracktion_engine/modules/tracktion_engine)
+juce_add_module(third_party/tracktion_engine/modules/tracktion_engine)
+juce_add_module(modules/melatonin_audio_sparklines)
+
 #juce_add_module(third_party/chowdsp_utils/modules/gui/chowdsp_gui)
 #juce_add_modules(chowdsp_utils)
 #juce_add_module(third_party/chowdsp_utils/modules/plugin/chowdsp_plugin_state)

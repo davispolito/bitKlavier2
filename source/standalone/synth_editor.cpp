@@ -120,6 +120,8 @@ void SynthEditor::getNextAudioBlock(const AudioSourceChannelInfo& buffer) {
 //    current_time_ += current_samples * sample_time;
 //  }
     processAudioAndMidi(*buffer.buffer, midi_messages);
+    melatonin::printSparkline(*buffer.buffer);
+
 }
 
 void SynthEditor::releaseResources() {

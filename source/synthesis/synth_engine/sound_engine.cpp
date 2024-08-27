@@ -26,6 +26,7 @@ namespace bitklavier {
                                 {
     //SoundEngine::init();
     processorGraph->clear();
+    processorGraph->enableAllBuses();
   }
 
   SoundEngine::~SoundEngine() {

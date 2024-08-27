@@ -59,6 +59,7 @@ void ConstructionSite::newObjectAdded (PreparationSection* object)
                                                        {
                                                            SynthGuiInterface* _parent = findParentComponentOfClass<SynthGuiInterface>();
                                                            object->setNodeAndPortInfo(_parent->getSynth()->addProcessor(std::move(object->getProcessorPtr())));
+                                                           //changelistener callback is causing timing errors here.
 
                                                            //last_proc.reset();
                                                        });
@@ -535,9 +536,9 @@ void ConstructionSite::updateComponents()
     {
         SynthGuiInterface* parent = findParentComponentOfClass<SynthGuiInterface>();
         for (int i = objects.size(); --i >= 0;) {
-            if (parent->getSynth()->getNodeForId(objects.getUnchecked(i)->pluginID) == nullptr) {
-                state.removeChild(objects.getUnchecked(i)->state, nullptr);
-            }
+//            if (parent->getSynth()->getNodeForId(objects.getUnchecked(i)->pluginID) == nullptr) {
+//                state.removeChild(objects.getUnchecked(i)->state, nullptr);
+//            }
         }
 
 

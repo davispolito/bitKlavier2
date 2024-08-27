@@ -171,7 +171,7 @@ void CableView::endDraggingConnector (const MouseEvent& e)
 
             connection.destination = pin->pin;
         }
-//// add connection to actual rendered connections
+//// add connection to actual rendered connections make this threadsafe
         SynthGuiInterface* parent = findParentComponentOfClass<SynthGuiInterface>();
         parent->getSynth()->addConnection(connection);
 //        graph.graph.addConnection (connection);

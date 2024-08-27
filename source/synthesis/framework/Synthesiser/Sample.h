@@ -17,6 +17,10 @@
 #include <juce_audio_utils/juce_audio_utils.h>
 #include <juce_core/juce_core.h>
 #include <juce_audio_formats/juce_audio_formats.h>
+//#ifdef DEBUG
+#include "common.h"
+
+//#endif
 //==============================================================================
 // Represents the constant parts of an audio sample: its name, sample rate,
 // length, and the audio sample data itself.
@@ -565,7 +569,7 @@ public:
             /*: samplerSound(std::move(sound))*/
     {
         //jassert(samplerSound != nullptr);
-        ampEnv.setParameters(juce::ADSR::Parameters(1.0, 1.0,1.0,1.0));
+        ampEnv.setParameters(juce::ADSR::Parameters(0.1, 1.0,1.0,1.0));
         m_Buffer.setSize(2, 1, false, true, false);
     }
 
@@ -604,9 +608,9 @@ public:
         samplerSound = _sound;
         currentlyPlayingSound = _sound;
         currentlyPlayingNote = midiNoteNumber;
-        level.setTargetValue(velocity);
+        level.setTargetValue(velocity * 40);
         frequency.setTargetValue(mtof(midiNoteNumber));
-
+        //melatonin::printSparkline(m_Buffer);
         auto loopPoints = samplerSound->getLoopPointsInSeconds();
         loopBegin.setTargetValue(loopPoints.getStart() * samplerSound->getSample()->getSampleRate());
         loopEnd.setTargetValue(loopPoints.getEnd() * samplerSound->getSample()->getSampleRate());
@@ -702,8 +706,8 @@ private:
         auto currentLoopEnd = loopEnd.getNextValue();
 
         float ampEnvLast = ampEnv.getNextSample();
-        DBG("ampEnv sample for block : " + String(ampEnvLast));
-        DBG("ampEnv isActive: " + String(static_cast<int>(ampEnv.isActive())));
+        //DBG("ampEnv sample for block : " + juce::String(ampEnvLast));
+        //DBG("ampEnv isActive: " + juce::String(static_cast<int>(ampEnv.isActive())));
         if (ampEnv.isActive() && isTailingOff())
         {
             if (ampEnvLast < 0.001)

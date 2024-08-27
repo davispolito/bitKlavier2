@@ -58,4 +58,6 @@ void DirectProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::Midi
     buffer.clear();
     synth.renderNextBlock (buffer, midiMessages,
                            0, buffer.getNumSamples());
+    //juce::dsp::AudioBlock<float> block(buffer);
+    //melatonin::printSparkline(buffer);
 }
