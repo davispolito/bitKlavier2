@@ -12,6 +12,7 @@ BKSynthesiser::BKSynthesiser()
 
 BKSynthesiser::~BKSynthesiser()
 {
+    voices.clear();
 }
 
 //==============================================================================

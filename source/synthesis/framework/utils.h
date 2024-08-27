@@ -259,15 +259,15 @@ using namespace juce;
              };
 // Template structure to define velocity ranges based on the number
       // Primary template declaration
-      template<int N>
+      template<size_t N>
       struct VelocityRange
       {
-          static const std::array<std::tuple<int, int>, N> values; // Declaration
+          static constexpr std::array<std::tuple<int, int>, N> values; // Declaration
       };
 
 // Initialize the primary template's static member (empty in this case)
-      template<int N>
-      const std::array<std::tuple<int, int>, N> VelocityRange<N>::values = {};
+//      template<int N>
+//      constexpr std::array<std::tuple<int, int>, N> VelocityRange<N>::values = {};
 
 
 

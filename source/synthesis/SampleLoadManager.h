@@ -106,7 +106,7 @@ public:
     void handleAsyncUpdate() override;
 
     SynthBase* synth;
-    AudioFormatManager* audioFormatManager;
+    std::unique_ptr<AudioFormatManager> audioFormatManager;
     std::unique_ptr<AudioFormatReaderFactory> readerFactory;
 //    std::unique_ptr<AudioFormatReader> getSampleReader() const
 //    {

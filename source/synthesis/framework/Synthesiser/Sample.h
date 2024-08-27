@@ -279,7 +279,7 @@ public:
     bool appliesToChannel (int midiNoteNumber)  {
         return true;
     }
-    bool appliesToVelocity (int midiNoteVelocity) {return true; /*midiVelocities[midiNoteVelocity]*/;}
+    bool appliesToVelocity (int midiNoteVelocity) {return midiVelocities[midiNoteVelocity];}
     void setSample (std::unique_ptr<Sample<T>> value)
     {
         sample = std::move (value);

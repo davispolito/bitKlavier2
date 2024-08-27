@@ -74,7 +74,7 @@ bool SampleLoadManager::loadSamples( int selection, bool isGlobal)
     {
         sampleLoader.addJob(new SampleLoadJob(selection,
                                               std::unique_ptr<AudioFormatReaderFactory>(r),
-                                                      audioFormatManager ,
+                                                      audioFormatManager.get() ,
                                                       &sampler_soundset[bitklavier::utils::samplepaths[selection]], this)
                             , true );
     }
@@ -105,29 +105,90 @@ juce::ThreadPoolJob::JobStatus SampleLoadJob::runJob() {
 
     if (loadType == bitklavier::utils::BKLoadHeavy)
     {
-        loadMainPianoSamples<16>() ;
+        loadMainPianoSamples<8>() ;
     }
     else if (loadType == bitklavier::utils::BKLoadMedium)
     {
-        loadMainPianoSamples<8>() ;
+        loadMainPianoSamples<4>() ;
     }
     else if (loadType == bitklavier::utils::BKLoadLite)
     {
-        loadMainPianoSamples<4>() ;
+        loadMainPianoSamples<2>() ;
     }
     else if (loadType == bitklavier::utils::BKLoadLitest)
     {
-        loadMainPianoSamples<2>() ;
+        loadMainPianoSamples<1>() ;
     }
     loadManager->triggerAsyncUpdate();
     return jobHasFinished;
 
 }
+
+namespace bitklavier {
+    namespace utils {
+        // Define the tuples for N = 16
+        template<>
+        constexpr std::array<std::tuple<int, int>, 16> VelocityRange<16>::values = {
+                std::make_tuple(0, 8),
+                std::make_tuple(8, 16),
+                std::make_tuple(16, 24),
+                std::make_tuple(24, 32),
+                std::make_tuple(32, 40),
+                std::make_tuple(40, 48),
+                std::make_tuple(48, 56),
+                std::make_tuple(56, 64),
+                std::make_tuple(64, 72),
+                std::make_tuple(72, 80),
+                std::make_tuple(80, 88),
+                std::make_tuple(88, 96),
+                std::make_tuple(96, 104),
+                std::make_tuple(104, 112),
+                std::make_tuple(112, 120),
+                std::make_tuple(120, 128)
+        };
+// Define the tuples for N = 8
+        template<>
+        constexpr std::array<std::tuple<int, int>, 8> VelocityRange<8>::values = {
+                std::make_tuple(0, 30),
+                std::make_tuple(30, 50),
+                std::make_tuple(50, 68),
+                std::make_tuple(68, 84),
+                std::make_tuple(84, 98),
+                std::make_tuple(98, 110),
+                std::make_tuple(110, 120),
+                std::make_tuple(120, 128)
+        };
+
+// Define the tuples for N = 4
+        template<>
+        constexpr std::array<std::tuple<int, int>, 4> VelocityRange<4>::values = {
+                std::make_tuple(0, 42),
+                std::make_tuple(42, 76),
+                std::make_tuple(76, 104),
+                std::make_tuple(104, 128)
+        };
+
+
+// Define the tuples for N = 2
+        template<>
+        constexpr std::array<std::tuple<int, int>, 2> VelocityRange<2>::values = {
+                std::make_tuple(0, 76),
+                std::make_tuple(76, 128)
+        };
+
+
+// Define the tuples for N = 1
+        template<>
+        constexpr std::array<std::tuple<int, int>, 1> VelocityRange<1>::values = {
+                std::make_tuple(0, 128)
+        };
+    }
+}
 template<int layers>
 void SampleLoadJob::loadMainPianoSamples()
 {
 
-    const std::array<std::tuple<int, int>, layers> ranges = bitklavier::utils::VelocityRange<layers>::values;
+    auto ranges = bitklavier::utils::VelocityRange<layers>();
     int  i = 0;
     float dbFSBelow  = -100.f;
     while (true) {
@@ -167,7 +228,7 @@ void SampleLoadJob::loadMainPianoSamples()
 
 
 
-        auto [begin, end] = ranges[vel -1];
+        auto [begin, end] = ranges.values[vel];
         BigInteger velRange;
         velRange.setRange(begin, end - begin, true);
         auto sound = soundset->add(new BKSamplerSound(filename, std::shared_ptr<Sample<juce::AudioFormatReader>>(sample),
@@ -183,5 +244,6 @@ void SampleLoadJob::loadMainPianoSamples()
         i++;
 
     }
+    DBG("done laoding samples");
 
 }
