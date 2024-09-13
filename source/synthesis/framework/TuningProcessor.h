@@ -105,7 +105,7 @@ struct TuningNonParameterState : chowdsp::NonParamState
     chowdsp::StateValue<juce::Point<int>> prepPoint { "prep_point", { 300, 500 } };
 };
 
-class TuningProcessor : public chowdsp::PluginBase<chowdsp::PluginStateImpl<TuningParams,TuningNonParameterState>>
+class TuningProcessor : public chowdsp::PluginBase<chowdsp::PluginStateImpl<TuningParams,TuningNonParameterState,chowdsp::XMLSerializer>>
 {
 public:
     TuningProcessor();

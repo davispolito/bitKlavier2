@@ -47,7 +47,9 @@ class OpenGlSlider : public Slider {
     static constexpr float kRotaryAngle = 0.8f * bitklavier::kPi;
 
     OpenGlSlider(String name) : Slider(name), parent_(nullptr), modulation_knob_(false), modulation_amount_(0.0f),
-                                paint_to_image_(false), active_(true), bipolar_(false), slider_quad_(new OpenGlSliderQuad(this)),knob_size_scale_(1.0f) {
+                                paint_to_image_(false), active_(true), bipolar_(false), slider_quad_(new OpenGlSliderQuad(this)),
+                                image_component_(new OpenGlImageComponent("slider")),
+                                knob_size_scale_(1.0f) {
       slider_quad_->setTargetComponent(this);
       setMaxArc(kRotaryAngle);
 

@@ -64,7 +64,7 @@ struct KeymapNonParameterState : chowdsp::NonParamState
     chowdsp::StateValue<juce::Point<int>> prepPoint { "prep_point", { 300, 500 } };
 };
 
-class KeymapProcessor : public chowdsp::PluginBase<chowdsp::PluginStateImpl<KeymapParams,KeymapNonParameterState>>
+class KeymapProcessor : public chowdsp::PluginBase<chowdsp::PluginStateImpl<KeymapParams,KeymapNonParameterState,chowdsp::XMLSerializer>>
 {
 public:
     KeymapProcessor();

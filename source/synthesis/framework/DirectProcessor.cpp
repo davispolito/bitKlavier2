@@ -6,12 +6,16 @@
 #include "DirectProcessor.h"
 #include "common.h"
 #include "Synthesiser/Sample.h"
+#include <chowdsp_serialization/chowdsp_serialization.h>
 DirectProcessor::DirectProcessor() : PluginBase(nullptr, directBusLayout())
 {
     for (int i = 0; i < 300; i++)
     {
         synth.addVoice(new BKSamplerVoice());
     }
+    std::unique_ptr<XmlElement> xml = chowdsp::Serialization::serialize<chowdsp::XMLSerializer>(state);
+    DBG(chowdsp::Serialization::serialize<chowdsp::XMLSerializer>(state)->toString());
+    chowdsp::Serialization::deserialize<chowdsp::XMLSerializer>(xml,state);
 }
 
 void DirectProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)

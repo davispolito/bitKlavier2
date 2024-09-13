@@ -1,0 +1,1705 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<session version="0.1.7" uuid="31dff8809dd84726b4e90f881259ee05" currentSet="c446a9f80beb4b23866a74ac61d82719"
+         displayRear="edit" unfolded="" displayedSet="c446a9f80beb4b23866a74ac61d82719"
+         hwOutputsPanelWidth="590">
+  <globalSet uuid="201ee778fbe34dac93c21ee9d1f28e15" colour="ff4eadea" unfolded="showMixEffects"
+             displayedFxIndices="0">
+    <controlSurfaces uuid="06b1e0f0d8de430b877fc14af27e897f"/>
+    <fxLimiter uuid="2e1435aef26f4664959d4676c1860542" pinned="fxLimiter" unfolded="fxLimiter"/>
+  </globalSet>
+  <sessionSet uuid="9de48dcc836d471c87f1400c4dc90972" volume="1" pan="0.5"
+              mainColour="ff0f184c" secondaryColour="6be6e3ff" gradients="0.500000:0.000000:0.715000:0.784000"
+              displayFx="1" displayedFxIndices="1" colour="fff5d852" longDescription=""
+              unfolded="showMixEffects" displayedIndices="" name="world 1"
+              setTrans="all">
+    <drumPads name="kick_oscified" surfaceType="kick" msgInputs="kick1" activePads="open,rim-tip,rim-shoulder"
+              uuid="704d6c2a30f349bc9067696da680dfb9" pinned="drumPads,mixPanel,childsPanel,noteTranspPanel"
+              unfolded="drumPads,childsPanel,noteTranspPanel" matrix="1,1,0,0,0,0/1,1,0,0,0,0/0,0,1,1,1,1"
+              displayFx="0" selectedColumn="0" noteTransp="0.0" displayedFxIndices="4"
+              volume="0.8393291234970093" advancedMode="1" displayedIndices="1"
+              muted="0">
+      <group uuid="f1783a8565c84d5c95c6b8f433a9c953" pinned="group,mixPanel,noteTranspPanel"
+             unfolded="group,childsPanel,noteTranspPanel" scaleMode="1" displayFx="1"
+             displayedIndices="0" scaleName="Pentatonic Minor" displayedAssignment="bedec719165c4aa489e1e042e8590520"
+             octavesDn="-0.5833333333333334" octavesUp="0.5833333333333334">
+        <sampler inputChannel="1" name="world1_bass lo" volume="1.0" pan="0.5"
+                 uuid="7063b62a8379406c913dca1b2f6256d9" samplerate="44100.0"
+                 gain="3.323772430419922" pinned="sampler,mixPanel,inputPanel"
+                 unfolded="sampler,noteTranspPanel,inputPanel" retrigger="1" adsrDecay="0.6"
+                 samplerFile="samples/world1_bass.wav" length="61615" startDisplayedTime="0"
+                 endDisplayedTime="1.397142857142857" start="0.0" stop="61614.0"
+                 gainCached="3.323772430419922" scaleMode="1" scaleName="Pentatonic Minor"
+                 displayedAssignment="3a62ec004bbd430f84402ddcb57c21ff" octavesDn="-0.5241997241973877"
+                 octavesUp="0.7120807766914368" muted="0" velocityCurve="0.0357143,0_0.514286,0.647059_1,1"
+                 curveType="sshape" forwardOSC="1" oscAddress="/obsidian/oscout/world1/kick/126">
+          <assignment name="# Current note" paramId="curNoteSelect" outputMin="0.0"
+                      outputMax="1.0" uuid="3a62ec004bbd430f84402ddcb57c21ff" inputs="here"
+                      mode="rand">
+            <stepsMod name="# rand" uuid="3d05550bdb604e70873e043000188916"/>
+          </assignment>
+          <fxEnvelopeFollow uuid="ecdbaa7a468549cfa20f12ef661a8b4a" pinned="fxEnvelopeFollow"
+                            unfolded="fxEnvelopeFollow" gain="8.839946192836637" attack="0.01"
+                            release="156.9002838134766"/>
+          <assignment name="# # env" paramId="value" outputMin="0.0" outputMax="1.0"
+                      uuid="4867464f7d174bacbcd7ac7e655a73a3" inputs="ecdbaa7a468549cfa20f12ef661a8b4a"
+                      mode="external"/>
+        </sampler>
+        <assignment name="# Current note" paramId="curNoteSelect" outputMin="0.0"
+                    outputMax="1.0" uuid="bedec719165c4aa489e1e042e8590520" inputs="here"
+                    mode="rand">
+          <stepsMod name="# rand" uuid="601eb773e4754fb6b788f0fa964288f3"/>
+        </assignment>
+      </group>
+      <group uuid="50bab18706d74fd09494dbafcf5795d7" pinned="group,mixPanel,noteTranspPanel"
+             unfolded="group,childsPanel,noteTranspPanel" displayedIndices="0"
+             scaleMode="1" octavesDn="-0.5833333333333334" octavesUp="0.5833333333333334"
+             noteTransp="12.0" scaleName="Pentatonic Minor" displayedAssignment="85db2153e1ac48b6bbef3b866660f2c3">
+        <sampler inputChannel="1" name="world1_bass hi" volume="1" pan="0.5" uuid="f5717a1c6cc4464bb4fe61de03f64174"
+                 samplerate="44100.0" gain="3.323772430419922" pinned="sampler,mixPanel,noteTranspPanel,inputPanel"
+                 unfolded="sampler,noteTranspPanel,inputPanel" sampleRootDetune="0.0"
+                 sampleRootNote="63" samplerFile="samples/world1_bass.wav" length="61615"
+                 startDisplayedTime="0" endDisplayedTime="1.397142857142857" start="0.0"
+                 stop="61614.0" gainCached="3.323772430419922" transpose="0.0"
+                 scaleMode="0" scaleName="Pentatonic Minor" displayedAssignment="adb47eebc8c2408ca3dc8166aefd0389"
+                 octavesDn="-0.6909298896789551" octavesUp="0.5373475551605225"
+                 muted="0" velocityCurve="0.257143,0.359477_0.656085,0.788135_1,1"
+                 curveType="sshape" noteTransp="12.0" forwardOSC="1" oscAddress="/obsidian/oscout/world1/kick/125">
+          <assignment name="# Current note" paramId="curNoteSelect" outputMin="0.0"
+                      outputMax="1.0" uuid="adb47eebc8c2408ca3dc8166aefd0389" inputs="here"
+                      mode="rand">
+            <stepsMod name="# rand" uuid="79ade0c3b061427094a542fc89c87f15"/>
+          </assignment>
+          <fxEnvelopeFollow uuid="a481c3363cde421889343ff1a183b915" pinned="fxEnvelopeFollow"
+                            unfolded="fxEnvelopeFollow" gain="8.839946192836637" attack="0.01"
+                            release="156.9002838134766"/>
+          <assignment name="# # env" paramId="value" outputMin="0.0" outputMax="1.0"
+                      uuid="7d1c4b9b54c5447d9dde80996dc66586" inputs="a481c3363cde421889343ff1a183b915"
+                      mode="external"/>
+        </sampler>
+        <assignment name="# Current note" paramId="curNoteSelect" outputMin="0.0"
+                    outputMax="1.0" uuid="85db2153e1ac48b6bbef3b866660f2c3" inputs="here"
+                    mode="rand">
+          <stepsMod name="# rand" uuid="0d48f762ada540608f884721e95bfe6b"/>
+        </assignment>
+      </group>
+      <fxTransientShaper uuid="ff6c424da20e4b209de97ed2f0680acc" pinned="fxTransientShaper"
+                         unfolded="fxTransientShaper" attackGain="5.728125095367432" decay="146.5640563964844"
+                         attack="0.6975544691085815" muted="0"/>
+      <multibandEQ uuid="b185b54f648f4855845de261154472b9" pinned="multibandEQ"
+                   unfolded="multibandEQ" selectedBand="4" gain="-0.7679998278617859"
+                   muted="0">
+        <filterBand cutoff="28.56175641551587" filtertype="Low Shelf" uuid="5ee468fdef82497588ea7f22c1546c7f"
+                    gain="-3.343949044585987" resonance="0.7071067811865475"/>
+        <filterBand cutoff="219.0503018373611" filtertype="Peak" uuid="5846ad5af6394abf8dd68040fc00c334"
+                    gain="2.197452229299362" resonance="0.7071067811865475"/>
+        <filterBand cutoff="800.8889016314313" filtertype="Peak" uuid="81f2328871fc41608d4f82c2d13a0175"
+                    gain="-0.8598726114649686" resonance="0.7071067811865475"/>
+        <filterBand cutoff="2535.373703965637" filtertype="High Shelf" uuid="a2513ed16b7b4ebfa93cce22947cfdbb"
+                    gain="0.095541401273886" resonance="0.7071067811865475"/>
+        <filterBand cutoff="96.17573065431326" muted="0" filtertype="Peak" uuid="703c6e824f9342aaa0e05769db15fbad"
+                    gain="-1.433121019108279" resonance="0.7071067811865475"/>
+        <filterBand cutoff="10000.0" muted="1" filtertype="Peak" uuid="70933b7b2cc84b06905a87e1e543965b"/>
+        <filterBand cutoff="7000.0" muted="1" filtertype="Peak" uuid="4112f9d5d7ca42be986053a2806105ab"/>
+        <filterBand cutoff="18000.0" muted="1" filtertype="Low Pass" uuid="513e4116ab1449be86bf9c5ac0d026fc"/>
+      </multibandEQ>
+      <fxCompressor uuid="771ca6c6c74e494aa70e1b3f1e06d741" pinned="fxCompressor"
+                    unfolded="fxCompressor" makeup="-3.894000053405762" muted="0"/>
+      <group uuid="067816fe09d148d2bf834ee37965b275" pinned="group,mixPanel"
+             unfolded="group,childsPanel" displayedIndices="0">
+        <sampler inputChannel="1" samplerFile="samples/shinkifb 3.wav" name="shinkifb 3"
+                 volume="1" pan="0.5" uuid="39d30dd7629e423784e88eae0ae0e131"
+                 length="123000" samplerate="48000.0" start="0.0" stop="122999.0"
+                 gainCached="-2.04436469078064" gain="-2.04436469078064" pinned="sampler,mixPanel,inputPanel"
+                 unfolded="sampler,inputPanel" startDisplayedTime="0" endDisplayedTime="2.562479166666667"
+                 velocityCurve="0.185714,0.137255_0.592857,0.568627_1,1" playStart="0.03499999642372131"
+                 displayFx="1" displayedFxIndices="0" forwardOSC="1" oscAddress="/obsidian/oscout/world1/kick/124">
+          <filter uuid="358b7086c0b746478813772963b6b4ba" pinned="filter" unfolded="filter"
+                  cutoff="2032.134887695312" filtertype="bp"/>
+          <fxEnvelopeFollow uuid="2ebfcece92184d97bf5a63fe033a2c36" pinned="fxEnvelopeFollow"
+                            unfolded="fxEnvelopeFollow" gain="12.305075645446777" attack="0.01"
+                            release="156.9002838134766"/>
+          <assignment name="# # env" paramId="value" outputMin="0.0" outputMax="1.0"
+                      uuid="81d99f3f14b84b47a03a6388aebdd572" inputs="2ebfcece92184d97bf5a63fe033a2c36"
+                      mode="external"/>
+        </sampler>
+      </group>
+      <fxTube uuid="577abcbe177a4ef18b0ec3ffb6631c7d" pinned="fxTube" unfolded="fxTube"
+              drive="0.8838437795639038" muted="0" drywet="0.9358593821525574"/>
+      <fxLimiter uuid="8c7ef1d6456044159dd3b15f557d68a3" pinned="fxLimiter" unfolded="fxLimiter"/>
+      <assignment name="# Mute" paramId="muted" outputMin="0" outputMax="1" uuid="36a6283d1d414551a95890adcc48e577"
+                  inputs="801b41f190b044aea560a821f3f5fe63" mode="macro">
+        <macroMod name="# macro" uuid="8f97e164616b4be4946b550f6ef61745"/>
+      </assignment>
+    </drumPads>
+    <fxCompressor uuid="49f82fef951f4cdaaf2d0fa05e6142ab" pinned="fxCompressor"
+                  unfolded="fxCompressor"/>
+    <fxLimiter uuid="b488f96fd40e49f1b24a4a07912f2791" pinned="fxLimiter" unfolded="fxLimiter"/>
+    <fxSoftClipper softness="0.0" uuid="68a5cdd77bfc4d1a908788baeb804d9c"/>
+    <group uuid="ab74cf16c3fa4debbd90283b61e74d68" pinned="group,mixPanel,inputPanel"
+           unfolded="group,childsPanel,inputPanel" retrigger="0" displayedIndices="1"
+           msgInputs="tom1,tom2" displayFx="1" velocityCurve="0.0785714,0.732026_0.535822,0.879411_1,1"
+           name="amen breaks (mesh toms)" volume="0.7592146396636963" displayedFxIndices="0"
+           muted="0">
+      <sequencer mode="random" uuid="cf44018e9917458e87e6eb3b5def2b3a" matrix="1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0/0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0/0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0/0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0/0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0/0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0/0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0/0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0/0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0/0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0/0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0/0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0/0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0/0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0/0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0/0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0/0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0/0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0/0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0/0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0/0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1"
+                 pinned="sequencer,mixPanel,childsPanel" unfolded="sequencer,childsPanel"
+                 retrigger="1" msgInputs="tom2" displayedIndices="2" muted="0"
+                 advancedMode="1" name="abletn chps rand_oscified" scroll="13"
+                 forwardOSC="1" oscAddress="/obsidian/oscout/world1/amen_break/abletn_chps_rand">
+        <sampler inputChannel="1" samplerFile="samples/Slice 1 (2).wav" name="Slice 1 (2)"
+                 volume="1" pan="0.5" uuid="71240cb0c81b47198e3f0b92ced5f41a"
+                 length="16702" samplerate="44100.0" start="0.0" stop="16701.0"
+                 gainCached="0.5673031806945801" gain="0.5673031806945801" pinned="sampler,mixPanel"
+                 unfolded="sampler" startDisplayedTime="0" endDisplayedTime="0.3787074829931973"/>
+        <sampler inputChannel="1" samplerFile="samples/Slice 2 (2).wav" name="Slice 2 (2)"
+                 volume="1" pan="0.5" uuid="a03d8bdbaceb4e2494d6220cd2becf41"
+                 length="8689" samplerate="44100.0" start="0.0" stop="8688.0"
+                 gainCached="-2.787593841552734" gain="-2.787593841552734" pinned="sampler,mixPanel"
+                 unfolded="sampler" startDisplayedTime="0" endDisplayedTime="0.1970068027210884"/>
+        <sampler inputChannel="1" samplerFile="samples/Slice 3 (2).wav" name="Slice 3 (2)"
+                 volume="1" pan="0.5" uuid="48aa509a6fbd4cc1830c7c638ce1de89"
+                 length="7703" samplerate="44100.0" start="0.0" stop="7702.0"
+                 gainCached="1.268452167510986" gain="1.268452167510986" pinned="sampler,mixPanel"
+                 unfolded="sampler" startDisplayedTime="0" endDisplayedTime="0.1746485260770975"/>
+        <sampler inputChannel="1" samplerFile="samples/Slice 4 (2).wav" name="Slice 4 (2)"
+                 volume="1" pan="0.5" uuid="107bbd0b69924667a0a9144f38068a23"
+                 length="8673" samplerate="44100.0" start="0.0" stop="8672.0"
+                 gainCached="-1.7327880859375" gain="-1.7327880859375"/>
+        <sampler inputChannel="1" samplerFile="samples/Slice 5 (2).wav" name="Slice 5 (2)"
+                 volume="1" pan="0.5" uuid="0d35826c14ec4053abf4ae0b3846e253"
+                 length="8597" samplerate="44100.0" start="0.0" stop="8596.0"
+                 gainCached="-2.990027904510498" gain="-2.990027904510498"/>
+        <sampler inputChannel="1" samplerFile="samples/Slice 6 (2).wav" name="Slice 6 (2)"
+                 volume="1" pan="0.5" uuid="02022700ec7d458eb70f37ba16fa6e4d"
+                 length="25891" samplerate="44100.0" start="0.0" stop="25890.0"
+                 gainCached="-1.7327880859375" gain="-1.7327880859375"/>
+        <sampler inputChannel="1" samplerFile="samples/Slice 7 (2).wav" name="Slice 7 (2)"
+                 volume="1" pan="0.5" uuid="a806cf7079f4418e957ff2f724cc7ae7"
+                 length="4629" samplerate="44100.0" start="0.0" stop="4628.0"
+                 gainCached="-0.2209954261779785" gain="-0.2209954261779785"/>
+        <sampler inputChannel="1" samplerFile="samples/Slice 8 (2).wav" name="Slice 8 (2)"
+                 volume="1" pan="0.5" uuid="3a5a486bfa814d2b886746661ddedee8"
+                 length="3110" samplerate="44100.0" start="0.0" stop="3109.0"
+                 gainCached="-3.894659996032715" gain="-3.894659996032715"/>
+        <sampler inputChannel="1" samplerFile="samples/Slice 9 (2).wav" name="Slice 9 (2)"
+                 volume="1" pan="0.5" uuid="b8be7ae39332489dbf51d5d90cb3bba1"
+                 length="18039" samplerate="44100.0" start="0.0" stop="18038.0"
+                 gainCached="-0.7647104263305664" gain="-0.7647104263305664"/>
+        <sampler inputChannel="1" samplerFile="samples/Slice 10 (2).wav" name="Slice 10 (2)"
+                 volume="1" pan="0.5" uuid="2ac8c98eb8614867a1d273088fdfddf7"
+                 length="8782" samplerate="44100.0" start="0.0" stop="8781.0"
+                 gainCached="-3.217777967453003" gain="-3.217777967453003"/>
+        <sampler inputChannel="1" samplerFile="samples/Slice 11 (2).wav" name="Slice 11 (2)"
+                 volume="1" pan="0.5" uuid="ff595eb82f744e1a95c48a9de1010b88"
+                 length="25442" samplerate="44100.0" start="0.0" stop="25441.0"
+                 gainCached="-1.640763521194458" gain="-1.640763521194458"/>
+        <sampler inputChannel="1" samplerFile="samples/Slice 12 (2).wav" name="Slice 12 (2)"
+                 volume="1" pan="0.5" uuid="5dbfcc528b094c84bc337ad2851371eb"
+                 length="16425" samplerate="44100.0" start="0.0" stop="16424.0"
+                 gainCached="-3.015300273895264" gain="-3.015300273895264"/>
+        <sampler inputChannel="1" samplerFile="samples/Slice 13 (2).wav" name="Slice 13 (2)"
+                 volume="1" pan="0.5" uuid="a90b25df13c1450a8e5b20670f396c80"
+                 length="9562" samplerate="44100.0" start="0.0" stop="9561.0"
+                 gainCached="-1.973079204559326" gain="-1.973079204559326"/>
+        <sampler inputChannel="1" samplerFile="samples/Slice 14 (2).wav" name="Slice 14 (2)"
+                 volume="1" pan="0.5" uuid="04dca0f24de84efa89af848dc1dd7317"
+                 length="8268" samplerate="44100.0" start="0.0" stop="8267.0"
+                 gainCached="2.582305431365967" gain="2.582305431365967"/>
+        <sampler inputChannel="1" samplerFile="samples/Slice 15 (2).wav" name="Slice 15 (2)"
+                 volume="1" pan="0.5" uuid="dde2599dcfa248bdb7926236e78c035e"
+                 length="7895" samplerate="44100.0" start="0.0" stop="7894.0"
+                 gainCached="-3.943088531494141" gain="-3.943088531494141"/>
+        <sampler inputChannel="1" samplerFile="samples/Slice 16 (2).wav" name="Slice 16 (2)"
+                 volume="1" pan="0.5" uuid="3c4dfdf7af724ad8a8307e8d2e70691f"
+                 length="13715" samplerate="44100.0" start="0.0" stop="13714.0"
+                 gainCached="-0.9429121017456055" gain="-0.9429121017456055"/>
+        <sampler inputChannel="1" samplerFile="samples/Slice 17 (2).wav" name="Slice 17 (2)"
+                 volume="1" pan="0.5" uuid="c00b8bad50b94ea0999782652749d524"
+                 length="8192" samplerate="44100.0" start="0.0" stop="8191.0"
+                 gainCached="2.024842262268066" gain="2.024842262268066"/>
+        <sampler inputChannel="1" samplerFile="samples/Slice 18 (2).wav" name="Slice 18 (2)"
+                 volume="1" pan="0.5" uuid="e1c9a0e6232d4d8fb0e406b1f0ae48f5"
+                 length="3903" samplerate="44100.0" start="0.0" stop="3902.0"
+                 gainCached="0.4298210144042969" gain="0.4298210144042969"/>
+        <sampler inputChannel="1" samplerFile="samples/Slice 19 (2).wav" name="Slice 19 (2)"
+                 volume="1" pan="0.5" uuid="7cfa9e1e14914c9e90a16b605c456122"
+                 length="16168" samplerate="44100.0" start="0.0" stop="16167.0"
+                 gainCached="-3.263773679733276" gain="-3.263773679733276"/>
+        <sampler inputChannel="1" samplerFile="samples/Slice 20 (2).wav" name="Slice 20 (2)"
+                 volume="1" pan="0.5" uuid="5240421d59b04c86a833c6dc8a3bb0ff"
+                 length="25449" samplerate="44100.0" start="0.0" stop="25448.0"
+                 gainCached="-2.414572238922119" gain="-2.414572238922119"/>
+        <sampler inputChannel="1" samplerFile="samples/Slice 21 (2).wav" name="Slice 21 (2)"
+                 volume="1" pan="0.5" uuid="00625db3ceda44c3a6733dafb7bfa5af"
+                 length="15996" samplerate="44100.0" start="0.0" stop="15995.0"
+                 gainCached="-2.218298196792603" gain="-2.218298196792603"/>
+        <fxEnvelopeFollow uuid="b41c27486d3a49dbb4a41a5a50d2c5ce" pinned="fxEnvelopeFollow"
+                          unfolded="fxEnvelopeFollow" gain="4.445749840946785" attack="0.01"
+                          release="156.9002838134766"/>
+        <assignment name="# # env" paramId="value" outputMin="0.0" outputMax="1.0"
+                    uuid="939d71a999bc40e695c1f07b6b82d4f6" inputs="b41c27486d3a49dbb4a41a5a50d2c5ce"
+                    mode="external"/>
+      </sequencer>
+      <fxLimiter uuid="8f54c0238c67448f841eeea1bd187123" pinned="fxLimiter" unfolded="fxLimiter"/>
+      <sequencer mode="cycle" uuid="f4408489abb54ad3bbbbcd99539dd891" matrix="1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0/0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0/0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0/0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0/0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0/0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0/0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0/0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0/0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0/0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0/0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0/0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0/0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0/0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0/0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0/0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0/0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0/0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0/0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0/0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0/0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1"
+                 pinned="sequencer,mixPanel,childsPanel" unfolded="sequencer,childsPanel"
+                 retrigger="1" msgInputs="tom1" displayedIndices="7" name="ableton chops_oscified"
+                 muted="0" scroll="0" forwardOSC="1" oscAddress="/obsidian/oscout/world1/amen_break/ableton_chops">
+        <sampler inputChannel="1" samplerFile="samples/Slice 1 .wav" name="Slice 1 "
+                 volume="1" pan="0.5" uuid="177dd93a7fa247eba265cd5037a2f813"
+                 length="10890" samplerate="96000.0" start="0.0" stop="10889.0"
+                 gainCached="0.5673031806945801" gain="0.5673031806945801" pinned="sampler,mixPanel"
+                 unfolded="sampler" startDisplayedTime="0" endDisplayedTime="0.3787074829931973"/>
+        <sampler inputChannel="1" samplerFile="samples/Slice 2 .wav" name="Slice 2 "
+                 volume="1" pan="0.5" uuid="99cc35f6e1ac4d979fa7b7f14e1b6f4b"
+                 length="8689" samplerate="44100.0" start="0.0" stop="8688.0"
+                 gainCached="-2.787593841552734" gain="-2.787593841552734" pinned="sampler,mixPanel"
+                 unfolded="sampler" startDisplayedTime="0" endDisplayedTime="0.1970068027210884"/>
+        <sampler inputChannel="1" samplerFile="samples/Slice 3 .wav" name="Slice 3 "
+                 volume="1" pan="0.5" uuid="6a93be7f65304a7e96dfb6cd12a9dfcd"
+                 length="7703" samplerate="44100.0" start="0.0" stop="7702.0"
+                 gainCached="1.268452167510986" gain="1.268452167510986" pinned="sampler,mixPanel"
+                 unfolded="sampler" startDisplayedTime="0" endDisplayedTime="0.1746485260770975"/>
+        <sampler inputChannel="1" samplerFile="samples/Slice 4 .wav" name="Slice 4 "
+                 volume="1" pan="0.5" uuid="68a5d0fbab164d759bd3d8bb8e2dbfd4"
+                 length="63763" samplerate="96000.0" start="0.0" stop="8672.0"
+                 gainCached="-1.7327880859375" gain="-1.7327880859375" pinned="sampler,mixPanel"
+                 unfolded="sampler" startDisplayedTime="0" endDisplayedTime="0.1966439909297052"/>
+        <sampler inputChannel="1" samplerFile="samples/Slice 5 .wav" name="Slice 5 "
+                 volume="1" pan="0.5" uuid="b984a95fc60c4736884f49903e55799a"
+                 length="8597" samplerate="44100.0" start="0.0" stop="8596.0"
+                 gainCached="-2.990027904510498" gain="-2.990027904510498" pinned="sampler,mixPanel"
+                 unfolded="sampler" startDisplayedTime="0" endDisplayedTime="0.1949206349206349"/>
+        <sampler inputChannel="1" samplerFile="samples/Slice 6 .wav" name="Slice 6 "
+                 volume="1" pan="0.5" uuid="0a3806950df64b4c9328d21cfcebe853"
+                 length="63523" samplerate="96000.0" start="0.0" stop="25890.0"
+                 gainCached="-1.7327880859375" gain="-1.7327880859375" pinned="sampler,mixPanel"
+                 unfolded="sampler" startDisplayedTime="0" endDisplayedTime="0.5870748299319728"
+                 playLength="1.0"/>
+        <sampler inputChannel="1" samplerFile="samples/Slice 7 .wav" name="Slice 7 "
+                 volume="1" pan="0.5" uuid="76414bc0079643e9ad532af3e97fd3ea"
+                 length="11008" samplerate="96000.0" start="0.0" stop="4628.0"
+                 gainCached="-0.2209954261779785" gain="-0.2209954261779785" pinned="sampler,mixPanel"
+                 unfolded="sampler" startDisplayedTime="0" endDisplayedTime="0.1049433106575964"/>
+        <sampler inputChannel="1" samplerFile="samples/Slice 8 .wav" name="Slice 8 "
+                 volume="1" pan="0.5" uuid="818efb696bb148d0b4d4f99adfbeae38"
+                 length="3110" samplerate="44100.0" start="0.0" stop="3109.0"
+                 gainCached="-3.894659996032715" gain="-3.894659996032715" pinned="sampler,mixPanel"
+                 unfolded="sampler" startDisplayedTime="0" endDisplayedTime="0.07049886621315193"/>
+        <sampler inputChannel="1" samplerFile="samples/Slice 9 .wav" name="Slice 9 "
+                 volume="1" pan="0.5" uuid="260ee846907d4d7b9646349f600a4418"
+                 length="18039" samplerate="44100.0" start="0.0" stop="18038.0"
+                 gainCached="-0.7647104263305664" gain="-0.7647104263305664" pinned="sampler,mixPanel"
+                 unfolded="sampler" startDisplayedTime="0" endDisplayedTime="0.4090249433106576"
+                 playLength="1.0"/>
+        <sampler inputChannel="1" samplerFile="samples/Slice 10 .wav" name="Slice 10 "
+                 volume="1" pan="0.5" uuid="8d58566805194256922113894285f687"
+                 length="62321" samplerate="96000.0" start="0.0" stop="8781.0"
+                 gainCached="-3.217777967453003" gain="-3.217777967453003" pinned="sampler,mixPanel"
+                 unfolded="sampler" startDisplayedTime="0" endDisplayedTime="0.1991156462585034"/>
+        <sampler inputChannel="1" samplerFile="samples/Slice 11 .wav" name="Slice 11 "
+                 volume="1" pan="0.5" uuid="87de016d8c0b4dcfb769c046c2890fcc"
+                 length="14338" samplerate="96000.0" start="0.0" stop="14337.0"
+                 gainCached="-1.640763521194458" gain="-1.640763521194458" pinned="sampler,mixPanel"
+                 unfolded="sampler" startDisplayedTime="0" endDisplayedTime="0.5768934240362812"
+                 playLength="0.9960000514984131"/>
+        <sampler inputChannel="1" samplerFile="samples/Slice 12 .wav" name="Slice 12 "
+                 volume="1" pan="0.5" uuid="df006835ac6649279c7ada3eadd3263b"
+                 length="16425" samplerate="44100.0" start="0.0" stop="16424.0"
+                 gainCached="-3.015300273895264" gain="-3.015300273895264" pinned="sampler,mixPanel"
+                 unfolded="sampler" startDisplayedTime="0" endDisplayedTime="0.3724263038548753"/>
+        <sampler inputChannel="1" samplerFile="samples/Slice 13 .wav" name="Slice 13 "
+                 volume="1" pan="0.5" uuid="003c889935e147e6ac4e3dee39e9ea2b"
+                 length="11342" samplerate="96000.0" start="0.0" stop="9561.0"
+                 gainCached="-1.973079204559326" gain="-1.973079204559326" pinned="sampler,mixPanel"
+                 unfolded="sampler" startDisplayedTime="0" endDisplayedTime="0.2168027210884354"/>
+        <sampler inputChannel="1" samplerFile="samples/Slice 14 .wav" name="Slice 14 "
+                 volume="1" pan="0.5" uuid="659982c2927d4faa94321aa6208fd64e"
+                 length="8268" samplerate="44100.0" start="0.0" stop="8267.0"
+                 gainCached="2.582305431365967" gain="2.582305431365967" pinned="sampler,mixPanel"
+                 unfolded="sampler" startDisplayedTime="0" endDisplayedTime="0.1874603174603175"/>
+        <sampler inputChannel="1" samplerFile="samples/Slice 15 .wav" name="Slice 15 "
+                 volume="1" pan="0.5" uuid="d7665d30570e4490b56f7c505262056b"
+                 length="12364" samplerate="96000.0" start="0.0" stop="7894.0"
+                 gainCached="-3.943088531494141" gain="-3.943088531494141" pinned="sampler,mixPanel"
+                 unfolded="sampler" startDisplayedTime="0" endDisplayedTime="0.1790022675736961"/>
+        <sampler inputChannel="1" samplerFile="samples/Slice 16 .wav" name="Slice 16 "
+                 volume="1" pan="0.5" uuid="c3a922e6f7834c6c9e5b6f497c54c41a"
+                 length="13715" samplerate="44100.0" start="0.0" stop="13714.0"
+                 gainCached="-0.9429121017456055" gain="-0.9429121017456055" pinned="sampler,mixPanel"
+                 unfolded="sampler" startDisplayedTime="0" endDisplayedTime="0.3109750566893424"/>
+        <sampler inputChannel="1" samplerFile="samples/Slice 17 .wav" name="Slice 17 "
+                 volume="1" pan="0.5" uuid="fb3b05e7dad04a60bce249e1acebab38"
+                 length="13893" samplerate="96000.0" start="0.0" stop="8191.0"
+                 gainCached="2.024842262268066" gain="2.024842262268066" pinned="sampler,mixPanel"
+                 unfolded="sampler" startDisplayedTime="0" endDisplayedTime="0.1857369614512472"/>
+        <sampler inputChannel="1" samplerFile="samples/Slice 18 .wav" name="Slice 18 "
+                 volume="1" pan="0.5" uuid="087e0b12998144b78bf2ed75a36606b3"
+                 length="3903" samplerate="44100.0" start="0.0" stop="3902.0"
+                 gainCached="0.4298210144042969" gain="0.4298210144042969" pinned="sampler,mixPanel"
+                 unfolded="sampler" startDisplayedTime="0" endDisplayedTime="0.08848072562358276"/>
+        <sampler inputChannel="1" samplerFile="samples/Slice 19 .wav" name="Slice 19 "
+                 volume="1" pan="0.5" uuid="49afb94a4cf34c028b88fbc457e983ad"
+                 length="10004" samplerate="96000.0" start="0.0" stop="10003.0"
+                 gainCached="-3.263773679733276" gain="-3.263773679733276" pinned="sampler,mixPanel"
+                 unfolded="sampler" startDisplayedTime="0" endDisplayedTime="0.3665986394557823"/>
+        <sampler inputChannel="1" samplerFile="samples/Slice 20 .wav" name="Slice 20 "
+                 volume="1" pan="0.5" uuid="cb28306a890a44ea801c5d8bc7fc6444"
+                 length="25449" samplerate="44100.0" start="0.0" stop="25448.0"
+                 gainCached="-2.414572238922119" gain="-2.414572238922119" pinned="sampler,mixPanel"
+                 unfolded="sampler" startDisplayedTime="0" endDisplayedTime="0.5770521541950113"
+                 playLength="0.9790000319480896"/>
+        <sampler inputChannel="1" samplerFile="samples/Slice 21 .wav" name="Slice 21 "
+                 volume="1" pan="0.5" uuid="5af21e140f38468f9cf48baf76e68c07"
+                 length="63534" samplerate="96000.0" start="0.0" stop="15995.0"
+                 gainCached="-2.218298196792603" gain="-2.218298196792603" pinned="sampler,mixPanel"
+                 unfolded="sampler" startDisplayedTime="0" endDisplayedTime="0.3626984126984127"/>
+        <fxEnvelopeFollow uuid="f36f2c2a973645cabaf4a37e6e69e812" pinned="fxEnvelopeFollow"
+                          unfolded="fxEnvelopeFollow" gain="4.445749840946785" attack="0.01"
+                          release="156.9002838134766"/>
+        <assignment name="# # env" paramId="value" outputMin="0.0" outputMax="1.0"
+                    uuid="c6e20f0aa3be4b6982f24383b4e852cc" inputs="f36f2c2a973645cabaf4a37e6e69e812"
+                    mode="external"/>
+      </sequencer>
+    </group>
+    <drumPads name="hand drum (snare)_oscified" uuid="85cfb837dd5b4eada9b0b9425caebfd0"
+              unfolded="drumPads,childsPanel,mixPanel,noteTranspPanel,inputPanel"
+              displayedIndices="2" scroll="0" surfaceType="snare" matrix="1,0,0,0,0,0,0,1,0,0/0,1,1,0,0,0,0,0,1,0/0,0,0,1,0,0,0,0,0,0/0,0,0,0,1,0,0,0,0,0/0,0,0,0,0,0,0,0,0,0/0,0,0,0,0,1,1,0,0,1"
+              advancedMode="1" selectedColumn="0" pinned="drumPads,childsPanel,mixPanel,macroPanel,sendPanel,noteTranspPanel,inputPanel"
+              displayRear="0" activePads="center,rimshot-center,cross-stick,rim-shoulder,edge,rimshot-edge,rim-tip"
+              pan="0.5" msgInputs="snare1" displayFx="1" displayedFxIndices="1"
+              showMix="0" volume="1.0" muted="1">
+      <hitController name="Open" uuid="37b071b6362047a8b8f1a10119167cad" unfolded="hitController,childsPanel"
+                     threshold="0.5" padA="center" padB="edge" displayedIndices="2"
+                     scroll="0.0" matrix="0,0,1/0,1,0/1,0,0" weights="l:0.333333,0.333333,0.333333"
+                     advancedMode="1" numSteps="3" selectedColumn="0" pinned="hitController,childsPanel"
+                     selectedPads="center,edge,cross-stick,rimshot-center,rimshot-edge,rim-tip,rim-shoulder,stickshot,damped,shell"
+                     spread="0.0">
+        <sequencer name="velocity 3" mode="cycle" uuid="884073cf084c453895b604c13a363f87"
+                   unfolded="sequencer,childsPanel" displayedIndices="" scroll="0.0"
+                   matrix="1,0,0/0,1,0/0,0,1" displayRear="1" selectedColumn="0"
+                   curIdx="1" pinned="sequencer,childsPanel" saveStep="1" forwardOSC="1"
+                   oscAddress="/obsidian/oscout/world1/snare_tones/Open_velocity_3">
+          <sampler inputChannel="1" samplerFile="%%%%_lib_%%%%/samples/Percussion Section/Detailed/Black Cat Congas/Hembra/open tone/Black Cat_hembra_open-tone_v3-1.wav"
+                   name="Black Cat_hembra_open-tone_v3-1" volume="1.0" pan="0.5"
+                   uuid="6facc9f247674f3fa3a10f9cc306f936" unfolded="sampler" startDisplayedTime="0.0"
+                   endDisplayedTime="1.050544217687075" length="46330" samplerate="44100.0"
+                   start="0" stop="46329" gain="-3.999130249023438" fadeOut="1050.544311523438"
+                   adsrSustain="0.0" displayedIndices="" pinned="sampler,mixPanel"
+                   gainCached="-3.999130249023438" playLength="0.382000058889389"/>
+          <sampler inputChannel="1" samplerFile="%%%%_lib_%%%%/samples/Percussion Section/Detailed/Black Cat Congas/Hembra/open tone/Black Cat_hembra_open-tone_v3-2.wav"
+                   name="Black Cat_hembra_open-tone_v3-2" volume="1" pan="0.5" uuid="f9fd14c7811d46cca2573c3687915272"
+                   unfolded="sampler" startDisplayedTime="0.0" endDisplayedTime="1.30265306122449"
+                   length="57448" samplerate="44100.0" start="0" stop="57447" gain="-3.999130249023438"
+                   fadeOut="1302.653076171875" adsrSustain="0.0" displayedIndices=""
+                   pinned="sampler,mixPanel" gainCached="-3.999130249023438" playLength="0.4770002663135529"/>
+          <sampler inputChannel="1" samplerFile="%%%%_lib_%%%%/samples/Percussion Section/Detailed/Black Cat Congas/Hembra/open tone/Black Cat_hembra_open-tone_v3-3.wav"
+                   name="Black Cat_hembra_open-tone_v3-3" volume="1" pan="0.5" uuid="0c63eff826f047f0aaa544d1e4136296"
+                   unfolded="sampler" startDisplayedTime="0.0" endDisplayedTime="1.232698412698413"
+                   length="54363" samplerate="44100.0" start="0" stop="54362" gain="-3.999130249023438"
+                   fadeOut="1232.698486328125" adsrSustain="0.0" displayedIndices=""
+                   pinned="sampler,mixPanel" gainCached="-3.999130249023438" playLength="0.650999903678894"/>
+          <fxEnvelopeFollow uuid="298cc91418dd408ea43cc2a3112fb4b6" pinned="fxEnvelopeFollow"
+                            unfolded="fxEnvelopeFollow" gain="8.13126142579614" attack="0.01"
+                            release="156.9002838134766"/>
+          <assignment name="# # env" paramId="value" outputMin="0.0" outputMax="1.0"
+                      uuid="2c190c9238fb48029a76efb583c1b421" inputs="298cc91418dd408ea43cc2a3112fb4b6"
+                      mode="external"/>
+        </sequencer>
+        <sequencer name="velocity 2" mode="cycle" uuid="c2580ddf876b468d9f03a172a4c99010"
+                   unfolded="sequencer,childsPanel" displayedIndices="" scroll="0.0"
+                   matrix="1,0,0/0,1,0/0,0,1" displayRear="1" selectedColumn="0"
+                   curIdx="1" pinned="sequencer,childsPanel" saveStep="1" forwardOSC="1"
+                   oscAddress="/obsidian/oscout/world1/snare_tones/Open_velocity_2">
+          <sampler inputChannel="1" samplerFile="%%%%_lib_%%%%/samples/Percussion Section/Detailed/Black Cat Congas/Hembra/open tone/Black Cat_hembra_open-tone_v2-1.wav"
+                   name="Black Cat_hembra_open-tone_v2-1" volume="1" pan="0.5" uuid="f18c401a274f48ccadc5d7032bb17b5f"
+                   unfolded="sampler" startDisplayedTime="0.004603174603174603"
+                   endDisplayedTime="0.5430839002267573" length="62480" samplerate="44100.0"
+                   start="203" stop="23950" gain="-3.999131202697754" fadeOut="1412.154174804688"
+                   adsrSustain="0.0" displayedIndices="" pinned="sampler,mixPanel"
+                   gainCached="-3.999131202697754" playLength="0.6730000972747803"/>
+          <sampler inputChannel="1" samplerFile="%%%%_lib_%%%%/samples/Percussion Section/Detailed/Black Cat Congas/Hembra/open tone/Black Cat_hembra_open-tone_v2-2.wav"
+                   name="Black Cat_hembra_open-tone_v2-2" volume="1" pan="0.5" uuid="ff79f9e9d4f04cd7a9ddaefb37bbd19c"
+                   unfolded="sampler" startDisplayedTime="0.00816326530612245" endDisplayedTime="1.030181405895692"
+                   length="50324" samplerate="44100.0" start="360" stop="45431"
+                   gain="-3.999130249023438" fadeOut="1141.111083984375" adsrSustain="0.0"
+                   displayedIndices="" pinned="sampler,mixPanel" gainCached="-3.999130249023438"
+                   playLength="0.7379999160766602"/>
+          <sampler inputChannel="1" samplerFile="%%%%_lib_%%%%/samples/Percussion Section/Detailed/Black Cat Congas/Hembra/open tone/Black Cat_hembra_open-tone_v2-3.wav"
+                   name="Black Cat_hembra_open-tone_v2-3" volume="1" pan="0.5" uuid="e75d3dcfe74c4888968631cfba23442c"
+                   unfolded="sampler" startDisplayedTime="0.002766439909297052"
+                   endDisplayedTime="0.7159410430839003" length="49206" samplerate="44100.0"
+                   start="122" stop="31573" gain="-3.999130249023438" fadeOut="1112.993286132812"
+                   adsrSustain="0.0" displayedIndices="" pinned="sampler,mixPanel"
+                   gainCached="-3.999130249023438" playLength="0.7350000143051147"/>
+          <fxEnvelopeFollow uuid="7e1c22db866d44cba98365fd7f0f5bd4" pinned="fxEnvelopeFollow"
+                            unfolded="fxEnvelopeFollow" gain="7.6538586086285765" attack="0.01"
+                            release="156.9002838134766"/>
+          <assignment name="# # env" paramId="value" outputMin="0.0" outputMax="1.0"
+                      uuid="1cdcc4b3be794f3299fefc6c08d4f0d9" inputs="7e1c22db866d44cba98365fd7f0f5bd4"
+                      mode="external"/>
+        </sequencer>
+        <sequencer name="velocity 1" mode="cycle" uuid="1204aa1cc668495497d5247c3497b89e"
+                   unfolded="sequencer,childsPanel" displayedIndices="" scroll="0.0"
+                   matrix="1,0,0/0,1,0/0,0,1" displayRear="1" selectedColumn="0"
+                   curIdx="0" pinned="sequencer,childsPanel" saveStep="1" forwardOSC="1"
+                   oscAddress="/obsidian/oscout/world1/snare_tones/Open_velocity_1">
+          <sampler inputChannel="1" samplerFile="%%%%_lib_%%%%/samples/Percussion Section/Detailed/Black Cat Congas/Hembra/open tone/Black Cat_hembra_open-tone_v1-1.wav"
+                   name="Black Cat_hembra_open-tone_v1-1" volume="1" pan="0.5" uuid="4be5a9ed2348422b8f132cf2125d2336"
+                   unfolded="sampler" startDisplayedTime="0.007664399092970522"
+                   endDisplayedTime="0.4454421768707483" length="36834" samplerate="44100.0"
+                   start="338" stop="19644" gain="-3.999130249023438" fadeOut="630.48291015625"
+                   adsrSustain="0.0" displayedIndices="" pinned="sampler,mixPanel"
+                   gainCached="-3.999130249023438" playLength="0.454000324010849"/>
+          <sampler inputChannel="1" samplerFile="%%%%_lib_%%%%/samples/Percussion Section/Detailed/Black Cat Congas/Hembra/open tone/Black Cat_hembra_open-tone_v1-2.wav"
+                   name="Black Cat_hembra_open-tone_v1-2" volume="1" pan="0.5" uuid="e687ba0b643145fd946d52ee98015f1f"
+                   unfolded="sampler" startDisplayedTime="0.006802721088435374"
+                   endDisplayedTime="0.716031746031746" length="39784" samplerate="44100.0"
+                   start="300" stop="31577" gain="-3.999130249023438" fadeOut="902.1088256835938"
+                   adsrSustain="0.0" displayedIndices="" pinned="sampler,mixPanel"
+                   gainCached="-3.999130249023438" playLength="0.4790004193782806"/>
+          <sampler inputChannel="1" samplerFile="%%%%_lib_%%%%/samples/Percussion Section/Detailed/Black Cat Congas/Hembra/open tone/Black Cat_hembra_open-tone_v1-3.wav"
+                   name="Black Cat_hembra_open-tone_v1-3" volume="1" pan="0.5" uuid="6671256eb2e94f90a410956101586e95"
+                   unfolded="sampler" startDisplayedTime="0.003650793650793651"
+                   endDisplayedTime="0.6040589569160998" length="43395" samplerate="44100.0"
+                   start="161" stop="26639" gain="-3.999130249023438" fadeOut="983.9909057617188"
+                   adsrSustain="0.0" displayedIndices="" pinned="sampler,mixPanel"
+                   gainCached="-3.999130249023438" playLength="0.5550001859664917"/>
+          <fxEnvelopeFollow uuid="f12789206dbe488386b641530947576d" pinned="fxEnvelopeFollow"
+                            unfolded="fxEnvelopeFollow" gain="7.013372435944723" attack="0.01"
+                            release="156.9002838134766"/>
+          <assignment name="# # env" paramId="value" outputMin="0.0" outputMax="1.0"
+                      uuid="dbfdf526707d472e855240a826bd2b1b" inputs="f12789206dbe488386b641530947576d"
+                      mode="external"/>
+        </sequencer>
+      </hitController>
+      <hitController name="Cross Stick" uuid="b054bc5eaa114918a8dbce7a389b6325" unfolded="hitController,childsPanel"
+                     threshold="0.5" padA="center" padB="edge" displayedIndices="0"
+                     scroll="0.0" matrix="0,0,1/0,1,0/1,0,0" weights="l:0.333333,0.333333,0.333333"
+                     advancedMode="1" numSteps="3" selectedColumn="0" pinned="hitController,childsPanel"
+                     selectedPads="center,edge,cross-stick,rimshot-center,rimshot-edge,rim-tip,rim-shoulder,stickshot,damped,shell">
+        <sequencer name="velocity 3" mode="cycle" uuid="b01117aa276247e0b2c142fddc57959c"
+                   unfolded="sequencer,childsPanel" displayedIndices="" scroll="0.0"
+                   curIdx="0" matrix="1,0,0/0,1,0/0,0,1" selectedColumn="0" pinned="sequencer,childsPanel"
+                   saveStep="1" forwardOSC="1" oscAddress="/obsidian/oscout/world1/snare_tones/Cross_Stick_velocity_3">
+          <sampler inputChannel="1" samplerFile="%%%%_lib_%%%%/samples/Percussion Section/Detailed/Black Cat Congas/Hembra/muted/Black Cat_hembra_muted_tone_v3-1.wav"
+                   name="Black Cat_hembra_muted_tone_v3-1" volume="1" pan="0.5"
+                   uuid="574bc14a8285456580ee7a852dd0376f" length="38503" samplerate="44100.0"
+                   start="105" stop="24813" gain="-3.999130249023438" unfolded="sampler"
+                   startDisplayedTime="0.002380952380952381" endDisplayedTime="0.5626530612244898"
+                   fadeOut="873.0612182617188" adsrSustain="0.0" displayedIndices=""
+                   pinned="sampler,mixPanel" gainCached="-3.999130249023438" playLength="0.7200000286102295"/>
+          <sampler inputChannel="1" samplerFile="%%%%_lib_%%%%/samples/Percussion Section/Detailed/Black Cat Congas/Hembra/muted/Black Cat_hembra_muted_tone_v3-2.wav"
+                   name="Black Cat_hembra_muted_tone_v3-2" volume="1" pan="0.5"
+                   uuid="c3eff3dd24e7402ba9cf7e5ba52d7e22" length="38252" samplerate="44100.0"
+                   start="110" stop="30070" gain="-3.999130249023438" unfolded="sampler"
+                   startDisplayedTime="0.002494331065759637" endDisplayedTime="0.681859410430839"
+                   fadeOut="864.875244140625" adsrSustain="0.0" displayedIndices=""
+                   pinned="sampler,mixPanel" gainCached="-3.999130249023438" muted="0"
+                   playLength="0.5059999227523804"/>
+          <sampler inputChannel="1" samplerFile="%%%%_lib_%%%%/samples/Percussion Section/Detailed/Black Cat Congas/Hembra/muted/Black Cat_hembra_muted_tone_v3-3.wav"
+                   name="Black Cat_hembra_muted_tone_v3-3" volume="1" pan="0.5"
+                   uuid="9c6e1e888b8c468b8470ad25011ce569" length="29639" samplerate="44100.0"
+                   start="254" stop="29638" gain="-3.999130249023438" unfolded="sampler"
+                   startDisplayedTime="0.005759637188208617" endDisplayedTime="0.672063492063492"
+                   fadeOut="666.3038940429688" adsrSustain="0.0" displayedIndices=""
+                   pinned="sampler,mixPanel" gainCached="-3.999130249023438" playLength="0.5089999437332153"/>
+          <fxEnvelopeFollow uuid="f8e4a0e1ed834808a6f58563aa403649" pinned="fxEnvelopeFollow"
+                            unfolded="fxEnvelopeFollow" gain="10.225146186377188" attack="0.01"
+                            release="156.9002838134766"/>
+          <assignment name="# # env" paramId="value" outputMin="0.0" outputMax="1.0"
+                      uuid="4997fb7308864c72b9ed28104ae5534d" inputs="f8e4a0e1ed834808a6f58563aa403649"
+                      mode="external"/>
+        </sequencer>
+        <sequencer name="velocity 2" mode="cycle" uuid="c16ee0921c37443e92f40a1fdbe9fa76"
+                   unfolded="sequencer,childsPanel" displayedIndices="" scroll="0.0"
+                   matrix="1,0,0/0,1,0/0,0,1" selectedColumn="0" curIdx="0" lastIdx="0"
+                   pinned="sequencer,childsPanel" saveStep="1" forwardOSC="1" oscAddress="/obsidian/oscout/world1/snare_tones/Cross_Stick_velocity_2">
+          <sampler inputChannel="1" samplerFile="%%%%_lib_%%%%/samples/Percussion Section/Detailed/Black Cat Congas/Hembra/muted/Black Cat_hembra_muted_tone_v2-1.wav"
+                   name="Black Cat_hembra_muted_tone_v2-1" volume="1" pan="0.5"
+                   uuid="0705ae1f76b34628b101c9fefa6b8a3a" length="25319" samplerate="44100.0"
+                   start="219" stop="25318" gain="-3.999130249023438" unfolded="sampler"
+                   startDisplayedTime="0.004965986394557823" endDisplayedTime="0.5741043083900227"
+                   displayedIndices="" pinned="sampler,mixPanel" gainCached="-3.999130249023438"
+                   fadeIn="0.1000000014901161" fadeOut="402.7942199707031" playLength="0.5070000886917114"/>
+          <sampler inputChannel="1" samplerFile="%%%%_lib_%%%%/samples/Percussion Section/Detailed/Black Cat Congas/Hembra/muted/Black Cat_hembra_muted_tone_v2-2.wav"
+                   name="Black Cat_hembra_muted_tone_v2-2" volume="1" pan="0.5"
+                   uuid="0748bf8a1cc34656ae7525ae11ae0b1a" length="33121" samplerate="44100.0"
+                   start="0" stop="33120" gain="-3.999130249023438" unfolded="sampler"
+                   startDisplayedTime="0.0" endDisplayedTime="0.7510204081632653"
+                   displayedIndices="" pinned="sampler,mixPanel" gainCached="-3.999130249023438"
+                   fadeOut="437.2641906738281" playLength="0.4279998242855072"/>
+          <sampler inputChannel="1" samplerFile="%%%%_lib_%%%%/samples/Percussion Section/Detailed/Black Cat Congas/Hembra/muted/Black Cat_hembra_muted_tone_v2-3.wav"
+                   name="Black Cat_hembra_muted_tone_v2-3" volume="1" pan="0.5"
+                   uuid="017d4f3de78f49648636ebe21380647f" length="23563" samplerate="44100.0"
+                   start="0" stop="23562" gain="-3.999131202697754" unfolded="sampler"
+                   startDisplayedTime="0.0" endDisplayedTime="0.5342857142857143"
+                   displayedIndices="" pinned="sampler,mixPanel" gainCached="-3.999131202697754"
+                   playLength="0.5359999537467957" fadeOut="226.3798828125"/>
+          <fxEnvelopeFollow uuid="feb14d1b9d1e44ce97cfe1e3584e67d9" pinned="fxEnvelopeFollow"
+                            unfolded="fxEnvelopeFollow" gain="9.724532234617882" attack="0.01"
+                            release="156.9002838134766"/>
+          <assignment name="# # env" paramId="value" outputMin="0.0" outputMax="1.0"
+                      uuid="ac482d36f87e4fa6ae3fa0dd5e73418c" inputs="feb14d1b9d1e44ce97cfe1e3584e67d9"
+                      mode="external"/>
+        </sequencer>
+        <sequencer name="velocity 1" mode="cycle" uuid="f3ca47f1020f4e13a3062d4af1fcb01d"
+                   unfolded="sequencer,childsPanel" displayedIndices="" scroll="0.0"
+                   curIdx="1" lastIdx="1" matrix="1,0,0/0,1,0/0,0,1" selectedColumn="4"
+                   pinned="sequencer,childsPanel" saveStep="1" forwardOSC="1" oscAddress="/obsidian/oscout/world1/snare_tones/Cross_Stick_velocity_1">
+          <sampler inputChannel="1" samplerFile="%%%%_lib_%%%%/samples/Percussion Section/Detailed/Black Cat Congas/Hembra/muted/Black Cat_hembra_muted_tone_v1-1.wav"
+                   name="Black Cat_hembra_muted_tone_v1-1" volume="1" pan="0.5"
+                   uuid="09819cbb197d4fb894da00bb8e980403" length="52760" samplerate="44100.0"
+                   start="211" stop="12750" gain="-3.999130249023438" unfolded="sampler"
+                   startDisplayedTime="0.004784580498866213" endDisplayedTime="0.2891156462585034"
+                   fadeOut="1196.349243164062" adsrSustain="0.0" displayedIndices=""
+                   pinned="sampler,mixPanel" gainCached="-3.999130249023438" playLength="0.7500000596046448"/>
+          <sampler inputChannel="1" samplerFile="%%%%_lib_%%%%/samples/Percussion Section/Detailed/Black Cat Congas/Hembra/muted/Black Cat_hembra_muted_tone_v1-2.wav"
+                   name="Black Cat_hembra_muted_tone_v1-2" volume="1" pan="0.5"
+                   uuid="83093343c6454f198c3fd5fc26586356" length="43633" samplerate="44100.0"
+                   start="111" stop="14059" gain="-3.999130249023438" unfolded="sampler"
+                   startDisplayedTime="0.002517006802721088" endDisplayedTime="0.3187981859410431"
+                   fadeOut="989.3877563476562" adsrSustain="0.0" displayedIndices=""
+                   pinned="sampler,mixPanel" gainCached="-3.999130249023438" playLength="0.7349998950958252"/>
+          <sampler inputChannel="1" samplerFile="%%%%_lib_%%%%/samples/Percussion Section/Detailed/Black Cat Congas/Hembra/muted/Black Cat_hembra_muted_tone_v1-3.wav"
+                   name="Black Cat_hembra_muted_tone_v1-3" volume="1" pan="0.5"
+                   uuid="0e02580b9ab248ca9cec060409894f96" length="48191" samplerate="44100.0"
+                   start="206" stop="10575" gain="-3.999131202697754" unfolded="sampler"
+                   startDisplayedTime="0.004671201814058957" endDisplayedTime="0.2397959183673469"
+                   fadeOut="1092.743774414062" adsrSustain="0.0" displayedIndices=""
+                   pinned="sampler,mixPanel" gainCached="-3.999131202697754" playLength="0.8169999122619629"/>
+          <fxEnvelopeFollow uuid="f982739e0a214c1faaec649b8479b498" pinned="fxEnvelopeFollow"
+                            unfolded="fxEnvelopeFollow" gain="10.557991618299233" attack="0.01"
+                            release="156.9002838134766"/>
+          <assignment name="# # env" paramId="value" outputMin="0.0" outputMax="1.0"
+                      uuid="e76d80c9968841c3bda3b148ce73a55a" inputs="f982739e0a214c1faaec649b8479b498"
+                      mode="external"/>
+        </sequencer>
+      </hitController>
+      <hitController name="Rimshot Center" uuid="e74e7154011f46e582073f1f51ba21d6"
+                     unfolded="hitController,childsPanel" threshold="0.5" padA="center"
+                     padB="edge" displayedIndices="0" scroll="0.0" displayRear="0"
+                     matrix="0,0,1/0,1,0/1,0,0" weights="l:0.333333,0.333333,0.333333"
+                     advancedMode="1" numSteps="3" selectedColumn="2" pinned="hitController,childsPanel"
+                     selectedPads="center,edge,cross-stick,rimshot-center,rimshot-edge,rim-tip,rim-shoulder,stickshot,damped,shell">
+        <sequencer name="velocity 3" mode="cycle" uuid="346d2dc4ee06417cb3323e7f9778becb"
+                   unfolded="sequencer,childsPanel" displayedIndices="0" scroll="0.0"
+                   matrix="1,0,0/0,1,0/0,0,1" curIdx="2" pinned="sequencer,childsPanel"
+                   saveStep="1" advancedMode="1" forwardOSC="1" oscAddress="/obsidian/oscout/world1/snare_tones/Rimshot_Center_velocity_3">
+          <sampler inputChannel="1" samplerFile="%%%%_lib_%%%%/samples/Percussion Section/Detailed/Black Cat Congas/Hembra/slap/Black Cat_hembra_slap_v3-1.wav"
+                   name="Black Cat_hembra_slap_v3-1" volume="1" pan="0.5" uuid="ebb8fe9cdc4b44a8b5af39196603c32c"
+                   length="36272" samplerate="44100.0" start="0" stop="17833" gain="-3.999130249023438"
+                   unfolded="sampler" startDisplayedTime="0.0" endDisplayedTime="0.4043764172335601"
+                   fadeOut="822.4716796875" adsrSustain="0.0" displayedIndices=""
+                   pinned="sampler,mixPanel" gainCached="-3.999130249023438"/>
+          <sampler inputChannel="1" samplerFile="%%%%_lib_%%%%/samples/Percussion Section/Detailed/Black Cat Congas/Hembra/slap/Black Cat_hembra_slap_v3-2.wav"
+                   name="Black Cat_hembra_slap_v3-2" volume="1" pan="0.5" uuid="3f1bd7018d7b4d218e53ad9def519dc0"
+                   length="46263" samplerate="44100.0" start="0" stop="23260" gain="-3.999130249023438"
+                   unfolded="sampler" startDisplayedTime="0.0" endDisplayedTime="0.5274376417233561"
+                   fadeOut="1049.02490234375" adsrSustain="0.0" displayedIndices=""
+                   pinned="sampler,mixPanel" gainCached="-3.999130249023438"/>
+          <sampler inputChannel="1" samplerFile="%%%%_lib_%%%%/samples/Percussion Section/Detailed/Black Cat Congas/Hembra/slap/Black Cat_hembra_slap_v3-3.wav"
+                   name="Black Cat_hembra_slap_v3-3" volume="1" pan="0.5" uuid="03a49df8cdaf473a91fce8cc241f9e00"
+                   length="54315" samplerate="44100.0" start="0" stop="20066" gain="-3.999130249023438"
+                   unfolded="sampler" startDisplayedTime="0.0" endDisplayedTime="0.4550113378684807"
+                   fadeOut="1231.609985351562" adsrSustain="0.0" displayedIndices=""
+                   pinned="sampler,mixPanel" gainCached="-3.999130249023438"/>
+          <fxEnvelopeFollow uuid="bd784c167b3f43d6a6eec08e65a898d8" pinned="fxEnvelopeFollow"
+                            unfolded="fxEnvelopeFollow" gain="8.380881221131936" attack="0.01"
+                            release="156.9002838134766"/>
+          <assignment name="# # env" paramId="value" outputMin="0.0" outputMax="1.0"
+                      uuid="10586fc2c95d48da8c7421e783bb1b41" inputs="bd784c167b3f43d6a6eec08e65a898d8"
+                      mode="external"/>
+        </sequencer>
+        <sequencer name="velocity 2" mode="cycle" uuid="09e008aefeba4934b8e2a62ed49f25ac"
+                   unfolded="sequencer,childsPanel" displayedIndices="" scroll="0"
+                   matrix="1,0,0/0,1,0/0,0,1" advancedMode="1" numSteps="3" curIdx="2"
+                   pinned="sequencer,childsPanel" saveStep="1" forwardOSC="1" oscAddress="/obsidian/oscout/world1/snare_tones/Rimshot_Center_velocity_2">
+          <sampler inputChannel="1" samplerFile="%%%%_lib_%%%%/samples/Percussion Section/Detailed/Black Cat Congas/Hembra/slap/Black Cat_hembra_slap_v2-1.wav"
+                   name="Black Cat_hembra_slap_v2-1" volume="1" pan="0.5" uuid="dcedcc5913ea47e693178d16f19fbdf2"
+                   length="39442" samplerate="44100.0" start="0" stop="9312" gain="-3.999130249023438"
+                   unfolded="sampler" startDisplayedTime="0.0" endDisplayedTime="0.8943764163643257"
+                   fadeOut="894.353759765625" adsrSustain="0.0" displayedIndices=""
+                   pinned="sampler,mixPanel" gainCached="-3.999130249023438"/>
+          <sampler inputChannel="1" samplerFile="%%%%_lib_%%%%/samples/Percussion Section/Detailed/Black Cat Congas/Hembra/slap/Black Cat_hembra_slap_v2-2.wav"
+                   name="Black Cat_hembra_slap_v2-2" volume="1" pan="0.5" uuid="2c3c291501494d12b39f5acd29836988"
+                   length="66655" samplerate="44100.0" start="0" stop="21848" gain="-3.999131202697754"
+                   unfolded="sampler" startDisplayedTime="0" endDisplayedTime="1.511451247165533"
+                   fadeOut="1511.428588867188" adsrSustain="0.0" displayedIndices=""
+                   pinned="sampler,mixPanel" gainCached="-3.999131202697754"/>
+          <sampler inputChannel="1" samplerFile="%%%%_lib_%%%%/samples/Percussion Section/Detailed/Black Cat Congas/Hembra/slap/Black Cat_hembra_slap_v2-3.wav"
+                   name="Black Cat_hembra_slap_v2-3" volume="1" pan="0.5" uuid="cef1755373894fb6a78cbb1b2ee32bde"
+                   length="51190" samplerate="44100.0" start="0" stop="16636" gain="-3.999130249023438"
+                   unfolded="sampler" startDisplayedTime="1.107239064324084e-9"
+                   endDisplayedTime="1.160770975056689" fadeOut="1160.748291015625"
+                   adsrSustain="0.0" displayedIndices="" pinned="sampler,mixPanel"
+                   gainCached="-3.999130249023438"/>
+          <fxEnvelopeFollow uuid="fd153e8417d143db8066b648034abff8" pinned="fxEnvelopeFollow"
+                            unfolded="fxEnvelopeFollow" gain="10.540174971094897" attack="0.01"
+                            release="156.9002838134766"/>
+          <assignment name="# # env" paramId="value" outputMin="0.0" outputMax="1.0"
+                      uuid="2fa1e422463d424b8a988931304fb368" inputs="fd153e8417d143db8066b648034abff8"
+                      mode="external"/>
+        </sequencer>
+        <sequencer name="velocity 1" mode="cycle" uuid="aa8a969bcde84d3f94a5aecd453475d6"
+                   unfolded="sequencer,childsPanel" displayedIndices="" scroll="0.0"
+                   matrix="1,0,0/0,1,0/0,0,1" curIdx="0" selectedColumn="4" pinned="sequencer,childsPanel"
+                   saveStep="1" forwardOSC="1" oscAddress="/obsidian/oscout/world1/snare_tones/Rimshot_Center_velocity_1">
+          <sampler inputChannel="1" samplerFile="%%%%_lib_%%%%/samples/Percussion Section/Detailed/Black Cat Congas/Hembra/slap/Black Cat_hembra_slap_v1-1.wav"
+                   name="Black Cat_hembra_slap_v1-1" volume="1" pan="0.5" uuid="9ce2e29598a042febebc2dab6b5707dd"
+                   length="39198" samplerate="44100.0" start="0" stop="12412" gain="-3.999130249023438"
+                   unfolded="sampler" startDisplayedTime="9.054525087603266e-12"
+                   endDisplayedTime="0.888843537414966" fadeOut="888.8208618164062"
+                   adsrSustain="0.0" displayedIndices="" pinned="sampler,mixPanel"
+                   gainCached="-3.999130249023438"/>
+          <sampler inputChannel="1" samplerFile="%%%%_lib_%%%%/samples/Percussion Section/Detailed/Black Cat Congas/Hembra/slap/Black Cat_hembra_slap_v1-2.wav"
+                   name="Black Cat_hembra_slap_v1-2" volume="1" pan="0.5" uuid="f5d8b3a6faaf4d07a38f8b94ad1b51d0"
+                   length="38728" samplerate="44100.0" start="0" stop="10757" gain="-3.999130249023438"
+                   unfolded="sampler" startDisplayedTime="0" endDisplayedTime="0.8781859410430839"
+                   fadeOut="878.1632690429688" adsrSustain="0.0" displayedIndices=""
+                   pinned="sampler,mixPanel" gainCached="-3.999130249023438"/>
+          <sampler inputChannel="1" samplerFile="%%%%_lib_%%%%/samples/Percussion Section/Detailed/Black Cat Congas/Hembra/slap/Black Cat_hembra_slap_v1-3.wav"
+                   name="Black Cat_hembra_slap_v1-3" volume="1" pan="0.5" uuid="d8d9d8a98515482f8af585fbf55b3d2a"
+                   length="29187" samplerate="44100.0" start="0" stop="11755" gain="-3.999130249023438"
+                   unfolded="sampler" startDisplayedTime="0" endDisplayedTime="0.6618367346938776"
+                   fadeOut="661.8140258789062" adsrSustain="0.0" displayedIndices=""
+                   pinned="sampler,mixPanel" gainCached="-3.999130249023438"/>
+          <fxEnvelopeFollow uuid="bf97ee1bf45c40d2a870861627c81f37" pinned="fxEnvelopeFollow"
+                            unfolded="fxEnvelopeFollow" gain="9.540297742204357" attack="0.01"
+                            release="156.9002838134766"/>
+          <assignment name="# # env" paramId="value" outputMin="0.0" outputMax="1.0"
+                      uuid="a32b62c4b1a24c10b1c3abc29007629c" inputs="bf97ee1bf45c40d2a870861627c81f37"
+                      mode="external"/>
+        </sequencer>
+      </hitController>
+      <hitController name="Rimshot Edge" uuid="1bc3c1561a824298805910102a7eba3b" unfolded="hitController,childsPanel"
+                     threshold="0.5" padA="center" padB="edge" displayedIndices=""
+                     scroll="0.0" displayRear="0" matrix="0,0,1/0,1,0/1,0,0" weights="l:0.333333,0.333333,0.333333"
+                     advancedMode="1" numSteps="3" selectedColumn="1" pinned="hitController,childsPanel"
+                     selectedPads="center,edge,cross-stick,rimshot-center,rimshot-edge,rim-tip,rim-shoulder,stickshot,damped,shell">
+        <sequencer name="velocity 3" mode="cycle" uuid="7ce3f021909b44a39a3491b1b81b563a"
+                   unfolded="sequencer,childsPanel" displayedIndices="" scroll="0.0"
+                   matrix="1,0,0/0,1,0/0,0,1" curIdx="2" lastIdx="2" selectedColumn="0"
+                   pinned="sequencer,childsPanel" saveStep="1" forwardOSC="1" oscAddress="/obsidian/oscout/world1/snare_tones/Rimshot_Edge_velocity_3">
+          <sampler inputChannel="1" samplerFile="%%%%_lib_%%%%/samples/Percussion Section/Detailed/Black Cat Congas/Hembra/muted/Black Cat_hembra_muted_slap_v3-1.wav"
+                   name="Black Cat_hembra_muted_slap_v3-1" volume="1" pan="0.5"
+                   uuid="96a1d966dfb54562a5e95e2d28817f07" length="38456" samplerate="44100.0"
+                   start="0" stop="38455" gain="-3.999130249023438" unfolded="sampler"
+                   startDisplayedTime="0.0" endDisplayedTime="0.8719954648526077"
+                   fadeOut="871.9954223632812" adsrSustain="0.0" displayedIndices=""
+                   pinned="sampler,mixPanel" gainCached="-3.999130249023438" playLength="0.5750002861022949"/>
+          <sampler inputChannel="1" samplerFile="%%%%_lib_%%%%/samples/Percussion Section/Detailed/Black Cat Congas/Hembra/muted/Black Cat_hembra_muted_slap_v3-2.wav"
+                   name="Black Cat_hembra_muted_slap_v3-2" volume="1" pan="0.5"
+                   uuid="a418728cb0734192a6b343f5bb0c9fe5" length="38135" samplerate="44100.0"
+                   start="0" stop="38134" gain="-3.999130249023438" unfolded="sampler"
+                   startDisplayedTime="0.0" endDisplayedTime="0.8647165532879818"
+                   fadeOut="864.716552734375" adsrSustain="0.0" displayedIndices=""
+                   pinned="sampler,mixPanel" gainCached="-3.999130249023438" playLength="0.6169998645782471"/>
+          <sampler inputChannel="1" samplerFile="%%%%_lib_%%%%/samples/Percussion Section/Detailed/Black Cat Congas/Hembra/muted/Black Cat_hembra_muted_slap_v3-3.wav"
+                   name="Black Cat_hembra_muted_slap_v3-3" volume="1" pan="0.5"
+                   uuid="17feb0c8d89e4b4cbeee1bccd2b94111" length="49245" samplerate="44100.0"
+                   start="0" stop="49244" gain="-3.999130249023438" unfolded="sampler"
+                   startDisplayedTime="0.0" endDisplayedTime="1.116643990929705"
+                   fadeOut="1116.64404296875" adsrSustain="0.0" displayedIndices=""
+                   pinned="sampler,mixPanel" gainCached="-3.999130249023438" playLength="0.5160000920295715"/>
+          <fxEnvelopeFollow uuid="e0d6fd87e06e4b4f8f5951413df3d19f" pinned="fxEnvelopeFollow"
+                            unfolded="fxEnvelopeFollow" gain="9.350475645315393" attack="0.01"
+                            release="156.9002838134766"/>
+          <assignment name="# # env" paramId="value" outputMin="0.0" outputMax="1.0"
+                      uuid="1e001308787f4cacbf166a4073e967ab" inputs="e0d6fd87e06e4b4f8f5951413df3d19f"
+                      mode="external"/>
+        </sequencer>
+        <sequencer name="velocity 2" mode="cycle" uuid="0bad7dd82baf469194bc4b0fb42f3e49"
+                   unfolded="sequencer,childsPanel" displayedIndices="" scroll="0.0"
+                   matrix="1,0,0/0,1,0/0,0,1" advancedMode="1" numSteps="3" selectedColumn="0"
+                   curIdx="0" lastIdx="0" pinned="sequencer,childsPanel" saveStep="1"
+                   forwardOSC="1" oscAddress="/obsidian/oscout/world1/snare_tones/Rimshot_Edge_velocity_2">
+          <sampler inputChannel="1" samplerFile="%%%%_lib_%%%%/samples/Percussion Section/Detailed/Black Cat Congas/Hembra/muted/Black Cat_hembra_muted_slap_v2-1.wav"
+                   name="Black Cat_hembra_muted_slap_v2-1" volume="1" pan="0.5"
+                   uuid="92dc093e84be4fcfb02a193ccbef8bfb" length="20578" samplerate="44100.0"
+                   start="0" stop="20577" gain="-3.999130249023438" unfolded="sampler"
+                   startDisplayedTime="0.0" endDisplayedTime="0.4665986394557823"
+                   fadeOut="428.9068298339844" adsrSustain="0.0" displayedIndices=""
+                   pinned="sampler,mixPanel" gainCached="-3.999130249023438"/>
+          <sampler inputChannel="1" samplerFile="%%%%_lib_%%%%/samples/Percussion Section/Detailed/Black Cat Congas/Hembra/muted/Black Cat_hembra_muted_slap_v2-2.wav"
+                   name="Black Cat_hembra_muted_slap_v2-2" volume="1" pan="0.5"
+                   uuid="89975b1e94704f0cb1f4fd83089d3636" length="28004" samplerate="44100.0"
+                   start="0" stop="28003" gain="-3.999131202697754" unfolded="sampler"
+                   startDisplayedTime="0.0" endDisplayedTime="0.6349886621315193"
+                   fadeOut="634.9886474609375" adsrSustain="0.0" displayedIndices=""
+                   pinned="sampler,mixPanel" gainCached="-3.999131202697754" playLength="0.6110000610351562"/>
+          <sampler inputChannel="1" samplerFile="%%%%_lib_%%%%/samples/Percussion Section/Detailed/Black Cat Congas/Hembra/muted/Black Cat_hembra_muted_slap_v2-3.wav"
+                   name="Black Cat_hembra_muted_slap_v2-3" volume="1" pan="0.5"
+                   uuid="81dbb0cbd85648b192034cb0e443005b" length="30002" samplerate="44100.0"
+                   start="0" stop="30001" gain="-3.999130249023438" unfolded="sampler"
+                   startDisplayedTime="0.0" endDisplayedTime="0.6802947845804989"
+                   fadeOut="680.2947998046875" adsrSustain="0.0" displayedIndices=""
+                   pinned="sampler,mixPanel" gainCached="-3.999130249023438" playLength="0.7159999012947083"/>
+          <fxEnvelopeFollow uuid="f74cef4c260e4a178fee70185ab36bf3" pinned="fxEnvelopeFollow"
+                            unfolded="fxEnvelopeFollow" gain="10.261319925793487" attack="0.01"
+                            release="156.9002838134766"/>
+          <assignment name="# # env" paramId="value" outputMin="0.0" outputMax="1.0"
+                      uuid="22df9ae86db34dc7a14039f4ae8706d6" inputs="f74cef4c260e4a178fee70185ab36bf3"
+                      mode="external"/>
+        </sequencer>
+        <sequencer name="velocity 1" mode="cycle" uuid="0407615b5afe4d57bc2d817e6a9c9250"
+                   unfolded="sequencer,childsPanel" displayedIndices="" scroll="0.0"
+                   matrix="1,0,0/0,1,0/0,0,1" selectedColumn="0" curIdx="0" lastIdx="1"
+                   pinned="sequencer,childsPanel" advancedMode="1" saveStep="1"
+                   forwardOSC="1" oscAddress="/obsidian/oscout/world1/snare_tones/Rimshot_Edge_velocity_1">
+          <sampler inputChannel="1" samplerFile="%%%%_lib_%%%%/samples/Percussion Section/Detailed/Black Cat Congas/Hembra/muted/Black Cat_hembra_muted_slap_v1-1.wav"
+                   name="Black Cat_hembra_muted_slap_v1-1" volume="1" pan="0.5"
+                   uuid="159d1921d77d4c0998ae8c372c932c42" length="32471" samplerate="44100.0"
+                   start="0" stop="11455" gain="-3.999130249023438" unfolded="sampler"
+                   startDisplayedTime="0.0" endDisplayedTime="0.259750566893424"
+                   fadeOut="736.2811279296875" adsrSustain="0.0" displayedIndices=""
+                   pinned="sampler,mixPanel" gainCached="-3.999130249023438"/>
+          <sampler inputChannel="1" samplerFile="%%%%_lib_%%%%/samples/Percussion Section/Detailed/Black Cat Congas/Hembra/muted/Black Cat_hembra_muted_slap_v1-2.wav"
+                   name="Black Cat_hembra_muted_slap_v1-2" volume="1" pan="0.5"
+                   uuid="fa09e0c0d400493aa0ab11946dd83dea" length="28545" samplerate="44100.0"
+                   start="0" stop="13876" gain="-3.999131202697754" unfolded="sampler"
+                   startDisplayedTime="0.0" endDisplayedTime="0.3146485260770975"
+                   fadeOut="647.2562255859375" adsrSustain="0.0" displayedIndices=""
+                   pinned="sampler,mixPanel" gainCached="-3.999131202697754"/>
+          <sampler inputChannel="1" samplerFile="%%%%_lib_%%%%/samples/Percussion Section/Detailed/Black Cat Congas/Hembra/muted/Black Cat_hembra_muted_slap_v1-3.wav"
+                   name="Black Cat_hembra_muted_slap_v1-3" volume="1" pan="0.5"
+                   uuid="4d4000b3a3d24a9d9e4ecb3e46f0280d" length="24988" samplerate="44100.0"
+                   start="0" stop="7288" gain="-3.999129295349121" unfolded="sampler"
+                   startDisplayedTime="0.0" endDisplayedTime="0.1652607709750567"
+                   fadeOut="72.02348327636719" adsrSustain="0.0" displayedIndices=""
+                   pinned="sampler,mixPanel" gainCached="-3.999129295349121" playLength="1.0"/>
+          <fxEnvelopeFollow uuid="9ecf7e509ff4402eb143b351a3cb0b20" pinned="fxEnvelopeFollow"
+                            unfolded="fxEnvelopeFollow" gain="11.06281956051837" attack="0.01"
+                            release="156.9002838134766"/>
+          <assignment name="# # env" paramId="value" outputMin="0.0" outputMax="1.0"
+                      uuid="c73c85894b144511a0fde67e301877be" inputs="9ecf7e509ff4402eb143b351a3cb0b20"
+                      mode="external"/>
+        </sequencer>
+      </hitController>
+      <sequencer name="heal-toe cycle" mode="cycle" uuid="c719acebfd3d4aca92005af7d0a2d0b9"
+                 unfolded="sequencer,childsPanel" displayedIndices="" scroll="0.0"
+                 matrix="1,0,0,0,0,0/0,1,0,0,0,0/0,0,1,0,0,0/0,0,0,1,0,0/0,0,0,0,1,0/0,0,0,0,0,1"
+                 selectedColumn="3" curIdx="2" displayRear="0" pinned="sequencer,childsPanel"
+                 saveStep="1" forwardOSC="1" oscAddress="/obsidian/oscout/world1/snare_tones/hand_drum_snare_heal_toe_cycle">
+        <sampler inputChannel="1" samplerFile="%%%%_lib_%%%%/samples/Percussion Section/Detailed/Black Cat Congas/Quinto/special/Black Cat_quinto_heal-1.wav"
+                 name="Black Cat_quinto_heal-1" volume="1" pan="0.5" uuid="77e78e12d30249a888a1bfab2776107d"
+                 length="13446" samplerate="44100.0" start="0" stop="3884" gain="-3.999131202697754"
+                 unfolded="sampler" startDisplayedTime="0" endDisplayedTime="0.3048979591836735"
+                 fadeOut="304.8752746582031" adsrSustain="0.0" transpose="-4"
+                 displayedIndices="" pinned="sampler,mixPanel" gainCached="-3.999131202697754"/>
+        <sampler inputChannel="1" samplerFile="%%%%_lib_%%%%/samples/Percussion Section/Detailed/Black Cat Congas/Quinto/special/Black Cat_quinto_heal-2.wav"
+                 name="Black Cat_quinto_heal-2" volume="1" pan="0.5" uuid="71d9e4de9c2b4c1cb282a1c8de5cbbdd"
+                 length="24254" samplerate="44100.0" start="0" stop="7410" gain="-3.999130249023438"
+                 unfolded="sampler" startDisplayedTime="0" endDisplayedTime="0.5499773242630386"
+                 fadeOut="549.9546508789062" adsrSustain="0.0" transpose="-4"
+                 displayedIndices="" pinned="sampler,mixPanel" gainCached="-3.999130249023438"/>
+        <sampler inputChannel="1" samplerFile="%%%%_lib_%%%%/samples/Percussion Section/Detailed/Black Cat Congas/Quinto/special/Black Cat_quinto_heal-3.wav"
+                 name="Black Cat_quinto_heal-3" volume="1" pan="0.5" uuid="df359861bbc9484cb0a0ccd66c3bac16"
+                 length="22947" samplerate="44100.0" start="0" stop="8860" gain="-3.999130249023438"
+                 unfolded="sampler" startDisplayedTime="0.0" endDisplayedTime="0.5203401360544218"
+                 fadeOut="520.3174438476562" adsrSustain="0.0" transpose="-4"
+                 displayedIndices="" pinned="sampler,mixPanel" gainCached="-3.999130249023438"/>
+        <sampler inputChannel="1" samplerFile="%%%%_lib_%%%%/samples/Percussion Section/Detailed/Black Cat Congas/Quinto/special/Black Cat_quinto_toe-1.wav"
+                 name="Black Cat_quinto_toe-1" volume="1" pan="0.5" uuid="723466ce3171466797952a8b8efba35a"
+                 length="17476" samplerate="44100.0" start="0" stop="6116" gain="-3.999130249023438"
+                 unfolded="sampler" startDisplayedTime="0" endDisplayedTime="0.396281179138322"
+                 fadeOut="396.2585144042969" adsrSustain="0.0" transpose="-4"
+                 displayedIndices="" pinned="sampler,mixPanel" gainCached="-3.999130249023438"/>
+        <sampler inputChannel="1" samplerFile="%%%%_lib_%%%%/samples/Percussion Section/Detailed/Black Cat Congas/Quinto/special/Black Cat_quinto_toe-2.wav"
+                 name="Black Cat_quinto_toe-2" volume="1" pan="0.5" uuid="63d608c5d1694dd8b5387ec80ddfbcad"
+                 length="17381" samplerate="44100.0" start="0" stop="5117" gain="-3.999130249023438"
+                 unfolded="sampler" startDisplayedTime="0" endDisplayedTime="0.3941269841269841"
+                 fadeOut="394.1043090820312" adsrSustain="0.0" transpose="-4"
+                 displayedIndices="" pinned="sampler,mixPanel" gainCached="-3.999130249023438"/>
+        <sampler inputChannel="1" samplerFile="%%%%_lib_%%%%/samples/Percussion Section/Detailed/Black Cat Congas/Quinto/special/Black Cat_quinto_toe-3.wav"
+                 name="Black Cat_quinto_toe-3" volume="1" pan="0.5" uuid="c345993bee28475987b4880f428660ce"
+                 length="21740" samplerate="44100.0" start="0" stop="6099" gain="-3.999130249023438"
+                 unfolded="sampler" startDisplayedTime="0" endDisplayedTime="0.4929705215419501"
+                 fadeOut="492.9478454589844" adsrSustain="0.0" transpose="-4"
+                 displayedIndices="" pinned="sampler,mixPanel" gainCached="-3.999130249023438"/>
+        <fxEnvelopeFollow uuid="63d4c4a79ee84bd4948bb7baecf20da2" pinned="fxEnvelopeFollow"
+                          unfolded="fxEnvelopeFollow" gain="10.331595539766383" attack="0.01"
+                          release="156.9002838134766"/>
+        <assignment name="# # env" paramId="value" outputMin="0.0" outputMax="1.0"
+                    uuid="66c1eef772634dd094995a5f6cd3e0ba" inputs="63d4c4a79ee84bd4948bb7baecf20da2"
+                    mode="external"/>
+      </sequencer>
+      <sequencer name="Fingers" mode="cycle" uuid="a85ded1ae207401185e5a4061dc46e53"
+                 unfolded="sequencer,childsPanel,mixPanel" displayedIndices=""
+                 scroll="82" matrix="1,0,0,0,0,0,0,0,0,0,0,0/0,1,0,0,0,0,0,0,0,0,0,0/0,0,1,0,0,0,0,0,0,0,0,0/0,0,0,1,0,0,0,0,0,0,0,0/0,0,0,0,1,0,0,0,0,0,0,0/0,0,0,0,0,1,0,0,0,0,0,0/0,0,0,0,0,0,1,0,0,0,0,0/0,0,0,0,0,0,0,1,0,0,0,0/0,0,0,0,0,0,0,0,1,0,0,0/0,0,0,0,0,0,0,0,0,1,0,0/0,0,0,0,0,0,0,0,0,0,1,0/0,0,0,0,0,0,0,0,0,0,0,1"
+                 selectedColumn="5" curIdx="1" displayRear="0" pinned="sequencer,childsPanel,mixPanel"
+                 volume="0.3650693297386169" saveStep="1" forwardOSC="1" oscAddress="/obsidian/oscout/world1/snare_tones/hand_drum_snare_Fingers">
+        <sampler inputChannel="1" samplerFile="%%%%_lib_%%%%/samples/Percussion Section/Detailed/Black Cat Congas/Quinto/special/Black Cat_quinto_finger-1.wav"
+                 name="Black Cat_quinto_finger-1" volume="1" pan="0.5" uuid="d184af0414114a9d9f53435562b5ec1b"
+                 length="40791" samplerate="44100.0" start="0" stop="23114" gain="-3.999130249023438"
+                 unfolded="sampler" startDisplayedTime="0" endDisplayedTime="0.9249659863945578"
+                 fadeOut="924.9432983398438" adsrSustain="0.0" transpose="-4"
+                 displayedIndices="" pinned="sampler,mixPanel" gainCached="-3.999130249023438"/>
+        <sampler inputChannel="1" samplerFile="%%%%_lib_%%%%/samples/Percussion Section/Detailed/Black Cat Congas/Quinto/special/Black Cat_quinto_finger-10.wav"
+                 name="Black Cat_quinto_finger-10" volume="1" pan="0.5" uuid="4bd16777594b415cb74b042a96a214ff"
+                 length="49643" samplerate="44100.0" start="0" stop="24683" gain="-3.999130249023438"
+                 unfolded="sampler" startDisplayedTime="0" endDisplayedTime="1.125691609977324"
+                 fadeOut="1125.668823242188" adsrSustain="0.0" transpose="-4"
+                 displayedIndices="" pinned="sampler,mixPanel" gainCached="-3.999130249023438"/>
+        <sampler inputChannel="1" samplerFile="%%%%_lib_%%%%/samples/Percussion Section/Detailed/Black Cat Congas/Quinto/special/Black Cat_quinto_finger-11.wav"
+                 name="Black Cat_quinto_finger-11" volume="1" pan="0.5" uuid="7b1e4aa6689943389c3daf95a5343f78"
+                 length="43824" samplerate="44100.0" start="0" stop="23007" gain="-3.999130249023438"
+                 unfolded="sampler" startDisplayedTime="0" endDisplayedTime="0.9937414965986394"
+                 fadeOut="993.7188110351562" adsrSustain="0.0" transpose="-4"
+                 displayedIndices="" pinned="sampler,mixPanel" gainCached="-3.999130249023438"/>
+        <sampler inputChannel="1" samplerFile="%%%%_lib_%%%%/samples/Percussion Section/Detailed/Black Cat Congas/Quinto/special/Black Cat_quinto_finger-12.wav"
+                 name="Black Cat_quinto_finger-12" volume="1" pan="0.5" uuid="c6400a272f2a4ae6aa1e11688dd448e1"
+                 length="49940" samplerate="44100.0" start="0" stop="21085" gain="-3.999132394790649"
+                 unfolded="sampler" startDisplayedTime="0" endDisplayedTime="1.132426303854875"
+                 fadeOut="1132.403564453125" adsrSustain="0.0" transpose="-4"
+                 displayedIndices="" pinned="sampler,mixPanel" gainCached="-3.999132394790649"/>
+        <sampler inputChannel="1" samplerFile="%%%%_lib_%%%%/samples/Percussion Section/Detailed/Black Cat Congas/Quinto/special/Black Cat_quinto_finger-2.wav"
+                 name="Black Cat_quinto_finger-2" volume="1" pan="0.5" uuid="6338f6188ab746ecaf454d45da42b09a"
+                 length="44174" samplerate="44100.0" start="0" stop="18283" gain="-3.999130249023438"
+                 unfolded="sampler" startDisplayedTime="0" endDisplayedTime="1.001678004535147"
+                 fadeOut="1001.655334472656" adsrSustain="0.0" transpose="-4"
+                 displayedIndices="" pinned="sampler,mixPanel" gainCached="-3.999130249023438"/>
+        <sampler inputChannel="1" samplerFile="%%%%_lib_%%%%/samples/Percussion Section/Detailed/Black Cat Congas/Quinto/special/Black Cat_quinto_finger-3.wav"
+                 name="Black Cat_quinto_finger-3" volume="1" pan="0.5" uuid="8ff34c01483845acbbad0a6f29f480cb"
+                 length="33951" samplerate="44100.0" start="0" stop="17447" gain="-3.999130249023438"
+                 unfolded="sampler" startDisplayedTime="0.0" endDisplayedTime="0.3956235827664399"
+                 fadeOut="769.8412475585938" adsrSustain="0.0" transpose="-4"
+                 displayedIndices="" pinned="sampler,mixPanel" gainCached="-3.999130249023438"
+                 playLength="0.4360000789165497"/>
+        <sampler inputChannel="1" samplerFile="%%%%_lib_%%%%/samples/Percussion Section/Detailed/Black Cat Congas/Quinto/special/Black Cat_quinto_finger-4.wav"
+                 name="Black Cat_quinto_finger-4" volume="1" pan="0.5" uuid="21fdde52247241eca3146d30f364c619"
+                 length="50129" samplerate="44100.0" start="0" stop="23811" gain="-3.999131202697754"
+                 unfolded="sampler" startDisplayedTime="0" endDisplayedTime="1.13671201814059"
+                 fadeOut="1136.689331054688" adsrSustain="0.0" transpose="-4"
+                 displayedIndices="" pinned="sampler,mixPanel" gainCached="-3.999131202697754"/>
+        <sampler inputChannel="1" samplerFile="%%%%_lib_%%%%/samples/Percussion Section/Detailed/Black Cat Congas/Quinto/special/Black Cat_quinto_finger-5.wav"
+                 name="Black Cat_quinto_finger-5" volume="1" pan="0.5" uuid="323f7e60d9c94e1e9613fb38656e0756"
+                 length="31750" samplerate="44100.0" start="0" stop="18697" gain="-3.999130249023438"
+                 unfolded="sampler" startDisplayedTime="0" endDisplayedTime="0.719954648526077"
+                 fadeOut="719.9319458007812" adsrSustain="0.0" transpose="-4"
+                 displayedIndices="" pinned="sampler,mixPanel" gainCached="-3.999130249023438"/>
+        <sampler inputChannel="1" samplerFile="%%%%_lib_%%%%/samples/Percussion Section/Detailed/Black Cat Congas/Quinto/special/Black Cat_quinto_finger-6.wav"
+                 name="Black Cat_quinto_finger-6" volume="1" pan="0.5" uuid="e8b0bf3688414a3aa379ec86965139f9"
+                 length="46941" samplerate="44100.0" start="0" stop="46940" gain="-3.999131202697754"
+                 unfolded="sampler" startDisplayedTime="0" endDisplayedTime="1.064421768707483"
+                 fadeOut="1064.399169921875" adsrSustain="0.0" transpose="-4"
+                 displayedIndices="" pinned="sampler,mixPanel" gainCached="-3.999131202697754"/>
+        <sampler inputChannel="1" samplerFile="%%%%_lib_%%%%/samples/Percussion Section/Detailed/Black Cat Congas/Quinto/special/Black Cat_quinto_finger-7.wav"
+                 name="Black Cat_quinto_finger-7" volume="1" pan="0.5" uuid="8570618d73d345c3ab07206d8c11a85d"
+                 length="39698" samplerate="44100.0" start="0" stop="39697" gain="-3.999130249023438"
+                 unfolded="sampler" startDisplayedTime="0" endDisplayedTime="0.9001814058956916"
+                 fadeOut="900.15869140625" adsrSustain="0.0" transpose="-4" displayedIndices=""
+                 pinned="sampler,mixPanel" gainCached="-3.999130249023438"/>
+        <sampler inputChannel="1" samplerFile="%%%%_lib_%%%%/samples/Percussion Section/Detailed/Black Cat Congas/Quinto/special/Black Cat_quinto_finger-8.wav"
+                 name="Black Cat_quinto_finger-8" volume="1" pan="0.5" uuid="562acf757cad48bc9282fa7dd0bab988"
+                 length="37592" samplerate="44100.0" start="0" stop="37591" gain="-3.999130249023438"
+                 unfolded="sampler" startDisplayedTime="2.295968515135527e-11"
+                 endDisplayedTime="0.8524263038548753" fadeOut="852.4036254882812"
+                 adsrSustain="0.0" transpose="-4" displayedIndices="" pinned="sampler,mixPanel"
+                 gainCached="-3.999130249023438"/>
+        <sampler inputChannel="1" samplerFile="%%%%_lib_%%%%/samples/Percussion Section/Detailed/Black Cat Congas/Quinto/special/Black Cat_quinto_finger-9.wav"
+                 name="Black Cat_quinto_finger-9" volume="1" pan="0.5" uuid="9f904bf7785b4bf68f48024a2b27a3d4"
+                 length="50297" samplerate="44100.0" start="0" stop="50296" gain="-3.999130249023438"
+                 unfolded="sampler" startDisplayedTime="0" endDisplayedTime="1.140521541950113"
+                 fadeOut="1140.498901367188" adsrSustain="0.0" transpose="-4"
+                 displayedIndices="" pinned="sampler,mixPanel" gainCached="-3.999130249023438"/>
+        <fxEnvelopeFollow uuid="c9b29786cf5e4710b02bbf0b4d2603f0" pinned="fxEnvelopeFollow"
+                          unfolded="fxEnvelopeFollow" gain="7.851560827732328" attack="0.01"
+                          release="156.9002838134766"/>
+        <assignment name="# # env" paramId="value" outputMin="0.0" outputMax="1.0"
+                    uuid="16c04d2c253c4f95ad0bacd91f9f94ed" inputs="c9b29786cf5e4710b02bbf0b4d2603f0"
+                    mode="external"/>
+      </sequencer>
+      <reverb uuid="be353eae55a04bad96685e3356bd7697" pinned="reverb" unfolded="reverb"
+              drywet="0.1574999988079071" roomsize="0.5634999871253967"/>
+      <gain uuid="e80c347efcfb4db2810f93f3aa3c18f8" pinned="gain" unfolded="gain"
+            gain="10.63124942779541"/>
+      <fxLimiter uuid="b7161f7985894063b9e01855a2fc53d8" pinned="fxLimiter" unfolded="fxLimiter"/>
+    </drumPads>
+    <drumPads surfaceType="tom" msgInputs="tom3" activePads="center,rim-shoulder,edge,rim-tip"
+              matrix="1,1,1,1,1,1,1,1,1,1/1,1,1,1,1,1,1,1,1,1/1,1,1,1,1,1,1,1,1,1"
+              uuid="0ad44461965d42cd85c681f561d483b9" pinned="drumPads,mixPanel,childsPanel,modulatorPanel"
+              unfolded="modulatorPanel,childsPanel" name="floor tom_oscified"
+              displayedIndices="0" advancedMode="1" selectedColumn="0" volume="1.0"
+              displayFx="1" displayedFxIndices="3" muted="0">
+      <sampler inputChannel="1" name="world1_tone-long-low" volume="1.0" pan="0.5"
+               uuid="61984abd0437478ba421ca89257d17a2" samplerate="44100.0"
+               gain="15.90618896484375" pinned="sampler,mixPanel,noteTranspPanel,inputPanel"
+               unfolded="sampler,noteTranspPanel,inputPanel" retrigger="1" adsrDecay="0.322499692440033"
+               scaleMode="1" scaleName="Pentatonic Minor" displayedAssignment="a57460eb51b64859a0f751ce4b808b9a"
+               octavesDn="-1.384146332740784" octavesUp="0.7759146094322205"
+               muted="0" samplerFile="samples/world1_tone-long.wav" length="276959"
+               startDisplayedTime="0" endDisplayedTime="6.280226757369615" start="0.0"
+               stop="276958.0" gainCached="15.90618896484375" fadeOut="1235.067993164062"
+               adsrSustain="-70.0" velocityCurve="0,0_0.500002,0.5_1,1" forwardOSC="1"
+               oscAddress="/obsidian/oscout/world1/floor_tom/floor_tom_low"
+               selected="1">
+        <assignment name="# Current note" paramId="curNoteSelect" outputMin="0.0"
+                    outputMax="1.0" uuid="a57460eb51b64859a0f751ce4b808b9a" inputs="here"
+                    mode="rand">
+          <stepsMod name="# rand" uuid="0398da8887aa4aa2b65e7625a08d5546"/>
+        </assignment>
+        <fxEnvelopeFollow uuid="cd69021b955141f9b54ba03358daffcb" pinned="fxEnvelopeFollow"
+                          unfolded="fxEnvelopeFollow" gain="13.812796387149493" attack="0.01"
+                          release="156.9002838134766"/>
+        <assignment name="# # env" paramId="value" outputMin="0.0" outputMax="1.0"
+                    uuid="8cb6ea74d5f44f1b88a5a88a9e9eb603" inputs="cd69021b955141f9b54ba03358daffcb"
+                    mode="external"/>
+        <assignment name="# d" paramId="adsrDecay" outputMin="0.1023668274283409"
+                    outputMax="3.027453660964966" uuid="60246125c0b54d40a7fee6e6d3c80c19"
+                    inputs="9365de520c3e4a1186cb9311377b0466" mode="external"/>
+      </sampler>
+      <sampler inputChannel="1" name="world1_tone-long-mid" volume="1.0" pan="0.5"
+               uuid="78bb295778914fc686a94b54a996d38a" samplerate="44100.0"
+               gain="20.0" pinned="sampler,mixPanel,noteTranspPanel,inputPanel"
+               unfolded="sampler,noteTranspPanel,inputPanel" retrigger="1" adsrDecay="0.322499692440033"
+               scaleMode="1" scaleName="Pentatonic Minor" displayedAssignment="0d2f2421794f48dab92f1fcfd5131b6e"
+               octavesDn="-0.5929877758026123" octavesUp="1.04782772064209"
+               muted="0" samplerFile="samples/world1_tone-long.wav" length="276959"
+               startDisplayedTime="0" endDisplayedTime="6.280226757369615" start="0.0"
+               stop="276958.0" gainCached="15.90618896484375" fadeOut="1235.067993164062"
+               adsrSustain="-70.0" autogain="0" velocityCurve="0.314286,0.202614_0.657143,0.601307_1,1"
+               forwardOSC="1" oscAddress="/obsidian/oscout/world1/floor_tom/floor_tom_mid">
+        <assignment name="# Current note" paramId="curNoteSelect" outputMin="0.0"
+                    outputMax="1.0" uuid="8c20ca67caee4bd0b8b9fb4a1e53cfd6" inputs="here"
+                    mode="rand">
+          <stepsMod name="# rand" uuid="b19a281ed5c54aaa8876f60315c17eaa"/>
+        </assignment>
+        <fxEnvelopeFollow uuid="11f563987fd046ba92fbff042ef3e4c5" pinned="fxEnvelopeFollow"
+                          unfolded="fxEnvelopeFollow" gain="13.812796387149493" attack="0.01"
+                          release="156.9002838134766"/>
+        <assignment name="# # env" paramId="value" outputMin="0.0" outputMax="1.0"
+                    uuid="060ab510c83a4dcf9db42114bc1b1244" inputs="11f563987fd046ba92fbff042ef3e4c5"
+                    mode="external"/>
+        <assignment name="# d" paramId="adsrDecay" outputMin="0.1023668274283409"
+                    outputMax="3.027453660964966" uuid="0d2f2421794f48dab92f1fcfd5131b6e"
+                    inputs="9365de520c3e4a1186cb9311377b0466" mode="external"/>
+      </sampler>
+      <sampler inputChannel="1" name="world1_tone-long-high" volume="1.0" pan="0.5"
+               uuid="0d715b1d7e434f679da968444c248060" samplerate="44100.0"
+               gain="15.90618896484375" pinned="sampler,mixPanel,noteTranspPanel,inputPanel"
+               unfolded="sampler,noteTranspPanel,inputPanel" retrigger="1" adsrDecay="0.322499692440033"
+               scaleMode="1" scaleName="Pentatonic Minor" displayedAssignment="389683c031994cd4a39e180196428ff4"
+               octavesDn="-0.5998475551605225" octavesUp="1.921112775802612"
+               muted="0" samplerFile="samples/world1_tone-long.wav" length="276959"
+               startDisplayedTime="0" endDisplayedTime="6.280226757369615" start="0.0"
+               stop="276958.0" gainCached="15.90618896484375" fadeOut="1235.067993164062"
+               adsrSustain="-70.0" forwardOSC="1" oscAddress="/obsidian/oscout/world1/floor_tom/floor_tom_high"
+               velocityCurve="0.685714,0.647059_0.842857,0.823529_1,1">
+        <assignment name="# Current note" paramId="curNoteSelect" outputMin="0.0"
+                    outputMax="1.0" uuid="ba988afb4a654e10898fa288c7a511a7" inputs="here"
+                    mode="rand">
+          <stepsMod name="# rand" uuid="605d8feee9a8435b91ee423b1c46f3bb"/>
+        </assignment>
+        <fxEnvelopeFollow uuid="8151819e5410493a81be14f6e7a53d94" pinned="fxEnvelopeFollow"
+                          unfolded="fxEnvelopeFollow" gain="13.812796387149493" attack="0.01"
+                          release="156.9002838134766"/>
+        <assignment name="# # env" paramId="value" outputMin="0.0" outputMax="1.0"
+                    uuid="ea3ea738ea70488888706b3fc896d2e7" inputs="8151819e5410493a81be14f6e7a53d94"
+                    mode="external"/>
+        <assignment name="# d" paramId="adsrDecay" outputMin="0.1023668274283409"
+                    outputMax="3.027453660964966" uuid="f93f1476f4f649f8a6609eca4bee8341"
+                    inputs="9365de520c3e4a1186cb9311377b0466" mode="external"/>
+      </sampler>
+      <reverb uuid="46e2e1def76d45e985eca0fca6d11521" pinned="reverb" unfolded="reverb"
+              drywet="0.2467031180858612"/>
+      <fxCompressor uuid="343a7e090bcc4404b9b9a7c197474372" pinned="fxCompressor"
+                    unfolded="fxCompressor" drywet="80.06718444824219" makeup="1.383000016212463"
+                    threshold="-9.181031227111816"/>
+      <multibandEQ uuid="8a75d7cec9644ecf98ccf3beee879a04" pinned="multibandEQ"
+                   unfolded="multibandEQ" selectedBand="2">
+        <filterBand cutoff="148.1636383703166" filtertype="Low Shelf" uuid="e52261a0c7fe4d6c85e493065df75d2c"
+                    gain="-9.267515923566879" resonance="0.7071067811865475"/>
+        <filterBand cutoff="200.0" filtertype="Peak" uuid="b34b07be58d442df8f55e2eccb591c3f"/>
+        <filterBand cutoff="2535.373703965637" filtertype="Peak" uuid="0945fdd01443459a9f66a28badfcd794"
+                    resonance="0.6659053247829642" gain="2.197452229299362"/>
+        <filterBand cutoff="16157.28163743713" filtertype="High Shelf" uuid="7fcc750ef89a445da9d740c8599d7ffe"
+                    gain="-2.961783439490445" resonance="0.7071067811865475"/>
+        <filterBand cutoff="100.0" muted="1" filtertype="Peak" uuid="b6c45dceecc04bdeb003b70c02c1b0f3"/>
+        <filterBand cutoff="10000.0" muted="1" filtertype="Peak" uuid="0654f321e31249638506314d1e3edcc6"/>
+        <filterBand cutoff="7000.0" muted="1" filtertype="Peak" uuid="3f262988049842b0829b12438fb7a492"/>
+        <filterBand cutoff="18000.0" muted="1" filtertype="Low Pass" uuid="f5141d41c655427bb4dfb463e635274d"/>
+      </multibandEQ>
+      <assignment name="# Mute" paramId="muted" outputMin="0" outputMax="1" uuid="06dca7cca3ee42bf9b5077a20818bfb0"
+                  inputs="801b41f190b044aea560a821f3f5fe63" mode="macro">
+        <macroMod name="# macro" uuid="9ef30ab88bb44c84acfab147c168b1c5"/>
+      </assignment>
+      <velocity name="# velocity" uuid="9365de520c3e4a1186cb9311377b0466" surfaceType="tom"
+                selectedPads="center,edge,cross-stick,rimshot-center,rimshot-edge,rim-tip,rim-shoulder,stickshot,damped,shell"/>
+      <gain uuid="657fbfd1b46a495ca2a90495260e592e" pinned="gain" unfolded="gain"
+            gain="2.246875047683716"/>
+    </drumPads>
+    <drumPads surfaceType="snare" msgInputs="snare1" activePads="center,rim-shoulder,edge,rim-tip"
+              matrix="1,1,0,1,1,0,0,1,1,0/1,1,0,1,1,0,0,1,1,0/1,1,0,1,1,0,0,1,1,0/0,0,1,0,0,1,1,0,0,1"
+              uuid="aef0757cab4b421b96cf2dbaf71b3282" pinned="drumPads,mixPanel,childsPanel"
+              unfolded="drumPads,childsPanel" advancedMode="1" selectedColumn="0"
+              displayFx="0" volume="1.0" displayedIndices="3" scroll="0" displayedFxIndices="1"
+              muted="0" name="_oscified">
+      <sampler inputChannel="1" name="world1_tone-low" volume="1.0" pan="0.5"
+               uuid="58cd9b1caba849f08a594c83542952b4" samplerate="44100.0"
+               gain="8.062166213989258" pinned="sampler,mixPanel,noteTranspPanel,inputPanel"
+               unfolded="sampler,noteTranspPanel,inputPanel" retrigger="1" adsrDecay="60.0"
+               scaleMode="1" scaleName="Pentatonic Minor" displayedAssignment="315a1552c33a42b6b917d0a6175feec4"
+               octavesDn="-1.241806387901306" octavesUp="1.04782772064209" muted="0"
+               samplerFile="VOLUMES_greg-fox-9.4.24/samples/world1_tone-1.wav"
+               length="136860" startDisplayedTime="0" endDisplayedTime="3.103378684807256"
+               start="0.0" stop="136859.0" gainCached="8.062166213989258" adsrSustain="-70.0"
+               forwardOSC="1" oscAddress="/obsidian/oscout/world1/snaretones/_lo">
+        <assignment name="# Current note" paramId="curNoteSelect" outputMin="0.0"
+                    outputMax="1.0" uuid="fb1079ae83644104aa498fb369823901" inputs="here"
+                    mode="rand">
+          <stepsMod name="# rand" uuid="ff13456c0f7d4b9884545284695ff3f3"/>
+        </assignment>
+        <assignment name="# d" paramId="adsrDecay" outputMin="0.06850409168772399"
+                    outputMax="0.4733117989528827" uuid="315a1552c33a42b6b917d0a6175feec4"
+                    inputs="here" mode="velocity">
+          <velocity name="# velocity" uuid="0ce8ec2a3a314dc7801b39d4eb4d9e9c" selectedPads="center,edge,cross-stick,rimshot-center,rimshot-edge,rim-tip,rim-shoulder,stickshot,damped,shell"/>
+        </assignment>
+        <fxEnvelopeFollow uuid="01ed1a3f3ac14800b83ffe02b464d70a" pinned="fxEnvelopeFollow"
+                          unfolded="fxEnvelopeFollow" gain="12.531201530911227" attack="0.01"
+                          release="156.9002838134766"/>
+        <assignment name="# # env" paramId="value" outputMin="0.0" outputMax="1.0"
+                    uuid="c91baddcb4494c56bbc5ae7293459a56" inputs="01ed1a3f3ac14800b83ffe02b464d70a"
+                    mode="external"/>
+      </sampler>
+      <sampler inputChannel="1" name="world1_tone-mid" volume="1.0" pan="0.5"
+               uuid="0519ec32b1414de3a5479efbf20b4a11" samplerate="44100.0"
+               gain="8.062166213989258" pinned="sampler,mixPanel,noteTranspPanel,inputPanel"
+               unfolded="sampler,noteTranspPanel,inputPanel" retrigger="1" adsrDecay="60.0"
+               scaleMode="1" scaleName="Pentatonic Minor" displayedAssignment="19c5f64251364f29bd7a257c9801564f"
+               octavesDn="-1.241806387901306" octavesUp="0.7393292784690857"
+               muted="0" samplerFile="VOLUMES_greg-fox-9.4.24/samples/world1_tone-1.wav"
+               length="136860" startDisplayedTime="0" endDisplayedTime="3.103378684807256"
+               start="0.0" stop="136859.0" gainCached="8.062166213989258" adsrSustain="-70.0"
+               velocityCurve="0.242857,0.202614_0.621429,0.601307_1,1" forwardOSC="1"
+               oscAddress="/obsidian/oscout/world1/snaretones/_mid">
+        <assignment name="# Current note" paramId="curNoteSelect" outputMin="0.0"
+                    outputMax="1.0" uuid="d539e654bfe244cb9d9aa11f7e2eea42" inputs="here"
+                    mode="rand">
+          <stepsMod name="# rand" uuid="e243a5c002bc474d9953c7c343e58006"/>
+        </assignment>
+        <assignment name="# d" paramId="adsrDecay" outputMin="0.06850409168772399"
+                    outputMax="0.4733117989528827" uuid="19c5f64251364f29bd7a257c9801564f"
+                    inputs="here" mode="velocity">
+          <velocity name="# velocity" uuid="942c4a1221564168bb06640e4c314853" selectedPads="center,edge,cross-stick,rimshot-center,rimshot-edge,rim-tip,rim-shoulder,stickshot,damped,shell"/>
+        </assignment>
+        <fxEnvelopeFollow uuid="96297eb9c7244a23ad6757eeb50e448f" pinned="fxEnvelopeFollow"
+                          unfolded="fxEnvelopeFollow" gain="12.531201530911227" attack="0.01"
+                          release="156.9002838134766"/>
+        <assignment name="# # env" paramId="value" outputMin="0.0" outputMax="1.0"
+                    uuid="0e29e27e756e4a4bb80ab64f21faf3ba" inputs="96297eb9c7244a23ad6757eeb50e448f"
+                    mode="external"/>
+      </sampler>
+      <sampler inputChannel="1" name="world1_tone-high" volume="1.0" pan="0.5"
+               uuid="0a44c71728ff4b29a3bbd9449540a92b" samplerate="44100.0"
+               gain="8.062166213989258" pinned="sampler,mixPanel,noteTranspPanel,inputPanel"
+               unfolded="sampler,noteTranspPanel,inputPanel" retrigger="1" adsrDecay="60.0"
+               scaleMode="1" scaleName="Pentatonic Minor" displayedAssignment="0dab1a4dafe940ef8ff9eed900afb113"
+               octavesDn="-0.6122332215309143" octavesUp="2.033917665481567"
+               muted="0" samplerFile="VOLUMES_greg-fox-9.4.24/samples/world1_tone-1.wav"
+               length="136860" startDisplayedTime="0" endDisplayedTime="3.103378684807256"
+               start="0.0" stop="136859.0" gainCached="8.062166213989258" adsrSustain="-70.0"
+               velocityCurve="0.585714,0.653595_0.792858,0.826797_1,1" forwardOSC="1"
+               oscAddress="/obsidian/oscout/world1/snaretones/_high">
+        <assignment name="# Current note" paramId="curNoteSelect" outputMin="0.0"
+                    outputMax="1.0" uuid="ff1e09987b004f70b16ff699f26348f4" inputs="here"
+                    mode="rand">
+          <stepsMod name="# rand" uuid="7110432e372947a4a4cd11246d701fbe"/>
+        </assignment>
+        <assignment name="# d" paramId="adsrDecay" outputMin="0.06850409168772399"
+                    outputMax="0.4733117989528827" uuid="0dab1a4dafe940ef8ff9eed900afb113"
+                    inputs="here" mode="velocity">
+          <velocity name="# velocity" uuid="a4c28a1561ef4844afd8f177c17d8bf6" selectedPads="center,edge,cross-stick,rimshot-center,rimshot-edge,rim-tip,rim-shoulder,stickshot,damped,shell"/>
+        </assignment>
+        <fxEnvelopeFollow uuid="7ad908ebd9e84f80816fc3b8fe748c8e" pinned="fxEnvelopeFollow"
+                          unfolded="fxEnvelopeFollow" gain="12.531201530911227" attack="0.01"
+                          release="156.9002838134766"/>
+        <assignment name="# # env" paramId="value" outputMin="0.0" outputMax="1.0"
+                    uuid="c9b6d6a069274377acf8bdd4162bbcd3" inputs="7ad908ebd9e84f80816fc3b8fe748c8e"
+                    mode="external"/>
+      </sampler>
+      <sampler inputChannel="1" name="world1_tone-long" volume="1.0" pan="0.5"
+               uuid="233cac3837f34c6486cf832b37dc9b4c" samplerate="44100.0"
+               gain="15.90618896484375" pinned="sampler,mixPanel,noteTranspPanel"
+               unfolded="sampler,noteTranspPanel" retrigger="1" adsrDecay="0.322499692440033"
+               scaleMode="1" scaleName="Pentatonic Minor" displayedAssignment="0d65bfe377bd4ba08d78fcf2b0446e46"
+               octavesDn="-0.3588033616542816" octavesUp="1.04782772064209"
+               muted="0" samplerFile="samples/world1_tone-long.wav" length="276959"
+               startDisplayedTime="0" endDisplayedTime="6.280226757369615" start="0.0"
+               stop="276958.0" gainCached="15.90618896484375" fadeOut="1235.067993164062"
+               adsrSustain="-70.0" displayFx="1" displayedFxIndices="0" forwardOSC="1"
+               oscAddress="/obsidian/oscout/world1/snaretones/_long">
+        <assignment name="# Current note" paramId="curNoteSelect" outputMin="0.0"
+                    outputMax="1.0" uuid="8eddb558eb5d4bce865142a592021bbd" inputs="here"
+                    mode="rand">
+          <stepsMod name="# rand" uuid="1ef9a5346999473fb368b69464aaa33e"/>
+        </assignment>
+        <assignment name="# d" paramId="adsrDecay" outputMin="0.1006609154413204"
+                    outputMax="1.618470455627306" uuid="0d65bfe377bd4ba08d78fcf2b0446e46"
+                    inputs="here" mode="velocity">
+          <velocity name="# velocity" uuid="187c3b8108964bd2a0920c2ce3fa374f" selectedPads="center,edge,cross-stick,rimshot-center,rimshot-edge,rim-tip,rim-shoulder,stickshot,damped,shell"/>
+        </assignment>
+        <fxTube uuid="098e54e526ad455e8a3b11b21a7208b1" pinned="fxTube" unfolded="fxTube"/>
+        <fxEnvelopeFollow uuid="c802ee5277c14aa0a4ea1d073f36a198" pinned="fxEnvelopeFollow"
+                          unfolded="fxEnvelopeFollow" gain="13.812796387149493" attack="0.01"
+                          release="156.9002838134766"/>
+        <assignment name="# # env" paramId="value" outputMin="0.0" outputMax="1.0"
+                    uuid="28e1b8554fb942de91e19f4d728dc17f" inputs="c802ee5277c14aa0a4ea1d073f36a198"
+                    mode="external"/>
+      </sampler>
+      <reverb uuid="6ea28dbbd1f446c2ad3fde7b66d45fb7" pinned="reverb" unfolded="reverb"
+              drywet="0.1860468685626984"/>
+      <fxCompressor uuid="3f11d24f8ab1437898af4cf51e5a1957" pinned="fxCompressor"
+                    unfolded="fxCompressor" drywet="72.86093902587891"/>
+      <assignment name="# Mute" paramId="muted" outputMin="0" outputMax="1" uuid="d40c1fc5e8ab4e1ca7ec6dcc5b9cc9cc"
+                  inputs="801b41f190b044aea560a821f3f5fe63" mode="macro">
+        <macroMod name="# macro" uuid="aa9d28f576264d708775d82a3d807324"/>
+      </assignment>
+    </drumPads>
+    <macro name="tonal mute" type="toggle" uuid="801b41f190b044aea560a821f3f5fe63"
+           value="0"/>
+  </sessionSet>
+  <sessionSet uuid="c446a9f80beb4b23866a74ac61d82719" name="world 2" volume="1"
+              pan="0.5" mainColour="ff0f184c" secondaryColour="6be6e3ff" gradients="0.500000:0.000000:0.715000:0.784000"
+              displayFx="1" displayedFxIndices="0,1" colour="ff201350" unfolded="controlSurfaces,showMixEffects"
+              setTrans="all" selected="1">
+    <drumPads name="kick pads" surfaceType="kick" msgInputs="kick1" activePads="open,closed,rim-shoulder"
+              uuid="3da9ecbfb24e4c6d9f3f897f0f522a08" pinned="drumPads,mixPanel,childsPanel"
+              unfolded="drumPads,childsPanel" matrix="1,1,1,1,1,1" displayFx="0"
+              displayedIndices="0" selectedColumn="0" advancedMode="1" displayedFxIndices="0">
+      <sequencer mode="random" uuid="2b2335fa18944bb4a6081c80852b523e" pinned="sequencer,mixPanel,childsPanel"
+                 unfolded="sequencer,childsPanel" matrix="1,0,0,0,0,0,0,0,0,0/0,1,0,0,0,0,0,0,0,0/0,0,1,0,0,0,0,0,0,0/0,0,0,1,0,0,0,0,0,0/0,0,0,0,1,0,0,0,0,0/0,0,0,0,0,1,0,0,0,0/0,0,0,0,0,0,1,0,0,0/0,0,0,0,0,0,0,1,0,0/0,0,0,0,0,0,0,0,1,0/0,0,0,0,0,0,0,0,0,1"
+                 displayFx="0" displayedIndices="0" retrigger="1" name="heavy drums">
+        <sampler inputChannel="1" samplerFile="samples/heavy-drums-hat-1.wav"
+                 name="heavy-drums-hat-1" volume="1" pan="0.5" uuid="d0c02e19a62d4f999570e3430c92298f"
+                 length="36763" samplerate="44100.0" start="0.0" stop="36762.0"
+                 gainCached="-1.151276826858521" gain="-1.151276826858521" pinned="sampler,mixPanel"
+                 unfolded="sampler" startDisplayedTime="0" endDisplayedTime="0.8336054421768707"/>
+        <sampler inputChannel="1" samplerFile="samples/heavy-drums-hat-2.wav"
+                 name="heavy-drums-hat-2" volume="1" pan="0.5" uuid="1903b7cb920040cda88e20783ef97f0c"
+                 length="37926" samplerate="44100.0" start="0.0" stop="37925.0"
+                 gainCached="3.40088939666748" gain="3.40088939666748"/>
+        <sampler inputChannel="1" samplerFile="samples/heavy-drums-hat-3.wav"
+                 name="heavy-drums-hat-3" volume="1" pan="0.5" uuid="af0839845962476da45d686d92224f83"
+                 length="92346" samplerate="44100.0" start="0.0" stop="92345.0"
+                 gainCached="-0.6420104503631592" gain="-0.6420104503631592"/>
+        <sampler inputChannel="1" samplerFile="samples/heavy-drums-kick-1.wav"
+                 name="heavy-drums-kick-1" volume="1" pan="0.5" uuid="9c1755d5c2b94b99925f909728253077"
+                 length="40432" samplerate="44100.0" start="0.0" stop="40431.0"
+                 gainCached="-2.165482997894287" gain="-2.165482997894287"/>
+        <sampler inputChannel="1" samplerFile="samples/heavy-drums-kick-2.wav"
+                 name="heavy-drums-kick-2" volume="1" pan="0.5" uuid="7cabc482d62a409fa7f6ba52982b4c27"
+                 length="34848" samplerate="44100.0" start="0.0" stop="34847.0"
+                 gainCached="-1.769712209701538" gain="-1.769712209701538"/>
+        <sampler inputChannel="1" samplerFile="samples/heavy-drums-snare-1.wav"
+                 name="heavy-drums-snare-1" volume="1" pan="0.5" uuid="cda24655e3854092bbedd2fc724c5e54"
+                 length="45888" samplerate="44100.0" start="0.0" stop="45887.0"
+                 gainCached="-0.6101541519165039" gain="-0.6101541519165039"/>
+        <sampler inputChannel="1" samplerFile="samples/heavy-drums-snare-2.wav"
+                 name="heavy-drums-snare-2" volume="1" pan="0.5" uuid="e559bd868d484741b6eb80b2a0029311"
+                 length="34055" samplerate="44100.0" start="0.0" stop="34054.0"
+                 gainCached="-2.079357147216797" gain="-2.079357147216797"/>
+        <sampler inputChannel="1" samplerFile="samples/heavy-drums-snare-3.wav"
+                 name="heavy-drums-snare-3" volume="1" pan="0.5" uuid="0811f7540bc5462e85152d294d89e709"
+                 length="45576" samplerate="44100.0" start="0.0" stop="45575.0"
+                 gainCached="-0.5589747428894043" gain="-0.5589747428894043"/>
+        <sampler inputChannel="1" samplerFile="samples/heavy-drums-snare-4.wav"
+                 name="heavy-drums-snare-4" volume="1" pan="0.5" uuid="272c05b0766c4512bba41f2320e38f62"
+                 length="33398" samplerate="44100.0" start="0.0" stop="33397.0"
+                 gainCached="-2.057085275650024" gain="-2.057085275650024"/>
+        <sampler inputChannel="1" samplerFile="samples/heavy-drums-snare-5.wav"
+                 name="heavy-drums-snare-5" volume="1" pan="0.5" uuid="880be268585f480686e0f7a294b258b4"
+                 length="47234" samplerate="44100.0" start="0.0" stop="47233.0"
+                 gainCached="-0.5041742324829102" gain="-0.5041742324829102"/>
+      </sequencer>
+      <reverb uuid="92254b821eaa45e399047aa058727f40" pinned="reverb" unfolded="reverb"
+              drywet="0.1098906248807907"/>
+    </drumPads>
+    <drumPads name="kick pads_oscified" surfaceType="kick" msgInputs="kick1"
+              activePads="open,closed,rim-shoulder" uuid="757495fff92745aa805b117033197b77"
+              pinned="drumPads,mixPanel,childsPanel" unfolded="drumPads,childsPanel"
+              matrix="1,1,1,1,1,1" displayFx="0" displayedIndices="0" selectedColumn="0"
+              advancedMode="1" displayedFxIndices="0">
+      <sequencer mode="random" uuid="7cf306323c0a491aa6f3b4cf5bf4a01a" pinned="sequencer,mixPanel,childsPanel"
+                 unfolded="sequencer,childsPanel" matrix="1,0,0,0,0,0,0,0,0,0/0,1,0,0,0,0,0,0,0,0/0,0,1,0,0,0,0,0,0,0/0,0,0,1,0,0,0,0,0,0/0,0,0,0,1,0,0,0,0,0/0,0,0,0,0,1,0,0,0,0/0,0,0,0,0,0,1,0,0,0/0,0,0,0,0,0,0,1,0,0/0,0,0,0,0,0,0,0,1,0/0,0,0,0,0,0,0,0,0,1"
+                 displayFx="0" displayedIndices="4" retrigger="1" name="heavy drums">
+        <sampler inputChannel="1" samplerFile="samples/heavy-drums-hat-1.wav"
+                 name="heavy-drums-hat-1" volume="1" pan="0.5" uuid="c3554c50929b40389ef19b662ffd0abc"
+                 length="36763" samplerate="44100.0" start="0.0" stop="36762.0"
+                 gainCached="-1.151276826858521" gain="-1.151276826858521" pinned="sampler,mixPanel"
+                 unfolded="sampler" startDisplayedTime="0" endDisplayedTime="0.8336054421768707"
+                 forwardOSC="1" oscAddress="/obsidian/oscout/world2/kick/heavy_drums_hat">
+          <fxEnvelopeFollow uuid="2257ddfa18a84b33b326232d6c9ce6c3" pinned="fxEnvelopeFollow"
+                            unfolded="fxEnvelopeFollow" gain="11.276675835316059" attack="0.01"
+                            release="156.9002838134766"/>
+          <assignment name="# # env" paramId="value" outputMin="0.0" outputMax="1.0"
+                      uuid="6bfa6592e7874287bc5aae9a91d23634" inputs="2257ddfa18a84b33b326232d6c9ce6c3"
+                      mode="external"/>
+        </sampler>
+        <sampler inputChannel="1" samplerFile="samples/heavy-drums-hat-2.wav"
+                 name="heavy-drums-hat-2" volume="1" pan="0.5" uuid="60abeef28c0d45228edd5f8b471e6084"
+                 length="37926" samplerate="44100.0" start="0.0" stop="37925.0"
+                 gainCached="3.40088939666748" gain="3.40088939666748" forwardOSC="1"
+                 oscAddress="/obsidian/oscout/world2/kick/heavy_drums_hat">
+          <fxEnvelopeFollow uuid="9314676f51e942d8a3152baaeaae364c" pinned="fxEnvelopeFollow"
+                            unfolded="fxEnvelopeFollow" gain="13.277143323133679" attack="0.01"
+                            release="156.9002838134766"/>
+          <assignment name="# # env" paramId="value" outputMin="0.0" outputMax="1.0"
+                      uuid="2dbefd1db04945ceafa9016441565281" inputs="9314676f51e942d8a3152baaeaae364c"
+                      mode="external"/>
+        </sampler>
+        <sampler inputChannel="1" samplerFile="samples/heavy-drums-hat-3.wav"
+                 name="heavy-drums-hat-3" volume="1" pan="0.5" uuid="c84b1135171943f7831a3c085a78208a"
+                 length="92346" samplerate="44100.0" start="0.0" stop="92345.0"
+                 gainCached="-0.6420104503631592" gain="-0.6420104503631592" forwardOSC="1"
+                 oscAddress="/obsidian/oscout/world2/kick/heavy_drums_hat">
+          <fxEnvelopeFollow uuid="cc1fc0224d5c4ebaa465bcc4817f0303" pinned="fxEnvelopeFollow"
+                            unfolded="fxEnvelopeFollow" gain="12.876696100610255" attack="0.01"
+                            release="156.9002838134766"/>
+          <assignment name="# # env" paramId="value" outputMin="0.0" outputMax="1.0"
+                      uuid="656dfe5d0a104aa6878380f920f4680d" inputs="cc1fc0224d5c4ebaa465bcc4817f0303"
+                      mode="external"/>
+        </sampler>
+        <sampler inputChannel="1" samplerFile="samples/heavy-drums-kick-1.wav"
+                 name="heavy-drums-kick-1" volume="1" pan="0.5" uuid="f9d959bf468348d184875f68214adee6"
+                 length="40432" samplerate="44100.0" start="0.0" stop="40431.0"
+                 gainCached="-2.165482997894287" gain="-2.165482997894287" forwardOSC="1"
+                 oscAddress="/obsidian/oscout/world2/kick/heavy_drums_kick">
+          <fxEnvelopeFollow uuid="2d820d7ddf3a4287baade6a2b5e4a32b" pinned="fxEnvelopeFollow"
+                            unfolded="fxEnvelopeFollow" gain="6.809139963359332" attack="0.01"
+                            release="156.9002838134766"/>
+          <assignment name="# # env" paramId="value" outputMin="0.0" outputMax="1.0"
+                      uuid="0551eda839a54e0ea12041a64184f487" inputs="2d820d7ddf3a4287baade6a2b5e4a32b"
+                      mode="external"/>
+        </sampler>
+        <sampler inputChannel="1" samplerFile="samples/heavy-drums-kick-2.wav"
+                 name="heavy-drums-kick-2" volume="1" pan="0.5" uuid="bd8c6adb871646049e3998dc88e1b664"
+                 length="34848" samplerate="44100.0" start="0.0" stop="34847.0"
+                 gainCached="-1.769712209701538" gain="-1.769712209701538" forwardOSC="1"
+                 oscAddress="/obsidian/oscout/world2/kick/heavy_drums_kick" pinned="sampler,mixPanel"
+                 unfolded="sampler" startDisplayedTime="0" endDisplayedTime="0.7901814058956916">
+          <fxEnvelopeFollow uuid="5fcb78c7c34e4e8cb7c387bfcf27a13f" pinned="fxEnvelopeFollow"
+                            unfolded="fxEnvelopeFollow" gain="8.078579734472102" attack="0.01"
+                            release="156.9002838134766"/>
+          <assignment name="# # env" paramId="value" outputMin="0.0" outputMax="1.0"
+                      uuid="a799a25c70c64ed59c93cea43a7be134" inputs="5fcb78c7c34e4e8cb7c387bfcf27a13f"
+                      mode="external"/>
+        </sampler>
+        <sampler inputChannel="1" samplerFile="samples/heavy-drums-snare-1.wav"
+                 name="heavy-drums-snare-1" volume="1" pan="0.5" uuid="89fd287dcb064451b7bd28ddbf130068"
+                 length="45888" samplerate="44100.0" start="0.0" stop="45887.0"
+                 gainCached="-0.6101541519165039" gain="-0.6101541519165039" forwardOSC="1"
+                 oscAddress="/obsidian/oscout/world2/kick/heavy_drums_snare">
+          <fxEnvelopeFollow uuid="c9a5b300cc4c49fa940cac2f627e6006" pinned="fxEnvelopeFollow"
+                            unfolded="fxEnvelopeFollow" gain="9.401242615593828" attack="0.01"
+                            release="156.9002838134766"/>
+          <assignment name="# # env" paramId="value" outputMin="0.0" outputMax="1.0"
+                      uuid="b8290a209a4c4f818963c4ba1bc45c1d" inputs="c9a5b300cc4c49fa940cac2f627e6006"
+                      mode="external"/>
+        </sampler>
+        <sampler inputChannel="1" samplerFile="samples/heavy-drums-snare-2.wav"
+                 name="heavy-drums-snare-2" volume="1" pan="0.5" uuid="14fd098a1db34882ac72217c54731c7a"
+                 length="34055" samplerate="44100.0" start="0.0" stop="34054.0"
+                 gainCached="-2.079357147216797" gain="-2.079357147216797" forwardOSC="1"
+                 oscAddress="/obsidian/oscout/world2/kick/heavy_drums_snare">
+          <fxEnvelopeFollow uuid="66c21b976330450d87a2fce0637b303d" pinned="fxEnvelopeFollow"
+                            unfolded="fxEnvelopeFollow" gain="9.062900075791289" attack="0.01"
+                            release="156.9002838134766"/>
+          <assignment name="# # env" paramId="value" outputMin="0.0" outputMax="1.0"
+                      uuid="e2dd62dfb0d0442f9c6763c663fc3d81" inputs="66c21b976330450d87a2fce0637b303d"
+                      mode="external"/>
+        </sampler>
+        <sampler inputChannel="1" samplerFile="samples/heavy-drums-snare-3.wav"
+                 name="heavy-drums-snare-3" volume="1" pan="0.5" uuid="e862f245e2be460e87630ce3e914cfa9"
+                 length="45576" samplerate="44100.0" start="0.0" stop="45575.0"
+                 gainCached="-0.5589747428894043" gain="-0.5589747428894043" forwardOSC="1"
+                 oscAddress="/obsidian/oscout/world2/kick/heavy_drums_snare">
+          <fxEnvelopeFollow uuid="7eba3cd0e89c417980651e473c916f6d" pinned="fxEnvelopeFollow"
+                            unfolded="fxEnvelopeFollow" gain="9.389422221495407" attack="0.01"
+                            release="156.9002838134766"/>
+          <assignment name="# # env" paramId="value" outputMin="0.0" outputMax="1.0"
+                      uuid="bdbb1912574f4fc5bf5d1b64c4ebec4f" inputs="7eba3cd0e89c417980651e473c916f6d"
+                      mode="external"/>
+        </sampler>
+        <sampler inputChannel="1" samplerFile="samples/heavy-drums-snare-4.wav"
+                 name="heavy-drums-snare-4" volume="1" pan="0.5" uuid="7c05faaace034c9b824016ac9950041e"
+                 length="33398" samplerate="44100.0" start="0.0" stop="33397.0"
+                 gainCached="-2.057085275650024" gain="-2.057085275650024" forwardOSC="1"
+                 oscAddress="/obsidian/oscout/world2/kick/heavy_drums_snare">
+          <fxEnvelopeFollow uuid="36c2470a41634b829fc1ab3f800854ca" pinned="fxEnvelopeFollow"
+                            unfolded="fxEnvelopeFollow" gain="9.029152675393357" attack="0.01"
+                            release="156.9002838134766"/>
+          <assignment name="# # env" paramId="value" outputMin="0.0" outputMax="1.0"
+                      uuid="cffc9b7dccea49b4ae27d3aacb77b5f0" inputs="36c2470a41634b829fc1ab3f800854ca"
+                      mode="external"/>
+        </sampler>
+        <sampler inputChannel="1" samplerFile="samples/heavy-drums-snare-5.wav"
+                 name="heavy-drums-snare-5" volume="1" pan="0.5" uuid="f9f66aa93ab94333a680c1b439d24c4e"
+                 length="47234" samplerate="44100.0" start="0.0" stop="47233.0"
+                 gainCached="-0.5041742324829102" gain="-0.5041742324829102" forwardOSC="1"
+                 oscAddress="/obsidian/oscout/world2/kick/heavy_drums_snare">
+          <fxEnvelopeFollow uuid="3b8e836829cd491e8dd4d3d5a6186579" pinned="fxEnvelopeFollow"
+                            unfolded="fxEnvelopeFollow" gain="9.451517530086788" attack="0.01"
+                            release="156.9002838134766"/>
+          <assignment name="# # env" paramId="value" outputMin="0.0" outputMax="1.0"
+                      uuid="2d02dd4014204d2a85c0fa24f9a4d656" inputs="3b8e836829cd491e8dd4d3d5a6186579"
+                      mode="external"/>
+        </sampler>
+      </sequencer>
+      <reverb uuid="527c8753f8294b9aa4794ef4094fadf8" pinned="reverb" unfolded="reverb"
+              drywet="0.1098906248807907"/>
+    </drumPads>
+    <drumPads name="snare pads_oscified" surfaceType="snare" msgInputs="snare1"
+              activePads="center,edge,rim-tip,rim-shoulder" uuid="e0a9be8f0d3243a7a833b7aa17e6fb1c"
+              pinned="drumPads,mixPanel,childsPanel" unfolded="drumPads,childsPanel"
+              matrix="0,0,1,0,0,1,1,0,0,1/1,1,0,1,1,0,0,1,1,0" displayFx="0"
+              displayedIndices="0" selectedColumn="0" advancedMode="1" displayedFxIndices="0">
+      <sequencer mode="cycle" uuid="de40d552edf7474690002fe8fda2a950" pinned="sequencer,mixPanel,childsPanel"
+                 unfolded="sequencer,childsPanel" matrix="1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0/0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0/0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0/0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0/0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0/0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0/0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0/0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0/0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0/0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0/0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0/0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0/0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0/0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0/0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0/0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0/0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0/0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1"
+                 name="walnuts" displayedIndices="11" displayFx="1" displayedFxIndices="0"
+                 scroll="83" selectedColumn="10" forwardOSC="1" oscAddress="/obsidian/oscout/world1/snare/snare_pads_walnuts">
+        <sampler inputChannel="1" samplerFile="samples/Slice 1 .wav" name="Slice 1 "
+                 volume="1" pan="0.5" uuid="d6588f3457874c22bf096e8d00bb5e67"
+                 pinned="sampler,mixPanel" unfolded="sampler" length="10890" samplerate="96000.0"
+                 startDisplayedTime="0" endDisplayedTime="0.1134270833333333"
+                 start="0.0" stop="10889.0" gainCached="9.923355102539062" gain="9.923355102539062"/>
+        <sampler inputChannel="1" samplerFile="samples/Slice 4 .wav" name="Slice 4 "
+                 volume="1" pan="0.5" uuid="036d55bd433749969b6a99dfcbbf3bf4"
+                 length="63763" samplerate="96000.0" start="0.0" stop="63762.0"
+                 gainCached="8.542008399963379" gain="8.542008399963379" pinned="sampler,mixPanel"
+                 unfolded="sampler" startDisplayedTime="0" endDisplayedTime="0.6641875"/>
+        <sampler inputChannel="1" samplerFile="samples/Slice 6 .wav" name="Slice 6 "
+                 volume="1" pan="0.5" uuid="cc2cad5347ac4c039c8c096e5d2dc715"
+                 length="63523" samplerate="96000.0" start="0.0" stop="63522.0"
+                 gainCached="6.985569953918457" gain="6.985569953918457" pinned="sampler,mixPanel"
+                 unfolded="sampler" startDisplayedTime="0" endDisplayedTime="0.6616875"/>
+        <sampler inputChannel="1" samplerFile="samples/Slice 7 .wav" name="Slice 7 "
+                 volume="1" pan="0.5" uuid="b6518570178740df9ec3633710a14088"
+                 length="11008" samplerate="96000.0" start="0.0" stop="11007.0"
+                 gainCached="6.671695709228516" gain="6.671695709228516" pinned="sampler,mixPanel"
+                 unfolded="sampler" startDisplayedTime="0" endDisplayedTime="0.11465625"/>
+        <sampler inputChannel="1" samplerFile="samples/Slice 10 .wav" name="Slice 10 "
+                 volume="1" pan="0.5" uuid="75cb3ae1067641d9be6a713848f45063"
+                 length="62321" samplerate="96000.0" start="0.0" stop="62320.0"
+                 gainCached="9.740900993347168" gain="9.740900993347168" pinned="sampler,mixPanel"
+                 unfolded="sampler" startDisplayedTime="0" endDisplayedTime="0.6491666666666667"/>
+        <sampler inputChannel="1" samplerFile="samples/Slice 11 .wav" name="Slice 11 "
+                 volume="1" pan="0.5" uuid="58a8824b36cb49f8bee316cf5542c299"
+                 length="14338" samplerate="96000.0" start="0.0" stop="14337.0"
+                 gainCached="8.275205612182617" gain="8.275205612182617"/>
+        <sampler inputChannel="1" samplerFile="samples/Slice 13 .wav" name="Slice 13 "
+                 volume="1" pan="0.5" uuid="e5690c98c89442a18257eea557879c7c"
+                 length="11342" samplerate="96000.0" start="0.0" stop="11341.0"
+                 gainCached="6.390387535095215" gain="6.390387535095215"/>
+        <sampler inputChannel="1" samplerFile="samples/Slice 15 .wav" name="Slice 15 "
+                 volume="1" pan="0.5" uuid="e3fcbfcf03564eb8a426e3d689645006"
+                 length="12364" samplerate="96000.0" start="0.0" stop="12363.0"
+                 gainCached="7.94029426574707" gain="7.94029426574707"/>
+        <sampler inputChannel="1" samplerFile="samples/Slice 17 .wav" name="Slice 17 "
+                 volume="1" pan="0.5" uuid="afd40bc1327542d08081dd84d107f94b"
+                 length="13893" samplerate="96000.0" start="0.0" stop="13892.0"
+                 gainCached="8.84390926361084" gain="8.84390926361084"/>
+        <sampler inputChannel="1" samplerFile="samples/Slice 19 .wav" name="Slice 19 "
+                 volume="1" pan="0.5" uuid="f0d3340d59a54340b72e3465537f8f84"
+                 length="10004" samplerate="96000.0" start="0.0" stop="10003.0"
+                 gainCached="10.50825691223145" gain="10.50825691223145" pinned="sampler,mixPanel"
+                 unfolded="sampler" startDisplayedTime="0" endDisplayedTime="0.1041979166666667"/>
+        <sampler inputChannel="1" samplerFile="samples/Slice 21 .wav" name="Slice 21 "
+                 volume="1" pan="0.5" uuid="c7dde5da1ef044b8964854e1dc407f32"
+                 length="63534" samplerate="96000.0" start="0.0" stop="63533.0"
+                 gainCached="9.694133758544922" gain="9.694133758544922" pinned="sampler,mixPanel"
+                 unfolded="sampler" startDisplayedTime="0" endDisplayedTime="0.6618020833333333"/>
+        <sampler inputChannel="1" samplerFile="samples/Slice 22 .wav" name="Slice 22 "
+                 volume="1" pan="0.5" uuid="5f427ff788e24f02840f5f1284fd1fee"
+                 length="60601" samplerate="96000.0" start="0.0" stop="60600.0"
+                 gainCached="6.626602172851562" gain="6.626602172851562" selected="1"
+                 pinned="sampler,mixPanel" unfolded="sampler" startDisplayedTime="0"
+                 endDisplayedTime="0.63125"/>
+        <sampler inputChannel="1" samplerFile="samples/Slice 23 .wav" name="Slice 23 "
+                 volume="1" pan="0.5" uuid="7b30533da49c4c818e293f0db711d1cf"
+                 length="61472" samplerate="96000.0" start="0.0" stop="61471.0"
+                 gainCached="6.686563491821289" gain="6.686563491821289" selected="1"/>
+        <sampler inputChannel="1" samplerFile="samples/Slice 24 .wav" name="Slice 24 "
+                 volume="1" pan="0.5" uuid="c93aa7beea2a46e7957245d1b96f62fa"
+                 length="60016" samplerate="96000.0" start="0.0" stop="60015.0"
+                 gainCached="14.24092674255371" gain="14.24092674255371" selected="1"/>
+        <sampler inputChannel="1" samplerFile="samples/Slice 25 .wav" name="Slice 25 "
+                 volume="1" pan="0.5" uuid="3f35c1c13ae94b0e87c1943275539de5"
+                 length="62279" samplerate="96000.0" start="0.0" stop="62278.0"
+                 gainCached="8.619573593139648" gain="8.619573593139648" selected="1"/>
+        <sampler inputChannel="1" samplerFile="samples/Slice 26 .wav" name="Slice 26 "
+                 volume="1" pan="0.5" uuid="916c491531254bcc8eeaca523811fdfd"
+                 length="62731" samplerate="96000.0" start="0.0" stop="62730.0"
+                 gainCached="6.742955207824707" gain="6.742955207824707" selected="1"/>
+        <sampler inputChannel="1" samplerFile="samples/Slice 28 .wav" name="Slice 28 "
+                 volume="1" pan="0.5" uuid="e2e3591d90434f03bc583da79e36a7df"
+                 length="64229" samplerate="96000.0" start="0.0" stop="64228.0"
+                 gainCached="7.693216323852539" gain="7.693216323852539" selected="1"/>
+        <sampler inputChannel="1" samplerFile="samples/Slice 29 .wav" name="Slice 29 "
+                 volume="1" pan="0.5" uuid="4caa538a97d54c1e815237526b4a8a49"
+                 length="29567" samplerate="96000.0" start="0.0" stop="29566.0"
+                 gainCached="7.5074462890625" gain="7.5074462890625" selected="1"
+                 pinned="sampler,mixPanel" unfolded="sampler" startDisplayedTime="0"
+                 endDisplayedTime="0.3079791666666667"/>
+        <fxEchoOilCan uuid="98ba2d200baa4e12ac3b247c7b034b67" pinned="fxEchoOilCan"
+                      unfolded="fxEchoOilCan" drywet="0.3074062466621399" feedback="0.3758906126022339"/>
+        <fxEnvelopeFollow uuid="eb135e02c0004828b5f0cbff26207baa" pinned="fxEnvelopeFollow"
+                          unfolded="fxEnvelopeFollow" gain="10.93840689387836" attack="0.01"
+                          release="156.9002838134766"/>
+        <assignment name="# # env" paramId="value" outputMin="0.0" outputMax="1.0"
+                    uuid="763b7cdf27d54891a0d7e6e65e9f7712" inputs="eb135e02c0004828b5f0cbff26207baa"
+                    mode="external"/>
+      </sequencer>
+      <sequencer mode="random" uuid="c9aa81e7c37f4937bc40cabdbf12defe" pinned="sequencer,mixPanel,childsPanel"
+                 unfolded="sequencer,childsPanel" matrix="1,0,0,0,0,0,0,0,0,0/0,1,0,0,0,0,0,0,0,0/0,0,1,0,0,0,0,0,0,0/0,0,0,1,0,0,0,0,0,0/0,0,0,0,1,0,0,0,0,0/0,0,0,0,0,1,0,0,0,0/0,0,0,0,0,0,1,0,0,0/0,0,0,0,0,0,0,1,0,0/0,0,0,0,0,0,0,0,1,0/0,0,0,0,0,0,0,0,0,1"
+                 displayFx="0" displayedIndices="0" retrigger="1" name="heavy drums"
+                 forwardOSC="1" oscAddress="/obsidian/oscout/world1/snare/snare_pads_heavy_drums">
+        <sampler inputChannel="1" samplerFile="samples/heavy-drums-hat-1.wav"
+                 name="heavy-drums-hat-1" volume="1" pan="0.5" uuid="1435e0765cde47e1bf7caabe55fc8006"
+                 length="36763" samplerate="44100.0" start="0.0" stop="36762.0"
+                 gainCached="-1.151276826858521" gain="-1.151276826858521" pinned="sampler,mixPanel"
+                 unfolded="sampler" startDisplayedTime="0" endDisplayedTime="0.8336054421768707"/>
+        <sampler inputChannel="1" samplerFile="samples/heavy-drums-hat-2.wav"
+                 name="heavy-drums-hat-2" volume="1" pan="0.5" uuid="d5a0939d08334e5c87e9287cf3c2e6c4"
+                 length="37926" samplerate="44100.0" start="0.0" stop="37925.0"
+                 gainCached="3.40088939666748" gain="3.40088939666748"/>
+        <sampler inputChannel="1" samplerFile="samples/heavy-drums-hat-3.wav"
+                 name="heavy-drums-hat-3" volume="1" pan="0.5" uuid="d32f16237796467fb782db93e929cd32"
+                 length="92346" samplerate="44100.0" start="0.0" stop="92345.0"
+                 gainCached="-0.6420104503631592" gain="-0.6420104503631592"/>
+        <sampler inputChannel="1" samplerFile="samples/heavy-drums-kick-1.wav"
+                 name="heavy-drums-kick-1" volume="1" pan="0.5" uuid="1c5da319f89840eb8131ef968e239fe0"
+                 length="40432" samplerate="44100.0" start="0.0" stop="40431.0"
+                 gainCached="-2.165482997894287" gain="-2.165482997894287"/>
+        <sampler inputChannel="1" samplerFile="samples/heavy-drums-kick-2.wav"
+                 name="heavy-drums-kick-2" volume="1" pan="0.5" uuid="c58db4a0ab854e4eac78d0219206d5ed"
+                 length="34848" samplerate="44100.0" start="0.0" stop="34847.0"
+                 gainCached="-1.769712209701538" gain="-1.769712209701538"/>
+        <sampler inputChannel="1" samplerFile="samples/heavy-drums-snare-1.wav"
+                 name="heavy-drums-snare-1" volume="1" pan="0.5" uuid="cb4307268a1f43bd9ec98a7ed8f8c059"
+                 length="45888" samplerate="44100.0" start="0.0" stop="45887.0"
+                 gainCached="-0.6101541519165039" gain="-0.6101541519165039"/>
+        <sampler inputChannel="1" samplerFile="samples/heavy-drums-snare-2.wav"
+                 name="heavy-drums-snare-2" volume="1" pan="0.5" uuid="a58806050c0e4598955e31ff7c83b4c9"
+                 length="34055" samplerate="44100.0" start="0.0" stop="34054.0"
+                 gainCached="-2.079357147216797" gain="-2.079357147216797"/>
+        <sampler inputChannel="1" samplerFile="samples/heavy-drums-snare-3.wav"
+                 name="heavy-drums-snare-3" volume="1" pan="0.5" uuid="41143d8ece2642d0a6165bad53d73b33"
+                 length="45576" samplerate="44100.0" start="0.0" stop="45575.0"
+                 gainCached="-0.5589747428894043" gain="-0.5589747428894043"/>
+        <sampler inputChannel="1" samplerFile="samples/heavy-drums-snare-4.wav"
+                 name="heavy-drums-snare-4" volume="1" pan="0.5" uuid="1e0f675aa4784fc7a6dfd79e6776348b"
+                 length="33398" samplerate="44100.0" start="0.0" stop="33397.0"
+                 gainCached="-2.057085275650024" gain="-2.057085275650024"/>
+        <sampler inputChannel="1" samplerFile="samples/heavy-drums-snare-5.wav"
+                 name="heavy-drums-snare-5" volume="1" pan="0.5" uuid="ac8cd7ed98cf457cb81aa317a94e2878"
+                 length="47234" samplerate="44100.0" start="0.0" stop="47233.0"
+                 gainCached="-0.5041742324829102" gain="-0.5041742324829102"/>
+        <fxEnvelopeFollow uuid="80fd193ce9294543a791e862126b7469" pinned="fxEnvelopeFollow"
+                          unfolded="fxEnvelopeFollow" gain="6.809139963359332" attack="0.01"
+                          release="156.9002838134766"/>
+        <assignment name="# # env" paramId="value" outputMin="0.0" outputMax="1.0"
+                    uuid="cb20cc71bf8f4c4a96fdd07883344298" inputs="80fd193ce9294543a791e862126b7469"
+                    mode="external"/>
+      </sequencer>
+      <reverb uuid="49c6c635dcaf45039d985ea611dee3e7" pinned="reverb" unfolded="reverb"
+              drywet="0.1785625070333481"/>
+    </drumPads>
+    <group uuid="71f6d99ec6cf4a03bfba626301ab6099" pinned="group,mixPanel"
+           unfolded="group,childsPanel" name="mesh toms tonal" msgInputs="tom1,tom2"
+           displayFx="0" displayedFxIndices="3" displayedIndices="1">
+      <drumPads name="rack 1 (mesh)" surfaceType="tom" msgInputs="tom1" activePads="center,edge,rim-tip,rim-shoulder"
+                uuid="012e275d9a6646e9a62a14f357c70359" pinned="drumPads,mixPanel,childsPanel"
+                unfolded="drumPads,childsPanel" matrix="1,1,0,1,1,0,0,1,1,0/0,0,1,0,0,1,1,0,0,1"
+                displayFx="0" displayedIndices="0" advancedMode="1" selectedColumn="0">
+        <sequencer mode="cycle" uuid="80a55ba705164249923e088e57d63b26" pinned="sequencer,mixPanel,childsPanel"
+                   unfolded="sequencer,childsPanel" matrix="1,0,0/0,1,0/0,0,1" retrigger="0"
+                   displayedIndices="2" scroll="0" name="_oscified" advancedMode="1">
+          <sampler inputChannel="1" samplerFile="samples/world2_tone-long-1.wav"
+                   name="clow" volume="1" pan="0.5" uuid="269d6af3d4be408b8c1c88fda63ea151"
+                   length="524721" samplerate="44100.0" start="0.0" stop="524720.0"
+                   gainCached="2.911280632019043" gain="2.911280632019043" pinned="sampler,mixPanel"
+                   unfolded="sampler" startDisplayedTime="0" endDisplayedTime="11.8984126984127"
+                   forwardOSC="1" oscAddress="/obsidian/oscout/world2/tom1/_clow">
+            <fxEnvelopeFollow uuid="a1a0ffa247cd41f68978e1d8dfa6c7c4" pinned="fxEnvelopeFollow"
+                              unfolded="fxEnvelopeFollow" gain="12.269695603342798" attack="0.01"
+                              release="156.9002838134766"/>
+            <assignment name="# # env" paramId="value" outputMin="0.0" outputMax="1.0"
+                        uuid="aeae7471e00d46179ceea85cce7da418" inputs="a1a0ffa247cd41f68978e1d8dfa6c7c4"
+                        mode="external"/>
+          </sampler>
+          <sampler inputChannel="1" samplerFile="samples/world2_tone-long-2.wav"
+                   name="cmid" volume="1" pan="0.5" uuid="9621efa7f420427d81ecc5c535df254d"
+                   length="619536" samplerate="44100.0" start="0.0" stop="619535.0"
+                   gainCached="4.806639671325684" gain="4.806639671325684" pinned="sampler,mixPanel"
+                   unfolded="sampler" startDisplayedTime="0" endDisplayedTime="14.0484126984127"
+                   forwardOSC="1" oscAddress="/obsidian/oscout/world2/tom1/_cmid">
+            <fxEnvelopeFollow uuid="672a96ac228946109931cbe444ec607a" pinned="fxEnvelopeFollow"
+                              unfolded="fxEnvelopeFollow" gain="13.096506693449122" attack="0.01"
+                              release="156.9002838134766"/>
+            <assignment name="# # env" paramId="value" outputMin="0.0" outputMax="1.0"
+                        uuid="8648568b80204aca911dd46c4db98085" inputs="672a96ac228946109931cbe444ec607a"
+                        mode="external"/>
+          </sampler>
+          <sampler inputChannel="1" samplerFile="samples/world2_tone-long-3.wav"
+                   name="chigh" volume="1" pan="0.5" uuid="5c1c7e3b32d742fea6ecbf62d5456001"
+                   length="618778" samplerate="44100.0" start="0.0" stop="618777.0"
+                   gainCached="5.473760604858398" gain="5.473760604858398" pinned="sampler,mixPanel"
+                   unfolded="sampler" startDisplayedTime="0" endDisplayedTime="14.03122448979592"
+                   forwardOSC="1" oscAddress="/obsidian/oscout/world2/tom1/_chigh">
+            <fxEnvelopeFollow uuid="8355d87ccc3c4b16944bb4b7d88cd838" pinned="fxEnvelopeFollow"
+                              unfolded="fxEnvelopeFollow" gain="13.633498844732706" attack="0.01"
+                              release="156.9002838134766"/>
+            <assignment name="# # env" paramId="value" outputMin="0.0" outputMax="1.0"
+                        uuid="cf57099cabed4b93a0e4a6a2e88b0f8e" inputs="8355d87ccc3c4b16944bb4b7d88cd838"
+                        mode="external"/>
+          </sampler>
+        </sequencer>
+        <sequencer mode="cycle" uuid="4248cda82581470bb3682be3bf62d015" pinned="sequencer,mixPanel,childsPanel"
+                   unfolded="sequencer,childsPanel" matrix="1,0,0/0,1,0/0,0,1" displayedIndices="0"
+                   retrigger="0" advancedMode="1" selectedColumn="2" name="_oscified">
+          <sampler inputChannel="1" samplerFile="samples/world2_tone-long-5.wav"
+                   name="mid" volume="1" pan="0.5" uuid="7bc8c9c1aa3644a887f286af3fee7752"
+                   length="571577" samplerate="44100.0" start="0.0" stop="571576.0"
+                   gainCached="6.021095275878906" gain="6.021095275878906" pinned="sampler,mixPanel"
+                   unfolded="sampler" startDisplayedTime="0" endDisplayedTime="12.96090702947846"
+                   forwardOSC="1" oscAddress="/obsidian/oscout/world2/tom1/_mid">
+            <fxEnvelopeFollow uuid="23cfc75977414637b355808796f53cfc" pinned="fxEnvelopeFollow"
+                              unfolded="fxEnvelopeFollow" gain="12.880887051020181" attack="0.01"
+                              release="156.9002838134766"/>
+            <assignment name="# # env" paramId="value" outputMin="0.0" outputMax="1.0"
+                        uuid="a305f39d8e384fba814be3bf58fa1a1d" inputs="23cfc75977414637b355808796f53cfc"
+                        mode="external"/>
+          </sampler>
+          <sampler inputChannel="1" samplerFile="samples/world2_tone-long-6.wav"
+                   name="high" volume="1" pan="0.5" uuid="b527ed1f9ff141c2a3d60915db5aeaa9"
+                   length="632346" samplerate="44100.0" start="0.0" stop="632345.0"
+                   gainCached="7.686187744140625" gain="7.686187744140625" pinned="sampler,mixPanel"
+                   unfolded="sampler" startDisplayedTime="0" endDisplayedTime="14.33888888888889"
+                   forwardOSC="1" oscAddress="/obsidian/oscout/world2/tom1/_high">
+            <fxEnvelopeFollow uuid="7a8dc1dc690c470394b0c0fca50a2021" pinned="fxEnvelopeFollow"
+                              unfolded="fxEnvelopeFollow" gain="14.068652575541018" attack="0.01"
+                              release="156.9002838134766"/>
+            <assignment name="# # env" paramId="value" outputMin="0.0" outputMax="1.0"
+                        uuid="ea92faa4a4634b199fa6d584a81c4440" inputs="7a8dc1dc690c470394b0c0fca50a2021"
+                        mode="external"/>
+          </sampler>
+          <sampler inputChannel="1" samplerFile="samples/world2_tone-long-4.wav"
+                   name="low" volume="1" pan="0.5" uuid="19b515e20c604b8da9a84f09940e7b89"
+                   length="526444" samplerate="44100.0" start="0.0" stop="526443.0"
+                   gainCached="5.863177299499512" gain="5.863177299499512" pinned="sampler,mixPanel"
+                   unfolded="sampler" startDisplayedTime="0" endDisplayedTime="11.93748299319728"
+                   forwardOSC="1" oscAddress="/obsidian/oscout/world2/tom1/_low">
+            <fxEnvelopeFollow uuid="bdce44494f384ebb9fdd4645ae3ffbc1" pinned="fxEnvelopeFollow"
+                              unfolded="fxEnvelopeFollow" gain="12.440422721484879" attack="0.01"
+                              release="156.9002838134766"/>
+            <assignment name="# # env" paramId="value" outputMin="0.0" outputMax="1.0"
+                        uuid="826ff5008e544ed281cc4a11e5b214b5" inputs="bdce44494f384ebb9fdd4645ae3ffbc1"
+                        mode="external"/>
+          </sampler>
+        </sequencer>
+      </drumPads>
+      <drumPads name="rack 2 (mesh)" surfaceType="tom" msgInputs="tom2" activePads="center,edge,rim-tip,rim-shoulder"
+                uuid="f843722552944200a65077612d4beb4f" pinned="drumPads,mixPanel,childsPanel"
+                unfolded="drumPads,childsPanel" matrix="1,1,1,1,1,1,1,1,1,1"
+                displayFx="0" displayedIndices="0" advancedMode="1">
+        <sequencer mode="cycle" uuid="a42cfa05b66b4eafb4ccd8030101b271" pinned="sequencer,mixPanel,childsPanel"
+                   unfolded="sequencer,childsPanel" matrix="1,0,0,0,0/0,1,0,0,0/0,0,1,0,0/0,0,0,1,0/0,0,0,0,1"
+                   displayedIndices="4" name="_oscified">
+          <sampler inputChannel="1" samplerFile="samples/world2_chord-1.wav" name="highest"
+                   volume="1" pan="0.5" uuid="1102f8d03fec41aba170c3483791d351"
+                   length="455299" samplerate="44100.0" start="0.0" stop="455298.0"
+                   gainCached="13.6063175201416" gain="13.6063175201416" pinned="sampler,mixPanel"
+                   unfolded="sampler" startDisplayedTime="0" endDisplayedTime="10.32421768707483"
+                   forwardOSC="1" oscAddress="/obsidian/oscout/world2/tom2/_highest">
+            <fxEnvelopeFollow uuid="995fa4a14a144bae92752b7014309b2d" pinned="fxEnvelopeFollow"
+                              unfolded="fxEnvelopeFollow" gain="15.939153017629165" attack="0.01"
+                              release="156.9002838134766"/>
+            <assignment name="# # env" paramId="value" outputMin="0.0" outputMax="1.0"
+                        uuid="c19733d17687426aa566c9a654b8e951" inputs="995fa4a14a144bae92752b7014309b2d"
+                        mode="external"/>
+          </sampler>
+          <sampler inputChannel="1" samplerFile="samples/world2_chord-2.wav" name="mid"
+                   volume="1" pan="0.5" uuid="16f1f66e9d4a426fa458240779d05b01"
+                   length="480449" samplerate="44100.0" start="0.0" stop="480448.0"
+                   gainCached="10.68023109436035" gain="10.68023109436035" pinned="sampler,mixPanel"
+                   unfolded="sampler" startDisplayedTime="0" endDisplayedTime="10.89451247165533"
+                   forwardOSC="1" oscAddress="/obsidian/oscout/world2/tom2/_mid">
+            <fxEnvelopeFollow uuid="b50d20d37d624b3682defbf0b9480138" pinned="fxEnvelopeFollow"
+                              unfolded="fxEnvelopeFollow" gain="15.185110915441204" attack="0.01"
+                              release="156.9002838134766"/>
+            <assignment name="# # env" paramId="value" outputMin="0.0" outputMax="1.0"
+                        uuid="b3f686e83cc44a77a9148ab678ac1d56" inputs="b50d20d37d624b3682defbf0b9480138"
+                        mode="external"/>
+          </sampler>
+          <sampler inputChannel="1" samplerFile="samples/world2_chord-3.wav" name="low"
+                   volume="1" pan="0.5" uuid="1382270088eb485e8bd393aa70d7345e"
+                   length="558830" samplerate="44100.0" start="0.0" stop="558829.0"
+                   gainCached="9.800765037536621" gain="9.800765037536621" pinned="sampler,mixPanel"
+                   unfolded="sampler" startDisplayedTime="0" endDisplayedTime="12.67185941043084"
+                   forwardOSC="1" oscAddress="/obsidian/oscout/world2/tom2/_low">
+            <fxEnvelopeFollow uuid="d2bd6a79d27f4398ae264ba0d9be886e" pinned="fxEnvelopeFollow"
+                              unfolded="fxEnvelopeFollow" gain="14.397673293091737" attack="0.01"
+                              release="156.9002838134766"/>
+            <assignment name="# # env" paramId="value" outputMin="0.0" outputMax="1.0"
+                        uuid="8b5b073614fd42558245dc28d0689ec8" inputs="d2bd6a79d27f4398ae264ba0d9be886e"
+                        mode="external"/>
+          </sampler>
+          <sampler inputChannel="1" samplerFile="samples/world2_chord-4.wav" name="mid_low"
+                   volume="1" pan="0.5" uuid="dcdfc490f9b149aa9575987ba2b7aaca"
+                   length="522827" samplerate="44100.0" start="0.0" stop="522826.0"
+                   gainCached="11.72360801696777" gain="11.72360801696777" pinned="sampler,mixPanel"
+                   unfolded="sampler" startDisplayedTime="0" endDisplayedTime="11.85546485260771"
+                   forwardOSC="1" oscAddress="/obsidian/oscout/world2/tom2/_mid_low">
+            <fxEnvelopeFollow uuid="270e39f39f854514808c3bd6ad68d0f4" pinned="fxEnvelopeFollow"
+                              unfolded="fxEnvelopeFollow" gain="15.378356881124393" attack="0.01"
+                              release="156.9002838134766"/>
+            <assignment name="# # env" paramId="value" outputMin="0.0" outputMax="1.0"
+                        uuid="792f9cea49d144d587de5bb6ef5d18f0" inputs="270e39f39f854514808c3bd6ad68d0f4"
+                        mode="external"/>
+          </sampler>
+          <sampler inputChannel="1" samplerFile="samples/world2_chord-5.wav" name="high"
+                   volume="1" pan="0.5" uuid="87b239439ef54aafa347b934fd70048e"
+                   length="749090" samplerate="44100.0" start="0.0" stop="749089.0"
+                   gainCached="12.87819480895996" gain="12.87819480895996" pinned="sampler,mixPanel"
+                   unfolded="sampler" startDisplayedTime="0" endDisplayedTime="16.98614512471655"
+                   forwardOSC="1" oscAddress="/obsidian/oscout/world2/tom2/_high">
+            <fxEnvelopeFollow uuid="8077fcb4c5b34077a8b907c9ed665509" pinned="fxEnvelopeFollow"
+                              unfolded="fxEnvelopeFollow" gain="16.11714574575066" attack="0.01"
+                              release="156.9002838134766"/>
+            <assignment name="# # env" paramId="value" outputMin="0.0" outputMax="1.0"
+                        uuid="b6511ec32e574be78c1592e77efd9873" inputs="8077fcb4c5b34077a8b907c9ed665509"
+                        mode="external"/>
+          </sampler>
+        </sequencer>
+      </drumPads>
+      <reverb uuid="28875db267da43a696de9b3cdadfaa49" pinned="reverb" unfolded="reverb"
+              drywet="0.1735468804836273"/>
+      <fxEchoBossDM2 uuid="0f33e2ae1abf4763878ba21a24bc548e" pinned="fxEchoBossDM2"
+                     unfolded="fxEchoBossDM2" drywet="0.2397499978542328"/>
+      <gain uuid="dfe4ae2922054b7fb7426661559e3521" pinned="gain" unfolded="gain"
+            gain="8.762499809265137" ramp="0.7052764296531677"/>
+      <fxLimiter uuid="673ebde77f9a44b891de3bcfc6699e0e" pinned="fxLimiter" unfolded="fxLimiter"/>
+    </group>
+    <drumPads name="floor tom" surfaceType="tom" msgInputs="tom3" activePads="center,edge,rim-tip,rim-shoulder"
+              uuid="d1e873cc22654d5bbb8b3c39004d35c0" pinned="drumPads,mixPanel,childsPanel"
+              unfolded="drumPads,childsPanel" selectedColumn="6" displayedIndices="0"
+              matrix="0,0,1,0,0,1,1,0,0,1" displayFx="0">
+      <sampler inputChannel="1" samplerFile="samples/world2_beep.wav" name="world2_beep"
+               volume="0.5330695509910583" pan="0.5" uuid="db7900cf1cf14efe9bbdb4895f91fa1f"
+               length="82663" samplerate="44100.0" start="0.0" stop="82662.0"
+               gainCached="9.252353668212891" gain="9.252353668212891" pinned="sampler,mixPanel,inputPanel"
+               unfolded="sampler,inputPanel" startDisplayedTime="0" endDisplayedTime="1.874421768707483"
+               fadeOut="1487.93798828125" retrigger="1" displayFx="1" displayedFxIndices="0"
+               transpose="0.0" velocityCurve="0.0642857,0_0.5,0.679739_1,1"
+               curveType="sshape">
+        <reverb uuid="e358c37cb89243bfa5f95d5de2e4a418" pinned="reverb" unfolded="reverb"
+                drywet="0.2534843683242798"/>
+      </sampler>
+    </drumPads>
+    <fxCompressor uuid="c4b31efeb48f4d99be09a3b6f3ffd244" pinned="fxCompressor"
+                  unfolded="fxCompressor"/>
+    <fxLimiter uuid="d4984260f33b4248892986077fa89cc9" pinned="fxLimiter" unfolded="fxLimiter"/>
+    <fxSoftClipper softness="0.0" uuid="e52161419a1d41c38abd9f5af6f18d59"/>
+  </sessionSet>
+</session>

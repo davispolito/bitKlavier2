@@ -12,12 +12,13 @@
 #include <chowdsp_plugin_state/chowdsp_plugin_state.h>
 #include "Synthesiser/BKSynthesiser.h"
 #include "Synthesiser/Sample.h"
+#include <chowdsp_serialization/chowdsp_serialization.h>
 
 struct DirectParams : chowdsp::ParamHolder
 {
 
     // Adds the appropriate parameters to the Direct Processor
-    DirectParams()
+    DirectParams() : chowdsp::ParamHolder("direct")
     {
         add (gainParam, hammerParam, velocityParam, resonanceParam, attackParam,
              decayParam, sustainParam, releaseParam);
@@ -28,7 +29,7 @@ struct DirectParams : chowdsp::ParamHolder
         juce::ParameterID { "gain", 100 },
         "Gain",
         juce::NormalisableRange { -30.0f, 0.0f },
-        -24.0f
+        -6.0f
     };
 
     // Hammer param
@@ -36,15 +37,15 @@ struct DirectParams : chowdsp::ParamHolder
             juce::ParameterID { "hammer", 100 },
             "Hammer",
             juce::NormalisableRange { -30.0f, 0.0f }, // FIX
-            -24.0f
+            -6.0f
     };
 
     // Velocity param
     chowdsp::FloatParameter::Ptr velocityParam {
             juce::ParameterID { "Velocity", 100 },
             "Velocity",
-            chowdsp::ParamUtils::createNormalisableRange (20.0f, 20000.0f, 2000.0f), // FIX
-            1000.0f,
+            chowdsp::ParamUtils::createNormalisableRange (0.0f, 127.0f, 63.f), // FIX
+            127.0f,
             &chowdsp::ParamUtils::floatValToString,
             &chowdsp::ParamUtils::stringToFloatVal
     };
@@ -54,31 +55,31 @@ struct DirectParams : chowdsp::ParamHolder
             juce::ParameterID { "resonance", 100 },
             "Resonance",
             juce::NormalisableRange { -30.0f, 0.0f }, // FIX
-            -24.0f
+            -6.0f
     };
 
     // Attack param
     chowdsp::TimeMsParameter::Ptr attackParam {
             juce::ParameterID { "attack", 100 },
             "attack",
-            chowdsp::ParamUtils::createNormalisableRange (2.01f, 10.0f, 4.0f),
-            3.5f,
+            chowdsp::ParamUtils::createNormalisableRange (1.0f, 1000.0f, 500.0f),
+            10.0f
     };
 
     // Decay param
     chowdsp::TimeMsParameter::Ptr decayParam {
             juce::ParameterID { "decay", 100 },
             "Decay",
-            chowdsp::ParamUtils::createNormalisableRange (2.01f, 10.0f, 4.0f), // FIX
-            3.5f,
+            chowdsp::ParamUtils::createNormalisableRange (1.0f, 1000.0f, 500.0f),
+            10.0f
     };
 
     // Sustain param
     chowdsp::FloatParameter::Ptr sustainParam {
             juce::ParameterID { "sustain", 100 },
             "Sustain",
-            chowdsp::ParamUtils::createNormalisableRange (20.0f, 20000.0f, 2000.0f),
-            1000.0f,
+            chowdsp::ParamUtils::createNormalisableRange (0.0f,1.0f, 0.5f),
+            1.0f,
             &chowdsp::ParamUtils::floatValToString,
             &chowdsp::ParamUtils::stringToFloatVal
     };
@@ -87,8 +88,8 @@ struct DirectParams : chowdsp::ParamHolder
     chowdsp::TimeMsParameter::Ptr releaseParam {
             juce::ParameterID { "release", 100 },
             "Release",
-            chowdsp::ParamUtils::createNormalisableRange (2.01f, 10.0f, 4.0f), // FIX
-            3.5f,
+            chowdsp::ParamUtils::createNormalisableRange (1.0f, 1000.0f, 500.0f),
+            10.0f
     };
 
 //    // Transpositions param
@@ -118,13 +119,14 @@ struct DirectNonParameterState : chowdsp::NonParamState
 {
     DirectNonParameterState()
     {
-        addStateValues ({ &prepPoint });
+        addStateValues ({ &prepPoint /*,&isSelected*/});
     }
 
     chowdsp::StateValue<juce::Point<int>> prepPoint { "prep_point", { 300, 500 } };
+    //chowdsp::StateValue<bool> isSelected { "selected", true };
 };
 
-class DirectProcessor : public chowdsp::PluginBase<chowdsp::PluginStateImpl<DirectParams,DirectNonParameterState>>
+class DirectProcessor : public chowdsp::PluginBase<chowdsp::PluginStateImpl<DirectParams,DirectNonParameterState, chowdsp::XMLSerializer>>
 {
 public:
     DirectProcessor();

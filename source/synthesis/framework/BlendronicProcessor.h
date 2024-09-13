@@ -104,7 +104,7 @@ struct BlendronicNonParameterState : chowdsp::NonParamState
     chowdsp::StateValue<juce::Point<int>> prepPoint { "prep_point", { 300, 500 } };
 };
 
-class BlendronicProcessor : public chowdsp::PluginBase<chowdsp::PluginStateImpl<BlendronicParams,BlendronicNonParameterState>>
+class BlendronicProcessor : public chowdsp::PluginBase<chowdsp::PluginStateImpl<BlendronicParams,BlendronicNonParameterState,chowdsp::XMLSerializer>>
 {
 public:
     BlendronicProcessor();

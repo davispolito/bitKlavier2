@@ -20,6 +20,7 @@ public:
         options.applicationName = "bitklavier";
         options.folderName = "bitklavier";
         options.filenameSuffix = ".settings";
+        options.osxLibrarySubFolder = "Application Support";
         file = options.getDefaultFile();
 
         tree = juce::ValueTree::fromXml(file.loadFileAsString());
