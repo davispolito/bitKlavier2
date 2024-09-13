@@ -12,7 +12,8 @@
 	branch = main
 [submodule "third_party/chowdsp_utils"]
 	path = third_party/chowdsp_utils
-	url = git@github.com:Chowdhury-DSP/chowdsp_utils.git
+	url = git@github.com:davispolito/chowdsp_utilsPrinceton.git
+	branch = bitklavier
 [submodule "third_party/tracktion_engine"]
 	path = third_party/tracktion_engine
 	url = git@github.com:Tracktion/tracktion_engine.git
