@@ -238,7 +238,7 @@ SynthSlider::SynthSlider(juce::String name, chowdsp::FloatParameter& param, chow
                                         text_entry_height_percent_(kDefaultTextEntryHeightPercent),
                                         display_multiply_(0.0f), display_exponential_base_(2.0f),
                                         string_lookup_(nullptr), extra_modulation_target_(nullptr),
-                                        synth_interface_(nullptr), attachment(param,pluginState, *this){
+                                        synth_interface_(nullptr) /*attachment(param,pluginState, *this)*/{
     //setAttachment(param, pluginState);
     setComponentID (param.paramID);
   text_entry_ = std::make_unique<OpenGlTextEditor>("text_entry");

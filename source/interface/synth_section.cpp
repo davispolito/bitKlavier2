@@ -30,6 +30,14 @@ SynthSection::SynthSection(const String& name) : Component(name), parent_(nullpt
   setWantsKeyboardFocus(true);
 }
 
+SynthSection::SynthSection(const String& name, OpenGlWrapper* open_gl)  : Component(name), parent_(nullptr), activator_(nullptr),
+preset_selector_(nullptr), preset_selector_half_width_(false),
+skin_override_(Skin::kNone), size_ratio_(1.0f),
+active_(true), sideways_heading_(true), background_(nullptr), open_gl(open_gl) {
+    setWantsKeyboardFocus(true);
+}
+
+
 float SynthSection::findValue(Skin::ValueId value_id) const {
   if (value_lookup_.count(value_id)) {
       if (Skin::shouldScaleValue(value_id))
@@ -450,6 +458,8 @@ void SynthSection::addSlider(SynthSlider* slider, bool show, bool listen) {
 //    slider->addListener(this);
   if (show)
     addAndMakeVisible(slider);
+  else
+      addChildComponent(slider);
  addOpenGlComponent(slider->getImageComponent());
  addOpenGlComponent(slider->getQuadComponent());
  addOpenGlComponent(slider->getTextEditorComponent());

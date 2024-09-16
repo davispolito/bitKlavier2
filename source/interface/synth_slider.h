@@ -59,6 +59,7 @@ class OpenGlSlider : public Slider {
 
       slider_quad_->setActive(false);
       image_component_->setActive(false);
+
     }
 
     virtual void resized() override {
@@ -141,6 +142,10 @@ class OpenGlSlider : public Slider {
         //DBG("paint");
     }
 
+//    void init (OpenGlWrapper &open_gl) override
+//    {
+//
+//    }
 
     void parentHierarchyChanged() override {
       parent_ = findParentComponentOfClass<SynthSection>();
