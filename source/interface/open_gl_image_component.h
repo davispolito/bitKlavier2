@@ -42,7 +42,7 @@ public:
     virtual void init(OpenGlWrapper& open_gl) override;
     virtual void render(OpenGlWrapper& open_gl, bool animate) override;
     virtual void destroy(OpenGlWrapper& open_gl) override;
-
+    virtual bool isInit() override;
     virtual void redrawImage(bool force, bool clear=true);
     void setComponent(Component* component) { component_ = component; }
     void setScissor(bool scissor) { image_.setScissor(scissor); }
@@ -111,7 +111,7 @@ class OpenGlAutoImageComponent : public ComponentType {
 class OpenGlTextEditor : public OpenGlAutoImageComponent<TextEditor>, public TextEditor::Listener {
   public:
     OpenGlTextEditor(String name) : OpenGlAutoImageComponent(name) {
-        image_component_ = std::make_shared<OpenGlImageComponent>();
+        image_component_ = std::make_shared<OpenGlImageComponent>(name + "_text");
       monospace_ = false;
       image_component_->setComponent(this);
       addListener(this);

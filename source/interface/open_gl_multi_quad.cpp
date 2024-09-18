@@ -19,37 +19,69 @@
 #include "../synthesis/framework/common.h"
 #include "look_and_feel/shaders.h"
 
-OpenGlMultiQuad::OpenGlMultiQuad(int max_quads, Shaders::FragmentShader shader) :
-    target_component_(nullptr), scissor_component_(nullptr), fragment_shader_(shader),
-    max_quads_(max_quads), num_quads_(max_quads), draw_when_not_visible_(false),
-    active_(true), dirty_(false), max_arc_(2.0f), thumb_amount_(0.5f), start_pos_(0.0f), 
-    current_alpha_mult_(1.0f), alpha_mult_(1.0f), additive_blending_(false),
-    current_thickness_(1.0f), thickness_(1.0f), rounding_(5.0f), shader_(nullptr) {
-  static const int triangles[] = {
-    0, 1, 2,
-    2, 3, 0
-  };
+//OpenGlMultiQuad::OpenGlMultiQuad(int max_quads, Shaders::FragmentShader shader) :
+//    target_component_(nullptr), scissor_component_(nullptr), fragment_shader_(shader),
+//    max_quads_(max_quads), num_quads_(max_quads), draw_when_not_visible_(false),
+//    active_(true), dirty_(false), max_arc_(2.0f), thumb_amount_(0.5f), start_pos_(0.0f),
+//    current_alpha_mult_(1.0f), alpha_mult_(1.0f), additive_blending_(false),
+//    current_thickness_(1.0f), thickness_(1.0f), rounding_(5.0f), shader_(nullptr) {
+//  static const int triangles[] = {
+//    0, 1, 2,
+//    2, 3, 0
+//  };
+//
+//  data_ = std::make_unique<float[]>(max_quads_ * kNumFloatsPerQuad);
+//  indices_ = std::make_unique<int[]>(max_quads_ * kNumIndicesPerQuad);
+//  vertex_buffer_ = 0;
+//  indices_buffer_ = 0;
+//
+//  mod_color_ = Colours::transparentBlack;
+//
+//  for (int i = 0; i < max_quads_; ++i) {
+//    setCoordinates(i, -1.0f, -1.0f, 2.0f, 2.0f);
+//    setShaderValue(i, 1.0f);
+//
+//    for (int j = 0; j < kNumIndicesPerQuad; ++j)
+//      indices_[i * kNumIndicesPerQuad + j] = triangles[j] + i * kNumVertices;
+//  }
+//
+//  setInterceptsMouseClicks(false, false);
+//}
 
-  data_ = std::make_unique<float[]>(max_quads_ * kNumFloatsPerQuad);
-  indices_ = std::make_unique<int[]>(max_quads_ * kNumIndicesPerQuad);
-  vertex_buffer_ = 0;
-  indices_buffer_ = 0;
+OpenGlMultiQuad::OpenGlMultiQuad(int max_quads, Shaders::FragmentShader shader, String name) : OpenGlComponent(name),
+        target_component_(nullptr), scissor_component_(nullptr), fragment_shader_(shader),
+        max_quads_(max_quads), num_quads_(max_quads), draw_when_not_visible_(false),
+        active_(true), dirty_(false), max_arc_(2.0f), thumb_amount_(0.5f), start_pos_(0.0f),
+        current_alpha_mult_(1.0f), alpha_mult_(1.0f), additive_blending_(false),
+        current_thickness_(1.0f), thickness_(1.0f), rounding_(5.0f), shader_(nullptr) {
+    static const int triangles[] = {
+            0, 1, 2,
+            2, 3, 0
+    };
 
-  mod_color_ = Colours::transparentBlack;
+    data_ = std::make_unique<float[]>(max_quads_ * kNumFloatsPerQuad);
+    indices_ = std::make_unique<int[]>(max_quads_ * kNumIndicesPerQuad);
+    vertex_buffer_ = 0;
+    indices_buffer_ = 0;
 
-  for (int i = 0; i < max_quads_; ++i) {
-    setCoordinates(i, -1.0f, -1.0f, 2.0f, 2.0f);
-    setShaderValue(i, 1.0f);
+    mod_color_ = Colours::transparentBlack;
 
-    for (int j = 0; j < kNumIndicesPerQuad; ++j)
-      indices_[i * kNumIndicesPerQuad + j] = triangles[j] + i * kNumVertices;
-  }
+    for (int i = 0; i < max_quads_; ++i) {
+        setCoordinates(i, -1.0f, -1.0f, 2.0f, 2.0f);
+        setShaderValue(i, 1.0f);
 
-  setInterceptsMouseClicks(false, false);
+        for (int j = 0; j < kNumIndicesPerQuad; ++j)
+            indices_[i * kNumIndicesPerQuad + j] = triangles[j] + i * kNumVertices;
+    }
+
+    setInterceptsMouseClicks(false, false);
 }
 
 OpenGlMultiQuad::~OpenGlMultiQuad() { }
-
+bool OpenGlMultiQuad::isInit()
+{
+    return shader_ != nullptr;
+}
 void OpenGlMultiQuad::init(OpenGlWrapper& open_gl) {
   open_gl.context.extensions.glGenBuffers(1, &vertex_buffer_);
   open_gl.context.extensions.glBindBuffer(juce::gl::GL_ARRAY_BUFFER, vertex_buffer_);

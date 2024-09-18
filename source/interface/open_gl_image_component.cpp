@@ -16,7 +16,7 @@
 
 #include "open_gl_image_component.h"
 #include "utils.h"
-OpenGlImageComponent::OpenGlImageComponent(String name) : OpenGlComponent(name), component_(nullptr),
+OpenGlImageComponent::OpenGlImageComponent(String name) : OpenGlComponent(name + "_image"), component_(nullptr),
                                                           active_(true), static_image_(false),
                                                           paint_entire_component_(true) {
    image_.setTopLeft(-1.0f, 1.0f);
@@ -71,6 +71,11 @@ void OpenGlImageComponent::redrawImage(bool force, bool clear) {
 
 void OpenGlImageComponent::init(OpenGlWrapper& open_gl) {
    image_.init(open_gl);
+}
+
+bool OpenGlImageComponent::isInit()
+{
+    return image_.shader() != nullptr;
 }
 
 void OpenGlImageComponent::render(OpenGlWrapper& open_gl, bool animate) {

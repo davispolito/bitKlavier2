@@ -61,6 +61,7 @@ class OpenGlComponent : public Component {
     void renderCorners(OpenGlWrapper& open_gl, bool animate, Colour color, float rounding);
     void renderCorners(OpenGlWrapper& open_gl, bool animate);
     virtual void destroy(OpenGlWrapper& open_gl);
+    virtual bool isInit();
     virtual void paintBackground(Graphics& g);
     void repaintBackground();
 
@@ -112,6 +113,7 @@ class OpenGlComponent : public Component {
     Colour body_color_;
     Skin::SectionOverride skin_override_;
     const SynthSection* parent_;
+
 private:
     int id;
     static int nID;

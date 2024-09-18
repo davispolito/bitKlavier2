@@ -304,6 +304,8 @@ class SynthSection : public Component, public Slider::Listener,
     std::map<std::string, SynthSlider*> getAllSliders() { return all_sliders_; }
     std::map<std::string, ToggleButton*> getAllButtons() { return all_buttons_; }
 
+    std::vector<juce::Component*> getAllSlidersVec() { return all_sliders_v; }
+    float getKnobSectionHeight();
 
     virtual void setActive(bool active);
     bool isActive() const { return active_; }
@@ -382,6 +384,7 @@ class SynthSection : public Component, public Slider::Listener,
 
 
     std::map<std::string, SynthSlider*> all_sliders_;
+    std::vector<juce::Component*> all_sliders_v;
     std::map<std::string, ToggleButton*> all_buttons_;
     std::map<Skin::ValueId, float> value_lookup_;
 

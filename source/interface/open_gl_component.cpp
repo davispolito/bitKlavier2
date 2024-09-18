@@ -192,6 +192,11 @@ void OpenGlComponent::destroy(OpenGlWrapper& open_gl) {
     corners_->destroy(open_gl);
 }
 
+bool OpenGlComponent::isInit() {
+    if (corners_)
+        return corners_->shader() != nullptr;
+}
+
 float OpenGlComponent::findValue(Skin::ValueId value_id) {
   if (parent_)
     return parent_->findValue(value_id);

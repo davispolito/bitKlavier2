@@ -298,7 +298,7 @@ void FullInterface::resized() {
    Rectangle<int> main_bounds(0, 0, width, height);
    Rectangle<int> new_bounds(0, 0, width, height);
    main_->setBounds(main_bounds);
-   prep_popup->setBounds(100, 100, 500, 500);
+   prep_popup->setBounds(100, 100, 700, 700);
    about_section_->setBounds(new_bounds);
    //inspectButton->setBounds(10, 0, 100, 100);
    if (getWidth() && getHeight())
@@ -338,7 +338,9 @@ void FullInterface::popupDisplay(Component* source, const std::string& text,
 
 void FullInterface::prepDisplay(PreparationSection* prep)
 {
+    DBG("*********SETTING CONTENT***************");
     prep_popup->setContent(prep->getPrepPopup());
+    DBG("*********CONTEN SET***************");
     prep_popup->setVisible(true);
 }
 

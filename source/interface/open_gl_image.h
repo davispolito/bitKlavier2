@@ -65,7 +65,7 @@ public:
     void setAdditive(bool additive) { additive_ = additive; }
     void setUseAlpha(bool use_alpha) { use_alpha_ = use_alpha; }
     void setScissor(bool scissor) { scissor_ = scissor; }
-
+    OpenGLShaderProgram* shader() { return image_shader_; }
 private:
     std::mutex mutex_;
     bool dirty_;
@@ -81,7 +81,7 @@ private:
     bool use_alpha_;
     bool scissor_;
 
-    OpenGLShaderProgram* image_shader_;
+    OpenGLShaderProgram* image_shader_ = nullptr;
     std::unique_ptr<OpenGLShaderProgram::Uniform> image_color_;
     std::unique_ptr<OpenGLShaderProgram::Attribute> image_position_;
     std::unique_ptr<OpenGLShaderProgram::Attribute> texture_coordinates_;

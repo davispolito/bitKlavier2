@@ -30,13 +30,14 @@ class OpenGlMultiQuad : public OpenGlComponent {
     static constexpr float kThicknessDecay = 0.4f;
     static constexpr float kAlphaInc = 0.2f;
 
-    OpenGlMultiQuad(int max_quads, Shaders::FragmentShader shader = Shaders::kColorFragment);
+    //OpenGlMultiQuad(int max_quads, Shaders::FragmentShader shader = Shaders::kColorFragment);
+    OpenGlMultiQuad(int max_quads, Shaders::FragmentShader shader = Shaders::kColorFragment, juce::String name="");
     virtual ~OpenGlMultiQuad();
 
     virtual void init(OpenGlWrapper& open_gl) override;
     virtual void render(OpenGlWrapper& open_gl, bool animate) override;
     virtual void destroy(OpenGlWrapper& open_gl) override;
-
+    virtual bool isInit() override;
     void paintBackground(Graphics& g) override { }
     void resized() override {
       OpenGlComponent::resized();
@@ -270,7 +271,7 @@ class OpenGlMultiQuad : public OpenGlComponent {
     std::unique_ptr<float[]> data_;
     std::unique_ptr<int[]> indices_;
 
-    OpenGLShaderProgram* shader_;
+    OpenGLShaderProgram* shader_ = nullptr;
     std::unique_ptr<OpenGLShaderProgram::Uniform> color_uniform_;
     std::unique_ptr<OpenGLShaderProgram::Uniform> alt_color_uniform_;
     std::unique_ptr<OpenGLShaderProgram::Uniform> mod_color_uniform_;
@@ -295,8 +296,11 @@ class OpenGlMultiQuad : public OpenGlComponent {
 
 class OpenGlQuad : public OpenGlMultiQuad {
   public:
-    OpenGlQuad(Shaders::FragmentShader shader) : OpenGlMultiQuad(1, shader) {
+    OpenGlQuad(Shaders::FragmentShader shader, juce::String name) : OpenGlMultiQuad(1, shader,name) {
       setQuad(0, -1.0f, -1.0f, 2.0f, 2.0f);
+    }
+    explicit OpenGlQuad(Shaders::FragmentShader shader) : OpenGlMultiQuad(1, shader) {
+        setQuad(0, -1.0f, -1.0f, 2.0f, 2.0f);
     }
 };
 

@@ -58,6 +58,10 @@ void DirectProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::Midi
         auto message = mi.getMessage();
 
         DBG(bitklavier::printMidi(message, "direct"));
+        state.params.doForAllParameters([this](auto& param, size_t) {
+           param.printDebug();
+        });
+
     }
     buffer.clear();
     synth.renderNextBlock (buffer, midiMessages,

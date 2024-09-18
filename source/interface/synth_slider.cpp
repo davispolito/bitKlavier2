@@ -221,7 +221,7 @@ void OpenGlSlider::setColors() {
 //    setVelocityModeParameters(1.0, 0, 0.0, false, ModifierKeys::ctrlAltCommandModifiers);
 //}
 
-SynthSlider::SynthSlider(juce::String name, chowdsp::FloatParameter& param, chowdsp::PluginState& pluginState) : OpenGlSlider(name), show_popup_on_hover_(false), scroll_enabled_(true),
+SynthSlider::SynthSlider(juce::String name, chowdsp::FloatParameter& param) : OpenGlSlider(name), show_popup_on_hover_(false), scroll_enabled_(true),
                                         bipolar_modulation_(false), stereo_modulation_(false),
                                         bypass_modulation_(false), modulation_bar_right_(true),
                                         snap_to_value_(false), hovering_(false),
@@ -241,7 +241,7 @@ SynthSlider::SynthSlider(juce::String name, chowdsp::FloatParameter& param, chow
                                         synth_interface_(nullptr) /*attachment(param,pluginState, *this)*/{
     //setAttachment(param, pluginState);
     setComponentID (param.paramID);
-  text_entry_ = std::make_unique<OpenGlTextEditor>("text_entry");
+  text_entry_ = std::make_unique<OpenGlTextEditor>(name);
   text_entry_->setMonospace();
   text_entry_->setMultiLine(false);
   text_entry_->setScrollToShowCursor(false);

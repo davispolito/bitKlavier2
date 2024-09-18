@@ -31,7 +31,7 @@ class SynthSection;
 
 class OpenGlSliderQuad : public OpenGlQuad {
   public:
-    OpenGlSliderQuad(OpenGlSlider* slider) : OpenGlQuad(Shaders::kRotarySliderFragment), slider_(slider) { }
+    OpenGlSliderQuad(OpenGlSlider* slider,String name) : OpenGlQuad(Shaders::kRotarySliderFragment, name + "_quad"), slider_(slider) { }
     virtual void init(OpenGlWrapper& open_gl) override;
 
     void paintBackground(Graphics& g) override;
@@ -47,8 +47,8 @@ class OpenGlSlider : public Slider {
     static constexpr float kRotaryAngle = 0.8f * bitklavier::kPi;
 
     OpenGlSlider(String name) : Slider(name), parent_(nullptr), modulation_knob_(false), modulation_amount_(0.0f),
-                                paint_to_image_(false), active_(true), bipolar_(false), slider_quad_(new OpenGlSliderQuad(this)),
-                                image_component_(new OpenGlImageComponent("slider")),
+                                paint_to_image_(false), active_(true), bipolar_(false), slider_quad_(new OpenGlSliderQuad(this,name)),
+                                image_component_(new OpenGlImageComponent(name)),
                                 knob_size_scale_(1.0f) {
       slider_quad_->setTargetComponent(this);
       setMaxArc(kRotaryAngle);
@@ -89,54 +89,54 @@ class OpenGlSlider : public Slider {
         PathStrokeType shadow_stroke(stroke_width + 1, PathStrokeType::beveled, PathStrokeType::rounded);
 
         g.saveState();
-        g.fillAll(juce::Colours::white);
-        g.setOrigin(center_x,center_y);
-
-        Colour body = findColour(Skin::kRotaryBody, true);
-        float body_radius = knob_size_scale_ * findValue(Skin::kKnobBodySize) / 2.0f;
-        if (body_radius >= 0.0f && body_radius < getWidth()) {
-
-            if (shadow_width > 0.0f) {
-                Colour transparent_shadow = shadow_color.withAlpha(0.0f);
-                float shadow_radius = body_radius + shadow_width;
-                ColourGradient shadow_gradient(shadow_color, center_x, center_y + shadow_offset,
-                                               transparent_shadow, center_x - shadow_radius, center_y + shadow_offset, true);
-                float shadow_start = std::max(0.0f, (body_radius - std::abs(shadow_offset))) / shadow_radius;
-                shadow_gradient.addColour(shadow_start, shadow_color);
-                shadow_gradient.addColour(1.0f - (1.0f - shadow_start) * 0.75f, shadow_color.withMultipliedAlpha(0.5625f));
-                shadow_gradient.addColour(1.0f - (1.0f - shadow_start) * 0.5f, shadow_color.withMultipliedAlpha(0.25f));
-                shadow_gradient.addColour(1.0f - (1.0f - shadow_start) * 0.25f, shadow_color.withMultipliedAlpha(0.0625f));
-                g.setGradientFill(shadow_gradient);
-                g.fillRect(getLocalBounds());
-            }
-
-            g.setColour(body);
-//            DBG("x: " + String(center_x- body_radius));
-//            DBG("y: " + String(center_y- body_radius));
-//            DBG("body radius: " + String(body_radius));
-//            DBG("knob size scale " + String(knob_size_scale_));
-//            DBG("knob body size" + String(findValue(Skin::kKnobBodySize)));
-            Rectangle<float> ellipse(10 - 1.5f*body_radius ,10 - 1.5f*body_radius, 1.5f*body_radius,1.5f*body_radius);
-            //ellipse.setCentre(getWidth() / 2.0f, getHeight()/2);
-            //Rectangle<float> ellipse(0, 0,  2.0f * body_radius, 2.0f * body_radius);
-
-            g.fillEllipse(ellipse);
-
-            g.setColour(findColour(Skin::kRotaryBodyBorder, true));
-            g.drawEllipse(ellipse.reduced(0.5f), 1.0f);
-        }
-
-        Path shadow_outline;
-        Path shadow_path;
-
-        shadow_outline.addCentredArc(0, 0, radius, radius,
-                                     0, -kRotaryAngle, kRotaryAngle, true);
-        shadow_stroke.createStrokedPath(shadow_path, shadow_outline);
-        if ((!findColour(Skin::kRotaryArcUnselected, true).isTransparent() && isActive()) ||
-            (!findColour(Skin::kRotaryArcUnselectedDisabled, true).isTransparent() && !isActive())) {
-            g.setColour(shadow_color);
-            g.fillPath(shadow_path);
-        }
+//        g.fillAll(juce::Colours::white);
+//        g.setOrigin(center_x,center_y);
+//
+//        Colour body = findColour(Skin::kRotaryBody, true);
+//        float body_radius = knob_size_scale_ * findValue(Skin::kKnobBodySize) / 2.0f;
+//        if (body_radius >= 0.0f && body_radius < getWidth()) {
+//
+//            if (shadow_width > 0.0f) {
+//                Colour transparent_shadow = shadow_color.withAlpha(0.0f);
+//                float shadow_radius = body_radius + shadow_width;
+//                ColourGradient shadow_gradient(shadow_color, center_x, center_y + shadow_offset,
+//                                               transparent_shadow, center_x - shadow_radius, center_y + shadow_offset, true);
+//                float shadow_start = std::max(0.0f, (body_radius - std::abs(shadow_offset))) / shadow_radius;
+//                shadow_gradient.addColour(shadow_start, shadow_color);
+//                shadow_gradient.addColour(1.0f - (1.0f - shadow_start) * 0.75f, shadow_color.withMultipliedAlpha(0.5625f));
+//                shadow_gradient.addColour(1.0f - (1.0f - shadow_start) * 0.5f, shadow_color.withMultipliedAlpha(0.25f));
+//                shadow_gradient.addColour(1.0f - (1.0f - shadow_start) * 0.25f, shadow_color.withMultipliedAlpha(0.0625f));
+//                g.setGradientFill(shadow_gradient);
+//                g.fillRect(getLocalBounds());
+//            }
+//
+//            g.setColour(body);
+////            DBG("x: " + String(center_x- body_radius));
+////            DBG("y: " + String(center_y- body_radius));
+////            DBG("body radius: " + String(body_radius));
+////            DBG("knob size scale " + String(knob_size_scale_));
+////            DBG("knob body size" + String(findValue(Skin::kKnobBodySize)));
+//            Rectangle<float> ellipse(10 - 1.5f*body_radius ,10 - 1.5f*body_radius, 1.5f*body_radius,1.5f*body_radius);
+//            //ellipse.setCentre(getWidth() / 2.0f, getHeight()/2);
+//            //Rectangle<float> ellipse(0, 0,  2.0f * body_radius, 2.0f * body_radius);
+//
+//            g.fillEllipse(ellipse);
+//
+//            g.setColour(findColour(Skin::kRotaryBodyBorder, true));
+//            g.drawEllipse(ellipse.reduced(0.5f), 1.0f);
+//        }
+//
+//        Path shadow_outline;
+//        Path shadow_path;
+//
+//        shadow_outline.addCentredArc(0, 0, radius, radius,
+//                                     0, -kRotaryAngle, kRotaryAngle, true);
+//        shadow_stroke.createStrokedPath(shadow_path, shadow_outline);
+//        if ((!findColour(Skin::kRotaryArcUnselected, true).isTransparent() && isActive()) ||
+//            (!findColour(Skin::kRotaryArcUnselectedDisabled, true).isTransparent() && !isActive())) {
+//            g.setColour(shadow_color);
+//            g.fillPath(shadow_path);
+//        }
 
         g.restoreState();
         //DBG("paint");
@@ -350,7 +350,7 @@ class SynthSlider : public OpenGlSlider, public TextEditor::Listener {
 //        virtual void guiChanged(SynthSlider* slider) { }
 //    };
 
-    SynthSlider(String name, chowdsp::FloatParameter& param, chowdsp::PluginState& pluginState);
+    SynthSlider(String name, chowdsp::FloatParameter& param);
 //    SynthSlider(String name);
     virtual void mouseDown(const MouseEvent& e) override;
     virtual void mouseDrag(const MouseEvent& e) override;

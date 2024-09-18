@@ -8,16 +8,18 @@ namespace bitklavier {
 /** Clone of juce::GenericAudioProcessorEditor, but usable as a generic component */
     class ParametersView : public SynthSection {
     public:
-        explicit ParametersView(chowdsp::PluginState &pluginState, chowdsp::ParamHolder &params, OpenGlWrapper *open_gl);
-
+        ParametersView (chowdsp::PluginState& pluginState, chowdsp::ParamHolder& params, OpenGlWrapper *open_gl);
+        ParametersView (chowdsp::ParameterListeners& paramListeners, chowdsp::ParamHolder& params, OpenGlWrapper *open_gl);
         ~ParametersView() override;
 
         void paint(juce::Graphics &) override;
 
         void resized() override;
-        void initOpenGlComponents(OpenGlWrapper &open_gl) override;
-        void renderOpenGlComponents(OpenGlWrapper& open_gl, bool animate) override;
+//        void initOpenGlComponents(OpenGlWrapper &open_gl) override;
+//        void renderOpenGlComponents(OpenGlWrapper& open_gl, bool animate) override;
         void init_();
+        /** Returns nullptr if no component is found for the given parameter */
+        [[nodiscard]] juce::Component* getComponentForParameter (const juce::RangedAudioParameter&);
         void paintBackground(Graphics& g) override
         {
             SynthSection::paintContainer(g);
@@ -29,7 +31,7 @@ namespace bitklavier {
     private:
         struct Pimpl;
         std::unique_ptr<Pimpl> pimpl;
-
+        std::vector<juce::Component*> comps;
         JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ParametersView)
     };
 

@@ -336,14 +336,37 @@ void SynthSection::drawTempoDivider(Graphics& g, Component* sync) {
 }
 
 void SynthSection::initOpenGlComponents(OpenGlWrapper& open_gl) {
-  for (auto& open_gl_component : open_gl_components_)
-    open_gl_component->init(open_gl);
+    if ((OpenGLContext::getCurrentContext() == nullptr))
+    {
+        open_gl.context.executeOnGLThread([this, &open_gl](OpenGLContext &openGLContext) {
+            for (auto &open_gl_component: open_gl_components_) {
+                open_gl_component->init(open_gl);
+                DBG("init " + open_gl_component->getName());
+            }
 
-  for (auto& sub_section : sub_sections_)
-    sub_section->initOpenGlComponents(open_gl);
+            for (auto &sub_section: sub_sections_)
+                sub_section->initOpenGlComponents(open_gl);
 
-  if(background_)
-      background_->init(open_gl);
+            for (auto &open_gl_component: open_gl_components_)
+                open_gl_component->setVisible(true);
+
+            if (background_)
+                background_->init(open_gl);
+        }, true);
+    } else
+    {
+        DBG("sent: init parameters execute on gl");
+        for (auto& open_gl_component : open_gl_components_)
+            open_gl_component->init(open_gl);
+
+        for (auto& sub_section : sub_sections_)
+            sub_section->initOpenGlComponents(open_gl);
+
+        if(background_)
+            background_->init(open_gl);
+    }
+
+
 }
 
 void SynthSection::renderOpenGlComponents(OpenGlWrapper& open_gl, bool animate) {
@@ -353,6 +376,12 @@ void SynthSection::renderOpenGlComponents(OpenGlWrapper& open_gl, bool animate) 
   }
 
   for (auto& open_gl_component : open_gl_components_) {
+      if (!open_gl_component->isInit())
+      {
+          open_gl_component->init(open_gl);
+          GLenum gl =  juce::gl::glGetError();
+          BITKLAVIER_ASSERT(gl == juce::gl::GL_NO_ERROR);
+      }
     if (open_gl_component->isVisible() && !open_gl_component->isAlwaysOnTop()) {
       open_gl_component->render(open_gl, animate);
       GLenum gl =  juce::gl::glGetError();
@@ -367,6 +396,12 @@ void SynthSection::renderOpenGlComponents(OpenGlWrapper& open_gl, bool animate) 
   }
 
   for (auto& open_gl_component : open_gl_components_) {
+      if (!open_gl_component->isInit())
+      {
+          open_gl_component->init(open_gl);
+          GLenum gl =  juce::gl::glGetError();
+          BITKLAVIER_ASSERT(gl == juce::gl::GL_NO_ERROR);
+      }
     if (open_gl_component->isVisible() && open_gl_component->isAlwaysOnTop()) {
       open_gl_component->render(open_gl, animate);
       BITKLAVIER_ASSERT(juce::gl::glGetError() == juce::gl::GL_NO_ERROR);
@@ -454,6 +489,7 @@ void SynthSection::addButton(OpenGlShapeButton* button, bool show) {
 void SynthSection::addSlider(SynthSlider* slider, bool show, bool listen) {
   slider_lookup_[slider->getName().toStdString()] = slider;
   all_sliders_[slider->getName().toStdString()] = slider;
+  all_sliders_v.push_back(slider);
 //  if (listen)
 //    slider->addListener(this);
   if (show)
@@ -627,7 +663,9 @@ float SynthSection::getTitleWidth() {
   return findValue(Skin::kTitleWidth);
 }
 
-
+float SynthSection::getKnobSectionHeight() {
+    return findValue(Skin::kKnobSectionHeight);
+}
 
 float SynthSection::getSliderWidth() {
   return findValue(Skin::kSliderWidth);
