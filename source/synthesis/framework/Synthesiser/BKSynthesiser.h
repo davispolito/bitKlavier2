@@ -285,7 +285,8 @@ class BKSynthesiser
                 */
                 void setMinimumRenderingSubdivisionSize (int numSamples, bool shouldBeStrict = false) noexcept;
 
-                protected:
+    juce::ADSR::Parameters globalADSR;
+protected:
                 //==============================================================================
                 /** This is used to control access to the rendering callback and the note trigger methods. */
                 juce::CriticalSection lock;
@@ -347,7 +348,7 @@ class BKSynthesiser
                 /** Can be overridden to do custom handling of incoming midi events. */
                 virtual void handleMidiEvent (const juce::MidiMessage&);
 
-                private:
+private:
                 //==============================================================================
                 double sampleRate = 0;
                 juce::uint32 lastNoteOnCounter = 0;

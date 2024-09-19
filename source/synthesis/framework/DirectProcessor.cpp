@@ -13,9 +13,37 @@ DirectProcessor::DirectProcessor() : PluginBase(nullptr, directBusLayout())
     {
         synth.addVoice(new BKSamplerVoice());
     }
+
     std::unique_ptr<XmlElement> xml = chowdsp::Serialization::serialize<chowdsp::XMLSerializer>(state);
     DBG(chowdsp::Serialization::serialize<chowdsp::XMLSerializer>(state)->toString());
     chowdsp::Serialization::deserialize<chowdsp::XMLSerializer>(xml,state);
+    adsrCallbacks += {state.addParameterListener(*state.params.attackParam,
+                                                 chowdsp::ParameterListenerThread::AudioThread,
+                                                 [this] {
+                                                     synth.globalADSR.attack = state.params.attackParam->get();
+                                                     DBG("attack: " + String(state.params.attackParam->get()));
+                                                 }),
+                      state.addParameterListener(*state.params.decayParam,
+                                                 chowdsp::ParameterListenerThread::AudioThread,
+                                                 [this] {
+                                                     synth.globalADSR.decay = state.params.decayParam->get();
+                                                     DBG("decay: " + String(state.params.decayParam->get()));
+                                                 }),
+                      state.addParameterListener(*state.params.sustainParam,
+                                                 chowdsp::ParameterListenerThread::AudioThread,
+                                                 [this] {
+                                                     synth.globalADSR.sustain = state.params.sustainParam->get();
+                                                     DBG("sustain: " + String(state.params.sustainParam->get()));
+                                                 }),
+                      state.addParameterListener(*state.params.releaseParam,
+                                                 chowdsp::ParameterListenerThread::AudioThread,
+                                                 [this] {
+                                                     synth.globalADSR.release = state.params.releaseParam->get();
+                                                     DBG("release: " + String(state.params.releaseParam->get()));
+                                                 })
+    };
+
+
 }
 
 void DirectProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
@@ -53,14 +81,17 @@ bool DirectProcessor::isBusesLayoutSupported (const juce::AudioProcessor::BusesL
 
 void DirectProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
 {
+#if JUCE_MODULE_AVAILABLE_chowdsp_plugin_state
+    state.getParameterListeners().callAudioThreadBroadcasters();
+#endif
     for(auto mi : midiMessages)
     {
         auto message = mi.getMessage();
 
-        DBG(bitklavier::printMidi(message, "direct"));
-        state.params.doForAllParameters([this](auto& param, size_t) {
-           param.printDebug();
-        });
+//        DBG(bitklavier::printMidi(message, "direct"));
+//        state.params.doForAllParameters([this](auto& param, size_t) {
+//           param.printDebug();
+//           });
 
     }
     buffer.clear();

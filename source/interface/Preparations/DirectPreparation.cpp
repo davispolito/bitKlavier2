@@ -126,7 +126,7 @@ DirectPreparation::DirectPopup::DirectPopup(DirectProcessor& _proc, OpenGlWrappe
     Skin default_skin;
     view.setSkinValues(default_skin, false);
     addSubSection(&view);
-    view.init_();
+//    view.init_();
 
     /*********************************************************************************************/
 }

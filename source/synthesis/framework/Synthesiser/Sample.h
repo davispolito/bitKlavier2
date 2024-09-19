@@ -651,12 +651,17 @@ public:
     void loopPointsSecondsChanged(juce::Range<double>) {}
 
     void updateParams() {
-        updateAmpEnv();
+        //updateAmpEnv();
+    }
+
+    void copyAmpEnv(juce::ADSR::Parameters parameters)
+    {
+        updateAmpEnv(parameters);
     }
 
 private:
 
-    void updateAmpEnv() {
+    void updateAmpEnv(juce::ADSR::Parameters &parameters) {
 
 //        auto params = ampEnv.getParameters();
 ////        params.attack = *valueTreeState.getRawParameterValue(IDs::ampEnvAttack) * .001;
@@ -665,6 +670,7 @@ private:
 ////        params.release = *valueTreeState.getRawParameterValue(IDs::ampEnvRelease) *.001;
 //        ampEnv.setParameters(params);
 //
+        ampEnv.setParameters(parameters);
 //        // todo: update mod amount
     }
 

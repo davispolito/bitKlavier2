@@ -22,6 +22,7 @@ struct DirectParams : chowdsp::ParamHolder
     {
         add (gainParam, hammerParam, velocityParam, resonanceParam, attackParam,
              decayParam, sustainParam, releaseParam);
+
     }
 
     // Gain param
@@ -62,7 +63,7 @@ struct DirectParams : chowdsp::ParamHolder
     chowdsp::TimeMsParameter::Ptr attackParam {
             juce::ParameterID { "attack", 100 },
             "attack",
-            chowdsp::ParamUtils::createNormalisableRange (1.0f, 1000.0f, 500.0f),
+            chowdsp::ParamUtils::createNormalisableRange (0.01f, 1000.0f, 100.0f),
             10.0f
     };
 
@@ -112,6 +113,7 @@ struct DirectParams : chowdsp::ParamHolder
 //    };
 
 
+
     /****************************************************************************************/
 };
 
@@ -119,10 +121,10 @@ struct DirectNonParameterState : chowdsp::NonParamState
 {
     DirectNonParameterState()
     {
-        addStateValues ({ &prepPoint /*,&isSelected*/});
+        //addStateValues ({ /*,&isSelected*/});
     }
 
-    chowdsp::StateValue<juce::Point<int>> prepPoint { "prep_point", { 300, 500 } };
+    //chowdsp::StateValue<juce::Point<int>> prepPoint { "prep_point", { 300, 500 } };
     //chowdsp::StateValue<bool> isSelected { "selected", true };
 };
 
@@ -157,9 +159,19 @@ public:
     bool hasEditor() const override { return false; }
     juce::AudioProcessorEditor* createEditor() override { return nullptr; }
 
+    void addToVT(ValueTree& vt)
+    {
+        state.params.doForAllParameters([this, &vt](auto& param, size_t) {
+            vt.setProperty(param.paramID, chowdsp::ParameterTypeHelpers::getValue(param), nullptr);
+        });
+
+    }
 private:
     //chowdsp::experimental::Directillator<float> oscillator;
     chowdsp::Gain<float> gain;
+    ADSR::Parameters adsrParams;
     BKSynthesiser synth;
+    chowdsp::ScopedCallbackList adsrCallbacks;
+    chowdsp::ScopedCallbackList vtCallbacks;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (DirectProcessor)
 };

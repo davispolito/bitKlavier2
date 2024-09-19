@@ -236,7 +236,6 @@ void BKSynthesiser::noteOn (const int midiChannel,
             for (auto* voice : voices)
                 if (voice->getCurrentlyPlayingNote() == midiNoteNumber && voice->isPlayingChannel (midiChannel))
                     stopVoice (voice, 1.0f, true);
-
             startVoice (findFreeVoice (sound, midiChannel, midiNoteNumber, shouldStealNotes),
                         sound, midiChannel, midiNoteNumber, velocity);
             break;
@@ -254,7 +253,7 @@ void BKSynthesiser::startVoice (BKSamplerVoice* const voice,
     {
         if (voice->currentlyPlayingSound != nullptr)
             voice->stopNote (0.0f, false);
-
+        voice->copyAmpEnv(globalADSR);
         voice->currentlyPlayingNote = midiNoteNumber;
         voice->currentPlayingMidiChannel = midiChannel;
         voice->noteOnTime = ++lastNoteOnCounter;
