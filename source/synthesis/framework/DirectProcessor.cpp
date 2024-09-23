@@ -16,7 +16,7 @@ DirectProcessor::DirectProcessor() : PluginBase(nullptr, directBusLayout())
 
     std::unique_ptr<XmlElement> xml = chowdsp::Serialization::serialize<chowdsp::XMLSerializer>(state);
     DBG(chowdsp::Serialization::serialize<chowdsp::XMLSerializer>(state)->toString());
-    chowdsp::Serialization::deserialize<chowdsp::XMLSerializer>(xml,state);
+    //chowdsp::Serialization::deserialize<chowdsp::XMLSerializer>(xml,state);
     adsrCallbacks += {state.addParameterListener(*state.params.attackParam,
                                                  chowdsp::ParameterListenerThread::AudioThread,
                                                  [this] {

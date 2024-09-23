@@ -9,7 +9,7 @@
 #include <chowdsp_plugin_base/chowdsp_plugin_base.h>
 #include <chowdsp_plugin_utils/chowdsp_plugin_utils.h>
 #include <chowdsp_sources/chowdsp_sources.h>
-#include <chowdsp_plugin_state/chowdsp_plugin_state.h>
+#include <PreparationStateImpl.h>
 #include "Synthesiser/BKSynthesiser.h"
 #include "Synthesiser/Sample.h"
 #include <chowdsp_serialization/chowdsp_serialization.h>
@@ -128,7 +128,7 @@ struct DirectNonParameterState : chowdsp::NonParamState
     //chowdsp::StateValue<bool> isSelected { "selected", true };
 };
 
-class DirectProcessor : public chowdsp::PluginBase<chowdsp::PluginStateImpl<DirectParams,DirectNonParameterState, chowdsp::XMLSerializer>>
+class DirectProcessor : public chowdsp::PluginBase<bitklavier::PreparationStateImpl<DirectParams,DirectNonParameterState, chowdsp::XMLSerializer>>
 {
 public:
     DirectProcessor();

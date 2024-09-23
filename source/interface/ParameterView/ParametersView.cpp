@@ -54,7 +54,9 @@ namespace bitklavier {
                 slider.setScrollWheelEnabled(false);
                 addAndMakeVisible(slider);
                 parent.addSlider(&slider, false);
+                slider.parentHierarchyChanged();
                 slider.setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
+                BITKLAVIER_ASSERT(slider.getSectionParent() != nullptr);
                 DBG("create slider for " + param.paramID + "with parent " + parent.getName());
             }
 

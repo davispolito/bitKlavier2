@@ -107,10 +107,10 @@ bool ConstructionSite::keyPressed (const juce::KeyPress& k, juce::Component* c)
         ValueTree t(IDs::PREPARATION);
 
         t.setProperty(IDs::type,bitklavier::BKPreparationType::PreparationTypeDirect, nullptr);
-//        t.setProperty(IDs::width, 260, nullptr);
-//        t.setProperty(IDs::height, 132, nullptr);
-//        t.setProperty(IDs::x,lastX - 260/2, nullptr);
-//        t.setProperty(IDs::y,lastY - 132 /2, nullptr);
+        t.setProperty(IDs::width, 260, nullptr);
+        t.setProperty(IDs::height, 132, nullptr);
+        t.setProperty(IDs::x,lastX - 260/2, nullptr);
+        t.setProperty(IDs::y,lastY - 132 /2, nullptr);
        // DBG("Position" + String(lastX) + " " + String(lastY));
         state.addChild(t,-1, nullptr);
         //DBG("place" + String(lastX) + " " + String(lastY));

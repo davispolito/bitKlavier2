@@ -412,14 +412,30 @@ void SynthSection::renderOpenGlComponents(OpenGlWrapper& open_gl, bool animate) 
 }
 
 void SynthSection::destroyOpenGlComponents(OpenGlWrapper& open_gl) {
-  for (auto& open_gl_component : open_gl_components_)
-    open_gl_component->destroy(open_gl);
+    if ((OpenGLContext::getCurrentContext() == nullptr))
+    {
+        open_gl.context.executeOnGLThread([this, &open_gl](OpenGLContext &openGLContext) {
+            for (auto& open_gl_component : open_gl_components_)
+                open_gl_component->destroy(open_gl);
 
-  for (auto& sub_section : sub_sections_)
-    sub_section->destroyOpenGlComponents(open_gl);
+            for (auto& sub_section : sub_sections_)
+                sub_section->destroyOpenGlComponents(open_gl);
 
-  if(background_)
-      background_->destroy(open_gl);
+            if(background_)
+                background_->destroy(open_gl);
+        }, true);
+    } else
+    {
+        for (auto& open_gl_component : open_gl_components_)
+            open_gl_component->destroy(open_gl);
+
+        for (auto& sub_section : sub_sections_)
+            sub_section->destroyOpenGlComponents(open_gl);
+
+        if(background_)
+            background_->destroy(open_gl);
+    }
+    DBG("openglcomponents destroyed");
 }
 
 void SynthSection::destroyOpenGlComponent(OpenGlComponent const& open_gl_component, OpenGlWrapper& open_gl)
@@ -866,6 +882,7 @@ void SynthSection::showPopupSelector(Component* source, juce::Point<int> positio
 
 void SynthSection::showPrepPopup(PreparationSection* prep)
 {
+    DBG("show prep popup");
     FullInterface* parent = findParentComponentOfClass<FullInterface>();
     if (parent)
         parent->prepDisplay(prep);

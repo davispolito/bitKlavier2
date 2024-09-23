@@ -82,7 +82,7 @@ public:
     OpenGlWrapper &_open_gl;
     SelectedItemSet<PreparationSection*> *selectedSet;
     std::unique_ptr<BKItem> item;
-    int x, y, width, height;
+    CachedValue<int> x, y, width, height;
     juce::ComponentDragger myDragger;
     juce::ComponentBoundsConstrainer constrainer;
     OwnedArray<BKPort> ports;

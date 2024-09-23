@@ -4,7 +4,6 @@
 
 #include "DirectPreparation.h"
 #include "BKitems/BKItem.h"
-
 #include "synth_slider.h"
 
 // Definition for the DirectPreparation constructor.  It takes three parameters: a pointer to
@@ -26,13 +25,22 @@ DirectPreparation::DirectPreparation (std::unique_ptr<DirectProcessor> p,
 
     addAndMakeVisible (item.get());
     setSkinOverride (Skin::kDirect);
-
+    MemoryBlock data;
+    proc.getStateInformation(data);
+    auto xml = juce::parseXML(data.toString());
+//auto xml = AudioProcessor::getXmlF(data.getData(), (int)data.getSize());
+    state.addChild(ValueTree::fromXml(*xml),0,nullptr);
+    DBG(state.toXmlString());
 }
 
 std::shared_ptr<SynthSection> DirectPreparation::getPrepPopup()
 {
-    if(popup_view)
-        popup_view->destroyOpenGlComponents(_open_gl);
+    DBG("prep popup");
+    if(popup_view) {
+//        popup_view->destroyOpenGlComponents(_open_gl);
+//        popup_view->reset();
+        return popup_view;
+    }
     popup_view = std::make_shared<DirectPopup>(proc, _open_gl);
     popup_view->initOpenGlComponents(_open_gl);
     return popup_view;

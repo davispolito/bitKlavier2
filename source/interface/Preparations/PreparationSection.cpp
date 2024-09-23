@@ -8,11 +8,12 @@
 PreparationSection::PreparationSection(String name, ValueTree v, OpenGlWrapper &open_gl) : SynthSection(name), state(v), _open_gl(open_gl)
 {
     //_parent = findParentComponentOfClass<SynthGuiInterface>();
-    x = v.getProperty(IDs::x);
-    y = v.getProperty(IDs::y);
-    width = v.getProperty(IDs::width);
-    height = v.getProperty(IDs::height);
+    x.referTo(v,IDs::x,nullptr);
+    y.referTo(v,IDs::y,nullptr);
+    width.referTo(v,IDs::width,nullptr);
+    height.referTo(v,IDs::height,nullptr);
     //constrainer.setBoundsForComponent(this,getParentComponent()->getLocalBounds() );
+    createUuidProperty(state);
 
     constrainer.setMinimumOnscreenAmounts(0xffffff,0xffffff,0xffffff,0xffffff);
 }
