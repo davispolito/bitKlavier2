@@ -12,9 +12,13 @@ PreparationSection::PreparationSection(String name, ValueTree v, OpenGlWrapper &
     y.referTo(v,IDs::y,nullptr);
     width.referTo(v,IDs::width,nullptr);
     height.referTo(v,IDs::height,nullptr);
+    numIns.referTo(v,IDs::numIns,nullptr);
+    numOuts.referTo(v,IDs::numOuts,nullptr);
     //constrainer.setBoundsForComponent(this,getParentComponent()->getLocalBounds() );
     createUuidProperty(state);
+    uuid.referTo(state,IDs::uuid,nullptr);
 
+    //pluginID.uid = static_cast<uint32>(int(state.getProperty(IDs::uuid)));
     constrainer.setMinimumOnscreenAmounts(0xffffff,0xffffff,0xffffff,0xffffff);
 }
 

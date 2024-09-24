@@ -78,6 +78,7 @@ public:
     juce::Viewport* view;
    juce::Point<float> mouse;
     OpenGlWrapper &open_gl;
+    ValueTree state;
 private:
 
     SynthGuiInterface* _parent;
@@ -106,7 +107,7 @@ private:
 
     friend class CableView;
     CableView cableView;
-    ValueTree state;
+
     UndoManager &undo;
 
     void draw(void);

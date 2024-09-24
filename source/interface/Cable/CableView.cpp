@@ -5,7 +5,7 @@
 #include "CableView.h"
 #include "ConstructionSite.h"
 #include "sound_engine.h"
-
+#include "valuetree_utils/VariantConverters.h"
 CableView::CableView (ConstructionSite &site) :site(site), /*pathTask (*this),*/ SynthSection("cableView")
 {
     setInterceptsMouseClicks (false,false);
@@ -171,9 +171,15 @@ void CableView::endDraggingConnector (const MouseEvent& e)
 
             connection.destination = pin->pin;
         }
-//// add connection to actual rendered connections make this threadsafe
+//// this doesnt feel threadsafe but putting it in the processorqueue breaks.
         SynthGuiInterface* parent = findParentComponentOfClass<SynthGuiInterface>();
         parent->getSynth()->addConnection(connection);
+//        parent->getSynth()->processorInitQueue.try_enqueue([this, &connection]
+//                                                           {
+//                                                               SynthGuiInterface* parent = findParentComponentOfClass<SynthGuiInterface>();
+//                                                               parent->getSynth()->addConnection(connection);
+//                                                           });
+
 //        graph.graph.addConnection (connection);
     }
 }
@@ -187,6 +193,9 @@ void CableView::updateCablePositions()
         cable->updateEndPoint();
     }
 }
+
+
+
 
 void CableView::updateComponents()
 {
@@ -206,6 +215,7 @@ void CableView::updateComponents()
     {
         if (getComponentForConnection (c) == nullptr)
         {
+
             auto* comp = cables.add (new Cable(&site, *this));
             addChildComponent(comp, 0);
 
@@ -224,6 +234,7 @@ void CableView::updateComponents()
 
             comp->setInput (c.source);
             comp->setOutput (c.destination);
+            comp->getValueTree();
         }
     }
 }

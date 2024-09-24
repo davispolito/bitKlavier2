@@ -8,6 +8,8 @@
 #include <Connection.h>
 #include "CubicBezier.h"
 #include "open_gl_image_component.h"
+#include "Identifiers.h"
+#include "valuetree_utils/VariantConverters.h"
 class CableView;
 namespace CableConstants
 {
@@ -46,6 +48,9 @@ public:
         if (connection.source != newSource)
         {
             connection.source = newSource;
+            state.setProperty(IDs::src,  VariantConverter<juce::AudioProcessorGraph::NodeID>::toVar(connection.source.nodeID), nullptr);
+            state.setProperty(IDs::srcIdx, connection.source.channelIndex, nullptr);
+
             update();
         }
     }
@@ -55,6 +60,8 @@ public:
         if (connection.destination != newDest)
         {
             connection.destination = newDest;
+            state.setProperty(IDs::dest,  VariantConverter<juce::AudioProcessorGraph::NodeID>::toVar(connection.destination.nodeID), nullptr);
+            state.setProperty(IDs::destIdx, connection.source.channelIndex, nullptr);
             update();
         }
     }
@@ -79,6 +86,9 @@ public:
         if (lastInputPos != p1 || lastOutputPos != p2)
             resizeToFit();
     }
+
+    ValueTree getValueTree();
+
 
     void resizeToFit()
     {
@@ -211,6 +221,7 @@ private:
 
     Path createCablePath (juce::Point<float> start, juce::Point<float> end, float scaleFactor);
     CriticalSection pathCrit;
+    ValueTree state {IDs::CONNECTION};
 };
 
 

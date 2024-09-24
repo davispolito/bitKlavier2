@@ -13,7 +13,7 @@
 #include "BKItem.h"
 #include "opengl_ComponentDragger.h"
 #include "BKPort.h"
-
+#include "valuetree_utils/VariantConverters.h"
 /************************************************************************************/
 /*                            CLASS: SynthGuiInterface                              */
 /************************************************************************************/
@@ -82,7 +82,7 @@ public:
     OpenGlWrapper &_open_gl;
     SelectedItemSet<PreparationSection*> *selectedSet;
     std::unique_ptr<BKItem> item;
-    CachedValue<int> x, y, width, height;
+    CachedValue<int> x, y, width, height, numIns, numOuts;
     juce::ComponentDragger myDragger;
     juce::ComponentBoundsConstrainer constrainer;
     OwnedArray<BKPort> ports;
@@ -250,6 +250,8 @@ public:
         MessageManager::callAsync (
                 [safeComp = Component::SafePointer<PreparationSection> (this)]
                 {
+                    safeComp->state.setProperty(IDs::nodeID,  VariantConverter<juce::AudioProcessorGraph::NodeID>::toVar(safeComp->pluginID), nullptr);
+
                     SynthGuiInterface* parent = safeComp->findParentComponentOfClass<SynthGuiInterface>();
                     auto& processor = *safeComp->node->getProcessor();
                     for (int i = 0; i < processor.getTotalNumInputChannels(); ++i)
@@ -289,13 +291,14 @@ public:
     }
     juce::AudioProcessorGraph::Node::Ptr node;
     juce::AudioProcessorGraph::NodeID pluginID;
+    CachedValue<juce::Uuid> uuid;
 //juce::AudioProcessor _proc;
     virtual juce::AudioProcessor* getProcessor(){}
     virtual std::unique_ptr<juce::AudioProcessor> getProcessorPtr(){}
 //std::shared_ptr<juce::AudioProcessor> _proc;
 protected:
     std::shared_ptr<PreparationPopup> popup_view;
-    int numIns, numOuts;
+
     int portSize = 16;
 private:
     bool isSelected = true;

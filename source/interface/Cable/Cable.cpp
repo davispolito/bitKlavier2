@@ -12,6 +12,7 @@ Cable::Cable (const ConstructionSite* site, CableView& cableView) : Component (C
                                                                                             site(site),
                                                                                             cableView(cableView)
 
+
 {
     //this->startPoint.store(startPoint.toFloat());
     //cableView = cableView;
@@ -20,6 +21,11 @@ Cable::Cable (const ConstructionSite* site, CableView& cableView) : Component (C
     startColour = juce::Colours::black;
     endColour = juce::Colours::black;
     cableThickness = getCableThickness();
+    state.setProperty(IDs::src,"",nullptr);
+    state.setProperty(IDs::dest,"",nullptr);
+    state.setProperty(IDs::srcIdx,"",nullptr);
+    state.setProperty(IDs::destIdx,"",nullptr);
+    createUuidProperty(state);
 }
 
 
@@ -28,6 +34,24 @@ Cable::~Cable()
 //    site->open_gl.initOpenGlComp.try_enqueue([this]{
 //        image_component_->destroy(site->open_gl);
 //    });
+}
+
+ValueTree Cable::getValueTree() {
+    auto source = site->state.getChildWithProperty(IDs::nodeID,
+                                                   VariantConverter<juce::AudioProcessorGraph::NodeID>::toVar(connection.source.nodeID));
+
+    auto destination = site->state.getChildWithProperty(IDs::nodeID,
+                                                        VariantConverter<juce::AudioProcessorGraph::NodeID>::toVar(connection.destination.nodeID));
+    if(source.isValid())
+    {
+        source.appendChild(state,nullptr);
+    }
+    if(destination.isValid())
+    {
+        destination.appendChild(state.createCopy(),nullptr);
+    }
+
+    return state;
 }
 
 void Cable::getPoints (juce::Point<float>& p1, juce::Point<float>& p2) const

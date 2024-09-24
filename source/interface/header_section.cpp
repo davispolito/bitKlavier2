@@ -18,7 +18,7 @@
 
 #include "fonts.h"
 #include <memory>
-
+#include "text_look_and_feel.h"
 
 LogoSection::LogoSection() : SynthSection("logo_section") {
 #if !defined(NO_TEXT_ENTRY)
@@ -28,6 +28,7 @@ LogoSection::LogoSection() : SynthSection("logo_section") {
   addOpenGlComponent(logo_button_->getImageComponent());
   logo_button_->addListener(this);
 #endif
+
 
   setSkinOverride(Skin::kLogo);
 }
@@ -73,6 +74,12 @@ HeaderSection::HeaderSection() : SynthSection("header_section"), tab_offset_(0),
     currentSampleType = 0;
     sampleSelectText = std::make_shared<PlainTextComponent>("Sample Select Text", "---");
     addOpenGlComponent(sampleSelectText);
+
+    printButton = std::make_unique<SynthButton>("header_print");
+    addButton(printButton.get());
+    printButton->setButtonText("PRINT");
+    printButton->setLookAndFeel(TextLookAndFeel::instance());
+    printButton->addListener(this);
 //  tab_selector_ = std::make_unique<TabSelector>("tab_selector");
 //  addAndMakeVisible(tab_selector_.get());
 //  addOpenGlComponent(tab_selector_->getImageComponent());
@@ -191,6 +198,7 @@ void HeaderSection::resized() {
     sampleSelectText->setBounds(sampleSelector->getBounds());
     float label_text_height = findValue(Skin::kLabelHeight);
     sampleSelectText->setTextSize(label_text_height);
+    printButton->setBounds(sampleSelector->getX() + 100, sampleSelector->getY(), 100, 50);
   //int logo_width = findValue(Skin::kModulationButtonWidth);
  // logo_section_->setBounds(large_padding, 0, logo_width, height);
   //inspectButton->setBounds(large_padding, 0, 100, height);
@@ -276,7 +284,12 @@ void HeaderSection::buttonClicked(Button* clicked_button) {
       });
 
     }
-      else
+  else if (clicked_button == printButton.get())
+    {
+      SynthGuiInterface* interface = findParentComponentOfClass<SynthGuiInterface>();
+      DBG(interface->getSynth()->getValueTree().toXmlString());
+    }
+  else
     SynthSection::buttonClicked(clicked_button);
 }
 

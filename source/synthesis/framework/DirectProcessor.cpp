@@ -14,8 +14,8 @@ DirectProcessor::DirectProcessor() : PluginBase(nullptr, directBusLayout())
         synth.addVoice(new BKSamplerVoice());
     }
 
-    std::unique_ptr<XmlElement> xml = chowdsp::Serialization::serialize<chowdsp::XMLSerializer>(state);
-    DBG(chowdsp::Serialization::serialize<chowdsp::XMLSerializer>(state)->toString());
+//    std::unique_ptr<XmlElement> xml = chowdsp::Serialization::serialize<chowdsp::XMLSerializer>(state);
+//    DBG(chowdsp::Serialization::serialize<chowdsp::XMLSerializer>(state)->toString());
     //chowdsp::Serialization::deserialize<chowdsp::XMLSerializer>(xml,state);
     adsrCallbacks += {state.addParameterListener(*state.params.attackParam,
                                                  chowdsp::ParameterListenerThread::AudioThread,

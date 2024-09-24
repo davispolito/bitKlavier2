@@ -47,7 +47,7 @@ SynthBase::SynthBase() : expired_(false) {
 
 
   Startup::doStartupChecks(midi_manager_.get());
-  tree = ValueTree(IDs::TREE);
+  tree = ValueTree(IDs::GALLERY);
   tree.addListener(this);
 }
 
@@ -142,10 +142,10 @@ void SynthBase::setMpeEnabled(bool enabled) {
 }
 
 
-juce::AudioProcessorGraph::Node::Ptr SynthBase::addProcessor(std::unique_ptr<juce::AudioProcessor> processor)
+juce::AudioProcessorGraph::Node::Ptr SynthBase::addProcessor(std::unique_ptr<juce::AudioProcessor> processor , juce::AudioProcessorGraph::NodeID id)
 {
     processor->prepareToPlay(engine_->getSampleRate(), engine_->getBufferSize());
-    return engine_->addNode(std::move(processor));
+    return engine_->addNode(std::move(processor) , id);
 }
 
 juce::AudioProcessorGraph::Node * SynthBase::getNodeForId(AudioProcessorGraph::NodeID id)

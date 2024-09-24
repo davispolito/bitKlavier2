@@ -63,6 +63,7 @@ public:
 
         return nullptr;
     }
+    void addConnectionToValueTree (const AudioProcessorGraph::Connection& conn);
     juce::Point<int> currentPort;
     void dragConnector (const MouseEvent& e) override;
 

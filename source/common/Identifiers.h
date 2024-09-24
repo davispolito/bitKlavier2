@@ -12,26 +12,41 @@ namespace IDs
 {
 #define DECLARE_ID(name) const juce::Identifier name (#name);
 
-    DECLARE_ID (TREE)
+    DECLARE_ID (GALLERY)
     DECLARE_ID (CONTROLS)
     DECLARE_ID (INPUT)
     DECLARE_ID (OUTPUT)
     DECLARE_ID (PIANO)
-    DECLARE_ID (CONNECTIONS)
+
     DECLARE_ID (PREPARATIONS)
 
     DECLARE_ID (name)
 
-DECLARE_ID (PREPARATION)
+    DECLARE_ID (PREPARATION)
     DECLARE_ID (id)
     DECLARE_ID (type)
     DECLARE_ID (x)
     DECLARE_ID (y)
     DECLARE_ID (height)
     DECLARE_ID (width)
+    DECLARE_ID (numIns)
+    DECLARE_ID (numOuts)
+    DECLARE_ID (nodeID)
 
     DECLARE_ID (CONNECTION)
+    DECLARE_ID (src)
+    DECLARE_ID (dest)
+    DECLARE_ID (srcIdx)
+    DECLARE_ID (destIdx)
+
+  //type
+  //
+
+
+    DECLARE_ID (assignment)
+
     DECLARE_ID (uuid)
+
 }
 
 #undef DECLARE_ID

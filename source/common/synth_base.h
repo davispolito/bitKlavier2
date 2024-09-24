@@ -103,7 +103,7 @@ class SynthBase : public MidiManager::Listener, public juce::ValueTree::Listener
       bitklavier::mono_float value;
     };
 
-    juce::AudioProcessorGraph::Node::Ptr addProcessor(std::unique_ptr<juce::AudioProcessor> processor);
+    juce::AudioProcessorGraph::Node::Ptr addProcessor(std::unique_ptr<juce::AudioProcessor> processor, juce::AudioProcessorGraph::NodeID id = {});
     juce::AudioProcessorGraph::Node * getNodeForId(AudioProcessorGraph::NodeID id);
     void addConnection(AudioProcessorGraph::Connection& connect);
 

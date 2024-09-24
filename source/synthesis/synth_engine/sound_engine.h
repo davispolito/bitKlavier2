@@ -150,9 +150,14 @@ namespace bitklavier {
           return juce::AudioProcessorGraph::NodeID (++(lastUID.uid));
       }
 
-      Node::Ptr addNode (std::unique_ptr<AudioProcessor> newProcessor)
+      Node::Ptr addNode (std::unique_ptr<AudioProcessor> newProcessor, juce::AudioProcessorGraph::NodeID id)
       {
-          Node::Ptr node = processorGraph->addNode(std::move(newProcessor), getNextUID());
+          Node::Ptr node;
+          if(id.uid != 0)
+              node = processorGraph->addNode(std::move(newProcessor),id);
+          else
+              node = processorGraph->addNode(std::move(newProcessor), getNextUID());
+
           auto processor = node->getProcessor();
           if (processor->getTotalNumOutputChannels() > 0)
           {

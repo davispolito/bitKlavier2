@@ -15,7 +15,7 @@
  */
 
 #include "sound_engine.h"
-
+#include "AudioProcessorGraph.h"
 
 
 namespace bitklavier {

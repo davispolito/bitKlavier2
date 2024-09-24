@@ -31,6 +31,7 @@ DirectPreparation::DirectPreparation (std::unique_ptr<DirectProcessor> p,
 //auto xml = AudioProcessor::getXmlF(data.getData(), (int)data.getSize());
     state.addChild(ValueTree::fromXml(*xml),0,nullptr);
     DBG(state.toXmlString());
+    DBG("add processor params");
 }
 
 std::shared_ptr<SynthSection> DirectPreparation::getPrepPopup()
