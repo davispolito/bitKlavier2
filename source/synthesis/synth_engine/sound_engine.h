@@ -47,6 +47,10 @@ namespace bitklavier {
 
       void releaseResources()
       {processorGraph->releaseResources();}
+      void resetEngine()
+      {
+          prepareToPlay(curr_sample_rate, buffer_size);
+      }
       void prepareToPlay(double sampleRate, int samplesPerBlock)
       {
           setSampleRate(sampleRate);

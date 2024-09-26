@@ -276,6 +276,9 @@ class HeaderSection : public SynthSection, public LogoSection::Listener {
     std::unique_ptr<ShapeButton> sampleSelector ;
     std::unique_ptr<SynthButton> printButton;
     std::unique_ptr<SynthButton> printSelected;
+    std::unique_ptr<SynthButton> saveButton;
+    std::unique_ptr<SynthButton> loadButton;
+    std::unique_ptr<FileChooser> filechooser;
     //Image background_image_;
     //std::unique_ptr<SynthButton> click_me;
    // juce::TextButton inspectButton { "Inspect the UI" };

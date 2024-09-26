@@ -4,7 +4,8 @@
 
 #include "PreparationSection.h"
 #include "synth_gui_interface.h"
-#include "DirectPreparation.h"
+
+#include "FullInterface.h"
 PreparationSection::PreparationSection(String name, ValueTree v, OpenGlWrapper &open_gl) : SynthSection(name), state(v), _open_gl(open_gl)
 {
     //_parent = findParentComponentOfClass<SynthGuiInterface>();

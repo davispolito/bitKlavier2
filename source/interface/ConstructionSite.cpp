@@ -10,7 +10,7 @@
 #include "sound_engine.h"
 ConstructionSite::ConstructionSite( juce::ValueTree &v,  juce::UndoManager &um, OpenGlWrapper &open_gl, SynthGuiData* data) : SynthSection("Construction Site"),
                                                                                  tracktion::engine::ValueTreeObjectList<PreparationSection>(v),
-                                                                                     state(v), undo(um), open_gl(open_gl),
+                                                                                     undo(um), open_gl(open_gl),
                                                                                      cableView(*this),
                                                                                      preparationSelector(*this)
 {
@@ -32,6 +32,42 @@ ConstructionSite::ConstructionSite( juce::ValueTree &v,  juce::UndoManager &um, 
     cableView.toBack();
     addSubSection(&cableView);
 }
+void ConstructionSite::valueTreeParentChanged(juce::ValueTree &changed) {
+//    SynthGuiInterface* _parent = findParentComponentOfClass<SynthGuiInterface>();
+//    ///changed.copyPropertiesAndChildrenFrom(_parent->getSynth()->getValueTree(),nullptr);
+//
+//    parent = _parent->getSynth()->getValueTree().getChildWithName(IDs::PIANO);
+
+}
+
+void ConstructionSite::valueTreeRedirected (juce::ValueTree&)
+{
+    SynthGuiInterface* interface = findParentComponentOfClass<SynthGuiInterface>();
+
+//    for (auto object : objects)
+//    {
+//        DBG("bo");
+//        object->destroyOpenGlComponents(interface->getGui()->open_gl_);
+//        this->removeSubSection(object);
+//    }
+    deleteAllObjects();
+    rebuildObjects();
+} // may need to add handling if this is hit
+
+void ConstructionSite::deleteObject(PreparationSection *at)  {
+    if ((OpenGLContext::getCurrentContext() == nullptr))
+    {
+        SynthGuiInterface* _parent = findParentComponentOfClass<SynthGuiInterface>();
+
+        //safe to do on message thread because we have locked processing if this is called
+        at->setVisible(false);
+        open_gl.context.executeOnGLThread([this,&at](OpenGLContext &openGLContext) {
+           this->removeSubSection(at);
+        },false);
+    }
+
+}
+
 PreparationSection* ConstructionSite::createNewObject (const juce::ValueTree& v)
 {
 
@@ -51,7 +87,19 @@ PreparationSection* ConstructionSite::createNewObject (const juce::ValueTree& v)
     s->addListener(&cableView);
     return s;
 }
+void ConstructionSite::reset()
+{
+    SynthGuiInterface* _parent = findParentComponentOfClass<SynthGuiInterface>();
+    //safe to do on message thread because we have locked processing if this is called
+    _parent->getSynth()->getEngine()->resetEngine();
+    parent = _parent->getSynth()->getValueTree().getChildWithName(IDs::PIANO);
 
+    for(auto object : objects)
+    {
+        newObjectAdded(object);
+    }
+
+}
 void ConstructionSite::newObjectAdded (PreparationSection* object)
 {
     SynthGuiInterface* parent = findParentComponentOfClass<SynthGuiInterface>();
@@ -112,7 +160,7 @@ bool ConstructionSite::keyPressed (const juce::KeyPress& k, juce::Component* c)
         t.setProperty(IDs::x,lastX - 260/2, nullptr);
         t.setProperty(IDs::y,lastY - 132 /2, nullptr);
        // DBG("Position" + String(lastX) + " " + String(lastY));
-        state.addChild(t,-1, nullptr);
+        parent.addChild(t,-1, nullptr);
         //DBG("place" + String(lastX) + " " + String(lastY));
     } else if (code == 78) // N nostalgic
     {
@@ -124,7 +172,7 @@ bool ConstructionSite::keyPressed (const juce::KeyPress& k, juce::Component* c)
         t.setProperty(IDs::x,lastX  - (260/2), nullptr);
         t.setProperty(IDs::y,lastY - (132/2), nullptr);
 
-        state.addChild(t,-1, nullptr);
+        parent.addChild(t,-1, nullptr);
     } else if (code == 75) // K Keymap
     {
         ValueTree t(IDs::PREPARATION);
@@ -135,7 +183,7 @@ bool ConstructionSite::keyPressed (const juce::KeyPress& k, juce::Component* c)
         t.setProperty(IDs::x,lastX - 114/2, nullptr);
         t.setProperty(IDs::y,lastY - 76 /2, nullptr);
         // DBG("Position" + String(lastX) + " " + String(lastY));
-        state.addChild(t,-1, nullptr);
+        parent.addChild(t,-1, nullptr);
         //DBG("place" + String(lastX) + " " + String(lastY));
     } else if (code == 82) // R resonance
     {
@@ -146,7 +194,7 @@ bool ConstructionSite::keyPressed (const juce::KeyPress& k, juce::Component* c)
         t.setProperty(IDs::height, 132, nullptr);
         t.setProperty(IDs::x, lastX - 260 / 2, nullptr);
         t.setProperty(IDs::y, lastY - 132 / 2, nullptr);
-        state.addChild(t, -1, nullptr);
+        parent.addChild(t, -1, nullptr);
     } else if (code == 83) // S synchronic
     {
         ValueTree t(IDs::PREPARATION);
@@ -156,7 +204,7 @@ bool ConstructionSite::keyPressed (const juce::KeyPress& k, juce::Component* c)
         t.setProperty(IDs::height, 132, nullptr);
         t.setProperty(IDs::x, lastX - 260 / 2, nullptr);
         t.setProperty(IDs::y, lastY - 132 / 2, nullptr);
-        state.addChild(t, -1, nullptr);
+        parent.addChild(t, -1, nullptr);
     } else if (code == 66) // B blendronic
     {
         ValueTree t(IDs::PREPARATION);
@@ -166,7 +214,7 @@ bool ConstructionSite::keyPressed (const juce::KeyPress& k, juce::Component* c)
         t.setProperty(IDs::height, 132, nullptr);
         t.setProperty(IDs::x, lastX - 260 / 2, nullptr);
         t.setProperty(IDs::y, lastY - 132 / 2, nullptr);
-        state.addChild(t, -1, nullptr);
+        parent.addChild(t, -1, nullptr);
     } else if (code == 77) // M tempo
     {
         ValueTree t(IDs::PREPARATION);
@@ -176,7 +224,7 @@ bool ConstructionSite::keyPressed (const juce::KeyPress& k, juce::Component* c)
         t.setProperty(IDs::height, 260, nullptr);
         t.setProperty(IDs::x, lastX - 132 / 2, nullptr);
         t.setProperty(IDs::y, lastY -  260 / 2, nullptr);
-        state.addChild(t, -1, nullptr);
+        parent.addChild(t, -1, nullptr);
     }
     else if (code == 84) // T tuning
     {
@@ -187,7 +235,7 @@ bool ConstructionSite::keyPressed (const juce::KeyPress& k, juce::Component* c)
         t.setProperty(IDs::height, 260, nullptr);
         t.setProperty(IDs::x, lastX - 132 / 2, nullptr);
         t.setProperty(IDs::y, lastY -  260 / 2 , nullptr);
-        state.addChild(t, -1, nullptr);
+        parent.addChild(t, -1, nullptr);
     }
     return true;
 }
@@ -537,7 +585,7 @@ void ConstructionSite::updateComponents()
         SynthGuiInterface* parent = findParentComponentOfClass<SynthGuiInterface>();
         for (int i = objects.size(); --i >= 0;) {
 //            if (parent->getSynth()->getNodeForId(objects.getUnchecked(i)->pluginID) == nullptr) {
-//                state.removeChild(objects.getUnchecked(i)->state, nullptr);
+//                parent.removeChild(objects.getUnchecked(i)->parent, nullptr);
 //            }
         }
 

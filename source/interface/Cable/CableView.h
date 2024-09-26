@@ -81,7 +81,7 @@ public:
 private:
 //    void timerCallback() override;
 
-    const ConstructionSite& site;
+    ConstructionSite& site;
 
 
     float scaleFactor = 1.0f;

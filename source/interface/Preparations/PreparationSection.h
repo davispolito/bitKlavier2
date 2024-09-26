@@ -241,12 +241,12 @@ public:
         auto& processor = *_node->getProcessor();
 
         numIns = processor.getTotalNumInputChannels();
-//        if (processor.acceptsMidi())
-//            ++numIns;
+        if (processor.acceptsMidi())
+            numIns = numIns + 1;
 
         numOuts = processor.getTotalNumOutputChannels();
-//        if (processor.producesMidi())
-//            ++numOuts;
+        if (processor.producesMidi())
+            numOuts = numOuts + 1;
         MessageManager::callAsync (
                 [safeComp = Component::SafePointer<PreparationSection> (this)]
                 {

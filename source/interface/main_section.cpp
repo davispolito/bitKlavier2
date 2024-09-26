@@ -5,7 +5,7 @@
 #include "main_section.h"
 #include "ConstructionSite.h"
 
-MainSection::MainSection(juce::ValueTree v, juce::UndoManager &um, OpenGlWrapper & open_gl, SynthGuiData* data) : SynthSection("main_section"), v(v), um(um)
+MainSection::MainSection(juce::ValueTree v, juce::UndoManager &um, OpenGlWrapper & open_gl, SynthGuiData* data) : SynthSection("main_section"), um(um)
 {
     constructionSite_ = std::make_unique<ConstructionSite>(v, um, open_gl, data);
     addMouseListener(constructionSite_.get(), true);

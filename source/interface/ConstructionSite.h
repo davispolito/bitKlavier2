@@ -9,6 +9,7 @@
 #include "Preparations/PreparationSection.h"
 #include "PreparationSelector.h"
 #include "Cable/CableView.h"
+
 class SynthGuiInterface;
 typedef Loki::Factory<PreparationSection, int,  juce::ValueTree,  OpenGlWrapper&> PreparationFactory;
 class ConstructionSite : public SynthSection,
@@ -32,6 +33,7 @@ public:
     void addItem(bitklavier::BKPreparationType type, bool center = false);
 
     void changeListenerCallback(juce::ChangeBroadcaster *source) override
+
     {
         updateComponents();
     }
@@ -44,15 +46,16 @@ public:
     }
 
     PreparationSection* createNewObject(const juce::ValueTree& v) override;
-    void deleteObject (PreparationSection* at) override
-    {
-        delete at;
-    }
+    void deleteObject (PreparationSection* at) override;
 
 
+    void reset() override;
     void newObjectAdded (PreparationSection*) override;
     void objectRemoved (PreparationSection*) override     { resized();}//resized(); }
     void objectOrderChanged() override              {resized(); }//resized(); }
+    void valueTreeParentChanged (juce::ValueTree&) override;
+    void valueTreeRedirected (juce::ValueTree&) override ;
+
     BKPort* findPinAt (juce::Point<float> pos) const
     {
         for (auto* fc : objects)
@@ -78,7 +81,14 @@ public:
     juce::Viewport* view;
    juce::Point<float> mouse;
     OpenGlWrapper &open_gl;
-    ValueTree state;
+
+    ValueTree getState()
+    {
+        return parent;
+    }
+    void copyValueTree(const ValueTree& vt){
+        parent.copyPropertiesFrom(vt,nullptr);
+    }
 private:
 
     SynthGuiInterface* _parent;

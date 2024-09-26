@@ -54,7 +54,7 @@ class SynthBase : public MidiManager::Listener, public juce::ValueTree::Listener
     int getConnectionIndex(const std::string& source, const std::string& destination);
 
 
-
+   bool loadFromFile(File preset, std::string& error) ;
 
 
 
@@ -112,6 +112,10 @@ class SynthBase : public MidiManager::Listener, public juce::ValueTree::Listener
     static constexpr size_t actionSize = 16; // sizeof ([this, i = index] { callMessageThreadBroadcaster (i); })
     using AudioThreadAction = juce::dsp::FixedSizeFunction<actionSize, void()>;
     moodycamel::ReaderWriterQueue<AudioThreadAction> processorInitQueue { 10 };
+    bool saveToFile(File preset);
+    bool saveToActiveFile();
+    void clearActiveFile() { active_file_ = File(); }
+    File getActiveFile() { return active_file_; }
   protected:
 
     juce::ValueTree tree;
@@ -123,7 +127,7 @@ class SynthBase : public MidiManager::Listener, public juce::ValueTree::Listener
 //    OwnedArray<ReferenceCountedArray<BKSamplerSound<juce::AudioFormatReader>>> emptySoundSet;
 //    OwnedArray<ReferenceCountedArray<BKSamplerSound<juce::AudioFormatReader>>> pedalReleaseSoundSet;
 
-
+    bool loadFromValueTree(const ValueTree& state);
 
 
     void processAudio(juce::AudioSampleBuffer* buffer, int channels, int samples, int offset);

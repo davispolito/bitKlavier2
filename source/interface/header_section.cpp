@@ -19,6 +19,7 @@
 #include "fonts.h"
 #include <memory>
 #include "text_look_and_feel.h"
+#include "load_save.h"
 
 LogoSection::LogoSection() : SynthSection("logo_section") {
 #if !defined(NO_TEXT_ENTRY)
@@ -80,6 +81,20 @@ HeaderSection::HeaderSection() : SynthSection("header_section"), tab_offset_(0),
     printButton->setButtonText("PRINT");
     printButton->setLookAndFeel(TextLookAndFeel::instance());
     printButton->addListener(this);
+
+    saveButton = std::make_unique<SynthButton>("header_save");
+    addButton(saveButton.get());
+    saveButton->setButtonText("save");
+    saveButton->setLookAndFeel(TextLookAndFeel::instance());
+    saveButton->addListener(this);
+
+    loadButton = std::make_unique<SynthButton>("header_load");
+    addButton(loadButton.get());
+    loadButton->setButtonText("load");
+    loadButton->setLookAndFeel(TextLookAndFeel::instance());
+    loadButton->addListener(this);
+//  tab_selector_ = std::make_unique<TabSelector>("tab_selector");
+//  tab_selector_ = std::make_unique<TabSelector>("tab_selector");
 //  tab_selector_ = std::make_unique<TabSelector>("tab_selector");
 //  addAndMakeVisible(tab_selector_.get());
 //  addOpenGlComponent(tab_selector_->getImageComponent());
@@ -199,6 +214,8 @@ void HeaderSection::resized() {
     float label_text_height = findValue(Skin::kLabelHeight);
     sampleSelectText->setTextSize(label_text_height);
     printButton->setBounds(sampleSelector->getX() + 100, sampleSelector->getY(), 100, 50);
+    loadButton->setBounds(printButton->getX() + 100, sampleSelector->getY(), 100, 50);
+    saveButton->setBounds(loadButton->getX() + 100, sampleSelector->getY(), 100, 50);
   //int logo_width = findValue(Skin::kModulationButtonWidth);
  // logo_section_->setBounds(large_padding, 0, logo_width, height);
   //inspectButton->setBounds(large_padding, 0, 100, height);
@@ -289,8 +306,41 @@ void HeaderSection::buttonClicked(Button* clicked_button) {
       SynthGuiInterface* interface = findParentComponentOfClass<SynthGuiInterface>();
       DBG(interface->getSynth()->getValueTree().toXmlString());
     }
-  else
-    SynthSection::buttonClicked(clicked_button);
+  else if (clicked_button == loadButton.get())
+    {
+        SynthGuiInterface* parent = findParentComponentOfClass<SynthGuiInterface>();
+        File active_file = parent->getSynth()->getActiveFile();
+        filechooser = std::make_unique<FileChooser> ("Open Preset", active_file, String("*.") + bitklavier::kPresetExtension);
+
+        auto flags = FileBrowserComponent::openMode
+                     | FileBrowserComponent::canSelectFiles;
+        filechooser->launchAsync(flags, [this] (const FileChooser& fc) {
+            if (fc.getResult() == File{})
+            {
+               return ;
+            }
+            SynthGuiInterface* _parent = findParentComponentOfClass<SynthGuiInterface>();
+            std::string error;
+                    File choice = fc.getResult();
+        if (!_parent->getSynth()->loadFromFile(choice, error)) {
+//            std::string name = ProjectInfo::projectName;
+//            error = "There was an error open the preset. " + error;
+            //AlertWindow::showMessageBoxAsync(MessageBoxIconType::WarningIcon, "PRESET ERROR, ""Error opening preset", error);
+            DBG("errrrrr");
+            DBG(error);
+        }
+//        else
+//            parent->externalPresetLoaded(choice);
+
+        });
+
+    }
+    else if (clicked_button == saveButton.get())
+    {
+
+    }
+    else
+        SynthSection::buttonClicked(clicked_button);
 }
 
 void HeaderSection::sliderValueChanged(Slider* slider) {

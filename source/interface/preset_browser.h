@@ -25,29 +25,29 @@
 #include "overlay.h"
 #include "popup_browser.h"
 #include "synth_section.h"
+#include "load_save.h"
+class PresetInfoCache {
+  public:
+    std::string getAuthor(const File& preset) {
+      std::string path = preset.getFullPathName().toStdString();
+      if (author_cache_.count(path) == 0)
+        author_cache_[path] = LoadSave::getAuthorFromFile(preset).toStdString();
 
-//class PresetInfoCache {
-//  public:
-//    std::string getAuthor(const File& preset) {
-//      std::string path = preset.getFullPathName().toStdString();
-//      if (author_cache_.count(path) == 0)
-//        author_cache_[path] = LoadSave::getAuthorFromFile(preset).toStdString();
-//
-//      return author_cache_[path];
-//    }
-//
-//    std::string getStyle(const File& preset) {
-//      std::string path = preset.getFullPathName().toStdString();
-//      if (style_cache_.count(path) == 0)
-//        style_cache_[path] = LoadSave::getStyleFromFile(preset).toLowerCase().toStdString();
-//
-//      return style_cache_[path];
-//    }
-//
-//  private:
-//    std::map<std::string, std::string> author_cache_;
-//    std::map<std::string, std::string> style_cache_;
-//};
+      return author_cache_[path];
+    }
+
+    std::string getStyle(const File& preset) {
+      std::string path = preset.getFullPathName().toStdString();
+      if (style_cache_.count(path) == 0)
+        style_cache_[path] = LoadSave::getStyleFromFile(preset).toLowerCase().toStdString();
+
+      return style_cache_[path];
+    }
+
+  private:
+    std::map<std::string, std::string> author_cache_;
+    std::map<std::string, std::string> style_cache_;
+};
 
 class PresetList : public SynthSection, public TextEditor::Listener, ScrollBar::Listener {
   public:
@@ -59,15 +59,15 @@ class PresetList : public SynthSection, public TextEditor::Listener, ScrollBar::
         virtual void deleteRequested(File preset) = 0;
     };
 
-//    enum Column {
-//      kNone,
-//      kStar,
-//      kName,
-//      kStyle,
-//      kAuthor,
-//      kDate,
-//      kNumColumns
-//    };
+    enum Column {
+      kNone,
+     // kStar,
+      kName,
+      kStyle,
+      kAuthor,
+      kDate,
+      kNumColumns
+    };
 
     enum MenuOptions {
       kCancel,
@@ -79,7 +79,6 @@ class PresetList : public SynthSection, public TextEditor::Listener, ScrollBar::
 
     static constexpr int kNumCachedRows = 50;
     static constexpr float kRowSizeHeightPercent = 0.04f;
-    static constexpr float kStarWidthPercent = 0.04f;
     static constexpr float kNameWidthPercent = 0.35f;
     static constexpr float kStyleWidthPercent = 0.18f;
     static constexpr float kAuthorWidthPercent = 0.25f;
@@ -102,77 +101,77 @@ class PresetList : public SynthSection, public TextEditor::Listener, ScrollBar::
         }
     };
 
-//    class AuthorAscendingComparator {
-//      public:
-//        AuthorAscendingComparator(PresetInfoCache* preset_cache) : cache_(preset_cache) { }
-//
-//        int compareElements(File first, File second) {
-//          String first_author = cache_->getAuthor(first);
-//          String second_author = cache_->getAuthor(second);
-//          return first_author.compareNatural(second_author);
-//        }
-//
-//      private:
-//        PresetInfoCache* cache_;
-//    };
-//
-//    class AuthorDescendingComparator {
-//      public:
-//        AuthorDescendingComparator(PresetInfoCache* preset_cache) : cache_(preset_cache) { }
-//
-//        int compareElements(File first, File second) {
-//          String first_author = cache_->getAuthor(first);
-//          String second_author = cache_->getAuthor(second);
-//          return -first_author.compareNatural(second_author);
-//        }
-//
-//      private:
-//        PresetInfoCache* cache_;
-//    };
+    class AuthorAscendingComparator {
+      public:
+        AuthorAscendingComparator(PresetInfoCache* preset_cache) : cache_(preset_cache) { }
 
-//    class StyleAscendingComparator {
-//      public:
-//        StyleAscendingComparator(PresetInfoCache* preset_cache) : cache_(preset_cache) { }
-//
-//        int compareElements(File first, File second) {
-//          String first_style = cache_->getStyle(first);
-//          String second_style = cache_->getStyle(second);
-//          return first_style.compareNatural(second_style);
-//        }
-//
-//      private:
-//        PresetInfoCache* cache_;
-//    };
-//
-//    class StyleDescendingComparator {
-//      public:
-//        StyleDescendingComparator(PresetInfoCache* preset_cache) : cache_(preset_cache) { }
-//
-//        int compareElements(File first, File second) {
-//          String first_style = cache_->getStyle(first);
-//          String second_style = cache_->getStyle(second);
-//          return -first_style.compareNatural(second_style);
-//        }
-//
-//      private:
-//        PresetInfoCache* cache_;
-//    };
-//
-//    class FileDateAscendingComparator {
-//      public:
-//        static int compareElements(File first, File second) {
-//          RelativeTime relative_time = first.getCreationTime() - second.getCreationTime();
-//          double days = relative_time.inDays();
-//          return days < 0.0 ? 1 : (days > 0.0f ? -1 : 0);
-//        }
-//    };
-//
-//    class FileDateDescendingComparator {
-//      public:
-//        static int compareElements(File first, File second) {
-//          return FileDateAscendingComparator::compareElements(second, first);
-//        }
-//    };
+        int compareElements(File first, File second) {
+          String first_author = cache_->getAuthor(first);
+          String second_author = cache_->getAuthor(second);
+          return first_author.compareNatural(second_author);
+        }
+
+      private:
+        PresetInfoCache* cache_;
+    };
+
+    class AuthorDescendingComparator {
+      public:
+        AuthorDescendingComparator(PresetInfoCache* preset_cache) : cache_(preset_cache) { }
+
+        int compareElements(File first, File second) {
+          String first_author = cache_->getAuthor(first);
+          String second_author = cache_->getAuthor(second);
+          return -first_author.compareNatural(second_author);
+        }
+
+      private:
+        PresetInfoCache* cache_;
+    };
+
+    class StyleAscendingComparator {
+      public:
+        StyleAscendingComparator(PresetInfoCache* preset_cache) : cache_(preset_cache) { }
+
+        int compareElements(File first, File second) {
+          String first_style = cache_->getStyle(first);
+          String second_style = cache_->getStyle(second);
+          return first_style.compareNatural(second_style);
+        }
+
+      private:
+        PresetInfoCache* cache_;
+    };
+
+    class StyleDescendingComparator {
+      public:
+        StyleDescendingComparator(PresetInfoCache* preset_cache) : cache_(preset_cache) { }
+
+        int compareElements(File first, File second) {
+          String first_style = cache_->getStyle(first);
+          String second_style = cache_->getStyle(second);
+          return -first_style.compareNatural(second_style);
+        }
+
+      private:
+        PresetInfoCache* cache_;
+    };
+
+    class FileDateAscendingComparator {
+      public:
+        static int compareElements(File first, File second) {
+          RelativeTime relative_time = first.getCreationTime() - second.getCreationTime();
+          double days = relative_time.inDays();
+          return days < 0.0 ? 1 : (days > 0.0f ? -1 : 0);
+        }
+    };
+
+    class FileDateDescendingComparator {
+      public:
+        static int compareElements(File first, File second) {
+          return FileDateAscendingComparator::compareElements(second, first);
+        }
+    };
 
 //    class FavoriteComparator {
 //      public:
@@ -291,110 +290,109 @@ class PresetList : public SynthSection, public TextEditor::Listener, ScrollBar::
     OpenGlQuad highlight_;
     OpenGlQuad hover_;
     float view_position_;
-//    Column sort_column_;
+    Column sort_column_;
     bool sort_ascending_;
 };
 
-//class PresetBrowser : public SynthSection,
-//                      public PresetList::Listener,
-//                      public TextEditor::Listener,
-//                      public KeyListener,
-//                      public SelectionList::Listener {
-//  public:
-//    static constexpr int kLeftPadding = 24;
-//    static constexpr int kTopPadding = 24;
-//    static constexpr int kMiddlePadding = 15;
-//    static constexpr int kNameFontHeight = 26;
-//    static constexpr int kAuthorFontHeight = 19;
-//    static constexpr int kStoreHeight = 33;
-//    static constexpr int kCommentsFontHeight = 15;
+class PresetBrowser : public SynthSection,
+                      public PresetList::Listener,
+                      public TextEditor::Listener,
+                      public KeyListener {
+  public:
+    static constexpr int kLeftPadding = 24;
+    static constexpr int kTopPadding = 24;
+    static constexpr int kMiddlePadding = 15;
+    static constexpr int kNameFontHeight = 26;
+    static constexpr int kAuthorFontHeight = 19;
+    static constexpr int kStoreHeight = 33;
+    static constexpr int kCommentsFontHeight = 15;
+
+    class Listener {
+      public:
+        virtual ~Listener() { }
+
+        virtual void newPresetSelected(File preset) = 0;
+        virtual void deleteRequested(File preset) = 0;
+        virtual void hidePresetBrowser() = 0;
+    };
+
+    PresetBrowser();
+    ~PresetBrowser();
+
+    void paintBackground(Graphics& g) override;
+    void paintBackgroundShadow(Graphics& g) override;
+    void resized() override;
+    void buttonClicked(Button* clicked_button) override;
+    bool keyPressed(const KeyPress &key, Component *origin) override;
+    bool keyStateChanged(bool is_key_down, Component *origin) override;
+    void visibilityChanged() override;
+
+    Rectangle<int> getSearchRect();
+    Rectangle<int> getInfoRect();
+
+    void filterPresets();
+    void textEditorTextChanged(TextEditor& editor) override;
+    void textEditorEscapeKeyPressed(TextEditor& editor) override;
+
+    void newPresetSelected(File preset) override {
+      for (Listener* listener : listeners_)
+        listener->newPresetSelected(preset);
+//        loadPresetInfo();
 //
-//    class Listener {
-//      public:
-//        virtual ~Listener() { }
-//
-//        virtual void newPresetSelected(File preset) = 0;
-//        virtual void deleteRequested(File preset) = 0;
-//        virtual void hidePresetBrowser() = 0;
-//    };
-//
-//    PresetBrowser();
-//    ~PresetBrowser();
-//
-//    void paintBackground(Graphics& g) override;
-//    void paintBackgroundShadow(Graphics& g) override;
-//    void resized() override;
-//    void buttonClicked(Button* clicked_button) override;
-//    bool keyPressed(const KeyPress &key, Component *origin) override;
-//    bool keyStateChanged(bool is_key_down, Component *origin) override;
-//    void visibilityChanged() override;
-//
-//    Rectangle<int> getSearchRect();
-//    Rectangle<int> getInfoRect();
-//
-//    void filterPresets();
-//    void textEditorTextChanged(TextEditor& editor) override;
-//    void textEditorEscapeKeyPressed(TextEditor& editor) override;
-//
-//    void newPresetSelected(File preset) override {
-//      for (Listener* listener : listeners_)
-//        listener->newPresetSelected(preset);
-////      loadPresetInfo();
-////
-////      String author = author_text_->getText();
-////      store_button_->setText("Get more presets by " + author);
-////      bool visible = more_author_presets_.count(author.removeCharacters(" _.").toLowerCase().toStdString());
-////      bool was_visible = store_button_->isVisible();
-////      store_button_->setVisible(visible);
-////      if (was_visible != visible)
-////        setCommentsBounds();
-//    }
-//
-//    void deleteRequested(File preset) override {
-//      for (Listener* listener : listeners_)
-//        listener->deleteRequested(preset);
-//    }
-//
-//    void loadPresets();
-//
-//
-//    void jumpToPreset(int indices);
-//    void loadNextPreset();
-//    void loadPrevPreset();
-//    void externalPresetLoaded(File file);
-//    void clearExternalPreset() { external_preset_ = File(); }
-//
-//    void addListener(Listener* listener);
-//
+//      String author = author_text_->getText();
+//      store_button_->setText("Get more presets by " + author);
+//      bool visible = more_author_presets_.count(author.removeCharacters(" _.").toLowerCase().toStdString());
+//      bool was_visible = store_button_->isVisible();
+//      store_button_->setVisible(visible);
+//      if (was_visible != visible)
+//        setCommentsBounds();
+    }
+
+    void deleteRequested(File preset) override {
+      for (Listener* listener : listeners_)
+        listener->deleteRequested(preset);
+    }
+
+    void loadPresets();
+
+
+    void jumpToPreset(int indices);
+    void loadNextPreset();
+    void loadPrevPreset();
+    void externalPresetLoaded(File file);
+    void clearExternalPreset() { external_preset_ = File(); }
+
+    void addListener(Listener* listener);
+
 //
 //    void newSelection(File selection) override;
 //    void allSelected() override;
 //    void favoritesSelected() override;
 //    void doubleClickedSelected(File selection) override { }
 //
-//  private:
-//    bool loadFromFile(File& preset);
-//    void loadPresetInfo();
-//    void setCommentsBounds();
-//    void setPresetInfo(File& preset);
+  private:
+    bool loadFromFile(File& preset);
+    void loadPresetInfo();
+    void setCommentsBounds();
+    void setPresetInfo(File& preset);
+
+    std::vector<Listener*> listeners_;
+    std::unique_ptr<PresetList> preset_list_;
+//    std::unique_ptr<OpenGlTextEditor> search_box_;
+//    std::unique_ptr<SelectionList> folder_list_;
+    std::shared_ptr<PlainTextComponent> preset_text_;
+//    std::unique_ptr<PlainTextComponent> author_text_;
+//    std::unique_ptr<OpenGlToggleButton> style_buttons_[LoadSave::kNumPresetStyles];
+//    std::unique_ptr<OpenGlToggleButton> store_button_;
 //
-//    std::vector<Listener*> listeners_;
-//    std::unique_ptr<PresetList> preset_list_;
-////    std::unique_ptr<OpenGlTextEditor> search_box_;
-////    std::unique_ptr<SelectionList> folder_list_;
-//    std::shared_ptr<PlainTextComponent> preset_text_;
-////    std::unique_ptr<PlainTextComponent> author_text_;
-////    std::unique_ptr<OpenGlToggleButton> style_buttons_[LoadSave::kNumPresetStyles];
-////    std::unique_ptr<OpenGlToggleButton> store_button_;
-////
-////    SaveSection* save_section_;
-////    DeleteSection* delete_section_;
-//
-//    std::unique_ptr<OpenGlTextEditor> comments_;
-//    File external_preset_;
-//    String author_;
-//    String license_;
-//    std::set<std::string> more_author_presets_;
-//
-//    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PresetBrowser)
-//};
+//    SaveSection* save_section_;
+//    DeleteSection* delete_section_;
+
+    std::unique_ptr<OpenGlTextEditor> comments_;
+    File external_preset_;
+    String author_;
+    String license_;
+    std::set<std::string> more_author_presets_;
+
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PresetBrowser)
+};

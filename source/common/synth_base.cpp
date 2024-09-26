@@ -23,7 +23,7 @@
 
 #include "Identifiers.h"
 #include "Synthesiser/Sample.h"
-
+#include "load_save.h"
 SynthBase::SynthBase() : expired_(false) {
 
   self_reference_ = std::make_shared<SynthBase*>();
@@ -157,6 +157,81 @@ void SynthBase::addConnection(AudioProcessorGraph::Connection &connect)
 {
     engine_->processorGraph->addConnection(connect);
 }
+bool SynthBase::loadFromValueTree(const ValueTree& state)
+{
+    pauseProcessing(true);
+    engine_->allSoundsOff();
+    tree.copyPropertiesAndChildrenFrom(state, nullptr);
+    pauseProcessing(false);
+    DBG("unpause processing");
+    if (tree.isValid())
+        return true;
+    return false;
+}
+
+bool SynthBase::loadFromFile(File preset, std::string& error) {
+    DBG("laoding from file");
+    if (!preset.exists())
+        return false;
+
+    auto xml = juce::parseXML(preset);
+    if(xml == nullptr)
+    {
+        error = "Error loading preset";
+        return false;
+    }
+    auto parsed_value_tree = ValueTree::fromXml(*xml);
+    if(!parsed_value_tree.isValid()) {
+
+        error = "Error converting XML to ValueTree";
+        return false;
+    }
+    if(!loadFromValueTree(parsed_value_tree))
+    {
+        error = "Error Initializing ValueTree";
+        return false;
+    }
+
+    //setPresetName(preset.getFileNameWithoutExtension());
+
+    SynthGuiInterface* gui_interface = getGuiInterface();
+    if (gui_interface) {
+        gui_interface->updateFullGui();
+        gui_interface->notifyFresh();
+    }
+
+    return true;
+}
+bool SynthBase::saveToFile(File preset) {
+    preset = preset.withFileExtension(String(bitklavier::kPresetExtension));
+
+    File parent = preset.getParentDirectory();
+    if (!parent.exists()) {
+        if (!parent.createDirectory().wasOk() || !parent.hasWriteAccess())
+            return false;
+    }
+
+    setPresetName(preset.getFileNameWithoutExtension());
+
+    SynthGuiInterface* gui_interface = getGuiInterface();
+    if (gui_interface)
+        gui_interface->notifyFresh();
+
+//    if (preset.replaceWithText(saveToJson().dump())) {
+//        active_file_ = preset;
+//        return true;
+//    }
+    return false;
+}
+
+bool SynthBase::saveToActiveFile() {
+    if (!active_file_.exists() || !active_file_.hasWriteAccess())
+        return false;
+
+    return saveToFile(active_file_);
+}
+
+
 void SynthBase::processAudio(AudioSampleBuffer* buffer, int channels, int samples, int offset) {
   if (expired_)
     return;

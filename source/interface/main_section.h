@@ -27,10 +27,10 @@ public:
 //
 //    void notifyChange();
 //    void notifyFresh();
-
+//    juce::ValueTree v;
     void addListener(Listener* listener) { listeners_.push_back(listener); }
 private:
-    juce::ValueTree v;
+
     juce::UndoManager &um;
     juce::Viewport constructionPort;
     std::unique_ptr<ConstructionSite> constructionSite_;

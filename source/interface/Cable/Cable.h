@@ -25,14 +25,14 @@ namespace CableConstants
 class ConstructionSite;
 class Cable : public Component {
 public:
-    Cable(const ConstructionSite* site, CableView& cableView);
+    Cable(ConstructionSite* site, CableView& cableView);
     ~Cable();
 
     void paint (Graphics& g) override;
 //    void resized() override;
 //    bool hitTest (int x, int y) override;
     //Connection connection;
-    const ConstructionSite* site;
+    ConstructionSite* site;
     CableView& cableView;
     static constexpr std::string_view componentName = "Cable";
     void repaintIfNeeded (bool force = false);

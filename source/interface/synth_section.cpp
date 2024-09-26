@@ -419,11 +419,19 @@ void SynthSection::destroyOpenGlComponents(OpenGlWrapper& open_gl) {
                 open_gl_component->destroy(open_gl);
 
             for (auto& sub_section : sub_sections_)
+            {
                 sub_section->destroyOpenGlComponents(open_gl);
+
+            }
+
 
             if(background_)
                 background_->destroy(open_gl);
-        }, true);
+            DBG("finished openglexercuted");
+            GLenum gl =  juce::gl::glGetError();
+            DBG(String(gl));
+
+        }, false);
     } else
     {
         for (auto& open_gl_component : open_gl_components_)
@@ -442,14 +450,15 @@ void SynthSection::destroyOpenGlComponent(OpenGlComponent const& open_gl_compone
 {
     //moves the component to the end of the array
     //erases it from the vector
-    const MessageManagerLock mmLock;
-    auto new_logical_end = std::remove_if(open_gl_components_.begin(), open_gl_components_.end(), [&](std::shared_ptr<OpenGlComponent> const& p)
     {
-        return *p == open_gl_component;
-    });
+        const MessageManagerLock mmLock;
+        auto new_logical_end = std::remove_if(open_gl_components_.begin(), open_gl_components_.end(),
+                                              [&](std::shared_ptr<OpenGlComponent> const &p) {
+                                                  return *p == open_gl_component;
+                                              });
 
-    open_gl_components_.erase(new_logical_end,open_gl_components_.end());
-
+        open_gl_components_.erase(new_logical_end, open_gl_components_.end());
+    }
 
 }
 

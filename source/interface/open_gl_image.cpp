@@ -44,7 +44,10 @@ OpenGlImage::OpenGlImage() : dirty_(true), image_(nullptr), image_width_(0), ima
   memcpy(position_triangles_.get(), position_triangles, kNumTriangleIndices * sizeof(int));
 }
 
-OpenGlImage::~OpenGlImage() { }
+OpenGlImage::~OpenGlImage() {
+
+}
+
 
 void OpenGlImage::init(OpenGlWrapper& open_gl) {
 

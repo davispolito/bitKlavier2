@@ -200,43 +200,43 @@ void CableView::updateCablePositions()
 void CableView::updateComponents()
 {
     SynthGuiInterface* parent = findParentComponentOfClass<SynthGuiInterface>();
-    for (int i = cables.size(); --i >= 0;)
-    {
-        if (! parent->getSynth()->getEngine()->processorGraph->isConnected (cables.getUnchecked (i)->connection))
-        {
-            cables.remove (i);
-        }
-    }
-
-    for (auto* cc : cables)
-        cc->update();
-
-    for (auto& c : parent->getSynth()->getEngine()->processorGraph->getConnections())
-    {
-        if (getComponentForConnection (c) == nullptr)
-        {
-
-            auto* comp = cables.add (new Cable(&site, *this));
-            addChildComponent(comp, 0);
-
-            addOpenGlComponent(comp->getImageComponent(), true, false);
-            site.open_gl.initOpenGlComp.try_enqueue([this, comp] {
-                comp->getImageComponent()->init(site.open_gl);
-                MessageManager::callAsync(
-                        [safeComp = Component::SafePointer<Cable>(comp)] {
-                            if (auto *_comp = safeComp.getComponent()) {
-                                _comp->setVisible(true);
-                                _comp->getImageComponent()->setVisible(true);
-                            }
-                        });
-            });
-            addAndMakeVisible (comp);
-
-            comp->setInput (c.source);
-            comp->setOutput (c.destination);
-            comp->getValueTree();
-        }
-    }
+//    for (int i = cables.size(); --i >= 0;)
+//    {
+//        if (! parent->getSynth()->getEngine()->processorGraph->isConnected (cables.getUnchecked (i)->connection))
+//        {
+//            cables.remove (i);
+//        }
+//    }
+//
+//    for (auto* cc : cables)
+//        cc->update();
+//
+//    for (auto& c : parent->getSynth()->getEngine()->processorGraph->getConnections())
+//    {
+//        if (getComponentForConnection (c) == nullptr)
+//        {
+//
+//            auto* comp = cables.add (new Cable(&site, *this));
+//            addChildComponent(comp, 0);
+//
+//            addOpenGlComponent(comp->getImageComponent(), true, false);
+//            site.open_gl.initOpenGlComp.try_enqueue([this, comp] {
+//                comp->getImageComponent()->init(site.open_gl);
+//                MessageManager::callAsync(
+//                        [safeComp = Component::SafePointer<Cable>(comp)] {
+//                            if (auto *_comp = safeComp.getComponent()) {
+//                                _comp->setVisible(true);
+//                                _comp->getImageComponent()->setVisible(true);
+//                            }
+//                        });
+//            });
+//            addAndMakeVisible (comp);
+//
+//            comp->setInput (c.source);
+//            comp->setOutput (c.destination);
+//            comp->getValueTree();
+//        }
+//    }
 }
 
 void CableView::dragConnector(const MouseEvent& e)

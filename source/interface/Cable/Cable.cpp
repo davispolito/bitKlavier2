@@ -7,7 +7,7 @@
 #include "ConstructionSite.h"
 using namespace CableConstants;
 
-Cable::Cable (const ConstructionSite* site, CableView& cableView) : Component (Cable::componentName.data()),
+Cable::Cable (ConstructionSite* site, CableView& cableView) : Component (Cable::componentName.data()),
                                                                                             image_component_(new OpenGlImageComponent()),
                                                                                             site(site),
                                                                                             cableView(cableView)
@@ -37,19 +37,22 @@ Cable::~Cable()
 }
 
 ValueTree Cable::getValueTree() {
-    auto source = site->state.getChildWithProperty(IDs::nodeID,
+    auto source = site->getState().getChildWithProperty(IDs::nodeID,
                                                    VariantConverter<juce::AudioProcessorGraph::NodeID>::toVar(connection.source.nodeID));
 
-    auto destination = site->state.getChildWithProperty(IDs::nodeID,
+    auto destination = site->getState().getChildWithProperty(IDs::nodeID,
                                                         VariantConverter<juce::AudioProcessorGraph::NodeID>::toVar(connection.destination.nodeID));
-    if(source.isValid())
-    {
-        source.appendChild(state,nullptr);
-    }
-    if(destination.isValid())
-    {
-        destination.appendChild(state.createCopy(),nullptr);
-    }
+//    if(source.isValid())
+//    {
+//        source.appendChild(state,nullptr);
+//    }
+//    if(destination.isValid())
+//    {
+//        destination.appendChild(state.createCopy(),nullptr);
+//    }
+    if(source.isValid() && destination.isValid())
+        site->getState().appendChild(state,nullptr);
+
 
     return state;
 }
