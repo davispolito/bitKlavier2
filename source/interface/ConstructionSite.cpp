@@ -59,6 +59,7 @@ void ConstructionSite::deleteObject(PreparationSection *at)  {
     {
         SynthGuiInterface* _parent = findParentComponentOfClass<SynthGuiInterface>();
 
+
         //safe to do on message thread because we have locked processing if this is called
         at->setVisible(false);
         open_gl.context.executeOnGLThread([this,&at](OpenGLContext &openGLContext) {
