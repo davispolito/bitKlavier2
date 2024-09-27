@@ -6,7 +6,7 @@
 #include "synth_gui_interface.h"
 
 #include "FullInterface.h"
-PreparationSection::PreparationSection(String name, ValueTree v, OpenGlWrapper &open_gl) : SynthSection(name), state(v), _open_gl(open_gl)
+PreparationSection::PreparationSection(String name, ValueTree v, OpenGlWrapper &open_gl) : tracktion::engine::ValueTreeObjectList<BKPort>(v), SynthSection(name), state(v), _open_gl(open_gl)
 {
     //_parent = findParentComponentOfClass<SynthGuiInterface>();
     x.referTo(v,IDs::x,nullptr);
@@ -19,8 +19,24 @@ PreparationSection::PreparationSection(String name, ValueTree v, OpenGlWrapper &
     createUuidProperty(state);
     uuid.referTo(state,IDs::uuid,nullptr);
 
+    pluginID = VariantConverter<juce::AudioProcessorGraph::NodeID>::fromVar(v.getProperty(IDs::nodeID));
     //pluginID.uid = static_cast<uint32>(int(state.getProperty(IDs::uuid)));
     constrainer.setMinimumOnscreenAmounts(0xffffff,0xffffff,0xffffff,0xffffff);
+    rebuildObjects();
+    for(auto object : objects)
+    {
+        open_gl.initOpenGlComp.try_enqueue([this, object, &open_gl] {
+
+            object->getImageComponent()->init(open_gl);
+
+            MessageManagerLock mm;
+            this->addOpenGlComponent(object->getImageComponent(),false, true);
+            this->addAndMakeVisible(object);
+            object->addListener(this);
+            this->resized();
+        });
+    }
+
 }
 
 void PreparationSection::paintBackground(Graphics& g)
@@ -52,7 +68,7 @@ void PreparationSection:: resized() {
 
     if (auto *processor = getProcessor())
     {
-        for (auto *port: ports) {
+        for (auto *port: objects) {
             const bool isInput = port->isInput;
             auto channelIndex = port->pin.channelIndex;
             int busIdx = 0;
@@ -83,6 +99,39 @@ void PreparationSection:: resized() {
 PreparationSection::~PreparationSection()
 {
 }
+
+BKPort *PreparationSection::createNewObject(const ValueTree &v) {
+    SynthGuiInterface* _parent = findParentComponentOfClass<SynthGuiInterface>();
+
+    return new BKPort(_parent, v);
+}
+
+void PreparationSection::deleteObject(BKPort *at) {
+
+}
+
+void PreparationSection::reset() {
+    SynthSection::reset();
+}
+
+void PreparationSection::newObjectAdded(BKPort * object) {
+
+    SynthGuiInterface* parent = findParentComponentOfClass<SynthGuiInterface>();
+    parent->getGui()->open_gl_.initOpenGlComp.try_enqueue([this, object] {
+        SynthGuiInterface* _parent = findParentComponentOfClass<SynthGuiInterface>();
+        object->getImageComponent()->init(_parent->getGui()->open_gl_);
+        MessageManagerLock mm;
+        this->addOpenGlComponent(object->getImageComponent(),false, true);
+        this->addAndMakeVisible(object);
+        object->addListener(this);
+        this->resized();
+    });
+}
+
+void PreparationSection::valueTreeRedirected(ValueTree &) {
+}
+
+
 
 //void PreparationSection::valueTreePropertyChanged (juce::ValueTree& v, const juce::Identifier& i)
 //{

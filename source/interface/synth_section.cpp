@@ -446,7 +446,7 @@ void SynthSection::destroyOpenGlComponents(OpenGlWrapper& open_gl) {
     DBG("openglcomponents destroyed");
 }
 
-void SynthSection::destroyOpenGlComponent(OpenGlComponent const& open_gl_component, OpenGlWrapper& open_gl)
+void SynthSection::destroyOpenGlComponent(OpenGlComponent & open_gl_component, OpenGlWrapper& open_gl)
 {
     //moves the component to the end of the array
     //erases it from the vector

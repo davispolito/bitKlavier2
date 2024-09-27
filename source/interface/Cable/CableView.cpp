@@ -6,7 +6,7 @@
 #include "ConstructionSite.h"
 #include "sound_engine.h"
 #include "valuetree_utils/VariantConverters.h"
-CableView::CableView (ConstructionSite &site) :site(site), /*pathTask (*this),*/ SynthSection("cableView")
+CableView::CableView (ConstructionSite &site) :site(site), tracktion::engine::ValueTreeObjectList<Cable>(site.getState()), /*pathTask (*this),*/ SynthSection("cableView")
 {
     setInterceptsMouseClicks (false,false);
     //startTimerHz (36);
@@ -41,8 +41,11 @@ void CableView::beginConnectorDrag (AudioProcessorGraph::NodeAndChannel source,
                          AudioProcessorGraph::NodeAndChannel dest,
                          const MouseEvent& e)
 {
-    auto* c = dynamic_cast<Cable*> (e.originalComponent);
-    cables.removeObject (c, false);
+    auto c = dynamic_cast<Cable*> (e.originalComponent);
+    int index = objects.indexOf(c);
+
+    if(index >= 0)
+        objects.remove(index);
     draggingConnector.reset (c);
 
     if (draggingConnector == nullptr)
@@ -75,9 +78,16 @@ void CableView::paint (Graphics& g)
 
 }
 
+void CableView::reset()
+{
+    SynthGuiInterface* _parent = findParentComponentOfClass<SynthGuiInterface>();
+    //safe to do on message thread because we have locked processing if this is called
+    //_parent->getSynth()->getEngine()->resetEngine();
+    parent = _parent->getSynth()->getValueTree().getChildWithName(IDs::PIANO);
+}
 void CableView::resized()
 {
-    for (auto* cable : cables)
+    for (auto* cable : objects)
         cable->setBounds (getLocalBounds());
 }
 
@@ -129,7 +139,7 @@ void CableView::mouseUp (const MouseEvent& e)
         auto relMouse = e.getEventRelativeTo (this);
         auto mousePos = relMouse.getPosition();
 
-        auto* cable = cables.getLast();
+        auto* cable = objects.getLast();
         // not being connected... trash the latest cable
         {
             DBG("delete cable");
@@ -172,26 +182,104 @@ void CableView::endDraggingConnector (const MouseEvent& e)
             connection.destination = pin->pin;
         }
 //// this doesnt feel threadsafe but putting it in the processorqueue breaks.
-        SynthGuiInterface* parent = findParentComponentOfClass<SynthGuiInterface>();
-        parent->getSynth()->addConnection(connection);
-//        parent->getSynth()->processorInitQueue.try_enqueue([this, &connection]
+
+        ValueTree _connection(IDs::CONNECTION);
+        _connection.setProperty(IDs::src,  VariantConverter<juce::AudioProcessorGraph::NodeID>::toVar(connection.source.nodeID), nullptr);
+        _connection.setProperty(IDs::srcIdx, connection.source.channelIndex, nullptr);
+        _connection.setProperty(IDs::dest,  VariantConverter<juce::AudioProcessorGraph::NodeID>::toVar(connection.destination.nodeID), nullptr);
+        _connection.setProperty(IDs::destIdx, connection.destination.channelIndex, nullptr);
+        parent.appendChild(_connection,nullptr);
+;
+    }
+}
+
+
+void CableView::valueTreeRedirected (juce::ValueTree&)
+{
+    SynthGuiInterface* interface = findParentComponentOfClass<SynthGuiInterface>();
+
+//    for (auto object : objects)
+//    {
+//        DBG("bo");
+//        object->destroyOpenGlComponents(interface->getGui()->open_gl_);
+//        this->removeSubSection(object);
+//    }
+    deleteAllObjects();
+    rebuildObjects();
+    for(auto object : objects)
+    {
+        newObjectAdded(object);
+    }
+    updateComponents();
+    resized();
+} // may need to add handling if this is hit
+
+void CableView::newObjectAdded(Cable *c) {
+    ////IS THIS THREAD SAFE? IDK
+    //        parent->getSynth()->processorInitQueue.try_enqueue([this, &connection]
 //                                                           {
 //                                                               SynthGuiInterface* parent = findParentComponentOfClass<SynthGuiInterface>();
 //                                                               parent->getSynth()->addConnection(connection);
 //                                                           });
 
-//        graph.graph.addConnection (connection);
+//        graph.graph.addConnection (connection)
+    SynthGuiInterface* _parent = findParentComponentOfClass<SynthGuiInterface>();
+    _parent->getSynth()->processorInitQueue.try_enqueue([this,c]
+                                                       {
+                                                           SynthGuiInterface* _parent = findParentComponentOfClass<SynthGuiInterface>();
+                                                           _parent->getSynth()->addConnection(c->connection);
+                                                           //changelistener callback is causing timing errors here.
+
+                                                           //last_proc.reset();
+                                                       });
+
+}
+void CableView::deleteObject(Cable *at)  {
+    if ((OpenGLContext::getCurrentContext() == nullptr))
+    {
+        SynthGuiInterface* _parent = findParentComponentOfClass<SynthGuiInterface>();
+
+        //safe to do on message thread because we have locked processing if this is called
+        at->setVisible(false);
+        site.open_gl.context.executeOnGLThread([this,&at](OpenGLContext &openGLContext) {
+            this->destroyOpenGlComponent(*(at->getImageComponent()), this->site.open_gl);
+        },true);
     }
+
 }
 
 
 void CableView::updateCablePositions()
 {
-    for (auto* cable : cables)
+    for (auto* cable : objects)
     {
         cable->updateStartPoint();
         cable->updateEndPoint();
     }
+}
+
+Cable* CableView::createNewObject(const juce::ValueTree &v) {
+    DBG("addcable");
+    auto* comp = new Cable(&site, *this);
+    addChildComponent(comp, 0);
+
+    addOpenGlComponent(comp->getImageComponent(), true, false);
+    site.open_gl.initOpenGlComp.try_enqueue([this, comp] {
+        comp->getImageComponent()->init(site.open_gl);
+        MessageManager::callAsync(
+                [safeComp = Component::SafePointer<Cable>(comp)] {
+                    if (auto *_comp = safeComp.getComponent()) {
+                        _comp->setVisible(true);
+                        _comp->getImageComponent()->setVisible(true);
+                        _comp->resized();
+                    }
+                });
+    });
+    addAndMakeVisible (comp);
+    comp->setValueTree(v);
+
+    return comp;
+
 }
 
 
@@ -199,44 +287,38 @@ void CableView::updateCablePositions()
 
 void CableView::updateComponents()
 {
-    SynthGuiInterface* parent = findParentComponentOfClass<SynthGuiInterface>();
-//    for (int i = cables.size(); --i >= 0;)
-//    {
-//        if (! parent->getSynth()->getEngine()->processorGraph->isConnected (cables.getUnchecked (i)->connection))
-//        {
-//            cables.remove (i);
-//        }
-//    }
-//
-//    for (auto* cc : cables)
-//        cc->update();
-//
-//    for (auto& c : parent->getSynth()->getEngine()->processorGraph->getConnections())
-//    {
+    SynthGuiInterface* _parent = findParentComponentOfClass<SynthGuiInterface>();
+    for (int i = objects.size(); --i >= 0;)
+    {
+        if (! _parent->getSynth()->getEngine()->processorGraph->isConnected (objects.getUnchecked (i)->connection))
+        {
+            objects.remove (i);
+        }
+    }
+
+    for (auto* cc : objects)
+        cc->update();
+
+    for (auto& c : _parent->getSynth()->getEngine()->processorGraph->getConnections())
+    {
 //        if (getComponentForConnection (c) == nullptr)
 //        {
+//            auto source = parent.getChildWithProperty(IDs::nodeID,
+//                                                                VariantConverter<juce::AudioProcessorGraph::NodeID>::toVar(c.source.nodeID));
 //
-//            auto* comp = cables.add (new Cable(&site, *this));
-//            addChildComponent(comp, 0);
-//
-//            addOpenGlComponent(comp->getImageComponent(), true, false);
-//            site.open_gl.initOpenGlComp.try_enqueue([this, comp] {
-//                comp->getImageComponent()->init(site.open_gl);
-//                MessageManager::callAsync(
-//                        [safeComp = Component::SafePointer<Cable>(comp)] {
-//                            if (auto *_comp = safeComp.getComponent()) {
-//                                _comp->setVisible(true);
-//                                _comp->getImageComponent()->setVisible(true);
-//                            }
-//                        });
-//            });
-//            addAndMakeVisible (comp);
-//
-//            comp->setInput (c.source);
-//            comp->setOutput (c.destination);
-//            comp->getValueTree();
+//            auto destination = parent.getChildWithProperty(IDs::nodeID,
+//                                                                     VariantConverter<juce::AudioProcessorGraph::NodeID>::toVar(c.destination.nodeID));
+//            if(source.isValid() && destination.isValid())
+//            {
+//                ValueTree connection(IDs::CONNECTION);
+//                connection.setProperty(IDs::src,  VariantConverter<juce::AudioProcessorGraph::NodeID>::toVar(c.source.nodeID), nullptr);
+//                connection.setProperty(IDs::srcIdx, c.source.channelIndex, nullptr);
+//                connection.setProperty(IDs::dest,  VariantConverter<juce::AudioProcessorGraph::NodeID>::toVar(c.destination.nodeID), nullptr);
+//                connection.setProperty(IDs::destIdx, c.destination.channelIndex, nullptr);
+//                parent.appendChild(connection,nullptr);
+//            }
 //        }
-//    }
+    }
 }
 
 void CableView::dragConnector(const MouseEvent& e)

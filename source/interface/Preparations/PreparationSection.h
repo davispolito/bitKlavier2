@@ -23,7 +23,9 @@ class SynthGuiInterface;
 /************************************************************************************/
 /*     CLASS: PreparationSection, inherits from SynthSection and Listener           */
 /************************************************************************************/
-class PreparationSection : public SynthSection, public BKItem::Listener, public BKPort::Listener,  public ChangeListener
+class PreparationSection : public SynthSection, public BKItem::Listener, public BKPort::Listener,  public ChangeListener,
+        public tracktion::engine::ValueTreeObjectList<BKPort>
+
 {
 public:
     static constexpr float kItemPaddingY = 2.0f;
@@ -85,7 +87,25 @@ public:
     CachedValue<int> x, y, width, height, numIns, numOuts;
     juce::ComponentDragger myDragger;
     juce::ComponentBoundsConstrainer constrainer;
-    OwnedArray<BKPort> ports;
+
+    BKPort* createNewObject(const juce::ValueTree& v) override;
+    void deleteObject (BKPort* at) override;
+
+
+    void reset() override;
+    void newObjectAdded (BKPort*) override;
+    void objectRemoved (BKPort*) override     { resized();}//resized(); }
+    void objectOrderChanged() override              {resized(); }//resized(); }
+    // void valueTreeParentChanged (juce::ValueTree&) override;
+    void valueTreeRedirected (juce::ValueTree&) override ;
+    void valueTreePropertyChanged (juce::ValueTree& v, const juce::Identifier& i) override {
+        tracktion::engine::ValueTreeObjectList<BKPort>::valueTreePropertyChanged(v, i);
+    }
+    bool isSuitableType (const juce::ValueTree& v) const override
+    {
+        return v.hasType (IDs::PORT);
+    }
+
 
     void update()
     {
@@ -226,64 +246,97 @@ public:
 
     juce::Point<float> getPinPos (int index, bool isInput) const
     {
-        for (auto* port : ports)
+        for (auto* port : objects)
             if (port->pin.channelIndex == index && isInput == port->isInput)
                 return getPosition().toFloat() + port->getBounds().getCentre().toFloat();
 
         return {};
     }
+    void setPortInfo()
+    {
+        numIns = getProcessor()->getTotalNumInputChannels();
+        if (getProcessor()->acceptsMidi())
+            numIns = numIns + 1;
+
+        numOuts = getProcessor()->getTotalNumOutputChannels();
+        if (getProcessor()->producesMidi())
+            numOuts = numOuts + 1;
+
+
+            SynthGuiInterface* parent = this->findParentComponentOfClass<SynthGuiInterface>();
+            auto& processor = *this->node->getProcessor();
+            for (int i = 0; i < processor.getTotalNumInputChannels(); ++i)
+            {
+                ValueTree v{IDs::PORT} ;
+                v.setProperty(IDs::nodeID,VariantConverter<juce::AudioProcessorGraph::NodeID>::toVar(this->pluginID), nullptr);
+                v.setProperty(IDs::chIdx, i, nullptr);
+                state.addChild(v, -1, nullptr) ;
+            }
+                //this->objects.add (new BKPort (true, { this->pluginID, i }, parent));
+
+            if(processor.acceptsMidi())
+            {
+                ValueTree v{IDs::PORT} ;
+                v.setProperty(IDs::nodeID,VariantConverter<juce::AudioProcessorGraph::NodeID>::toVar(this->pluginID), nullptr);
+                v.setProperty(IDs::chIdx, AudioProcessorGraph::midiChannelIndex, nullptr);
+                v.setProperty(IDs::isIn, true, nullptr);
+                state.addChild(v, -1, nullptr) ;
+            }
+
+            for(int i = 0; i < processor.getTotalNumOutputChannels(); ++i)
+            {
+                ValueTree v{IDs::PORT} ;
+                v.setProperty(IDs::nodeID,VariantConverter<juce::AudioProcessorGraph::NodeID>::toVar(this->pluginID), nullptr);
+                v.setProperty(IDs::chIdx, i, nullptr);
+                v.setProperty(IDs::isIn, false, nullptr);
+                state.addChild(v, -1, nullptr) ;
+            }
+
+            if(processor.producesMidi())
+            {
+                ValueTree v{IDs::PORT} ;
+                v.setProperty(IDs::nodeID,VariantConverter<juce::AudioProcessorGraph::NodeID>::toVar(this->pluginID), nullptr);
+                v.setProperty(IDs::chIdx, AudioProcessorGraph::midiChannelIndex, nullptr);
+                v.setProperty(IDs::isIn, false, nullptr);
+                state.addChild(v, -1, nullptr) ;
+            }
+
+
+
+
+
+//            this->_open_gl.initOpenGlComp.try_enqueue([ this] {
+//                for (auto *port: this->objects) {
+//
+//                    port->getImageComponent()->init(this->_open_gl);
+//                    MessageManagerLock mm;
+//                    this->addOpenGlComponent(port->getImageComponent(),false, true);
+//                    this->addAndMakeVisible(port);
+//                    port->addListener(this);
+//                }
+//                MessageManagerLock mm;
+//                this->resized();
+//                DBG("ports added");
+//            });
+
+
+
+
+    }
     virtual std::shared_ptr<SynthSection> getPrepPopup(){}
-    void setNodeAndPortInfo(juce::AudioProcessorGraph::Node::Ptr _node)
+    void setNodeInfo(juce::AudioProcessorGraph::Node::Ptr _node)
     {
         node = _node;
         pluginID = node->nodeID;
+        this->state.setProperty(IDs::nodeID,  VariantConverter<juce::AudioProcessorGraph::NodeID>::toVar(this->pluginID), nullptr);
         int i = 0;
         auto& processor = *_node->getProcessor();
-
-        numIns = processor.getTotalNumInputChannels();
-        if (processor.acceptsMidi())
-            numIns = numIns + 1;
-
-        numOuts = processor.getTotalNumOutputChannels();
-        if (processor.producesMidi())
-            numOuts = numOuts + 1;
-        MessageManager::callAsync (
-                [safeComp = Component::SafePointer<PreparationSection> (this)]
-                {
-                    safeComp->state.setProperty(IDs::nodeID,  VariantConverter<juce::AudioProcessorGraph::NodeID>::toVar(safeComp->pluginID), nullptr);
-
-                    SynthGuiInterface* parent = safeComp->findParentComponentOfClass<SynthGuiInterface>();
-                    auto& processor = *safeComp->node->getProcessor();
-                    for (int i = 0; i < processor.getTotalNumInputChannels(); ++i)
-                        safeComp->ports.add (new BKPort (true, { safeComp->pluginID, i }, parent));
-
-                    if(processor.acceptsMidi())
-                        safeComp->ports.add (new BKPort (true, {safeComp-> pluginID, AudioProcessorGraph::midiChannelIndex}, parent));
-
-                    for(int i = 0; i < processor.getTotalNumInputChannels(); ++i)
-                        safeComp->ports.add (new BKPort (false, {safeComp->pluginID, i}, parent));
-
-                    if(processor.producesMidi())
-                        safeComp->ports.add (new BKPort (false, {safeComp->pluginID, AudioProcessorGraph::midiChannelIndex}, parent));
-
-
-
-
-                        safeComp->_open_gl.initOpenGlComp.try_enqueue([ safeComp] {
-                            for (auto *port: safeComp->ports) {
-
-                                port->getImageComponent()->init(safeComp->_open_gl);
-                                MessageManagerLock mm;
-                                safeComp->addOpenGlComponent(port->getImageComponent(),false, true);
-                                safeComp->addAndMakeVisible(port);
-                                port->addListener(safeComp);
-                            }
-                            MessageManagerLock mm;
-                            safeComp->resized();
-                        });
-
-
-                });
+        if (objects.isEmpty()) {
+            MessageManager::callAsync ([safeComp = Component::SafePointer<PreparationSection> (this)]
+                                       {
+                safeComp->setPortInfo();
+                                       });
+        }
 
 
 

@@ -155,7 +155,7 @@ return engine_->processorGraph->getNodeForId(id);
 
 void SynthBase::addConnection(AudioProcessorGraph::Connection &connect)
 {
-    engine_->processorGraph->addConnection(connect);
+    BITKLAVIER_ASSERT(engine_->processorGraph->addConnection(connect));
 }
 bool SynthBase::loadFromValueTree(const ValueTree& state)
 {

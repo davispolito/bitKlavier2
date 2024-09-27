@@ -11,7 +11,7 @@ class SynthGuiInterface;
 class BKPort : public Button
 {
 public:
-    BKPort(bool isIn, AudioProcessorGraph::NodeAndChannel pinToUse, SynthGuiInterface* parent);
+    BKPort(SynthGuiInterface* parent, ValueTree v);
     class Listener
     {
     public:
@@ -111,11 +111,12 @@ public:
     Path port_outline;
     Path port_fill;
     AudioProcessorGraph::NodeAndChannel pin;
-    bool isInput;
+    CachedValue<bool> isInput;
     int busIdx = 0;
     std::shared_ptr<OpenGlImageComponent> getImageComponent() { return image_component_; }
     void redoImage() { image_component_->redrawImage (true); } //image_component_.redrawImage(true); }
     std::shared_ptr<OpenGlImageComponent> image_component_;
+    ValueTree state;
 };
 
 

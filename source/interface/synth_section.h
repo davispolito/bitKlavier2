@@ -295,7 +295,7 @@ class SynthSection : public Component, public Slider::Listener,
     virtual void initOpenGlComponents(OpenGlWrapper& open_gl);
     virtual void renderOpenGlComponents(OpenGlWrapper& open_gl, bool animate);
     virtual void destroyOpenGlComponents(OpenGlWrapper& open_gl);
-    void destroyOpenGlComponent(OpenGlComponent const& open_gl_component, OpenGlWrapper& open_gl);
+    void destroyOpenGlComponent(OpenGlComponent & open_gl_component, OpenGlWrapper& open_gl);
 
     virtual void sliderValueChanged(Slider* moved_slider) override;
     virtual void buttonClicked(Button* clicked_button) override;

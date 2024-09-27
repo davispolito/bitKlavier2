@@ -120,7 +120,7 @@ void DirectPreparation::DirectPopup::renderOpenGlComponents(OpenGlWrapper& open_
 }
 
 void DirectPreparation::paintBackground(juce::Graphics &g)  {
-    for (auto * port: ports)
+    for (auto * port: objects)
         port->redoImage();
     PreparationSection::paintBackground(g);
 }

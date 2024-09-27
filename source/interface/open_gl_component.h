@@ -93,7 +93,7 @@ class OpenGlComponent : public Component {
 
     force_inline void checkGlError() {
     #if DEBUG
-      int error = juce::gl::glGetError();
+      GLenum error = juce::gl::glGetError();
       assert(error == juce::gl::GL_NO_ERROR);
     #endif
     }

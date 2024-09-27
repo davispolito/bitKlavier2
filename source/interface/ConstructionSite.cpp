@@ -44,6 +44,7 @@ void ConstructionSite::valueTreeRedirected (juce::ValueTree&)
 {
     SynthGuiInterface* interface = findParentComponentOfClass<SynthGuiInterface>();
 
+
 //    for (auto object : objects)
 //    {
 //        DBG("bo");
@@ -52,13 +53,16 @@ void ConstructionSite::valueTreeRedirected (juce::ValueTree&)
 //    }
     deleteAllObjects();
     rebuildObjects();
+    for(auto object : objects)
+    {
+        newObjectAdded(object);
+    }
 } // may need to add handling if this is hit
 
 void ConstructionSite::deleteObject(PreparationSection *at)  {
     if ((OpenGLContext::getCurrentContext() == nullptr))
     {
         SynthGuiInterface* _parent = findParentComponentOfClass<SynthGuiInterface>();
-
 
         //safe to do on message thread because we have locked processing if this is called
         at->setVisible(false);
@@ -86,6 +90,7 @@ PreparationSection* ConstructionSite::createNewObject (const juce::ValueTree& v)
     s->selectedSet = &(preparationSelector.getLassoSelection());
     preparationSelector.getLassoSelection().addChangeListener(s);
     s->addListener(&cableView);
+
     return s;
 }
 void ConstructionSite::reset()
@@ -95,19 +100,15 @@ void ConstructionSite::reset()
     _parent->getSynth()->getEngine()->resetEngine();
     parent = _parent->getSynth()->getValueTree().getChildWithName(IDs::PIANO);
 
-    for(auto object : objects)
-    {
-        newObjectAdded(object);
+    cableView.reset();
     }
-
-}
 void ConstructionSite::newObjectAdded (PreparationSection* object)
 {
     SynthGuiInterface* parent = findParentComponentOfClass<SynthGuiInterface>();
     parent->getSynth()->processorInitQueue.try_enqueue([this, object]
                                                        {
                                                            SynthGuiInterface* _parent = findParentComponentOfClass<SynthGuiInterface>();
-                                                           object->setNodeAndPortInfo(_parent->getSynth()->addProcessor(std::move(object->getProcessorPtr())));
+                                                           object->setNodeInfo(_parent->getSynth()->addProcessor(std::move(object->getProcessorPtr()), object->pluginID));
                                                            //changelistener callback is causing timing errors here.
 
                                                            //last_proc.reset();

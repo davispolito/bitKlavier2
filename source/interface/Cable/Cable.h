@@ -32,6 +32,7 @@ public:
 //    void resized() override;
 //    bool hitTest (int x, int y) override;
     //Connection connection;
+
     ConstructionSite* site;
     CableView& cableView;
     static constexpr std::string_view componentName = "Cable";
@@ -61,7 +62,7 @@ public:
         {
             connection.destination = newDest;
             state.setProperty(IDs::dest,  VariantConverter<juce::AudioProcessorGraph::NodeID>::toVar(connection.destination.nodeID), nullptr);
-            state.setProperty(IDs::destIdx, connection.source.channelIndex, nullptr);
+            state.setProperty(IDs::destIdx, connection.destination.channelIndex, nullptr);
             update();
         }
     }
@@ -189,6 +190,14 @@ public:
         distanceFromEnd   = p2.getDistanceFrom (p);
     }
 
+    void setValueTree(const ValueTree& v)
+    {
+        state = v;
+        connection.source = {VariantConverter<juce::AudioProcessorGraph::NodeID>::fromVar(v.getProperty(IDs::src)), v.getProperty(IDs::srcIdx)};
+        connection.destination = {VariantConverter<juce::AudioProcessorGraph::NodeID>::fromVar(v.getProperty(IDs::dest)), v.getProperty(IDs::destIdx)};
+        update();
+    }
+    ValueTree state {IDs::CONNECTION};
 
 private:
     float getCableThickness() const;
@@ -221,7 +230,6 @@ private:
 
     Path createCablePath (juce::Point<float> start, juce::Point<float> end, float scaleFactor);
     CriticalSection pathCrit;
-    ValueTree state {IDs::CONNECTION};
 };
 
 

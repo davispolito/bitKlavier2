@@ -17,7 +17,9 @@ class ConstructionSite;
 class CableView :
 //                  private Timer,
                   public PreparationSection::Listener,
-                  public SynthSection
+                  public SynthSection,
+                  public tracktion::engine::ValueTreeObjectList<Cable>
+
 {
 public:
     explicit CableView (ConstructionSite &site);
@@ -57,13 +59,12 @@ public:
 
     Cable* getComponentForConnection (const AudioProcessorGraph::Connection& conn) const
     {
-        for (auto* cc : cables)
+        for (auto* cc : objects)
             if (cc->connection == conn)
                 return cc;
 
         return nullptr;
     }
-    void addConnectionToValueTree (const AudioProcessorGraph::Connection& conn);
     juce::Point<int> currentPort;
     void dragConnector (const MouseEvent& e) override;
 
@@ -77,7 +78,25 @@ public:
 
 
 
-    OwnedArray<Cable> cables;
+    /////VALUe Tree objectlist overrides
+    Cable* createNewObject(const juce::ValueTree& v) override;
+    void deleteObject (Cable* at) override;
+
+
+    void reset() override;
+    void newObjectAdded (Cable*) override;
+    void objectRemoved (Cable*) override     { resized();}//resized(); }
+    void objectOrderChanged() override              {resized(); }//resized(); }
+   // void valueTreeParentChanged (juce::ValueTree&) override;
+    void valueTreeRedirected (juce::ValueTree&) override ;
+    void valueTreePropertyChanged (juce::ValueTree& v, const juce::Identifier& i) override {
+        tracktion::engine::ValueTreeObjectList<Cable>::valueTreePropertyChanged(v, i);
+    }
+    bool isSuitableType (const juce::ValueTree& v) const override
+    {
+        return v.hasType (IDs::CONNECTION);
+    }
+
 private:
 //    void timerCallback() override;
 
