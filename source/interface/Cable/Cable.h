@@ -4,12 +4,12 @@
 
 #ifndef BITKLAVIER2_CABLE_H
 #define BITKLAVIER2_CABLE_H
+#include "valuetree_utils/VariantConverters.h"
 #include <JuceHeader.h>
-#include <Connection.h>
 #include "CubicBezier.h"
 #include "open_gl_image_component.h"
 #include "Identifiers.h"
-#include "valuetree_utils/VariantConverters.h"
+
 class CableView;
 namespace CableConstants
 {

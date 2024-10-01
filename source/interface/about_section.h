@@ -21,21 +21,21 @@
 #include "open_gl_multi_quad.h"
 #include "open_gl_image_component.h"
 #include "default_look_and_feel.h"
+#include "bitklavier_AudioDeviceSelectorComponent.h"
 
-
-class OpenGlDeviceSelector : public OpenGlAutoImageComponent<AudioDeviceSelectorComponent> {
+class OpenGlDeviceSelector : public OpenGlAutoImageComponent<bitklavier::AudioDeviceSelectorComponent> {
   public:
     OpenGlDeviceSelector(AudioDeviceManager& device_manager,
                          int min_audio_input_channels, int max_audioInput_channels,
                          int min_audio_output_channels, int max_audioOutput_channels,
                          bool show_midi_input_options, bool show_midi_output_selector,
-                         bool show_channels_as_stereo_pairs, bool hide_advanced_options_with_button) :
-        OpenGlAutoImageComponent<AudioDeviceSelectorComponent>(device_manager,
+                         bool show_channels_as_stereo_pairs, bool hide_advanced_options_with_button, ValueTree tree) :
+        OpenGlAutoImageComponent<bitklavier::AudioDeviceSelectorComponent>(device_manager,
                                                                min_audio_input_channels, max_audioInput_channels,
                                                                min_audio_output_channels, max_audioOutput_channels,
                                                                show_midi_input_options, show_midi_output_selector,
                                                                show_channels_as_stereo_pairs,
-                                                               hide_advanced_options_with_button)
+                                                               hide_advanced_options_with_button, tree)
                                                                {
         image_component_ = std::make_shared<OpenGlImageComponent>();
         setLookAndFeel(DefaultLookAndFeel::instance());
@@ -88,7 +88,7 @@ class AboutSection : public Overlay {
   private:
     void setGuiSize(float multiplier);
     void fullScreen();
-
+    ValueTree preferences;
     std::unique_ptr<OpenGlDeviceSelector> device_selector_;
 
 

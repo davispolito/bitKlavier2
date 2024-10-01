@@ -23,7 +23,6 @@
 
 #include <set>
 #include <string>
-#include "Connection.h"
 
 class SynthGuiInterface;
 template<typename T>

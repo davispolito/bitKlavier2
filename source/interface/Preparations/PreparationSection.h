@@ -4,7 +4,7 @@
 
 #ifndef BITKLAVIER2_PREPARATIONSECTION_H
 #define BITKLAVIER2_PREPARATIONSECTION_H
-
+#include "valuetree_utils/VariantConverters.h"
 #include "synth_section.h"
 #include "draggable_component.h"
 #include "tracktion_engine.h"
@@ -13,7 +13,7 @@
 #include "BKItem.h"
 #include "opengl_ComponentDragger.h"
 #include "BKPort.h"
-#include "valuetree_utils/VariantConverters.h"
+
 /************************************************************************************/
 /*                            CLASS: SynthGuiInterface                              */
 /************************************************************************************/

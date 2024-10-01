@@ -4,7 +4,7 @@
 
 #ifndef BITKLAVIER2_BKPORT_H
 #define BITKLAVIER2_BKPORT_H
-
+#include "valuetree_utils/VariantConverters.h"
 #include "open_gl_image_component.h"
 #include "common.h"
 class SynthGuiInterface;

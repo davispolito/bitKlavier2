@@ -304,6 +304,7 @@ void HeaderSection::buttonClicked(Button* clicked_button) {
   else if (clicked_button == printButton.get())
     {
       SynthGuiInterface* interface = findParentComponentOfClass<SynthGuiInterface>();
+      interface->getSynth()->getValueTree().getChild(0).setProperty("sync", 1, nullptr);
       DBG(interface->getSynth()->getValueTree().toXmlString());
     }
   else if (clicked_button == loadButton.get())

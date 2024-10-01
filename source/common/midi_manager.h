@@ -40,16 +40,25 @@ class MidiMessageCollector {
 };
 
 #endif
-
+#include "Identifiers.h"
 class SynthBase;
 
 namespace bitklavier {
   class SoundEngine;
   struct ValueDetails;
-
+    struct MidiDeviceWrapper {
+        MidiDeviceWrapper(const ValueTree &v) : state(v) {
+            identifier.referTo(state,IDs::midiDeviceId, nullptr);
+        }
+        ValueTree state;
+        CachedValue<String> identifier;
+    };
 } // namespace bitklavier
 using namespace juce;
+namespace bitklavier
+{
 
+}
 class MidiManager : public MidiInputCallback {
   public:
     typedef std::map<int, std::map<std::string, const bitklavier::ValueDetails*>> midi_map;
@@ -88,7 +97,7 @@ class MidiManager : public MidiInputCallback {
         virtual void presetChangedThroughMidi(juce::File preset) = 0;
     };
 
-    MidiManager( juce::MidiKeyboardState* keyboard_state,
+    MidiManager( juce::MidiKeyboardState* keyboard_state, const ValueTree &v={},
                  Listener* listener = nullptr);
     virtual ~MidiManager() override;
 
@@ -141,7 +150,7 @@ class MidiManager : public MidiInputCallback {
       juce::File preset;
     };
     juce::MidiMessageCollector midi_collector_;
-    std::vector<String> enabledMidiInputs;
+    ValueTree enabledMidiInputs;
 
 
   protected:

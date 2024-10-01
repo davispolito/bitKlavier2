@@ -142,6 +142,20 @@ private:
     void valueTreePropertyChanged (juce::ValueTree& v, const juce::Identifier& i) override
     {
         tracktion::engine::ValueTreeObjectList<PreparationSection>::valueTreePropertyChanged (v, i);
+        if(v.getProperty("sync",0))
+        {
+            for(auto obj : objects)
+            {
+                juce::MemoryBlock data;
+                obj->getProcessor()->getStateInformation(data);
+                auto xml = juce::parseXML(data.toString());
+//auto xml = AudioProcessor::getXmlF(data.getData(), (int)data.getSize());
+                if (obj->state.getChild(0).isValid())
+                    obj->state.getChild(0).copyPropertiesFrom(ValueTree::fromXml(*xml),nullptr);
+                  //  state.addChild(ValueTree::fromXml(*xml),0,nullptr);
+            }
+            v.removeProperty("sync", nullptr);
+        }
     }
 
     PreparationFactory prepFactory;

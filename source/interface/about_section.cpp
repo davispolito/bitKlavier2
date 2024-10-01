@@ -69,7 +69,7 @@ void AboutSection::resized() {
     AudioDeviceManager* device_manager = parent->getAudioDeviceManager();
     if (device_manager) {
       device_selector_ = std::make_unique<OpenGlDeviceSelector>(
-          *device_manager, 0, 0, bitklavier::kNumChannels, bitklavier::kNumChannels, true, false, false, false);
+          *device_manager, 0, 0, bitklavier::kNumChannels, bitklavier::kNumChannels, true, false, false, false, parent->userPreferences.tree);
       addAndMakeVisible(device_selector_.get());
       addOpenGlComponent(device_selector_->getImageComponent());
     }

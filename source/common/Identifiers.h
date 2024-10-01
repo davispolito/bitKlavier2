@@ -48,7 +48,10 @@ namespace IDs
     DECLARE_ID (assignment)
 
     DECLARE_ID (uuid)
-
+    DECLARE_ID (midiInput)
+    DECLARE_ID (midiDeviceId)
+    DECLARE_ID(active)
+    DECLARE_ID(midiPrefs)
 }
 
 #undef DECLARE_ID

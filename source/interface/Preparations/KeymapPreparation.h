@@ -10,23 +10,47 @@
 #include "popup_browser.h"
 
 class OpenGlSlider;
+
 class MidiInputSelectorComponentListBox : public ListBox,
                                                                               private ListBoxModel,
-                                          private ChangeListener
+private ChangeListener,  public tracktion::engine::ValueTreeObjectList<bitklavier::MidiDeviceWrapper>
 {
 public:
-    MidiInputSelectorComponentListBox (MidiInputCallback& midi, std::vector<String> &enabledMidiInputs,
+    MidiInputSelectorComponentListBox (MidiInputCallback& midi, const ValueTree &v,
                                        AudioDeviceManager& manager)
             : ListBox ({}, nullptr),
-            enabledMidiInputs(enabledMidiInputs),
             midi(midi),
-            manager(manager)
+            manager(manager),
+              tracktion::engine::ValueTreeObjectList<bitklavier::MidiDeviceWrapper>(v)
     {
         updateDevices();
         setModel (this);
         setOutlineThickness (1);
     }
 
+    bitklavier::MidiDeviceWrapper* createNewObject(const juce::ValueTree& v) override
+    {
+        return new bitklavier::MidiDeviceWrapper(v);
+    }
+    void deleteObject (bitklavier::MidiDeviceWrapper* at) override
+    {
+        manager.removeMidiInputDeviceCallback(at->identifier, &midi);
+    }
+    void newObjectAdded (bitklavier::MidiDeviceWrapper* obj) override
+    {
+        manager.addMidiInputDeviceCallback(obj->identifier, &midi);
+    }
+    void objectRemoved (bitklavier::MidiDeviceWrapper*) override     { resized();}//resized(); }
+    void objectOrderChanged() override              {resized(); }//resized(); }
+    // void valueTreeParentChanged (juce::ValueTree&) override;
+    //void valueTreeRedirected (juce::ValueTree&) override ;
+    void valueTreePropertyChanged (juce::ValueTree& v, const juce::Identifier& i) override {
+        tracktion::engine::ValueTreeObjectList<bitklavier::MidiDeviceWrapper>::valueTreePropertyChanged(v, i);
+    }
+    bool isSuitableType (const juce::ValueTree& v) const override
+    {
+        return v.hasType (IDs::midiInput);
+    }
     void updateDevices()
     {
         items = MidiInput::getAvailableDevices();
@@ -125,13 +149,14 @@ private:
     }
     const String noItemsMessage;
     Array<MidiDeviceInfo> items;
-    std::vector<String> &enabledMidiInputs;
+    //std::vector<bitklavier::MidiDeviceWrapper> &enabledMidiInputs;
     MidiInputCallback& midi;
     AudioDeviceManager& manager;
     bool isMidiInputDeviceEnabled (const String& identifier)
     {
-        for (auto& mi : enabledMidiInputs) {
-            if (mi == identifier) {
+        for (auto mi : objects) {
+
+            if (mi->identifier == identifier) {
                 return true;
             }
         }
@@ -144,14 +169,15 @@ private:
             auto identifier = items[row].identifier;
             if (!isMidiInputDeviceEnabled(identifier))
             {
-               manager.addMidiInputDeviceCallback(identifier, &midi);
-               enabledMidiInputs.push_back(identifier);
+
+               ValueTree t(IDs::midiInput);
+               parent.appendChild(t, nullptr);
             }
             else
             {
-                manager.removeMidiInputDeviceCallback(identifier, &midi);
-                enabledMidiInputs.erase(std::remove(enabledMidiInputs.begin(), enabledMidiInputs.end(), identifier),
-                                        enabledMidiInputs.end());
+
+                parent.removeChild(parent.getChildWithProperty(IDs::midiDeviceId, identifier), nullptr);
+
             }
 
             //deviceManager.setMidiInputDeviceEnabled (identifier, ! deviceManager.isMidiInputDeviceEnabled (identifier));
@@ -170,9 +196,9 @@ private:
 
 class OpenGlMidiSelector : public OpenGlAutoImageComponent<MidiInputSelectorComponentListBox> {
 public:
-    OpenGlMidiSelector(MidiInputCallback& midi, std::vector<String> &enabledMidiInputs,
+    OpenGlMidiSelector(MidiInputCallback& midi, const ValueTree & v,
             AudioDeviceManager& manager) :
-            OpenGlAutoImageComponent<MidiInputSelectorComponentListBox>(midi,enabledMidiInputs,
+            OpenGlAutoImageComponent<MidiInputSelectorComponentListBox>(midi,v,
                                                                          manager) {
         image_component_ = std::make_shared<OpenGlImageComponent>();
         setLookAndFeel(DefaultLookAndFeel::instance());

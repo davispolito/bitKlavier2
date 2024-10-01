@@ -5,7 +5,7 @@
 #include "CableView.h"
 #include "ConstructionSite.h"
 #include "sound_engine.h"
-#include "valuetree_utils/VariantConverters.h"
+
 CableView::CableView (ConstructionSite &site) :site(site), tracktion::engine::ValueTreeObjectList<Cable>(site.getState()), /*pathTask (*this),*/ SynthSection("cableView")
 {
     setInterceptsMouseClicks (false,false);

@@ -34,7 +34,7 @@ public:
     // Static function that returns a pointer to a DirectPreparation object
     static PreparationSection* createDirectSection(ValueTree v, OpenGlWrapper &um) {
 
-        return new DirectPreparation(std::make_unique<DirectProcessor>(), v, um);
+        return new DirectPreparation(std::make_unique<DirectProcessor>(v), v, um);
     }
 
 //    void portClicked(const juce::Point<int>& pos

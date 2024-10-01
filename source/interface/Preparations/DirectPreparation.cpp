@@ -29,7 +29,8 @@ DirectPreparation::DirectPreparation (std::unique_ptr<DirectProcessor> p,
     proc.getStateInformation(data);
     auto xml = juce::parseXML(data.toString());
 //auto xml = AudioProcessor::getXmlF(data.getData(), (int)data.getSize());
-    state.addChild(ValueTree::fromXml(*xml),0,nullptr);
+    if (!state.getChild(0).isValid())
+        state.addChild(ValueTree::fromXml(*xml),0,nullptr);
     DBG(state.toXmlString());
     DBG("add processor params");
 }

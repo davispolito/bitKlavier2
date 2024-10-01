@@ -8,6 +8,7 @@
 #include <juce_core/juce_core.h>
 #include <juce_data_structures/juce_data_structures.h>
 #include <tracktion_engine.h>
+#include "Identifiers.h"
 struct UserPreferences : private tracktion::engine::ValueTreeAllEventListener
 {
 public:
@@ -30,6 +31,9 @@ public:
         juce::String path_to_samples = "~/Library/Application Support/bitklavier/samples";
 
         tree.setProperty("default_sample_path", path_to_samples, nullptr);
+        juce::ValueTree a (IDs::midiPrefs);
+        if(!tree.getChildWithName(IDs::midiInput).isValid())
+            tree.appendChild(a, nullptr);
     }
 
     void valueTreeChanged() override { file.replaceWithText(tree.toXmlString()); }

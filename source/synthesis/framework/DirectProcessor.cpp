@@ -7,7 +7,7 @@
 #include "common.h"
 #include "Synthesiser/Sample.h"
 #include <chowdsp_serialization/chowdsp_serialization.h>
-DirectProcessor::DirectProcessor() : PluginBase(nullptr, directBusLayout())
+DirectProcessor::DirectProcessor(const ValueTree &v) : PluginBase(v, nullptr, directBusLayout())
 {
     for (int i = 0; i < 300; i++)
     {

@@ -31,7 +31,7 @@ namespace {
   }
 } // namespace
 
-MidiManager::MidiManager(MidiKeyboardState* keyboard_state,
+MidiManager::MidiManager(MidiKeyboardState* keyboard_state, const ValueTree &v,
                           Listener* listener) :
      keyboard_state_(keyboard_state),
     listener_(listener), armed_value_(nullptr),

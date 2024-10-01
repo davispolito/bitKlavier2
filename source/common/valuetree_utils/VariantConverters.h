@@ -4,8 +4,7 @@
 
 #ifndef BITKLAVIER2_VARIANTCONVERTERS_H
 #define BITKLAVIER2_VARIANTCONVERTERS_H
-
-#include <JuceHeader.h>
+#include <juce_audio_processors/juce_audio_processors.h>
 namespace juce {
     template<>
     struct VariantConverter<juce::AudioProcessorGraph::NodeID> final

@@ -51,7 +51,6 @@ class SynthGuiInterface {
     bitklavier::mono_float getControlValue(const std::string& name);
 
 
-
     void setFocus();
     void notifyChange();
     void notifyFresh();

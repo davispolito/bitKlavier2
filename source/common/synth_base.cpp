@@ -37,7 +37,8 @@ SynthBase::SynthBase() : expired_(false) {
 
 
   keyboard_state_ = std::make_unique<MidiKeyboardState>();
-  midi_manager_ = std::make_unique<MidiManager>( keyboard_state_.get(), this);
+  ValueTree v;
+  midi_manager_ = std::make_unique<MidiManager>( keyboard_state_.get(),v ,this);
 
   last_played_note_ = 0.0f;
   last_num_pressed_ = 0;

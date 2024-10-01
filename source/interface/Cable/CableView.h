@@ -7,11 +7,10 @@
 
 
 #pragma once
-
+#include "valuetree_utils/VariantConverters.h"
 #include <JuceHeader.h>
 #include "Cable.h"
 #include "PreparationSection.h"
-#include "Connection.h"
 
 class ConstructionSite;
 class CableView :
