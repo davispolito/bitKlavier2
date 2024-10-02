@@ -20,7 +20,7 @@
 // the base class members and private TempoPreparation member proc with an initialization list.
 TempoPreparation::TempoPreparation (std::unique_ptr<TempoProcessor> p,
                                               juce::ValueTree v, OpenGlWrapper& um) :
-        PreparationSection(juce::String("tempo"), v, um),
+        PreparationSection(juce::String("tempo"), v, um,p.get()),
         proc(*p.get()),
         _proc_ptr(std::move(p))
 {

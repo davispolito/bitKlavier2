@@ -31,11 +31,11 @@ namespace {
   }
 } // namespace
 
-MidiManager::MidiManager(MidiKeyboardState* keyboard_state, const ValueTree &v,
-                          Listener* listener) :
+MidiManager::MidiManager(MidiKeyboardState* keyboard_state, AudioDeviceManager* manager, const ValueTree &v,
+                          Listener* listener) : tracktion::engine::ValueTreeObjectList<bitklavier::MidiDeviceWrapper>(v),
      keyboard_state_(keyboard_state),
     listener_(listener), armed_value_(nullptr),
-    msb_pressure_values_(), msb_slide_values_() {
+    msb_pressure_values_(), msb_slide_values_() , manager(manager){
   //engine_ = synth_->get//engine();
   current_bank_ = -1;
   current_folder_ = -1;
@@ -48,6 +48,11 @@ MidiManager::MidiManager(MidiKeyboardState* keyboard_state, const ValueTree &v,
 
   mpe_enabled_ = false;
   mpe_zone_layout_.setLowerZone(bitklavier::kNumMidiChannels - 1);
+    rebuildObjects();
+    for(auto obj: objects)
+    {
+        manager->addMidiInputDeviceCallback(obj->identifier, this);
+    }
 }
 
 MidiManager::~MidiManager() {

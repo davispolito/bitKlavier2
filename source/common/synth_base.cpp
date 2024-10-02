@@ -24,7 +24,7 @@
 #include "Identifiers.h"
 #include "Synthesiser/Sample.h"
 #include "load_save.h"
-SynthBase::SynthBase() : expired_(false) {
+SynthBase::SynthBase(AudioDeviceManager * deviceManager) : expired_(false), manager(deviceManager) {
 
   self_reference_ = std::make_shared<SynthBase*>();
   *self_reference_ = this;
@@ -38,7 +38,7 @@ SynthBase::SynthBase() : expired_(false) {
 
   keyboard_state_ = std::make_unique<MidiKeyboardState>();
   ValueTree v;
-  midi_manager_ = std::make_unique<MidiManager>( keyboard_state_.get(),v ,this);
+  midi_manager_ = std::make_unique<MidiManager>( keyboard_state_.get(),manager, v ,this);
 
   last_played_note_ = 0.0f;
   last_num_pressed_ = 0;
@@ -47,7 +47,7 @@ SynthBase::SynthBase() : expired_(false) {
 
 
 
-  Startup::doStartupChecks(midi_manager_.get());
+  Startup::doStartupChecks();
   tree = ValueTree(IDs::GALLERY);
   tree.addListener(this);
 }

@@ -12,7 +12,7 @@
 // the base class members and private ResonancePreparation member proc with an initialization list.
 ResonancePreparation::ResonancePreparation (std::unique_ptr<ResonanceProcessor> p,
                                       juce::ValueTree v, OpenGlWrapper& um) :
-        PreparationSection(juce::String("resonance"), v, um),
+        PreparationSection(juce::String("resonance"), v, um,p.get()),
         proc(*p.get()),
         _proc_ptr(std::move(p))
 {

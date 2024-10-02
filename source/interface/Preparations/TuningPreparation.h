@@ -14,7 +14,7 @@
 #include "TuningProcessor.h"
 #include "PreparationSection.h"
 #include "popup_browser.h"
-
+#include "FullInterface.h"
 /************************************************************************************/
 /*                              CLASS: OpenGlSlider                                 */
 /************************************************************************************/
@@ -36,9 +36,9 @@ public:
     ~TuningPreparation();
 
     // Static function that returns a pointer to a TuningPreparation object
-    static PreparationSection* createTuningSection(ValueTree v, OpenGlWrapper &um) {
+    static PreparationSection* createTuningSection(ValueTree v, SynthGuiInterface* interface) {
 
-        return new TuningPreparation(std::make_unique<TuningProcessor>(), v, um);
+        return new TuningPreparation(std::make_unique<TuningProcessor>(), v, interface->getGui()->open_gl_);
     }
 
     // Public function definitions for the TuningPreparation class, which override functions

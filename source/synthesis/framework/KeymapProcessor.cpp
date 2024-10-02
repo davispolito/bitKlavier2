@@ -4,7 +4,7 @@
 
 #include "KeymapProcessor.h"
 #include "common.h"
-KeymapProcessor::KeymapProcessor() : PluginBase(nullptr, keymapBusLayout()), _midi(std::make_unique<MidiManager>(&keyboard_state))
+KeymapProcessor::KeymapProcessor(const ValueTree& v, AudioDeviceManager* manager) : PluginBase(v, nullptr, keymapBusLayout()), _midi(std::make_unique<MidiManager>(&keyboard_state,manager,v))
 {
 
 }

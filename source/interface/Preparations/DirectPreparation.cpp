@@ -11,7 +11,7 @@
 // the base class members and private DirectPreparation member proc with an initialization list.
 DirectPreparation::DirectPreparation (std::unique_ptr<DirectProcessor> p,
     juce::ValueTree v, OpenGlWrapper& um) :
-                         PreparationSection(juce::String("direct"), v, um),
+                         PreparationSection(juce::String("direct"), v, um,p.get()),
                          proc(*p.get()),
                          _proc_ptr(std::move(p))
 {
@@ -26,12 +26,12 @@ DirectPreparation::DirectPreparation (std::unique_ptr<DirectProcessor> p,
     addAndMakeVisible (item.get());
     setSkinOverride (Skin::kDirect);
     MemoryBlock data;
-    proc.getStateInformation(data);
-    auto xml = juce::parseXML(data.toString());
-//auto xml = AudioProcessor::getXmlF(data.getData(), (int)data.getSize());
-    if (!state.getChild(0).isValid())
-        state.addChild(ValueTree::fromXml(*xml),0,nullptr);
-    DBG(state.toXmlString());
+//    proc.getStateInformation(data);
+//    auto xml = juce::parseXML(data.toString());
+////auto xml = AudioProcessor::getXmlF(data.getData(), (int)data.getSize());
+//    if (!state.getChild(0).isValid())
+//        state.addChild(ValueTree::fromXml(*xml),0,nullptr);
+//    DBG(state.toXmlString());
     DBG("add processor params");
 }
 

@@ -6,7 +6,7 @@
 #include "FullInterface.h"
 KeymapPreparation::KeymapPreparation (std::unique_ptr<KeymapProcessor> p,
                                       juce::ValueTree v, OpenGlWrapper& um) :
-        PreparationSection(juce::String("keymap"), v, um),
+        PreparationSection(juce::String("keymap"), v, um,p.get()),
         proc(*p.get()),
         _proc_ptr(std::move(p))
 {
@@ -71,7 +71,7 @@ void KeymapPreparation::KeymapPopup::resized()
         AudioDeviceManager* device_manager = parent->getAudioDeviceManager();
         if (device_manager) {
             midi_selector_ = std::make_unique<OpenGlMidiSelector>
-                    (*proc._midi.get(), proc._midi->enabledMidiInputs, *device_manager);
+                    (proc.v);
             addAndMakeVisible(midi_selector_.get());
             addOpenGlComponent(midi_selector_->getImageComponent());
             parent->getGui()->open_gl_.initOpenGlComp.try_enqueue([this]

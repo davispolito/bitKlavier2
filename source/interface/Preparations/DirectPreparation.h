@@ -9,7 +9,7 @@
 #include "PreparationSection.h"
 #include "popup_browser.h"
 #include "ParameterView/ParametersView.h"
-
+#include "FullInterface.h"
 /************************************************************************************/
 /*                              CLASS: OpenGlSlider                                 */
 /************************************************************************************/
@@ -32,9 +32,9 @@ public:
     ~DirectPreparation();
 
     // Static function that returns a pointer to a DirectPreparation object
-    static PreparationSection* createDirectSection(ValueTree v, OpenGlWrapper &um) {
+    static PreparationSection* createDirectSection(ValueTree v, SynthGuiInterface* interface) {
 
-        return new DirectPreparation(std::make_unique<DirectProcessor>(v), v, um);
+        return new DirectPreparation(std::make_unique<DirectProcessor>(v), v, interface->getGui()->open_gl_);
     }
 
 //    void portClicked(const juce::Point<int>& pos

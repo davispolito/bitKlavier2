@@ -11,7 +11,7 @@
 #include "Cable/CableView.h"
 
 class SynthGuiInterface;
-typedef Loki::Factory<PreparationSection, int,  juce::ValueTree,  OpenGlWrapper&> PreparationFactory;
+typedef Loki::Factory<PreparationSection, int,  juce::ValueTree,  SynthGuiInterface*> PreparationFactory;
 class ConstructionSite : public SynthSection,
                          public tracktion::engine::ValueTreeObjectList<PreparationSection>,private KeyListener,
                          public DragAndDropContainer,

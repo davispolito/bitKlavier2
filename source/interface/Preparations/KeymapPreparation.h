@@ -8,49 +8,24 @@
 #include "KeymapProcessor.h"
 #include "PreparationSection.h"
 #include "popup_browser.h"
-
+#include "FullInterface.h"
 class OpenGlSlider;
 
 class MidiInputSelectorComponentListBox : public ListBox,
                                                                               private ListBoxModel,
-private ChangeListener,  public tracktion::engine::ValueTreeObjectList<bitklavier::MidiDeviceWrapper>
+private ChangeListener
 {
 public:
-    MidiInputSelectorComponentListBox (MidiInputCallback& midi, const ValueTree &v,
-                                       AudioDeviceManager& manager)
+    MidiInputSelectorComponentListBox (const ValueTree &v)
             : ListBox ({}, nullptr),
-            midi(midi),
-            manager(manager),
-              tracktion::engine::ValueTreeObjectList<bitklavier::MidiDeviceWrapper>(v)
+            v(v)
     {
         updateDevices();
         setModel (this);
         setOutlineThickness (1);
     }
 
-    bitklavier::MidiDeviceWrapper* createNewObject(const juce::ValueTree& v) override
-    {
-        return new bitklavier::MidiDeviceWrapper(v);
-    }
-    void deleteObject (bitklavier::MidiDeviceWrapper* at) override
-    {
-        manager.removeMidiInputDeviceCallback(at->identifier, &midi);
-    }
-    void newObjectAdded (bitklavier::MidiDeviceWrapper* obj) override
-    {
-        manager.addMidiInputDeviceCallback(obj->identifier, &midi);
-    }
-    void objectRemoved (bitklavier::MidiDeviceWrapper*) override     { resized();}//resized(); }
-    void objectOrderChanged() override              {resized(); }//resized(); }
-    // void valueTreeParentChanged (juce::ValueTree&) override;
-    //void valueTreeRedirected (juce::ValueTree&) override ;
-    void valueTreePropertyChanged (juce::ValueTree& v, const juce::Identifier& i) override {
-        tracktion::engine::ValueTreeObjectList<bitklavier::MidiDeviceWrapper>::valueTreePropertyChanged(v, i);
-    }
-    bool isSuitableType (const juce::ValueTree& v) const override
-    {
-        return v.hasType (IDs::midiInput);
-    }
+
     void updateDevices()
     {
         items = MidiInput::getAvailableDevices();
@@ -142,6 +117,7 @@ public:
     }
 
 private:
+    ValueTree v;
     //==============================================================================
     void changeListenerCallback (ChangeBroadcaster*) override
     {
@@ -150,16 +126,19 @@ private:
     const String noItemsMessage;
     Array<MidiDeviceInfo> items;
     //std::vector<bitklavier::MidiDeviceWrapper> &enabledMidiInputs;
-    MidiInputCallback& midi;
-    AudioDeviceManager& manager;
+
     bool isMidiInputDeviceEnabled (const String& identifier)
     {
-        for (auto mi : objects) {
-
-            if (mi->identifier == identifier) {
-                return true;
-            }
+        if (auto child = v.getChildWithProperty(IDs::midiDeviceId, identifier); child.isValid())
+        {
+           return true;
         }
+//        for (auto mi : objects) {
+//
+//            if (mi->identifier == identifier) {
+//                return true;
+//            }
+//        }
         return false;
     }
     void flipEnablement (const int row)
@@ -171,12 +150,13 @@ private:
             {
 
                ValueTree t(IDs::midiInput);
-               parent.appendChild(t, nullptr);
+               t.setProperty(IDs::midiDeviceId, identifier,nullptr);
+               v.appendChild(t, nullptr);
             }
             else
             {
 
-                parent.removeChild(parent.getChildWithProperty(IDs::midiDeviceId, identifier), nullptr);
+                v.removeChild(v.getChildWithProperty(IDs::midiDeviceId, identifier), nullptr);
 
             }
 
@@ -196,10 +176,8 @@ private:
 
 class OpenGlMidiSelector : public OpenGlAutoImageComponent<MidiInputSelectorComponentListBox> {
 public:
-    OpenGlMidiSelector(MidiInputCallback& midi, const ValueTree & v,
-            AudioDeviceManager& manager) :
-            OpenGlAutoImageComponent<MidiInputSelectorComponentListBox>(midi,v,
-                                                                         manager) {
+    OpenGlMidiSelector(const ValueTree& v) :
+            OpenGlAutoImageComponent<MidiInputSelectorComponentListBox>(v) {
         image_component_ = std::make_shared<OpenGlImageComponent>();
         setLookAndFeel(DefaultLookAndFeel::instance());
         image_component_->setComponent(this);
@@ -225,9 +203,9 @@ public:
     ~KeymapPreparation();
 
 // Static function that returns a pointer to a KeymapPreparation object
-    static PreparationSection *createKeymapSection(ValueTree v, OpenGlWrapper &um) {
+    static PreparationSection *createKeymapSection(ValueTree v, SynthGuiInterface* interface) {
 
-        return new KeymapPreparation(std::make_unique<KeymapProcessor>(), v, um);
+        return new KeymapPreparation(std::make_unique<KeymapProcessor>(v,interface->getAudioDeviceManager()), v, interface->getGui()->open_gl_);
     }
 
 // Public function definitions for the KeymapPreparation class, which override functions

@@ -13,7 +13,7 @@
 #include "SynchronicProcessor.h"
 #include "PreparationSection.h"
 #include "popup_browser.h"
-
+#include "FullInterface.h"
 /************************************************************************************/
 /*                              CLASS: OpenGlSlider                                 */
 /************************************************************************************/
@@ -35,9 +35,9 @@ public:
     ~SynchronicPreparation();
 
     // Static function that returns a pointer to a SynchronicPreparation object
-    static PreparationSection* createSynchronicSection(ValueTree v, OpenGlWrapper &um) {
+    static PreparationSection* createSynchronicSection(ValueTree v, SynthGuiInterface* interface) {
 
-        return new SynchronicPreparation(std::make_unique<SynchronicProcessor>(), v, um);
+        return new SynchronicPreparation(std::make_unique<SynchronicProcessor>(), v, interface->getGui()->open_gl_);
     }
 
     // Public function definitions for the SynchronicPreparation class, which override functions

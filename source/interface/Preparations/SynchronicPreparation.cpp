@@ -16,7 +16,7 @@
 // the base class members and private SynchronicPreparation member proc with an initialization list.
 SynchronicPreparation::SynchronicPreparation (std::unique_ptr<SynchronicProcessor> p,
                                             juce::ValueTree v, OpenGlWrapper& um) :
-        PreparationSection(juce::String("synchronic"), v, um),
+        PreparationSection(juce::String("synchronic"), v, um,p.get()),
         proc(*p.get()),
         _proc_ptr(std::move(p))
 {

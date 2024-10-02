@@ -6,7 +6,7 @@
 #include "synth_gui_interface.h"
 
 #include "FullInterface.h"
-PreparationSection::PreparationSection(String name, ValueTree v, OpenGlWrapper &open_gl) : tracktion::engine::ValueTreeObjectList<BKPort>(v), SynthSection(name), state(v), _open_gl(open_gl)
+PreparationSection::PreparationSection(String name, ValueTree v, OpenGlWrapper &open_gl, juce::AudioProcessor* proc) : tracktion::engine::ValueTreeObjectList<BKPort>(v), SynthSection(name), state(v), _open_gl(open_gl), _proc(proc)
 {
     //_parent = findParentComponentOfClass<SynthGuiInterface>();
     x.referTo(v,IDs::x,nullptr);
@@ -36,6 +36,13 @@ PreparationSection::PreparationSection(String name, ValueTree v, OpenGlWrapper &
             this->resized();
         });
     }
+    MemoryBlock data;
+    proc->getStateInformation(data);
+    auto xml = juce::parseXML(data.toString());
+//auto xml = AudioProcessor::getXmlF(data.getData(), (int)data.getSize());
+    if (!state.getChild(0).isValid())
+        state.addChild(ValueTree::fromXml(*xml),0,nullptr);
+    DBG(state.toXmlString());
 
 }
 

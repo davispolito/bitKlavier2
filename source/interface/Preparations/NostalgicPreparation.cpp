@@ -11,7 +11,7 @@
 // the base class members and private NostalgicPreparation member proc with an initialization list.
 NostalgicPreparation::NostalgicPreparation (std::unique_ptr<NostalgicProcessor> p,
                                       juce::ValueTree v, OpenGlWrapper& um) :
-        PreparationSection(juce::String("Nostalgic"), v, um),
+        PreparationSection(juce::String("Nostalgic"), v, um,p.get()),
         proc(*p.get()),
         _proc_ptr(std::move(p))
 {

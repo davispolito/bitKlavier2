@@ -41,6 +41,7 @@ class MidiMessageCollector {
 
 #endif
 #include "Identifiers.h"
+#include "tracktion_engine.h"
 class SynthBase;
 
 namespace bitklavier {
@@ -59,7 +60,7 @@ namespace bitklavier
 {
 
 }
-class MidiManager : public MidiInputCallback {
+class MidiManager : public MidiInputCallback, public tracktion::engine::ValueTreeObjectList<bitklavier::MidiDeviceWrapper> {
   public:
     typedef std::map<int, std::map<std::string, const bitklavier::ValueDetails*>> midi_map;
 
@@ -97,10 +98,32 @@ class MidiManager : public MidiInputCallback {
         virtual void presetChangedThroughMidi(juce::File preset) = 0;
     };
 
-    MidiManager( juce::MidiKeyboardState* keyboard_state, const ValueTree &v={},
+    MidiManager( juce::MidiKeyboardState* keyboard_state, AudioDeviceManager *manager, const ValueTree &v={},
                  Listener* listener = nullptr);
     virtual ~MidiManager() override;
-
+    bitklavier::MidiDeviceWrapper* createNewObject(const juce::ValueTree& v) override
+    {
+        return new bitklavier::MidiDeviceWrapper(v);
+    }
+    void deleteObject (bitklavier::MidiDeviceWrapper* at) override
+    {
+        manager->removeMidiInputDeviceCallback(at->identifier, this);
+    }
+    void newObjectAdded (bitklavier::MidiDeviceWrapper* obj) override
+    {
+        manager->addMidiInputDeviceCallback(obj->identifier, this);
+    }
+    void objectRemoved (bitklavier::MidiDeviceWrapper*) override     { }//resized(); }
+    void objectOrderChanged() override              { }//resized(); }
+    // void valueTreeParentChanged (juce::ValueTree&) override;
+    //void valueTreeRedirected (juce::ValueTree&) override ;
+    void valueTreePropertyChanged (juce::ValueTree& v, const juce::Identifier& i) override {
+        tracktion::engine::ValueTreeObjectList<bitklavier::MidiDeviceWrapper>::valueTreePropertyChanged(v, i);
+    }
+    bool isSuitableType (const juce::ValueTree& v) const override
+    {
+        return v.hasType (IDs::midiInput);
+    }
     void armMidiLearn(std::string name);
     void cancelMidiLearn();
     void clearMidiLearn(const std::string& name);
@@ -150,8 +173,7 @@ class MidiManager : public MidiInputCallback {
       juce::File preset;
     };
     juce::MidiMessageCollector midi_collector_;
-    ValueTree enabledMidiInputs;
-
+    AudioDeviceManager *manager;
 
   protected:
     void readMpeMessage(const juce::MidiMessage& message);

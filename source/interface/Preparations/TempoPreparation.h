@@ -13,7 +13,7 @@
 #include "TempoProcessor.h"
 #include "PreparationSection.h"
 #include "popup_browser.h"
-
+#include "FullInterface.h"
 /************************************************************************************/
 /*                              CLASS: OpenGlSlider                                 */
 /************************************************************************************/
@@ -35,9 +35,9 @@ public:
     ~TempoPreparation();
 
     // Static function that returns a pointer to a TempoPreparation object
-    static PreparationSection* createTempoSection(ValueTree v, OpenGlWrapper &um) {
+    static PreparationSection* createTempoSection(ValueTree v, SynthGuiInterface* interface) {
 
-        return new TempoPreparation(std::make_unique<TempoProcessor>(), v, um);
+        return new TempoPreparation(std::make_unique<TempoProcessor>(), v, interface->getGui()->open_gl_);
     }
 
     // Public function definitions for the TempoPreparation class, which override functions

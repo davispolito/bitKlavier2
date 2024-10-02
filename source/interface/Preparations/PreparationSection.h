@@ -73,7 +73,7 @@ public:
     void addListener(Listener* listener) { listeners_.push_back(listener); }
     std::vector<Listener*> listeners_;
     // Constructor Declaration
-    PreparationSection(juce::String name, juce::ValueTree v, OpenGlWrapper &um);
+    PreparationSection(juce::String name, juce::ValueTree v, OpenGlWrapper &um, juce::AudioProcessor* proc);
 
     // Destructor Declaration
     ~PreparationSection();
@@ -355,6 +355,7 @@ protected:
     int portSize = 16;
 private:
     bool isSelected = true;
+    juce::AudioProcessor* _proc;
 
     //void valueTreePropertyChanged (juce::ValueTree& v, const juce::Identifier& i) override;
     //SynthGuiInterface *_parent;

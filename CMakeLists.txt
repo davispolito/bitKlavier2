@@ -9,7 +9,7 @@ set(JSON_BuildTests OFF CACHE INTERNAL "")
 # This tells cmake we have goodies in the /cmake folder
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 include (PamplejuceVersion)
-
+add_compile_options(-w)
 
 # Change me!
 # This is the internal name of the project and the name of JUCE's shared code "target"

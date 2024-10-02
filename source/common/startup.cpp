@@ -15,9 +15,9 @@
  */
 
 #include "startup.h"
-#include "synth_base.h"
+//#include "synth_base.h"
 
-void Startup::doStartupChecks(MidiManager* midi_manager) {
+void Startup::doStartupChecks(/*MidiManager* midi_manager*/) {
 
 
 

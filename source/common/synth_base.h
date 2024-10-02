@@ -33,7 +33,7 @@ class SynthBase : public MidiManager::Listener, public juce::ValueTree::Listener
     static constexpr float kOutputWindowMinNote = 16.0f;
     static constexpr float kOutputWindowMaxNote = 128.0f;
 
-    SynthBase();
+    SynthBase(AudioDeviceManager* ={});
     virtual ~SynthBase();
 
 
@@ -101,8 +101,9 @@ class SynthBase : public MidiManager::Listener, public juce::ValueTree::Listener
       std::string control_name;
       bitklavier::mono_float value;
     };
+    AudioDeviceManager* manager;
 
-    juce::AudioProcessorGraph::Node::Ptr addProcessor(std::unique_ptr<juce::AudioProcessor> processor, juce::AudioProcessorGraph::NodeID id ={});
+            juce::AudioProcessorGraph::Node::Ptr addProcessor(std::unique_ptr<juce::AudioProcessor> processor, juce::AudioProcessorGraph::NodeID id ={});
     juce::AudioProcessorGraph::Node * getNodeForId(AudioProcessorGraph::NodeID id);
     void addConnection(AudioProcessorGraph::Connection& connect);
 

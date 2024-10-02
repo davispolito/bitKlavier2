@@ -27,7 +27,7 @@ class MidiManager;
 
 class Startup {
   public:
-    static void doStartupChecks(MidiManager* midi_manager);
+    static void doStartupChecks(/*MidiManager* midi_manager*/);
     static bool isComputerCompatible();
 
   private:

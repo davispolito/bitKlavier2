@@ -12,7 +12,7 @@
 #include "BlendronicProcessor.h"
 #include "PreparationSection.h"
 #include "popup_browser.h"
-
+#include "FullInterface.h"
 /************************************************************************************/
 /*                              CLASS: OpenGlSlider                                 */
 /************************************************************************************/
@@ -34,12 +34,10 @@ public:
     ~BlendronicPreparation();
 
     // Static function that returns a pointer to a BlendronicPreparation object
-    static PreparationSection* createBlendronicSection(ValueTree v, OpenGlWrapper &um) {
+    static PreparationSection* createBlendronicSection(ValueTree v, SynthGuiInterface* interface) {
 
-        return new BlendronicPreparation(std::make_unique<BlendronicProcessor>(), v, um);
-    }
-
-    // Public function definitions for the BlendronicPreparation class, which override functions
+        return new BlendronicPreparation(std::make_unique<BlendronicProcessor>(), v, interface->getGui()->open_gl_);
+    }    // Public function definitions for the BlendronicPreparation class, which override functions
     // in the PreparationSection base class
     std::shared_ptr<SynthSection> getPrepPopup() override;
     void resized() override;

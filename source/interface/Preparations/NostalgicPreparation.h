@@ -12,7 +12,7 @@
 #include "NostalgicProcessor.h"
 #include "PreparationSection.h"
 #include "popup_browser.h"
-
+#include "FullInterface.h"
 /************************************************************************************/
 /*                              CLASS: OpenGlSlider                                 */
 /************************************************************************************/
@@ -34,12 +34,10 @@ public:
     ~NostalgicPreparation();
 
     // Static function that returns a pointer to a NostalgicPreparation object
-    static PreparationSection* createNostalgicSection(ValueTree v, OpenGlWrapper &um) {
+    static PreparationSection* createNostalgicSection(ValueTree v, SynthGuiInterface* interface) {
 
-        return new NostalgicPreparation(std::make_unique<NostalgicProcessor>(), v, um);
-    }
-
-    // Public function definitions for the NostalgicPreparation class, which override functions
+        return new NostalgicPreparation(std::make_unique<NostalgicProcessor>(), v, interface->getGui()->open_gl_);
+    }    // Public function definitions for the NostalgicPreparation class, which override functions
     // in the PreparationSection base class
     std::shared_ptr<SynthSection> getPrepPopup() override;
     void resized() override;

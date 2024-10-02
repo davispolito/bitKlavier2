@@ -17,7 +17,7 @@
 // the base class members and private TuningPreparation member proc with an initialization list.
 TuningPreparation::TuningPreparation (std::unique_ptr<TuningProcessor> p,
                                     juce::ValueTree v, OpenGlWrapper& um) :
-        PreparationSection(juce::String("tuning"), v, um),
+        PreparationSection(juce::String("tuning"), v, um,p.get()),
         proc(*p.get()),
         _proc_ptr(std::move(p))
 {

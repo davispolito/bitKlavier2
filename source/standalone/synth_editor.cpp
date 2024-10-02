@@ -29,7 +29,7 @@
 #include <memory>
 
 
-SynthEditor::SynthEditor(bool use_gui) : SynthGuiInterface(this, use_gui) {
+SynthEditor::SynthEditor(bool use_gui) : SynthGuiInterface(this, use_gui), SynthBase(&deviceManager) {
   static constexpr int kHeightBuffer = 50;
 #if PERFETTO
   MelatoninPerfetto::get().beginSession();

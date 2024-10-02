@@ -75,9 +75,9 @@ void ConstructionSite::deleteObject(PreparationSection *at)  {
 
 PreparationSection* ConstructionSite::createNewObject (const juce::ValueTree& v)
 {
-
-    auto s = prepFactory.CreateObject((int)v.getProperty(IDs::type), v, open_gl);
     SynthGuiInterface* parent = findParentComponentOfClass<SynthGuiInterface>();
+    auto s = prepFactory.CreateObject((int)v.getProperty(IDs::type), v, parent);
+
 //    last_proc = s->getProcessor();
     addSubSection(s);
     Skin default_skin;

@@ -110,7 +110,7 @@ namespace bitklavier {
 
         virtual juce::String getWrapperTypeString() const;
         bool supportsParameterModulation() const;
-
+        juce::ValueTree v;
     protected:
 #if JUCE_MODULE_AVAILABLE_chowdsp_plugin_state
         PluginStateType state;
@@ -141,7 +141,7 @@ namespace bitklavier {
 
     CHOWDSP_CHECK_HAS_STATIC_METHOD (HasAddParameters, addParameters)
 #endif
-    juce::ValueTree v;
+
     private:
         JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PluginBase)
     };

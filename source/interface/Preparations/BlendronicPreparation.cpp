@@ -12,7 +12,7 @@
 // the base class members and private BlendronicPreparation member proc with an initialization list.
 BlendronicPreparation::BlendronicPreparation (std::unique_ptr<BlendronicProcessor> p,
                                             juce::ValueTree v, OpenGlWrapper& um) :
-        PreparationSection(juce::String("blendronic"), v, um),
+        PreparationSection(juce::String("blendronic"), v, um,p.get()),
         proc(*p.get()),
         _proc_ptr(std::move(p))
 {

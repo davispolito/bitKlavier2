@@ -12,7 +12,7 @@
 #include "ResonanceProcessor.h"
 #include "PreparationSection.h"
 #include "popup_browser.h"
-
+#include "FullInterface.h"
 /************************************************************************************/
 /*                              CLASS: OpenGlSlider                                 */
 /************************************************************************************/
@@ -34,9 +34,9 @@ public:
     ~ResonancePreparation();
 
     // Static function that returns a pointer to a ResonancePreparation object
-    static PreparationSection* createResonanceSection(ValueTree v, OpenGlWrapper &um) {
+    static PreparationSection* createResonanceSection(ValueTree v, SynthGuiInterface* interface) {
 
-        return new ResonancePreparation(std::make_unique<ResonanceProcessor>(), v, um);
+        return new ResonancePreparation(std::make_unique<ResonanceProcessor>(), v, interface->getGui()->open_gl_);
     }
 
     // Public function definitions for the ResonancePreparation class, which override functions

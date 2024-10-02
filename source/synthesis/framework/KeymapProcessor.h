@@ -11,44 +11,46 @@
 #include <chowdsp_plugin_state/chowdsp_plugin_state.h>
 #include <juce_audio_devices/juce_audio_devices.h>
 #include "midi_manager.h"
+#include "PreparationStateImpl.h"
+#include "PluginBase.h"
 struct KeymapParams : chowdsp::ParamHolder
 {
 
 
     /****************************************************************************************/
 
-    KeymapParams()
+    KeymapParams() : chowdsp::ParamHolder("keymap")
     {
-        add (gainParam,
-             sustainParam,
-             attackParam
-        );
+//        add (gainParam,
+//             sustainParam,
+//             attackParam
+//        );
     }
 
-    // Gain param
-    chowdsp::GainDBParameter::Ptr gainParam {
-            juce::ParameterID { "gain", 100 },
-            "Gain",
-            juce::NormalisableRange { -30.0f, 0.0f },
-            -24.0f
-    };
-
-    // Float param
-    chowdsp::FloatParameter::Ptr sustainParam {
-            juce::ParameterID { "sustain", 100 },
-            "Sustain",
-            chowdsp::ParamUtils::createNormalisableRange (20.0f, 20000.0f, 2000.0f),
-            1000.0f,
-            &chowdsp::ParamUtils::floatValToString,
-            &chowdsp::ParamUtils::stringToFloatVal
-    };
-
-    chowdsp::TimeMsParameter::Ptr attackParam {
-            juce::ParameterID { "attack", 100 },
-            "attack",
-            chowdsp::ParamUtils::createNormalisableRange (2.01f, 10.0f, 4.0f),
-            3.5f,
-    };
+//    // Gain param
+//    chowdsp::GainDBParameter::Ptr gainParam {
+//            juce::ParameterID { "gain", 100 },
+//            "Gain",
+//            juce::NormalisableRange { -30.0f, 0.0f },
+//            -24.0f
+//    };
+//
+//    // Float param
+//    chowdsp::FloatParameter::Ptr sustainParam {
+//            juce::ParameterID { "sustain", 100 },
+//            "Sustain",
+//            chowdsp::ParamUtils::createNormalisableRange (20.0f, 20000.0f, 2000.0f),
+//            1000.0f,
+//            &chowdsp::ParamUtils::floatValToString,
+//            &chowdsp::ParamUtils::stringToFloatVal
+//    };
+//
+//    chowdsp::TimeMsParameter::Ptr attackParam {
+//            juce::ParameterID { "attack", 100 },
+//            "attack",
+//            chowdsp::ParamUtils::createNormalisableRange (2.01f, 10.0f, 4.0f),
+//            3.5f,
+//    };
 
 
     /****************************************************************************************/
@@ -64,10 +66,10 @@ struct KeymapNonParameterState : chowdsp::NonParamState
     //chowdsp::StateValue<juce::Point<int>> prepPoint { "prep_point", { 300, 500 } };
 };
 
-class KeymapProcessor : public chowdsp::PluginBase<chowdsp::PluginStateImpl<KeymapParams,KeymapNonParameterState,chowdsp::XMLSerializer>>
+class KeymapProcessor : public bitklavier::PluginBase<bitklavier::PreparationStateImpl<KeymapParams,KeymapNonParameterState,chowdsp::XMLSerializer>>
 {
 public:
-    KeymapProcessor();
+    KeymapProcessor(const ValueTree& v, AudioDeviceManager* manager);
 
     void prepareToPlay (double sampleRate, int samplesPerBlock) override;
     void releaseResources() override {}
