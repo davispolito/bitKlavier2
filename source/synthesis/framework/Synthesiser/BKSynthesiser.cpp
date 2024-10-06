@@ -249,7 +249,7 @@ void BKSynthesiser::startVoice (BKSamplerVoice* const voice,
                               const int midiNoteNumber,
                               const float velocity)
 {
-    if (voice != nullptr && sound != nullptr)
+    //if (voice != nullptr && sound != nullptr)
     {
         if (voice->currentlyPlayingSound != nullptr)
             voice->stopNote (0.0f, false);

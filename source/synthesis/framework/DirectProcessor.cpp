@@ -20,13 +20,13 @@ DirectProcessor::DirectProcessor(const ValueTree &v) : PluginBase(v, nullptr, di
     adsrCallbacks += {state.addParameterListener(*state.params.attackParam,
                                                  chowdsp::ParameterListenerThread::AudioThread,
                                                  [this] {
-                                                     synth.globalADSR.attack = state.params.attackParam->get();
+                                                     synth.globalADSR.attack = state.params.attackParam->get() * .001; //should fix, not do hard conversions between ms and seconds here
                                                      DBG("attack: " + String(state.params.attackParam->get()));
                                                  }),
                       state.addParameterListener(*state.params.decayParam,
                                                  chowdsp::ParameterListenerThread::AudioThread,
                                                  [this] {
-                                                     synth.globalADSR.decay = state.params.decayParam->get();
+                                                     synth.globalADSR.decay = state.params.decayParam->get() * .001;
                                                      DBG("decay: " + String(state.params.decayParam->get()));
                                                  }),
                       state.addParameterListener(*state.params.sustainParam,
@@ -38,7 +38,7 @@ DirectProcessor::DirectProcessor(const ValueTree &v) : PluginBase(v, nullptr, di
                       state.addParameterListener(*state.params.releaseParam,
                                                  chowdsp::ParameterListenerThread::AudioThread,
                                                  [this] {
-                                                     synth.globalADSR.release = state.params.releaseParam->get();
+                                                     synth.globalADSR.release = state.params.releaseParam->get() * .001;
                                                      DBG("release: " + String(state.params.releaseParam->get()));
                                                  })
     };
