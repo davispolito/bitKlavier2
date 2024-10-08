@@ -98,6 +98,7 @@ public:
     ~SampleLoadManager();
 
     bool loadSamples(int selection, bool isGlobal);
+    Array<File> samplesByPitch(String whichPitch, Array<File> inFiles);
     juce::ThreadPool sampleLoader;
     std::map<juce::String, juce::ReferenceCountedArray<BKSamplerSound<juce::AudioFormatReader>>> sampler_soundset;
     juce::String globalSoundSet;
@@ -123,7 +124,7 @@ public:
                   juce::ThreadPoolJob("sample_loader"),
                   soundset(soundset),
                   loadManager(loadManager),
-    sampleReader(std::move(ptr)), loadType(loadType), manager(manager)
+                  sampleReader(std::move(ptr)), loadType(loadType), manager(manager)
     {
         int numSamplesPerLayer = 29;
         int numHarmSamples = 69;

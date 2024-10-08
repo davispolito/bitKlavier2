@@ -54,6 +54,7 @@ namespace bitklavier {
       void prepareToPlay(double sampleRate, int samplesPerBlock)
       {
           setSampleRate(sampleRate);
+          // DBG("setting sample rate to: " + String(sampleRate));
           setBufferSize(samplesPerBlock);
 
           processorGraph->prepareToPlay (sampleRate, samplesPerBlock);

@@ -79,8 +79,9 @@ public:
 
     double getSampleRate() const { return m_sourceSampleRate; }
     int getLength() const { return m_length; }
-     float getRMS()
-     {
+
+    float getRMS()
+    {
         float dBFSLevel = 0.0f;
          for (int i = 0; i < m_data.getNumChannels(); ++i)
          {
@@ -89,7 +90,8 @@ public:
          dBFSLevel *= 1.f/m_data.getNumChannels();
          dBFSLevel = juce::Decibels::gainToDecibels(dBFSLevel);
          return dBFSLevel;
-     }
+    }
+
     void setStartSample(int startSample){m_startSample = startSample;}
     void setNumSamps(int numSamps) {m_numSamps = numSamps;}
     const std::tuple<const float*, const float*> getBuffer() const  {
@@ -233,9 +235,9 @@ public:
                     const juce::BigInteger& midiVelocities,
                     int numLayers,
                     int layerId,
-                    float dbfsBelow
+                    float dBFSBelow
                     ) :
-                    dbFSBelow(dbfsBelow),
+                    dBFSBelow(dBFSBelow),
                     numLayers(numLayers),
                     layerId(layerId),
                     rootMidiNote(rootMidiNote),
@@ -247,6 +249,7 @@ public:
         // Print the class name and action
         DBG("Create BKSamplerSound");
 
+        dBFSLevel = sample->getRMS();
 
         // Print the standard values
         DBG("soundName: " + soundName);
@@ -255,7 +258,8 @@ public:
         DBG("transpose: " + juce::String(transpose));
         DBG("numLayers: " + juce::String(numLayers));
         DBG("layerId: " + juce::String(layerId));
-        DBG("dbfsBelow: " + juce::String(dbfsBelow));
+        DBG("dbfsLevel: " + juce::String(dBFSLevel));
+        DBG("dbfsBelow: " + juce::String(dBFSBelow));
 
         // Print the highest bit and bit count for midiNotes
         int midiNotesHighestBit = midiNotes.getHighestBit();
@@ -269,7 +273,7 @@ public:
         DBG("midiVelocities Highest Bit: " + juce::String(midiVelocitiesHighestBit));
         DBG("midiVelocities Bit Count: " + juce::String(midiVelocitiesBitCount));
         setCentreFrequencyInHz(mtof(rootMidiNote));
-        dbFSLevel = sample->getRMS();
+
 
     }
     //==============================================================================
@@ -326,8 +330,8 @@ public:
     void setEnvelopeParameters (juce::ADSR::Parameters parametersToUse)    { params = parametersToUse; }
     /** The class is reference-counted, so this is a handy pointer class for it. */
     typedef juce::ReferenceCountedObjectPtr<BKSamplerSound<T>> Ptr;
-    float dbFSLevel;
-    float dbFSBelow;
+    float dBFSLevel; // dBFS value of this velocity layer
+    float dBFSBelow; //// dBFS value of velocity layer below this layer
     int numLayers;
     int layerId;
     int rootMidiNote;

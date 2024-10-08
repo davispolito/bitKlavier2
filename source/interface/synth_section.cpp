@@ -515,6 +515,7 @@ void SynthSection::addButton(OpenGlShapeButton* button, bool show) {
 
 
 void SynthSection::addSlider(SynthSlider* slider, bool show, bool listen) {
+    DBG("adding slider");
   slider_lookup_[slider->getName().toStdString()] = slider;
   all_sliders_[slider->getName().toStdString()] = slider;
   all_sliders_v.push_back(slider);
