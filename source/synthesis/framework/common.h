@@ -27,9 +27,9 @@
 // Debugging.
 #if DEBUG
     #include <cassert>
-    #define BITKLAVIER_ASSERT(x) assert(x)
+    #define _ASSERT(x) assert(x)
 #else
-    #define BITKLAVIER_ASSERT(x) ((void)0)
+    #define _ASSERT(x) ((void)0)
 #endif // DEBUG
 
 #define UNUSED(x) ((void)x)

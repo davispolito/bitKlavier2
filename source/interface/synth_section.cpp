@@ -380,13 +380,13 @@ void SynthSection::renderOpenGlComponents(OpenGlWrapper& open_gl, bool animate) 
       {
           open_gl_component->init(open_gl);
           GLenum gl =  juce::gl::glGetError();
-          BITKLAVIER_ASSERT(gl == juce::gl::GL_NO_ERROR);
+          _ASSERT(gl == juce::gl::GL_NO_ERROR);
       }
     if (open_gl_component->isVisible() && !open_gl_component->isAlwaysOnTop()) {
       open_gl_component->render(open_gl, animate);
       GLenum gl =  juce::gl::glGetError();
       //DBG(String(gl));
-      BITKLAVIER_ASSERT(gl == juce::gl::GL_NO_ERROR);
+      _ASSERT(gl == juce::gl::GL_NO_ERROR);
     }
   }
 
@@ -400,11 +400,11 @@ void SynthSection::renderOpenGlComponents(OpenGlWrapper& open_gl, bool animate) 
       {
           open_gl_component->init(open_gl);
           GLenum gl =  juce::gl::glGetError();
-          BITKLAVIER_ASSERT(gl == juce::gl::GL_NO_ERROR);
+          _ASSERT(gl == juce::gl::GL_NO_ERROR);
       }
     if (open_gl_component->isVisible() && open_gl_component->isAlwaysOnTop()) {
       open_gl_component->render(open_gl, animate);
-      BITKLAVIER_ASSERT(juce::gl::glGetError() == juce::gl::GL_NO_ERROR);
+      _ASSERT(juce::gl::glGetError() == juce::gl::GL_NO_ERROR);
     }
   }
     if(background_)
@@ -450,15 +450,18 @@ void SynthSection::destroyOpenGlComponent(OpenGlComponent & open_gl_component, O
 {
     //moves the component to the end of the array
     //erases it from the vector
+    /////TODO: remove this lock can cause opengldeadlocks
+    const MessageManagerLock mmLock;
+    auto new_logical_end = std::remove_if(open_gl_components_.begin(), open_gl_components_.end(), [&](std::shared_ptr<OpenGlComponent> const& p)
     {
-        const MessageManagerLock mmLock;
-        auto new_logical_end = std::remove_if(open_gl_components_.begin(), open_gl_components_.end(),
-                                              [&](std::shared_ptr<OpenGlComponent> const &p) {
-                                                  return *p == open_gl_component;
-                                              });
+        return *p == open_gl_component;
+    });
+//    //calls destroy function
+//    new_logical_end->get()->destroy(open_gl);
+//
+//
+    open_gl_components_.erase(new_logical_end,open_gl_components_.end());
 
-        open_gl_components_.erase(new_logical_end, open_gl_components_.end());
-    }
 
 }
 
@@ -566,7 +569,7 @@ void SynthSection::addOpenGlComponent(std::shared_ptr<OpenGlComponent> open_gl_c
   if (open_gl_component == nullptr)
     return;
   
-  BITKLAVIER_ASSERT(std::find(open_gl_components_.begin(), open_gl_components_.end(),
+  _ASSERT(std::find(open_gl_components_.begin(), open_gl_components_.end(),
                          open_gl_component) == open_gl_components_.end());
 
   open_gl_component->setParent(this);

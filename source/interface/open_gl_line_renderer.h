@@ -51,22 +51,22 @@ class OpenGlLineRenderer : public OpenGlComponent {
     force_inline void setBoostLeft(int index, float val) {
       boost_left_[index] = val;
       dirty_ = true;
-      BITKLAVIER_ASSERT(num_points_ > index);
+      _ASSERT(num_points_ > index);
     }
     force_inline void setBoostRight(int index, float val) {
       boost_right_[index] = val;
       dirty_ = true;
-      BITKLAVIER_ASSERT(num_points_ > index);
+      _ASSERT(num_points_ > index);
     }
     force_inline void setYAt(int index, float val) {
       y_[index] = val;
       dirty_ = true;
-      BITKLAVIER_ASSERT(num_points_ > index);
+      _ASSERT(num_points_ > index);
     }
     force_inline void setXAt(int index, float val) {
       x_[index] = val;
       dirty_ = true;
-      BITKLAVIER_ASSERT(num_points_ > index);
+      _ASSERT(num_points_ > index);
     }
 
     void setFillVertices(bool left);

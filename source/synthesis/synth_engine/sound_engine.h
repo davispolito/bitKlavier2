@@ -33,7 +33,7 @@ namespace bitklavier {
 
 //      void init() override;
       void processWithInput(const mono_float* audio_in, int num_samples) {
-          //BITKLAVIER_ASSERT(num_samples <= output()->buffer_size);
+          //_ASSERT(num_samples <= output()->buffer_size);
 
           juce::FloatVectorOperations::disableDenormalisedNumberSupport();
 

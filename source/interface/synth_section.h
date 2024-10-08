@@ -339,8 +339,9 @@ class SynthSection : public Component, public Slider::Listener,
     virtual void setSkinValues(const Skin& skin, bool top_level);
     void setSkinValues(std::map<Skin::ValueId, float> values) { value_lookup_ = std::move(values); }
     void setSkinOverride(Skin::SectionOverride skin_override) { skin_override_ = skin_override; }
-    OpenGlWrapper *open_gl;
+
     void addSlider(SynthSlider* slider, bool show = true, bool listen = true);
+    OpenGlWrapper *open_gl;
   protected:
     void setSliderHasHzAlternateDisplay(SynthSlider* slider);
     void setSidewaysHeading(bool sideways) { sideways_heading_ = sideways; }

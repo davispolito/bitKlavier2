@@ -26,7 +26,7 @@ class OpenGlBackground {
     OpenGlBackground();
     virtual ~OpenGlBackground();
 
-    void updateBackgroundImage(Image background);
+    void updateBackgroundImage(juce::Image background);
     virtual void init(OpenGlWrapper& open_gl);
     virtual void render(OpenGlWrapper& open_gl);
     virtual void destroy(OpenGlWrapper& open_gl);
@@ -34,25 +34,25 @@ class OpenGlBackground {
     void lock() { mutex_.lock(); }
     void unlock() { mutex_.unlock(); }
 
-    OpenGLShaderProgram* shader() { return image_shader_; }
-    OpenGLShaderProgram::Uniform* texture_uniform() { return texture_uniform_.get(); }
+    juce::OpenGLShaderProgram* shader() { return image_shader_; }
+    juce::OpenGLShaderProgram::Uniform* texture_uniform() { return texture_uniform_.get(); }
 
-    void bind(OpenGLContext& open_gl_context);
-    void enableAttributes(OpenGLContext& open_gl_context);
-    void disableAttributes(OpenGLContext& open_gl_context);
+    void bind(juce::OpenGLContext& open_gl_context);
+    void enableAttributes(juce::OpenGLContext& open_gl_context);
+    void disableAttributes(juce::OpenGLContext& open_gl_context);
 
   private:
-    OpenGLShaderProgram* image_shader_;
-    std::unique_ptr<OpenGLShaderProgram::Uniform> texture_uniform_;
-    std::unique_ptr<OpenGLShaderProgram::Attribute> position_;
-    std::unique_ptr<OpenGLShaderProgram::Attribute> texture_coordinates_;
+    juce::OpenGLShaderProgram* image_shader_;
+    std::unique_ptr<juce::OpenGLShaderProgram::Uniform> texture_uniform_;
+    std::unique_ptr<juce::OpenGLShaderProgram::Attribute> position_;
+    std::unique_ptr<juce::OpenGLShaderProgram::Attribute> texture_coordinates_;
 
     float vertices_[16];
 
     std::mutex mutex_;
-    OpenGLTexture background_;
+    juce::OpenGLTexture background_;
     bool new_background_;
-    Image background_image_;
+    juce::Image background_image_;
 
     GLuint vertex_buffer_;
     GLuint triangle_buffer_;

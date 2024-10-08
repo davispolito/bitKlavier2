@@ -19,70 +19,71 @@
 #include "../synthesis/framework/common.h"
 #include "look_and_feel/shaders.h"
 
-//OpenGlMultiQuad::OpenGlMultiQuad(int max_quads, Shaders::FragmentShader shader) :
-//    target_component_(nullptr), scissor_component_(nullptr), fragment_shader_(shader),
-//    max_quads_(max_quads), num_quads_(max_quads), draw_when_not_visible_(false),
-//    active_(true), dirty_(false), max_arc_(2.0f), thumb_amount_(0.5f), start_pos_(0.0f),
-//    current_alpha_mult_(1.0f), alpha_mult_(1.0f), additive_blending_(false),
-//    current_thickness_(1.0f), thickness_(1.0f), rounding_(5.0f), shader_(nullptr) {
-//  static const int triangles[] = {
-//    0, 1, 2,
-//    2, 3, 0
-//  };
+// OpenGlMultiQuad::OpenGlMultiQuad(int max_quads, Shaders::FragmentShader shader) :
+//     target_component_(nullptr), scissor_component_(nullptr), fragment_shader_(shader),
+//     max_quads_(max_quads), num_quads_(max_quads), draw_when_not_visible_(false),
+//     active_(true), dirty_(false), max_arc_(2.0f), thumb_amount_(0.5f), start_pos_(0.0f),
+//     current_alpha_mult_(1.0f), alpha_mult_(1.0f), additive_blending_(false),
+//     current_thickness_(1.0f), thickness_(1.0f), rounding_(5.0f), shader_(nullptr) {
+//   static const int triangles[] = {
+//     0, 1, 2,
+//     2, 3, 0
+//   };
 //
-//  data_ = std::make_unique<float[]>(max_quads_ * kNumFloatsPerQuad);
-//  indices_ = std::make_unique<int[]>(max_quads_ * kNumIndicesPerQuad);
-//  vertex_buffer_ = 0;
-//  indices_buffer_ = 0;
+//   data_ = std::make_unique<float[]>(max_quads_ * kNumFloatsPerQuad);
+//   indices_ = std::make_unique<int[]>(max_quads_ * kNumIndicesPerQuad);
+//   vertex_buffer_ = 0;
+//   indices_buffer_ = 0;
 //
-//  mod_color_ = Colours::transparentBlack;
+//   mod_color_ = Colours::transparentBlack;
 //
-//  for (int i = 0; i < max_quads_; ++i) {
-//    setCoordinates(i, -1.0f, -1.0f, 2.0f, 2.0f);
-//    setShaderValue(i, 1.0f);
+//   for (int i = 0; i < max_quads_; ++i) {
+//     setCoordinates(i, -1.0f, -1.0f, 2.0f, 2.0f);
+//     setShaderValue(i, 1.0f);
 //
-//    for (int j = 0; j < kNumIndicesPerQuad; ++j)
-//      indices_[i * kNumIndicesPerQuad + j] = triangles[j] + i * kNumVertices;
-//  }
+//     for (int j = 0; j < kNumIndicesPerQuad; ++j)
+//       indices_[i * kNumIndicesPerQuad + j] = triangles[j] + i * kNumVertices;
+//   }
 //
-//  setInterceptsMouseClicks(false, false);
-//}
+//   setInterceptsMouseClicks(false, false);
+// }
 
-OpenGlMultiQuad::OpenGlMultiQuad(int max_quads, Shaders::FragmentShader shader, String name) : OpenGlComponent(name),
-        target_component_(nullptr), scissor_component_(nullptr), fragment_shader_(shader),
-        max_quads_(max_quads), num_quads_(max_quads), draw_when_not_visible_(false),
-        active_(true), dirty_(false), max_arc_(2.0f), thumb_amount_(0.5f), start_pos_(0.0f),
-        current_alpha_mult_(1.0f), alpha_mult_(1.0f), additive_blending_(false),
-        current_thickness_(1.0f), thickness_(1.0f), rounding_(5.0f), shader_(nullptr) {
-    static const int triangles[] = {
-            0, 1, 2,
-            2, 3, 0
-    };
+OpenGlMultiQuad::OpenGlMultiQuad(int max_quads, Shaders::FragmentShader shader, juce::String name) : OpenGlComponent(name),
+                                                                                               target_component_(nullptr), scissor_component_(nullptr), fragment_shader_(shader),
+                                                                                               max_quads_(max_quads), num_quads_(max_quads), draw_when_not_visible_(false),
+                                                                                               active_(true), dirty_(false), max_arc_(2.0f), thumb_amount_(0.5f), start_pos_(0.0f),
+                                                                                               current_alpha_mult_(1.0f), alpha_mult_(1.0f), additive_blending_(false),
+                                                                                               current_thickness_(1.0f), thickness_(1.0f), rounding_(5.0f), shader_(nullptr)
+{
+  static const int triangles[] = {
+      0, 1, 2,
+      2, 3, 0};
 
-    data_ = std::make_unique<float[]>(max_quads_ * kNumFloatsPerQuad);
-    indices_ = std::make_unique<int[]>(max_quads_ * kNumIndicesPerQuad);
-    vertex_buffer_ = 0;
-    indices_buffer_ = 0;
+  data_ = std::make_unique<float[]>(max_quads_ * kNumFloatsPerQuad);
+  indices_ = std::make_unique<int[]>(max_quads_ * kNumIndicesPerQuad);
+  vertex_buffer_ = 0;
+  indices_buffer_ = 0;
 
-    mod_color_ = Colours::transparentBlack;
+  mod_color_ = juce::Colours::transparentBlack;
+  for (int i = 0; i < max_quads_; ++i)
+  {
+    setCoordinates(i, -1.0f, -1.0f, 2.0f, 2.0f);
+    setShaderValue(i, 1.0f);
 
-    for (int i = 0; i < max_quads_; ++i) {
-        setCoordinates(i, -1.0f, -1.0f, 2.0f, 2.0f);
-        setShaderValue(i, 1.0f);
+    for (int j = 0; j < kNumIndicesPerQuad; ++j)
+      indices_[i * kNumIndicesPerQuad + j] = triangles[j] + i * kNumVertices;
+  }
 
-        for (int j = 0; j < kNumIndicesPerQuad; ++j)
-            indices_[i * kNumIndicesPerQuad + j] = triangles[j] + i * kNumVertices;
-    }
-
-    setInterceptsMouseClicks(false, false);
+  setInterceptsMouseClicks(false, false);
 }
 
-OpenGlMultiQuad::~OpenGlMultiQuad() { }
+OpenGlMultiQuad::~OpenGlMultiQuad() {}
 bool OpenGlMultiQuad::isInit()
 {
-    return shader_ != nullptr;
+  return shader_ != nullptr;
 }
-void OpenGlMultiQuad::init(OpenGlWrapper& open_gl) {
+void OpenGlMultiQuad::init(OpenGlWrapper &open_gl)
+{
   open_gl.context.extensions.glGenBuffers(1, &vertex_buffer_);
   open_gl.context.extensions.glBindBuffer(juce::gl::GL_ARRAY_BUFFER, vertex_buffer_);
 
@@ -114,7 +115,8 @@ void OpenGlMultiQuad::init(OpenGlWrapper& open_gl) {
   alpha_mult_uniform_ = getUniform(open_gl, *shader_, "alpha_mult");
 }
 
-void OpenGlMultiQuad::destroy(OpenGlWrapper& open_gl) {
+void OpenGlMultiQuad::destroy(OpenGlWrapper &open_gl)
+{
   shader_ = nullptr;
   position_ = nullptr;
   dimensions_ = nullptr;
@@ -137,12 +139,13 @@ void OpenGlMultiQuad::destroy(OpenGlWrapper& open_gl) {
   indices_buffer_ = 0;
 }
 
-void OpenGlMultiQuad::render(OpenGlWrapper& open_gl, bool animate) {
-  Component* component = target_component_ ? target_component_ : this;
+void OpenGlMultiQuad::render(OpenGlWrapper &open_gl, bool animate)
+{
+  Component *component = target_component_ ? target_component_ : this;
   if (!active_ || (!draw_when_not_visible_ && !component->isVisible()) || !setViewPort(component, open_gl))
     return;
 
-  Component* scissor_component = scissor_component_;
+  Component *scissor_component = scissor_component_;
   if (scissor_component)
     setScissor(scissor_component, open_gl);
 
@@ -159,9 +162,10 @@ void OpenGlMultiQuad::render(OpenGlWrapper& open_gl, bool animate) {
   else
     juce::gl::glBlendFunc(juce::gl::GL_SRC_ALPHA, juce::gl::GL_ONE_MINUS_SRC_ALPHA);
 
-  if (dirty_) {
+  if (dirty_)
+  {
     dirty_ = false;
-    
+
     for (int i = 0; i < num_quads_; ++i)
       setDimensions(i, getQuadWidth(i), getQuadHeight(i), component->getWidth(), component->getHeight());
 
@@ -188,24 +192,30 @@ void OpenGlMultiQuad::render(OpenGlWrapper& open_gl, bool animate) {
   color_uniform_->set(color_.getFloatRed(), color_.getFloatGreen(),
                       color_.getFloatBlue(), alpha_color_mult * color_.getFloatAlpha());
 
-  if (alt_color_uniform_) {
-    if (alt_color_.getFloatAlpha()) {
+  if (alt_color_uniform_)
+  {
+    if (alt_color_.getFloatAlpha())
+    {
       alt_color_uniform_->set(alt_color_.getFloatRed(), alt_color_.getFloatGreen(),
                               alt_color_.getFloatBlue(), alt_color_.getFloatAlpha());
     }
     else
       alt_color_uniform_->set(color_.getFloatRed(), color_.getFloatGreen(), color_.getFloatBlue(), 0.0f);
   }
-  if (mod_color_uniform_) {
-    if (mod_color_.getFloatAlpha()) {
+  if (mod_color_uniform_)
+  {
+    if (mod_color_.getFloatAlpha())
+    {
       mod_color_uniform_->set(mod_color_.getFloatRed(), mod_color_.getFloatGreen(),
                               mod_color_.getFloatBlue(), mod_color_.getFloatAlpha());
     }
     else
       mod_color_uniform_->set(color_.getFloatRed(), color_.getFloatGreen(), color_.getFloatBlue(), 0.0f);
   }
-  if (background_color_uniform_) {
-    if (background_color_.getFloatAlpha()) {
+  if (background_color_uniform_)
+  {
+    if (background_color_.getFloatAlpha())
+    {
       background_color_uniform_->set(background_color_.getFloatRed(), background_color_.getFloatGreen(),
                                      background_color_.getFloatBlue(), background_color_.getFloatAlpha());
     }
@@ -213,7 +223,8 @@ void OpenGlMultiQuad::render(OpenGlWrapper& open_gl, bool animate) {
       background_color_uniform_->set(color_.getFloatRed(), color_.getFloatGreen(), color_.getFloatBlue(), 0.0f);
   }
 
-  if (thumb_color_uniform_) {
+  if (thumb_color_uniform_)
+  {
     thumb_color_uniform_->set(thumb_color_.getFloatRed(), thumb_color_.getFloatGreen(),
                               thumb_color_.getFloatBlue(), thumb_color_.getFloatAlpha());
   }
@@ -224,7 +235,8 @@ void OpenGlMultiQuad::render(OpenGlWrapper& open_gl, bool animate) {
   if (start_pos_uniform_)
     start_pos_uniform_->set(start_pos_);
 
-  if (thickness_uniform_) {
+  if (thickness_uniform_)
+  {
     current_thickness_ = current_thickness_ + kThicknessDecay * (thickness_ - current_thickness_);
     thickness_uniform_->set(current_thickness_);
   }
@@ -239,22 +251,25 @@ void OpenGlMultiQuad::render(OpenGlWrapper& open_gl, bool animate) {
   open_gl.context.extensions.glVertexAttribPointer(position_->attributeID, 2, juce::gl::GL_FLOAT,
                                                    juce::gl::GL_FALSE, kNumFloatsPerVertex * sizeof(float), nullptr);
   open_gl.context.extensions.glEnableVertexAttribArray(position_->attributeID);
-  if (dimensions_) {
+  if (dimensions_)
+  {
     open_gl.context.extensions.glVertexAttribPointer(dimensions_->attributeID, 2, juce::gl::GL_FLOAT,
                                                      juce::gl::GL_FALSE, kNumFloatsPerVertex * sizeof(float),
-                                                     (GLvoid*)(2 * sizeof(float)));
+                                                     (GLvoid *)(2 * sizeof(float)));
     open_gl.context.extensions.glEnableVertexAttribArray(dimensions_->attributeID);
   }
-  if (coordinates_) {
+  if (coordinates_)
+  {
     open_gl.context.extensions.glVertexAttribPointer(coordinates_->attributeID, 2, juce::gl::GL_FLOAT,
                                                      juce::gl::GL_FALSE, kNumFloatsPerVertex * sizeof(float),
-                                                     (GLvoid*)(4 * sizeof(float)));
+                                                     (GLvoid *)(4 * sizeof(float)));
     open_gl.context.extensions.glEnableVertexAttribArray(coordinates_->attributeID);
   }
-  if (shader_values_) {
+  if (shader_values_)
+  {
     open_gl.context.extensions.glVertexAttribPointer(shader_values_->attributeID, 4, juce::gl::GL_FLOAT,
                                                      juce::gl::GL_FALSE, kNumFloatsPerVertex * sizeof(float),
-                                                     (GLvoid*)(6 * sizeof(float)));
+                                                     (GLvoid *)(6 * sizeof(float)));
     open_gl.context.extensions.glEnableVertexAttribArray(shader_values_->attributeID);
   }
 

@@ -22,11 +22,11 @@ Fonts::Fonts() :
     proportional_title_(Font(Font::plain)),
     proportional_title_regular_(Font(Font::plain)),
     monospace_(Font(Font::plain)) {
-
-  Array<int> glyphs;
-  Array<float> x_offsets;
-  proportional_regular_.getGlyphPositions("test", glyphs, x_offsets);
-  proportional_light_.getGlyphPositions("test", glyphs, x_offsets);
-  proportional_title_.getGlyphPositions("test", glyphs, x_offsets);
-  monospace_.getGlyphPositions("test", glyphs, x_offsets);
+//
+//  Array<int> glyphs;
+//  Array<float> x_offsets;
+//  proportional_regular_.getGlyphPositions("test", glyphs, x_offsets);
+//  proportional_light_.getGlyphPositions("test", glyphs, x_offsets);
+//  proportional_title_.getGlyphPositions("test", glyphs, x_offsets);
+//  monospace_.getGlyphPositions("test", glyphs, x_offsets);
 }

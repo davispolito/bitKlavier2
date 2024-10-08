@@ -156,7 +156,7 @@ return engine_->processorGraph->getNodeForId(id);
 
 void SynthBase::addConnection(AudioProcessorGraph::Connection &connect)
 {
-    BITKLAVIER_ASSERT(engine_->processorGraph->addConnection(connect));
+    _ASSERT(engine_->processorGraph->addConnection(connect));
 }
 bool SynthBase::loadFromValueTree(const ValueTree& state)
 {
@@ -274,7 +274,7 @@ void SynthBase::writeAudio(AudioSampleBuffer* buffer, int channels, int samples,
     //this line actually sends audio to the JUCE AudioSamplerBuffer to get audio out of the plugin
     for (int i = 0; i < samples; ++i) {
       //channel_data[i] = engine_output[bitklavier::poly_float::kSize * i + channel];
-      BITKLAVIER_ASSERT(std::isfinite(channel_data[i]));
+      _ASSERT(std::isfinite(channel_data[i]));
     }
   }
  /*this line would send audio out to draw and get info from */
@@ -317,10 +317,10 @@ void SynthBase::updateMemoryOutput(int samples, const bitklavier::poly_float* au
 ////  for (; memory_input_offset_ < samples; memory_input_offset_ += output_inc) {
 ////    int input_index = bitklavier::utils::iclamp(memory_input_offset_, 0, samples);
 ////    memory_index_ = bitklavier::utils::iclamp(memory_index_, 0, oscilloscope_samples - 1);
-////    BITKLAVIER_ASSERT(input_index >= 0);
-////    BITKLAVIER_ASSERT(input_index < samples);
-////    BITKLAVIER_ASSERT(memory_index_ >= 0);
-////    BITKLAVIER_ASSERT(memory_index_ < oscilloscope_samples);
+////    _ASSERT(input_index >= 0);
+////    _ASSERT(input_index < samples);
+////    _ASSERT(memory_index_ >= 0);
+////    _ASSERT(memory_index_ < oscilloscope_samples);
 ////    //oscilloscope_memory_write_[memory_index_++] = audio[input_index];
 ////
 ////    if (memory_index_ * output_inc >= memory_reset_period_) {

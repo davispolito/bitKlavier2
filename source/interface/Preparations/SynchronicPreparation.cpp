@@ -74,7 +74,7 @@ void SynchronicPreparation::SynchronicPopup::renderOpenGlComponents(OpenGlWrappe
             open_gl_component->render(open_gl, animate);
             GLenum gl =  juce::gl::glGetError();
             //DBG(String(gl));
-            BITKLAVIER_ASSERT(gl == juce::gl::GL_NO_ERROR);
+            _ASSERT(gl == juce::gl::GL_NO_ERROR);
         }
     }
 
@@ -87,7 +87,7 @@ void SynchronicPreparation::SynchronicPopup::renderOpenGlComponents(OpenGlWrappe
     for (auto& open_gl_component : open_gl_components_) {
         if (open_gl_component->isVisible() && open_gl_component->isAlwaysOnTop()) {
             open_gl_component->render(open_gl, animate);
-            BITKLAVIER_ASSERT(juce::gl::glGetError() == juce::gl::GL_NO_ERROR);
+            _ASSERT(juce::gl::glGetError() == juce::gl::GL_NO_ERROR);
         }
     }
     if (background_)

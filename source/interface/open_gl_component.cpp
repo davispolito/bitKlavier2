@@ -201,6 +201,6 @@ float OpenGlComponent::findValue(Skin::ValueId value_id) {
   if (parent_)
     return parent_->findValue(value_id);
 
-  BITKLAVIER_ASSERT(false);
+  _ASSERT(false);
   return 0.0f;
 }

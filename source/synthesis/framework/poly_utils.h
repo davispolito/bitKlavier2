@@ -483,7 +483,7 @@ namespace bitklavier::utils {
     }
 
     force_inline poly_float toFloat(poly_int integers) {
-      BITKLAVIER_ASSERT(poly_float::kSize == poly_int::kSize);
+      _ASSERT(poly_float::kSize == poly_int::kSize);
 
     #if BITKLAVIER_AVX2
       return _mm256_cvtepi32_ps(integers.value);
@@ -495,7 +495,7 @@ namespace bitklavier::utils {
     }
 
     force_inline poly_int toInt(poly_float floats) {
-      BITKLAVIER_ASSERT(poly_float::kSize == poly_int::kSize);
+      _ASSERT(poly_float::kSize == poly_int::kSize);
 
     #if BITKLAVIER_AVX2
       return _mm256_cvtps_epi32(floats.value);

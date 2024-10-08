@@ -75,13 +75,13 @@ void OpenGlBackground::destroy(OpenGlWrapper& open_gl) {
   open_gl.context.extensions.glDeleteBuffers(1, &triangle_buffer_);
 }
 
-void OpenGlBackground::bind(OpenGLContext& open_gl_context) {
+void OpenGlBackground::bind(juce::OpenGLContext& open_gl_context) {
   open_gl_context.extensions.glBindBuffer(juce::gl::GL_ARRAY_BUFFER, vertex_buffer_);
   open_gl_context.extensions.glBindBuffer(juce::gl::GL_ELEMENT_ARRAY_BUFFER, triangle_buffer_);
   background_.bind();
 }
 
-void OpenGlBackground::enableAttributes(OpenGLContext& open_gl_context) {
+void OpenGlBackground::enableAttributes(juce::OpenGLContext& open_gl_context) {
   if (position_ != nullptr) {
     open_gl_context.extensions.glVertexAttribPointer(position_->attributeID, 2, juce::gl::GL_FLOAT,
                                                     juce::gl::GL_FALSE, 4 * sizeof(float), nullptr);
@@ -95,7 +95,7 @@ void OpenGlBackground::enableAttributes(OpenGLContext& open_gl_context) {
   }
 }
 
-void OpenGlBackground::disableAttributes(OpenGLContext& open_gl_context) {
+void OpenGlBackground::disableAttributes(juce::OpenGLContext& open_gl_context) {
   if (position_ != nullptr)
     open_gl_context.extensions.glDisableVertexAttribArray(position_->attributeID);
 
@@ -143,7 +143,7 @@ void OpenGlBackground::render(OpenGlWrapper& open_gl) {
   mutex_.unlock();
 }
 
-void OpenGlBackground::updateBackgroundImage(Image background) {
+void OpenGlBackground::updateBackgroundImage(juce::Image background) {
   background_image_ = background;
   new_background_ = true;
 }

@@ -27,7 +27,7 @@ namespace bitklavier {
 
     mono_float encodeOrderToFloat(int* order, int size) {
       // Max array size you can encode in 32 bits.
-      BITKLAVIER_ASSERT(size <= kMaxOrderLength);
+      _ASSERT(size <= kMaxOrderLength);
 
       unsigned int code = 0;
       for (int i = 1; i < size; ++i) {
@@ -45,7 +45,7 @@ namespace bitklavier {
 
     void decodeFloatToOrder(int* order, mono_float float_code, int size) {
       // Max array size you can encode in 32 bits.
-      BITKLAVIER_ASSERT(size <= kMaxOrderLength);
+      _ASSERT(size <= kMaxOrderLength);
 
       int code = float_code;
       for (int i = 0; i < size; ++i)

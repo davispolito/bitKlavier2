@@ -15,114 +15,121 @@
  */
 
 #pragma once
-#include "../synthesis/framework/common.h"
-#include "../interface/look_and_feel/skin.h"
-#include <JuceHeader.h>
-#include "look_and_feel/shaders.h"
+#include "shaders.h"
 
-using namespace juce;
+#include "common.h"
+#include "skin.h"
+#include <juce_opengl/juce_opengl.h>
 
 class SynthSection;
 class OpenGlCorners;
 
-class OpenGlComponent : public Component {
-  public:
-    static bool setViewPort(Component* component, Rectangle<int> bounds, OpenGlWrapper& open_gl);
-    static bool setViewPort(Component* component, OpenGlWrapper& open_gl);
-    static void setScissor(Component* component, OpenGlWrapper& open_gl);
-    static void setScissorBounds(Component* component, Rectangle<int> bounds, OpenGlWrapper& open_gl);
+class OpenGlComponent : public juce::Component
+{
+public:
+  static bool setViewPort(juce::Component *component, juce::Rectangle<int> bounds, OpenGlWrapper &open_gl);
+  static bool setViewPort(Component *component, OpenGlWrapper &open_gl);
+  static void setScissor(Component *component, OpenGlWrapper &open_gl);
+  static void setScissorBounds(Component *component, juce::Rectangle<int> bounds, OpenGlWrapper &open_gl);
 
-    static std::unique_ptr<OpenGLShaderProgram::Uniform> getUniform(const OpenGlWrapper& open_gl,
-                                                                    const OpenGLShaderProgram& program,
-                                                                    const char* name) {
-      if (open_gl.context.extensions.glGetUniformLocation(program.getProgramID(), name) >= 0)
-        return std::make_unique<OpenGLShaderProgram::Uniform>(program, name);
-      return nullptr;
-    }
+  static std::unique_ptr<juce::OpenGLShaderProgram::Uniform> getUniform(const OpenGlWrapper &open_gl,
+                                                                        const juce::OpenGLShaderProgram &program,
+                                                                        const char *name)
+  {
+    if (open_gl.context.extensions.glGetUniformLocation(program.getProgramID(), name) >= 0)
+      return std::make_unique<juce::OpenGLShaderProgram::Uniform>(program, name);
+    return nullptr;
+  }
 
-    static std::unique_ptr<OpenGLShaderProgram::Attribute> getAttribute(const OpenGlWrapper& open_gl,
-                                                                        const OpenGLShaderProgram& program,
-                                                                        const char* name) {
-      if (open_gl.context.extensions.glGetAttribLocation(program.getProgramID(), name) >= 0)
-        return std::make_unique<OpenGLShaderProgram::Attribute>(program, name);
-      return nullptr;
-    }
+  static std::unique_ptr<juce::OpenGLShaderProgram::Attribute> getAttribute(const OpenGlWrapper &open_gl,
+                                                                            const juce::OpenGLShaderProgram &program,
+                                                                            const char *name)
+  {
+    if (open_gl.context.extensions.glGetAttribLocation(program.getProgramID(), name) >= 0)
+      return std::make_unique<juce::OpenGLShaderProgram::Attribute>(program, name);
+    return nullptr;
+  }
 
-    OpenGlComponent(String name = "");
-    virtual ~OpenGlComponent();
+  OpenGlComponent(juce::String name = "");
+  virtual ~OpenGlComponent();
 
-    virtual void resized() override;
-    virtual void parentHierarchyChanged() override;
+  virtual void resized() override;
+  virtual void parentHierarchyChanged() override;
 
-    void addRoundedCorners();
-    void addBottomRoundedCorners();
-    virtual void init(OpenGlWrapper& open_gl);
-    virtual void render(OpenGlWrapper& open_gl, bool animate) = 0;
-    void renderCorners(OpenGlWrapper& open_gl, bool animate, Colour color, float rounding);
-    void renderCorners(OpenGlWrapper& open_gl, bool animate);
-    virtual void destroy(OpenGlWrapper& open_gl);
-    virtual bool isInit();
-    virtual void paintBackground(Graphics& g);
-    void repaintBackground();
+  void addRoundedCorners();
+  void addBottomRoundedCorners();
+  virtual void init(OpenGlWrapper &open_gl);
+  virtual void render(OpenGlWrapper &open_gl, bool animate) = 0;
+  void renderCorners(OpenGlWrapper &open_gl, bool animate, juce::Colour color, float rounding);
+  void renderCorners(OpenGlWrapper &open_gl, bool animate);
+  virtual void destroy(OpenGlWrapper &open_gl);
+  virtual bool isInit();
+  virtual void paintBackground(juce::Graphics &g);
+  void repaintBackground();
 
-    Colour getBodyColor() const { return body_color_; }
+  juce::Colour getBodyColor() const { return body_color_; }
 
-    void setParent(const SynthSection* parent) { parent_ = parent; }
+  void setParent(const SynthSection *parent) { parent_ = parent; }
 
-    float findValue(Skin::ValueId value_id);
-    void setSkinValues(const Skin& skin) {
-      skin.setComponentColors(this, skin_override_, false);
-    }
-    void setSkinOverride(Skin::SectionOverride skin_override) { skin_override_ = skin_override; }
-    static inline String translateFragmentShader(const String& code) {
-    #if OPENGL_ES
-      return String("#version 300 es\n") + "out mediump vec4 fragColor;\n" +
-             code.replace("varying", "in").replace("texture2D", "texture").replace("gl_FragColor", "fragColor");
-    #else
-      return OpenGLHelpers::translateFragmentShaderToV3(code);
-    #endif
-    }
+  float findValue(Skin::ValueId value_id);
+  void setSkinValues(const Skin &skin)
+  {
+    skin.setComponentColors(this, skin_override_, false);
+  }
+  void setSkinOverride(Skin::SectionOverride skin_override) { skin_override_ = skin_override; }
+  static inline juce::String translateFragmentShader(const juce::String &code)
+  {
+#if OPENGL_ES
+    return String("#version 300 es\n") + "out mediump vec4 fragColor;\n" +
+           code.replace("varying", "in").replace("texture2D", "texture").replace("gl_FragColor", "fragColor");
+#else
+    return juce::OpenGLHelpers::translateFragmentShaderToV3(code);
+#endif
+  }
 
-    static inline String translateVertexShader(const String& code) {
-    #if OPENGL_ES
-      return String("#version 300 es\n") + code.replace("attribute", "in").replace("varying", "out");
-    #else
-      return OpenGLHelpers::translateVertexShaderToV3(code);
-    #endif
-    }
+  static inline juce::String translateVertexShader(const juce::String &code)
+  {
+#if OPENGL_ES
+    return String("#version 300 es\n") + code.replace("attribute", "in").replace("varying", "out");
+#else
+    return juce::OpenGLHelpers::translateVertexShaderToV3(code);
+#endif
+  }
 
-    force_inline void checkGlError() {
-    #if DEBUG
-      GLenum error = juce::gl::glGetError();
-      assert(error == juce::gl::GL_NO_ERROR);
-    #endif
-    }
+  force_inline void checkGlError()
+  {
+#if DEBUG
+    GLenum error = juce::gl::glGetError();
+    assert(error == juce::gl::GL_NO_ERROR);
+#endif
+  }
 
-    bool operator==(OpenGlComponent const& other) const {
-        // Implement comparison logic based on your requirements
-        return this->id == other.id; // Example comparison based on an 'id' member
-    }
-    void setBackgroundColor(const Colour& color) { background_color_ = color; }
+  bool operator==(OpenGlComponent const &other) const
+  {
+    // Implement comparison logic based on your requirements
+    return this->id == other.id; // Example comparison based on an 'id' member
+  }
+  void setBackgroundColor(const juce::Colour &color) { background_color_ = color; }
 
-  protected:
-    bool setViewPort(OpenGlWrapper& open_gl);
-    
-    std::unique_ptr<OpenGlCorners> corners_;
-    bool only_bottom_corners_;
-    Colour background_color_;
-    Colour body_color_;
-    Skin::SectionOverride skin_override_;
-    const SynthSection* parent_;
+protected:
+  bool setViewPort(OpenGlWrapper &open_gl);
+
+  std::unique_ptr<OpenGlCorners> corners_;
+  bool only_bottom_corners_;
+  juce::Colour background_color_;
+  juce::Colour body_color_;
+  Skin::SectionOverride skin_override_;
+  const SynthSection *parent_;
 
 private:
-    int id;
-    static int nID;
+  int id;
+  static int nID;
 
-    int generateID(){
-        nID++;
-        return nID;
-    }
+  int generateID()
+  {
+    nID++;
+    return nID;
+  }
 
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(OpenGlComponent)
+  JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(OpenGlComponent)
 };
-

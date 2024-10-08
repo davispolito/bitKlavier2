@@ -1029,7 +1029,7 @@ const char* Shaders::getVertexShader(VertexShader shader) {
     case kBarVerticalVertex:
       return kBarVerticalVertexShader;
     default:
-      BITKLAVIER_ASSERT(false);
+      _ASSERT(false);
       return nullptr;
   }
 }
@@ -1079,7 +1079,7 @@ const char* Shaders::getFragmentShader(FragmentShader shader) {
     case kModulationKnobFragment:
       return kModulationKnobFragmentShader;
     default:
-      BITKLAVIER_ASSERT(false);
+      _ASSERT(false);
       return nullptr;
   }
 }
@@ -1105,7 +1105,7 @@ GLuint Shaders::createVertexShader(OpenGLExtensionFunctions& extensions, VertexS
   extensions.glShaderSource(shader_id, 1, &code, nullptr);
   extensions.glCompileShader(shader_id);
 
-  BITKLAVIER_ASSERT(checkShaderCorrect(extensions, shader_id));
+  _ASSERT(checkShaderCorrect(extensions, shader_id));
   return shader_id;
 }
 
@@ -1116,7 +1116,7 @@ GLuint Shaders::createFragmentShader(OpenGLExtensionFunctions& extensions, Fragm
   extensions.glShaderSource(shader_id, 1, &code, nullptr);
   extensions.glCompileShader(shader_id);
 
-  BITKLAVIER_ASSERT(checkShaderCorrect(extensions, shader_id));
+  _ASSERT(checkShaderCorrect(extensions, shader_id));
   return shader_id;
 }
 
