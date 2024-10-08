@@ -236,6 +236,7 @@ void BKSynthesiser::noteOn (const int midiChannel,
             for (auto* voice : voices)
                 if (voice->getCurrentlyPlayingNote() == midiNoteNumber && voice->isPlayingChannel (midiChannel))
                     stopVoice (voice, 1.0f, true);
+
             startVoice (findFreeVoice (sound, midiChannel, midiNoteNumber, shouldStealNotes),
                         sound, midiChannel, midiNoteNumber, velocity);
             break;
@@ -262,7 +263,7 @@ void BKSynthesiser::startVoice (BKSamplerVoice* const voice,
         voice->setSostenutoPedalDown (false);
         voice->setSustainPedalDown (sustainPedalsDown[midiChannel]);
 
-        voice->startNote (midiNoteNumber, velocity * (1.0f / 127.0f), sound,
+        voice->startNote (midiNoteNumber, velocity, sound,
                           lastPitchWheelValues [midiChannel - 1]);
     }
 }

@@ -249,6 +249,8 @@ public:
         // Print the class name and action
         DBG("Create BKSamplerSound");
 
+        int velocityMin = minVelocity();
+        int velocityMax = maxVelocity();
         dBFSLevel = sample->getRMS();
 
         // Print the standard values
@@ -270,8 +272,11 @@ public:
         // Print the highest bit and bit count for midiVelocities
         int midiVelocitiesHighestBit = midiVelocities.getHighestBit();
         int midiVelocitiesBitCount = midiVelocities.countNumberOfSetBits();
+
         DBG("midiVelocities Highest Bit: " + juce::String(midiVelocitiesHighestBit));
         DBG("midiVelocities Bit Count: " + juce::String(midiVelocitiesBitCount));
+        DBG("min Velocity " + juce::String(minVelocity()));
+        DBG("max Velocity " + juce::String(maxVelocity()));
         setCentreFrequencyInHz(mtof(rootMidiNote));
 
 
@@ -327,11 +332,27 @@ public:
         return loopMode;
     }
 
+    // find the bounding velocities for this sound
+    int minVelocity (void) { return midiVelocities.findNextSetBit(0); }
+    int maxVelocity (void) { return midiVelocities.findNextClearBit(midiVelocities.findNextSetBit(0)); }
+
+    // use the velocity to set a gain multiplier
+    //  - if the velocity is at the top velocity range for this layer, then this will return 1.
+    //  - if the velocity is at the bottom velocity range for this layer, it will return a value that
+    //      should result in a dBFS equivalent the max loudness of the layer below (dBFSBelow)
+    float getGainMultiplierFromVelocity(float velocity) // velocity [0, 127]
+    {
+        DBG("layer dB size = " + String(dBFSLevel - dBFSBelow));
+        float dbOffset = (dBFSLevel - dBFSBelow) * (velocity - maxVelocity()) / (maxVelocity() - minVelocity());
+        return juce::Decibels::decibelsToGain(dbOffset);
+    }
+
     void setEnvelopeParameters (juce::ADSR::Parameters parametersToUse)    { params = parametersToUse; }
     /** The class is reference-counted, so this is a handy pointer class for it. */
     typedef juce::ReferenceCountedObjectPtr<BKSamplerSound<T>> Ptr;
+
     float dBFSLevel; // dBFS value of this velocity layer
-    float dBFSBelow; //// dBFS value of velocity layer below this layer
+    float dBFSBelow; // dBFS value of velocity layer below this layer
     int numLayers;
     int layerId;
     int rootMidiNote;
@@ -612,7 +633,9 @@ public:
         samplerSound = _sound;
         currentlyPlayingSound = _sound;
         currentlyPlayingNote = midiNoteNumber;
-        level.setTargetValue(velocity * 40);
+        level.setTargetValue(samplerSound->getGainMultiplierFromVelocity(velocity));
+        DBG("gain from velocity = " + String(velocity) + ":" + String(samplerSound->getGainMultiplierFromVelocity(velocity)));
+        //level.setTargetValue(velocity * 40);
         frequency.setTargetValue(mtof(midiNoteNumber));
         //melatonin::printSparkline(m_Buffer);
         auto loopPoints = samplerSound->getLoopPointsInSeconds();
