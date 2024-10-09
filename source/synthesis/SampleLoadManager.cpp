@@ -11,6 +11,7 @@ synth(synth_)
 {
     audioFormatManager->registerBasicFormats();
 
+    // compile list of all string names on the piano A0 through C8
     for (int i=0; i<=8; i++)
     {
         for (auto note : allPitchClasses)
@@ -20,11 +21,6 @@ synth(synth_)
             DBG(noteOctave);
         }
     }
-//    for(auto str : bitklavier::utils::samplepaths)
-//    {
-//        sampler_soundset[str];
-//
-//    }
 }
 
 SampleLoadManager::~SampleLoadManager()
@@ -45,6 +41,7 @@ void SampleLoadManager::handleAsyncUpdate()
                  });
 }
 
+// standard filename comparator, though doesn't handle velocities well
 class MyComparator
 {
 public:
@@ -117,48 +114,34 @@ Array<File> SampleLoadManager::samplesByPitch(String whichPitch, Array<File> inF
 
     // need to sort correctly by velocity....
     outFiles.sort(vsorter);
-
-    DBG("*** sounds of this pitch " + whichPitch);
-    for ( auto file : outFiles)
-    {
-        DBG(file.getFullPathName());
-    }
-    DBG("*** done with sounds of this pitch " + whichPitch);
-
     return outFiles;
 }
 
 bool SampleLoadManager::loadSamples( int selection, bool isGlobal)
 {
-    MyComparator sorter;
+    // open sample directory
     String samplePath = preferences.tree.getProperty("default_sample_path");
-
-    //samplePath.append(bitklavier::utils::samplepaths[selection], 10); // change to "orig" to test that way
-    //samplePath.append("/orig", 10);
     samplePath.append("/Yamaha", 10);
-    DBG("sample path = " + samplePath);
     File directory(samplePath);
-    DBG(samplePath);
     Array<File> allSamples = directory.findChildFiles(File::TypesOfFileToFind::findFiles, false, "*.wav");
+
+    // sort alphabetically
+    MyComparator sorter;
     allSamples.sort(sorter);
 
-    //auto r = new FileArrayAudioFormatReaderFactory(allSamples) ;
-
-    if (isGlobal)
-    {
-        globalSoundSet =  bitklavier::utils::samplepaths[selection];
-    }
+    // save this set as the global set
+    if (isGlobal) globalSoundSet =  bitklavier::utils::samplepaths[selection];
 
     // loop through all 12 notes and octaves
     for (auto pitchName : allPitches)
     {
         DBG("*****>>>>> LOADING PITCH " + pitchName + " <<<<<*****");
         Array<File> onePitchSamples = samplesByPitch(pitchName, allSamples);
-        if (onePitchSamples.size() <= 0) continue;
+        if (onePitchSamples.size() <= 0) continue; // skip if no samples at this pitch
         
         auto r = new FileArrayAudioFormatReaderFactory(onePitchSamples) ;
         sampleLoader.addJob(new SampleLoadJob(
-                                 selection,
+                                 //selection,
                                  onePitchSamples.size(),
                                  std::unique_ptr<AudioFormatReaderFactory>(r),
                                  audioFormatManager.get(),
@@ -166,101 +149,7 @@ bool SampleLoadManager::loadSamples( int selection, bool isGlobal)
                                  this),
             true );
     }
-
-    /*
-    // loop through all 12 notes and octaves
-    Array<File> onePitchSamples = samplesByPitch("A4", allSamples);
-    auto r = new FileArrayAudioFormatReaderFactory(onePitchSamples) ;
-    sampleLoader.addJob(new SampleLoadJob(
-                             selection,
-                             onePitchSamples.size(),
-                             std::unique_ptr<AudioFormatReaderFactory>(r),
-                             audioFormatManager.get(),
-                             &sampler_soundset[bitklavier::utils::samplepaths[selection]],
-                             this),
-        true );
-
-    onePitchSamples = samplesByPitch("C5", allSamples);
-    r = new FileArrayAudioFormatReaderFactory(onePitchSamples) ;
-    sampleLoader.addJob(new SampleLoadJob(
-                             selection,
-                             onePitchSamples.size(),
-                             std::unique_ptr<AudioFormatReaderFactory>(r),
-                             audioFormatManager.get(),
-                             &sampler_soundset[bitklavier::utils::samplepaths[selection]],
-                             this),
-        true );
-    */
-    /*
-    auto r = new FileArrayAudioFormatReaderFactory(allSamples) ;
-    //readerFactory =
-    int i = 0;
-    for ( auto file : allSamples)
-    {
-        DBG(file.getFullPathName() + " " + String(++i));
-    }
-
-    if (isGlobal)
-    {
-        globalSoundSet =  bitklavier::utils::samplepaths[selection];
-    }
-
-    if(!sampler_soundset.contains(bitklavier::utils::samplepaths[selection]))
-    {
-        sampleLoader.addJob(new SampleLoadJob(
-                                 selection,
-                                 std::unique_ptr<AudioFormatReaderFactory>(r),
-                                 audioFormatManager.get(),
-                                 &sampler_soundset[bitklavier::utils::samplepaths[selection]],
-                                 this),
-                                 true );
-    }
-     */
 }
-/*
-bool SampleLoadManager::loadSamples( int selection, bool isGlobal)
-{
-
-    MyComparator sorter;
-    String samplePath = preferences.tree.getProperty("default_sample_path");
-
-    samplePath.append(bitklavier::utils::samplepaths[selection], 10); // change to "orig" to test that way
-    //samplePath.append("/orig", 10);
-    DBG("sample path = " + samplePath);
-    File directory(samplePath);
-    DBG(samplePath);
-    Array<File> allSamples = directory.findChildFiles(File::TypesOfFileToFind::findFiles, false, "*.wav");
-    allSamples.sort(sorter);
-    // look for how many of each type there are: 3 A0 samples, 7 C3 samples, 0 D# samples, 1 C# sample, etc...
-    // divide up the velocity range depending on how many there are, and/or using dBFS
-    // load accordingly
-    auto r = new FileArrayAudioFormatReaderFactory(allSamples) ;
-    //readerFactory =
-    int i = 0;
-    for ( auto file : allSamples)
-    {
-        DBG(file.getFullPathName() + " " + String(++i));
-    }
-
-    if (isGlobal)
-    {
-        globalSoundSet =  bitklavier::utils::samplepaths[selection];
-    }
-
-    if(!sampler_soundset.contains(bitklavier::utils::samplepaths[selection]))
-    {
-        sampleLoader.addJob(new SampleLoadJob(
-                                 selection,
-                                 std::unique_ptr<AudioFormatReaderFactory>(r),
-                                 audioFormatManager.get() ,
-                                 &sampler_soundset[bitklavier::utils::samplepaths[selection]],
-                                 this)
-                            , true );
-    }
-
-
-}
- */
 
 static inline int noteNameToRoot(String name)
 {
@@ -281,31 +170,11 @@ static inline int noteNameToRoot(String name)
     return root;
 }
 
-juce::ThreadPoolJob::JobStatus SampleLoadJob::runJob() {
-
+juce::ThreadPoolJob::JobStatus SampleLoadJob::runJob()
+{
     loadSamplesByPitch();
-    /*
-    if (loadType == bitklavier::utils::BKLoadHeavy)
-    {
-        loadMainPianoSamples<8>() ;
-    }
-    else if (loadType == bitklavier::utils::BKLoadMedium)
-    {
-        loadMainPianoSamples<4>() ;
-    }
-    else if (loadType == bitklavier::utils::BKLoadLite)
-    {
-        loadMainPianoSamples<2>() ;
-    }
-    else if (loadType == bitklavier::utils::BKLoadLitest)
-    {
-        loadMainPianoSamples<1>() ;
-    }
-     */
-
     loadManager->triggerAsyncUpdate();
     return jobHasFinished;
-
 }
 
 namespace bitklavier {
@@ -423,23 +292,21 @@ Array<std::tuple<int, int>> SampleLoadJob::getVelLayers (int howmany)
     return layersToReturn;
 }
 
+// load all the velocity layers samples for a particular pitch/key
 void SampleLoadJob::loadSamplesByPitch()
 {
     auto ranges = getVelLayers(velocityLayers);
     int layers = ranges.size();
     int currentVelLayer = 0;
 
-    //for v1 samples.
-        // quietest Yamaha sample is about -41dbFS
+    //for v1 samples, to define bottom threshold.
+    //  quietest Yamaha sample is about -41dbFS, so -50 seems safe and reasonable
     float dBFSBelow  = -50.f;
 
     while (true)
     {
         auto [reader, filename] = sampleReader->make(*manager);
-        // Break the loop if the reader is null
-        if (!reader) {
-            break;
-        }
+        if (!reader) break; // Break the loop if the reader is null
 
         DBG("**** loading sample: " + filename);
         auto sample = new Sample(*(reader.get()), 90);
@@ -474,7 +341,7 @@ void SampleLoadJob::loadSamplesByPitch()
             0,
             velRange,
             layers,
-            (vel  + 1) / 2,
+            //(vel  + 1) / 2,
             dBFSBelow));
 
         dBFSBelow = sound->dBFSLevel; // to pass on to next sample, which should be the next velocity layer above
@@ -484,71 +351,5 @@ void SampleLoadJob::loadSamplesByPitch()
 
     }
     DBG("done loading string samples");
-
-}
-
-template<int layers>
-void SampleLoadJob::loadMainPianoSamples()
-{
-
-    auto ranges = getVelLayers(velocityLayers);
-
-    //auto ranges = bitklavier::utils::VelocityRange<layers>();
-    int  i = 0;
-    float dBFSBelow  = -100.f;
-    while (true)
-    {
-        auto [reader, filename] = sampleReader->make(*manager);
-        // Break the loop if the reader is null
-        if (!reader) {
-            break;
-        }
-
-        DBG("**** loading sample: " + filename);
-        auto sample = new Sample(*(reader.get()), 90);
-
-        StringArray stringArray;
-        stringArray.addTokens(filename, "v", "");
-        String noteName = stringArray[0];
-        String velLayer = stringArray[1];
-        int midiNote = noteNameToRoot(noteName);
-        int vel = velLayer.getIntValue();
-        BigInteger midiNoteRange;
-        int start = midiNote -1;
-
-        //reset dbfs values
-        if (vel == 1) dBFSBelow = -100.f;
-
-        //setting end ranges
-        if(midiNote == 9)
-        {
-            midiNoteRange.setRange(0, start + 3, true);
-        } else if (midiNote == 93)
-        {
-            midiNoteRange.setRange(start, 128-start, true);
-        } else midiNoteRange.setRange(start, 3, true);
-
-        //auto [begin, end] = ranges.values[vel];
-        auto [begin, end] = ranges.getUnchecked(i);
-        DBG("velocity min/max = " + String(begin) + "/" + String(end));
-        BigInteger velRange;
-        velRange.setRange(begin, end - begin, true);
-        auto sound = soundset->add(new BKSamplerSound(filename, std::shared_ptr<Sample<juce::AudioFormatReader>>(sample),
-                                              midiNoteRange,
-                                              midiNote,
-                                              0,
-                                              velRange,
-                                              layers,
-                                              (vel  + 1) / 2,
-                                              dBFSBelow));
-
-        dBFSBelow = sound->dBFSLevel;
-        i++;
-
-        DBG("**** loading sample: " + filename);
-        DBG("");
-
-    }
-    DBG("done loading samples");
 
 }

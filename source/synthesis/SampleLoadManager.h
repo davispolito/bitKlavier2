@@ -112,17 +112,13 @@ public:
 
     Array<String> allPitches;
     Array<String> allPitchClasses = {"A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#"};
-
-//    std::unique_ptr<AudioFormatReader> getSampleReader() const
-//    {
-//        return readerFactory != nullptr ? readerFactory.get()->make(*audioFormatManager) : nullptr;
-//    }
 };
 
+// for loading all the velocity layers for a particular string/key
 class SampleLoadJob : public juce::ThreadPoolJob
 {
 public:
-    SampleLoadJob(int loadType,
+    SampleLoadJob(//int loadType,
                   int numLayers,
                   std::unique_ptr<AudioFormatReaderFactory> ptr,
                   AudioFormatManager* manager,
@@ -131,64 +127,22 @@ public:
                                            soundset(soundset),
                                            loadManager(loadManager),
                                            sampleReader(std::move(ptr)),
-                                           loadType(loadType),
+                                           //loadType(loadType),
                                            manager(manager)
     {
-        /*
-        int numSamplesPerLayer = 29;
-        int numHarmSamples = 69;
-        int numResSamples = 88;
-
-                progressInc =
-                1.0f / ((loadType == bitklavier::utils::BKLoadHeavy)  ? (numSamplesPerLayer * 8 + (numResSamples + numHarmSamples)) :
-                        (loadType == bitklavier::utils::BKLoadMedium) ? (numSamplesPerLayer * 4) :
-                        (loadType == bitklavier::utils::BKLoadLite)   ? (numSamplesPerLayer * 2) :
-                        (loadType == bitklavier::utils::BKLoadLitest) ? (numSamplesPerLayer * 1) :
-                         0.0);
-        */
-
         velocityLayers = numLayers;
-
     };
 
-    //double progressInc;
     JobStatus runJob() override;
-    template <int layers>
-    void loadMainPianoSamples();
     void loadSamplesByPitch();
+
+    int velocityLayers; // how many velocity layers for this particular string
     Array<std::tuple<int, int>> getVelLayers (int howmany);
+
     juce::ReferenceCountedArray<BKSamplerSound<juce::AudioFormatReader>> *soundset;
     std::unique_ptr<AudioFormatReaderFactory> sampleReader;
     AudioFormatManager* manager;
     juce::AsyncUpdater* loadManager;
-    int loadType;
-    int velocityLayers;
-};
-
-class SampleLoadStringJob : public juce::ThreadPoolJob
-{
-public:
-    SampleLoadStringJob(int loadType,
-        std::unique_ptr<AudioFormatReaderFactory> ptr,
-        AudioFormatManager* manager,
-        juce::ReferenceCountedArray<BKSamplerSound<juce::AudioFormatReader>> *soundset,
-        juce::AsyncUpdater* loadManager) : juce::ThreadPoolJob("sample_loader"),
-                                           soundset(soundset),
-                                           loadManager(loadManager),
-                                           sampleReader(std::move(ptr)),
-                                           loadType(loadType),
-                                           manager(manager)
-    {
-    }
-
-    //double progressInc;
-    JobStatus runJob() override;
-    void loadSamplesByPitch();
-    juce::ReferenceCountedArray<BKSamplerSound<juce::AudioFormatReader>> *soundset;
-    std::unique_ptr<AudioFormatReaderFactory> sampleReader;
-    AudioFormatManager* manager;
-    juce::AsyncUpdater* loadManager;
-    int loadType;
 };
 
 #endif //BITKLAVIER2_AUDIOFILEMANAGER_H

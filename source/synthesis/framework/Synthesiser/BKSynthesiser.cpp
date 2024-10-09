@@ -8,6 +8,12 @@ BKSynthesiser::BKSynthesiser()
 {
     for (int i = 0; i < juce::numElementsInArray (lastPitchWheelValues); ++i)
         lastPitchWheelValues[i] = 0x2000;
+
+    // init ADSR
+    globalADSR.attack = 0.005f;
+    globalADSR.decay = 0.0f;
+    globalADSR.sustain = 1.0f;
+    globalADSR.release = 0.1f;
 }
 
 BKSynthesiser::~BKSynthesiser()
