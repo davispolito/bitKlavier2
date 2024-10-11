@@ -51,6 +51,14 @@ public:
     {
         proc.addSoundSet(s);
     }
+
+    void addSoundSet(
+        juce::ReferenceCountedArray<BKSamplerSound<juce::AudioFormatReader>>* s,
+        juce::ReferenceCountedArray<BKSamplerSound<juce::AudioFormatReader>>* h) override
+    {
+        proc.addSoundSet(s, h);
+    }
+
     std::shared_ptr<SynthSection> getPrepPopup() override;
     void resized() override;
     void paintBackground(juce::Graphics &g);

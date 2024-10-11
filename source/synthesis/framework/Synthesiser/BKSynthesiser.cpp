@@ -190,13 +190,27 @@ void BKSynthesiser::handleMidiEvent (const juce::MidiMessage& m)
 {
     const int channel = m.getChannel();
 
+    /**
+     * in most cases, this operates as expected
+     *
+     * for a mainSynth that is in keyRelease mode, however, the function of noteOn and noteOff releases are reversed
+     *
+     * note that this is separate from the "invert noteOn/Off" modality in KeyMap, which could effectively
+     * reverse this already reversed behaviour!
+     */
     if (m.isNoteOn())
     {
-        noteOn (channel, m.getNoteNumber(), m.getVelocity());
+        if (!keyReleaseSynth)
+            noteOn (channel, m.getNoteNumber(), m.getVelocity());
+        else
+            noteOff (channel, m.getNoteNumber(), m.getVelocity(), true);
     }
     else if (m.isNoteOff())
     {
-        noteOff (channel, m.getNoteNumber(), m.getVelocity(), true);
+        if (keyReleaseSynth)
+            noteOn (channel, m.getNoteNumber(), m.getVelocity());
+        else
+            noteOff (channel, m.getNoteNumber(), m.getVelocity(), true);
     }
     else if (m.isAllNotesOff() || m.isAllSoundOff())
     {
@@ -525,7 +539,7 @@ BKSamplerVoice* BKSynthesiser::findVoiceToSteal (BKSamplerSound<juce::AudioForma
     // We've only got "protected" voices now: lowest note takes priority
     jassert (low != nullptr);
 
-    // Duophonic synth: give priority to the bass note:
+    // Duophonic mainSynth: give priority to the bass note:
     if (top != nullptr)
         return top;
 

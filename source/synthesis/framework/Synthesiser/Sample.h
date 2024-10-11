@@ -426,7 +426,7 @@ public:
 
         If allowTailOff is false or the voice doesn't want to tail-off, then it must stop all
         sound immediately, and must call clearCurrentNote() to reset the state of this voice
-        and allow the synth to reassign it another sound.
+        and allow the mainSynth to reassign it another sound.
 
         If allowTailOff is true and the voice decides to do a tail-off, then it's allowed to
         begin fading out its sound, and it can stop playing until it's finished. As soon as it
@@ -488,7 +488,7 @@ public:
         The rate is set so that subclasses know the output rate and can set their pitch
         accordingly.
 
-        This method is called by the synth, and subclasses can access the current rate with
+        This method is called by the mainSynth, and subclasses can access the current rate with
         the currentSampleRate member.
     */
     virtual void setCurrentPlaybackSampleRate (double newRate);

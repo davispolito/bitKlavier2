@@ -242,21 +242,33 @@ using namespace juce;
     void complexToPcmData(int16_t* pcm_data, const std::complex<float>* complex_data, int size);
     void pcmToFloatData(float* float_data, const int16_t* pcm_data, int size);
     void pcmToComplexData(std::complex<float>* complex_data, const int16_t* pcm_data, int size);
-      typedef enum BKSampleLoadType
-      {
+
+    typedef enum BKSampleLoadType
+    {
           BKLoadLitest = 0,
           BKLoadLite,
           BKLoadMedium,
           BKLoadHeavy,
           BKNumSampleTypes
-      } BKSampleLoadType;
-     const std::string samplepaths[BKSampleLoadType::BKNumSampleTypes]
-             {
+    } BKSampleLoadType;
+
+    const std::string samplepaths[BKSampleLoadType::BKNumSampleTypes]
+        {
          "/litest",
          "/lite",
          "/medium",
          "/heavy"
-             };
+        };
+
+    typedef enum BKPianoSampleType
+    {
+        BKPianoMain = 0,
+        BKPianoHammer,
+        BKPianoReleaseResonance,
+        BKPianoPedal,
+        BKNumPianoSampleTypes
+    } BKPianoSampleType;
+
 // Template structure to define velocity ranges based on the number
       // Primary template declaration
       template<size_t N>

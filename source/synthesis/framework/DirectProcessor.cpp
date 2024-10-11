@@ -11,7 +11,8 @@ DirectProcessor::DirectProcessor(const ValueTree &v) : PluginBase(v, nullptr, di
 {
     for (int i = 0; i < 300; i++)
     {
-        synth.addVoice(new BKSamplerVoice());
+        mainSynth.addVoice(new BKSamplerVoice());
+        hammerSynth.addVoice(new BKSamplerVoice());
     }
 
 //    std::unique_ptr<XmlElement> xml = chowdsp::Serialization::serialize<chowdsp::XMLSerializer>(state);
@@ -20,38 +21,47 @@ DirectProcessor::DirectProcessor(const ValueTree &v) : PluginBase(v, nullptr, di
     adsrCallbacks += {state.addParameterListener(*state.params.attackParam,
                                                  chowdsp::ParameterListenerThread::AudioThread,
                                                  [this] {
-                                                     synth.globalADSR.attack = state.params.attackParam->get() * .001; //should fix, not do hard conversions between ms and seconds here
+                               mainSynth.globalADSR.attack = state.params.attackParam->get() * .001f; //should fix, not do hard conversions between ms and seconds here
                                                      DBG("attack: " + String(state.params.attackParam->get()));
                                                  }),
                       state.addParameterListener(*state.params.decayParam,
                                                  chowdsp::ParameterListenerThread::AudioThread,
                                                  [this] {
-                                                     synth.globalADSR.decay = state.params.decayParam->get() * .001;
+                mainSynth.globalADSR.decay = state.params.decayParam->get() * .001f;
                                                      DBG("decay: " + String(state.params.decayParam->get()));
                                                  }),
                       state.addParameterListener(*state.params.sustainParam,
                                                  chowdsp::ParameterListenerThread::AudioThread,
                                                  [this] {
-                                                     synth.globalADSR.sustain = state.params.sustainParam->get();
+                mainSynth.globalADSR.sustain = state.params.sustainParam->get();
                                                      DBG("sustain: " + String(state.params.sustainParam->get()));
                                                  }),
                       state.addParameterListener(*state.params.releaseParam,
                                                  chowdsp::ParameterListenerThread::AudioThread,
                                                  [this] {
-                                                     synth.globalADSR.release = state.params.releaseParam->get() * .001;
+                mainSynth.globalADSR.release = state.params.releaseParam->get() * .001f;
                                                      DBG("release: " + String(state.params.releaseParam->get()));
                                                  })
     };
 
+    hammerSynth.isKeyReleaseSynth(true);
+
+    // should be able to hard-wire these
+    hammerSynth.globalADSR.attack = 0.001f;
+    hammerSynth.globalADSR.decay = 0.0f;
+    hammerSynth.globalADSR.sustain = 1.0f;
+    hammerSynth.globalADSR.release = 0.05;
 
 }
 
 void DirectProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
     const auto spec = juce::dsp::ProcessSpec { sampleRate, (uint32_t) samplesPerBlock, (uint32_t) getMainBusNumInputChannels() };
-    synth.setCurrentPlaybackSampleRate(sampleRate);
+    mainSynth.setCurrentPlaybackSampleRate(sampleRate);
     gain.prepare (spec);
     gain.setRampDurationSeconds (0.05);
+
+    hammerSynth.setCurrentPlaybackSampleRate(sampleRate);
 }
 
 //void DirectProcessor::processAudioBlock (juce::AudioBuffer<float>& buffer)
@@ -95,8 +105,19 @@ void DirectProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::Midi
 
     }
     buffer.clear();
-    synth.renderNextBlock (buffer, midiMessages,
+    mainSynth.renderNextBlock (buffer, midiMessages,
                            0, buffer.getNumSamples());
+
+    hammerSynth.renderNextBlock (buffer, midiMessages,
+        0, buffer.getNumSamples());
+
+    /*
+     * make separate synths for rel, harm, and pedal samples
+     * but all samples loaded into the same sample set?
+     * or separate sound sets, to minimize searching through sets for appropriate samples?
+     * also, how to implement noteOff triggered samples?
+     */
+
     //juce::dsp::AudioBlock<float> block(buffer);
     //melatonin::printSparkline(buffer);
 }

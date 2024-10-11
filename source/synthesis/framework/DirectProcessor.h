@@ -146,9 +146,17 @@ public:
 
     void addSoundSet(juce::ReferenceCountedArray<BKSamplerSound<juce::AudioFormatReader>>* s)
     {
-        synth.addSoundSet(s);
+        mainSynth.addSoundSet(s);
     }
-//    truetruevoid addSamples();
+
+    void addSoundSet(
+        juce::ReferenceCountedArray<BKSamplerSound<juce::AudioFormatReader>>* s, // main samples
+        juce::ReferenceCountedArray<BKSamplerSound<juce::AudioFormatReader>>* h) // hammer samples
+    {
+        DBG("adding main and hammer synth");
+        mainSynth.addSoundSet(s);
+        hammerSynth.addSoundSet(h);
+    }
 
     juce::AudioProcessor::BusesProperties  directBusLayout()
     {
@@ -170,7 +178,8 @@ private:
     //chowdsp::experimental::Directillator<float> oscillator;
     chowdsp::Gain<float> gain;
     ADSR::Parameters adsrParams;
-    BKSynthesiser synth;
+    BKSynthesiser mainSynth;
+    BKSynthesiser hammerSynth;
     chowdsp::ScopedCallbackList adsrCallbacks;
     chowdsp::ScopedCallbackList vtCallbacks;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (DirectProcessor)

@@ -86,13 +86,16 @@ PreparationSection* ConstructionSite::createNewObject (const juce::ValueTree& v)
     s->setSizeRatio(size_ratio_);
     s->setCentrePosition(s->x, s->y);
     s->setSize(s->width, s->height);
-    s->addSoundSet(parent->sampleLoadManager.global_soundset);
+    s->addSoundSet(
+        parent->sampleLoadManager.globalSoundset,
+        parent->sampleLoadManager.globalHammersSoundset);
     s->selectedSet = &(preparationSelector.getLassoSelection());
     preparationSelector.getLassoSelection().addChangeListener(s);
     s->addListener(&cableView);
 
     return s;
 }
+
 void ConstructionSite::reset()
 {
     SynthGuiInterface* _parent = findParentComponentOfClass<SynthGuiInterface>();
@@ -101,7 +104,8 @@ void ConstructionSite::reset()
     parent = _parent->getSynth()->getValueTree().getChildWithName(IDs::PIANO);
 
     cableView.reset();
-    }
+}
+
 void ConstructionSite::newObjectAdded (PreparationSection* object)
 {
     SynthGuiInterface* parent = findParentComponentOfClass<SynthGuiInterface>();

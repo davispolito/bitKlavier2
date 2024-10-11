@@ -100,9 +100,18 @@ public:
     bool loadSamples(int selection, bool isGlobal);
     Array<File> samplesByPitch(String whichPitch, Array<File> inFiles);
     juce::ThreadPool sampleLoader;
-    std::map<juce::String, juce::ReferenceCountedArray<BKSamplerSound<juce::AudioFormatReader>>> sampler_soundset;
-    juce::String globalSoundSet;
-    juce::ReferenceCountedArray<BKSamplerSound<juce::AudioFormatReader>>* global_soundset = nullptr;
+    std::map<juce::String, juce::ReferenceCountedArray<BKSamplerSound<juce::AudioFormatReader>>> samplerSoundset;
+
+    // um, need to find a better way to do this i think....
+    juce::String globalSoundset_name;
+    juce::String globalHammersSoundset_name;
+    juce::String globalReleaseResonanceSoundset_name;
+    juce::String globalPedalsSoundset_name;
+    juce::ReferenceCountedArray<BKSamplerSound<juce::AudioFormatReader>>* globalSoundset = nullptr;
+    juce::ReferenceCountedArray<BKSamplerSound<juce::AudioFormatReader>>* globalHammersSoundset = nullptr;
+    juce::ReferenceCountedArray<BKSamplerSound<juce::AudioFormatReader>>* globalReleaseResonanceSoundset = nullptr;
+    juce::ReferenceCountedArray<BKSamplerSound<juce::AudioFormatReader>>* globalPedalsSoundset = nullptr;
+
     UserPreferences &preferences;
     void handleAsyncUpdate() override;
 
@@ -110,15 +119,24 @@ public:
     std::unique_ptr<AudioFormatManager> audioFormatManager;
     std::unique_ptr<AudioFormatReaderFactory> readerFactory;
 
+    // perhaps these should be move to utils or something
     Array<String> allPitches;
     Array<String> allPitchClasses = {"A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#"};
 };
 
-// for loading all the velocity layers for a particular string/key
+/* SampleLoadJob is setup to load the standard bK sample setup, with main, hammer (rel), release resonance Harm, and pedal samples
+ * all named consistently
+ *
+ * loadMainSamplesByPitch() is for loading all the velocity layers for a particular string/key
+ * layer numbers to NOT have be consecutive
+ * but they do need to be ascending, with quieter samples having lower numbers than louder samples
+ * so, v1, v4, v5, v23 from softest to loudest is fine... but v4, v1, v23, v5 from softest to loudest is not
+ */
 class SampleLoadJob : public juce::ThreadPoolJob
 {
 public:
     SampleLoadJob(//int loadType,
+                  int sampleType,
                   int numLayers,
                   std::unique_ptr<AudioFormatReaderFactory> ptr,
                   AudioFormatManager* manager,
@@ -130,12 +148,19 @@ public:
                                            //loadType(loadType),
                                            manager(manager)
     {
+        thisSampleType = sampleType;
         velocityLayers = numLayers;
     };
 
     JobStatus runJob() override;
-    void loadSamplesByPitch();
 
+    void loadSamples(); // calls one of the following, depending on context
+    void loadMainSamplesByPitch();
+    void loadHammerSamples();
+    void loadReleaseResonanceSamples();
+    void loadPedalSamples();
+
+    int thisSampleType;
     int velocityLayers; // how many velocity layers for this particular string
     Array<std::tuple<int, int>> getVelLayers (int howmany);
 

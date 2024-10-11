@@ -324,7 +324,7 @@ void FullInterface::animate(bool animate) {
 void FullInterface::reset() {
    ScopedLock lock(open_gl_critical_section_);
 //   if(main_ != nullptr && !main_->v.getParent().isValid()){
-//       main_->v.copyPropertiesAndChildrenFrom(data->synth->getValueTree().getChild(0), nullptr);
+//       main_->v.copyPropertiesAndChildrenFrom(data->mainSynth->getValueTree().getChild(0), nullptr);
 //   }
 
    SynthSection::reset();
