@@ -19,6 +19,7 @@
 #include <juce_audio_formats/juce_audio_formats.h>
 //#ifdef DEBUG
 #include "common.h"
+#include "utils.h"
 
 //#endif
 //==============================================================================
@@ -57,10 +58,6 @@ public:
 
         //upsample(8);
     }
-
-
-
-
 
 //    Sample(std::vector<std::vector<float>> soundData, double sr) : m_sourceSampleRate{ sr },
 //        m_length((int)soundData.at(0).size()) {
@@ -217,14 +214,6 @@ template<typename T>
 class BKSamplerSound :  public juce::SynthesiserSound
 {
 public:
-    static double mtof( double f )
-    {
-        if( f <= -1500 ) return (0);
-        else if( f > 1499 ) return (mtof(1499));
-            // else return (8.17579891564 * exp(.0577622650 * f));
-            // TODO: optimize
-        else return ( pow(2, (f - 69) / 12.0) * 440.0 );
-    }
 
 
     BKSamplerSound( const juce::String& soundName,
