@@ -20,8 +20,8 @@ DirectProcessor::DirectProcessor(const ValueTree &v) : PluginBase(v, nullptr, di
     // mixer
     // connect these to sliders, as with ADSR
     mainSynth.setSynthGain(1.);
-    hammerSynth.setSynthGain(0.1);
-    releaseResonanceSynth.setSynthGain(5.);
+    hammerSynth.setSynthGain(0.05);
+    releaseResonanceSynth.setSynthGain(2.);
 
 //    std::unique_ptr<XmlElement> xml = chowdsp::Serialization::serialize<chowdsp::XMLSerializer>(state);
 //    DBG(chowdsp::Serialization::serialize<chowdsp::XMLSerializer>(state)->toString());
