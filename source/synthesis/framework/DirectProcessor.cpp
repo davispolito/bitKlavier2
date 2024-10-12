@@ -18,6 +18,8 @@ DirectProcessor::DirectProcessor(const ValueTree &v) : PluginBase(v, nullptr, di
     }
 
     // mixer
+    // connect these to sliders, as with ADSR
+    mainSynth.setSynthGain(1.);
     hammerSynth.setSynthGain(0.1);
     releaseResonanceSynth.setSynthGain(5.);
 
@@ -50,6 +52,7 @@ DirectProcessor::DirectProcessor(const ValueTree &v) : PluginBase(v, nullptr, di
                                                  })
     };
 
+    // these synths play their stuff on noteOff rather than noteOn
     hammerSynth.isKeyReleaseSynth(true);
     releaseResonanceSynth.isKeyReleaseSynth(true);
 

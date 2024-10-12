@@ -4,8 +4,6 @@
 
 #pragma once
 
-
-
 #include "PluginBase.h"
 #include <chowdsp_plugin_utils/chowdsp_plugin_utils.h>
 #include <chowdsp_sources/chowdsp_sources.h>

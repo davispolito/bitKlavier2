@@ -371,7 +371,7 @@ private:
                 mutable juce::CriticalSection stealLock;
                 mutable juce::Array<BKSamplerVoice*> usableVoicesToStealArray;
 
-                bool keyReleaseSynth = false;
+                bool keyReleaseSynth = false; // by default, synths play on keyPress (noteOn), not the opposite!
 
                 template <typename floatType>
                 void processNextBlock (juce::AudioBuffer<floatType>&, const juce::MidiBuffer&, int startSample, int numSamples);

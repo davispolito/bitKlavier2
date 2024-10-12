@@ -24,7 +24,6 @@ synth(synth_)
         {
             String noteOctave = note + String(i);
             allPitches.add(noteOctave);
-            // DBG(noteOctave);
         }
     }
 }
@@ -107,8 +106,6 @@ void SampleLoadManager::loadSamples_sub(bitklavier::utils::BKPianoSampleType thi
     else if (thisSampleType == BKPianoPedal)
         soundsetName = globalPedalsSoundset_name;
 
-    DBG("loadSamples_sub " + soundsetName);
-
     String samplePath = preferences.tree.getProperty("default_sample_path");
     samplePath.append("/Default", 20);
     samplePath.append(BKPianoSampleType_string[thisSampleType], 20); // subfolders need to be named accordingly
@@ -125,12 +122,10 @@ void SampleLoadManager::loadSamples_sub(bitklavier::utils::BKPianoSampleType thi
         DBG("*****>>>>> LOADING " + String(BKPianoSampleType_string[thisSampleType]) + " " + pitchName + " <<<<<*****");
 
         Array<File> onePitchSamples(allSamples);
-        DBG("onePitchSamples.size = " + String(onePitchSamples.size()));
         if (thisSampleType == BKPianoMain || thisSampleType == BKPianoReleaseResonance)
             onePitchSamples = samplesByPitch(pitchName, allSamples);
         else if (thisSampleType == BKPianoHammer)
         {
-            DBG ("noteNameToRoot = " + noteNameToRoot(pitchName));
             onePitchSamples.clear();
             for (auto thisFile : allSamples)
             {
@@ -146,18 +141,14 @@ void SampleLoadManager::loadSamples_sub(bitklavier::utils::BKPianoSampleType thi
             }
         }
 
-        DBG("onePitchSamples.size = " + String(onePitchSamples.size()));
         if (onePitchSamples.size() <= 0) continue; // skip if no samples at this pitch
 
         auto r = new FileArrayAudioFormatReaderFactory(onePitchSamples) ;
         sampleLoader.addJob(new SampleLoadJob(
                                  thisSampleType,
-                                 //bitklavier::utils::BKPianoMain,
-                                 //allSamples.size(),
                                  onePitchSamples.size(),
                                  std::unique_ptr<AudioFormatReaderFactory>(r),
                                  audioFormatManager.get(),
-                                 //&samplerSoundset[globalSoundset_name],
                                  &samplerSoundset[soundsetName],
                                  this),
             true );
@@ -174,110 +165,9 @@ bool SampleLoadManager::loadSamples( int selection, bool isGlobal)
         globalReleaseResonanceSoundset_name = bitklavier::utils::samplepaths[selection] + "ReleaseResonance";
     }
 
-    /**
-     * Load Main samples
-     */
-
-    String samplePath = preferences.tree.getProperty("default_sample_path");
-    samplePath.append("/Default/main", 20);
-    File directory(samplePath);
-    Array<File> allSamples = directory.findChildFiles(File::TypesOfFileToFind::findFiles, false, "*.wav");
-
-    // sort alphabetically
-    MyComparator sorter;
-    allSamples.sort(sorter);
-
-
     loadSamples_sub(bitklavier::utils::BKPianoMain);
     loadSamples_sub(bitklavier::utils::BKPianoHammer);
     loadSamples_sub(bitklavier::utils::BKPianoReleaseResonance);
-    // loop through all 12 notes and octaves
-
-    /*
-    for (auto pitchName : allPitches)
-    {
-        DBG("*****>>>>> LOADING PITCH " + pitchName + " <<<<<*****");
-        Array<File> onePitchSamples = samplesByPitch(pitchName, allSamples);
-        if (onePitchSamples.size() <= 0) continue; // skip if no samples at this pitch
-        
-        auto r = new FileArrayAudioFormatReaderFactory(onePitchSamples) ;
-        sampleLoader.addJob(new SampleLoadJob(
-                                 bitklavier::utils::BKPianoMain,
-                                 //selection,
-                                 onePitchSamples.size(),
-                                 std::unique_ptr<AudioFormatReaderFactory>(r),
-                                 audioFormatManager.get(),
-                                 //&samplerSoundset[bitklavier::utils::samplepaths[selection]],
-                                 &samplerSoundset[globalSoundset_name],
-                                 this),
-            true );
-    }
-     */
-
-
-    /**
-     * Load Hammer Samples
-     */
-
-    /*
-    samplePath = preferences.tree.getProperty("default_sample_path");
-    samplePath.append("/Default/hammer", 20);
-    directory = samplePath;
-    allSamples = directory.findChildFiles(File::TypesOfFileToFind::findFiles, false, "*.wav");
-    allSamples.sort(sorter);
-
-    //auto r = new FileArrayAudioFormatReaderFactory(allSamples);
-    for (auto pitchName : allPitches)
-    {
-        DBG("*****>>>>> LOADING HAMMER " + pitchName + " <<<<<*****");
-
-        if (allSamples.size() <= 0) continue; // skip if no samples at this pitch
-        for (auto thisFile : allSamples)
-        {
-            // isolate MIDI
-            StringArray stringArray;
-            stringArray.addTokens(thisFile.getFileName(), "l", "");
-            int midiNote = stringArray[1].getIntValue();
-            if (midiNote == noteNameToRoot(pitchName))
-            {
-                DBG ("thisFile " + thisFile.getFileName() + " matches " + pitchName);
-
-                auto r = new FileArrayAudioFormatReaderFactory (thisFile);
-                sampleLoader.addJob (new SampleLoadJob (
-                                         //selection,
-                                         bitklavier::utils::BKPianoHammer,
-                                         1, // only one velocity layer for these
-                                         std::unique_ptr<AudioFormatReaderFactory> (r),
-                                         audioFormatManager.get(),
-                                         //&samplerSoundset[bitklavier::utils::samplepaths[selection]],
-                                         &samplerSoundset[globalHammersSoundset_name],
-                                         this),
-                    true);
-            }
-
-        }
-        */
-
-        /*
-        auto r = new FileArrayAudioFormatReaderFactory(allSamples) ;
-        sampleLoader.addJob(new SampleLoadJob(
-                                 //selection,
-                                 bitklavier::utils::BKPianoHammer,
-                                 1, // only one velocity layer for these
-                                 std::unique_ptr<AudioFormatReaderFactory>(r),
-                                 audioFormatManager.get(),
-                                 //&samplerSoundset[bitklavier::utils::samplepaths[selection]],
-                                 &samplerSoundset[globalHammersSoundset_name],
-                                 this),
-            true );
-
-    }
-         */
-
-
-    /**
-     * then do the same for releaseResonance and pedal samples
-     */
 }
 
 /**
