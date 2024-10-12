@@ -88,7 +88,8 @@ PreparationSection* ConstructionSite::createNewObject (const juce::ValueTree& v)
     s->setSize(s->width, s->height);
     s->addSoundSet(
         parent->sampleLoadManager.globalSoundset,
-        parent->sampleLoadManager.globalHammersSoundset);
+        parent->sampleLoadManager.globalHammersSoundset,
+        parent->sampleLoadManager.globalReleaseResonanceSoundset);
     s->selectedSet = &(preparationSelector.getLassoSelection());
     preparationSelector.getLassoSelection().addChangeListener(s);
     s->addListener(&cableView);

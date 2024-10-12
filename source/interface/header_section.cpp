@@ -262,12 +262,14 @@ void HeaderSection::reset() {
 //}
 namespace string_constants{
 
-
+    // i think the sample library menu should be autopopulated by subfolders in the samples folder
+    // and also by whatever other folders the user specifies in preferences for storing samples
+    // including SoundFonts
     static const std::vector<std::string> cBKSampleLoadTypes = {
-            "Piano (litest)",
-            "Piano (lite)",
-            "Piano (medium)",
-            "Piano (heavy)"
+            "Piano (Default)",
+            "Library 2",
+            "Library 3",
+            "Library 4"
     };
 
 };
@@ -286,7 +288,7 @@ void HeaderSection::buttonClicked(Button* clicked_button) {
   else if (clicked_button == sampleSelector.get())
     {
       PopupItems options;
-      for(int i = 0; i < bitklavier::utils::BKSampleLoadType::BKNumSampleTypes; i++)
+      for(int i = 0; i < bitklavier::utils::BKSampleLoadType::BKNumSampleLoadTypes; i++)
       {
             options.addItem(i, string_constants::cBKSampleLoadTypes[i]);
       }

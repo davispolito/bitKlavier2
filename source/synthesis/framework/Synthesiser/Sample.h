@@ -253,14 +253,14 @@ public:
         dBFSLevel = sample->getRMS();
 
         // Print the standard values
-        DBG("soundName: " + soundName);
+        //DBG("soundName: " + soundName);
         //DBG("Sample Pointer: " + juce::String((uintptr_t)sample.get()));
-        DBG("rootMidiNote: " + juce::String(rootMidiNote));
+        //DBG("rootMidiNote: " + juce::String(rootMidiNote));
         //DBG("transpose: " + juce::String(transpose));
         //DBG("numLayers: " + juce::String(numLayers));
         //DBG("layerId: " + juce::String(layerId));
-        DBG("dbfsLevel: " + juce::String(dBFSLevel));
-        DBG("dbfsBelow: " + juce::String(dBFSBelow));
+        //DBG("dbfsLevel: " + juce::String(dBFSLevel));
+        //DBG("dbfsBelow: " + juce::String(dBFSBelow));
 
         // Print the highest bit and bit count for midiNotes
         //int midiNotesHighestBit = midiNotes.getHighestBit();
@@ -274,8 +274,8 @@ public:
 
         //DBG("midiVelocities Highest Bit: " + juce::String(midiVelocitiesHighestBit));
         //DBG("midiVelocities Bit Count: " + juce::String(midiVelocitiesBitCount));
-        DBG("min Velocity " + juce::String(minVelocity()));
-        DBG("max Velocity " + juce::String(maxVelocity()));
+        //DBG("min Velocity " + juce::String(minVelocity()));
+        //DBG("max Velocity " + juce::String(maxVelocity()));
 
 
 
@@ -635,7 +635,7 @@ public:
 
         // this will adjust the loudness of this layer according to velocity, based on the
         //      dB difference between this layer and the layer below
-        level.setTargetValue(samplerSound->getGainMultiplierFromVelocity(velocity));
+        level.setTargetValue(samplerSound->getGainMultiplierFromVelocity(velocity)); // need gain setting for each synth
         //DBG("gain from velocity = " + String(velocity) + ":" + String(samplerSound->getGainMultiplierFromVelocity(velocity)));
 
         frequency.setTargetValue(mtof(midiNoteNumber));

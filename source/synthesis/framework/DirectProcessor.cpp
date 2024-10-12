@@ -13,6 +13,8 @@ DirectProcessor::DirectProcessor(const ValueTree &v) : PluginBase(v, nullptr, di
     {
         mainSynth.addVoice(new BKSamplerVoice());
         hammerSynth.addVoice(new BKSamplerVoice());
+        releaseResonanceSynth.addVoice(new BKSamplerVoice());
+        pedalSynth.addVoice(new BKSamplerVoice());
     }
 
 //    std::unique_ptr<XmlElement> xml = chowdsp::Serialization::serialize<chowdsp::XMLSerializer>(state);
@@ -45,12 +47,18 @@ DirectProcessor::DirectProcessor(const ValueTree &v) : PluginBase(v, nullptr, di
     };
 
     hammerSynth.isKeyReleaseSynth(true);
+    releaseResonanceSynth.isKeyReleaseSynth(true);
 
     // should be able to hard-wire these
     hammerSynth.globalADSR.attack = 0.001f;
     hammerSynth.globalADSR.decay = 0.0f;
     hammerSynth.globalADSR.sustain = 1.0f;
     hammerSynth.globalADSR.release = 0.05;
+
+    releaseResonanceSynth.globalADSR.attack = 0.001f;
+    releaseResonanceSynth.globalADSR.decay = 0.0f;
+    releaseResonanceSynth.globalADSR.sustain = 1.0f;
+    releaseResonanceSynth.globalADSR.release = 0.05;
 
 }
 
@@ -62,6 +70,8 @@ void DirectProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
     gain.setRampDurationSeconds (0.05);
 
     hammerSynth.setCurrentPlaybackSampleRate(sampleRate);
+    releaseResonanceSynth.setCurrentPlaybackSampleRate(sampleRate);
+    pedalSynth.setCurrentPlaybackSampleRate(sampleRate);
 }
 
 //void DirectProcessor::processAudioBlock (juce::AudioBuffer<float>& buffer)
@@ -102,21 +112,21 @@ void DirectProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::Midi
 //        state.params.doForAllParameters([this](auto& param, size_t) {
 //           param.printDebug();
 //           });
-
     }
+
     buffer.clear();
-    mainSynth.renderNextBlock (buffer, midiMessages,
+
+    if (mainSynth.getNumSounds() > 0)
+        mainSynth.renderNextBlock (buffer, midiMessages,
                            0, buffer.getNumSamples());
 
-    hammerSynth.renderNextBlock (buffer, midiMessages,
+    if (hammerSynth.getNumSounds() > 0)
+        hammerSynth.renderNextBlock (buffer, midiMessages,
         0, buffer.getNumSamples());
 
-    /*
-     * make separate synths for rel, harm, and pedal samples
-     * but all samples loaded into the same sample set?
-     * or separate sound sets, to minimize searching through sets for appropriate samples?
-     * also, how to implement noteOff triggered samples?
-     */
+    if (releaseResonanceSynth.getNumSounds() > 0)
+        releaseResonanceSynth.renderNextBlock (buffer, midiMessages,
+        0, buffer.getNumSamples());
 
     //juce::dsp::AudioBlock<float> block(buffer);
     //melatonin::printSparkline(buffer);

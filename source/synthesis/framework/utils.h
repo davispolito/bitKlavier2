@@ -245,19 +245,19 @@ using namespace juce;
 
     typedef enum BKSampleLoadType
     {
-          BKLoadLitest = 0,
-          BKLoadLite,
-          BKLoadMedium,
-          BKLoadHeavy,
-          BKNumSampleTypes
+        BKLoadDefault = 0,
+        BKLoadSampleSet2,
+        BKLoadSampleSet3,
+        BKLoadSampleSet4,
+        BKNumSampleLoadTypes
     } BKSampleLoadType;
 
-    const std::string samplepaths[BKSampleLoadType::BKNumSampleTypes]
+    const std::string samplepaths[BKSampleLoadType::BKNumSampleLoadTypes]
         {
-         "/litest",
-         "/lite",
-         "/medium",
-         "/heavy"
+         "/default",
+         "/sampleset2", // made up for now...
+         "/sampleset3",
+         "/sampleset4"
         };
 
     typedef enum BKPianoSampleType
@@ -266,8 +266,16 @@ using namespace juce;
         BKPianoHammer,
         BKPianoReleaseResonance,
         BKPianoPedal,
-        BKNumPianoSampleTypes
+        BKPianoSampleTypes
     } BKPianoSampleType;
+
+    const std::string BKPianoSampleType_string[BKPianoSampleType::BKPianoSampleTypes]
+    {
+        "/main",
+        "/hammer",
+        "/resonance",
+        "/pedal"
+    };
 
 // Template structure to define velocity ranges based on the number
       // Primary template declaration
@@ -282,6 +290,62 @@ using namespace juce;
 //      constexpr std::array<std::tuple<int, int>, N> VelocityRange<N>::values = {};
 
 
+      template<>
+      constexpr std::array<std::tuple<int, int>, 16> VelocityRange<16>::values = {
+          std::make_tuple(0, 8),
+          std::make_tuple(8, 16),
+          std::make_tuple(16, 24),
+          std::make_tuple(24, 32),
+          std::make_tuple(32, 40),
+          std::make_tuple(40, 48),
+          std::make_tuple(48, 56),
+          std::make_tuple(56, 64),
+          std::make_tuple(64, 72),
+          std::make_tuple(72, 80),
+          std::make_tuple(80, 88),
+          std::make_tuple(88, 96),
+          std::make_tuple(96, 104),
+          std::make_tuple(104, 112),
+          std::make_tuple(112, 120),
+          std::make_tuple(120, 128)
+      };
+      // Define the tuples for N = 8
+      template<>
+      constexpr std::array<std::tuple<int, int>, 8> VelocityRange<8>::values = {
+          std::make_tuple(0, 30),
+          std::make_tuple(30, 50),
+          std::make_tuple(50, 68),
+          std::make_tuple(68, 84),
+          std::make_tuple(84, 98),
+          std::make_tuple(98, 110),
+          std::make_tuple(110, 120),
+          std::make_tuple(120, 128)
+      };
+
+      // Define the tuples for N = 4
+      template<>
+      constexpr std::array<std::tuple<int, int>, 4> VelocityRange<4>::values = {
+          std::make_tuple(0, 42),
+          std::make_tuple(42, 76),
+          std::make_tuple(76, 104),
+          std::make_tuple(104, 128)
+      };
+
+
+      // Define the tuples for N = 2
+      template<>
+      constexpr std::array<std::tuple<int, int>, 2> VelocityRange<2>::values = {
+          std::make_tuple(0, 76),
+          std::make_tuple(76, 128)
+      };
+
+
+      // Define the tuples for N = 1
+      template<>
+      constexpr std::array<std::tuple<int, int>, 1> VelocityRange<1>::values = {
+          std::make_tuple(0, 128)
+      };
+  
 
 
 
@@ -289,3 +353,63 @@ using namespace juce;
 
 // namespace vital
 
+// standard filename comparator, though doesn't handle velocities well
+class MyComparator
+{
+public:
+    static int compareElements (File first, File second) {
+        if (first.getFileNameWithoutExtension() < second.getFileNameWithoutExtension())
+            return -1;
+        else if (first.getFileNameWithoutExtension() < second.getFileNameWithoutExtension())
+            return 1;
+        else
+            return 0; //items are equal
+    }
+};
+
+// finds velocities in sample names and uses those to sort
+class VelocityComparator
+{
+public:
+    static int compareElements (File first, File second) {
+        // assumes sample names of form [PitchLetter(s)][octave]v[velocity].wav
+        //      so A3v13.wav, of C#0v2.wav
+        //      with only sharps, and ABCDEFG
+        // find where the 'v' is, and where the '.' is for the suffix
+        auto vIndexFirst    = first.getFileName().indexOfChar('v') + 1;
+        auto vIndexSecond   = second.getFileName().indexOfChar('v') + 1;
+        auto vEndIndexFirst = first.getFileName().indexOfChar('.');
+        auto vEndIndexSecond= second.getFileName().indexOfChar('.');
+
+        // get the velocity as an int
+        int velocityFirst = first.getFileName().substring(vIndexFirst, vEndIndexFirst).getIntValue();
+        int velocitySecond = second.getFileName().substring(vIndexSecond, vEndIndexSecond).getIntValue();
+
+        // compare as ints
+        if (velocityFirst < velocitySecond)
+            return -1;
+        else if (velocityFirst < velocitySecond)
+            return 1;
+        else
+            return 0; //items are equal
+    }
+};
+
+static inline int noteNameToRoot(String name)
+{
+    int root = 0;
+    if (name[0] == 'C') root = 0;
+    else if (name[0] == 'D') root = 2;
+    else if (name[0] == 'E') root = 4;
+    else if (name[0] == 'F') root = 5;
+    else if (name[0] == 'G') root = 7;
+    else if (name[0] == 'A') root = 9;
+    else if (name[0] == 'B') root = 11;
+
+    if (name[1] == '#') root++;
+    else if (name[1] == 'b') root--;
+
+    root += 12 * name.getTrailingIntValue() + 12;
+
+    return root;
+}

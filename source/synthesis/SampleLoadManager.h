@@ -4,13 +4,12 @@
 
 #ifndef BITKLAVIER2_AUDIOFILEMANAGER_H
 #define BITKLAVIER2_AUDIOFILEMANAGER_H
+
 #include <juce_events/juce_events.h>
 #include "UserPreferences.h"
 #include "utils.h"
 template<typename T>
 class BKSamplerSound;
-
-
 
 class AudioFormatReaderFactory
 {
@@ -97,12 +96,14 @@ public:
     SampleLoadManager(UserPreferences &preferences, SynthBase* synth_);
     ~SampleLoadManager();
 
-    bool loadSamples(int selection, bool isGlobal);
-    Array<File> samplesByPitch(String whichPitch, Array<File> inFiles);
     juce::ThreadPool sampleLoader;
     std::map<juce::String, juce::ReferenceCountedArray<BKSamplerSound<juce::AudioFormatReader>>> samplerSoundset;
 
-    // um, need to find a better way to do this i think....
+    bool loadSamples(int selection, bool isGlobal);
+    void loadSamples_sub(bitklavier::utils::BKPianoSampleType thisSampleType);
+    Array<File> samplesByPitch(String whichPitch, Array<File> inFiles);
+
+    // maybe this repetition can be cleaned up, but maybe not so important.
     juce::String globalSoundset_name;
     juce::String globalHammersSoundset_name;
     juce::String globalReleaseResonanceSoundset_name;
@@ -119,13 +120,14 @@ public:
     std::unique_ptr<AudioFormatManager> audioFormatManager;
     std::unique_ptr<AudioFormatReaderFactory> readerFactory;
 
-    // perhaps these should be move to utils or something
+    // perhaps these should be moved to utils or something
     Array<String> allPitches;
     Array<String> allPitchClasses = {"A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#"};
+
 };
 
 /* SampleLoadJob is setup to load the standard bK sample setup, with main, hammer (rel), release resonance Harm, and pedal samples
- * all named consistently
+ * all named consistently like the original Yamaha/Salamander samples used in bitKlavier
  *
  * loadMainSamplesByPitch() is for loading all the velocity layers for a particular string/key
  * layer numbers to NOT have be consecutive
