@@ -635,7 +635,7 @@ public:
 
         // this will adjust the loudness of this layer according to velocity, based on the
         //      dB difference between this layer and the layer below
-        level.setTargetValue(samplerSound->getGainMultiplierFromVelocity(velocity)); // need gain setting for each synth
+        level.setTargetValue(samplerSound->getGainMultiplierFromVelocity(velocity) * voiceGain); // need gain setting for each synth
         //DBG("gain from velocity = " + String(velocity) + ":" + String(samplerSound->getGainMultiplierFromVelocity(velocity)));
 
         frequency.setTargetValue(mtof(midiNoteNumber));
@@ -669,6 +669,10 @@ public:
             */
     }
 
+    void setGain(float g)
+    {
+        voiceGain = g;
+    }
 
     void renderNextBlock(juce::AudioBuffer<float>& outputBuffer,
                          int startSample,
@@ -900,6 +904,7 @@ private:
     //AudioProcessorValueTreeState& valueTreeState;  // from the SamplerAudioProcessor
 
     BKSamplerSound<juce::AudioFormatReader>* samplerSound;
+    float voiceGain {1.};
     juce::SmoothedValue<double> level { 0 };
     juce::SmoothedValue<double> frequency { 0 };
     juce::SmoothedValue<double> loopBegin;

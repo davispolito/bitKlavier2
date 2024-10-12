@@ -292,6 +292,11 @@ class BKSynthesiser
                 */
                 void isKeyReleaseSynth(bool mode) { keyReleaseSynth = mode; }
 
+                void setSynthGain(float g)
+                {
+                    synthGain = g;
+                }
+
                 juce::ADSR::Parameters globalADSR;
 protected:
                 //==============================================================================
@@ -370,6 +375,8 @@ private:
 
                 template <typename floatType>
                 void processNextBlock (juce::AudioBuffer<floatType>&, const juce::MidiBuffer&, int startSample, int numSamples);
+
+                float synthGain = 1.0; //global gain for this synth
 
                 JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (BKSynthesiser)
         };

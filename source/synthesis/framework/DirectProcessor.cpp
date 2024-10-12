@@ -17,6 +17,10 @@ DirectProcessor::DirectProcessor(const ValueTree &v) : PluginBase(v, nullptr, di
         pedalSynth.addVoice(new BKSamplerVoice());
     }
 
+    // mixer
+    hammerSynth.setSynthGain(0.1);
+    releaseResonanceSynth.setSynthGain(5.);
+
 //    std::unique_ptr<XmlElement> xml = chowdsp::Serialization::serialize<chowdsp::XMLSerializer>(state);
 //    DBG(chowdsp::Serialization::serialize<chowdsp::XMLSerializer>(state)->toString());
     //chowdsp::Serialization::deserialize<chowdsp::XMLSerializer>(xml,state);
