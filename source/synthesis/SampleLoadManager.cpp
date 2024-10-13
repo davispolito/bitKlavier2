@@ -320,24 +320,15 @@ void SampleLoadJob::loadHammerSamples()
 
         DBG("**** loading hammer sample: " + filename + " " + String(midiNote));
 
-        //setting end ranges
-        /*
+        // hammers are only assigned to their one key (rel1 => A0 only, etc...)
         BigInteger midiNoteRange;
-        if(midiNote == 9) midiNoteRange.setRange(0, midiNote, true);
-        else if (midiNote == 88) midiNoteRange.setRange(midiNote, 128-midiNote, true);
-        else midiNoteRange.setRange(midiNote, 1, true);
-         */
-        BigInteger midiNoteRange;
-        if(midiNote == 21) midiNoteRange.setRange(0, midiNote+1, true);
-        else if (midiNote >= 108) midiNoteRange.setRange(midiNote, 128-midiNote, true);
-        else midiNoteRange.setRange(midiNote, 1, true);
+        midiNoteRange.setRange(midiNote, 1, true);
 
         BigInteger velRange;
         velRange.setRange(0, 128, true);
 
         auto sound = soundset->add(new BKSamplerSound(filename, std::shared_ptr<Sample<juce::AudioFormatReader>>(sample),
             midiNoteRange,
-            //thisMidiRange, // need to handle ranging differently for hammers
             midiNote,
             0,
             velRange,
@@ -372,21 +363,8 @@ void SampleLoadJob::loadReleaseResonanceSamples()
         String noteName = stringArray[0].removeCharacters("harm");
         String velLayer = stringArray[1];
         int midiNote = noteNameToRoot(noteName);
-        //int vel = velLayer.getIntValue();
-        /*
-        BigInteger midiNoteRange;
-        int start = midiNote - 1;
 
-        //setting end ranges
-        // **** need to generalize this if we want to be able to open any random collection and assign to an appropriate range
-        if(midiNote == 9) midiNoteRange.setRange(0, start + 3, true);
-        else if (midiNote == 93) midiNoteRange.setRange(start, 128-start, true);
-        else midiNoteRange.setRange(start, 3, true);
-         */
-
-        //auto [begin, end] = ranges.values[vel];
         auto [begin, end] = ranges.getUnchecked(currentVelLayer++);
-        //DBG("velocity min/max = " + String(begin) + "/" + String(end));
         BigInteger velRange;
         velRange.setRange(begin, end - begin, true);
 
@@ -437,20 +415,8 @@ void SampleLoadJob::loadMainSamplesByPitch()
         String noteName = stringArray[0];
         String velLayer = stringArray[1];
         int midiNote = noteNameToRoot(noteName);
-        //int vel = velLayer.getIntValue();
-        /*
-        BigInteger midiNoteRange;
-        int start = midiNote -1;
 
-        //setting end ranges
-        if(midiNote == 9) midiNoteRange.setRange(0, start + 3, true);
-        else if (midiNote == 93) midiNoteRange.setRange(start, 128-start, true);
-        else midiNoteRange.setRange(start, 3, true);
-         */
-
-        //auto [begin, end] = ranges.values[vel];
         auto [begin, end] = ranges.getUnchecked(currentVelLayer++);
-        //DBG("velocity min/max = " + String(begin) + "/" + String(end));
         BigInteger velRange;
         velRange.setRange(begin, end - begin, true);
 
