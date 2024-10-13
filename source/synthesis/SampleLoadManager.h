@@ -141,7 +141,7 @@ class SampleLoadJob : public juce::ThreadPoolJob
 public:
     SampleLoadJob(//int loadType,
                   int sampleType,
-                  int numLayers, // do we need this one?
+                  int numLayers,
                   BigInteger newMidiRange,
                   std::unique_ptr<AudioFormatReaderFactory> ptr,
                   AudioFormatManager* manager,

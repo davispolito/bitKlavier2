@@ -193,7 +193,7 @@ void BKSynthesiser::handleMidiEvent (const juce::MidiMessage& m)
     /**
      * in most cases, this operates as expected
      *
-     * for a mainSynth that is in keyRelease mode, however, the function of noteOn and noteOff releases are reversed
+     * for a synth that is in keyRelease mode, however, the function of noteOn and noteOff releases are reversed
      *
      * note that this is separate from the "invert noteOn/Off" modality in KeyMap, which could effectively
      * reverse this already reversed behaviour!

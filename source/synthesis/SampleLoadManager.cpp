@@ -369,7 +369,6 @@ void SampleLoadJob::loadReleaseResonanceSamples()
         velRange.setRange(begin, end - begin, true);
 
         auto sound = soundset->add(new BKSamplerSound(filename, std::shared_ptr<Sample<juce::AudioFormatReader>>(sample),
-            //midiNoteRange,
             thisMidiRange,
             midiNote,
             0,
@@ -421,7 +420,6 @@ void SampleLoadJob::loadMainSamplesByPitch()
         velRange.setRange(begin, end - begin, true);
 
         auto sound = soundset->add(new BKSamplerSound(filename, std::shared_ptr<Sample<juce::AudioFormatReader>>(sample),
-            //midiNoteRange,
             thisMidiRange,
             midiNote,
             0,
