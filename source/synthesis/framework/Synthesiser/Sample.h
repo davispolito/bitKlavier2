@@ -227,7 +227,7 @@ public:
                     float dBFSBelow
                     ) :
                     dBFSBelow(dBFSBelow),
-                    numLayers(numLayers),
+                    numLayers(numLayers), // i don't think we need this argument anymore
                     //layerId(layerId),
                     rootMidiNote(rootMidiNote),
                     transpose(transpose),
@@ -252,8 +252,8 @@ public:
         //DBG("dbfsBelow: " + juce::String(dBFSBelow));
 
         // Print the highest bit and bit count for midiNotes
-        //int midiNotesHighestBit = midiNotes.getHighestBit();
-        //int midiNotesBitCount = midiNotes.countNumberOfSetBits();
+        int midiNotesHighestBit = midiNotes.getHighestBit();
+        int midiNotesBitCount = midiNotes.countNumberOfSetBits();
         //DBG("midiNotes Highest Bit: " + juce::String(midiNotesHighestBit));
         //DBG("midiNotes Bit Count: " + juce::String(midiNotesBitCount));
 
@@ -341,7 +341,7 @@ public:
 
     float dBFSLevel; // dBFS value of this velocity layer
     float dBFSBelow; // dBFS value of velocity layer below this layer
-    int numLayers;
+    int numLayers; // don't think we need this...
     //int layerId;
     int rootMidiNote;
     int transpose;

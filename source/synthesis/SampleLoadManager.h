@@ -123,6 +123,8 @@ public:
     // perhaps these should be moved to utils or something
     Array<String> allPitches;
     Array<String> allPitchClasses = {"A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#"};
+    Array<int> allKeysWithSamples; // array that keeps track of which keys have samples, for building start/end ranges in keymap
+    BigInteger getMidiRange(String pitchName);
 
 };
 
@@ -139,7 +141,8 @@ class SampleLoadJob : public juce::ThreadPoolJob
 public:
     SampleLoadJob(//int loadType,
                   int sampleType,
-                  int numLayers,
+                  int numLayers, // do we need this one?
+                  BigInteger newMidiRange,
                   std::unique_ptr<AudioFormatReaderFactory> ptr,
                   AudioFormatManager* manager,
                   juce::ReferenceCountedArray<BKSamplerSound<juce::AudioFormatReader>> *soundset,
@@ -152,6 +155,7 @@ public:
     {
         thisSampleType = sampleType;
         velocityLayers = numLayers;
+        thisMidiRange = newMidiRange;
     };
 
     JobStatus runJob() override;
@@ -164,6 +168,7 @@ public:
 
     int thisSampleType;
     int velocityLayers; // how many velocity layers for this particular string
+    BigInteger thisMidiRange;
     Array<std::tuple<int, int>> getVelLayers (int howmany);
 
     juce::ReferenceCountedArray<BKSamplerSound<juce::AudioFormatReader>> *soundset;

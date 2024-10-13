@@ -91,6 +91,46 @@ Array<File> SampleLoadManager::samplesByPitch(String whichPitch, Array<File> inF
     return outFiles;
 }
 
+/**
+SampleLoadManager::getMidiRange
+ this looks at the allKeysWithSamples array and determines the start and end points
+ needed for each sample to fully cover all the keys.
+ the default bK samples are a minor 3rd apart, so it handles assigning to adjacent keys
+ but it should work with any randomly spaced set of samples, named appropriately
+ need to fully test it though!
+ */
+
+BigInteger SampleLoadManager::getMidiRange(String pitchName)
+{
+    int pitchNum = noteNameToRoot(pitchName);
+    int pitchIndex = allKeysWithSamples.indexOf(pitchNum);
+
+    int lowerNeighbor, upperNeighbor;
+    int gapDown, gapUp;
+
+    //this is not correct yet for even gaps!
+
+    if (pitchIndex <= 0) gapDown = pitchNum;
+    else
+    {
+        lowerNeighbor = allKeysWithSamples.getUnchecked(pitchIndex - 1);
+        gapDown = std::trunc((pitchNum - lowerNeighbor) / 2.);
+    }
+
+    if (pitchIndex >= allKeysWithSamples.size() - 1) gapUp = 128 - pitchNum;
+    else
+    {
+        upperNeighbor = allKeysWithSamples.getUnchecked(pitchIndex + 1);
+        gapUp = std::trunc((upperNeighbor - pitchNum) / 2.);  // subtract 0.25 or something from this, so it truncates down when even, but still works when odd...
+    }
+
+    BigInteger midirange;
+    midirange.setRange(pitchNum - gapDown, gapDown + gapUp + 1, true); // 2nd argument needs to be range, not top val
+    DBG("getMidiRange for " + String(pitchNum) + " start at " + String(pitchNum - gapDown) + " with range " + String(gapDown + gapUp + 1));
+
+    return midirange;
+}
+
 void SampleLoadManager::loadSamples_sub(bitklavier::utils::BKPianoSampleType thisSampleType)
 {
     using namespace bitklavier::utils;
@@ -116,14 +156,27 @@ void SampleLoadManager::loadSamples_sub(bitklavier::utils::BKPianoSampleType thi
     MyComparator sorter;
     allSamples.sort(sorter);
 
+    //Build allKeysWithSamples: array that keeps track of which keys have samples, for building start/end ranges in keymap
+    for (auto thisFile : allSamples)
+    {
+        if (thisSampleType == BKPianoMain || thisSampleType == BKPianoReleaseResonance)
+        {
+            StringArray stringArray;
+            stringArray.addTokens( thisFile.getFileName(), "v", "");
+            String noteName = stringArray[0].removeCharacters("harm");
+            allKeysWithSamples.addIfNotAlreadyThere(noteNameToRoot(noteName));
+        }
+    }
+    allKeysWithSamples.sort();
+
     // loop through all 12 notes and octaves
     for (auto pitchName : allPitches)
     {
-        DBG("*****>>>>> LOADING " + String(BKPianoSampleType_string[thisSampleType]) + " " + pitchName + " <<<<<*****");
+        DBG ("*****>>>>> LOADING " + String (BKPianoSampleType_string[thisSampleType]) + " " + pitchName + " <<<<<*****");
 
-        Array<File> onePitchSamples(allSamples);
+        Array<File> onePitchSamples (allSamples);
         if (thisSampleType == BKPianoMain || thisSampleType == BKPianoReleaseResonance)
-            onePitchSamples = samplesByPitch(pitchName, allSamples);
+            onePitchSamples = samplesByPitch (pitchName, allSamples);
         else if (thisSampleType == BKPianoHammer)
         {
             onePitchSamples.clear();
@@ -132,7 +185,7 @@ void SampleLoadManager::loadSamples_sub(bitklavier::utils::BKPianoSampleType thi
                 // isolate MIDI
                 StringArray stringArray;
                 stringArray.addTokens(thisFile.getFileName(), "l", "");
-                int midiNote = stringArray[1].getIntValue();
+                int midiNote = stringArray[1].getIntValue() + 20;
                 if (midiNote == noteNameToRoot(pitchName))
                 {
                     onePitchSamples.add(thisFile);
@@ -143,10 +196,13 @@ void SampleLoadManager::loadSamples_sub(bitklavier::utils::BKPianoSampleType thi
 
         if (onePitchSamples.size() <= 0) continue; // skip if no samples at this pitch
 
+        BigInteger midirange = getMidiRange(pitchName);
+
         auto r = new FileArrayAudioFormatReaderFactory(onePitchSamples) ;
         sampleLoader.addJob(new SampleLoadJob(
                                  thisSampleType,
                                  onePitchSamples.size(),
+                                 midirange,
                                  std::unique_ptr<AudioFormatReaderFactory>(r),
                                  audioFormatManager.get(),
                                  &samplerSoundset[soundsetName],
@@ -260,14 +316,20 @@ void SampleLoadJob::loadHammerSamples()
         // isolate MIDI
         StringArray stringArray;
         stringArray.addTokens(filename, "l", "");
-        int midiNote = stringArray[1].getIntValue();
+        int midiNote = stringArray[1].getIntValue() + 20;
 
         DBG("**** loading hammer sample: " + filename + " " + String(midiNote));
 
         //setting end ranges
+        /*
         BigInteger midiNoteRange;
         if(midiNote == 9) midiNoteRange.setRange(0, midiNote, true);
         else if (midiNote == 88) midiNoteRange.setRange(midiNote, 128-midiNote, true);
+        else midiNoteRange.setRange(midiNote, 1, true);
+         */
+        BigInteger midiNoteRange;
+        if(midiNote == 21) midiNoteRange.setRange(0, midiNote+1, true);
+        else if (midiNote >= 108) midiNoteRange.setRange(midiNote, 128-midiNote, true);
         else midiNoteRange.setRange(midiNote, 1, true);
 
         BigInteger velRange;
@@ -275,6 +337,7 @@ void SampleLoadJob::loadHammerSamples()
 
         auto sound = soundset->add(new BKSamplerSound(filename, std::shared_ptr<Sample<juce::AudioFormatReader>>(sample),
             midiNoteRange,
+            //thisMidiRange, // need to handle ranging differently for hammers
             midiNote,
             0,
             velRange,
@@ -309,7 +372,8 @@ void SampleLoadJob::loadReleaseResonanceSamples()
         String noteName = stringArray[0].removeCharacters("harm");
         String velLayer = stringArray[1];
         int midiNote = noteNameToRoot(noteName);
-        int vel = velLayer.getIntValue();
+        //int vel = velLayer.getIntValue();
+        /*
         BigInteger midiNoteRange;
         int start = midiNote - 1;
 
@@ -318,6 +382,7 @@ void SampleLoadJob::loadReleaseResonanceSamples()
         if(midiNote == 9) midiNoteRange.setRange(0, start + 3, true);
         else if (midiNote == 93) midiNoteRange.setRange(start, 128-start, true);
         else midiNoteRange.setRange(start, 3, true);
+         */
 
         //auto [begin, end] = ranges.values[vel];
         auto [begin, end] = ranges.getUnchecked(currentVelLayer++);
@@ -326,7 +391,8 @@ void SampleLoadJob::loadReleaseResonanceSamples()
         velRange.setRange(begin, end - begin, true);
 
         auto sound = soundset->add(new BKSamplerSound(filename, std::shared_ptr<Sample<juce::AudioFormatReader>>(sample),
-            midiNoteRange,
+            //midiNoteRange,
+            thisMidiRange,
             midiNote,
             0,
             velRange,
@@ -371,7 +437,8 @@ void SampleLoadJob::loadMainSamplesByPitch()
         String noteName = stringArray[0];
         String velLayer = stringArray[1];
         int midiNote = noteNameToRoot(noteName);
-        int vel = velLayer.getIntValue();
+        //int vel = velLayer.getIntValue();
+        /*
         BigInteger midiNoteRange;
         int start = midiNote -1;
 
@@ -379,6 +446,7 @@ void SampleLoadJob::loadMainSamplesByPitch()
         if(midiNote == 9) midiNoteRange.setRange(0, start + 3, true);
         else if (midiNote == 93) midiNoteRange.setRange(start, 128-start, true);
         else midiNoteRange.setRange(start, 3, true);
+         */
 
         //auto [begin, end] = ranges.values[vel];
         auto [begin, end] = ranges.getUnchecked(currentVelLayer++);
@@ -387,7 +455,8 @@ void SampleLoadJob::loadMainSamplesByPitch()
         velRange.setRange(begin, end - begin, true);
 
         auto sound = soundset->add(new BKSamplerSound(filename, std::shared_ptr<Sample<juce::AudioFormatReader>>(sample),
-            midiNoteRange,
+            //midiNoteRange,
+            thisMidiRange,
             midiNote,
             0,
             velRange,
