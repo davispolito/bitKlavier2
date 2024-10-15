@@ -249,6 +249,7 @@ void BKSynthesiser::noteOn (const int midiChannel,
 
     for (auto* sound : *sounds)
     {
+        //DBG("noteOn velocity = " + String(velocity));
         if (sound->appliesToNote (midiNoteNumber) && sound->appliesToChannel (midiChannel) && sound->appliesToVelocity(velocity))
         {
             // If hitting a note that's still ringing, stop it first (it could be

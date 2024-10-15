@@ -121,12 +121,12 @@ BigInteger SampleLoadManager::getMidiRange(String pitchName)
     else
     {
         upperNeighbor = allKeysWithSamples.getUnchecked(pitchIndex + 1);
-        gapUp = std::trunc((upperNeighbor - pitchNum) / 2.);  // subtract 0.25 or something from this, so it truncates down when even, but still works when odd...
+        gapUp = std::trunc(((upperNeighbor - pitchNum) / 2.) - 0.1);  // subtract something small, so it truncates down when even, but still works when odd...
     }
 
     BigInteger midirange;
     midirange.setRange(pitchNum - gapDown, gapDown + gapUp + 1, true); // 2nd argument needs to be range, not top val
-    DBG("getMidiRange for " + String(pitchNum) + " start at " + String(pitchNum - gapDown) + " with range " + String(gapDown + gapUp + 1));
+    //DBG("getMidiRange for " + String(pitchNum) + " start at " + String(pitchNum - gapDown) + " with range " + String(gapDown + gapUp + 1));
 
     return midirange;
 }
@@ -271,9 +271,9 @@ Array<std::tuple<int, int>> SampleLoadJob::getVelLayers (int howmany)
     else //otherwise, divide up the velocity range evenly
     {
         int velThreshold = 0;
-        int velIncrement = 128 / howmany;
+        int velIncrement = std::ceil(128. / howmany);
 
-        while (velThreshold < 128)
+        while (velThreshold <= 128)
         {
             auto vtuple = std::make_tuple(velThreshold, velThreshold + velIncrement);
             velThreshold += velIncrement;
@@ -281,10 +281,13 @@ Array<std::tuple<int, int>> SampleLoadJob::getVelLayers (int howmany)
         }
     }
 
+    /*
     for ( auto vtuple : layersToReturn)
     {
         auto [begin, end] = vtuple;
+        DBG("velocity layers min/max = " + String(begin) + "/" + String(end));
     }
+     */
 
     return layersToReturn;
 }

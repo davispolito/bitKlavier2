@@ -31,4 +31,5 @@ void KeymapProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::Midi
         auto message = mi.getMessage();
         DBG(bitklavier::printMidi(message, "kmap"));
     }
+
 }
