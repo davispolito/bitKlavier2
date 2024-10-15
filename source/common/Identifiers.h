@@ -5,8 +5,10 @@
 #ifndef BITKLAVIER2_IDENTIFIERS_H
 #define BITKLAVIER2_IDENTIFIERS_H
 #pragma once
+
+#include "common.h"
 #include <juce_core/juce_core.h>
-//#include <juce_data_structures/juce_data_structures.h>
+
 
 namespace IDs
 {
@@ -41,9 +43,6 @@ namespace IDs
     DECLARE_ID(isIn)
     DECLARE_ID (PORT)
     DECLARE_ID (chIdx)
-  //type
-  //
-
 
     DECLARE_ID (assignment)
 

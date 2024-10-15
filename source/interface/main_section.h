@@ -6,7 +6,6 @@
 #define BITKLAVIER2_MAIN_SECTION_H
 #include "synth_section.h"
 #include "ConstructionSite.h"
-#include <JuceHeader.h>
 class MainSection : public SynthSection
 {
 public:

@@ -5,7 +5,6 @@
 #ifndef BITKLAVIER2_FULLINTERFACE_H
 #define BITKLAVIER2_FULLINTERFACE_H
 
-#include <JuceHeader.h>
 #include "open_gl_background.h"
 #include "header_section.h"
 #include "main_section.h"

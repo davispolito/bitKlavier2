@@ -15,7 +15,7 @@
  */
 
 #include "midi_manager.h"
-
+using namespace juce;
 
 
 namespace {

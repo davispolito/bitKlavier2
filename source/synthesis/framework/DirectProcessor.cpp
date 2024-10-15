@@ -7,7 +7,7 @@
 #include "common.h"
 #include "Synthesiser/Sample.h"
 #include <chowdsp_serialization/chowdsp_serialization.h>
-DirectProcessor::DirectProcessor(const ValueTree &v) : PluginBase(v, nullptr, directBusLayout())
+DirectProcessor::DirectProcessor(const juce::ValueTree &v) : PluginBase(v, nullptr, directBusLayout())
 {
     for (int i = 0; i < 300; i++)
     {
@@ -21,25 +21,25 @@ DirectProcessor::DirectProcessor(const ValueTree &v) : PluginBase(v, nullptr, di
                                                  chowdsp::ParameterListenerThread::AudioThread,
                                                  [this] {
                                                      synth.globalADSR.attack = state.params.attackParam->get() * .001; //should fix, not do hard conversions between ms and seconds here
-                                                     DBG("attack: " + String(state.params.attackParam->get()));
+                                                     DBG("attack: " + juce::String(state.params.attackParam->get()));
                                                  }),
                       state.addParameterListener(*state.params.decayParam,
                                                  chowdsp::ParameterListenerThread::AudioThread,
                                                  [this] {
                                                      synth.globalADSR.decay = state.params.decayParam->get() * .001;
-                                                     DBG("decay: " + String(state.params.decayParam->get()));
+                                                     DBG("decay: " + juce::String(state.params.decayParam->get()));
                                                  }),
                       state.addParameterListener(*state.params.sustainParam,
                                                  chowdsp::ParameterListenerThread::AudioThread,
                                                  [this] {
                                                      synth.globalADSR.sustain = state.params.sustainParam->get();
-                                                     DBG("sustain: " + String(state.params.sustainParam->get()));
+                                                     DBG("sustain: " + juce::String(state.params.sustainParam->get()));
                                                  }),
                       state.addParameterListener(*state.params.releaseParam,
                                                  chowdsp::ParameterListenerThread::AudioThread,
                                                  [this] {
                                                      synth.globalADSR.release = state.params.releaseParam->get() * .001;
-                                                     DBG("release: " + String(state.params.releaseParam->get()));
+                                                     DBG("release: " + juce::String(state.params.releaseParam->get()));
                                                  })
     };
 

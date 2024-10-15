@@ -131,7 +131,7 @@ struct DirectNonParameterState : chowdsp::NonParamState
 class DirectProcessor : public bitklavier::PluginBase<bitklavier::PreparationStateImpl<DirectParams,DirectNonParameterState, chowdsp::XMLSerializer>>
 {
 public:
-    DirectProcessor(const ValueTree &v);
+    DirectProcessor(const juce::ValueTree &v);
 
     void prepareToPlay (double sampleRate, int samplesPerBlock) override;
     void releaseResources() override {}
@@ -159,7 +159,7 @@ public:
     bool hasEditor() const override { return false; }
     juce::AudioProcessorEditor* createEditor() override { return nullptr; }
 
-    void addToVT(ValueTree& vt)
+    void addToVT(juce::ValueTree& vt)
     {
         state.params.doForAllParameters([this, &vt](auto& param, size_t) {
             vt.setProperty(param.paramID, chowdsp::ParameterTypeHelpers::getValue(param), nullptr);
@@ -169,9 +169,10 @@ public:
 private:
     //chowdsp::experimental::Directillator<float> oscillator;
     chowdsp::Gain<float> gain;
-    ADSR::Parameters adsrParams;
+    juce::ADSR::Parameters adsrParams;
     BKSynthesiser synth;
     chowdsp::ScopedCallbackList adsrCallbacks;
     chowdsp::ScopedCallbackList vtCallbacks;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (DirectProcessor)
+
 };

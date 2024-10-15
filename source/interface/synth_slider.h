@@ -16,8 +16,8 @@
 
 #pragma once
 
-#include <JuceHeader.h>
-
+#include <chowdsp_plugin_state/chowdsp_plugin_state.h>
+#include <juce_gui_basics/juce_gui_basics.h>
 #include "curve_look_and_feel.h"
 #include "text_look_and_feel.h"
 #include "open_gl_image_component.h"

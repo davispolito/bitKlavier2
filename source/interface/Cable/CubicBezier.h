@@ -5,6 +5,8 @@
 #ifndef BITKLAVIER2_CUBICBEZIER_H
 #define BITKLAVIER2_CUBICBEZIER_H
 
+#include <chowdsp_math/chowdsp_math.h>
+
 struct CubicBezier
 {
     /*

@@ -16,7 +16,10 @@
 
 #pragma once
 
-#include <JuceHeader.h>
+#include <functional>
+#include <map>
+#include <set>
+
 #include "look_and_feel/fonts.h"
 #include "paths.h"
 #include "open_gl_image_component.h"
@@ -25,9 +28,7 @@
 
 #include "synth_button.h"
 
-#include <functional>
-#include <map>
-#include <set>
+
 
 class ModulationButton;
 class OpenGlComponent;

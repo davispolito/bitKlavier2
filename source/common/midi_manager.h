@@ -16,6 +16,8 @@
 
 #pragma once
 
+#include <juce_audio_basics/juce_audio_basics.h>
+#include <juce_audio_devices/juce_audio_devices.h>
 #include "common.h"
 
 #include <map>
@@ -40,27 +42,24 @@ class MidiMessageCollector {
 };
 
 #endif
-#include "Identifiers.h"
 #include "tracktion_engine.h"
+#include "Identifiers.h"
+
 class SynthBase;
 
 namespace bitklavier {
   class SoundEngine;
   struct ValueDetails;
     struct MidiDeviceWrapper {
-        MidiDeviceWrapper(const ValueTree &v) : state(v) {
+        MidiDeviceWrapper(const juce::ValueTree &v) : state(v) {
             identifier.referTo(state,IDs::midiDeviceId, nullptr);
         }
-        ValueTree state;
-        CachedValue<String> identifier;
+        juce::ValueTree state;
+        juce::CachedValue<juce::String> identifier;
     };
 } // namespace bitklavier
-using namespace juce;
-namespace bitklavier
-{
 
-}
-class MidiManager : public MidiInputCallback, public tracktion::engine::ValueTreeObjectList<bitklavier::MidiDeviceWrapper> {
+class MidiManager : public juce::MidiInputCallback, public tracktion::engine::ValueTreeObjectList<bitklavier::MidiDeviceWrapper> {
   public:
     typedef std::map<int, std::map<std::string, const bitklavier::ValueDetails*>> midi_map;
 
@@ -98,7 +97,7 @@ class MidiManager : public MidiInputCallback, public tracktion::engine::ValueTre
         virtual void presetChangedThroughMidi(juce::File preset) = 0;
     };
 
-    MidiManager( juce::MidiKeyboardState* keyboard_state, AudioDeviceManager *manager, const ValueTree &v={},
+    MidiManager( juce::MidiKeyboardState* keyboard_state, juce::AudioDeviceManager *manager, const juce::ValueTree &v={},
                  Listener* listener = nullptr);
     virtual ~MidiManager() override;
     bitklavier::MidiDeviceWrapper* createNewObject(const juce::ValueTree& v) override
@@ -159,7 +158,7 @@ class MidiManager : public MidiInputCallback, public tracktion::engine::ValueTre
     void setMidiLearnMap(const midi_map& midi_learn_map) { midi_learn_map_ = midi_learn_map; }
 
     // MidiInputCallback
-    void handleIncomingMidiMessage(MidiInput *source, const juce::MidiMessage &midi_message) override;
+    void handleIncomingMidiMessage (juce::MidiInput *source, const juce::MidiMessage &midi_message) override;
 
     struct PresetLoadedCallback : public juce::CallbackMessage {
       PresetLoadedCallback(Listener* lis, juce::File pre) : listener(lis), preset(std::move(pre)) { }
@@ -173,7 +172,7 @@ class MidiManager : public MidiInputCallback, public tracktion::engine::ValueTre
       juce::File preset;
     };
     juce::MidiMessageCollector midi_collector_;
-    AudioDeviceManager *manager;
+    juce::AudioDeviceManager *manager;
 
   protected:
     void readMpeMessage(const juce::MidiMessage& message);

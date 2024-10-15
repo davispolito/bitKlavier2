@@ -17,12 +17,14 @@
 #pragma once
 
 
+#include <string>
 #include "midi_manager.h"
 #include "../synthesis/framework/poly_utils.h"
 
+#include <juce_data_structures/juce_data_structures.h>
+#include <chowdsp_dsp_data_structures/chowdsp_dsp_data_structures.h>
+#include <juce_dsp/juce_dsp.h>
 
-#include <set>
-#include <string>
 
 class SynthGuiInterface;
 template<typename T>

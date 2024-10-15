@@ -16,7 +16,6 @@
 
 #pragma once
 
-#include <JuceHeader.h>
 #include "synth_section.h"
 
 #include <set>

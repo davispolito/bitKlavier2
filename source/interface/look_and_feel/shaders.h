@@ -16,10 +16,14 @@
 
 #pragma once
 
-#include <JuceHeader.h>
-
-#include "../../synthesis/framework/common.h"
 #include <map>
+
+#include <juce_dsp/juce_dsp.h>
+#include <juce_core/juce_core.h>
+#include <juce_opengl/juce_opengl.h>
+
+#include "chowdsp_dsp_data_structures/third_party/moodycamel/concurrentqueue.h"
+#include "common.h"
 
 using namespace juce;
 

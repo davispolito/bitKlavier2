@@ -69,7 +69,7 @@ struct KeymapNonParameterState : chowdsp::NonParamState
 class KeymapProcessor : public bitklavier::PluginBase<bitklavier::PreparationStateImpl<KeymapParams,KeymapNonParameterState,chowdsp::XMLSerializer>>
 {
 public:
-    KeymapProcessor(const ValueTree& v, AudioDeviceManager* manager);
+    KeymapProcessor(const juce::ValueTree& v, juce::AudioDeviceManager* manager);
 
     void prepareToPlay (double sampleRate, int samplesPerBlock) override;
     void releaseResources() override {}
@@ -89,7 +89,7 @@ public:
     {
         return BusesProperties();
     }
-    bool setMidiDevice(juce::AudioDeviceManager& deviceManager, String identifier)
+    bool setMidiDevice(juce::AudioDeviceManager& deviceManager, juce::String identifier)
     {
         deviceManager.addMidiInputDeviceCallback(identifier, static_cast<juce::MidiInputCallback*>(_midi.get()));
     }

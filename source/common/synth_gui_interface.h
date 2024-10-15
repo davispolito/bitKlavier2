@@ -17,7 +17,7 @@
 #pragma once
 
 #include "synth_base.h"
-#include <JuceHeader.h>
+
 #if HEADLESS
 
 class FullInterface { };

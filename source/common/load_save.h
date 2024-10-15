@@ -16,12 +16,12 @@
 
 #pragma once
 
-#include "JuceHeader.h"
-
-
 #include <map>
 #include <set>
 #include <string>
+
+#include "chowdsp_json/third_party/nlohmann/json.hpp"
+#include <juce_core/juce_core.h>
 
 using json = nlohmann::json;
 
@@ -40,7 +40,7 @@ class LoadSave {
       public:
         FileSorterAscending() { }
 
-        static int compareElements(File a, File b) {
+        static int compareElements (juce::File a, juce::File b) {
           return a.getFullPathName().toLowerCase().compareNatural(b.getFullPathName().toLowerCase());
         }
 
@@ -71,36 +71,35 @@ class LoadSave {
     static const std::string kAdditionalWavetableFoldersName;
     static const std::string kAdditionalSampleFoldersName;
 
-    static String getAuthorFromFile(const File& file);
-    static String getStyleFromFile(const File& file);
+    static juce::String getAuthorFromFile(const juce::File& file);
+    static juce::String getStyleFromFile(const juce::File& file);
     static std::string getAuthor(json file);
     static std::string getLicense(json state);
 
-    static File getConfigFile();
-    static void writeCrashLog(String crash_log);
-    static void writeErrorLog(String error_log);
-    static File getFavoritesFile();
-    static File getDefaultSkin();
+    static juce::File getConfigFile();
+    static void writeCrashLog(juce::String crash_log);
+    static void writeErrorLog(juce::String error_log);
+    static juce::File getFavoritesFile();
+    static juce::File getDefaultSkin();
     static std::string getAuthor();
     static std::vector<std::string> getAdditionalFolders(const std::string& name);
 
-    static File getDataDirectory();
-    static std::vector<File> getDirectories(const String& folder_name);
-    static std::vector<File> getPresetDirectories();
-    static std::vector<File> getSampleDirectories();
-    static File getUserDirectory();
-    static File getUserPresetDirectory();
-    static File getUserSampleDirectory();
-    static void getAllFilesOfTypeInDirectories(Array<File>& files, const String& extensions,
-                                               const std::vector<File>& directories);
-    static void getAllSamples(Array<File>& samples);
-    static void getAllUserPresets(Array<File>& presets);
-    static void getAllUserSamples(Array<File>& samples);
+    static juce::File getDataDirectory();
+    static std::vector<juce::File> getDirectories(const juce::String& folder_name);
+    static std::vector<juce::File> getPresetDirectories();
+    static std::vector<juce::File> getSampleDirectories();
+    static juce::File getUserDirectory();
+    static juce::File getUserPresetDirectory();
+    static juce::File getUserSampleDirectory();
+    static void getAllFilesOfTypeInDirectories(juce::Array<juce::File>& files, const juce::String& extensions,
+                                               const std::vector<juce::File>& directories);
+    static void getAllSamples(juce::Array<juce::File>& samples);
+    static void getAllUserPresets(juce::Array<juce::File>& presets);
+    static void getAllUserSamples(juce::Array<juce::File>& samples);
 
-    static File getShiftedFile(const String directory_name, const String& extensions,
-                               const std::string& additional_folders_name, const File& current_file, int shift);
+    static juce::File getShiftedFile(const juce::String directory_name, const juce::String& extensions,
+                               const std::string& additional_folders_name, const juce::File& current_file, int shift);
 
   private:
     LoadSave() { }
 };
-

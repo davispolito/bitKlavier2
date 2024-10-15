@@ -21,9 +21,8 @@
  */
 
 #pragma once
+#include <juce_core/juce_core.h>
 
-
-#include <JuceHeader.h>
 // Debugging.
 #if DEBUG
     #include <cassert>
@@ -148,7 +147,7 @@ namespace bitklavier {
 
         return juce::String::toHexString (m.getRawData(), m.getRawDataSize());
     }
-    static String printMidi(juce::MidiMessage& message, const juce::String& source)
+    static juce::String printMidi(juce::MidiMessage& message, const juce::String& source)
     {
 
         auto time = message.getTimeStamp(); //- startTime;

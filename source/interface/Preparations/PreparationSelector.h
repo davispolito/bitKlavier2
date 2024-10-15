@@ -4,7 +4,6 @@
 
 #ifndef BITKLAVIER2_PREPARATIONSELECTOR_H
 #define BITKLAVIER2_PREPARATIONSELECTOR_H
-#include <JuceHeader.h>
 #include "PreparationSection.h"
 class ConstructionSite;
 class PreparationSelector : public LassoSource<PreparationSection*>

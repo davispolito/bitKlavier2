@@ -15,10 +15,10 @@
  */
 
 #include "load_save.h"
-
-#include "sound_engine.h"
 #include "midi_manager.h"
 #include "synth_base.h"
+
+#include <JuceHeader.h>
 
 #define QUOTE(x) #x
 #define STRINGIFY(x) QUOTE(x)
@@ -152,23 +152,25 @@ void LoadSave::writeErrorLog(String error_log) {
   file.appendText(error_log + "\n");
 }
 
+
 File LoadSave::getFavoritesFile() {
-#if defined(JUCE_DATA_STRUCTURES_H_INCLUDED)
-  PropertiesFile::Options config_options;
-  config_options.applicationName = "Vial";
-  config_options.osxLibrarySubFolder = "Application Support";
-  config_options.filenameSuffix = "favorites";
+    using namespace ProjectInfo;
+    #if defined(JUCE_DATA_STRUCTURES_H_INCLUDED)
+    PropertiesFile::Options config_options;
+    config_options.applicationName = "Vial";
+    config_options.osxLibrarySubFolder = "Application Support";
+    config_options.filenameSuffix = "favorites";
 
-#ifdef LINUX
-  config_options.folderName = "." + String(ProjectInfo::projectName).toLowerCase();
-#else
-  config_options.folderName = String(ProjectInfo::projectName).toLowerCase();
-#endif
+    #ifdef LINUX
+    config_options.folderName = "." + String(ProjectInfo::projectName).toLowerCase();
+    #else
+    config_options.folderName = String(ProjectInfo::projectName).toLowerCase();
+    #endif
 
-  return config_options.getDefaultFile();
-#else
-  return File();
-#endif
+    return config_options.getDefaultFile();
+    #else
+    return File();
+    #endif
 }
 
 File LoadSave::getDefaultSkin() {

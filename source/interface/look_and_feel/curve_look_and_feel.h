@@ -16,7 +16,7 @@
 
 #pragma once
 
-#include "JuceHeader.h"
+#include <juce_gui_basics/juce_gui_basics.h>
 #include "default_look_and_feel.h"
 
 class CurveLookAndFeel : public DefaultLookAndFeel {

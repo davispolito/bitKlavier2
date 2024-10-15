@@ -16,6 +16,7 @@
 
 #pragma once
 #include "../framework/note_handler.h"
+#include <juce_audio_processors/juce_audio_processors.h>
 
 
 
@@ -43,7 +44,7 @@ namespace bitklavier {
 
 
       }
-      void process(int num_samples, AudioSampleBuffer& buffer);
+      void process(int num_samples, juce::AudioSampleBuffer& buffer);
 
       void releaseResources()
       {processorGraph->releaseResources();}
@@ -155,7 +156,7 @@ namespace bitklavier {
           return juce::AudioProcessorGraph::NodeID (++(lastUID.uid));
       }
 
-      Node::Ptr addNode (std::unique_ptr<AudioProcessor> newProcessor, juce::AudioProcessorGraph::NodeID id)
+      Node::Ptr addNode (std::unique_ptr<juce::AudioProcessor> newProcessor, juce::AudioProcessorGraph::NodeID id)
       {
           Node::Ptr node;
           if(id.uid != 0) {
@@ -182,7 +183,7 @@ namespace bitklavier {
       }
 
       void checkOversampling();
-      std::vector<std::shared_ptr<AudioProcessor>> processors;
+      std::vector<std::shared_ptr<juce::AudioProcessor>> processors;
       std::unique_ptr<juce::AudioProcessorGraph>  processorGraph;
       Node::Ptr audioOutputNode;
       Node::Ptr midiInputNode;

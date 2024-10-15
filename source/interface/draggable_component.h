@@ -4,7 +4,6 @@
 
 #ifndef BITKLAVIER2_DRAGGABLE_COMPONENT_H
 #define BITKLAVIER2_DRAGGABLE_COMPONENT_H
-#include <JuceHeader.h>
 #include "open_gl_image_component.h"
 #include "OpenGLImageFileComponent.h"
 #include "open_gl_multi_image.h"

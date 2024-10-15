@@ -4,7 +4,7 @@
 
 #ifndef BITKLAVIER2_AUDIOPROCESSORGRAPH_H
 #define BITKLAVIER2_AUDIOPROCESSORGRAPH_H
-#include <JuceHeader.h>
+#include <juce_audio_processors/juce_audio_processors.h>
 
 namespace bitklavier {
     class AudioProcessorGraph : public juce::AudioProcessorGraph {

@@ -4,7 +4,7 @@
 
 #ifndef BITKLAVIER2_BITKLAVIER_AUDIODEVICESELECTORCOMPONENT_H
 #define BITKLAVIER2_BITKLAVIER_AUDIODEVICESELECTORCOMPONENT_H
-#include <JuceHeader.h>
+
 #include "Identifiers.h"
 namespace bitklavier {
     //==============================================================================

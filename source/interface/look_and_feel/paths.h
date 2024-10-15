@@ -16,10 +16,9 @@
 
 #pragma once
 
-
+#include <juce_gui_basics/juce_gui_basics.h>
 #include "../../synthesis/framework/utils.h"
 #include "BinaryData.h"
-#include <JuceHeader.h>
 
 class Paths {
   public:

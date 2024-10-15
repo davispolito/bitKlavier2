@@ -16,12 +16,14 @@
 
 #pragma once
 
-#include "common.h"
-#include <JuceHeader.h>
 #include <cmath>
 #include <complex>
 #include <cstdlib>
 #include <random>
+
+#include <juce_core/juce_core.h>
+#include <juce_audio_basics/juce_audio_basics.h>
+#include "common.h"
 using namespace juce;
 #define NAME_AND_VALUE(x) #x, x
 

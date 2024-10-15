@@ -16,10 +16,10 @@
 
 #pragma once
 
-#include <JuceHeader.h>
-#include <JuceHeader.h>
-#include <JuceHeader.h>
+#include <juce_gui_basics/juce_gui_basics.h>
+
 #include "json.hpp"
+
 using json = nlohmann::json;
 class FullInterface;
 class SynthSection;

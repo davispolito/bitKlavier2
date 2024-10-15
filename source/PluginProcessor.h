@@ -1,6 +1,8 @@
 #pragma once
-#include <JuceHeader.h>
+
 #include "synth_base.h"
+#include <juce_audio_processors/juce_audio_processors.h>
+
 #if (MSVC)
 #include "ipps.h"
 #endif
