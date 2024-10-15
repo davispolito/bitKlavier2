@@ -5,7 +5,11 @@
 #ifndef BITKLAVIER2_BITKLAVIER_AUDIODEVICESELECTORCOMPONENT_H
 #define BITKLAVIER2_BITKLAVIER_AUDIODEVICESELECTORCOMPONENT_H
 
+#include <juce_gui_basics/juce_gui_basics.h>
+#include <juce_audio_devices/juce_audio_devices.h>
+#include <juce_audio_utils/juce_audio_utils.h>
 #include "Identifiers.h"
+
 namespace bitklavier {
     //==============================================================================
 /**
@@ -42,7 +46,7 @@ private juce::ChangeListener
         @param hideAdvancedOptionsWithButton    if true, only the minimum amount of UI components
                                         are shown, with an "advanced" button that shows the rest of them
     */
-    AudioDeviceSelectorComponent (AudioDeviceManager& deviceManager,
+    AudioDeviceSelectorComponent (juce::AudioDeviceManager& deviceManager,
     int minAudioInputChannels,
     int maxAudioInputChannels,
     int minAudioOutputChannels,
@@ -84,7 +88,7 @@ private juce::ChangeListener
     std::unique_ptr<ComboBox> deviceTypeDropDown;
     std::unique_ptr<Label> deviceTypeDropDownLabel;
     std::unique_ptr<Component> audioDeviceSettingsComp;
-    String audioDeviceSettingsCompType;
+    juce::String audioDeviceSettingsCompType;
     int itemHeight = 0;
     const int minOutputChannels, maxOutputChannels, minInputChannels, maxInputChannels;
     const bool showChannelsAsStereoPairs;

@@ -53,6 +53,7 @@ namespace IDs
     DECLARE_ID(midiPrefs)
 }
 
+using namespace juce;
 #undef DECLARE_ID
     inline juce::ValueTree createUuidProperty (juce::ValueTree& v)
     {

@@ -16,17 +16,18 @@
 
 #pragma once
 
-#include <functional>
-#include <map>
-#include <set>
+
 
 #include "look_and_feel/fonts.h"
 #include "paths.h"
 #include "open_gl_image_component.h"
 #include "open_gl_multi_quad.h"
 #include "look_and_feel/shaders.h"
-
 #include "synth_button.h"
+
+#include <functional>
+#include <map>
+#include <set>
 
 
 

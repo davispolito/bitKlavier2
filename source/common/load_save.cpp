@@ -18,8 +18,6 @@
 #include "midi_manager.h"
 #include "synth_base.h"
 
-#include <JuceHeader.h>
-
 #define QUOTE(x) #x
 #define STRINGIFY(x) QUOTE(x)
 

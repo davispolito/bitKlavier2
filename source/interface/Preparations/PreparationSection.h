@@ -4,10 +4,11 @@
 
 #ifndef BITKLAVIER2_PREPARATIONSECTION_H
 #define BITKLAVIER2_PREPARATIONSECTION_H
+#include "tracktion_engine.h"
+
 #include "valuetree_utils/VariantConverters.h"
 #include "synth_section.h"
 #include "draggable_component.h"
-#include "tracktion_engine.h"
 #include "common.h"
 #include "Identifiers.h"
 #include "BKItem.h"
