@@ -191,6 +191,7 @@ void BKSynthesiser::handleMidiEvent (const juce::MidiMessage& m)
     const int channel = m.getChannel();
 
     /**
+     * regarding keyReleaseSynths:
      * in most cases, this operates as expected
      *
      * for a synth that is in keyRelease mode, however, the function of noteOn and noteOff releases are reversed
@@ -200,6 +201,7 @@ void BKSynthesiser::handleMidiEvent (const juce::MidiMessage& m)
      */
     if (m.isNoteOn())
     {
+        if(pedalSynth) return;
         if (!keyReleaseSynth)
             noteOn (channel, m.getNoteNumber(), m.getVelocity());
         else
@@ -207,6 +209,7 @@ void BKSynthesiser::handleMidiEvent (const juce::MidiMessage& m)
     }
     else if (m.isNoteOff())
     {
+        if(pedalSynth) return;
         if (keyReleaseSynth)
             noteOn (channel, m.getNoteNumber(), m.getVelocity());
         else
@@ -389,31 +392,57 @@ void BKSynthesiser::handleChannelPressure (int midiChannel, int channelPressureV
 
 void BKSynthesiser::handleSustainPedal (int midiChannel, bool isDown)
 {
+    DBG("BKSynthesiser::handleSustainPedal");
     jassert (midiChannel > 0 && midiChannel <= 16);
     const juce::ScopedLock sl (lock);
 
     if (isDown)
     {
-        sustainPedalsDown.setBit (midiChannel);
-
-        for (auto* voice : voices)
-            if (voice->isPlayingChannel (midiChannel) && voice->isKeyDown())
-                voice->setSustainPedalDown (true);
-    }
-    else
-    {
-        for (auto* voice : voices)
+        if (pedalSynth) // only do this if this is a sustainPedal synth
         {
-            if (voice->isPlayingChannel (midiChannel))
-            {
-                voice->setSustainPedalDown (false);
-
-                if (! (voice->isKeyDown() || voice->isSostenutoPedalDown()))
-                    stopVoice (voice, 1.0f, true);
+            DBG("pressing sustain pedal");
+            if (!sustainPedalAlreadyDown){
+                // play pedal down sample here
+                sustainPedalAlreadyDown = true;
+                noteOn(midiChannel, 64, 64); // 64 for pedal down. velocity?
             }
         }
 
-        sustainPedalsDown.clearBit (midiChannel);
+        else { // regular synth
+            sustainPedalsDown.setBit (midiChannel);
+
+            for (auto* voice : voices)
+                if (voice->isPlayingChannel (midiChannel) && voice->isKeyDown())
+                    voice->setSustainPedalDown (true);
+        }
+    }
+    else
+    {
+        if (pedalSynth)
+        {
+            if(sustainPedalAlreadyDown)
+            {
+                DBG("releasing sustain pedal");
+                // play pedal up sample here
+                noteOff(midiChannel, 64, 64, true); // turn off sustain pedal down sample, which can be long
+                noteOn(midiChannel, 65, 64); // 65 for pedal up
+            }
+            sustainPedalAlreadyDown = false;
+        }
+
+        else {
+            for (auto* voice : voices)
+            {
+                if (voice->isPlayingChannel (midiChannel))
+                {
+                    voice->setSustainPedalDown (false);
+
+                    if (! (voice->isKeyDown() || voice->isSostenutoPedalDown()))
+                        stopVoice (voice, 1.0f, true);
+                }
+            }
+            sustainPedalsDown.clearBit (midiChannel);
+        }
     }
 }
 

@@ -45,6 +45,7 @@ void SampleLoadManager::handleAsyncUpdate()
                     globalSoundset = &samplerSoundset[globalSoundset_name];
                     globalHammersSoundset = &samplerSoundset[globalHammersSoundset_name];
                     globalReleaseResonanceSoundset = &samplerSoundset[globalReleaseResonanceSoundset_name];
+                    globalPedalsSoundset = &samplerSoundset[globalPedalsSoundset_name];
                     //last_proc.reset();
                  });
 }
@@ -156,6 +157,14 @@ void SampleLoadManager::loadSamples_sub(bitklavier::utils::BKPianoSampleType thi
     MyComparator sorter;
     allSamples.sort(sorter);
 
+    if (thisSampleType == BKPianoPedal)
+    {
+        for (auto thisFile : allSamples)
+        {
+            DBG("pedal sample name = " + thisFile.getFileName());
+        }
+    }
+
     //Build allKeysWithSamples: array that keeps track of which keys have samples, for building start/end ranges in keymap
     for (auto thisFile : allSamples)
     {
@@ -193,6 +202,23 @@ void SampleLoadManager::loadSamples_sub(bitklavier::utils::BKPianoSampleType thi
                 }
             }
         }
+        else if (thisSampleType == BKPianoPedal)
+        {
+            onePitchSamples.clear();
+            for (auto thisFile : allSamples)
+            {
+                if(thisFile.getFileName().contains("D") && noteNameToRoot(pitchName) == 65)
+                {
+                    //pedalDown sample, set to 65
+                    onePitchSamples.add(thisFile);
+                }
+                else if(thisFile.getFileName().contains("U") && noteNameToRoot(pitchName) == 66)
+                {
+                    //pedalDown sample, set to 66
+                    onePitchSamples.add(thisFile);
+                }
+            }
+        }
 
         if (onePitchSamples.size() <= 0) continue; // skip if no samples at this pitch
 
@@ -219,11 +245,13 @@ bool SampleLoadManager::loadSamples( int selection, bool isGlobal)
         globalSoundset_name =  bitklavier::utils::samplepaths[selection];
         globalHammersSoundset_name = bitklavier::utils::samplepaths[selection] + "Hammers";
         globalReleaseResonanceSoundset_name = bitklavier::utils::samplepaths[selection] + "ReleaseResonance";
+        globalPedalsSoundset_name = bitklavier::utils::samplepaths[selection] + "Pedals";
     }
 
     loadSamples_sub(bitklavier::utils::BKPianoMain);
     loadSamples_sub(bitklavier::utils::BKPianoHammer);
     loadSamples_sub(bitklavier::utils::BKPianoReleaseResonance);
+    loadSamples_sub(bitklavier::utils::BKPianoPedal);
 }
 
 /**

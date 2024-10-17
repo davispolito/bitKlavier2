@@ -292,6 +292,11 @@ class BKSynthesiser
                 */
                 void isKeyReleaseSynth(bool mode) { keyReleaseSynth = mode; }
 
+                /**
+                 * pedal synths only play sounds when the sustain pedal is pressed or released
+                 */
+                void isPedalSynth(bool mode) { pedalSynth = mode; }
+
                 void setSynthGain(float g)
                 {
                     synthGain = g;
@@ -371,7 +376,9 @@ private:
                 mutable juce::CriticalSection stealLock;
                 mutable juce::Array<BKSamplerVoice*> usableVoicesToStealArray;
 
-                bool keyReleaseSynth = false; // by default, synths play on keyPress (noteOn), not the opposite!
+                bool keyReleaseSynth = false;   // by default, synths play on keyPress (noteOn), not the opposite!
+                bool pedalSynth = false;        // for sustain pedal sounds; will ignore noteOn messages
+                bool sustainPedalAlreadyDown = false; // to avoid retriggering of pedalDown sounds
 
                 template <typename floatType>
                 void processNextBlock (juce::AudioBuffer<floatType>&, const juce::MidiBuffer&, int startSample, int numSamples);

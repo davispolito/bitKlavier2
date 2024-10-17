@@ -77,6 +77,8 @@ public:
 
     void processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages) override;
 
+    MidiMessage swapNoteOnNoteOff (MidiMessage inmsg);
+
     bool acceptsMidi() const override
     {
         return false;

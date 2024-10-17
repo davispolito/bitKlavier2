@@ -55,6 +55,7 @@ DirectProcessor::DirectProcessor(const ValueTree &v) : PluginBase(v, nullptr, di
     // these synths play their stuff on noteOff rather than noteOn
     hammerSynth.isKeyReleaseSynth(true);
     releaseResonanceSynth.isKeyReleaseSynth(true);
+    pedalSynth.isPedalSynth(true);
 
     // should be able to hard-wire these
     hammerSynth.globalADSR.attack = 0.001f;
