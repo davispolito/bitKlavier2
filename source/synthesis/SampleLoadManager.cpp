@@ -418,6 +418,44 @@ void SampleLoadJob::loadReleaseResonanceSamples()
 
 void SampleLoadJob::loadPedalSamples()
 {
+    //for v1 samples, to define bottom threshold.
+    float dBFSBelow  = -50.f;
+
+    auto ranges = getVelLayers(velocityLayers);
+    int layers = ranges.size();
+    int currentVelLayer = 0;
+
+    while (true)
+    {
+        auto [reader, filename] = sampleReader->make(*manager);
+        if (!reader) break; // Break the loop if the reader is null
+
+        auto sample = new Sample(*(reader.get()), 90);
+
+        int midiNote;
+        if(filename.contains("D")) midiNote = 65;
+        else if (filename.contains("U")) midiNote = 66;
+
+        DBG("**** loading pedal sample: " + filename + " " + String(midiNote));
+
+        // pedals set to single keys: 65 for pedalDown, 66 for pedalUp
+        BigInteger midiNoteRange;
+        midiNoteRange.setRange(midiNote, 1, true);
+
+        auto [begin, end] = ranges.getUnchecked(currentVelLayer++);
+        BigInteger velRange;
+        velRange.setRange(begin, end - begin, true);
+
+        auto sound = soundset->add(new BKSamplerSound(filename, std::shared_ptr<Sample<juce::AudioFormatReader>>(sample),
+            midiNoteRange,
+            midiNote,
+            0,
+            velRange,
+            1,
+            dBFSBelow));
+    }
+
+    DBG("done loading pedal samples");
 
 }
 
