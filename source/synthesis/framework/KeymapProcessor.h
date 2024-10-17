@@ -96,11 +96,18 @@ public:
         deviceManager.addMidiInputDeviceCallback(identifier, static_cast<juce::MidiInputCallback*>(_midi.get()));
     }
 
+    // user settings
+    void setInvertNoteOnNoteOff(bool invert) { invertNoteOnNoteOff = invert; }
+
     std::unique_ptr<MidiManager> _midi;
 private:
     //chowdsp::experimental::Keymapillator<float> oscillator;
     chowdsp::Gain<float> gain;
     juce::MidiKeyboardState keyboard_state;
+
+    // user settings
+    bool invertNoteOnNoteOff = false;
+
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (KeymapProcessor)
 };
 
