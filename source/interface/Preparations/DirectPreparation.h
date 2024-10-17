@@ -55,9 +55,10 @@ public:
     void addSoundSet(
         juce::ReferenceCountedArray<BKSamplerSound<juce::AudioFormatReader>>* s,
         juce::ReferenceCountedArray<BKSamplerSound<juce::AudioFormatReader>>* h,
-        juce::ReferenceCountedArray<BKSamplerSound<juce::AudioFormatReader>>* r) override
+        juce::ReferenceCountedArray<BKSamplerSound<juce::AudioFormatReader>>* r,
+        juce::ReferenceCountedArray<BKSamplerSound<juce::AudioFormatReader>>* p) override
     {
-        proc.addSoundSet(s, h, r);
+        proc.addSoundSet(s, h, r, p);
     }
 
     std::shared_ptr<SynthSection> getPrepPopup() override;

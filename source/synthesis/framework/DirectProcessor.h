@@ -150,12 +150,14 @@ public:
     void addSoundSet(
         juce::ReferenceCountedArray<BKSamplerSound<juce::AudioFormatReader>>* s, // main samples
         juce::ReferenceCountedArray<BKSamplerSound<juce::AudioFormatReader>>* h, // hammer samples
-        juce::ReferenceCountedArray<BKSamplerSound<juce::AudioFormatReader>>* r) // release samples
+        juce::ReferenceCountedArray<BKSamplerSound<juce::AudioFormatReader>>* r, // release samples
+        juce::ReferenceCountedArray<BKSamplerSound<juce::AudioFormatReader>>* p) // pedal samples
     {
         DBG("adding main, hammer and releaseResonance synths");
         mainSynth.addSoundSet(s);
         hammerSynth.addSoundSet(h);
         releaseResonanceSynth.addSoundSet(r);
+        pedalSynth.addSoundSet(p);
     }
 
     juce::AudioProcessor::BusesProperties  directBusLayout()

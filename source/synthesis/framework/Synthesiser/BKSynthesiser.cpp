@@ -250,6 +250,7 @@ void BKSynthesiser::noteOn (const int midiChannel,
 {
     const juce::ScopedLock sl (lock);
 
+    // DBG("num noteOn sounds = " + String(sounds->size()));
     for (auto* sound : *sounds)
     {
         //DBG("noteOn velocity = " + String(velocity));
@@ -404,7 +405,7 @@ void BKSynthesiser::handleSustainPedal (int midiChannel, bool isDown)
             if (!sustainPedalAlreadyDown){
                 // play pedal down sample here
                 sustainPedalAlreadyDown = true;
-                noteOn(midiChannel, 64, 64); // 64 for pedal down. velocity?
+                noteOn(midiChannel, 65, 64); // 64 for pedal down. velocity?
             }
         }
 
@@ -424,8 +425,8 @@ void BKSynthesiser::handleSustainPedal (int midiChannel, bool isDown)
             {
                 DBG("releasing sustain pedal");
                 // play pedal up sample here
-                noteOff(midiChannel, 64, 64, true); // turn off sustain pedal down sample, which can be long
-                noteOn(midiChannel, 65, 64); // 65 for pedal up
+                noteOff(midiChannel, 65, 64, true); // turn off sustain pedal down sample, which can be long
+                noteOn(midiChannel, 66, 64); // 65 for pedal up
             }
             sustainPedalAlreadyDown = false;
         }

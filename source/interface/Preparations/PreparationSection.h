@@ -82,7 +82,8 @@ public:
     virtual void addSoundSet(
         juce::ReferenceCountedArray<BKSamplerSound<juce::AudioFormatReader>>* s,
         juce::ReferenceCountedArray<BKSamplerSound<juce::AudioFormatReader>>* h,
-        juce::ReferenceCountedArray<BKSamplerSound<juce::AudioFormatReader>>* r) {}
+        juce::ReferenceCountedArray<BKSamplerSound<juce::AudioFormatReader>>* r,
+        juce::ReferenceCountedArray<BKSamplerSound<juce::AudioFormatReader>>* p) {}
     // Public member variables for a PreparationSection object
     juce::ValueTree state;
     OpenGlWrapper &_open_gl;

@@ -157,14 +157,6 @@ void SampleLoadManager::loadSamples_sub(bitklavier::utils::BKPianoSampleType thi
     MyComparator sorter;
     allSamples.sort(sorter);
 
-    if (thisSampleType == BKPianoPedal)
-    {
-        for (auto thisFile : allSamples)
-        {
-            DBG("pedal sample name = " + thisFile.getFileName());
-        }
-    }
-
     //Build allKeysWithSamples: array that keeps track of which keys have samples, for building start/end ranges in keymap
     for (auto thisFile : allSamples)
     {
@@ -445,6 +437,7 @@ void SampleLoadJob::loadPedalSamples()
         auto [begin, end] = ranges.getUnchecked(currentVelLayer++);
         BigInteger velRange;
         velRange.setRange(begin, end - begin, true);
+        DBG("pedal vel range = " + String(begin) + " to " + String(end) + " for " + filename);
 
         auto sound = soundset->add(new BKSamplerSound(filename, std::shared_ptr<Sample<juce::AudioFormatReader>>(sample),
             midiNoteRange,

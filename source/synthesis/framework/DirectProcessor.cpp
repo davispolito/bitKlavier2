@@ -22,6 +22,7 @@ DirectProcessor::DirectProcessor(const ValueTree &v) : PluginBase(v, nullptr, di
     mainSynth.setSynthGain(1.);
     hammerSynth.setSynthGain(0.05);
     releaseResonanceSynth.setSynthGain(2.);
+    pedalSynth.setSynthGain(0.2);
 
 //    std::unique_ptr<XmlElement> xml = chowdsp::Serialization::serialize<chowdsp::XMLSerializer>(state);
 //    DBG(chowdsp::Serialization::serialize<chowdsp::XMLSerializer>(state)->toString());
@@ -67,6 +68,11 @@ DirectProcessor::DirectProcessor(const ValueTree &v) : PluginBase(v, nullptr, di
     releaseResonanceSynth.globalADSR.decay = 0.0f;
     releaseResonanceSynth.globalADSR.sustain = 1.0f;
     releaseResonanceSynth.globalADSR.release = 0.05;
+
+    pedalSynth.globalADSR.attack = 0.001f;
+    pedalSynth.globalADSR.decay = 0.0f;
+    pedalSynth.globalADSR.sustain = 1.0f;
+    pedalSynth.globalADSR.release = 0.05;
 
 }
 
@@ -135,6 +141,12 @@ void DirectProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::Midi
     if (releaseResonanceSynth.getNumSounds() > 0)
         releaseResonanceSynth.renderNextBlock (buffer, midiMessages,
         0, buffer.getNumSamples());
+
+
+    if (pedalSynth.getNumSounds() > 0)
+        pedalSynth.renderNextBlock (buffer, midiMessages,
+            0, buffer.getNumSamples());
+
 
     //juce::dsp::AudioBlock<float> block(buffer);
     //melatonin::printSparkline(buffer);
