@@ -11,7 +11,7 @@
     Base class for a musical device that can play sounds.
 
     To create a BKSynthesiser, you'll need to create a subclass of BKSynthesiserSound
-    to describe each sound available to your synth, and a subclass of  juce::BKSamplerVoice
+    to describe each sound available to your mainSynth, and a subclass of  juce::BKSamplerVoice
     which can play back one of these sounds.
 
     Then you can use the addVoice() and addSound() methods to give the BKSynthesiser a
@@ -54,7 +54,7 @@ class BKSynthesiser
                 /** Returns one of the voices that have been added. */
                  BKSamplerVoice* getVoice (int index) const;
 
-                /** Adds a new voice to the synth.
+                /** Adds a new voice to the mainSynth.
             
                     All the voices should be the same class of object and are treated equally.
             
@@ -71,7 +71,7 @@ class BKSynthesiser
                 /** Deletes all sounds. */
                 //void clearSounds();
 
-                /** Returns the number of sounds that have been added to the synth. */
+                /** Returns the number of sounds that have been added to the mainSynth. */
                 int getNumSounds() const noexcept                               { return sounds->size(); }
 
                 /** Returns one of the sounds. */
@@ -88,7 +88,7 @@ class BKSynthesiser
 
                 void addSoundSet(juce::ReferenceCountedArray<BKSamplerSound<juce::AudioFormatReader>>*);
                 //==============================================================================
-                /** If set to true, then the synth will try to take over an existing voice if
+                /** If set to true, then the mainSynth will try to take over an existing voice if
                     it runs out and needs to play another note.
             
                     The value of this boolean is passed into findFreeVoice(), so the result will
@@ -223,7 +223,7 @@ class BKSynthesiser
 
                 /** Can be overridden to handle an incoming program change message.
                     The base class implementation of this has no effect, but you may want to make your
-                    own synth react to program changes.
+                    own mainSynth react to program changes.
                 */
                 virtual void handleProgramChange (int midiChannel,
                 int programNumber);
@@ -275,7 +275,7 @@ class BKSynthesiser
             
                     The default setting is 32, which means that midi messages are accurate to about < 1ms
                     accuracy, which is probably fine for most purposes, but you may want to increase or
-                    decrease this value for your synth.
+                    decrease this value for your mainSynth.
             
                     If shouldBeStrict is true, the audio sub-blocks will strictly never be smaller than numSamples.
             
@@ -285,7 +285,24 @@ class BKSynthesiser
                 */
                 void setMinimumRenderingSubdivisionSize (int numSamples, bool shouldBeStrict = false) noexcept;
 
-    juce::ADSR::Parameters globalADSR;
+                /** when keyRelease Synth is true, this mainSynth triggers notes from noteOff message
+                 * instead of noteOn messages
+                 * if KeyMap is inverting noteOn/noteOff modes, then of course this would get reversed
+                 * but bksynth wouldn't know/care
+                */
+                void isKeyReleaseSynth(bool mode) { keyReleaseSynth = mode; }
+
+                /**
+                 * pedal synths only play sounds when the sustain pedal is pressed or released
+                 */
+                void isPedalSynth(bool mode) { pedalSynth = mode; }
+
+                void setSynthGain(float g)
+                {
+                    synthGain = g;
+                }
+
+                juce::ADSR::Parameters globalADSR;
 protected:
                 //==============================================================================
                 /** This is used to control access to the rendering callback and the note trigger methods. */
@@ -321,7 +338,7 @@ protected:
 
                 /** Chooses a voice that is most suitable for being re-used.
                     The default method will attempt to find the oldest voice that isn't the
-                    bottom or top note being played. If that's not suitable for your synth,
+                    bottom or top note being played. If that's not suitable for your mainSynth,
                     you can override this method and do something more cunning instead.
                 */
                 virtual  BKSamplerVoice* findVoiceToSteal (BKSamplerSound<juce::AudioFormatReader>* soundToPlay,
@@ -359,8 +376,14 @@ private:
                 mutable juce::CriticalSection stealLock;
                 mutable juce::Array<BKSamplerVoice*> usableVoicesToStealArray;
 
+                bool keyReleaseSynth = false;   // by default, synths play on keyPress (noteOn), not the opposite!
+                bool pedalSynth = false;        // for sustain pedal sounds; will ignore noteOn messages
+                bool sustainPedalAlreadyDown = false; // to avoid retriggering of pedalDown sounds
+
                 template <typename floatType>
                 void processNextBlock (juce::AudioBuffer<floatType>&, const juce::MidiBuffer&, int startSample, int numSamples);
+
+                float synthGain = 1.0; //global gain for this synth
 
                 JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (BKSynthesiser)
         };

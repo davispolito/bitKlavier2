@@ -25,7 +25,7 @@ Fonts::Fonts() :
 //
 //  juce::Array<int> glyphs;
 //  juce::Array<float> x_offsets;
-//  proportional_regular_.getGlyphPositions("test", glyphs, x_offsets);
+//  proportional_regular_.getGlyphPositions("", glyphs, x_offsets);
 //  proportional_light_.getGlyphPositions("test", glyphs, x_offsets);
 //  proportional_title_.getGlyphPositions("test", glyphs, x_offsets);
 //  monospace_.getGlyphPositions("test", glyphs, x_offsets);

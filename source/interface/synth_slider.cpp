@@ -312,7 +312,7 @@ void SynthSlider::mouseDown(const juce::MouseEvent& e) {
     }
 
     OpenGlSlider::mouseDown(e);
-    //synth->beginChangeGesture(getName().toStdString());
+    //mainSynth->beginChangeGesture(getName().toStdString());
 
 //    for (juce::SliderListener* listener : slider_listeners_)
 //      listener->mouseDown(this);
@@ -744,9 +744,9 @@ void SynthSlider::handlePopupResult(int result) {
 
 
 //  if (result == kArmMidiLearn)
-//    synth->armMidiLearn(getName().toStdString());
+//    mainSynth->armMidiLearn(getName().toStdString());
 //  else if (result == kClearMidiLearn)
-//    synth->clearMidiLearn(getName().toStdString());
+//    mainSynth->clearMidiLearn(getName().toStdString());
 //  else if (result == kDefaultValue)
 //    setValue(getDoubleClickReturnValue());
 //  else if (result == kManualEntry)

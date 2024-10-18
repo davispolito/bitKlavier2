@@ -298,9 +298,9 @@ void SynthButton::handlePopupResult(int result) {
   SynthBase* synth = parent->getSynth();
 //
 //  if (result == kArmMidiLearn)
-//    synth->armMidiLearn(getName().toStdString());
+//    mainSynth->armMidiLearn(getName().toStdString());
 //  else if (result == kClearMidiLearn)
-//    synth->clearMidiLearn(getName().toStdString());
+//    mainSynth->clearMidiLearn(getName().toStdString());
 }
 
 void SynthButton::mouseDown(const juce::MouseEvent& e) {
@@ -323,7 +323,7 @@ void SynthButton::mouseDown(const juce::MouseEvent& e) {
 //  }
 //  else {
     OpenGlToggleButton::mouseDown(e);
-    //synth->beginChangeGesture(getName().toStdString());
+    //mainSynth->beginChangeGesture(getName().toStdString());
 //  }
 }
 

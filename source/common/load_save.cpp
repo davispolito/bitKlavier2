@@ -49,8 +49,8 @@ const std::string LoadSave::kSampleFolderName = "Samples";
 
 
 
-//void LoadSave::loadSample(SynthBase* synth, const json& json_sample) {
-////  vital::Sample* sample = synth->getSample();
+//void LoadSave::loadSample(SynthBase* mainSynth, const json& json_sample) {
+////  vital::Sample* sample = mainSynth->getSample();
 ////  if (sample)
 ////    sample->jsonToState(json_sample);
 //}
