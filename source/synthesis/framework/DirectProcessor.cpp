@@ -27,31 +27,44 @@ DirectProcessor::DirectProcessor(const ValueTree &v) : PluginBase(v, nullptr, di
 //    std::unique_ptr<XmlElement> xml = chowdsp::Serialization::serialize<chowdsp::XMLSerializer>(state);
 //    DBG(chowdsp::Serialization::serialize<chowdsp::XMLSerializer>(state)->toString());
     //chowdsp::Serialization::deserialize<chowdsp::XMLSerializer>(xml,state);
-    adsrCallbacks += {state.addParameterListener(*state.params.attackParam,
+    adsrCallbacks += {
+
+        state.addParameterListener(*state.params.attackParam,
                                                  chowdsp::ParameterListenerThread::AudioThread,
                                                  [this] {
-                               mainSynth.globalADSR.attack = state.params.attackParam->get() * .001f; //should fix, not do hard conversions between ms and seconds here
+                mainSynth.globalADSR.attack = state.params.attackParam->get() * .001f; //should fix, not do hard conversions between ms and seconds here
                                                      DBG("attack: " + String(state.params.attackParam->get()));
                                                  }),
-                      state.addParameterListener(*state.params.decayParam,
+
+        state.addParameterListener(*state.params.decayParam,
                                                  chowdsp::ParameterListenerThread::AudioThread,
                                                  [this] {
                 mainSynth.globalADSR.decay = state.params.decayParam->get() * .001f;
                                                      DBG("decay: " + String(state.params.decayParam->get()));
                                                  }),
-                      state.addParameterListener(*state.params.sustainParam,
+
+        state.addParameterListener(*state.params.sustainParam,
                                                  chowdsp::ParameterListenerThread::AudioThread,
                                                  [this] {
                 mainSynth.globalADSR.sustain = state.params.sustainParam->get();
                                                      DBG("sustain: " + String(state.params.sustainParam->get()));
                                                  }),
-                      state.addParameterListener(*state.params.releaseParam,
+
+        state.addParameterListener(*state.params.releaseParam,
                                                  chowdsp::ParameterListenerThread::AudioThread,
                                                  [this] {
                 mainSynth.globalADSR.release = state.params.releaseParam->get() * .001f;
                                                      DBG("release: " + String(state.params.releaseParam->get()));
-                                                 })
+                                                 }),
+
+        state.addParameterListener(*state.params.gainParam,
+                                                chowdsp::ParameterListenerThread::AudioThread,
+                                                [this] {
+                mainSynth.setSynthGain(Decibels::decibelsToGain(state.params.gainParam->get()));
+                                                    DBG("direct gain: " + String(state.params.gainParam->get()));
+                                                })
     };
+
 
     // these synths play their stuff on noteOff rather than noteOn
     hammerSynth.isKeyReleaseSynth(true);

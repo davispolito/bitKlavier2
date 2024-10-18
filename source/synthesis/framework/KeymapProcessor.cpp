@@ -40,7 +40,8 @@ void KeymapProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::Midi
     // this could surely be optimized, though i'm not sure how important that is ./dlt
     // i'm also not 100% this properly retain the samplePosition, but again, it's not clear how important
     // that is when noteOn and noteOff are inverted... might be important for other MIDI processing, however
-    if (invertNoteOnNoteOff) {
+    if (invertNoteOnNoteOff)
+    {
         MidiBuffer saveMidi(midiMessages);
         midiMessages.clear();
         for(auto mi : saveMidi)
@@ -53,6 +54,18 @@ void KeymapProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::Midi
         }
     }
 
+    /**
+     * others to do from the original KeyMap
+     *
+     * Trigger All Notes Off
+     * Ignore Sustain Pedal
+     * Use as Sustain Pedal
+     * Toggle Keys
+     * Sostenuto Mode
+     * Ignore NoteOff
+     *
+     */
+
     // print them out for now
     for(auto mi : midiMessages)
     {
@@ -62,7 +75,6 @@ void KeymapProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::Midi
         mi.data;
         DBG(bitklavier::printMidi(message, "kmap"));
     }
-
 }
 
 // turns noteOn messages into noteOff messages, and vice versa

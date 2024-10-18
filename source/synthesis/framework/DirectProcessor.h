@@ -14,11 +14,15 @@
 
 struct DirectParams : chowdsp::ParamHolder
 {
+    // gain slider params, for all gain-type knobs
+    float rangeStart = -60.0f;
+    float rangeEnd = 6.0f;
+    float skewFactor = 2.0f;
 
     // Adds the appropriate parameters to the Direct Processor
     DirectParams() : chowdsp::ParamHolder("direct")
     {
-        add (gainParam, hammerParam, velocityParam, resonanceParam, attackParam,
+        add (gainParam, hammerParam, resonanceParam, pedalParam,velocityParam, attackParam,
              decayParam, sustainParam, releaseParam);
 
     }
@@ -27,7 +31,7 @@ struct DirectParams : chowdsp::ParamHolder
     chowdsp::GainDBParameter::Ptr gainParam {
         juce::ParameterID { "gain", 100 },
         "Gain",
-        juce::NormalisableRange { -30.0f, 0.0f },
+        juce::NormalisableRange { rangeStart, rangeEnd, 0.0f, skewFactor, false },
         -6.0f
     };
 
@@ -35,8 +39,24 @@ struct DirectParams : chowdsp::ParamHolder
     chowdsp::GainDBParameter::Ptr hammerParam {
             juce::ParameterID { "hammer", 100 },
             "Hammer",
-            juce::NormalisableRange { -30.0f, 0.0f }, // FIX
+            juce::NormalisableRange { rangeStart, rangeEnd, 0.0f, skewFactor, false },
             -6.0f
+    };
+
+    // Resonance param
+    chowdsp::GainDBParameter::Ptr resonanceParam {
+        juce::ParameterID { "resonance", 100 },
+        "Resonance",
+        juce::NormalisableRange { rangeStart, rangeEnd, 0.0f, skewFactor, false },
+        -6.0f
+    };
+
+    // Resonance param
+    chowdsp::GainDBParameter::Ptr pedalParam {
+        juce::ParameterID { "pedal", 100 },
+        "Pedal",
+        juce::NormalisableRange { rangeStart, rangeEnd, 0.0f, skewFactor, false },
+        -6.0f
     };
 
     // Velocity param
@@ -47,14 +67,6 @@ struct DirectParams : chowdsp::ParamHolder
             127.0f,
             &chowdsp::ParamUtils::floatValToString,
             &chowdsp::ParamUtils::stringToFloatVal
-    };
-
-    // Resonance param
-    chowdsp::GainDBParameter::Ptr resonanceParam {
-            juce::ParameterID { "resonance", 100 },
-            "Resonance",
-            juce::NormalisableRange { -30.0f, 0.0f }, // FIX
-            -6.0f
     };
 
     // Attack param
