@@ -135,9 +135,11 @@ void DirectProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::Midi
         //        state.params.doForAllParameters([this](auto& param, size_t) {
         //           param.printDebug();
         //           });
+
+        // do transpositions in here?
     }
 
-    buffer.clear();
+    buffer.clear(); // always
 
     if (mainSynth.getNumSounds() > 0)
         mainSynth.renderNextBlock (buffer, midiMessages, 0, buffer.getNumSamples());
