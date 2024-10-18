@@ -22,7 +22,7 @@ struct DirectParams : chowdsp::ParamHolder
     // Adds the appropriate parameters to the Direct Processor
     DirectParams() : chowdsp::ParamHolder ("direct")
     {
-        add (gainParam, hammerParam, resonanceParam, pedalParam, velocityParam, attackParam, decayParam, sustainParam, releaseParam);
+        add (gainParam, hammerParam, releaseResonanceParam, pedalParam, velocityParam, attackParam, decayParam, sustainParam, releaseParam);
     }
 
     // juce::Gain param
@@ -42,9 +42,9 @@ struct DirectParams : chowdsp::ParamHolder
     };
 
     // Resonance param
-    chowdsp::GainDBParameter::Ptr resonanceParam {
-        juce::ParameterID { "resonance", 100 },
-        "Resonance",
+    chowdsp::GainDBParameter::Ptr releaseResonanceParam {
+        juce::ParameterID { "releaseResonance", 100 },
+        "Release Resonance",
         juce::NormalisableRange { rangeStart, rangeEnd, 0.0f, skewFactor, false },
         -6.0f
     };

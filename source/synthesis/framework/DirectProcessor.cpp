@@ -28,6 +28,34 @@ DirectProcessor::DirectProcessor (const juce::ValueTree& v) : PluginBase (v, nul
     //chowdsp::Serialization::deserialize<chowdsp::XMLSerializer>(xml,state);
     adsrCallbacks += {
 
+        state.addParameterListener (*state.params.gainParam,
+                 chowdsp::ParameterListenerThread::AudioThread,
+                 [this] {
+                     mainSynth.setSynthGain (juce::Decibels::decibelsToGain (state.params.gainParam->get()));
+                     DBG ("direct gain: " + juce::String (state.params.gainParam->get()));
+                 }),
+
+        state.addParameterListener (*state.params.hammerParam,
+            chowdsp::ParameterListenerThread::AudioThread,
+            [this] {
+                hammerSynth.setSynthGain (juce::Decibels::decibelsToGain (state.params.hammerParam->get()));
+                DBG ("hammer gain: " + juce::String (state.params.hammerParam->get()));
+            }),
+
+        state.addParameterListener (*state.params.releaseResonanceParam,
+            chowdsp::ParameterListenerThread::AudioThread,
+            [this] {
+                releaseResonanceSynth.setSynthGain (juce::Decibels::decibelsToGain (state.params.releaseResonanceParam->get()));
+                DBG ("release resonance gain: " + juce::String (state.params.releaseResonanceParam->get()));
+            }),
+
+        state.addParameterListener (*state.params.pedalParam,
+            chowdsp::ParameterListenerThread::AudioThread,
+            [this] {
+                pedalSynth.setSynthGain (juce::Decibels::decibelsToGain (state.params.pedalParam->get()));
+                DBG ("pedal gain: " + juce::String (state.params.pedalParam->get()));
+            }),
+
         state.addParameterListener (*state.params.attackParam,
             chowdsp::ParameterListenerThread::AudioThread,
             [this] {
@@ -54,14 +82,8 @@ DirectProcessor::DirectProcessor (const juce::ValueTree& v) : PluginBase (v, nul
             [this] {
                 mainSynth.globalADSR.release = state.params.releaseParam->get() * .001f;
                 DBG ("release: " + juce::String (state.params.releaseParam->get()));
-            }),
-
-        state.addParameterListener (*state.params.gainParam,
-            chowdsp::ParameterListenerThread::AudioThread,
-            [this] {
-                mainSynth.setSynthGain (juce::Decibels::decibelsToGain (state.params.gainParam->get()));
-                DBG ("direct gain: " + juce::String (state.params.gainParam->get()));
             })
+
     };
 
     // these synths play their stuff on noteOff rather than noteOn
