@@ -21,7 +21,7 @@ DirectProcessor::DirectProcessor (const juce::ValueTree& v) : PluginBase (v, nul
     mainSynth.setSynthGain (1.);
     hammerSynth.setSynthGain (0.05);
     releaseResonanceSynth.setSynthGain (2.);
-    pedalSynth.setSynthGain (0.2);
+    pedalSynth.setSynthGain (0.4);
 
     //    std::unique_ptr<XmlElement> xml = chowdsp::Serialization::serialize<chowdsp::XMLSerializer>(state);
     //    DBG(chowdsp::Serialization::serialize<chowdsp::XMLSerializer>(state)->toString());
