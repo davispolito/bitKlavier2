@@ -7,7 +7,7 @@
 
 
 // Definition for the NostalgicPreparation constructor.  It takes three parameters: a pointer to
-// a Nostalgic Processor p, a ValueTree v, and a reference to an OpenGlWrapper object.  Initializes
+// a Nostalgic Processor p, a juce::ValueTree v, and a reference to an OpenGlWrapper object.  Initializes
 // the base class members and private NostalgicPreparation member proc with an initialization list.
 NostalgicPreparation::NostalgicPreparation (std::unique_ptr<NostalgicProcessor> p,
                                       juce::ValueTree v, OpenGlWrapper& um) :
@@ -67,7 +67,7 @@ void NostalgicPreparation::NostalgicPopup::renderOpenGlComponents(OpenGlWrapper&
         if (open_gl_component->isVisible() && !open_gl_component->isAlwaysOnTop()) {
             open_gl_component->render(open_gl, animate);
             GLenum gl =  juce::gl::glGetError();
-            //DBG(String(gl));
+            //DBG(juce::String(gl));
             _ASSERT(gl == juce::gl::GL_NO_ERROR);
         }
     }

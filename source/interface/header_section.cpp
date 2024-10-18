@@ -20,7 +20,7 @@
 #include <memory>
 #include "text_look_and_feel.h"
 #include "load_save.h"
-
+#include "SampleLoadManager.h"
 LogoSection::LogoSection() : SynthSection("logo_section") {
 #if !defined(NO_TEXT_ENTRY)
   logo_button_ = std::make_unique<LogoButton>("logo");
@@ -42,14 +42,14 @@ void LogoSection::resized() {
     logo_button_->setBounds(logo_padding_x, logo_padding_y, logo_height, logo_height);
 }
 
-void LogoSection::paintBackground(Graphics& g) {
+void LogoSection::paintBackground(juce::Graphics& g) {
   if (logo_button_) {
     logo_button_->setRingColors(findColour(Skin::kWidgetPrimary1, true), findColour(Skin::kWidgetPrimary2, true));
     logo_button_->setLetterColors(findColour(Skin::kWidgetSecondary1, true), findColour(Skin::kWidgetSecondary2, true));
   }
 }
 
-void LogoSection::buttonClicked(Button* clicked_button) {
+void LogoSection::buttonClicked(juce::Button* clicked_button) {
   for (Listener* listener : listeners_)
     listener->showAboutSection();
 }
@@ -64,13 +64,13 @@ HeaderSection::HeaderSection() : SynthSection("header_section"), tab_offset_(0),
     logo_section_->setAlwaysOnTop(true);
     logo_section_->addListener(this);
     addSubSection(logo_section_.get());
-    sampleSelector = std::make_unique<ShapeButton>("Selector", Colour(0xff666666),
-                                  Colour(0xffaaaaaa), Colour(0xff888888));
+    sampleSelector = std::make_unique<juce::ShapeButton>("Selector", juce::Colour(0xff666666),
+                                  juce::Colour(0xffaaaaaa), juce::Colour(0xff888888));
 
     addAndMakeVisible(sampleSelector.get());
     sampleSelector->addListener(this);
     sampleSelector->setTriggeredOnMouseDown(true);
-    sampleSelector->setShape(Path(), true, true, true);
+    sampleSelector->setShape(juce::Path(), true, true, true);
 
     currentSampleType = 0;
     sampleSelectText = std::make_shared<PlainTextComponent>("Sample Select Text", "---");
@@ -98,7 +98,7 @@ HeaderSection::HeaderSection() : SynthSection("header_section"), tab_offset_(0),
 //  tab_selector_ = std::make_unique<TabSelector>("tab_selector");
 //  addAndMakeVisible(tab_selector_.get());
 //  addOpenGlComponent(tab_selector_->getImageComponent());
-//  tab_selector_->setSliderStyle(Slider::LinearBar);
+//  tab_selector_->setSliderStyle(juce::Slider::LinearBar);
 //  tab_selector_->setRange(0, 3);
 //  tab_selector_->addListener(this);
 //  tab_selector_->setNames({"VOICE", "EFFECTS", "MATRIX", "ADVANCED"});
@@ -135,7 +135,7 @@ HeaderSection::HeaderSection() : SynthSection("header_section"), tab_offset_(0),
 //  temporary_tab_ = std::make_unique<PlainTextComponent>("Temporary", "");
 //  addOpenGlComponent(temporary_tab_.get());
 //  temporary_tab_->setFontType(PlainTextComponent::kLight);
-//  temporary_tab_->setJustification(Justification::centredLeft);
+//  temporary_tab_->setJustification(juce::Justification::centredLeft);
   //inspectButton = std::make_unique<OpenGlToggleButton>("Inspect the UI");
   //inspectButton->setUiButton(false);
   //inspectButton->
@@ -158,7 +158,7 @@ HeaderSection::HeaderSection() : SynthSection("header_section"), tab_offset_(0),
   setSkinOverride(Skin::kHeader);
 }
 
-void HeaderSection::paintBackground(Graphics& g) {
+void HeaderSection::paintBackground(juce::Graphics& g) {
   paintContainer(g);
     paintChildrenBackgrounds(g);
   g.setColour(findColour(Skin::kBody, true));
@@ -167,33 +167,33 @@ void HeaderSection::paintBackground(Graphics& g) {
 
     int label_rounding = findValue(Skin::kLabelBackgroundRounding);
     //g.setColour(findColour(Skin::kTextComponentBackground, true));
-    g.setColour(Colours::white);
+    g.setColour(juce::Colours::white);
     //g.fillRoundedRectangle(sampleSelector->getBounds().toFloat(), label_rounding);
     g.fillRect(100, 50, 100, 100);
   paintKnobShadows(g);
 
 
   //g.saveState();
-//  Rectangle<int> bounds = getLocalArea(synth_preset_selector_.get(), synth_preset_selector_->getLocalBounds());
+//  juce::Rectangle<int> bounds = getLocalArea(synth_preset_selector_.get(), synth_preset_selector_->getLocalBounds());
 //  g.reduceClipRegion(bounds);
 //  g.setOrigin(bounds.getTopLeft());
   //synth_preset_selector_->paintBackground(g);
   //g.restoreState();
 
 //  if (LoadSave::doesExpire()) {
-//    String countdown = "Beta expires in: " + String(LoadSave::getDaysToExpire()) + " days";
+//    juce::String countdown = "Beta expires in: " + juce::String(LoadSave::getDaysToExpire()) + " days";
 //    int countdown_height = volume_section_->getY() + volume_section_->getBuffer();
 //    g.setFont(Fonts::instance()->proportional_regular().withPointHeight(countdown_height / 2.0f));
 //    g.setColour(findColour(Skin::kTextComponentText, true));
 //    g.drawText(countdown, volume_section_->getX(), 0,
-//               volume_section_->getWidth(), countdown_height, Justification::centred);
+//               volume_section_->getWidth(), countdown_height, juce::Justification::centred);
 //  }
 }
 
 void HeaderSection::resized() {
   static constexpr float kTextHeightRatio = 0.3f;
   static constexpr float kPaddingLeft = 0.25f;
-    Colour body_text = findColour(Skin::kBodyText, true);
+    juce::Colour body_text = findColour(Skin::kBodyText, true);
     sampleSelectText->setColor(body_text);
 //  oscilloscope_->setColour(Skin::kBody, findColour(Skin::kBackground, true));
 //  spectrogram_->setColour(Skin::kBody, findColour(Skin::kBackground, true));
@@ -271,7 +271,7 @@ namespace string_constants{
     };
 
 };
-void HeaderSection::buttonClicked(Button* clicked_button) {
+void HeaderSection::buttonClicked(juce::Button* clicked_button) {
   if (clicked_button == exit_temporary_button_.get()) {
 //    for (Listener* listener : listeners_)
 //      listener->clearTemporaryTab(tab_selector_->getValue());
@@ -295,7 +295,7 @@ void HeaderSection::buttonClicked(Button* clicked_button) {
       showPopupSelector(this,position, options, [=](int selection){
 
           SynthGuiInterface* parent = findParentComponentOfClass<SynthGuiInterface>();
-          parent->sampleLoadManager.loadSamples(selection, true);
+          parent->sampleLoadManager->loadSamples(selection, true);
           sampleSelectText->setText(string_constants::cBKSampleLoadTypes[selection]);
           resized();
       });
@@ -310,23 +310,23 @@ void HeaderSection::buttonClicked(Button* clicked_button) {
   else if (clicked_button == loadButton.get())
     {
         SynthGuiInterface* parent = findParentComponentOfClass<SynthGuiInterface>();
-        File active_file = parent->getSynth()->getActiveFile();
-        filechooser = std::make_unique<FileChooser> ("Open Preset", active_file, String("*.") + bitklavier::kPresetExtension);
+        juce::File active_file = parent->getSynth()->getActiveFile();
+        filechooser = std::make_unique<juce::FileChooser> ("Open Preset", active_file, juce::String("*.") + bitklavier::kPresetExtension);
 
-        auto flags = FileBrowserComponent::openMode
-                     | FileBrowserComponent::canSelectFiles;
-        filechooser->launchAsync(flags, [this] (const FileChooser& fc) {
-            if (fc.getResult() == File{})
+        auto flags = juce::FileBrowserComponent::openMode
+                     | juce::FileBrowserComponent::canSelectFiles;
+        filechooser->launchAsync(flags, [this] (const juce::FileChooser& fc) {
+            if (fc.getResult() == juce::File{})
             {
                return ;
             }
             SynthGuiInterface* _parent = findParentComponentOfClass<SynthGuiInterface>();
             std::string error;
-                    File choice = fc.getResult();
+                    juce::File choice = fc.getResult();
         if (!_parent->getSynth()->loadFromFile(choice, error)) {
 //            std::string name = ProjectInfo::projectName;
 //            error = "There was an error open the preset. " + error;
-            //AlertWindow::showMessageBoxAsync(MessageBoxIconType::WarningIcon, "PRESET ERROR, ""Error opening preset", error);
+            //juce::AlertWindow::showMessageBoxAsync(MessageBoxIconType::WarningIcon, "PRESET ERROR, ""Error opening preset", error);
             DBG("errrrrr");
             DBG(error);
         }
@@ -344,7 +344,7 @@ void HeaderSection::buttonClicked(Button* clicked_button) {
         SynthSection::buttonClicked(clicked_button);
 }
 
-void HeaderSection::sliderValueChanged(Slider* slider) {
+void HeaderSection::sliderValueChanged(juce::Slider* slider) {
 //  if (slider == tab_selector_.get()) {
 //    int index = tab_selector_->getValue();
 //    for (Listener* listener : listeners_)
@@ -364,7 +364,7 @@ void HeaderSection::sliderValueChanged(Slider* slider) {
 //    listener->setBankExporterVisibility(visible, tab_selector_->getValue());
 //}
 //
-//void HeaderSection::deleteRequested(File preset) {
+//void HeaderSection::deleteRequested(juce::File preset) {
 //  for (Listener* listener : listeners_)
 //    listener->deleteRequested(preset);
 //}
@@ -374,12 +374,12 @@ void HeaderSection::sliderValueChanged(Slider* slider) {
 //    listener->bankImported();
 //}
 //
-//void HeaderSection::save(File preset) {
+//void HeaderSection::save(juce::File preset) {
 //  synth_preset_selector_->resetText();
 //  synth_preset_selector_->setModified(false);
 //}
 //
-//void HeaderSection::setTemporaryTab(String name) {
+//void HeaderSection::setTemporaryTab(juce::String name) {
 //  temporary_tab_->setText(name);
 //  tab_selector_->setVisible(name.isEmpty());
 //  exit_temporary_button_->setVisible(!name.isEmpty());

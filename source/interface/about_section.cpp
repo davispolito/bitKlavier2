@@ -15,6 +15,7 @@
  */
 
 #include "about_section.h"
+#include "UserPreferences.h"
 #include "skin.h"
 #include "fonts.h"
 
@@ -24,14 +25,14 @@
 #include "text_look_and_feel.h"
 
 namespace {
-  void setColorRecursively(Component *component, int color_id, const Colour& color) {
+  void setColorRecursively(juce::Component *component, int color_id, const juce::Colour& color) {
     component->setColour(color_id, color);
-    for (Component *child : component->getChildren())
+    for (juce::Component *child : component->getChildren())
       setColorRecursively(child, color_id, color);
   }
 }
 
-AboutSection::AboutSection(const String& name) : Overlay(name), body_(new OpenGlQuad(Shaders::kRoundedRectangleFragment)) {
+AboutSection::AboutSection(const juce::String& name) : Overlay(name), body_(new OpenGlQuad(Shaders::kRoundedRectangleFragment)) {
     addOpenGlComponent (body_);
     // logo_ = std::make_unique<AppLogo>("logo");
     //addOpenGlComponent(logo_.get());
@@ -40,7 +41,7 @@ AboutSection::AboutSection(const String& name) : Overlay(name), body_(new OpenGl
     addOpenGlComponent (name_text_);
     name_text_->setFontType (PlainTextComponent::kRegular);
     name_text_->setTextSize (40.0f);
-    version_text_ = std::make_shared<PlainTextComponent> ("version", String ("version  ") + ProjectInfo::versionString);
+    version_text_ = std::make_shared<PlainTextComponent> ("version", juce::String ("version  ") + "bitklavier2");//ProjectInfo::versionString);
     addOpenGlComponent (version_text_);
     version_text_->setFontType (PlainTextComponent::kLight);
     version_text_->setTextSize (12.0f);
@@ -49,7 +50,7 @@ AboutSection::AboutSection(const String& name) : Overlay(name), body_(new OpenGl
 AboutSection::~AboutSection() = default;
 
 void AboutSection::setLogoBounds() {
-  Rectangle<int> info_rect = getInfoRect();
+  juce::Rectangle<int> info_rect = getInfoRect();
   int left_buffer = kLeftLogoBuffer * size_ratio_;
   //logo_->setBounds(info_rect.getX() + left_buffer, info_rect.getY() + (kPaddingY + 12) * size_ratio_,
   //                 kLogoWidth * size_ratio_, kLogoWidth * size_ratio_);
@@ -58,20 +59,20 @@ void AboutSection::setLogoBounds() {
 void AboutSection::resized() {
   SynthGuiInterface* parent = findParentComponentOfClass<SynthGuiInterface>();
   if (parent && device_selector_ == nullptr) {
-    AudioDeviceManager* device_manager = parent->getAudioDeviceManager();
+    juce::AudioDeviceManager* device_manager = parent->getAudioDeviceManager();
     if (device_manager) {
       device_selector_ = std::make_unique<OpenGlDeviceSelector>(
-          *device_manager, 0, 0, bitklavier::kNumChannels, bitklavier::kNumChannels, true, false, false, false, parent->userPreferences.tree);
+          *device_manager, 0, 0, bitklavier::kNumChannels, bitklavier::kNumChannels, true, false, false, false, parent->userPreferences->tree);
       addAndMakeVisible(device_selector_.get());
       addOpenGlComponent(device_selector_->getImageComponent());
     }
   }
 
-  Rectangle<int> info_rect = getInfoRect();
+  juce::Rectangle<int> info_rect = getInfoRect();
   body_->setBounds(info_rect);
   body_->setRounding(findValue(Skin::kBodyRounding));
   body_->setColor(findColour(Skin::kBody, true));
-  Colour body_text = findColour(Skin::kBodyText, true);
+  juce::Colour body_text = findColour(Skin::kBodyText, true);
 //  name_text_->setColor(body_text);
 //
 //
@@ -110,19 +111,19 @@ void AboutSection::resized() {
   }
 
   if (device_selector_) {
-    Colour background = findColour(Skin::kPopupBackground, true); 
-    setColorRecursively(device_selector_.get(), ListBox::backgroundColourId, background);
-    setColorRecursively(device_selector_.get(), ComboBox::backgroundColourId, background);
-    setColorRecursively(device_selector_.get(), PopupMenu::backgroundColourId, background);
-    setColorRecursively(device_selector_.get(), BubbleComponent::backgroundColourId, background);
+    juce::Colour background = findColour(Skin::kPopupBackground, true);
+    setColorRecursively(device_selector_.get(), juce::ListBox::backgroundColourId, background);
+    setColorRecursively(device_selector_.get(), juce::ComboBox::backgroundColourId, background);
+    setColorRecursively(device_selector_.get(), juce::PopupMenu::backgroundColourId, background);
+    setColorRecursively(device_selector_.get(), juce::BubbleComponent::backgroundColourId, background);
 
-    Colour text = findColour(Skin::kBodyText, true);
-    setColorRecursively(device_selector_.get(), ListBox::textColourId, text);
-    setColorRecursively(device_selector_.get(), ComboBox::textColourId, text);
+    juce::Colour text = findColour(Skin::kBodyText, true);
+    setColorRecursively(device_selector_.get(), juce::ListBox::textColourId, text);
+    setColorRecursively(device_selector_.get(), juce::ComboBox::textColourId, text);
 
-    setColorRecursively(device_selector_.get(), TextEditor::highlightColourId, Colours::transparentBlack);
-    setColorRecursively(device_selector_.get(), ListBox::outlineColourId, Colours::transparentBlack);
-    setColorRecursively(device_selector_.get(), ComboBox::outlineColourId, Colours::transparentBlack);
+    setColorRecursively(device_selector_.get(), juce::TextEditor::highlightColourId, juce::Colours::transparentBlack);
+    setColorRecursively(device_selector_.get(), juce::ListBox::outlineColourId, juce::Colours::transparentBlack);
+    setColorRecursively(device_selector_.get(), juce::ComboBox::outlineColourId, juce::Colours::transparentBlack);
   }
 
 //  name_text_->setTextSize(40.0f * size_ratio_);
@@ -132,7 +133,7 @@ void AboutSection::resized() {
   Overlay::resized();
 }
 
-void AboutSection::mouseUp(const MouseEvent &e) {
+void AboutSection::mouseUp(const juce::MouseEvent &e) {
   if (!getInfoRect().contains(e.getPosition()))
     setVisible(false);
 }
@@ -140,19 +141,19 @@ void AboutSection::mouseUp(const MouseEvent &e) {
 void AboutSection::setVisible(bool should_be_visible) {
   if (should_be_visible) {
     //setLogoBounds();
-    Image image(Image::ARGB, 1, 1, false);
-    Graphics g(image);
+    juce::Image image(juce::Image::ARGB, 1, 1, false);
+    juce::Graphics g(image);
     paintOpenGlChildrenBackgrounds(g);
   }
 
   Overlay::setVisible(should_be_visible);
 }
 
-void AboutSection::buttonClicked(Button* clicked_button) {
+void AboutSection::buttonClicked(juce::Button* clicked_button) {
 
 }
 
-Rectangle<int> AboutSection::getInfoRect() {
+juce::Rectangle<int> AboutSection::getInfoRect() {
   int info_height = kBasicInfoHeight * size_ratio_;
   int info_width = kInfoWidth * size_ratio_;
   if (device_selector_)
@@ -160,12 +161,12 @@ Rectangle<int> AboutSection::getInfoRect() {
 
   int x = (getWidth() - info_width) / 2;
   int y = (getHeight() - info_width) / 2;
-  return Rectangle<int>(x, y, info_width, info_height);
+  return juce::Rectangle<int>(x, y, info_width, info_height);
 }
 
 void AboutSection::setGuiSize(float multiplier) {
-  if (Desktop::getInstance().getKioskModeComponent()) {
-    Desktop::getInstance().setKioskModeComponent(nullptr);
+  if (juce::Desktop::getInstance().getKioskModeComponent()) {
+    juce::Desktop::getInstance().setKioskModeComponent(nullptr);
     return;
   }
 
@@ -176,8 +177,8 @@ void AboutSection::setGuiSize(float multiplier) {
 }
 
 void AboutSection::fullScreen() {
-  if (Desktop::getInstance().getKioskModeComponent())
-    Desktop::getInstance().setKioskModeComponent(nullptr);
+  if (juce::Desktop::getInstance().getKioskModeComponent())
+    juce::Desktop::getInstance().setKioskModeComponent(nullptr);
   else
-    Desktop::getInstance().setKioskModeComponent(getTopLevelComponent());
+    juce::Desktop::getInstance().setKioskModeComponent(getTopLevelComponent());
 }

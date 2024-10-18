@@ -31,7 +31,7 @@ class OverlayBackgroundRenderer : public OpenGlComponent {
       shader_ = nullptr;
       additive_blending_ = false;
 
-      color_ = Colours::black;
+      color_ = juce::Colours::black;
       data_[0] = -1.0f;
       data_[1] = -1.0f;
       data_[2] = -1.0f;
@@ -76,7 +76,7 @@ class OverlayBackgroundRenderer : public OpenGlComponent {
       drawOverlay(open_gl);
     }
 
-    void paintBackground(Graphics& g) override { }
+    void paintBackground(juce::Graphics& g) override { }
 
     virtual void destroy(OpenGlWrapper& open_gl) override {
       shader_ = nullptr;
@@ -89,7 +89,7 @@ class OverlayBackgroundRenderer : public OpenGlComponent {
       indices_buffer_ = 0;
     }
 
-    void setColor(const Colour& color) { color_ = color; }
+    void setColor(const juce::Colour& color) { color_ = color; }
 
     force_inline void setAdditiveBlending(bool additive_blending) { additive_blending_ = additive_blending; }
 
@@ -129,11 +129,11 @@ class OverlayBackgroundRenderer : public OpenGlComponent {
       juce::gl::glDisable(juce::gl::GL_SCISSOR_TEST);
     }
 
-    OpenGLShaderProgram* shader_;
-    std::unique_ptr<OpenGLShaderProgram::Uniform> color_uniform_;
-    std::unique_ptr<OpenGLShaderProgram::Attribute> position_;
+    juce::OpenGLShaderProgram* shader_;
+    std::unique_ptr<juce::OpenGLShaderProgram::Uniform> color_uniform_;
+    std::unique_ptr<juce::OpenGLShaderProgram::Attribute> position_;
 
-    Colour color_;
+    juce::Colour color_;
     bool additive_blending_;
 
     float data_[kTotalFloats];
@@ -157,7 +157,7 @@ class Overlay : public SynthSection {
         JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(Listener)
     };
 
-    Overlay(String name) : SynthSection(name), size_ratio_(1.0f) , background_(new OverlayBackgroundRenderer()){
+    Overlay(juce::String name) : SynthSection(name), size_ratio_(1.0f) , background_(new OverlayBackgroundRenderer()){
       setSkinOverride(Skin::kOverlay);
       addOpenGlComponent(background_);
     }
@@ -170,7 +170,7 @@ class Overlay : public SynthSection {
         else
           listener->overlayHidden(this);
       }
-      Component::setVisible(should_be_visible);
+      juce::Component::setVisible(should_be_visible);
     }
 
     virtual void resized() override {
@@ -178,7 +178,7 @@ class Overlay : public SynthSection {
       background_->setBounds(getLocalBounds());
     }
 
-    virtual void paintBackground(Graphics& g) override { paintOpenGlChildrenBackgrounds(g); }
+    virtual void paintBackground(juce::Graphics& g) override { paintOpenGlChildrenBackgrounds(g); }
 
     void addOverlayListener(Listener* listener) { listeners_.insert(listener); }
     void removeOverlayListener(Listener* listener) { listeners_.erase(listener); }

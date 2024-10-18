@@ -40,7 +40,7 @@ public:
     void getStateInformation (juce::MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
 
-    const CriticalSection& getCriticalSection() override;
+    const juce::CriticalSection& getCriticalSection() override;
     void pauseProcessing(bool pause) override;
     SynthGuiInterface* getGuiInterface() override;
 

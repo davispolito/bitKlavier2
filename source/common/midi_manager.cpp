@@ -15,7 +15,6 @@
  */
 
 #include "midi_manager.h"
-using namespace juce;
 
 
 namespace {
@@ -31,7 +30,7 @@ namespace {
   }
 } // namespace
 
-MidiManager::MidiManager(MidiKeyboardState* keyboard_state, AudioDeviceManager* manager, const ValueTree &v,
+MidiManager::MidiManager(juce::MidiKeyboardState* keyboard_state, juce::AudioDeviceManager* manager, const juce::ValueTree &v,
                           Listener* listener) : tracktion::engine::ValueTreeObjectList<bitklavier::MidiDeviceWrapper>(v),
      keyboard_state_(keyboard_state),
     listener_(listener), armed_value_(nullptr),
@@ -113,15 +112,15 @@ void MidiManager::setSampleRate(double sample_rate) {
   midi_collector_.reset(sample_rate);
 }
 
-void MidiManager::removeNextBlockOfMessages(MidiBuffer& buffer, int num_samples) {
+void MidiManager::removeNextBlockOfMessages(juce::MidiBuffer& buffer, int num_samples) {
   midi_collector_.removeNextBlockOfMessages(buffer, num_samples);
 }
 
-void MidiManager::readMpeMessage(const MidiMessage& message) {
+void MidiManager::readMpeMessage(const juce::MidiMessage& message) {
   mpe_zone_layout_.processNextMidiEvent(message);
 }
 
-void MidiManager::processAllNotesOff(const MidiMessage& midi_message, int sample_position, int channel) {
+void MidiManager::processAllNotesOff(const juce::MidiMessage& midi_message, int sample_position, int channel) {
 //  if (isMpeChannelMasterLowerZone(channel))
 //    //engine_->allNotesOffRange(sample_position, lowerZoneStartChannel(), lowerZoneEndChannel());
 //  else if (isMpeChannelMasterUpperZone(channel))
@@ -134,7 +133,7 @@ void MidiManager::processAllSoundsOff() {
   //engine_->allSoundsOff();
 }
 
-void MidiManager::processSustain(const MidiMessage& midi_message, int sample_position, int channel) {
+void MidiManager::processSustain(const juce::MidiMessage& midi_message, int sample_position, int channel) {
   bool on = midi_message.isSustainPedalOn();
   if (isMpeChannelMasterLowerZone(channel)) {
     //if (on)
@@ -156,7 +155,7 @@ void MidiManager::processSustain(const MidiMessage& midi_message, int sample_pos
   }
 }
 
-void MidiManager::processSostenuto(const MidiMessage& midi_message, int sample_position, int channel) {
+void MidiManager::processSostenuto(const juce::MidiMessage& midi_message, int sample_position, int channel) {
   bool on = midi_message.isSostenutoPedalOn();
   if (isMpeChannelMasterLowerZone(channel)) {
     //if (on)
@@ -178,7 +177,7 @@ void MidiManager::processSostenuto(const MidiMessage& midi_message, int sample_p
   }
 }
 
-void MidiManager::processPitchBend(const MidiMessage& midi_message, int sample_position, int channel) {
+void MidiManager::processPitchBend(const juce::MidiMessage& midi_message, int sample_position, int channel) {
   bitklavier::mono_float percent = midi_message.getPitchWheelValue() / kHighResolutionMax;
   bitklavier::mono_float value = 2 * percent - 1.0f;
 
@@ -200,7 +199,7 @@ void MidiManager::processPitchBend(const MidiMessage& midi_message, int sample_p
   //}
 }
 
-void MidiManager::processPressure(const MidiMessage& midi_message, int sample_position, int channel) {
+void MidiManager::processPressure(const juce::MidiMessage& midi_message, int sample_position, int channel) {
   bitklavier::mono_float value = toHighResolutionValue(msb_pressure_values_[channel], lsb_pressure_values_[channel]);
  // if (isMpeChannelMasterLowerZone(channel))
     //engine_->setChannelRangeAftertouch(lowerZoneStartChannel(), lowerZoneEndChannel(), value, 0);
@@ -210,7 +209,7 @@ void MidiManager::processPressure(const MidiMessage& midi_message, int sample_po
     //engine_->setChannelAftertouch(channel, value, sample_position);
 }
 
-void MidiManager::processSlide(const MidiMessage& midi_message, int sample_position, int channel) {
+void MidiManager::processSlide(const juce::MidiMessage& midi_message, int sample_position, int channel) {
   bitklavier::mono_float value = toHighResolutionValue(msb_slide_values_[channel], lsb_slide_values_[channel]);
   //if (isMpeChannelMasterLowerZone(channel))
     //engine_->setChannelRangeSlide(value, lowerZoneStartChannel(), lowerZoneEndChannel(), 0);
@@ -228,7 +227,7 @@ force_inline bool MidiManager::isMpeChannelMasterUpperZone(int channel) {
   return mpe_enabled_ && mpe_zone_layout_.getUpperZone().isActive() && upperMasterChannel() == channel;
 }
 
-void MidiManager::processMidiMessage(const MidiMessage& midi_message, int sample_position) {
+void MidiManager::processMidiMessage(const juce::MidiMessage& midi_message, int sample_position) {
   if (midi_message.isController())
     readMpeMessage(midi_message);
 
@@ -238,7 +237,7 @@ void MidiManager::processMidiMessage(const MidiMessage& midi_message, int sample
     case kProgramChange:
       return;
     case kNoteOn: {
-      uint8 velocity = midi_message.getVelocity();
+      juce::uint8 velocity = midi_message.getVelocity();
     //  if (velocity)
         //engine_->noteOn(midi_message.getNoteNumber(), velocity / kControlMax, sample_position, channel);
     //  else
@@ -318,10 +317,10 @@ void MidiManager::processMidiMessage(const MidiMessage& midi_message, int sample
   }
 }
 
-void MidiManager::handleIncomingMidiMessage(MidiInput* source, const MidiMessage &midi_message) {
+void MidiManager::handleIncomingMidiMessage(juce::MidiInput* source, const juce::MidiMessage &midi_message) {
   midi_collector_.addMessageToQueue(midi_message);
 }
 
-void MidiManager::replaceKeyboardMessages(MidiBuffer& buffer, int num_samples) {
+void MidiManager::replaceKeyboardMessages(juce::MidiBuffer& buffer, int num_samples) {
   keyboard_state_->processNextMidiBuffer(buffer, 0, num_samples, true);
 }

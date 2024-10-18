@@ -16,13 +16,13 @@
 
 #pragma once
 
-#include "juce_gui_basics/juce_gui_basics.h"
+#include <juce_gui_basics/juce_gui_basics.h>
 
 class SynthSlider;
 
 class LeftAlignedScrollBar : public juce::ScrollBar {
   public:
-    LeftAlignedScrollBar(bool vertical) : ScrollBar(vertical) { }
+    LeftAlignedScrollBar(bool vertical) : juce::ScrollBar(vertical) { }
 };
 
 class DefaultLookAndFeel : public juce::LookAndFeel_V4 {

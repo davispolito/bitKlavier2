@@ -31,12 +31,12 @@ namespace bitklavier {
         ~PluginBase() override = default;
 
 #if defined JucePlugin_Name
-        const juce::String getName() const override // NOLINT(readability-const-return-type): Needs to return a const String for override compatibility
+        const juce::String getName() const override // NOLINT(readability-const-return-type): Needs to return a const juce::String for override compatibility
         {
             return JucePlugin_Name;
         }
 #else
-        const juce::String getName() const override // NOLINT(readability-const-return-type): Needs to return a const String for override compatibility
+        const juce::String getName() const override // NOLINT(readability-const-return-type): Needs to return a const juce::String for override compatibility
     {
         return juce::String();
     }
@@ -115,7 +115,7 @@ namespace bitklavier {
 #if JUCE_MODULE_AVAILABLE_chowdsp_plugin_state
         PluginStateType state;
 #else
-        using Parameters = chowdsp::Parameters;
+        using juce::Parameters = chowdsp::Parameters;
     juce::AudioProcessorValueTreeState vts;
 
 #if JUCE_MODULE_AVAILABLE_foleys_gui_magic
@@ -157,7 +157,7 @@ namespace bitklavier {
 #if JUCE_MODULE_AVAILABLE_chowdsp_plugin_state
     template <class State>
     PluginBase<State>::PluginBase (const juce::ValueTree &v, juce::UndoManager* um, const juce::AudioProcessor::BusesProperties& layout)
-            : AudioProcessor (layout),
+            : juce::AudioProcessor (layout),
               state (*this, um),
               v(v)
     {
@@ -167,7 +167,7 @@ namespace bitklavier {
     }
 #else
     template <class Processor>
-PluginBase<Processor>::PluginBase (juce::UndoManager* um, const juce::AudioProcessor::BusesProperties& layout) : AudioProcessor (layout),
+PluginBase<Processor>::PluginBase (juce::UndoManager* um, const juce::AudioProcessor::BusesProperties& layout) : juce::AudioProcessor (layout),
                                                                                                                  vts (*this, um, juce::Identifier ("Parameters"), createParameterLayout())
 {
 }
@@ -175,7 +175,7 @@ PluginBase<Processor>::PluginBase (juce::UndoManager* um, const juce::AudioProce
 template <class Processor>
 juce::AudioProcessorValueTreeState::ParameterLayout PluginBase<Processor>::createParameterLayout()
 {
-    Parameters params;
+    juce::Parameters params;
 
     static_assert (HasAddParameters<Processor>, "Processor class MUST contain a static addParameters function!");
     Processor::addParameters (params);
@@ -203,7 +203,7 @@ juce::AudioProcessorValueTreeState::ParameterLayout PluginBase<Processor>::creat
     }
 
     template <class P>
-    const juce::String PluginBase<P>::getProgramName (int index) // NOLINT(readability-const-return-type): Needs to return a const String for override compatibility
+    const juce::String PluginBase<P>::getProgramName (int index) // NOLINT(readability-const-return-type): Needs to return a const juce::String for override compatibility
     {
        return juce::String("");
     }
@@ -259,7 +259,7 @@ juce::AudioProcessorValueTreeState::ParameterLayout PluginBase<Processor>::creat
 //        juce::MemoryOutputStream out (data, false);
 //        out.writeInt (magicXmlNumber);
 //        out.writeInt (0);
-//        xml.writeTo (out, XmlElement::TextFormat().singleLine());
+//        xml.writeTo (out, juce::XmlElement::TextFormat().singleLine());
 //        out.writeByte (0);
 //    }
         state.serialize (data);
@@ -304,7 +304,7 @@ void PluginBase<Processor>::setStateInformation (const void* data, int sizeInByt
 #if JUCE_MODULE_AVAILABLE_chowdsp_clap_extensions
         return CLAPExtensions::CLAPInfoExtensions::getPluginTypeString (wrapperType);
 #else
-        return AudioProcessor::getWrapperTypeDescription (wrapperType);
+        return juce::AudioProcessor::getWrapperTypeDescription (wrapperType);
 #endif
     }
 

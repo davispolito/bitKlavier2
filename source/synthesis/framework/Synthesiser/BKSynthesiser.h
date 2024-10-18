@@ -162,7 +162,7 @@ class BKSynthesiser
                     renderNextBlock(), but may be called explicitly too.
             
                     @param midiChannel          the midi channel, from 1 to 16 inclusive
-                    @param wheelValue           the wheel position, from 0 to 0x3fff, as returned by MidiMessage::getPitchWheelValue()
+                    @param wheelValue           the wheel position, from 0 to 0x3fff, as returned by juce::MidiMessage::getPitchWheelValue()
                 */
                 virtual void handlePitchWheel (int midiChannel,
                 int wheelValue);
@@ -176,8 +176,8 @@ class BKSynthesiser
                     renderNextBlock(), but may be called explicitly too.
             
                     @param midiChannel          the midi channel, from 1 to 16 inclusive
-                    @param controllerNumber     the midi controller type, as returned by MidiMessage::getControllerNumber()
-                    @param controllerValue      the midi controller value, between 0 and 127, as returned by MidiMessage::getControllerValue()
+                    @param controllerNumber     the midi controller type, as returned by juce::MidiMessage::getControllerNumber()
+                    @param controllerValue      the midi controller value, between 0 and 127, as returned by juce::MidiMessage::getControllerValue()
                 */
                 virtual void handleController (int midiChannel,
                 int controllerNumber,
@@ -194,7 +194,7 @@ class BKSynthesiser
                     @param midiChannel          the midi channel, from 1 to 16 inclusive
                     @param midiNoteNumber       the midi note number, 0 to 127
                     @param aftertouchValue      the aftertouch value, between 0 and 127,
-                                                as returned by MidiMessage::getAftertouchValue()
+                                                as returned by juce::MidiMessage::getAftertouchValue()
                 */
                 virtual void handleAftertouch (int midiChannel, int midiNoteNumber, int aftertouchValue);
 
@@ -208,7 +208,7 @@ class BKSynthesiser
             
                     @param midiChannel              the midi channel, from 1 to 16 inclusive
                     @param channelPressureValue     the pressure value, between 0 and 127, as returned
-                                                    by MidiMessage::getChannelPressureValue()
+                                                    by juce::MidiMessage::getChannelPressureValue()
                 */
                 virtual void handleChannelPressure (int midiChannel, int channelPressureValue);
 

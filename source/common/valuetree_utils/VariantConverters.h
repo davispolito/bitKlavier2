@@ -7,11 +7,11 @@
 #include <juce_audio_processors/juce_audio_processors.h>
 namespace juce {
     template<>
-    struct VariantConverter<juce::AudioProcessorGraph::NodeID> final
+    struct juce::VariantConverter<juce::AudioProcessorGraph::NodeID> final
     {
-        using Type = String;
+        using Type = juce::String;
 
-        static juce::AudioProcessorGraph::NodeID fromVar(const var& v)
+        static juce::AudioProcessorGraph::NodeID fromVar(const juce::var& v)
         {
             if(v.isString())
             {
@@ -20,9 +20,9 @@ namespace juce {
             return {};
         }
 
-        static var toVar(const AudioProcessorGraph::NodeID& id)
+        static juce::var toVar(const juce::AudioProcessorGraph::NodeID& id)
         {
-            return String(id.uid);
+            return juce::String(id.uid);
         }
     };
 }

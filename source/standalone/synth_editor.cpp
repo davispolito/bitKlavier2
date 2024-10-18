@@ -39,24 +39,24 @@ SynthEditor::SynthEditor(bool use_gui) : SynthGuiInterface(this, use_gui), Synth
 
   setAudioChannels(0, bitklavier::kNumChannels);
 
-  AudioDeviceManager::AudioDeviceSetup setup;
+  juce::AudioDeviceManager::AudioDeviceSetup setup;
   deviceManager.getAudioDeviceSetup(setup);
   setup.sampleRate = bitklavier::kDefaultSampleRate;
   deviceManager.initialise(0, bitklavier::kNumChannels, nullptr, true, "", &setup);
 
   if (deviceManager.getCurrentAudioDevice() == nullptr) {
-    const OwnedArray<AudioIODeviceType>& device_types = deviceManager.getAvailableDeviceTypes();
+    const juce::OwnedArray<juce::AudioIODeviceType>& device_types = deviceManager.getAvailableDeviceTypes();
 
-    for (AudioIODeviceType* device_type : device_types) {
+    for (juce::AudioIODeviceType* device_type : device_types) {
       deviceManager.setCurrentAudioDeviceType(device_type->getTypeName(), true);
       if (deviceManager.getCurrentAudioDevice())
         break;
     }
   }
 
-  current_midi_ins_ = StringArray(juce::MidiInput::getDevices());
+  current_midi_ins_ = juce::StringArray(juce::MidiInput::getDevices());
 
-  for (const String& midi_in : current_midi_ins_)
+  for (const juce::String& midi_in : current_midi_ins_)
     deviceManager.setMidiInputDeviceEnabled(midi_in, true);
 
   deviceManager.addMidiInputDeviceCallback("", static_cast<juce::MidiInputCallback*>(midi_manager_.get()));
@@ -67,7 +67,7 @@ SynthEditor::SynthEditor(bool use_gui) : SynthGuiInterface(this, use_gui), Synth
     gui_->reset();
 
 
-    Rectangle<int> total_bounds = Desktop::getInstance().getDisplays().getTotalBounds(true);
+    juce::Rectangle<int> total_bounds = juce::Desktop::getInstance().getDisplays().getTotalBounds(true);
     total_bounds.removeFromBottom(kHeightBuffer);
 
     float window_size = 1.0f;
@@ -89,7 +89,7 @@ SynthEditor::~SynthEditor() {
 #if PERFETTO
   MelatoninPerfetto::get().endSession();
 #endif
-  PopupMenu::dismissAllActiveMenus();
+  juce::PopupMenu::dismissAllActiveMenus();
   shutdownAudio();
 }
 
@@ -99,14 +99,14 @@ void SynthEditor::prepareToPlay(int buffer_size, double sample_rate) {
   midi_manager_->setSampleRate(sample_rate);
 }
 
-void SynthEditor::getNextAudioBlock(const AudioSourceChannelInfo& buffer) {
-  ScopedLock lock(getCriticalSection());
+void SynthEditor::getNextAudioBlock(const juce::AudioSourceChannelInfo& buffer) {
+  juce::ScopedLock lock(getCriticalSection());
 
   int num_samples = buffer.buffer->getNumSamples();
   int synth_samples = std::min(num_samples, bitklavier::kMaxBufferSize);
 
   //processModulationChanges();
-  MidiBuffer midi_messages;
+  juce::MidiBuffer midi_messages;
   midi_manager_->removeNextBlockOfMessages(midi_messages, num_samples);
   processKeyboardEvents(midi_messages, num_samples);
 
@@ -135,7 +135,7 @@ void SynthEditor::resized() {
 }
 
 void SynthEditor::timerCallback() {
-  StringArray midi_ins(MidiInput::getDevices());
+  juce::StringArray midi_ins(juce::MidiInput::getDevices());
 
   for (int i = 0; i < midi_ins.size(); ++i) {
     if (!current_midi_ins_.contains(midi_ins[i]))

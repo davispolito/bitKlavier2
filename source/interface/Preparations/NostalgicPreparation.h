@@ -34,7 +34,7 @@ public:
     ~NostalgicPreparation();
 
     // Static function that returns a pointer to a NostalgicPreparation object
-    static PreparationSection* createNostalgicSection(ValueTree v, SynthGuiInterface* interface) {
+    static PreparationSection* createNostalgicSection(juce::ValueTree v, SynthGuiInterface* interface) {
 
         return new NostalgicPreparation(std::make_unique<NostalgicProcessor>(), v, interface->getGui()->open_gl_);
     }    // Public function definitions for the NostalgicPreparation class, which override functions
@@ -68,7 +68,7 @@ private:
         void initOpenGlComponents(OpenGlWrapper &open_gl) override;
         void renderOpenGlComponents(OpenGlWrapper& open_gl, bool animate) override;
         void resized() override;
-        void paintBackground(Graphics& g) override
+        void paintBackground(juce::Graphics& g) override
         {
             SynthSection::paintContainer(g);
             paintHeadingText(g);

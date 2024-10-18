@@ -18,17 +18,14 @@
 
 
 
-#include "open_gl_image.h"
-#include "open_gl_image_component.h"
-#include "open_gl_multi_image.h"
-#include "open_gl_multi_quad.h"
+
 #include "overlay.h"
 #include "popup_browser.h"
 #include "synth_section.h"
 #include "load_save.h"
 class PresetInfoCache {
   public:
-    std::string getAuthor(const File& preset) {
+    std::string getAuthor(const juce::File& preset) {
       std::string path = preset.getFullPathName().toStdString();
       if (author_cache_.count(path) == 0)
         author_cache_[path] = LoadSave::getAuthorFromFile(preset).toStdString();
@@ -36,7 +33,7 @@ class PresetInfoCache {
       return author_cache_[path];
     }
 
-    std::string getStyle(const File& preset) {
+    std::string getStyle(const juce::File& preset) {
       std::string path = preset.getFullPathName().toStdString();
       if (style_cache_.count(path) == 0)
         style_cache_[path] = LoadSave::getStyleFromFile(preset).toLowerCase().toStdString();
@@ -49,14 +46,14 @@ class PresetInfoCache {
     std::map<std::string, std::string> style_cache_;
 };
 
-class PresetList : public SynthSection, public TextEditor::Listener, ScrollBar::Listener {
+class PresetList : public SynthSection, public juce::TextEditor::Listener, juce::ScrollBar::Listener {
   public:
     class Listener {
       public:
         virtual ~Listener() { }
 
-        virtual void newPresetSelected(File preset) = 0;
-        virtual void deleteRequested(File preset) = 0;
+        virtual void newPresetSelected(juce::File preset) = 0;
+        virtual void deleteRequested(juce::File preset) = 0;
     };
 
     enum Column {
@@ -87,16 +84,16 @@ class PresetList : public SynthSection, public TextEditor::Listener, ScrollBar::
 
     class FileNameAscendingComparator {
       public:
-        static int compareElements(File first, File second) {
-          String first_name = first.getFileNameWithoutExtension().toLowerCase();
-          String second_name = second.getFileNameWithoutExtension().toLowerCase();
+        static int compareElements(juce::File first, juce::File second) {
+          juce::String first_name = first.getFileNameWithoutExtension().toLowerCase();
+          juce::String second_name = second.getFileNameWithoutExtension().toLowerCase();
           return first_name.compareNatural(second_name);
         }
     };
 
     class FileNameDescendingComparator {
       public:
-        static int compareElements(File first, File second) {
+        static int compareElements(juce::File first, juce::File second) {
           return FileNameAscendingComparator::compareElements(second, first);
         }
     };
@@ -105,9 +102,9 @@ class PresetList : public SynthSection, public TextEditor::Listener, ScrollBar::
       public:
         AuthorAscendingComparator(PresetInfoCache* preset_cache) : cache_(preset_cache) { }
 
-        int compareElements(File first, File second) {
-          String first_author = cache_->getAuthor(first);
-          String second_author = cache_->getAuthor(second);
+        int compareElements(juce::File first, juce::File second) {
+          juce::String first_author = cache_->getAuthor(first);
+          juce::String second_author = cache_->getAuthor(second);
           return first_author.compareNatural(second_author);
         }
 
@@ -119,9 +116,9 @@ class PresetList : public SynthSection, public TextEditor::Listener, ScrollBar::
       public:
         AuthorDescendingComparator(PresetInfoCache* preset_cache) : cache_(preset_cache) { }
 
-        int compareElements(File first, File second) {
-          String first_author = cache_->getAuthor(first);
-          String second_author = cache_->getAuthor(second);
+        int compareElements(juce::File first, juce::File second) {
+          juce::String first_author = cache_->getAuthor(first);
+          juce::String second_author = cache_->getAuthor(second);
           return -first_author.compareNatural(second_author);
         }
 
@@ -133,9 +130,9 @@ class PresetList : public SynthSection, public TextEditor::Listener, ScrollBar::
       public:
         StyleAscendingComparator(PresetInfoCache* preset_cache) : cache_(preset_cache) { }
 
-        int compareElements(File first, File second) {
-          String first_style = cache_->getStyle(first);
-          String second_style = cache_->getStyle(second);
+        int compareElements(juce::File first, juce::File second) {
+          juce::String first_style = cache_->getStyle(first);
+          juce::String second_style = cache_->getStyle(second);
           return first_style.compareNatural(second_style);
         }
 
@@ -147,9 +144,9 @@ class PresetList : public SynthSection, public TextEditor::Listener, ScrollBar::
       public:
         StyleDescendingComparator(PresetInfoCache* preset_cache) : cache_(preset_cache) { }
 
-        int compareElements(File first, File second) {
-          String first_style = cache_->getStyle(first);
-          String second_style = cache_->getStyle(second);
+        int compareElements(juce::File first, juce::File second) {
+          juce::String first_style = cache_->getStyle(first);
+          juce::String second_style = cache_->getStyle(second);
           return -first_style.compareNatural(second_style);
         }
 
@@ -159,8 +156,8 @@ class PresetList : public SynthSection, public TextEditor::Listener, ScrollBar::
 
     class FileDateAscendingComparator {
       public:
-        static int compareElements(File first, File second) {
-          RelativeTime relative_time = first.getCreationTime() - second.getCreationTime();
+        static int compareElements(juce::File first, juce::File second) {
+          juce::RelativeTime relative_time = first.getCreationTime() - second.getCreationTime();
           double days = relative_time.inDays();
           return days < 0.0 ? 1 : (days > 0.0f ? -1 : 0);
         }
@@ -168,7 +165,7 @@ class PresetList : public SynthSection, public TextEditor::Listener, ScrollBar::
 
     class FileDateDescendingComparator {
       public:
-        static int compareElements(File first, File second) {
+        static int compareElements(juce::File first, juce::File second) {
           return FileDateAscendingComparator::compareElements(second, first);
         }
     };
@@ -179,11 +176,11 @@ class PresetList : public SynthSection, public TextEditor::Listener, ScrollBar::
 //          favorites_ = LoadSave::getFavorites();
 //        }
 //
-//        bool isFavorite(const File& file) {
+//        bool isFavorite(const juce::File& file) {
 //          return favorites_.count(file.getFullPathName().toStdString());
 //        }
 //
-//        int compare(File first, File second) {
+//        int compare(juce::File first, juce::File second) {
 //          if (isFavorite(first)) {
 //            if (isFavorite(second))
 //              return 0;
@@ -200,41 +197,41 @@ class PresetList : public SynthSection, public TextEditor::Listener, ScrollBar::
 
 //    class FavoriteAscendingComparator : public FavoriteComparator {
 //      public:
-//        int compareElements(File first, File second) {
+//        int compareElements(juce::File first, juce::File second) {
 //          return compare(first, second);
 //        }
 //    };
 
 //    class FavoriteDescendingComparator : public FavoriteComparator {
 //      public:
-//        int compareElements(File first, File second) {
+//        int compareElements(juce::File first, juce::File second) {
 //          return compare(second, first);
 //        }
 //    };
 
     PresetList();
 
-    void paintBackground(Graphics& g) override;
-    void paintBackgroundShadow(Graphics& g) override { paintTabShadow(g); }
+    void paintBackground(juce::Graphics& g) override;
+    void paintBackgroundShadow(juce::Graphics& g) override { paintTabShadow(g); }
     void resized() override;
 
-    void setPresets(Array<File> presets);
-    void mouseWheelMove(const MouseEvent& e, const MouseWheelDetails& wheel) override;
+    void setPresets(juce::Array<juce::File> presets);
+    void mouseWheelMove(const juce::MouseEvent& e, const juce::MouseWheelDetails& wheel) override;
     int getRowFromPosition(float mouse_position);
     int getRowHeight() { return getHeight() * kRowSizeHeightPercent; }
-    void mouseMove(const MouseEvent& e) override;
-    void mouseExit(const MouseEvent& e) override;
+    void mouseMove(const juce::MouseEvent& e) override;
+    void mouseExit(const juce::MouseEvent& e) override;
     void respondToMenuCallback(int result);
-    void menuClick(const MouseEvent& e);
-    void leftClick(const MouseEvent& e);
+    void menuClick(const juce::MouseEvent& e);
+    void leftClick(const juce::MouseEvent& e);
 
-    void mouseDown(const MouseEvent& e) override;
+    void mouseDown(const juce::MouseEvent& e) override;
 
-    void textEditorReturnKeyPressed(TextEditor& text_editor) override;
-    void textEditorFocusLost(TextEditor& text_editor) override;
-    void textEditorEscapeKeyPressed(TextEditor& editor) override;
+    void textEditorReturnKeyPressed(juce::TextEditor& text_editor) override;
+    void textEditorFocusLost(juce::TextEditor& text_editor) override;
+    void textEditorEscapeKeyPressed(juce::TextEditor& editor) override;
 
-    void scrollBarMoved(ScrollBar* scroll_bar, double range_start) override;
+    void scrollBarMoved(juce::ScrollBar* scroll_bar, double range_start) override;
     void setScrollBarRange();
 
     void finishRename();
@@ -242,7 +239,7 @@ class PresetList : public SynthSection, public TextEditor::Listener, ScrollBar::
     void shiftSelectedPreset(int indices);
 
     void redoCache();
-    void filter(String filter_string, const std::set<std::string>& styles);
+    void filter(juce::String filter_string, const std::set<std::string>& styles);
     int getSelectedIndex();
     int getScrollableRange();
 
@@ -252,7 +249,7 @@ class PresetList : public SynthSection, public TextEditor::Listener, ScrollBar::
     void addListener(Listener* listener) {
       listeners_.push_back(listener);
     }
-    void setCurrentFolder(const File& folder) {
+    void setCurrentFolder(const juce::File& folder) {
       current_folder_ = folder;
       reloadPresets();
     }
@@ -268,23 +265,23 @@ class PresetList : public SynthSection, public TextEditor::Listener, ScrollBar::
     void sort();
 
     std::vector<Listener*> listeners_;
-    Array<File> presets_;
+    juce::Array<juce::File> presets_;
     int num_view_presets_;
-    std::vector<File> filtered_presets_;
+    std::vector<juce::File> filtered_presets_;
     std::set<std::string> favorites_;
     std::unique_ptr<OpenGlTextEditor> rename_editor_;
     std::unique_ptr<OpenGlScrollBar> scroll_bar_;
-    String filter_string_;
+    juce::String filter_string_;
     std::set<std::string> filter_styles_;
-    File selected_preset_;
-    File renaming_preset_;
-    File current_folder_;
+    juce::File selected_preset_;
+    juce::File renaming_preset_;
+    juce::File current_folder_;
     int hover_preset_;
     int click_preset_;
 
 
 
-    Component browse_area_;
+    juce::Component browse_area_;
     int cache_position_;
     OpenGlImage rows_[kNumCachedRows];
     OpenGlQuad highlight_;
@@ -296,8 +293,8 @@ class PresetList : public SynthSection, public TextEditor::Listener, ScrollBar::
 
 class PresetBrowser : public SynthSection,
                       public PresetList::Listener,
-                      public TextEditor::Listener,
-                      public KeyListener {
+                      public juce::TextEditor::Listener,
+                      public juce::KeyListener {
   public:
     static constexpr int kLeftPadding = 24;
     static constexpr int kTopPadding = 24;
@@ -311,35 +308,35 @@ class PresetBrowser : public SynthSection,
       public:
         virtual ~Listener() { }
 
-        virtual void newPresetSelected(File preset) = 0;
-        virtual void deleteRequested(File preset) = 0;
+        virtual void newPresetSelected(juce::File preset) = 0;
+        virtual void deleteRequested(juce::File preset) = 0;
         virtual void hidePresetBrowser() = 0;
     };
 
     PresetBrowser();
     ~PresetBrowser();
 
-    void paintBackground(Graphics& g) override;
-    void paintBackgroundShadow(Graphics& g) override;
+    void paintBackground(juce::Graphics& g) override;
+    void paintBackgroundShadow(juce::Graphics& g) override;
     void resized() override;
-    void buttonClicked(Button* clicked_button) override;
-    bool keyPressed(const KeyPress &key, Component *origin) override;
-    bool keyStateChanged(bool is_key_down, Component *origin) override;
+    void buttonClicked(juce::Button* clicked_button) override;
+    bool keyPressed(const juce::KeyPress &key, juce::Component *origin) override;
+    bool keyStateChanged(bool is_key_down, juce::Component *origin) override;
     void visibilityChanged() override;
 
-    Rectangle<int> getSearchRect();
-    Rectangle<int> getInfoRect();
+    juce::Rectangle<int> getSearchRect();
+    juce::Rectangle<int> getInfoRect();
 
     void filterPresets();
-    void textEditorTextChanged(TextEditor& editor) override;
-    void textEditorEscapeKeyPressed(TextEditor& editor) override;
+    void textEditorTextChanged(juce::TextEditor& editor) override;
+    void textEditorEscapeKeyPressed(juce::TextEditor& editor) override;
 
-    void newPresetSelected(File preset) override {
+    void newPresetSelected(juce::File preset) override {
       for (Listener* listener : listeners_)
         listener->newPresetSelected(preset);
 //        loadPresetInfo();
 //
-//      String author = author_text_->getText();
+//      juce::String author = author_text_->getText();
 //      store_button_->setText("Get more presets by " + author);
 //      bool visible = more_author_presets_.count(author.removeCharacters(" _.").toLowerCase().toStdString());
 //      bool was_visible = store_button_->isVisible();
@@ -348,7 +345,7 @@ class PresetBrowser : public SynthSection,
 //        setCommentsBounds();
     }
 
-    void deleteRequested(File preset) override {
+    void deleteRequested(juce::File preset) override {
       for (Listener* listener : listeners_)
         listener->deleteRequested(preset);
     }
@@ -359,22 +356,22 @@ class PresetBrowser : public SynthSection,
     void jumpToPreset(int indices);
     void loadNextPreset();
     void loadPrevPreset();
-    void externalPresetLoaded(File file);
-    void clearExternalPreset() { external_preset_ = File(); }
+    void externalPresetLoaded(juce::File file);
+    void clearExternalPreset() { external_preset_ = juce::File(); }
 
     void addListener(Listener* listener);
 
 //
-//    void newSelection(File selection) override;
+//    void newSelection(juce::File selection) override;
 //    void allSelected() override;
 //    void favoritesSelected() override;
-//    void doubleClickedSelected(File selection) override { }
+//    void doubleClickedSelected(juce::File selection) override { }
 //
   private:
-    bool loadFromFile(File& preset);
+    bool loadFromFile(juce::File& preset);
     void loadPresetInfo();
     void setCommentsBounds();
-    void setPresetInfo(File& preset);
+    void setPresetInfo(juce::File& preset);
 
     std::vector<Listener*> listeners_;
     std::unique_ptr<PresetList> preset_list_;
@@ -389,9 +386,9 @@ class PresetBrowser : public SynthSection,
 //    DeleteSection* delete_section_;
 
     std::unique_ptr<OpenGlTextEditor> comments_;
-    File external_preset_;
-    String author_;
-    String license_;
+    juce::File external_preset_;
+    juce::String author_;
+    juce::String license_;
     std::set<std::string> more_author_presets_;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PresetBrowser)

@@ -15,14 +15,13 @@
  */
 
 #pragma once
-
 #include <juce_gui_basics/juce_gui_basics.h>
 
 class FullInterface;
 
 class BorderBoundsConstrainer : public juce::ComponentBoundsConstrainer {
   public:
-    BorderBoundsConstrainer() : ComponentBoundsConstrainer(), gui_(nullptr) { }
+    BorderBoundsConstrainer() : juce::ComponentBoundsConstrainer(), gui_(nullptr) { }
 
     virtual void checkBounds(juce::Rectangle<int>& bounds, const juce::Rectangle<int>& previous,
                              const juce::Rectangle<int>& limits,

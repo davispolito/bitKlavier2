@@ -35,7 +35,7 @@ public:
     ~TempoPreparation();
 
     // Static function that returns a pointer to a TempoPreparation object
-    static PreparationSection* createTempoSection(ValueTree v, SynthGuiInterface* interface) {
+    static PreparationSection* createTempoSection(juce::ValueTree v, SynthGuiInterface* interface) {
 
         return new TempoPreparation(std::make_unique<TempoProcessor>(), v, interface->getGui()->open_gl_);
     }
@@ -70,7 +70,7 @@ private:
         void initOpenGlComponents(OpenGlWrapper &open_gl) override;
         void renderOpenGlComponents(OpenGlWrapper& open_gl, bool animate) override;
         void resized() override;
-        void paintBackground(Graphics& g) override
+        void paintBackground(juce::Graphics& g) override
         {
             SynthSection::paintContainer(g);
             paintHeadingText(g);

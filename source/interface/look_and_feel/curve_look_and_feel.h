@@ -23,11 +23,11 @@ class CurveLookAndFeel : public DefaultLookAndFeel {
   public:
     virtual ~CurveLookAndFeel() { }
 
-    void drawRotarySlider(Graphics& g, int x, int y, int width, int height,
+    void drawRotarySlider(juce::Graphics& g, int x, int y, int width, int height,
                           float slider_t, float start_angle, float end_angle,
-                          Slider& slider) override;
+                          juce::Slider& slider) override;
 
-    void drawCurve(Graphics& g, Slider& slider, int x, int y, int width, int height, bool active, bool bipolar);
+    void drawCurve(juce::Graphics& g, juce::Slider& slider, int x, int y, int width, int height, bool active, bool bipolar);
 
     static CurveLookAndFeel* instance() {
       static CurveLookAndFeel instance;

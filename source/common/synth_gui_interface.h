@@ -16,25 +16,25 @@
 
 #pragma once
 
-#include "synth_base.h"
 
+class SynthBase;
 #if HEADLESS
 
 class FullInterface { };
-class AudioDeviceManager { };
+class juce::AudioDeviceManager { };
 
 #endif
-#include "templates/Factory.h"
-#include "tracktion_engine.h"
-#include "SampleLoadManager.h"
-#include "UserPreferences.h"
+
+#include "synth_base.h"
+class SampleLoadManager;
+class UserPreferencesWrapper;
 class FullInterface;
 
 
 struct SynthGuiData {
   SynthGuiData(SynthBase* synth_base);
   juce::ValueTree& tree;
-  UndoManager& um;
+  juce::UndoManager& um;
   SynthBase* synth;
 };
 
@@ -47,7 +47,7 @@ class SynthGuiInterface {
     virtual juce::AudioDeviceManager* getAudioDeviceManager() { return nullptr; }
     SynthBase* getSynth() { return synth_; }
     virtual void updateFullGui();
-    virtual void updateGuiControl(const std::string& name, bitklavier::mono_float value);
+    //virtual void updateGuiControl(const std::string& name, bitklavier::mono_float value);
     bitklavier::mono_float getControlValue(const std::string& name);
 
 
@@ -55,12 +55,12 @@ class SynthGuiInterface {
     void notifyChange();
     void notifyFresh();
     void openSaveDialog();
-    void externalPresetLoaded(File preset);
+    void externalPresetLoaded(juce::File preset);
     void setGuiSize(float scale);
     FullInterface* getGui() { return gui_.get(); }
-    UserPreferencesWrapper userPreferences;
+    UserPreferencesWrapper* userPreferences;
     SynthBase* synth_;
-    SampleLoadManager sampleLoadManager ;
+    SampleLoadManager* sampleLoadManager ;
   protected:
 
 

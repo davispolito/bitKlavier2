@@ -56,7 +56,7 @@ LibrarySection::LibrarySection() : SynthSection("header_section"), body_(new Ope
     //setSkinOverride(Skin::kLibrary);
 }
 
-void LibrarySection::paintBackground(Graphics& g) {
+void LibrarySection::paintBackground(juce::Graphics& g) {
     paintContainer(g);
     paintChildrenBackgrounds(g);
     g.setColour(findColour(Skin::kBody, true));
@@ -65,7 +65,7 @@ void LibrarySection::paintBackground(Graphics& g) {
 
     int label_rounding = findValue(Skin::kLabelBackgroundRounding);
     //g.setColour(findColour(Skin::kTextComponentBackground, true));
-    g.setColour(Colours::white);
+    g.setColour(juce::Colours::white);
     //g.fillRoundedRectangle(sampleSelector->getBounds().toFloat(), label_rounding);
     g.fillRect(100, 50, 100, 100);
     paintKnobShadows(g);
@@ -77,7 +77,7 @@ void LibrarySection::paintBackground(Graphics& g) {
 void LibrarySection::resized() {
     static constexpr float kTextHeightRatio = 0.3f;
     static constexpr float kPaddingLeft = 0.25f;
-    Colour body_text = findColour(Skin::kBodyText, true);
+    juce::Colour body_text = findColour(Skin::kBodyText, true);
     //sampleSelectText->setColor(body_text);
 //  oscilloscope_->setColour(Skin::kBody, findColour(Skin::kBackground, true));
 //  spectrogram_->setColour(Skin::kBody, findColour(Skin::kBackground, true));
@@ -96,12 +96,12 @@ void LibrarySection::reset() {
 //    //synth_preset_selector_->resetText();
 }
 
-void LibrarySection::buttonClicked(Button* clicked_button) {
+void LibrarySection::buttonClicked(juce::Button* clicked_button) {
 
         SynthSection::buttonClicked(clicked_button);
 }
 
-void LibrarySection::sliderValueChanged(Slider* slider) {
+void LibrarySection::sliderValueChanged(juce::Slider* slider) {
 
     SynthSection::sliderValueChanged(slider);
 }

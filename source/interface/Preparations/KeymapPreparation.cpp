@@ -21,7 +21,7 @@ KeymapPreparation::KeymapPreparation (std::unique_ptr<KeymapProcessor> p,
 
 //    SynthGuiInterface* parent = findParentComponentOfClass<SynthGuiInterface>();
 //    if (parent) {
-//        AudioDeviceManager* device_manager = parent->getAudioDeviceManager();
+//        juce::AudioDeviceManager* device_manager = parent->getAudioDeviceManager();
 //        if (device_manager)
 //                    (*proc._midi.get(), proc._midi->enabledMidiInputs, *device_manager);
 //            addAndMakeVisible(midi_selector_.get());
@@ -68,7 +68,7 @@ void KeymapPreparation::KeymapPopup::resized()
 {
     SynthGuiInterface* parent = findParentComponentOfClass<SynthGuiInterface>();
     if (parent && midi_selector_ == nullptr) {
-        AudioDeviceManager* device_manager = parent->getAudioDeviceManager();
+        juce::AudioDeviceManager* device_manager = parent->getAudioDeviceManager();
         if (device_manager) {
             midi_selector_ = std::make_unique<OpenGlMidiSelector>
                     (proc.v);
@@ -83,19 +83,19 @@ void KeymapPreparation::KeymapPopup::resized()
         midi_selector_->setBounds(10, 10, 200, 200);
         midi_selector_->redoImage();
         midi_selector_->setRowHeight(22);
-        Colour background = findColour(Skin::kPopupBackground, true);
-        setColorRecursively(midi_selector_.get(), ListBox::backgroundColourId, background);
-        //setColorRecursively(midi_selector_.get(), ComboBox::backgroundColourId, background);
-        //setColorRecursively(midi_selector_.get(), PopupMenu::backgroundColourId, background);
-        //setColorRecursively(midi_selector_.get(), BubbleComponent::backgroundColourId, background);
+        juce::Colour background = findColour(Skin::kPopupBackground, true);
+        setColorRecursively(midi_selector_.get(), juce::ListBox::backgroundColourId, background);
+        //setColorRecursively(midi_selector_.get(), juce::ComboBox::backgroundColourId, background);
+        //setColorRecursively(midi_selector_.get(), juce::PopupMenu::backgroundColourId, background);
+        //setColorRecursively(midi_selector_.get(), juce::BubbleComponent::backgroundColourId, background);
 
-        Colour text = findColour(Skin::kBodyText, true);
-        setColorRecursively(midi_selector_.get(), ListBox::textColourId, text);
-        setColorRecursively(midi_selector_.get(), ComboBox::textColourId, text);
+        juce::Colour text = findColour(Skin::kBodyText, true);
+        setColorRecursively(midi_selector_.get(), juce::ListBox::textColourId, text);
+        setColorRecursively(midi_selector_.get(), juce::ComboBox::textColourId, text);
 
-        //setColorRecursively(midi_selector_.get(), TextEditor::highlightColourId, Colours::transparentBlack);
-        setColorRecursively(midi_selector_.get(), ListBox::outlineColourId, Colours::transparentBlack);
-        //setColorRecursively(midi_selector_.get(), ComboBox::outlineColourId, Colours::transparentBlack);
+        //setColorRecursively(midi_selector_.get(), juce::TextEditor::highlightColourId, juce::Colours::transparentBlack);
+        setColorRecursively(midi_selector_.get(), juce::ListBox::outlineColourId, juce::Colours::transparentBlack);
+        //setColorRecursively(midi_selector_.get(), juce::ComboBox::outlineColourId, juce::Colours::transparentBlack);
     }
 }
 
@@ -104,8 +104,8 @@ void KeymapPreparation::KeymapPopup::redoImage()
     int mult = getPixelMultiple();
     int image_width = getWidth() * mult;
     int image_height = getHeight() * mult;
-    //Image background_image(Image::ARGB,image_width, image_height, true);
-    //Graphics g (background_image);
+    //juce::Image background_image(juce::Image::ARGB,image_width, image_height, true);
+    //juce::Graphics g (background_image);
 
     //paintKnobShadows(g);
     //sliderShadows.setOwnImage(background_image);
@@ -114,7 +114,7 @@ void KeymapPreparation::KeymapPopup::redoImage()
 void KeymapPreparation::KeymapPopup::initOpenGlComponents(OpenGlWrapper &open_gl) {
 //    SynthGuiInterface* parent = findParentComponentOfClass<SynthGuiInterface>();
 //    if (parent && midi_selector_ == nullptr) {
-//        AudioDeviceManager* device_manager = parent->getAudioDeviceManager();
+//        juce::AudioDeviceManager* device_manager = parent->getAudioDeviceManager();
 //        if (device_manager) {
 //            midi_selector_ = std::make_unique<OpenGlMidiSelector>
 //                    (*proc._midi.get(), proc._midi->enabledMidiInputs, *device_manager);

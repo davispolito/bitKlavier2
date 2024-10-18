@@ -7,13 +7,14 @@
 
 
 #pragma once
+#include "synth_base.h"
 #include "valuetree_utils/VariantConverters.h"
 #include "Cable.h"
 #include "PreparationSection.h"
 
 class ConstructionSite;
 class CableView :
-//                  private Timer,
+//                  private juce::Timer,
                   public PreparationSection::Listener,
                   public SynthSection,
                   public tracktion::engine::ValueTreeObjectList<Cable>
@@ -23,14 +24,14 @@ public:
     explicit CableView (ConstructionSite &site);
     ~CableView() override;
 
-    void paint (Graphics& g) override;
+    void paint (juce::Graphics& g) override;
     void resized() override;
 
-    void mouseMove (const MouseEvent& e) override;
-    void mouseExit (const MouseEvent& e) override;
-    void mouseDown (const MouseEvent& e) override;
-    void mouseDrag (const MouseEvent& e) override;
-    void mouseUp (const MouseEvent& e) override;
+    void mouseMove (const juce::MouseEvent& e) override;
+    void mouseExit (const juce::MouseEvent& e) override;
+    void mouseDown (const juce::MouseEvent& e) override;
+    void mouseDrag (const juce::MouseEvent& e) override;
+    void mouseUp (const juce::MouseEvent& e) override;
 
 //    auto* getConnectionHelper() { return connectionHelper.get(); }
 //    auto* getPortLocationHelper() { return portLocationHelper.get(); }
@@ -55,7 +56,7 @@ public:
 //        }
     }
 
-    Cable* getComponentForConnection (const AudioProcessorGraph::Connection& conn) const
+    Cable* getComponentForConnection (const juce::AudioProcessorGraph::Connection& conn) const
     {
         for (auto* cc : objects)
             if (cc->connection == conn)
@@ -64,15 +65,15 @@ public:
         return nullptr;
     }
     juce::Point<int> currentPort;
-    void dragConnector (const MouseEvent& e) override;
+    void dragConnector (const juce::MouseEvent& e) override;
 
-    void beginConnectorDrag (AudioProcessorGraph::NodeAndChannel source,
-                             AudioProcessorGraph::NodeAndChannel dest,
-                             const MouseEvent& e) override;
+    void beginConnectorDrag (juce::AudioProcessorGraph::NodeAndChannel source,
+                             juce::AudioProcessorGraph::NodeAndChannel dest,
+                             const juce::MouseEvent& e) override;
 
 
 
-    void endDraggingConnector (const MouseEvent& e) override;
+    void endDraggingConnector (const juce::MouseEvent& e) override;
 
 
 
@@ -112,7 +113,7 @@ private:
     bool mouseOverClickablePort();
     bool mouseDraggingOverOutputPort();
 
-    CriticalSection cableMutex;
+    juce::CriticalSection cableMutex;
 
     bool portGlow = false;
 
@@ -125,12 +126,12 @@ private:
 //        int useTimeSlice() override;
 //
 //    private:
-//        struct TimeSliceThread : juce::TimeSliceThread
+//        struct juce::TimeSliceThread : juce::TimeSliceThread
 //        {
-//            TimeSliceThread() : juce::TimeSliceThread ("Cable Drawing Background Thread") {}
+//            juce::TimeSliceThread() : juce::TimeSliceThread ("Cable Drawing Background juce::Thread") {}
 //        };
 //
-//        juce::SharedResourcePointer<TimeSliceThread> sharedTimeSliceThread;
+//        juce::SharedResourcePointer<juce::TimeSliceThread> sharedTimeSliceThread;
 //
 //        CableView& cableView;
 //    } pathTask;

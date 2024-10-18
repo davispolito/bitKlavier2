@@ -23,33 +23,33 @@ public:
 
     virtual ~AudioFormatReaderFactory() noexcept = default;
 
-    virtual std::pair<std::unique_ptr<AudioFormatReader>, juce::String> make(AudioFormatManager&) const = 0;
+    virtual std::pair<std::unique_ptr<juce::AudioFormatReader>, juce::String> make(juce::AudioFormatManager&) const = 0;
     virtual std::unique_ptr<AudioFormatReaderFactory> clone() const = 0;
 };
 
-inline std::unique_ptr<AudioFormatReader> makeAudioFormatReader(AudioFormatManager& manager,
+inline std::unique_ptr<juce::AudioFormatReader> makeAudioFormatReader(juce::AudioFormatManager& manager,
                                                                 const void* sampleData,
                                                                 size_t dataSize)
 {
-    return std::unique_ptr<AudioFormatReader>(manager.createReaderFor(std::make_unique<MemoryInputStream>(sampleData,
+    return std::unique_ptr<juce::AudioFormatReader>(manager.createReaderFor(std::make_unique<juce::MemoryInputStream>(sampleData,
                                                                                                           dataSize,
                                                                                                           false)));
 }
 
-inline std::unique_ptr<AudioFormatReader> makeAudioFormatReader(AudioFormatManager& manager,
-                                                                const File& file)
+inline std::unique_ptr<juce::AudioFormatReader> makeAudioFormatReader(juce::AudioFormatManager& manager,
+                                                                const juce::File& file)
 {
-    return std::unique_ptr<AudioFormatReader>(manager.createReaderFor(file));
+    return std::unique_ptr<juce::AudioFormatReader>(manager.createReaderFor(file));
 }
 
 class FileArrayAudioFormatReaderFactory : public AudioFormatReaderFactory
 {
 public:
-    explicit FileArrayAudioFormatReaderFactory(Array<File> filesIn)
+    explicit FileArrayAudioFormatReaderFactory(juce::Array<juce::File> filesIn)
             : files(std::move(filesIn)), currentFile(0)
     {}
 
-    std::pair<std::unique_ptr<AudioFormatReader>, juce::String> make(AudioFormatManager& manager) const override
+    std::pair<std::unique_ptr<juce::AudioFormatReader>, juce::String> make(juce::AudioFormatManager& manager) const override
     {
         // Check if we have reached the end of the array
         if (currentFile >= files.size())
@@ -65,7 +65,7 @@ public:
     }
 
 private:
-    Array<File> files;
+    juce::Array<juce::File> files;
     //mutable int so that const make can modify vairable
     mutable int currentFile;
 };
@@ -73,11 +73,11 @@ private:
 //class FileAudioFormatReaderFactory : public AudioFormatReaderFactory
 //{
 //public:
-//    explicit FileAudioFormatReaderFactory(File fileIn)
+//    explicit FileAudioFormatReaderFactory(juce::File fileIn)
 //            : file(std::move(fileIn))
 //    {}
 //
-//    std::unique_ptr<AudioFormatReader> make(AudioFormatManager& manager) const override
+//    std::unique_ptr<juce::AudioFormatReader> make(juce::AudioFormatManager& manager) const override
 //    {
 //        return makeAudioFormatReader(manager, file);
 //    }
@@ -88,7 +88,7 @@ private:
 //    }
 //
 //private:
-//    File file;
+//    juce::File file;
 //};
 
 class SynthBase;
@@ -98,7 +98,7 @@ public:
     ~SampleLoadManager();
 
     bool loadSamples(int selection, bool isGlobal);
-    Array<File> samplesByPitch(String whichPitch, Array<File> inFiles);
+    juce::Array<juce::File> samplesByPitch(juce::String whichPitch, juce::Array<juce::File> inFiles);
     juce::ThreadPool sampleLoader;
     std::map<juce::String, juce::ReferenceCountedArray<BKSamplerSound<juce::AudioFormatReader>>> sampler_soundset;
     juce::String globalSoundSet;
@@ -107,9 +107,9 @@ public:
     void handleAsyncUpdate() override;
 
     SynthBase* synth;
-    std::unique_ptr<AudioFormatManager> audioFormatManager;
+    std::unique_ptr<juce::AudioFormatManager> audioFormatManager;
     std::unique_ptr<AudioFormatReaderFactory> readerFactory;
-//    std::unique_ptr<AudioFormatReader> getSampleReader() const
+//    std::unique_ptr<juce::AudioFormatReader> getSampleReader() const
 //    {
 //        return readerFactory != nullptr ? readerFactory.get()->make(*audioFormatManager) : nullptr;
 //    }
@@ -118,7 +118,7 @@ public:
 class SampleLoadJob : public juce::ThreadPoolJob
 {
 public:
-    SampleLoadJob(int loadType, std::unique_ptr<AudioFormatReaderFactory> ptr, AudioFormatManager* manager,
+    SampleLoadJob(int loadType, std::unique_ptr<AudioFormatReaderFactory> ptr, juce::AudioFormatManager* manager,
                   juce::ReferenceCountedArray<BKSamplerSound<juce::AudioFormatReader>> *soundset,
                   juce::AsyncUpdater* loadManager) :
                   juce::ThreadPoolJob("sample_loader"),
@@ -145,7 +145,7 @@ public:
     void loadMainPianoSamples();
     juce::ReferenceCountedArray<BKSamplerSound<juce::AudioFormatReader>> *soundset;
     std::unique_ptr<AudioFormatReaderFactory> sampleReader;
-    AudioFormatManager* manager;
+    juce::AudioFormatManager* manager;
     juce::AsyncUpdater* loadManager;
     int loadType;
 };

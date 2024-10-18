@@ -26,11 +26,11 @@
 
 class OpenGlDeviceSelector : public OpenGlAutoImageComponent<bitklavier::AudioDeviceSelectorComponent> {
   public:
-    OpenGlDeviceSelector(AudioDeviceManager& device_manager,
+    OpenGlDeviceSelector(juce::AudioDeviceManager& device_manager,
                          int min_audio_input_channels, int max_audioInput_channels,
                          int min_audio_output_channels, int max_audioOutput_channels,
                          bool show_midi_input_options, bool show_midi_output_selector,
-                         bool show_channels_as_stereo_pairs, bool hide_advanced_options_with_button, ValueTree tree) :
+                         bool show_channels_as_stereo_pairs, bool hide_advanced_options_with_button, juce::ValueTree tree) :
         OpenGlAutoImageComponent<bitklavier::AudioDeviceSelectorComponent>(device_manager,
                                                                min_audio_input_channels, max_audioInput_channels,
                                                                min_audio_output_channels, max_audioOutput_channels,
@@ -44,7 +44,7 @@ class OpenGlDeviceSelector : public OpenGlAutoImageComponent<bitklavier::AudioDe
     }
 
     virtual void resized() override {
-      OpenGlAutoImageComponent<AudioDeviceSelectorComponent>::resized();
+      OpenGlAutoImageComponent<bitklavier::AudioDeviceSelectorComponent>::resized();
       if (isShowing())
         redoImage();
     }
@@ -71,7 +71,7 @@ class AboutSection : public Overlay {
     static constexpr float kMultTriple = 3.0f;
     static constexpr float kMultQuadruple = 4.0f;
 
-    AboutSection(const String& name);
+    AboutSection(const juce::String& name);
     virtual ~AboutSection();
     void setLogoBounds();
     void resized() override;
@@ -80,16 +80,16 @@ class AboutSection : public Overlay {
       SynthSection::renderOpenGlComponents(open_gl, animate);
     }
 
-    Rectangle<int> getInfoRect();
+    juce::Rectangle<int> getInfoRect();
 
-    void mouseUp(const MouseEvent& e) override;
+    void mouseUp(const juce::MouseEvent& e) override;
     void setVisible(bool should_be_visible) override;
-    void buttonClicked(Button* clicked_button) override;
+    void buttonClicked(juce::Button* clicked_button) override;
 
   private:
     void setGuiSize(float multiplier);
     void fullScreen();
-    ValueTree preferences;
+    juce::ValueTree preferences;
     std::unique_ptr<OpenGlDeviceSelector> device_selector_;
 
 

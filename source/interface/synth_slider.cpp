@@ -41,7 +41,7 @@ void OpenGlSliderQuad::init(OpenGlWrapper& open_gl) {
   OpenGlQuad::init(open_gl);
 }
 
-void OpenGlSliderQuad::paintBackground(Graphics& g) {
+void OpenGlSliderQuad::paintBackground(juce::Graphics& g) {
   slider_->redoImage(false);
 }
 
@@ -89,8 +89,8 @@ void OpenGlSlider:: redoImage(bool skip_image) {
     slider_quad_->setBackgroundColor(background_color_);
   }
   else {
-    slider_quad_->setModColor(Colours::transparentBlack);
-    slider_quad_->setBackgroundColor(Colours::transparentBlack);
+    slider_quad_->setModColor(juce::Colours::transparentBlack);
+    slider_quad_->setBackgroundColor(juce::Colours::transparentBlack);
   }
 
   if (isModulationKnob()) {
@@ -151,12 +151,12 @@ void OpenGlSlider:: redoImage(bool skip_image) {
     slider_quad_->setThumbAmount(handle_width);
   }
   if (!skip_image) {
-//      Image _image(Image::SingleChannel, getWidth(), getHeight(), true);
-//      Graphics g(_image);
+//      juce::Image _image(juce::Image::SingleChannel, getWidth(), getHeight(), true);
+//      juce::Graphics g(_image);
 //      g.setColour(findColour(Skin::kRotaryBody,true));
 //      g.fillAll();
 //      image_component_.image().setOwnImage(_image);
-//    image_component_.draw_image_ = std::make_unique<Image>(_image);
+//    image_component_.draw_image_ = std::make_unique<juce::Image>(_image);
     image_component_->setActive(true);
     image_component_->redrawImage(true, false);
   }
@@ -173,7 +173,7 @@ void OpenGlSlider::setColors() {
   mod_color_ = getModColor();
 }
 
-//SynthSlider::SynthSlider(String name) : OpenGlSlider(name), show_popup_on_hover_(false), scroll_enabled_(true),
+//SynthSlider::SynthSlider(juce::String name) : OpenGlSlider(name), show_popup_on_hover_(false), scroll_enabled_(true),
 //                                                                                                           bipolar_modulation_(false), stereo_modulation_(false),
 //                                                                                                           bypass_modulation_(false), modulation_bar_right_(true),
 //                                                                                                           snap_to_value_(false), hovering_(false),
@@ -181,8 +181,8 @@ void OpenGlSlider::setColors() {
 //                                                                                                           use_suffix_(true), snap_value_(0.0),
 //                                                                                                           text_height_percentage_(0.0f),
 //                                                                                                           sensitivity_(kDefaultSensitivity),
-//                                                                                                           popup_placement_(BubbleComponent::below),
-//                                                                                                           modulation_control_placement_(BubbleComponent::below),
+//                                                                                                           popup_placement_(juce::BubbleComponent::below),
+//                                                                                                           modulation_control_placement_(juce::BubbleComponent::below),
 //                                                                                                           max_display_characters_(kDefaultFormatLength),
 //                                                                                                           max_decimal_places_(kDefaultFormatDecimalPlaces), shift_index_amount_(0),
 //                                                                                                           shift_is_multiplicative_(false), mouse_wheel_index_movement_(1.0),
@@ -199,14 +199,14 @@ void OpenGlSlider::setColors() {
 //    text_entry_->setScrollToShowCursor(false);
 //    text_entry_->addListener(this);
 //    text_entry_->setSelectAllWhenFocused(true);
-//    text_entry_->setKeyboardType(TextEditor::numericKeyboard);
-//    text_entry_->setJustification(Justification::centred);
+//    text_entry_->setKeyboardType(juce::TextEditor::numericKeyboard);
+//    text_entry_->setJustification(juce::Justification::centred);
 //    text_entry_->setAlwaysOnTop(true);
 //    text_entry_->getImageComponent()->setAlwaysOnTop(true);
 //    addChildComponent(text_entry_.get());
 //
 //    setWantsKeyboardFocus(true);
-//    setTextBoxStyle(Slider::NoTextBox, true, 0, 0);
+//    setTextBoxStyle(juce::Slider::NoTextBox, true, 0, 0);
 //
 //
 //
@@ -218,7 +218,7 @@ void OpenGlSlider::setColors() {
 //    setDefaultRange();
 //
 //    setVelocityBasedMode(false);
-//    setVelocityModeParameters(1.0, 0, 0.0, false, ModifierKeys::ctrlAltCommandModifiers);
+//    setVelocityModeParameters(1.0, 0, 0.0, false, juce::ModifierKeys::ctrlAltCommandModifiers);
 //}
 
 SynthSlider::SynthSlider(juce::String name, chowdsp::FloatParameter& param) : OpenGlSlider(name), show_popup_on_hover_(false), scroll_enabled_(true),
@@ -229,8 +229,8 @@ SynthSlider::SynthSlider(juce::String name, chowdsp::FloatParameter& param) : Op
                                         use_suffix_(true), snap_value_(0.0),
                                         text_height_percentage_(0.0f),
                                         sensitivity_(kDefaultSensitivity),
-                                        popup_placement_(BubbleComponent::below),
-                                        modulation_control_placement_(BubbleComponent::below),
+                                        popup_placement_(juce::BubbleComponent::below),
+                                        modulation_control_placement_(juce::BubbleComponent::below),
                                         max_display_characters_(kDefaultFormatLength),
                                         max_decimal_places_(kDefaultFormatDecimalPlaces), shift_index_amount_(0),
                                         shift_is_multiplicative_(false), mouse_wheel_index_movement_(1.0),
@@ -247,14 +247,14 @@ SynthSlider::SynthSlider(juce::String name, chowdsp::FloatParameter& param) : Op
   text_entry_->setScrollToShowCursor(false);
   text_entry_->addListener(this);
   text_entry_->setSelectAllWhenFocused(true);
-  text_entry_->setKeyboardType(TextEditor::numericKeyboard);
-  text_entry_->setJustification(Justification::centred);
+  text_entry_->setKeyboardType(juce::TextEditor::numericKeyboard);
+  text_entry_->setJustification(juce::Justification::centred);
   text_entry_->setAlwaysOnTop(true);
   text_entry_->getImageComponent()->setAlwaysOnTop(true);
   addChildComponent(text_entry_.get());
 
   setWantsKeyboardFocus(true);
-  setTextBoxStyle(Slider::NoTextBox, true, 0, 0);
+  setTextBoxStyle(juce::Slider::NoTextBox, true, 0, 0);
 
 
 
@@ -266,14 +266,14 @@ SynthSlider::SynthSlider(juce::String name, chowdsp::FloatParameter& param) : Op
   setDefaultRange();
 
   setVelocityBasedMode(false);
-  setVelocityModeParameters(1.0, 0, 0.0, false, ModifierKeys::ctrlAltCommandModifiers);
+  setVelocityModeParameters(1.0, 0, 0.0, false, juce::ModifierKeys::ctrlAltCommandModifiers);
 }
 
 PopupItems SynthSlider::createPopupMenu() {
   PopupItems options;
 
   if (isDoubleClickReturnEnabled())
-    options.addItem(kDefaultValue, "Set to Default Value");
+    options.addItem(kDefaultValue, "Set to Default juce::Value");
 
   if (has_parameter_assignment_)
     options.addItem(kArmMidiLearn, "Learn MIDI Assignment");
@@ -281,7 +281,7 @@ PopupItems SynthSlider::createPopupMenu() {
   if (has_parameter_assignment_ && synth_interface_->getSynth()->isMidiMapped(getName().toStdString()))
     options.addItem(kClearMidiLearn, "Clear MIDI Assignment");
 
-  options.addItem(kManualEntry, "Enter Value");
+  options.addItem(kManualEntry, "Enter juce::Value");
 
 
 
@@ -291,7 +291,7 @@ PopupItems SynthSlider::createPopupMenu() {
   return options;
 }
 
-void SynthSlider::mouseDown(const MouseEvent& e) {
+void SynthSlider::mouseDown(const juce::MouseEvent& e) {
   SynthBase* synth = synth_interface_->getSynth();
 
   if (e.mods.isAltDown()) {
@@ -314,14 +314,14 @@ void SynthSlider::mouseDown(const MouseEvent& e) {
     OpenGlSlider::mouseDown(e);
     //synth->beginChangeGesture(getName().toStdString());
 
-//    for (SliderListener* listener : slider_listeners_)
+//    for (juce::SliderListener* listener : slider_listeners_)
 //      listener->mouseDown(this);
 
     showPopup(true);
   }
 }
 
-void SynthSlider::mouseDrag(const MouseEvent& e) {
+void SynthSlider::mouseDrag(const juce::MouseEvent& e) {
 
   
   float multiply = 1.0f;
@@ -344,20 +344,20 @@ void SynthSlider::mouseDrag(const MouseEvent& e) {
     showPopup(true);
 }
 
-void SynthSlider::mouseUp(const MouseEvent& e) {
+void SynthSlider::mouseUp(const juce::MouseEvent& e) {
   if (e.mods.isPopupMenu() || e.mods.isAltDown())
     return;
 
   //setDefaultRange();
   OpenGlSlider::mouseUp(e);
 
-//  for (SliderListener* listener : slider_listeners_)
+//  for (juce::SliderListener* listener : slider_listeners_)
 //    listener->mouseUp(this);
 
 //  synth_interface_->getSynth()->endChangeGesture(getName().toStdString());
 }
 
-void SynthSlider::mouseEnter(const MouseEvent &e) {
+void SynthSlider::mouseEnter(const juce::MouseEvent &e) {
   OpenGlSlider::mouseEnter(e);
 //  for (SynthSlider::SliderListener* listener : slider_listeners_)
 //    listener->hoverStarted(this);
@@ -369,7 +369,7 @@ void SynthSlider::mouseEnter(const MouseEvent &e) {
   redoImage();
 }
 
-void SynthSlider::mouseExit(const MouseEvent &e) {
+void SynthSlider::mouseExit(const juce::MouseEvent &e) {
   OpenGlSlider::mouseExit(e);
 //  for (SynthSlider::SliderListener* listener : slider_listeners_)
 //    listener->hoverEnded(this);
@@ -379,16 +379,16 @@ void SynthSlider::mouseExit(const MouseEvent &e) {
   redoImage();
 }
 
-void SynthSlider::mouseDoubleClick(const MouseEvent& e) {
+void SynthSlider::mouseDoubleClick(const juce::MouseEvent& e) {
   OpenGlSlider::mouseDoubleClick(e);
   if (!e.mods.isPopupMenu()) {
-//    for (SliderListener* listener : slider_listeners_)
+//    for (juce::SliderListener* listener : slider_listeners_)
 //      listener->doubleClick(this);
   }
   showPopup(true);
 }
 
-void SynthSlider::mouseWheelMove(const MouseEvent& e, const MouseWheelDetails& wheel) {
+void SynthSlider::mouseWheelMove(const juce::MouseEvent& e, const juce::MouseWheelDetails& wheel) {
   double interval = getInterval();
   if (scroll_enabled_ && !wheel.isSmooth && getInterval() > 0) {
     if (shift_index_amount_ && e.mods.isShiftDown()) {
@@ -422,14 +422,14 @@ void SynthSlider::valueChanged() {
   notifyGuis();
 }
 
-String SynthSlider::getRawTextFromValue(double value) {
+juce::String SynthSlider::getRawTextFromValue(double value) {
   if (!has_parameter_assignment_)
     return OpenGlSlider::getTextFromValue(value);
 
-  return String(getAdjustedValue(value));
+  return juce::String(getAdjustedValue(value));
 }
 
-String SynthSlider::getSliderTextFromValue(double value) {
+juce::String SynthSlider::getSliderTextFromValue(double value) {
 //  if (string_lookup_) {
 //    int lookup = bitklavier::utils::iclamp(value, 0, getMaximum());
 //    return string_lookup_[lookup];
@@ -442,7 +442,7 @@ String SynthSlider::getSliderTextFromValue(double value) {
  // return popup_prefix_ + formatValue(adjusted_value);
 }
 
-String SynthSlider::getTextFromValue(double value) {
+juce::String SynthSlider::getTextFromValue(double value) {
 //  if (isText() && has_parameter_assignment_ && popup_prefix_.isEmpty()) {
 //    if (details_.local_description.empty())
 //      return details_.display_name;
@@ -453,11 +453,11 @@ String SynthSlider::getTextFromValue(double value) {
   return getSliderTextFromValue(value);
 }
 
-double SynthSlider::getValueFromText(const String& text) {
-  String cleaned = text.removeCharacters(" ").toLowerCase();
+double SynthSlider::getValueFromText(const juce::String& text) {
+  juce::String cleaned = text.removeCharacters(" ").toLowerCase();
   if (string_lookup_) {
     for (int i = 0; i <= getMaximum(); ++i) {
-      if (cleaned == String(string_lookup_[i]).toLowerCase())
+      if (cleaned == juce::String(string_lookup_[i]).toLowerCase())
         return i;
     }
   }
@@ -465,7 +465,7 @@ double SynthSlider::getValueFromText(const String& text) {
 //    float t = 0.01f * cleaned.removeCharacters("%").getDoubleValue();
 //    return (getMaximum() - getMinimum()) * t + getMinimum();
 //  }
-  return getValueFromAdjusted(Slider::getValueFromText(text));
+  return getValueFromAdjusted(juce::Slider::getValueFromText(text));
 }
 double SynthSlider::getValueFromAdjusted(double value) {
   //vital::ValueDetails* details = getDisplayDetails();
@@ -556,11 +556,11 @@ double SynthSlider::snapValue(double attempted_value, DragMode drag_mode) {
   return attempted_value;
 }
 
-void SynthSlider::textEditorReturnKeyPressed(TextEditor& editor) {
+void SynthSlider::textEditorReturnKeyPressed(juce::TextEditor& editor) {
   setSliderPositionFromText();
 }
 
-void SynthSlider::textEditorFocusLost(TextEditor& editor) {
+void SynthSlider::textEditorFocusLost(juce::TextEditor& editor) {
   setSliderPositionFromText();
 }
 
@@ -569,16 +569,16 @@ void SynthSlider::setSliderPositionFromText() {
     setValue(getValueFromText(text_entry_->getText()));
   text_entry_->setVisible(false);
 
-//  for (SliderListener* listener : slider_listeners_)
+//  for (juce::SliderListener* listener : slider_listeners_)
 //    listener->menuFinished(this);
 }
 
 void SynthSlider::showTextEntry() {
 #if !defined(NO_TEXT_ENTRY)
-  text_entry_->setColour(CaretComponent::caretColourId, findColour(Skin::kTextEditorCaret, true));
-  text_entry_->setColour(TextEditor::textColourId, findColour(Skin::kBodyText, true));
-  text_entry_->setColour(TextEditor::highlightedTextColourId, findColour(Skin::kBodyText, true));
-  text_entry_->setColour(TextEditor::highlightColourId, findColour(Skin::kTextEditorSelection, true));
+  text_entry_->setColour(juce::CaretComponent::caretColourId, findColour(Skin::kTextEditorCaret, true));
+  text_entry_->setColour(juce::TextEditor::textColourId, findColour(Skin::kBodyText, true));
+  text_entry_->setColour(juce::TextEditor::highlightedTextColourId, findColour(Skin::kBodyText, true));
+  text_entry_->setColour(juce::TextEditor::highlightColourId, findColour(Skin::kTextEditorSelection, true));
   if (isRotary())
     setRotaryTextEntryBounds();
   else
@@ -593,7 +593,7 @@ void SynthSlider::showTextEntry() {
 #endif
 }
 
-void SynthSlider::drawShadow(Graphics &g) {
+void SynthSlider::drawShadow(juce::Graphics &g) {
   if (isRotary() && !isTextOrCurve())
     drawRotaryShadow(g);
   else if (&getLookAndFeel() == CurveLookAndFeel::instance()) {
@@ -603,8 +603,8 @@ void SynthSlider::drawShadow(Graphics &g) {
   }
 }
 
-void SynthSlider::drawRotaryShadow(Graphics &g) {
-  Colour shadow_color = findColour(Skin::kShadow, true);
+void SynthSlider::drawRotaryShadow(juce::Graphics &g) {
+  juce::Colour shadow_color = findColour(Skin::kShadow, true);
 
   float center_x = getWidth() / 2.0f;
   float center_y = getHeight() / 2.0f;
@@ -614,20 +614,20 @@ void SynthSlider::drawRotaryShadow(Graphics &g) {
   float shadow_width = findValue(Skin::kKnobShadowWidth);
   float shadow_offset = findValue(Skin::kKnobShadowOffset);
 
-  PathStrokeType outer_stroke(stroke_width, PathStrokeType::beveled, PathStrokeType::rounded);
-  PathStrokeType shadow_stroke(stroke_width + 1, PathStrokeType::beveled, PathStrokeType::rounded);
+  juce::PathStrokeType outer_stroke(stroke_width, juce::PathStrokeType::beveled, juce::PathStrokeType::rounded);
+  juce::PathStrokeType shadow_stroke(stroke_width + 1, juce::PathStrokeType::beveled, juce::PathStrokeType::rounded);
 
   g.saveState();
   g.setOrigin(getX(), getY());
 
-  Colour body = findColour(Skin::kRotaryBody, true);
+  juce::Colour body = findColour(Skin::kRotaryBody, true);
   float body_radius = knob_size_scale_ * findValue(Skin::kKnobBodySize) / 2.0f;
   if (body_radius >= 0.0f && body_radius < getWidth()) {
 
     if (shadow_width > 0.0f) {
-      Colour transparent_shadow = shadow_color.withAlpha(0.0f);
+      juce::Colour transparent_shadow = shadow_color.withAlpha(0.0f);
       float shadow_radius = body_radius + shadow_width;
-      ColourGradient shadow_gradient(shadow_color, center_x, center_y + shadow_offset,
+      juce::ColourGradient shadow_gradient(shadow_color, center_x, center_y + shadow_offset,
                                      transparent_shadow, center_x - shadow_radius, center_y + shadow_offset, true);
       float shadow_start = std::max(0.0f, (body_radius - std::abs(shadow_offset))) / shadow_radius;
       shadow_gradient.addColour(shadow_start, shadow_color);
@@ -639,8 +639,8 @@ void SynthSlider::drawRotaryShadow(Graphics &g) {
     }
 
     g.setColour(body);
-    //Rectangle<float> ellipse(center_x - body_radius, center_y - body_radius, 2.0f * body_radius, 2.0f * body_radius);
-      Rectangle<float> ellipse(0, 0, 300,300);
+    //juce::Rectangle<float> ellipse(center_x - body_radius, center_y - body_radius, 2.0f * body_radius, 2.0f * body_radius);
+      juce::Rectangle<float> ellipse(0, 0, 300,300);
 
     g.fillEllipse(ellipse);
 
@@ -648,8 +648,8 @@ void SynthSlider::drawRotaryShadow(Graphics &g) {
     g.drawEllipse(ellipse.reduced(0.5f), 1.0f);
   }
 
-  Path shadow_outline;
-  Path shadow_path;
+  juce::Path shadow_outline;
+  juce::Path shadow_path;
 
   shadow_outline.addCentredArc(center_x, center_y, radius, radius,
                                0, -kRotaryAngle, kRotaryAngle, true);
@@ -686,15 +686,15 @@ void SynthSlider::hidePopup(bool primary) {
   //parent_->hidePopupDisplay(primary);
 }
 
-String SynthSlider::formatValue(float value) {
-  String format;
+juce::String SynthSlider::formatValue(float value) {
+  juce::String format;
 //  if (details_.value_scale == bitklavier::ValueDetails::kIndexed)
-//    format = String(value);
+//    format = juce::String(value);
 //  else {
 //    if (max_decimal_places_ == 0)
-//      format = String(std::roundf(value));
+//      format = juce::String(std::roundf(value));
 //    else
-//      format = String(value, max_decimal_places_);
+//      format = juce::String(value, max_decimal_places_);
 //
 //    int display_characters = max_display_characters_;
 //    if (format[0] == '-')
@@ -715,10 +715,10 @@ void SynthSlider::notifyGuis() {
 //    listener->guiChanged(this);
 }
 
-Rectangle<int> SynthSlider::getModulationMeterBounds() const {
+juce::Rectangle<int> SynthSlider::getModulationMeterBounds() const {
   static constexpr int kTextBarSize = 2;
 
-  Rectangle<int> mod_bounds = getModulationArea();
+  juce::Rectangle<int> mod_bounds = getModulationArea();
   if (isTextOrCurve()) {
     if (modulation_bar_right_)
       return mod_bounds.removeFromRight(kTextBarSize);
@@ -730,10 +730,10 @@ Rectangle<int> SynthSlider::getModulationMeterBounds() const {
 
   int buffer = findValue(Skin::kWidgetMargin);
   if (getSliderStyle() == LinearBar) {
-    return Rectangle<int>(mod_bounds.getX() + buffer, mod_bounds.getY(), 
+    return juce::Rectangle<int>(mod_bounds.getX() + buffer, mod_bounds.getY(),
                           mod_bounds.getWidth() - 2 * buffer, mod_bounds.getHeight());
   }
-  return Rectangle<int>(mod_bounds.getX(), mod_bounds.getY() + buffer,
+  return juce::Rectangle<int>(mod_bounds.getX(), mod_bounds.getY() + buffer,
                         mod_bounds.getWidth(), mod_bounds.getHeight() - 2 * buffer);
 }
 

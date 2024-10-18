@@ -20,7 +20,7 @@ namespace bitklavier {
         void init_();
         /** Returns nullptr if no component is found for the given parameter */
         [[nodiscard]] juce::Component* getComponentForParameter (const juce::RangedAudioParameter&);
-        void paintBackground(Graphics& g) override
+        void paintBackground(juce::Graphics& g) override
         {
             SynthSection::paintContainer(g);
             paintHeadingText(g);

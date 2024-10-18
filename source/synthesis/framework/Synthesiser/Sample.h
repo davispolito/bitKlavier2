@@ -85,7 +85,7 @@ public:
         float dBFSLevel = 0.0f;
          for (int i = 0; i < m_data.getNumChannels(); ++i)
          {
-             dBFSLevel = m_data.getRMSLevel(i, 0, jmin(int(m_sourceSampleRate*0.4f),m_data.getNumSamples()));
+             dBFSLevel = m_data.getRMSLevel(i, 0, juce::jmin(int(m_sourceSampleRate*0.4f),m_data.getNumSamples()));
          }
          dBFSLevel *= 1.f/m_data.getNumChannels();
          dBFSLevel = juce::Decibels::gainToDecibels(dBFSLevel);
@@ -349,12 +349,12 @@ private:
 };
 class BKSynthesiser;
 /**
-    Represents a voice that a Synthesiser can use to play a SynthesiserSound.
+    Represents a voice that a juce::Synthesiser can use to play a juce::SynthesiserSound.
 
     A voice plays a single sound at a time, and a synthesiser holds an array of
     voices so that it can play polyphonically.
 
-    @see Synthesiser, SynthesiserSound
+    @see juce::Synthesiser, juce::SynthesiserSound
 
     @tags{Audio}
 */
@@ -863,7 +863,7 @@ private:
         return std::tuple<double, Direction>(nextSamplePos, nextDirection);
     }
 
-    //AudioProcessorValueTreeState& valueTreeState;  // from the SamplerAudioProcessor
+    //juce::AudioProcessorValueTreeState& valueTreeState;  // from the SamplerAudioProcessor
 
     BKSamplerSound<juce::AudioFormatReader>* samplerSound;
     juce::SmoothedValue<double> level { 0 };

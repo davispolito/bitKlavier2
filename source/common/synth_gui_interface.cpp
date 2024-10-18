@@ -16,13 +16,16 @@
 
 #include "synth_gui_interface.h"
 
-#include "synth_base.h"
+#include "SampleLoadManager.h"
+#include "UserPreferences.h"
+
 #include "../synthesis/synth_engine/sound_engine.h"
 
 
 SynthGuiData::SynthGuiData(SynthBase* synth_base) : synth(synth_base),
                                                      tree(synth_base->getValueTree()),
                                                      um(synth_base->getUndoManager())
+
 {
     //tree = synth->getValueTree();
 //    um = synth_base->getUndoManager();
@@ -44,7 +47,7 @@ void SynthGuiInterface::setFocus() { }
 void SynthGuiInterface::notifyChange() { }
 void SynthGuiInterface::notifyFresh() { }
 void SynthGuiInterface::openSaveDialog() { }
-void SynthGuiInterface::externalPresetLoaded(File preset) { }
+void SynthGuiInterface::externalPresetLoaded(juce::File preset) { }
 void SynthGuiInterface::setGuiSize(float scale) { }
 
 #else
@@ -53,12 +56,14 @@ void SynthGuiInterface::setGuiSize(float scale) { }
 #include "../interface/fullInterface.h"
 
 
-SynthGuiInterface::SynthGuiInterface(SynthBase* synth, bool use_gui) : synth_(synth), sampleLoadManager(userPreferences.userPreferences.get(), synth) {
+SynthGuiInterface::SynthGuiInterface(SynthBase* synth, bool use_gui) : synth_(synth), userPreferences(new UserPreferencesWrapper()),
+                                                                       sampleLoadManager(new SampleLoadManager(userPreferences->userPreferences.get(),synth))
+                                                                        {
   if (use_gui) {
     SynthGuiData synth_data(synth_);
     gui_ = std::make_unique<FullInterface>(&synth_data);
   }
-    sampleLoadManager.preferences = userPreferences.userPreferences.get();
+    sampleLoadManager->preferences = userPreferences->userPreferences.get();
 
 }
 
@@ -72,16 +77,6 @@ void SynthGuiInterface::updateFullGui() {
   gui_->reset();
 }
 
-void SynthGuiInterface::updateGuiControl(const std::string& name, bitklavier::mono_float value) {
-  if (gui_ == nullptr)
-    return;
-
-//  gui_->setValue(name, value, NotificationType::dontSendNotification);
-}
-
-//bitklavier::mono_float SynthGuiInterface::getControlValue(const std::string& name) {
-//  return synth_->getControls()[name]->value();
-//}
 
 //void SynthGuiInterface::notifyModulationsChanged() {
 //  gui_->modulationChanged();
@@ -138,10 +133,10 @@ void SynthGuiInterface::setGuiSize(float scale) {
     return;
 
   juce::Point<int> position = gui_->getScreenBounds().getCentre();
-  const Displays::Display& display = Desktop::getInstance().getDisplays().findDisplayForPoint(position);
+  const juce::Displays::Display& display = juce::Desktop::getInstance().getDisplays().findDisplayForPoint(position);
 
-  Rectangle<int> display_area = Desktop::getInstance().getDisplays().getTotalBounds(true);
-  ComponentPeer* peer = gui_->getPeer();
+  juce::Rectangle<int> display_area = juce::Desktop::getInstance().getDisplays().getTotalBounds(true);
+  juce::ComponentPeer* peer = gui_->getPeer();
   if (peer)
     peer->getFrameSize().subtractFrom(display_area);
 
@@ -153,7 +148,7 @@ void SynthGuiInterface::setGuiSize(float scale) {
   int width = std::round(window_size * bitklavier::kDefaultWindowWidth);
   int height = std::round(window_size * bitklavier::kDefaultWindowHeight);
 
-  Rectangle<int> bounds = gui_->getBounds();
+  juce::Rectangle<int> bounds = gui_->getBounds();
   bounds.setWidth(width);
   bounds.setHeight(height);
   gui_->getParentComponent()->setBounds(bounds);

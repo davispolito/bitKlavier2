@@ -13,7 +13,7 @@
 #include "synth_slider.h"
 
 // Definition for the TuningPreparation constructor.  It takes three parameters: a pointer to
-// a Tuning Processor p, a ValueTree v, and a reference to an OpenGlWrapper object.  Initializes
+// a Tuning Processor p, a juce::ValueTree v, and a reference to an OpenGlWrapper object.  Initializes
 // the base class members and private TuningPreparation member proc with an initialization list.
 TuningPreparation::TuningPreparation (std::unique_ptr<TuningProcessor> p,
                                     juce::ValueTree v, OpenGlWrapper& um) :
@@ -74,7 +74,7 @@ void TuningPreparation::TuningPopup::renderOpenGlComponents(OpenGlWrapper& open_
         if (open_gl_component->isVisible() && !open_gl_component->isAlwaysOnTop()) {
             open_gl_component->render(open_gl, animate);
             GLenum gl =  juce::gl::glGetError();
-            //DBG(String(gl));
+            //DBG(juce::String(gl));
             _ASSERT(gl == juce::gl::GL_NO_ERROR);
         }
     }

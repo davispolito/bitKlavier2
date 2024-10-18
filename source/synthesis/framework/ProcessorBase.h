@@ -4,15 +4,15 @@
 
 #ifndef BITKLAVIER2_PROCESSORBASE_H
 #define BITKLAVIER2_PROCESSORBASE_H
-#include "juce_core/juce_core.h"
-#include "juce_audio_processors/juce_audio_processors.h"
+#include "_core/juce_core.h"
+#include "_audio_processors/juce_audio_processors.h"
 
-class ProcessorBase  : public juce::AudioProcessor
+class juce::ProcessorBase  : public juce::AudioProcessor
 {
 public:
     //==============================================================================
-    ProcessorBase()
-        : AudioProcessor (BusesProperties().withInput ("Input", juce::AudioChannelSet::stereo())
+    juce::ProcessorBase()
+        : juce::AudioProcessor (BusesProperties().withInput ("Input", juce::AudioChannelSet::stereo())
                               .withOutput ("Output", juce::AudioChannelSet::stereo()))
     {}
 
@@ -44,6 +44,6 @@ public:
 
 private:
     //==============================================================================
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ProcessorBase)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (juce::ProcessorBase)
 };
 #endif //BITKLAVIER2_PROCESSORBASE_H

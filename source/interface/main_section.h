@@ -18,11 +18,11 @@ public:
 
     MainSection(juce::ValueTree v, juce::UndoManager &um, OpenGlWrapper &open_gl, SynthGuiData * data);
 
-    void paintBackground(Graphics& g) override;
+    void paintBackground(juce::Graphics& g) override;
     void resized() override;
 //    void reset() override;
 //
-//    void buttonClicked(Button* clicked_button) override;
+//    void buttonClicked(juce::Button* clicked_button) override;
 //
 //    void notifyChange();
 //    void notifyFresh();

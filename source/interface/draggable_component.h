@@ -8,7 +8,6 @@
 #include "OpenGLImageFileComponent.h"
 #include "open_gl_multi_image.h"
 #include "common.h"
-#include "synth_section.h"
 
 class DraggableComponent    : public juce::Component, public juce::DragAndDropTarget
 {
@@ -43,7 +42,7 @@ public:
 
     }
 
-    //virtual void itemWasDropped(BKPreparationType type, Array<int>, int x, int y){};
+    //virtual void itemWasDropped(BKPreparationType type, juce::Array<int>, int x, int y){};
     virtual void itemIsBeingDragged(const juce::MouseEvent& e){};
     virtual void itemWasDragged(const juce::MouseEvent& e){};
     virtual void keyPressedWhileSelected(const juce::KeyPress& e) {};

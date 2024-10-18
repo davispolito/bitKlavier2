@@ -8,7 +8,7 @@
 #include "synth_slider.h"
 
 // Definition for the ResonancePreparation constructor.  It takes three parameters: a pointer to
-// a Resonance Processor p, a ValueTree v, and a reference to an OpenGlWrapper object.  Initializes
+// a Resonance Processor p, a juce::ValueTree v, and a reference to an OpenGlWrapper object.  Initializes
 // the base class members and private ResonancePreparation member proc with an initialization list.
 ResonancePreparation::ResonancePreparation (std::unique_ptr<ResonanceProcessor> p,
                                       juce::ValueTree v, OpenGlWrapper& um) :
@@ -69,7 +69,7 @@ void ResonancePreparation::ResonancePopup::renderOpenGlComponents(OpenGlWrapper&
         if (open_gl_component->isVisible() && !open_gl_component->isAlwaysOnTop()) {
             open_gl_component->render(open_gl, animate);
             GLenum gl =  juce::gl::glGetError();
-            //DBG(String(gl));
+            //DBG(juce::String(gl));
             _ASSERT(gl == juce::gl::GL_NO_ERROR);
         }
     }

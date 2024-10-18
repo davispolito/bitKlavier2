@@ -11,13 +11,13 @@
 #include "FullInterface.h"
 class OpenGlSlider;
 
-class MidiInputSelectorComponentListBox : public ListBox,
-                                                                              private ListBoxModel,
-private ChangeListener
+class MidiInputSelectorComponentListBox : public juce::ListBox,
+                                                                              private juce::ListBoxModel,
+private juce::ChangeListener
 {
 public:
-    MidiInputSelectorComponentListBox (const ValueTree &v)
-            : ListBox ({}, nullptr),
+    MidiInputSelectorComponentListBox (const juce::ValueTree &v)
+            : juce::ListBox ({}, nullptr),
             v(v)
     {
         updateDevices();
@@ -28,35 +28,35 @@ public:
 
     void updateDevices()
     {
-        items = MidiInput::getAvailableDevices();
+        items = juce::MidiInput::getAvailableDevices();
     }
 
     int getNumRows() override
     {
         return items.size();
     }
-    static void drawTextLayout (Graphics& g, Component& owner, StringRef text, const Rectangle<int>& textBounds, bool enabled)
+    static void drawTextLayout (juce::Graphics& g, juce::Component& owner, juce::StringRef text, const juce::Rectangle<int>& textBounds, bool enabled)
     {
-        const auto textColour = owner.findColour (ListBox::textColourId, true).withMultipliedAlpha (enabled ? 1.0f : 0.6f);
+        const auto textColour = owner.findColour (juce::ListBox::textColourId, true).withMultipliedAlpha (enabled ? 1.0f : 0.6f);
 
-        AttributedString attributedString { text };
+        juce::AttributedString attributedString { text };
         attributedString.setColour (textColour);
         attributedString.setFont ((float) textBounds.getHeight() * 0.6f);
-        attributedString.setJustification (Justification::centredLeft);
-        attributedString.setWordWrap (AttributedString::WordWrap::none);
+        attributedString.setJustification (juce::Justification::centredLeft);
+        attributedString.setWordWrap (juce::AttributedString::WordWrap::none);
 
-        TextLayout textLayout;
+        juce::TextLayout textLayout;
         textLayout.createLayout (attributedString,
                                  (float) textBounds.getWidth(),
                                  (float) textBounds.getHeight());
         textLayout.draw (g, textBounds.toFloat());
     }
-    void paintListBoxItem (int row, Graphics& g, int width, int height, bool rowIsSelected) override
+    void paintListBoxItem (int row, juce::Graphics& g, int width, int height, bool rowIsSelected) override
     {
-        if (isPositiveAndBelow (row, items.size()))
+        if (juce::isPositiveAndBelow (row, items.size()))
         {
             if (rowIsSelected)
-                g.fillAll (findColour (TextEditor::highlightColourId)
+                g.fillAll (findColour (juce::TextEditor::highlightColourId)
                                    .withMultipliedAlpha (0.3f));
 
             auto item = items[row];
@@ -75,7 +75,7 @@ public:
         }
     }
 
-    void listBoxItemClicked (int row, const MouseEvent& e) override
+    void listBoxItemClicked (int row, const juce::MouseEvent& e) override
     {
         selectRow (row);
 
@@ -83,7 +83,7 @@ public:
             flipEnablement (row);
     }
 
-    void listBoxItemDoubleClicked (int row, const MouseEvent&) override
+    void listBoxItemDoubleClicked (int row, const juce::MouseEvent&) override
     {
         flipEnablement (row);
     }
@@ -93,17 +93,17 @@ public:
         flipEnablement (row);
     }
 
-    void paint (Graphics& g) override
+    void paint (juce::Graphics& g) override
     {
-        ListBox::paint (g);
+        juce::ListBox::paint (g);
 
         if (items.isEmpty())
         {
-            g.setColour (Colours::grey);
+            g.setColour (juce::Colours::grey);
             g.setFont (0.5f * (float) getRowHeight());
             g.drawText (noItemsMessage,
                         0, 0, getWidth(), getHeight() / 2,
-                        Justification::centred, true);
+                        juce::Justification::centred, true);
         }
     }
 
@@ -111,23 +111,23 @@ public:
     {
         auto extra = getOutlineThickness() * 2;
 
-        return jmax (getRowHeight() * 2 + extra,
-                     jmin (getRowHeight() * getNumRows() + extra,
+        return juce::jmax (getRowHeight() * 2 + extra,
+                     juce::jmin (getRowHeight() * getNumRows() + extra,
                            preferredHeight));
     }
 
 private:
-    ValueTree v;
+    juce::ValueTree v;
     //==============================================================================
-    void changeListenerCallback (ChangeBroadcaster*) override
+    void changeListenerCallback (juce::ChangeBroadcaster*) override
     {
         resized();
     }
-    const String noItemsMessage;
-    Array<MidiDeviceInfo> items;
+    const juce::String noItemsMessage;
+    juce::Array<juce::MidiDeviceInfo> items;
     //std::vector<bitklavier::MidiDeviceWrapper> &enabledMidiInputs;
 
-    bool isMidiInputDeviceEnabled (const String& identifier)
+    bool isMidiInputDeviceEnabled (const juce::String& identifier)
     {
         if (auto child = v.getChildWithProperty(IDs::midiDeviceId, identifier); child.isValid())
         {
@@ -143,13 +143,13 @@ private:
     }
     void flipEnablement (const int row)
     {
-        if (isPositiveAndBelow (row, items.size()))
+        if (juce::isPositiveAndBelow (row, items.size()))
         {
             auto identifier = items[row].identifier;
             if (!isMidiInputDeviceEnabled(identifier))
             {
 
-               ValueTree t(IDs::midiInput);
+               juce::ValueTree t(IDs::midiInput);
                t.setProperty(IDs::midiDeviceId, identifier,nullptr);
                v.appendChild(t, nullptr);
             }
@@ -176,7 +176,7 @@ private:
 
 class OpenGlMidiSelector : public OpenGlAutoImageComponent<MidiInputSelectorComponentListBox> {
 public:
-    OpenGlMidiSelector(const ValueTree& v) :
+    OpenGlMidiSelector(const juce::ValueTree& v) :
             OpenGlAutoImageComponent<MidiInputSelectorComponentListBox>(v) {
         image_component_ = std::make_shared<OpenGlImageComponent>();
         setLookAndFeel(DefaultLookAndFeel::instance());
@@ -203,7 +203,7 @@ public:
     ~KeymapPreparation();
 
 // Static function that returns a pointer to a KeymapPreparation object
-    static PreparationSection *createKeymapSection(ValueTree v, SynthGuiInterface* interface) {
+    static PreparationSection *createKeymapSection(juce::ValueTree v, SynthGuiInterface* interface) {
 
         return new KeymapPreparation(std::make_unique<KeymapProcessor>(v,interface->getAudioDeviceManager()), v, interface->getGui()->open_gl_);
     }
@@ -231,9 +231,9 @@ private:
 
     class KeymapPopup : public PreparationPopup {
     public:
-        void setColorRecursively(Component *component, int color_id, const Colour& color) {
+        void setColorRecursively(juce::Component *component, int color_id, const juce::Colour& color) {
             component->setColour(color_id, color);
-            for (Component *child : component->getChildren())
+            for (juce::Component *child : component->getChildren())
                 setColorRecursively(child, color_id, color);
         }
         // Constructor method that takes two arguments: a smart pointer to a KeymapProcessor,
@@ -248,7 +248,7 @@ private:
 
         void resized() override;
 
-        void paintBackground(Graphics &g) override {
+        void paintBackground(juce::Graphics &g) override {
             SynthSection::paintContainer(g);
             paintHeadingText(g);
             paintBorder(g);

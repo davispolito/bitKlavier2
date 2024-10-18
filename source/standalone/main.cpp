@@ -25,7 +25,7 @@
 #include <juce_core/juce_core.h>
 
 void handleBitklavierCrash(void* data) {
-  //LoadSave::writeCrashLog(SystemStats::getStackBacktrace());
+  //LoadSave::writeCrashLog(juce::SystemStats::getStackBacktrace());
 }
 //namespace ProjectInfo
 //{
@@ -34,9 +34,9 @@ void handleBitklavierCrash(void* data) {
 //  const char* const  versionString  = "3.4a";
 //  const int          versionNumber  = 0x30400;
 //}
-String getArgumentValue(const StringArray& args, const String& flag, const String& full_flag) {
+juce::String getArgumentValue(const juce::StringArray& args, const juce::String& flag, const juce::String& full_flag) {
   int index = 0;
-  for (String arg : args) {
+  for (juce::String arg : args) {
     index++;
     if (arg == flag || arg == full_flag)
       return args[index];
@@ -45,13 +45,13 @@ String getArgumentValue(const StringArray& args, const String& flag, const Strin
   return "";
 }
 
-int loadAudioFile(AudioSampleBuffer& destination, InputStream* audio_stream) {
-  AudioFormatManager format_manager;
+int loadAudioFile(juce::AudioSampleBuffer& destination, juce::InputStream* audio_stream) {
+  juce::AudioFormatManager format_manager;
   format_manager.registerBasicFormats();
   
   audio_stream->setPosition(0);
-  std::unique_ptr<AudioFormatReader> format_reader(
-      format_manager.createReaderFor(std::unique_ptr<InputStream>(audio_stream)));
+  std::unique_ptr<juce::AudioFormatReader> format_reader(
+      format_manager.createReaderFor(std::unique_ptr<juce::InputStream>(audio_stream)));
   if (format_reader == nullptr)
     return 0;
 
@@ -62,9 +62,9 @@ int loadAudioFile(AudioSampleBuffer& destination, InputStream* audio_stream) {
 }
 
 
-class SynthApplication : public JUCEApplication {
+class SynthApplication : public juce::JUCEApplication {
   public:
-    class MainWindow : public DocumentWindow, public ApplicationCommandTarget, private AsyncUpdater {
+    class MainWindow : public juce::DocumentWindow, public juce::ApplicationCommandTarget, private juce::AsyncUpdater {
       public:
         enum PresetCommand {
           kSave = 0x5001,
@@ -73,16 +73,16 @@ class SynthApplication : public JUCEApplication {
           kToggleVideo,
         };
 
-        MainWindow(const String& name, bool visible) :
-            DocumentWindow(name, Colours::lightgrey, DocumentWindow::allButtons, visible), editor_(nullptr) {
+        MainWindow(const juce::String& name, bool visible) :
+            juce::DocumentWindow(name, juce::Colours::lightgrey, juce::DocumentWindow::allButtons, visible), editor_(nullptr) {
           if (!Startup::isComputerCompatible()) {
-            String error = String(ProjectInfo::projectName) +
-                           " requires SSE2, NEON or AVX2 compatible processor. Exiting.";
-            //AlertWindow::showNativeDialogBox("Computer not supported", error, false);
+//            juce::String error = juce::String(ProjectInfo::projectName) +
+//                           " requires SSE2, NEON or AVX2 compatible processor. Exiting.";
+            //juce::AlertWindow::showNativeDialogBox("Computer not supported", error, false);
             quit();
           }
 
-          SystemStats::setApplicationCrashHandler(handleBitklavierCrash);
+          juce::SystemStats::setApplicationCrashHandler(handleBitklavierCrash);
               
           if (visible) {
             setUsingNativeTitleBar(true);
@@ -113,10 +113,10 @@ class SynthApplication : public JUCEApplication {
         }
 
         void closeButtonPressed() override {
-          JUCEApplication::getInstance()->systemRequestedQuit();
+          juce::JUCEApplication::getInstance()->systemRequestedQuit();
         }
 
-        void loadFile(const File& file) {
+        void loadFile(const juce::File& file) {
           file_to_load_ = file;
           triggerAsyncUpdate();
         }
@@ -125,7 +125,7 @@ class SynthApplication : public JUCEApplication {
           editor_->shutdownAudio();
         }
 
-        ApplicationCommandTarget* getNextCommandTarget() override {
+        juce::ApplicationCommandTarget* getNextCommandTarget() override {
           return findFirstTargetParentComponent();
         }
 
@@ -137,30 +137,30 @@ class SynthApplication : public JUCEApplication {
 //          //if (editor_ != nullptr)
 //          //  editor_->setBounds(getBounds());
 //        }
-        void getAllCommands(Array<CommandID>& commands) override {
+        void getAllCommands(juce::Array<juce::CommandID>& commands) override {
           commands.add(kSave);
           commands.add(kSaveAs);
           commands.add(kOpen);
         }
 
-        void getCommandInfo(const CommandID commandID, ApplicationCommandInfo& result) override {
+        void getCommandInfo(const juce::CommandID commandID, juce::ApplicationCommandInfo& result) override {
           if (commandID == kSave) {
             result.setInfo(TRANS("Save"), TRANS("Save the current preset"), "Application", 0);
-            result.defaultKeypresses.add(KeyPress('s', ModifierKeys::commandModifier, 0));
+            result.defaultKeypresses.add(juce::KeyPress('s', juce::ModifierKeys::commandModifier, 0));
           }
           else if (commandID == kSaveAs) {
             result.setInfo(TRANS("Save As"), TRANS("Save preset to a new file"), "Application", 0);
-            ModifierKeys modifier = ModifierKeys::commandModifier | ModifierKeys::shiftModifier;
-            result.defaultKeypresses.add(KeyPress('s', modifier, 0));
+            juce::ModifierKeys modifier = juce::ModifierKeys::commandModifier | juce::ModifierKeys::shiftModifier;
+            result.defaultKeypresses.add(juce::KeyPress('s', modifier, 0));
           }
           else if (commandID == kOpen) {
             result.setInfo(TRANS("Open"), TRANS("Open a preset"), "Application", 0);
-            result.defaultKeypresses.add(KeyPress('o', ModifierKeys::commandModifier, 0));
+            result.defaultKeypresses.add(juce::KeyPress('o', juce::ModifierKeys::commandModifier, 0));
           }
           else if (commandID == kToggleVideo) {
             result.setInfo(TRANS("Toggle Zoom"), TRANS("Toggle zoom for recording"), "Application", 0);
-            ModifierKeys modifier = ModifierKeys::commandModifier | ModifierKeys::shiftModifier;
-            result.defaultKeypresses.add(KeyPress('t', modifier, 0));
+            juce::ModifierKeys modifier = juce::ModifierKeys::commandModifier | juce::ModifierKeys::shiftModifier;
+            result.defaultKeypresses.add(juce::KeyPress('t', modifier, 0));
           }
         }
 
@@ -175,8 +175,8 @@ class SynthApplication : public JUCEApplication {
             return true;
           }
           else if (info.commandID == kSaveAs) {
-//            File active_file = editor_->getActiveFile();
-//            FileChooser save_box("Export Preset", File(), String("*.") + vital::kPresetExtension);
+//            juce::File active_file = editor_->getActiveFile();
+//            juce::FileChooser save_box("Export Preset", juce::File(), juce::String("*.") + vital::kPresetExtension);
 //            if (save_box.browseForFileToSave(true))
 //              editor_->saveToFile(save_box.getResult().withFileExtension(vital::kPresetExtension));
 //            grabKeyboardFocus();
@@ -184,19 +184,19 @@ class SynthApplication : public JUCEApplication {
             return true;
           }
           else if (info.commandID == kOpen) {
-            //File active_file = editor_->getActiveFile();
-//            FileChooser open_box("Open Preset", active_file, String("*.") + vital::kPresetExtension);
+            //juce::File active_file = editor_->getActiveFile();
+//            juce::FileChooser open_box("Open Preset", active_file, juce::String("*.") + vital::kPresetExtension);
 //            if (!open_box.browseForFileToOpen())
 //              return true;
 
-//            File choice = open_box.getResult();
+//            juce::File choice = open_box.getResult();
 //            if (!choice.exists())
 //              return true;
 //
 //            std::string error;
 //            if (!editor_->loadFromFile(choice, error)) {
 //              error = "There was an error open the preset. " + error;
-//              AlertWindow::showNativeDialogBox("Error opening preset", error, false);
+//              juce::AlertWindow::showNativeDialogBox("Error opening preset", error, false);
 //            }
 //            else
 //              editor_->externalPresetLoaded(choice);
@@ -212,15 +212,15 @@ class SynthApplication : public JUCEApplication {
 
         void handleAsyncUpdate() override {
           if (command_manager_ == nullptr) {
-            command_manager_ = std::make_unique<ApplicationCommandManager>();
-            command_manager_->registerAllCommandsForTarget(JUCEApplication::getInstance());
+            command_manager_ = std::make_unique<juce::ApplicationCommandManager>();
+            command_manager_->registerAllCommandsForTarget(juce::JUCEApplication::getInstance());
             command_manager_->registerAllCommandsForTarget(this);
             addKeyListener(command_manager_->getKeyMappings());
           }
           
           if (file_to_load_.exists()) {
             loadFileAsyncUpdate();
-            file_to_load_ = File();
+            file_to_load_ = juce::File();
           }
           
           editor_->setFocus();
@@ -234,9 +234,9 @@ class SynthApplication : public JUCEApplication {
 //            editor_->externalPresetLoaded(file_to_load_);
         }
       
-        File file_to_load_;
+        juce::File file_to_load_;
         SynthEditor* editor_;
-        std::unique_ptr<ApplicationCommandManager> command_manager_;
+        std::unique_ptr<juce::ApplicationCommandManager> command_manager_;
         BorderBoundsConstrainer constrainer_;
       
         JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(MainWindow)
@@ -244,12 +244,12 @@ class SynthApplication : public JUCEApplication {
 
     SynthApplication() = default;
 
-    const String getApplicationName() override { return ProjectInfo::projectName; }
-    const String getApplicationVersion() override { return ProjectInfo::versionString; }
+    const juce::String getApplicationName() override { return "bitklavier2";}//ProjectInfo::projectName; }
+    const juce::String getApplicationVersion() override { return "0.0.1"; }
     bool moreThanOneInstanceAllowed() override { return true; }
 
-    void initialise(const String& command_line) override {
-      String command = " " + command_line + " ";
+    void initialise(const juce::String& command_line) override {
+      juce::String command = " " + command_line + " ";
       if (command.contains(" --version ") || command.contains(" -v ")) {
 //        std::cout << getApplicationName() << " " << getApplicationVersion() << newLine;
 //        quit();
@@ -285,9 +285,9 @@ class SynthApplication : public JUCEApplication {
         bool visible = !command.contains(" --headless ");
         main_window_ = std::make_unique<MainWindow>(getApplicationName(), visible);
 
-        StringArray args = getCommandLineParameterArray();
+        juce::StringArray args = getCommandLineParameterArray();
         bool last_arg_was_option = false;
-        for (const String& arg : args) {
+        for (const juce::String& arg : args) {
           if (arg != "" && arg[0] != '-' && !last_arg_was_option && loadFromCommandLine(arg))
             break;
 
@@ -296,11 +296,11 @@ class SynthApplication : public JUCEApplication {
       }
     }
 
-    bool loadFromCommandLine(const String& command_line) {
-      String file_path = command_line;
+    bool loadFromCommandLine(const juce::String& command_line) {
+      juce::String file_path = command_line;
       if (file_path[0] == '"' && file_path[file_path.length() - 1] == '"')
         file_path = command_line.substring(1, command_line.length() - 1);
-      File file = File::getCurrentWorkingDirectory().getChildFile(file_path);
+      juce::File file = juce::File::getCurrentWorkingDirectory().getChildFile(file_path);
       if (!file.exists())
         return false;
 
@@ -316,7 +316,7 @@ class SynthApplication : public JUCEApplication {
       quit();
     }
 
-    void anotherInstanceStarted(const String& command_line) override {
+    void anotherInstanceStarted(const juce::String& command_line) override {
       loadFromCommandLine(command_line);
     }
 

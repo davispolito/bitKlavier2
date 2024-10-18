@@ -15,24 +15,22 @@
  */
 
 #include "border_bounds_constrainer.h"
+#include "FullInterface.h"
 
-#include "../interface/FullInterface.h"
-#include "synth_gui_interface.h"
-
-void BorderBoundsConstrainer::checkBounds(Rectangle<int>& bounds, const Rectangle<int>& previous,
-                                          const Rectangle<int>& limits,
+void BorderBoundsConstrainer::checkBounds(juce::Rectangle<int>& bounds, const juce::Rectangle<int>& previous,
+                                          const juce::Rectangle<int>& limits,
                                           bool stretching_top, bool stretching_left,
                                           bool stretching_bottom, bool stretching_right) {
   border_.subtractFrom(bounds);
   double aspect_ratio = getFixedAspectRatio();
 
-  ComponentBoundsConstrainer::checkBounds(bounds, previous, limits,
+  juce::ComponentBoundsConstrainer::checkBounds(bounds, previous, limits,
                                           stretching_top, stretching_left,
                                           stretching_bottom, stretching_right);
 
-  Rectangle<int> display_area = Desktop::getInstance().getDisplays().getTotalBounds(true);
+    juce::Rectangle<int> display_area = juce::Desktop::getInstance().getDisplays().getTotalBounds(true);
   if (gui_) {
-    ComponentPeer* peer = gui_->getPeer();
+    juce::ComponentPeer* peer = gui_->getPeer();
     if (peer)
       peer->getFrameSize().subtractFrom(display_area);
   }

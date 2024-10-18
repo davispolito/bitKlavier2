@@ -55,7 +55,7 @@ namespace bitklavier {
                 addAndMakeVisible(slider);
                 parent.addSlider(&slider, false);
                 slider.parentHierarchyChanged();
-                slider.setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
+                slider.setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
                 _ASSERT(slider.getSectionParent() != nullptr);
                 DBG("create slider for " + param.paramID + "with parent " + parent.getName());
             }
@@ -112,25 +112,25 @@ namespace bitklavier {
                 int title_width = getTitleWidth();
                 int section_height = getKnobSectionHeight();
                 DBG("--------ogroupitem"  + name +" View -------------");
-                DBG("bounds x:" + String(getLocalBounds().getX()) + " y:" + String(getLocalBounds().getY()) + " width: " + String(getLocalBounds().getWidth()) + " height: " + String(getLocalBounds().getHeight()));
+                DBG("bounds x:" + juce::String(getLocalBounds().getX()) + " y:" + juce::String(getLocalBounds().getY()) + " width: " + juce::String(getLocalBounds().getWidth()) + " height: " + juce::String(getLocalBounds().getHeight()));
 //        pimpl->view.setBounds(getLocalBounds());
-//                Rectangle<int> bounds = getLocalBounds().withLeft(title_width);
+//                juce::Rectangle<int> bounds = getLocalBounds().withLeft(title_width);
 //                int i = 0;
 //                for(auto section : sub_sections_)
 //                {
-//                    Rectangle<int> section_area = getDividedAreaBuffered(bounds, sub_sections_.size(), i++, widget_margin);
+//                    juce::Rectangle<int> section_area = getDividedAreaBuffered(bounds, sub_sections_.size(), i++, widget_margin);
 //                    section->setBounds(section_area);
 //                }
                 int editor_x = getLocalBounds().getX();
                 int editor_width = getLocalBounds().getWidth();
                 int knob_y2 = section_height - widget_margin;
-                Rectangle<int> knobs_area = getDividedAreaBuffered(getLocalBounds(), 3, 0, widget_margin);
+                juce::Rectangle<int> knobs_area = getDividedAreaBuffered(getLocalBounds(), 3, 0, widget_margin);
                 placeKnobsInArea(getLocalBounds(),
                 comps) ;
 
 
             }
-             String getUniqueName() const
+             juce::String getUniqueName() const
              {
                 return name;
              }
@@ -196,11 +196,11 @@ namespace bitklavier {
 
     void ParametersView::resized() {
         DBG("--------" + getName() + "View -------------");
-        DBG("bounds x:" + String(getLocalBounds().getX()) + " y:" + String(getLocalBounds().getY()) + " width: " + String(getLocalBounds().getWidth()) + " height: " + String(getLocalBounds().getHeight()));
+        DBG("bounds x:" + juce::String(getLocalBounds().getX()) + " y:" + juce::String(getLocalBounds().getY()) + " width: " + juce::String(getLocalBounds().getWidth()) + " height: " + juce::String(getLocalBounds().getHeight()));
         //pimpl->groupItem.setBounds(getLocalBounds());
         placeKnobsInArea(getLocalBounds(), comps);
 //        SynthSection::resized();
-//        Grid g;
+//        juce::Grid g;
 //
 //        placeKnobsInArea(getLocalBounds(),
 //                         getAllSlidersVec());

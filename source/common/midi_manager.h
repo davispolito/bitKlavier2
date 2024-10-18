@@ -25,16 +25,16 @@
 #include <string>
 #if !defined(JUCE_AUDIO_DEVICES_H_INCLUDED)
 
-class MidiInput {};
+class juce::MidiInput {};
 
-class MidiInputCallback {
+class juce::MidiInputCallback {
   public:
-    virtual ~MidiInputCallback() = default;
-    virtual void handleIncomingMidiMessage(MidiInput *source, const juce::MidiMessage &midi_message) { }
-    virtual void 	handlePartialSysexMessage (MidiInput *source, const uint *messageData, int numBytesSoFar, double timestamp) { }
+    virtual ~juce::MidiInputCallback() = default;
+    virtual void handleIncomingMidiMessage(juce::MidiInput *source, const juce::MidiMessage &midi_message) { }
+    virtual void 	handlePartialSysexMessage (juce::MidiInput *source, const uint *messageData, int numBytesSoFar, double timestamp) { }
 };
 
-class MidiMessageCollector {
+class juce::MidiMessageCollector {
   public:
     void reset(int sample_rate) { }
     void removeNextBlockOfMessages(juce::MidiBuffer& buffer, int num_samples) { }
@@ -157,7 +157,7 @@ class MidiManager : public juce::MidiInputCallback, public tracktion::engine::Va
     midi_map getMidiLearnMap() { return midi_learn_map_; }
     void setMidiLearnMap(const midi_map& midi_learn_map) { midi_learn_map_ = midi_learn_map; }
 
-    // MidiInputCallback
+    // juce::MidiInputCallback
     void handleIncomingMidiMessage (juce::MidiInput *source, const juce::MidiMessage &midi_message) override;
 
     struct PresetLoadedCallback : public juce::CallbackMessage {

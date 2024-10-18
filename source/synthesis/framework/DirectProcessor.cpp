@@ -14,7 +14,7 @@ DirectProcessor::DirectProcessor(const juce::ValueTree &v) : PluginBase(v, nullp
         synth.addVoice(new BKSamplerVoice());
     }
 
-//    std::unique_ptr<XmlElement> xml = chowdsp::Serialization::serialize<chowdsp::XMLSerializer>(state);
+//    std::unique_ptr<juce::XmlElement> xml = chowdsp::Serialization::serialize<chowdsp::XMLSerializer>(state);
 //    DBG(chowdsp::Serialization::serialize<chowdsp::XMLSerializer>(state)->toString());
     //chowdsp::Serialization::deserialize<chowdsp::XMLSerializer>(xml,state);
     adsrCallbacks += {state.addParameterListener(*state.params.attackParam,

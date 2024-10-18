@@ -12,7 +12,7 @@
 #include "synth_slider.h"
 
 // Definition for the SynchronicPreparation constructor.  It takes three parameters: a pointer to
-// a Synchronic Processor p, a ValueTree v, and a reference to an OpenGlWrapper object.  Initializes
+// a Synchronic Processor p, a juce::ValueTree v, and a reference to an OpenGlWrapper object.  Initializes
 // the base class members and private SynchronicPreparation member proc with an initialization list.
 SynchronicPreparation::SynchronicPreparation (std::unique_ptr<SynchronicProcessor> p,
                                             juce::ValueTree v, OpenGlWrapper& um) :
@@ -73,7 +73,7 @@ void SynchronicPreparation::SynchronicPopup::renderOpenGlComponents(OpenGlWrappe
         if (open_gl_component->isVisible() && !open_gl_component->isAlwaysOnTop()) {
             open_gl_component->render(open_gl, animate);
             GLenum gl =  juce::gl::glGetError();
-            //DBG(String(gl));
+            //DBG(juce::String(gl));
             _ASSERT(gl == juce::gl::GL_NO_ERROR);
         }
     }

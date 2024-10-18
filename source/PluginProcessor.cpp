@@ -4,7 +4,7 @@
 
 //==============================================================================
 PluginProcessor::PluginProcessor()
-     : AudioProcessor (BusesProperties()
+     : juce::AudioProcessor (BusesProperties()
                      #if ! JucePlugin_IsMidiEffect
                       #if ! JucePlugin_IsSynth
                        .withInput  ("Input",  juce::AudioChannelSet::stereo(), true)
@@ -176,7 +176,7 @@ juce::AudioProcessorEditor* PluginProcessor::createEditor()
 void PluginProcessor::getStateInformation (juce::MemoryBlock& destData)
 {
     // You should use this method to store your parameters in the memory block.
-    // You could do that either as raw data, or use the XML or ValueTree classes
+    // You could do that either as raw data, or use the XML or juce::ValueTree classes
     // as intermediaries to make it easy to save and load complex data.
     juce::ignoreUnused (destData);
 }
@@ -195,7 +195,7 @@ juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
     return new PluginProcessor();
 }
 
-const CriticalSection& PluginProcessor::getCriticalSection() {
+const juce::CriticalSection& PluginProcessor::getCriticalSection() {
     return getCallbackLock();
 }
 
@@ -204,7 +204,7 @@ void PluginProcessor::pauseProcessing(bool pause) {
 }
 
 SynthGuiInterface* PluginProcessor::getGuiInterface() {
-    AudioProcessorEditor* editor = getActiveEditor();
+    juce::AudioProcessorEditor* editor = getActiveEditor();
     if (editor)
         return dynamic_cast<SynthGuiInterface*>(editor);
     return nullptr;

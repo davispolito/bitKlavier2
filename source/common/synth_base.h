@@ -16,26 +16,24 @@
 
 #pragma once
 
-#include <juce_data_structures/juce_data_structures.h>
+
 #include <chowdsp_dsp_data_structures/chowdsp_dsp_data_structures.h>
 #include <juce_dsp/juce_dsp.h>
 #include <set>
 #include <string>
 #include "midi_manager.h"
-#include "../synthesis/framework/poly_utils.h"
-
-
+#include <set>
+#include <string>
 class SynthGuiInterface;
 template<typename T>
 class BKSamplerSound;
 
-using namespace juce;
 class SynthBase : public MidiManager::Listener, public juce::ValueTree::Listener {
   public:
     static constexpr float kOutputWindowMinNote = 16.0f;
     static constexpr float kOutputWindowMaxNote = 128.0f;
 
-    SynthBase(AudioDeviceManager* ={});
+    SynthBase(juce::AudioDeviceManager* ={});
     virtual ~SynthBase();
 
 
@@ -55,7 +53,7 @@ class SynthBase : public MidiManager::Listener, public juce::ValueTree::Listener
     int getConnectionIndex(const std::string& source, const std::string& destination);
 
 
-   bool loadFromFile(File preset, std::string& error) ;
+   bool loadFromFile(juce::File preset, std::string& error) ;
 
 
 
@@ -103,33 +101,33 @@ class SynthBase : public MidiManager::Listener, public juce::ValueTree::Listener
       std::string control_name;
       bitklavier::mono_float value;
     };
-    AudioDeviceManager* manager;
+    juce::AudioDeviceManager* manager;
 
             juce::AudioProcessorGraph::Node::Ptr addProcessor(std::unique_ptr<juce::AudioProcessor> processor, juce::AudioProcessorGraph::NodeID id ={});
-    juce::AudioProcessorGraph::Node * getNodeForId(AudioProcessorGraph::NodeID id);
-    void addConnection(AudioProcessorGraph::Connection& connect);
+    juce::AudioProcessorGraph::Node * getNodeForId(juce::AudioProcessorGraph::NodeID id);
+    void addConnection(juce::AudioProcessorGraph::Connection& connect);
 
     juce::ValueTree& getValueTree();
     juce::UndoManager& getUndoManager();
     static constexpr size_t actionSize = 16; // sizeof ([this, i = index] { callMessageThreadBroadcaster (i); })
     using AudioThreadAction = juce::dsp::FixedSizeFunction<actionSize, void()>;
     moodycamel::ReaderWriterQueue<AudioThreadAction> processorInitQueue { 10 };
-    bool saveToFile(File preset);
+    bool saveToFile(juce::File preset);
     bool saveToActiveFile();
-    void clearActiveFile() { active_file_ = File(); }
-    File getActiveFile() { return active_file_; }
+    void clearActiveFile() { active_file_ = juce::File(); }
+    juce::File getActiveFile() { return active_file_; }
   protected:
 
     juce::ValueTree tree;
     juce::UndoManager um;
     virtual SynthGuiInterface* getGuiInterface() = 0;
-//    OwnedArray<ReferenceCountedArray<BKSamplerSound<juce::AudioFormatReader>>> mainPianoSoundSet;
-//    OwnedArray<ReferenceCountedArray<BKSamplerSound<juce::AudioFormatReader>>> resonanceReleaseSoundSet;
-//    OwnedArray<ReferenceCountedArray<BKSamplerSound<juce::AudioFormatReader>>> hammerReleaseSoundSet;
-//    OwnedArray<ReferenceCountedArray<BKSamplerSound<juce::AudioFormatReader>>> emptySoundSet;
-//    OwnedArray<ReferenceCountedArray<BKSamplerSound<juce::AudioFormatReader>>> pedalReleaseSoundSet;
+//    juce::OwnedArray<juce::ReferenceCountedArray<BKSamplerSound<juce::AudioFormatReader>>> mainPianoSoundSet;
+//    juce::OwnedArray<juce::ReferenceCountedArray<BKSamplerSound<juce::AudioFormatReader>>> resonanceReleaseSoundSet;
+//    juce::OwnedArray<juce::ReferenceCountedArray<BKSamplerSound<juce::AudioFormatReader>>> hammerReleaseSoundSet;
+//    juce::OwnedArray<juce::ReferenceCountedArray<BKSamplerSound<juce::AudioFormatReader>>> emptySoundSet;
+//    juce::OwnedArray<juce::ReferenceCountedArray<BKSamplerSound<juce::AudioFormatReader>>> pedalReleaseSoundSet;
 
-    bool loadFromValueTree(const ValueTree& state);
+    bool loadFromValueTree(const juce::ValueTree& state);
 
 
     void processAudio(juce::AudioSampleBuffer* buffer, int channels, int samples, int offset);
@@ -140,7 +138,6 @@ class SynthBase : public MidiManager::Listener, public juce::ValueTree::Listener
     void processMidi(juce::MidiBuffer& buffer, int start_sample = 0, int end_sample = 0);
     void processKeyboardEvents(juce::MidiBuffer& buffer, int num_samples);
     //void processModulationChanges();
-    void updateMemoryOutput(int samples, const bitklavier::poly_float* audio);
 
     std::unique_ptr<bitklavier::SoundEngine> engine_;
     std::unique_ptr<MidiManager> midi_manager_;
@@ -148,23 +145,18 @@ class SynthBase : public MidiManager::Listener, public juce::ValueTree::Listener
 
     std::shared_ptr<SynthBase*> self_reference_;
 
-    File active_file_;
+    juce::File active_file_;
 
-    bitklavier::mono_float last_played_note_;
-    int last_num_pressed_;
-    bitklavier::mono_float memory_reset_period_;
-    bitklavier::mono_float memory_input_offset_;
-    int memory_index_;
     bool expired_;
 
-    std::map<std::string, String> save_info_;
+    std::map<std::string, juce::String> save_info_;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(SynthBase)
 };
 
 class HeadlessSynth : public SynthBase {
   public:
-    virtual const CriticalSection& getCriticalSection() override {
+    virtual const juce::CriticalSection& getCriticalSection() override {
       return critical_section_;
     }
 
@@ -179,5 +171,5 @@ class HeadlessSynth : public SynthBase {
     virtual SynthGuiInterface* getGuiInterface() override { return nullptr; }
 
   private:
-    CriticalSection critical_section_;
+    juce::CriticalSection critical_section_;
 };

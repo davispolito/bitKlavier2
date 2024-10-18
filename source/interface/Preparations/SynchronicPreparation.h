@@ -35,7 +35,7 @@ public:
     ~SynchronicPreparation();
 
     // Static function that returns a pointer to a SynchronicPreparation object
-    static PreparationSection* createSynchronicSection(ValueTree v, SynthGuiInterface* interface) {
+    static PreparationSection* createSynchronicSection(juce::ValueTree v, SynthGuiInterface* interface) {
 
         return new SynchronicPreparation(std::make_unique<SynchronicProcessor>(), v, interface->getGui()->open_gl_);
     }
@@ -70,7 +70,7 @@ private:
         void initOpenGlComponents(OpenGlWrapper &open_gl) override;
         void renderOpenGlComponents(OpenGlWrapper& open_gl, bool animate) override;
         void resized() override;
-        void paintBackground(Graphics& g) override
+        void paintBackground(juce::Graphics& g) override
         {
             SynthSection::paintContainer(g);
             paintHeadingText(g);

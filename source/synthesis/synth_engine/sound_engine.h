@@ -55,7 +55,7 @@ namespace bitklavier {
       void prepareToPlay(double sampleRate, int samplesPerBlock)
       {
           setSampleRate(sampleRate);
-          // DBG("setting sample rate to: " + String(sampleRate));
+          // DBG("setting sample rate to: " + juce::String(sampleRate));
           setBufferSize(samplesPerBlock);
 
           processorGraph->prepareToPlay (sampleRate, samplesPerBlock);
@@ -194,9 +194,9 @@ namespace bitklavier {
       int last_sample_rate_;
       int buffer_size;
       int curr_sample_rate;
-//      Value* oversampling_;
-//      Value* bps_;
-//      Value* legato_;
+//      juce::Value* oversampling_;
+//      juce::Value* bps_;
+//      juce::Value* legato_;
 //      Decimator* decimator_;
 //      PeakMeter* peak_meter_;
 

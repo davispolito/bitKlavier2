@@ -22,17 +22,17 @@
 #include "../synth_section.h"
 
 DefaultLookAndFeel::DefaultLookAndFeel() {
-  setColour(PopupMenu::backgroundColourId, Colour(0xff111111));
-  setColour(PopupMenu::textColourId, Colour(0xffcccccc));
-  setColour(PopupMenu::headerTextColourId, Colour(0xffffffff));
-  setColour(PopupMenu::highlightedBackgroundColourId, Colour(0xff8458b7));
-  setColour(PopupMenu::highlightedTextColourId, Colour(0xffffffff));
-  setColour(BubbleComponent::backgroundColourId, Colour(0xff111111));
-  setColour(BubbleComponent::outlineColourId, Colour(0xff333333));
-  setColour(TooltipWindow::textColourId, Colour(0xffdddddd));
+  setColour(juce::PopupMenu::backgroundColourId, juce::Colour(0xff111111));
+  setColour(juce::PopupMenu::textColourId, juce::Colour(0xffcccccc));
+  setColour(juce::PopupMenu::headerTextColourId, juce::Colour(0xffffffff));
+  setColour(juce::PopupMenu::highlightedBackgroundColourId, juce::Colour(0xff8458b7));
+  setColour(juce::PopupMenu::highlightedTextColourId, juce::Colour(0xffffffff));
+  setColour(juce::BubbleComponent::backgroundColourId, juce::Colour(0xff111111));
+  setColour(juce::BubbleComponent::outlineColourId, juce::Colour(0xff333333));
+  setColour(juce::TooltipWindow::textColourId, juce::Colour(0xffdddddd));
 }
 
-void DefaultLookAndFeel::fillTextEditorBackground(Graphics& g, int width, int height, TextEditor& text_editor) {
+void DefaultLookAndFeel::fillTextEditorBackground(juce::Graphics& g, int width, int height, juce::TextEditor& text_editor) {
   if (width <= 0 || height <= 0)
     return;
 
@@ -47,14 +47,14 @@ void DefaultLookAndFeel::fillTextEditorBackground(Graphics& g, int width, int he
   g.drawRoundedRectangle(0.5f, 0.5f, width - 1.0f, height - 1.0f, rounding, 1.0f);
 }
 
-void DefaultLookAndFeel::drawPopupMenuBackground(Graphics& g, int width, int height) {
-  g.setColour(findColour(PopupMenu::backgroundColourId));
+void DefaultLookAndFeel::drawPopupMenuBackground(juce::Graphics& g, int width, int height) {
+  g.setColour(findColour(juce::PopupMenu::backgroundColourId));
   g.fillRoundedRectangle(0, 0, width, height, kPopupMenuBorder);
-  g.setColour(findColour(BubbleComponent::outlineColourId));
+  g.setColour(findColour(juce::BubbleComponent::outlineColourId));
   g.drawRoundedRectangle(0.5f, 0.5f, width - 1.0f, height - 1.0f, kPopupMenuBorder, 1.0f);
 }
 
-void DefaultLookAndFeel::drawScrollbar(Graphics& g, ScrollBar& scroll_bar, int x, int y, int width, int height,
+void DefaultLookAndFeel::drawScrollbar(juce::Graphics& g, juce::ScrollBar& scroll_bar, int x, int y, int width, int height,
                                        bool vertical, int thumb_position, int thumb_size,
                                        bool mouse_over, bool mouse_down) {
   if (thumb_size >= height)
@@ -79,19 +79,19 @@ void DefaultLookAndFeel::drawScrollbar(Graphics& g, ScrollBar& scroll_bar, int x
     g.fillRoundedRectangle(draw_x, thumb_position, draw_width, thumb_size, draw_width / 2.0f);
 }
 
-void DefaultLookAndFeel::drawComboBox(Graphics& g, int width, int height, const bool button_down,
-                                      int button_x, int button_y, int button_w, int button_h, ComboBox& box) {
+void DefaultLookAndFeel::drawComboBox(juce::Graphics& g, int width, int height, const bool button_down,
+                                      int button_x, int button_y, int button_w, int button_h, juce::ComboBox& box) {
   static constexpr float kRoundness = 4.0f;
-  g.setColour(findColour(BubbleComponent::backgroundColourId));
+  g.setColour(findColour(juce::BubbleComponent::backgroundColourId));
   g.fillRoundedRectangle(box.getLocalBounds().toFloat(), kRoundness);
-  Path path = Paths::downTriangle();
+  juce::Path path = Paths::downTriangle();
 
   g.setColour(box.findColour(Skin::kTextComponentText, true));
-  Rectangle<int> arrow_bounds = box.getLocalBounds().removeFromRight(height);
+  juce::Rectangle<int> arrow_bounds = box.getLocalBounds().removeFromRight(height);
   g.fillPath(path, path.getTransformToScaleToFit(arrow_bounds.toFloat(), true));
 }
 
-void DefaultLookAndFeel::drawTickBox(Graphics& g, Component& component,
+void DefaultLookAndFeel::drawTickBox(juce::Graphics& g, juce::Component& component,
                                      float x, float y, float w, float h, bool ticked,
                                      bool enabled, bool mouse_over, bool button_down) {
   static constexpr float kBorderPercent = 0.15f;
@@ -104,32 +104,32 @@ void DefaultLookAndFeel::drawTickBox(Graphics& g, Component& component,
   g.fillRect(x + border_width, y + border_width, w - 2 * border_width, h - 2 * border_width);
 }
 
-void DefaultLookAndFeel::drawCallOutBoxBackground(CallOutBox& call_out_box, Graphics& g, const Path& path, Image&) {
+void DefaultLookAndFeel::drawCallOutBoxBackground(juce::CallOutBox& call_out_box, juce::Graphics& g, const juce::Path& path, juce::Image&) {
   g.setColour(call_out_box.findColour(Skin::kBody, true));
   g.fillPath(path);
 
   g.setColour(call_out_box.findColour(Skin::kPopupBorder, true));
-  g.strokePath(path, PathStrokeType(1.0f));
+  g.strokePath(path, juce::PathStrokeType(1.0f));
 }
 
-void DefaultLookAndFeel::drawButtonBackground(Graphics& g, Button& button, const Colour& background_color,
+void DefaultLookAndFeel::drawButtonBackground(juce::Graphics& g, juce::Button& button, const juce::Colour& background_color,
                                               bool hover, bool down) {
   g.setColour(button.findColour(Skin::kPopupSelectorBackground, true));
   g.fillRoundedRectangle(button.getLocalBounds().toFloat(), 5.0f);
 }
 
-//int DefaultLookAndFeel::getSliderPopupPlacement(Slider& slider) {
+//int DefaultLookAndFeel::getSliderPopupPlacement(juce::Slider& slider) {
 //  SynthSlider* s_slider = dynamic_cast<SynthSlider*>(&slider);
 //  if (s_slider)
 //    return s_slider->getPopupPlacement();
 //
-//  return LookAndFeel_V3::getSliderPopupPlacement(slider);
+//  return juce::LookAndFeel_V3::getSliderPopupPlacement(slider);
 //}
 
-Font DefaultLookAndFeel::getPopupMenuFont() {
+juce::Font DefaultLookAndFeel::getPopupMenuFont() {
   return Fonts::instance()->proportional_regular().withPointHeight(14.0f);
 }
 
-Font DefaultLookAndFeel::getSliderPopupFont(Slider& slider) {
+juce::Font DefaultLookAndFeel::getSliderPopupFont(juce::Slider& slider) {
   return Fonts::instance()->proportional_regular().withPointHeight(14.0f);
 }

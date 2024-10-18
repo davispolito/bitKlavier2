@@ -33,9 +33,9 @@ force_inline bitklavier::mono_float powerScale(bitklavier::mono_float value, bit
 }
 CurveLookAndFeel::CurveLookAndFeel() { }
 
-void CurveLookAndFeel::drawRotarySlider(Graphics& g, int x, int y, int width, int height,
+void CurveLookAndFeel::drawRotarySlider(juce::Graphics& g, int x, int y, int width, int height,
                                         float slider_t, float start_angle, float end_angle,
-                                        Slider& slider) {
+                                        juce::Slider& slider) {
   bool active = true;
   bool bipolar = false;
   SynthSlider* s_slider = dynamic_cast<SynthSlider*>(&slider);
@@ -57,16 +57,16 @@ void CurveLookAndFeel::drawRotarySlider(Graphics& g, int x, int y, int width, in
   drawCurve(g, slider, x + inset, y + inset, width - 2.0f * inset, height - 2.0f * inset, active, bipolar);
 }
 
-void CurveLookAndFeel::drawCurve(Graphics& g, Slider& slider, int x, int y, int width, int height,
+void CurveLookAndFeel::drawCurve(juce::Graphics& g, juce::Slider& slider, int x, int y, int width, int height,
                                  bool active, bool bipolar) {
   static constexpr int kResolution = 16;
   static constexpr float kLineWidth = 2.0f;
-  PathStrokeType stroke(kLineWidth, PathStrokeType::beveled, PathStrokeType::rounded);
+  juce::PathStrokeType stroke(kLineWidth, juce::PathStrokeType::beveled, juce::PathStrokeType::rounded);
 
   float curve_width = std::min(width, height);
   float x_offset = (width - curve_width) / 2.0f;
   float power = -slider.getValue();
-  Path path;
+  juce::Path path;
   float start_x = x + x_offset + kLineWidth / 2.0f;
   float start_y = y + height - kLineWidth / 2.0f;
   path.startNewSubPath(start_x, start_y);
@@ -95,7 +95,7 @@ void CurveLookAndFeel::drawCurve(Graphics& g, Slider& slider, int x, int y, int 
     }
   }
 
-  Colour line = slider.findColour(Skin::kRotaryArc, true);
+  juce::Colour line = slider.findColour(Skin::kRotaryArc, true);
   if (!active)
     line = slider.findColour(Skin::kWidgetPrimaryDisabled, true);
 

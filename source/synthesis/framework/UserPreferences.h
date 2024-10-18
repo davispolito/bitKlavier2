@@ -61,4 +61,11 @@ private:
         //juce::NullCheckedInvocation::invoke(onSkinChange, skin);
     }
 };
+namespace ProjectInfo
+{
+    const char* const  projectName    = "bitKlavier2 Demo";
+    const char* const  companyName    = "bitKlavier2 Company";
+    const char* const  versionString  = "0.0.1";
+    const int          versionNumber  =  0x1;
+}
 #endif //BITKLAVIER2_USERPREFERENCES_H

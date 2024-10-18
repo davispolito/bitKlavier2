@@ -16,7 +16,7 @@
 #include "synth_slider.h"
 
 // Definition for the TempoPreparation constructor.  It takes three parameters: a pointer to
-// a Tempo Processor p, a ValueTree v, and a reference to an OpenGlWrapper object.  Initializes
+// a Tempo Processor p, a juce::ValueTree v, and a reference to an OpenGlWrapper object.  Initializes
 // the base class members and private TempoPreparation member proc with an initialization list.
 TempoPreparation::TempoPreparation (std::unique_ptr<TempoProcessor> p,
                                               juce::ValueTree v, OpenGlWrapper& um) :
@@ -77,7 +77,7 @@ void TempoPreparation::TempoPopup::renderOpenGlComponents(OpenGlWrapper& open_gl
         if (open_gl_component->isVisible() && !open_gl_component->isAlwaysOnTop()) {
             open_gl_component->render(open_gl, animate);
             GLenum gl =  juce::gl::glGetError();
-            //DBG(String(gl));
+            //DBG(juce::String(gl));
             _ASSERT(gl == juce::gl::GL_NO_ERROR);
         }
     }

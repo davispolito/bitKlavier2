@@ -4,18 +4,17 @@
 
 #include "BKPort.h"
 #include "paths.h"
-#include "synth_gui_interface.h"
 #include "Identifiers.h"
 
 #include "look_and_feel/default_look_and_feel.h"
-BKPort::BKPort(SynthGuiInterface* _parent, ValueTree v) :
-Button("port"),
+BKPort::BKPort( juce::ValueTree v) :
+juce::Button("port"),
 state(v),
 image_component_(new OpenGlImageComponent())
 
 {
     setLookAndFeel(DefaultLookAndFeel::instance());
-    pin = AudioProcessorGraph::NodeAndChannel{VariantConverter<juce::AudioProcessorGraph::NodeID>::fromVar(v.getProperty(IDs::nodeID)), v.getProperty(IDs::chIdx)};
+    pin = juce::AudioProcessorGraph::NodeAndChannel{juce::VariantConverter<juce::AudioProcessorGraph::NodeID>::fromVar(v.getProperty(IDs::nodeID)), v.getProperty(IDs::chIdx)};
 
     isInput.referTo(v, IDs::isIn, nullptr);
     setInterceptsMouseClicks(true, true);
@@ -27,7 +26,7 @@ image_component_(new OpenGlImageComponent())
 
 //    if (auto node = _parent->getSynth()->getNodeForId(pin.nodeID))
 //    {
-//        String tip;
+//        juce::String tip;
 //
 //        if (pin.isMIDI())
 //        {
@@ -40,17 +39,17 @@ image_component_(new OpenGlImageComponent())
 //            auto channel = processor.getOffsetInBusBufferForAbsoluteChannelIndex (isInput, pin.channelIndex, busIdx);
 //
 //            if (auto* bus = processor.getBus (isInput, busIdx))
-//                tip = bus->getName() + ": " + AudioChannelSet::getAbbreviatedChannelTypeName (bus->getCurrentLayout().getTypeOfChannel (channel));
+//                tip = bus->getName() + ": " + juce::AudioChannelSet::getAbbreviatedChannelTypeName (bus->getCurrentLayout().getTypeOfChannel (channel));
 //            else
 //                tip = (isInput ? "Main Input: "
-//                               : "Main Output: ") + String (pin.channelIndex + 1);
+//                               : "Main Output: ") + juce::String (pin.channelIndex + 1);
 //
 //        }
 
 //        setTooltip (tip);
 //    }
 }
-//void BKPort::mouseDown(const MouseEvent& e)
+//void BKPort::mouseDown(const juce::MouseEvent& e)
 //{
 //    //getParentComponent()->mouseDown(e);]
 //    for(auto listener : listeners_)
@@ -60,22 +59,21 @@ image_component_(new OpenGlImageComponent())
 //    DBG("Pdown");
 //}
 //
-//void BKPort::mouseEnter(const MouseEvent& e)
+//void BKPort::mouseEnter(const juce::MouseEvent& e)
 //{
 //    //getParentComponent()->mouseDown(e);
 ////    DBG("Popraat");
 //}
 
 
-//void BKPort::mouseDoubleClick(const MouseEvent& e)
+//void BKPort::mouseDoubleClick(const juce::MouseEvent& e)
 //{
 //
 //}
 
-void BKPort::mouseDown (const MouseEvent& e)
+void BKPort::mouseDown (const juce::MouseEvent& e)
 {
-    DBG("borp");
-    AudioProcessorGraph::NodeAndChannel dummy { {}, 0 };
+    juce::AudioProcessorGraph::NodeAndChannel dummy { {}, 0 };
     for (auto listener: listeners_)
     {
         listener->beginConnectorDrag(isInput ? dummy : pin,
@@ -85,13 +83,13 @@ void BKPort::mouseDown (const MouseEvent& e)
 
 }
 
-void BKPort::mouseDrag (const MouseEvent& e)
+void BKPort::mouseDrag (const juce::MouseEvent& e)
 {
     for (auto listener : listeners_)
         listener->dragConnector (e);
 }
 
-void BKPort::mouseUp (const MouseEvent& e)
+void BKPort::mouseUp (const juce::MouseEvent& e)
 {
     for (auto listener : listeners_)
         listener->endDraggingConnector (e);

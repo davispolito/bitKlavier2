@@ -4,18 +4,17 @@
 
 #ifndef BITKLAVIER2_CONSTRUCTIONSITE_H
 #define BITKLAVIER2_CONSTRUCTIONSITE_H
-#include  "draggable_component.h"
-#include "common.h"
 #include "Preparations/PreparationSection.h"
 #include "PreparationSelector.h"
 #include "Cable/CableView.h"
-
+#include "templates/Factory.h"
+#include "common.h"
 class SynthGuiInterface;
 typedef Loki::Factory<PreparationSection, int,  juce::ValueTree,  SynthGuiInterface*> PreparationFactory;
 class ConstructionSite : public SynthSection,
-                         public tracktion::engine::ValueTreeObjectList<PreparationSection>,private KeyListener,
-                         public DragAndDropContainer,
-                         public ChangeListener
+                         public tracktion::engine::ValueTreeObjectList<PreparationSection>,private juce::KeyListener,
+                         public juce::DragAndDropContainer,
+                         public juce::ChangeListener
 
 {
 public:
@@ -25,10 +24,10 @@ public:
 
     void redraw(void);
 
-    bool keyPressed(const KeyPress &k, Component *c) override;
-    void itemIsBeingDragged(BKItem* thisItem, const MouseEvent& e);
+    bool keyPressed(const juce::KeyPress &k, juce::Component *c) override;
+    void itemIsBeingDragged(BKItem* thisItem, const juce::MouseEvent& e);
 
-    void paintBackground(Graphics& g) override;
+    void paintBackground(juce::Graphics& g) override;
 
     void addItem(bitklavier::BKPreparationType type, bool center = false);
 
@@ -60,7 +59,7 @@ public:
     {
         for (auto* fc : objects)
         {
-            // NB: A Visual Studio optimiser error means we have to put this Component* in a local
+            // NB: A Visual Studio optimiser error means we have to put this juce::Component* in a local
             // variable before trying to cast it, or it gets mysteriously optimised away..
             auto* comp = fc->getComponentAt (pos.toInt() - fc->getPosition());
 
@@ -70,7 +69,7 @@ public:
 
         return nullptr;
     }
-   PreparationSection* getComponentForPlugin (AudioProcessorGraph::NodeID nodeID) const
+   PreparationSection* getComponentForPlugin (juce::AudioProcessorGraph::NodeID nodeID) const
     {
         for (auto* fc : objects)
             if (fc->pluginID == nodeID)
@@ -82,11 +81,11 @@ public:
    juce::Point<float> mouse;
     OpenGlWrapper &open_gl;
 
-    ValueTree getState()
+    juce::ValueTree getState()
     {
         return parent;
     }
-    void copyValueTree(const ValueTree& vt){
+    void copyValueTree(const juce::ValueTree& vt){
         parent.copyPropertiesFrom(vt,nullptr);
     }
 private:
@@ -98,7 +97,7 @@ private:
 
     bool edittingComment;
 
-    OwnedArray<HashMap<int,int>> pastemap;
+    juce::OwnedArray<juce::HashMap<int,int>> pastemap;
     friend class CableView;
 
 
@@ -113,26 +112,26 @@ private:
 
 
     PreparationSelector preparationSelector;
-    LassoComponent<PreparationSection*> selectorLasso;
+    juce::LassoComponent<PreparationSection*> selectorLasso;
 
     friend class CableView;
     CableView cableView;
 
-    UndoManager &undo;
+    juce::UndoManager &undo;
 
     void draw(void);
 
-    void prepareItemDrag(BKItem* item, const MouseEvent& e, bool center);
+    void prepareItemDrag(BKItem* item, const juce::MouseEvent& e, bool center);
 
     void resized() override;
 
-    void mouseDown (const MouseEvent& eo) override;
+    void mouseDown (const juce::MouseEvent& eo) override;
 
-    void mouseUp (const MouseEvent& eo) override;
+    void mouseUp (const juce::MouseEvent& eo) override;
 
-    void mouseDrag (const MouseEvent& e) override;
+    void mouseDrag (const juce::MouseEvent& e) override;
 
-    void mouseMove (const MouseEvent& e) override;
+    void mouseMove (const juce::MouseEvent& e) override;
 
     void deleteItem (BKItem* item);
 
@@ -149,10 +148,10 @@ private:
                 juce::MemoryBlock data;
                 obj->getProcessor()->getStateInformation(data);
                 auto xml = juce::parseXML(data.toString());
-//auto xml = AudioProcessor::getXmlF(data.getData(), (int)data.getSize());
+//auto xml = juce::AudioProcessor::getXmlF(data.getData(), (int)data.getSize());
                 if (obj->state.getChild(0).isValid())
-                    obj->state.getChild(0).copyPropertiesFrom(ValueTree::fromXml(*xml),nullptr);
-                  //  state.addChild(ValueTree::fromXml(*xml),0,nullptr);
+                    obj->state.getChild(0).copyPropertiesFrom(juce::ValueTree::fromXml(*xml),nullptr);
+                  //  state.addChild(juce::ValueTree::fromXml(*xml),0,nullptr);
             }
             v.removeProperty("sync", nullptr);
         }

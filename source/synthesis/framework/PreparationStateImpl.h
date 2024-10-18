@@ -27,10 +27,10 @@ namespace bitklavier
         /** Constructs the state and adds all the state parameters to the given processor */
         explicit PreparationStateImpl (juce::AudioProcessor& processor, juce::UndoManager* um = nullptr);
 
-        /** Serializes the plugin state to the given MemoryBlock */
+        /** Serializes the plugin state to the given juce::MemoryBlock */
         void serialize (juce::MemoryBlock& data) const override;
 
-        /** Deserializes the plugin state from the given MemoryBlock */
+        /** Deserializes the plugin state from the given juce::MemoryBlock */
         void deserialize (const juce::MemoryBlock& data) override;
 
         /** Serializer */

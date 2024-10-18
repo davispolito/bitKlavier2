@@ -26,7 +26,7 @@
 
 namespace {
   template<class Comparator>
-  void sortSelectionArray(Array<File>& selection_array) {
+  void sortSelectionArray(juce::Array<juce::File>& selection_array) {
     Comparator comparator;
     selection_array.sort(comparator, true);
   }
@@ -35,22 +35,22 @@ namespace {
   const std::string kStoreUrl = "";
   constexpr int kMaxRootFiles = 8000;
 
-  bool isAcceptableRoot(const File& file) {
-    std::list<File> folders;
+  bool isAcceptableRoot(const juce::File& file) {
+    std::list<juce::File> folders;
     folders.push_back(file);
     int num_files = 0;
 
     while (!folders.empty()) {
-      File current_file = folders.back();
+      juce::File current_file = folders.back();
       folders.pop_back();
 
-      num_files += current_file.getNumberOfChildFiles(File::findFiles);
+      num_files += current_file.getNumberOfChildFiles(juce::File::findFiles);
       if (num_files > kMaxRootFiles)
         return false;
 
-      Array<File> sub_folders = current_file.findChildFiles(File::findDirectories, false);
+      juce::Array<juce::File> sub_folders = current_file.findChildFiles(juce::File::findDirectories, false);
 
-      for (const File& folder : sub_folders)
+      for (const juce::File& folder : sub_folders)
         folders.push_back(folder);
 
     }
@@ -58,8 +58,8 @@ namespace {
   }
 
   void showAddRootWarning() {
-    String error = String("Folder has too many files to add to browser. Max: ") + String(kMaxRootFiles);
-    NativeMessageBox::showMessageBoxAsync(AlertWindow::WarningIcon, "Error Adding Folder", error);
+    juce::String error = juce::String("Folder has too many files to add to browser. Max: ") + juce::String(kMaxRootFiles);
+    juce::NativeMessageBox::showMessageBoxAsync(juce::AlertWindow::WarningIcon, "Error Adding Folder", error);
   }
 }
 
@@ -71,14 +71,14 @@ PopupDisplay::PopupDisplay() : SynthSection("Popup Display"), text_(new PlainTex
   addOpenGlComponent(border_);
   addOpenGlComponent(text_);
 
-  text_->setJustification(Justification::centred);
+  text_->setJustification(juce::Justification::centred);
   text_->setFontType(PlainTextComponent::kLight);
 
   setSkinOverride(Skin::kPopupBrowser);
 }
 
 void PopupDisplay::resized() {
-  Rectangle<int> bounds = getLocalBounds();
+  juce::Rectangle<int> bounds = getLocalBounds();
   int rounding = findValue(Skin::kBodyRounding);
 
   body_->setBounds(bounds);
@@ -94,13 +94,13 @@ void PopupDisplay::resized() {
   text_->setColor(findColour(Skin::kBodyText, true));
 }
 
-void PopupDisplay::setContent(const std::string& text, Rectangle<int> bounds,
-                              BubbleComponent::BubblePlacement placement) {
+void PopupDisplay::setContent(const std::string& text, juce::Rectangle<int> bounds,
+                              juce::BubbleComponent::BubblePlacement placement) {
   static constexpr int kHeight = 24;
 
   int height = kHeight * size_ratio_;
   int mult = getPixelMultiple();
-  Font font = Fonts::instance()->proportional_light().withPointHeight(height * 0.5f * mult);
+  juce::Font font = Fonts::instance()->proportional_light().withPointHeight(height * 0.5f * mult);
   int padding = height / 4;
   int buffer = padding * 2 + 2;
   int width = (font.getStringWidth(text) / getPixelMultiple()) + buffer;
@@ -108,13 +108,13 @@ void PopupDisplay::setContent(const std::string& text, Rectangle<int> bounds,
   int middle_x = bounds.getX() + bounds.getWidth() / 2;
   int middle_y = bounds.getY() + bounds.getHeight() / 2;
 
-  if (placement == BubbleComponent::above)
+  if (placement == juce::BubbleComponent::above)
     setBounds(middle_x - width / 2, bounds.getY() - height, width, height);
-  else if (placement == BubbleComponent::below)
+  else if (placement == juce::BubbleComponent::below)
     setBounds(middle_x - width / 2, bounds.getBottom(), width, height);
-  else if (placement == BubbleComponent::left)
+  else if (placement == juce::BubbleComponent::left)
     setBounds(bounds.getX() - width, middle_y - height / 2, width, height);
-  else if (placement == BubbleComponent::right)
+  else if (placement == juce::BubbleComponent::right)
     setBounds(bounds.getRight(), middle_y - height / 2, width, height);
 
   text_->setText(text);
@@ -137,7 +137,7 @@ PopupList::PopupList() : SynthSection("Popup List"),
 }
 
 void PopupList::resized() {
-  Colour lighten = findColour(Skin::kLightenScreen, true);
+  juce::Colour lighten = findColour(Skin::kLightenScreen, true);
   scroll_bar_->setColor(lighten);
 
   if (getScrollableRange() > getHeight()) {
@@ -174,7 +174,7 @@ int PopupList::getRowFromPosition(float mouse_position) {
 int PopupList::getBrowseWidth() {
   static constexpr int kMinWidth = 150;
 
-  Font font = getFont();
+  juce::Font font = getFont();
   int max_width = kMinWidth * size_ratio_;
   int buffer = getTextPadding() * 2 + 2;
   for (int i = 0; i < selections_.size(); ++i)
@@ -183,25 +183,25 @@ int PopupList::getBrowseWidth() {
   return max_width;
 }
 
-void PopupList::mouseMove(const MouseEvent& e) {
+void PopupList::mouseMove(const juce::MouseEvent& e) {
   int row = getRowFromPosition(e.position.y);
   if (row >= selections_.size() || row < 0)
     row = -1;
   hovered_ = row;
 }
 
-void PopupList::mouseDrag(const MouseEvent& e) {
+void PopupList::mouseDrag(const juce::MouseEvent& e) {
   int row = getRowFromPosition(e.position.y);
   if (e.position.x < 0 || e.position.x > getWidth() || row >= selections_.size() || row < 0)
     row = -1;
   hovered_ = row;
 }
 
-void PopupList::mouseExit(const MouseEvent& e) {
+void PopupList::mouseExit(const juce::MouseEvent& e) {
   hovered_ = -1;
 }
 
-int PopupList::getSelection(const MouseEvent& e) {
+int PopupList::getSelection(const juce::MouseEvent& e) {
   float click_y_position = e.position.y;
   int row = getRowFromPosition(click_y_position);
   if (row < selections_.size() && row >= 0)
@@ -210,14 +210,14 @@ int PopupList::getSelection(const MouseEvent& e) {
   return -1;
 }
 
-void PopupList::mouseUp(const MouseEvent& e) {
+void PopupList::mouseUp(const juce::MouseEvent& e) {
   if (e.position.x < 0 || e.position.x > getWidth())
     return;
 
   select(getSelection(e));
 }
 
-void PopupList::mouseDoubleClick(const MouseEvent& e) {
+void PopupList::mouseDoubleClick(const juce::MouseEvent& e) {
   int selection = getSelection(e);
   if (selection != selected_ || selection < 0)
     return;
@@ -241,7 +241,7 @@ void PopupList::select(int selection) {
 
 void PopupList::initOpenGlComponents(OpenGlWrapper& open_gl) {
   rows_->init(open_gl);
-  rows_->setColor(Colours::white);
+  rows_->setColor(juce::Colours::white);
 
   highlight_->init(open_gl);
   hover_->init(open_gl);
@@ -256,11 +256,11 @@ void PopupList::redoImage() {
   int row_height = getRowHeight() * mult;
   int image_width = getWidth() * mult;
 
-  Colour text_color = findColour(Skin::kTextComponentText, true);
-  Colour lighten = findColour(Skin::kLightenScreen, true);
+  juce::Colour text_color = findColour(Skin::kTextComponentText, true);
+  juce::Colour lighten = findColour(Skin::kLightenScreen, true);
   int image_height = std::max(row_height * selections_.size(), getHeight());
-  Image rows_image(Image::ARGB, image_width, image_height, true);
-  Graphics g(rows_image);
+  juce::Image rows_image(juce::Image::ARGB, image_width, image_height, true);
+  juce::Graphics g(rows_image);
   g.setColour(text_color);
   g.setFont(getFont());
 
@@ -274,8 +274,8 @@ void PopupList::redoImage() {
     }
     else {
       g.setColour(text_color);
-      String name = selections_.items[i].name;
-      g.drawText(name, padding, row_height * i, width, row_height, Justification::centredLeft, true);
+      juce::String name = selections_.items[i].name;
+      g.drawText(name, padding, row_height * i, width, row_height, juce::Justification::centredLeft, true);
     }
   }
   rows_->setOwnImage(rows_image);
@@ -295,7 +295,7 @@ void PopupList::moveQuadToRow(OpenGlQuad& quad, int row) {
 }
 
 void PopupList::renderOpenGlComponents(OpenGlWrapper& open_gl, bool animate) {
-  Rectangle<int> view_bounds(getLocalBounds());
+  juce::Rectangle<int> view_bounds(getLocalBounds());
   OpenGlComponent::setViewPort(this, view_bounds, open_gl);
 
   float image_width = bitklavier::utils::nextPowerOfTwo(getWidth());
@@ -340,7 +340,7 @@ void PopupList::resetScrollPosition() {
   setScrollBarRange();
 }
 
-void PopupList::mouseWheelMove(const MouseEvent& e, const MouseWheelDetails& wheel) {
+void PopupList::mouseWheelMove(const juce::MouseEvent& e, const juce::MouseWheelDetails& wheel) {
   view_position_ -= wheel.deltaY * kScrollSensitivity;
   view_position_ = std::max(0.0f, view_position_);
   float scaled_height = getHeight();
@@ -349,7 +349,7 @@ void PopupList::mouseWheelMove(const MouseEvent& e, const MouseWheelDetails& whe
   setScrollBarRange();
 }
 
-void PopupList::scrollBarMoved(ScrollBar* scroll_bar, double range_start) {
+void PopupList::scrollBarMoved(juce::ScrollBar* scroll_bar, double range_start) {
   view_position_ = range_start;
 }
 
@@ -358,7 +358,7 @@ void PopupList::setScrollBarRange() {
 
   float scaled_height = getHeight();
   scroll_bar_->setRangeLimits(0.0f, getScrollableRange());
-  scroll_bar_->setCurrentRange(getViewPosition(), scaled_height, dontSendNotification);
+  scroll_bar_->setCurrentRange(getViewPosition(), scaled_height, juce::NotificationType::dontSendNotification);
   scroll_bar_->setSingleStepSize(scroll_bar_->getHeight() * kScrollStepRatio);
   scroll_bar_->cancelPendingUpdate();
 }
@@ -405,7 +405,7 @@ int PopupList::getScrollableRange() {
 //
 //  loadBrowserCache(cache_position_, cache_position_ + kNumCachedRows);
 //
-//  Colour lighten = findColour(Skin::kLightenScreen, true);
+//  juce::Colour lighten = findColour(Skin::kLightenScreen, true);
 //  scroll_bar_->setColor(lighten);
 //}
 //
@@ -415,7 +415,7 @@ int PopupList::getScrollableRange() {
 //  setScrollBarRange();
 //}
 //
-//void SelectionList::setSelections(Array<File> selections) {
+//void SelectionList::setSelections(juce::Array<juce::File> selections) {
 //  selections_ = std::move(selections);
 //  sort();
 //  redoCache();
@@ -427,7 +427,7 @@ int PopupList::getScrollableRange() {
 //  setScrollBarRange();
 //}
 //
-//void SelectionList::mouseWheelMove(const MouseEvent& e, const MouseWheelDetails& wheel) {
+//void SelectionList::mouseWheelMove(const juce::MouseEvent& e, const juce::MouseWheelDetails& wheel) {
 //  view_position_ -= wheel.deltaY * kScrollSensitivity;
 //  view_position_ = std::max(0.0f, view_position_);
 //  float scaled_height = getHeight();
@@ -441,7 +441,7 @@ int PopupList::getScrollableRange() {
 //  return floorf((mouse_position + getViewPosition()) / getRowHeight());
 //}
 //
-//void SelectionList::mouseMove(const MouseEvent& e) {
+//void SelectionList::mouseMove(const juce::MouseEvent& e) {
 //  hovered_ = getRowFromPosition(e.position.y);
 //  if (hovered_ >= filtered_selections_.size())
 //    hovered_ = -1;
@@ -451,7 +451,7 @@ int PopupList::getScrollableRange() {
 //  x_area_ = x >= 0 && x < row_height;
 //}
 //
-//void SelectionList::mouseExit(const MouseEvent& e) {
+//void SelectionList::mouseExit(const juce::MouseEvent& e) {
 //  hovered_ = -1;
 //}
 //
@@ -462,32 +462,32 @@ int PopupList::getScrollableRange() {
 //  filtered_selections_[result].revealToUser();
 //}
 //
-//void SelectionList::menuClick(const MouseEvent& e) {
+//void SelectionList::menuClick(const juce::MouseEvent& e) {
 //  float click_y_position = e.position.y;
 //  int row = getRowFromPosition(click_y_position);
 //
 //  if (row >= 0 && hovered_ >= 0) {
 //    PopupItems options;
-//    options.addItem(hovered_, "Open File Location");
+//    options.addItem(hovered_, "Open juce::File Location");
 //    showPopupSelector(this, e.getPosition(), options, [=](int selection) { respondToMenuCallback(selection); });
 //  }
 //}
 //
-//File SelectionList::getSelection(const MouseEvent& e) {
+//juce::File SelectionList::getSelection(const juce::MouseEvent& e) {
 //  float click_y_position = e.position.y;
 //  int row = getRowFromPosition(click_y_position);
 //  if (row < filtered_selections_.size() && row >= 0)
 //    return filtered_selections_[row];
 //
-//  return File();
+//  return juce::File();
 //}
 //
-//void SelectionList::leftClick(const MouseEvent& e) {
+//void SelectionList::leftClick(const juce::MouseEvent& e) {
 //  float click_x_position = e.position.x;
 //  int star_right = getRowHeight() + getIconPadding();
-//  File selection = getSelection(e);
+//  juce::File selection = getSelection(e);
 //  if (!selection.exists() && selection != getFavoritesFile() && selection != getAllFile()) {
-//    if (selection.getFileName() == String(kAddFolderName))
+//    if (selection.getFileName() == juce::String(kAddFolderName))
 //      addAdditionalFolder();
 //    return;
 //  }
@@ -500,17 +500,17 @@ int PopupList::getScrollableRange() {
 //    select(selection);
 //}
 //
-//void SelectionList::mouseDown(const MouseEvent& e) {
+//void SelectionList::mouseDown(const juce::MouseEvent& e) {
 //  if (e.mods.isPopupMenu())
 //    menuClick(e);
 //  else
 //    leftClick(e);
 //}
 //
-//void SelectionList::mouseDoubleClick(const MouseEvent& e) {
+//void SelectionList::mouseDoubleClick(const juce::MouseEvent& e) {
 //  float click_x_position = e.position.x;
 //  int star_right = getRowHeight() + getIconPadding();
-//  File selection = getSelection(e);
+//  juce::File selection = getSelection(e);
 //  if (!selection.exists())
 //    return;
 //
@@ -522,22 +522,22 @@ int PopupList::getScrollableRange() {
 //}
 //
 //void SelectionList::addAdditionalFolder() {
-//  FileChooser open_box("Add Folder", File());
+//  juce::FileChooser open_box("Add Folder", juce::File());
 ////  if (open_box.browseForDirectory()) {
-////    File result = open_box.getResult();
+////    juce::File result = open_box.getResult();
 ////    if (result.exists()) {
 ////      if (isAcceptableRoot(result)) {
 ////        std::vector<std::string> roots; //= LoadSave::getAdditionalFolders(additional_roots_name_);
 ////        for (const std::string& root : roots) {
-////          if (result == File(root)) {
-////            NativeMessageBox::showMessageBoxAsync(AlertWindow::WarningIcon, "Error Adding Folder",
-////                                                  String("Folder already added"));
+////          if (result == juce::File(root)) {
+////            juce::NativeMessageBox::showMessageBoxAsync(juce::AlertWindow::WarningIcon, "Error Adding Folder",
+////                                                  juce::String("Folder already added"));
 ////            return;
 ////          }
 ////        }
-////        if (selections_.contains(File(result))) {
-////          NativeMessageBox::showMessageBoxAsync(AlertWindow::WarningIcon, "Error Adding Folder",
-////                                                String("Folder already added"));
+////        if (selections_.contains(juce::File(result))) {
+////          juce::NativeMessageBox::showMessageBoxAsync(juce::AlertWindow::WarningIcon, "Error Adding Folder",
+////                                                juce::String("Folder already added"));
 ////          return;
 ////        }
 ////        additional_roots_.add(result);
@@ -552,7 +552,7 @@ int PopupList::getScrollableRange() {
 ////  }
 //}
 //
-//void SelectionList::removeAdditionalFolder(const File& folder) {
+//void SelectionList::removeAdditionalFolder(const juce::File& folder) {
 ////  additional_roots_.removeFirstMatchingValue(folder);
 ////  std::vector<std::string> roots = LoadSave::getAdditionalFolders(additional_roots_name_);
 ////  std::string path = folder.getFullPathName().toStdString();
@@ -565,7 +565,7 @@ int PopupList::getScrollableRange() {
 ////  redoCache();
 //}
 //
-//void SelectionList::select(const File& selection) {
+//void SelectionList::select(const juce::File& selection) {
 //  if (selection.exists() && selection.isDirectory() && selection == selected_) {
 //    toggleOpenFolder(selection);
 //    return;
@@ -586,14 +586,14 @@ int PopupList::getScrollableRange() {
 //  }
 //}
 //
-//void SelectionList::selectIcon(const File& selection) {
+//void SelectionList::selectIcon(const juce::File& selection) {
 //  if (selection.isDirectory())
 //    select(selection);
 //  else
 //    toggleFavorite(selection);
 //}
 //
-//void SelectionList::toggleFavorite(const File& selection) {
+//void SelectionList::toggleFavorite(const juce::File& selection) {
 //  if (selection == getFavoritesFile() || selection == getAllFile()) {
 //    select(selection);
 //    return;
@@ -603,10 +603,10 @@ int PopupList::getScrollableRange() {
 //  redoCache();
 //}
 //
-//void SelectionList::toggleOpenFolder(const File& selection) {
+//void SelectionList::toggleOpenFolder(const juce::File& selection) {
 //  std::string path = selection.getFullPathName().toStdString();
-//  Array<File> children;
-//  selection.findChildFiles(children, File::findDirectories, false);
+//  juce::Array<juce::File> children;
+//  selection.findChildFiles(children, juce::File::findDirectories, false);
 //  if (open_folders_.count(path))
 //    open_folders_.erase(path);
 //  else if (!children.isEmpty())
@@ -615,7 +615,7 @@ int PopupList::getScrollableRange() {
 //  redoCache();
 //}
 //
-//void SelectionList::scrollBarMoved(ScrollBar* scroll_bar, double range_start) {
+//void SelectionList::scrollBarMoved(juce::ScrollBar* scroll_bar, double range_start) {
 //  view_position_ = range_start;
 //  viewPositionChanged();
 //}
@@ -639,17 +639,17 @@ int PopupList::getScrollableRange() {
 //  loadBrowserCache(position, position + kNumCachedRows);
 //}
 //
-//int SelectionList::getFolderDepth(const File& file) {
+//int SelectionList::getFolderDepth(const juce::File& file) {
 //  std::string parent_string = file.getParentDirectory().getFullPathName().toStdString();
 //  if (open_folders_.count(parent_string))
 //    return open_folders_[parent_string] + 1;
 //  return 0;
 //}
 //
-//void SelectionList::addSubfolderSelections(const File& selection, std::vector<File>& selections) {
-//  Array<File> children;
-//  selection.findChildFiles(children, File::findDirectories, false);
-//  for (const File& child : children) {
+//void SelectionList::addSubfolderSelections(const juce::File& selection, std::vector<juce::File>& selections) {
+//  juce::Array<juce::File> children;
+//  selection.findChildFiles(children, juce::File::findDirectories, false);
+//  for (const juce::File& child : children) {
 //    selections.push_back(child);
 //    if (open_folders_.count(child.getFullPathName().toStdString()))
 //      addSubfolderSelections(child, selections);
@@ -662,16 +662,16 @@ int PopupList::getScrollableRange() {
 ////  if (!name.empty()) {
 ////    std::vector<std::string> roots = LoadSave::getAdditionalFolders(additional_roots_name_);
 ////    for (const std::string& root : roots) {
-////      File file(root);
+////      juce::File file(root);
 ////      if (file.exists())
 ////        additional_roots_.add(file);
 ////    }
 ////  }
 //}
 //
-//void SelectionList::filter(const String& filter_string) {
+//void SelectionList::filter(const juce::String& filter_string) {
 //  filter_string_ = filter_string.toLowerCase();
-//  StringArray tokens;
+//  juce::StringArray tokens;
 //  tokens.addTokens(filter_string_, " ", "");
 //  filtered_selections_.clear();
 //  if (favorites_option_) {
@@ -679,15 +679,15 @@ int PopupList::getScrollableRange() {
 //    filtered_selections_.push_back(getFavoritesFile());
 //  }
 //
-//  Array<File> all_selections = selections_;
+//  juce::Array<juce::File> all_selections = selections_;
 //  all_selections.addArray(additional_roots_);
 //
-//  for (const File& selection : all_selections) {
+//  for (const juce::File& selection : all_selections) {
 //    bool match = true;
 //    if (tokens.size()) {
-//      String name = selection.getFileNameWithoutExtension().toLowerCase();
+//      juce::String name = selection.getFileNameWithoutExtension().toLowerCase();
 //
-//      for (const String& token : tokens) {
+//      for (const juce::String& token : tokens) {
 //        if (!name.contains(token))
 //          match = false;
 //      }
@@ -700,12 +700,12 @@ int PopupList::getScrollableRange() {
 //  }
 //
 //  if (!additional_roots_name_.empty())
-//    filtered_selections_.push_back(File::getCurrentWorkingDirectory().getChildFile("_").getChildFile(kAddFolderName));
+//    filtered_selections_.push_back(juce::File::getCurrentWorkingDirectory().getChildFile("_").getChildFile(kAddFolderName));
 //  num_view_selections_ = static_cast<int>(filtered_selections_.size());
 //
 //  auto found = std::find(filtered_selections_.begin(), filtered_selections_.end(), selected_);
 //  if (found == filtered_selections_.end())
-//    selected_ = File();
+//    selected_ = juce::File();
 //}
 //
 //int SelectionList::getSelectedIndex() {
@@ -744,7 +744,7 @@ int PopupList::getScrollableRange() {
 //  for (OpenGlImage& row : rows_) {
 //    row.setScissor(true);
 //    row.init(open_gl);
-//    row.setColor(Colours::white);
+//    row.setColor(juce::Colours::white);
 //  }
 //
 //  highlight_.init(open_gl);
@@ -781,38 +781,38 @@ int PopupList::getScrollableRange() {
 //  int name_width = image_width - name_x;
 //
 //  end_index = std::min(static_cast<int>(filtered_selections_.size()), end_index);
-//  Font font = Fonts::instance()->proportional_light().withPointHeight(row_height * 0.55f);
+//  juce::Font font = Fonts::instance()->proportional_light().withPointHeight(row_height * 0.55f);
 //
-//  Path star = Paths::star();
-//  //Path folder = Paths::folder();
+//  juce::Path star = Paths::star();
+//  //juce::Path folder = Paths::folder();
 //  float star_draw_width = row_height * 0.8f;
 //  float star_y = (row_height - star_draw_width) / 2.0f;
-//  Rectangle<float> star_bounds(icon_x + (icon_width - star_draw_width) / 2.0f, star_y,
+//  juce::Rectangle<float> star_bounds(icon_x + (icon_width - star_draw_width) / 2.0f, star_y,
 //                               star_draw_width, star_draw_width);
 //  star.applyTransform(star.getTransformToScaleToFit(star_bounds, true));
 //
 //  float folder_draw_width = row_height * 0.6f;
 //  float folder_y = (row_height - folder_draw_width) / 2.0f;
-//  Rectangle<float> folder_bounds(icon_x + (icon_width - folder_draw_width) / 2.0f, folder_y,
+//  juce::Rectangle<float> folder_bounds(icon_x + (icon_width - folder_draw_width) / 2.0f, folder_y,
 //                                 folder_draw_width, folder_draw_width);
 ////  folder.applyTransform(folder.getTransformToScaleToFit(folder_bounds, true));
-//  PathStrokeType icon_stroke(1.0f, PathStrokeType::curved);
+//  juce::PathStrokeType icon_stroke(1.0f, juce::PathStrokeType::curved);
 //
-//  Colour text_color = findColour(Skin::kTextComponentText, true);
-//  Colour icon_unselected = text_color.withMultipliedAlpha(0.5f);
-//  Colour icon_selected = findColour(Skin::kWidgetPrimary1, true);
+//  juce::Colour text_color = findColour(Skin::kTextComponentText, true);
+//  juce::Colour icon_unselected = text_color.withMultipliedAlpha(0.5f);
+//  juce::Colour icon_selected = findColour(Skin::kWidgetPrimary1, true);
 //
 //  for (int i = start_index; i < end_index; ++i) {
-//    Image row_image(Image::ARGB, image_width, row_height, true);
-//    Graphics g(row_image);
+//    juce::Image row_image(juce::Image::ARGB, image_width, row_height, true);
+//    juce::Graphics g(row_image);
 //
-//    File selection = filtered_selections_[i];
-//    String name = selection.getFileNameWithoutExtension();
+//    juce::File selection = filtered_selections_[i];
+//    juce::String name = selection.getFileNameWithoutExtension();
 //    if (selection.isDirectory()) {
 //      int parents = getFolderDepth(selection);
-//      g.addTransform(AffineTransform::translation(juce::Point<int>(parents * folder_draw_width, 0)));
+//      g.addTransform(juce::AffineTransform::translation(juce::Point<int>(parents * folder_draw_width, 0)));
 //
-//      if (name == String(passthrough_name_))
+//      if (name == juce::String(passthrough_name_))
 //        name = selection.getParentDirectory().getFileNameWithoutExtension();
 //
 //      g.setColour(icon_unselected);
@@ -821,9 +821,9 @@ int PopupList::getScrollableRange() {
 //
 ////      g.strokePath(folder, icon_stroke);
 //    }
-//    else if (selection.getFileName() == String(kAddFolderName)) {
+//    else if (selection.getFileName() == juce::String(kAddFolderName)) {
 ////      g.setColour(icon_unselected);
-////      Path add_folder_path;
+////      juce::Path add_folder_path;
 ////      float dashes[2] = { 4.0f * size_ratio_, 2.0f * size_ratio_ };
 ////      icon_stroke.createDashedStroke(add_folder_path, folder, dashes, 2);
 ////      g.fillPath(add_folder_path);
@@ -841,7 +841,7 @@ int PopupList::getScrollableRange() {
 //
 //    g.setColour(text_color);
 //    g.setFont(font);
-//    g.drawText(name, name_x, 0, name_width - 2 * padding, row_height, Justification::centredLeft, true);
+//    g.drawText(name, name_x, 0, name_width - 2 * padding, row_height, juce::Justification::centredLeft, true);
 //    rows_[i % kNumCachedRows].setOwnImage(row_image);
 //    is_additional_[i % kNumCachedRows] = additional_roots_.contains(selection);
 //  }
@@ -865,7 +865,7 @@ int PopupList::getScrollableRange() {
 //  int view_position = getViewPosition();
 //  float y_offset = 2.0f * view_position / view_height;
 //
-//  Rectangle<int> view_bounds(getLocalBounds());
+//  juce::Rectangle<int> view_bounds(getLocalBounds());
 //  OpenGlComponent::setViewPort(this, view_bounds, open_gl);
 //
 //  float image_width = bitklavier::utils::nextPowerOfTwo(getWidth());
@@ -881,7 +881,7 @@ int PopupList::getScrollableRange() {
 //    float offset = (2.0f * row_height * row) / view_height;
 //    float y = 1.0f + y_offset - offset;
 //
-//    Rectangle<int> row_bounds(0, row_height * row - view_position, getWidth(), row_height);
+//    juce::Rectangle<int> row_bounds(0, row_height * row - view_position, getWidth(), row_height);
 //    OpenGlComponent::setScissorBounds(this, row_bounds, open_gl);
 //
 //    rows_[cache_index].setTopLeft(-1.0f, y);
@@ -906,7 +906,7 @@ int PopupList::getScrollableRange() {
 //    int cache_index = hovered_ % kNumCachedRows;
 //
 //    int scroll_bar_width = kScrollBarWidth * size_ratio_;
-//    Rectangle<int> bounds(getWidth() - row_height - scroll_bar_width, row_height * hovered_ - view_position_,
+//    juce::Rectangle<int> bounds(getWidth() - row_height - scroll_bar_width, row_height * hovered_ - view_position_,
 //                          row_height, row_height);
 //    if (OpenGlComponent::setViewPort(&browse_area_, bounds, open_gl) && is_additional_[cache_index]) {
 //      if (x_area_)
@@ -950,7 +950,7 @@ SinglePopupSelector::SinglePopupSelector() : SynthSection("Popup Selector"),
 void SinglePopupSelector::resized() {
   SynthSection::resized();
 
-  Rectangle<int> bounds = getLocalBounds();
+  juce::Rectangle<int> bounds = getLocalBounds();
   int rounding = findValue(Skin::kBodyRounding);
   popup_list_->setBounds(1, rounding, getWidth() - 2, getHeight() - 2 * rounding);
 
@@ -964,7 +964,7 @@ void SinglePopupSelector::resized() {
   border_->setColor(findColour(Skin::kBorder, true));
 }
 
-void SinglePopupSelector::setPosition(juce::Point<int> position, Rectangle<int> bounds) {
+void SinglePopupSelector::setPosition(juce::Point<int> position, juce::Rectangle<int> bounds) {
   int rounding = findValue(Skin::kBodyRounding);
   int width = popup_list_->getBrowseWidth();
   int height = popup_list_->getBrowseHeight() + 2 * rounding;
@@ -1007,7 +1007,7 @@ DualPopupSelector::DualPopupSelector() : SynthSection("Dual Popup Selector"),
 void DualPopupSelector::resized() {
   SynthSection::resized();
 
-  Rectangle<int> bounds = getLocalBounds();
+  juce::Rectangle<int> bounds = getLocalBounds();
   int rounding = findValue(Skin::kBodyRounding);
   int height = getHeight() - 2 * rounding;
   left_list_->setBounds(1, rounding, getWidth() / 2 - 2, height);
@@ -1024,12 +1024,12 @@ void DualPopupSelector::resized() {
 
   divider_->setBounds(getWidth() / 2 - 1, 1, 1, getHeight() - 2);
 
-  Colour border = findColour(Skin::kBorder, true);
+  juce::Colour border = findColour(Skin::kBorder, true);
   border_->setColor(border);
   divider_->setColor(border);
 }
 
-void DualPopupSelector::setPosition(juce::Point<int> position, int width, Rectangle<int> bounds) {
+void DualPopupSelector::setPosition(juce::Point<int> position, int width, juce::Rectangle<int> bounds) {
   int rounding = findValue(Skin::kBodyRounding);
   int height = left_list_->getBrowseHeight() + 2 * rounding;
   int x = position.x;
@@ -1115,7 +1115,7 @@ void DualPopupSelector::newSelection(PopupList* list, int id, int index) {
 //  search_box_->addListener(this);
 //  search_box_->setSelectAllWhenFocused(true);
 //  search_box_->setMultiLine(false, false);
-//  search_box_->setJustification(Justification::centredLeft);
+//  search_box_->setJustification(juce::Justification::centredLeft);
 //  addAndMakeVisible(search_box_.get());
 //  addOpenGlComponent(search_box_->getImageComponent());
 //#endif
@@ -1148,20 +1148,20 @@ void DualPopupSelector::newSelection(PopupList* list, int id, int index) {
 //  border_.setRounding(findValue(Skin::kBodyRounding));
 //  border_.setThickness(1.0f, true);
 //
-//  Colour border = findColour(Skin::kBorder, true);
+//  juce::Colour border = findColour(Skin::kBorder, true);
 //  border_.setColor(border);
 //  horizontal_divider_.setColor(border);
 //  vertical_divider_.setColor(border);
 //
-//  Colour empty_color = findColour(Skin::kBodyText, true);
+//  juce::Colour empty_color = findColour(Skin::kBodyText, true);
 //  empty_color = empty_color.withAlpha(0.5f * empty_color.getFloatAlpha());
 //
 //  if (search_box_) {
 //    search_box_->setTextToShowWhenEmpty(TRANS("Search"), empty_color);
-//    search_box_->setColour(CaretComponent::caretColourId, findColour(Skin::kTextEditorCaret, true));
-//    search_box_->setColour(TextEditor::textColourId, findColour(Skin::kBodyText, true));
-//    search_box_->setColour(TextEditor::highlightedTextColourId, findColour(Skin::kBodyText, true));
-//    search_box_->setColour(TextEditor::highlightColourId, findColour(Skin::kTextEditorSelection, true));
+//    search_box_->setColour(juce::CaretComponent::caretColourId, findColour(Skin::kTextEditorCaret, true));
+//    search_box_->setColour(juce::TextEditor::textColourId, findColour(Skin::kBodyText, true));
+//    search_box_->setColour(juce::TextEditor::highlightedTextColourId, findColour(Skin::kBodyText, true));
+//    search_box_->setColour(juce::TextEditor::highlightColourId, findColour(Skin::kTextEditorSelection, true));
 //  }
 //
 //  int selection_list_width = browser_bounds_.getWidth() * kBrowseWidthRatio;
@@ -1188,8 +1188,8 @@ void DualPopupSelector::newSelection(PopupList* list, int id, int index) {
 //  store_button_->setBounds(store_x, y + padding, browser_bounds_.getRight() - store_x - top_height, text_height);
 //  exit_button_->setBounds(x + browser_bounds_.getWidth() - top_height, y, top_height, top_height);
 //
-//  Image image(Image::ARGB, 1, 1, false);
-//  Graphics g(image);
+//  juce::Image image(juce::Image::ARGB, 1, 1, false);
+//  juce::Graphics g(image);
 //  paintOpenGlChildrenBackgrounds(g);
 //}
 //
@@ -1200,15 +1200,15 @@ void DualPopupSelector::newSelection(PopupList* list, int id, int index) {
 //  if (search_box_)
 //    search_box_->setText("");
 //
-//  File selected = folder_list_->selected();
+//  juce::File selected = folder_list_->selected();
 //  if (selected.exists())
 //    newSelection(selected);
 //}
 //
-//void PopupBrowser::newSelection(File selection) {
+//void PopupBrowser::newSelection(juce::File selection) {
 //  if (selection.exists() && selection.isDirectory()) {
-//    Array<File> files;
-//    selection.findChildFiles(files, File::findFiles, true, extensions_);
+//    juce::Array<juce::File> files;
+//    selection.findChildFiles(files, juce::File::findFiles, true, extensions_);
 //    selection_list_->setSelections(files);
 //    selection_list_->resetScrollPosition();
 //  }
@@ -1221,12 +1221,12 @@ void DualPopupSelector::newSelection(PopupList* list, int id, int index) {
 //}
 //
 //void PopupBrowser::allSelected() {
-//  Array<File> files;
-//  Array<File> folders = folder_list_->getSelections();
+//  juce::Array<juce::File> files;
+//  juce::Array<juce::File> folders = folder_list_->getSelections();
 //  folders.addArray(folder_list_->getAdditionalFolders());
-//  for (const File& folder : folders) {
+//  for (const juce::File& folder : folders) {
 //    if (folder.exists() && folder.isDirectory())
-//      folder.findChildFiles(files, File::findFiles, true, extensions_);
+//      folder.findChildFiles(files, juce::File::findFiles, true, extensions_);
 //  }
 //
 //  selection_list_->setSelections(files);
@@ -1234,16 +1234,16 @@ void DualPopupSelector::newSelection(PopupList* list, int id, int index) {
 //}
 //
 //void PopupBrowser::favoritesSelected() {
-////  Array<File> files;
-////  Array<File> folders = folder_list_->getSelections();
+////  juce::Array<juce::File> files;
+////  juce::Array<juce::File> folders = folder_list_->getSelections();
 ////  folders.addArray(folder_list_->getAdditionalFolders());
-////  for (const File& folder : folders) {
+////  for (const juce::File& folder : folders) {
 ////    if (folder.exists() && folder.isDirectory())
-////      folder.findChildFiles(files, File::findFiles, true, extensions_);
+////      folder.findChildFiles(files, juce::File::findFiles, true, extensions_);
 ////  }
-////  Array<File> favorites;
+////  juce::Array<juce::File> favorites;
 ////  std::set<std::string> favorite_lookup = LoadSave::getFavorites();
-////  for (const File& file : files) {
+////  for (const juce::File& file : files) {
 ////    if (favorite_lookup.count(file.getFullPathName().toStdString()))
 ////      favorites.add(file);
 ////  }
@@ -1251,37 +1251,37 @@ void DualPopupSelector::newSelection(PopupList* list, int id, int index) {
 ////  selection_list_->resetScrollPosition();
 //}
 //
-//void PopupBrowser::doubleClickedSelected(File selection) {
+//void PopupBrowser::doubleClickedSelected(juce::File selection) {
 //  if (selection.exists() && !selection.isDirectory())
 //    setVisible(false);
 //}
 //
-//bool PopupBrowser::keyPressed(const KeyPress &key, Component *origin) {
+//bool PopupBrowser::keyPressed(const juce::KeyPress &key, juce::Component *origin) {
 //  if (!isVisible())
 //    return search_box_->hasKeyboardFocus(true);
 //
-//  if (key.getKeyCode() == KeyPress::escapeKey) {
+//  if (key.getKeyCode() == juce::KeyPress::escapeKey) {
 //    setVisible(false);
 //    return true;
 //  }
-//  if (key.getKeyCode() == KeyPress::upKey || key.getKeyCode() == KeyPress::leftKey) {
+//  if (key.getKeyCode() == juce::KeyPress::upKey || key.getKeyCode() == juce::KeyPress::leftKey) {
 //    selection_list_->selectPrev();
 //    return true;
 //  }
-//  if (key.getKeyCode() == KeyPress::downKey || key.getKeyCode() == KeyPress::rightKey) {
+//  if (key.getKeyCode() == juce::KeyPress::downKey || key.getKeyCode() == juce::KeyPress::rightKey) {
 //    selection_list_->selectNext();
 //    return true;
 //  }
 //  return search_box_->hasKeyboardFocus(true);
 //}
 //
-//bool PopupBrowser::keyStateChanged(bool is_key_down, Component *origin) {
+//bool PopupBrowser::keyStateChanged(bool is_key_down, juce::Component *origin) {
 //  if (is_key_down)
 //    return search_box_->hasKeyboardFocus(true);
 //  return false;
 //}
 //
-//void PopupBrowser::closingAreaClicked(PopupClosingArea* closing_area, const MouseEvent& e) {
+//void PopupBrowser::closingAreaClicked(PopupClosingArea* closing_area, const juce::MouseEvent& e) {
 //  if (!browser_bounds_.contains(e.getPosition() + closing_area->getPosition()))
 //    setVisible(false);
 //}
@@ -1296,21 +1296,21 @@ void DualPopupSelector::newSelection(PopupList* list, int id, int index) {
 //void PopupBrowser::checkStoreButton() {
 //  if (owner_) {
 //    std::string author = owner_->getFileAuthor();
-//    String type = folder_list_->getPassthroughFolderName();
+//    juce::String type = folder_list_->getPassthroughFolderName();
 //    store_button_->setText("Get more " + type.toLowerCase().toStdString() + " by " + author);
-//    String cleaned = String(author).removeCharacters(" _.").toLowerCase();
+//    juce::String cleaned = juce::String(author).removeCharacters(" _.").toLowerCase();
 //    store_button_->setVisible(more_author_presets_.count(cleaned.toStdString()));
 //  }
 //}
 //
-//void PopupBrowser::loadPresets(std::vector<File> directories, const String& extensions,
+//void PopupBrowser::loadPresets(std::vector<juce::File> directories, const juce::String& extensions,
 //                               const std::string& passthrough_name, const std::string& additional_folders_name) {
 //  extensions_ = extensions;
 //  if (search_box_)
 //    search_box_->setText("");
 //
-//  Array<File> folders;
-//  for (const File& directory : directories)
+//  juce::Array<juce::File> folders;
+//  for (const juce::File& directory : directories)
 //    folders.add(directory);
 //
 //  folder_list_->setPassthroughFolderName(passthrough_name);
@@ -1320,11 +1320,11 @@ void DualPopupSelector::newSelection(PopupList* list, int id, int index) {
 ////  if (!additional_folders_name.empty()) {
 ////    std::vector<std::string> additional = LoadSave::getAdditionalFolders(additional_folders_name);
 ////    for (const std::string& path : additional)
-////      directories.emplace_back(File(path));
+////      directories.emplace_back(juce::File(path));
 ////  }
 //
-//  Array<File> presets;
-//  selection_list_->setSelected(File());
+//  juce::Array<juce::File> presets;
+//  selection_list_->setSelected(juce::File());
 //  folder_list_->filter("");
 ////  if (!folder_list_->selected().exists()) {
 ////    LoadSave::getAllFilesOfTypeInDirectories(presets, extensions_, directories);
@@ -1353,9 +1353,9 @@ void DualPopupSelector::newSelection(PopupList* list, int id, int index) {
 ////        continue;
 ////
 ////      std::string author_data = pack["Author"];
-////      StringArray authors;
+////      juce::StringArray authors;
 ////      authors.addTokens(author_data, ",", "");
-////      for (const String& author : authors)
+////      for (const juce::String& author : authors)
 ////        more_author_presets_.insert(author.removeCharacters(" ._").toLowerCase().toStdString());
 ////    }
 ////  }
@@ -1370,15 +1370,15 @@ void DualPopupSelector::newSelection(PopupList* list, int id, int index) {
 //  selection_list_->redoCache();
 //}
 //
-//void PopupBrowser::textEditorTextChanged(TextEditor& editor) {
+//void PopupBrowser::textEditorTextChanged(juce::TextEditor& editor) {
 //  filterPresets();
 //}
 //
-//void PopupBrowser::textEditorEscapeKeyPressed(TextEditor& editor) {
+//void PopupBrowser::textEditorEscapeKeyPressed(juce::TextEditor& editor) {
 //  editor.setText("");
 //}
 //
-//void PopupBrowser::buttonClicked(Button* clicked_button) {
+//void PopupBrowser::buttonClicked(juce::Button* clicked_button) {
 //  if (clicked_button == exit_button_.get())
 //    setVisible(false);
 ////  else if (clicked_button == download_button_.get()) {
@@ -1389,10 +1389,10 @@ void DualPopupSelector::newSelection(PopupList* list, int id, int index) {
 ////    }
 ////  }
 ////  else if (clicked_button == store_button_.get() && owner_) {
-////    String encoded_author = URL::addEscapeChars(owner_->getFileAuthor(), true);
+////    juce::String encoded_author = juce::URL::addEscapeChars(owner_->getFileAuthor(), true);
 ////    encoded_author = encoded_author.replace("+", "%2B");
 ////
-////    URL url(String(kStoreUrl) + encoded_author);
+////    juce::URL url(juce::String(kStoreUrl) + encoded_author);
 ////    url.launchInDefaultBrowser();
 ////  }
 //}
@@ -1453,7 +1453,7 @@ void PreparationPopup::buttonClicked(juce::Button *clicked_button)
 
 }
 void PreparationPopup::resized() {
-    Rectangle<int> bounds = getLocalBounds();
+    juce::Rectangle<int> bounds = getLocalBounds();
     int rounding = findValue(Skin::kBodyRounding);
 
     body_->setBounds(bounds);
@@ -1470,8 +1470,8 @@ void PreparationPopup::resized() {
     if(prep_view != nullptr)
     {
         prep_view->setBounds(bounds);
-        //Image image(Image::ARGB, 1, 1, false);
-        //Graphics g(image);
+        //juce::Image image(juce::Image::ARGB, 1, 1, false);
+        //juce::Graphics g(image);
         //paintOpenGlChildrenBackgrounds(g);
         //paintChildBackground(g, prep_view.get());
         //prep_view->paintKnobShadows(g);

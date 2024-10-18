@@ -16,14 +16,14 @@
 
 #include "open_gl_image_component.h"
 #include "utils.h"
-OpenGlImageComponent::OpenGlImageComponent(String name) : OpenGlComponent(name + "_image"), component_(nullptr),
+OpenGlImageComponent::OpenGlImageComponent(juce::String name) : OpenGlComponent(name + "_image"), component_(nullptr),
                                                           active_(true), static_image_(false),
                                                           paint_entire_component_(true) {
    image_.setTopLeft(-1.0f, 1.0f);
    image_.setTopRight(1.0f, 1.0f);
    image_.setBottomLeft(-1.0f, -1.0f);
    image_.setBottomRight(1.0f, -1.0f);
-   image_.setColor(Colours::white);
+   image_.setColor(juce::Colours::white);
 
    if (name == "")
        setInterceptsMouseClicks(false, false);
@@ -33,9 +33,9 @@ void OpenGlImageComponent::redrawImage(bool force, bool clear) {
    if (!active_)
        return;
 
-   Component* component = component_ ? component_ : this;
+   juce::Component* component = component_ ? component_ : this;
 
-   float pixel_scale =2* Desktop::getInstance().getDisplays().getDisplayForRect(getScreenBounds())->scale;
+   float pixel_scale =2* juce::Desktop::getInstance().getDisplays().getDisplayForRect(getScreenBounds())->scale;
    int width = component->getWidth() * pixel_scale;
    int height = component->getHeight() * pixel_scale;
    if (width <= 0 || height <= 0)
@@ -48,11 +48,11 @@ void OpenGlImageComponent::redrawImage(bool force, bool clear) {
    image_.lock();
 
    if (new_image)
-       draw_image_ = std::make_unique<Image>(Image::ARGB, width, height, false);
+       draw_image_ = std::make_unique<juce::Image>(juce::Image::ARGB, width, height, false);
 
-   draw_image_->clear(Rectangle<int>(0, 0, width, height));
-   Graphics g(*draw_image_);
-   g.addTransform(AffineTransform::scale(pixel_scale));
+   draw_image_->clear(juce::Rectangle<int>(0, 0, width, height));
+   juce::Graphics g(*draw_image_);
+   g.addTransform(juce::AffineTransform::scale(pixel_scale));
    paintToImage(g);
    image_.setImage(draw_image_.get());
 
@@ -79,7 +79,7 @@ bool OpenGlImageComponent::isInit()
 }
 
 void OpenGlImageComponent::render(OpenGlWrapper& open_gl, bool animate) {
-   Component* component = component_ ? component_ : this;
+   juce::Component* component = component_ ? component_ : this;
    if (!active_ || !setViewPort(component, open_gl) || !component->isVisible())
        return;
 

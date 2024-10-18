@@ -15,22 +15,22 @@
  */
 
 #include "load_save.h"
+
 #include "midi_manager.h"
-#include "synth_base.h"
+#include "UserPreferences.h"
 
 #define QUOTE(x) #x
 #define STRINGIFY(x) QUOTE(x)
 
 namespace {
   const std::string kLinuxUserDataDirectory = "~/.local/share/vital/";
-  const std::string kAvailablePacksFile = "available_packs.json";
-  const std::string kInstalledPacksFile = "packs.json";
 
-  Time getBuildTime() {
-    StringArray date_tokens;
+
+  juce::Time getBuildTime() {
+    juce::StringArray date_tokens;
     date_tokens.addTokens(STRINGIFY(BUILD_DATE), true);
     if (date_tokens.size() != 5)
-      return Time::getCompilationDate();
+      return juce::Time::getCompilationDate();
 
     int year = date_tokens[0].getIntValue();
     int month = date_tokens[1].getIntValue() - 1;
@@ -38,7 +38,7 @@ namespace {
     int hour = date_tokens[3].getIntValue();
     int minute = date_tokens[4].getIntValue();
 
-    return Time(year, month, day, hour, minute);
+    return juce::Time(year, month, day, hour, minute);
   }
 } // namespace
 
@@ -58,7 +58,7 @@ const std::string LoadSave::kSampleFolderName = "Samples";
 
 
 //
-//void LoadSave::initSaveInfo(std::map<std::string, String>& save_info) {
+//void LoadSave::initSaveInfo(std::map<std::string, juce::String>& save_info) {
 //  save_info["preset_name"] = "";
 //  save_info["author"] = "";
 //  save_info["comments"] = "";
@@ -69,17 +69,17 @@ const std::string LoadSave::kSampleFolderName = "Samples";
 //}
 
 
-String LoadSave::getAuthorFromFile(const File& file) {
+juce::String LoadSave::getAuthorFromFile(const juce::File& file) {
   static constexpr int kMaxCharacters = 40;
   static constexpr int kMinSize = 60;
-  FileInputStream file_stream(file);
+  juce::FileInputStream file_stream(file);
 
   if (file_stream.getTotalLength() < kMinSize)
     return "";
 
   file_stream.readByte();
   file_stream.readByte();
-  MemoryBlock author_memory_block;
+  juce::MemoryBlock author_memory_block;
   file_stream.readIntoMemoryBlock(author_memory_block, 6);
 
   char end_quote = file_stream.readByte();
@@ -95,33 +95,33 @@ String LoadSave::getAuthorFromFile(const File& file) {
     }
   }
 
-  MemoryBlock name_memory_block;
+  juce::MemoryBlock name_memory_block;
   file_stream.readIntoMemoryBlock(name_memory_block, kMaxCharacters);
-  String name = name_memory_block.toString();
+  juce::String name = name_memory_block.toString();
 
   if (!name.contains("\""))
     return name.toStdString();
 
-  StringArray tokens;
+  juce::StringArray tokens;
   tokens.addTokens(name, "\"", "");
 
   return tokens[0];
 }
 
-String LoadSave::getStyleFromFile(const File& file) {
+juce::String LoadSave::getStyleFromFile(const juce::File& file) {
   static constexpr int kMinSize = 5000;
-  FileInputStream file_stream(file);
+  juce::FileInputStream file_stream(file);
 
   if (file_stream.getTotalLength() < kMinSize)
     return "";
 
-  MemoryBlock style_memory_block;
+  juce::MemoryBlock style_memory_block;
   file_stream.readIntoMemoryBlock(style_memory_block, kMinSize);
 
-  StringArray tokens;
+  juce::StringArray tokens;
   tokens.addTokens(style_memory_block.toString(), "\"", "");
   bool found_style = false;
-  for (String token : tokens) {
+  for (juce::String token : tokens) {
     if (found_style && token.trim() != ":")
       return token;
     if (token == "preset_style")
@@ -133,60 +133,60 @@ String LoadSave::getStyleFromFile(const File& file) {
 
 
 
-void LoadSave::writeCrashLog(String crash_log) {
-  File data_dir = getDataDirectory();
+void LoadSave::writeCrashLog(juce::String crash_log) {
+  juce::File data_dir = getDataDirectory();
   if (!data_dir.exists() || !data_dir.isDirectory())
     return;
-  File file = data_dir.getChildFile("crash.txt");
+  juce::File file = data_dir.getChildFile("crash.txt");
   file.replaceWithText(crash_log);
 }
 
-void LoadSave::writeErrorLog(String error_log) {
-  File data_dir = getDataDirectory();
+void LoadSave::writeErrorLog(juce::String error_log) {
+  juce::File data_dir = getDataDirectory();
   if (!data_dir.exists() || !data_dir.isDirectory())
     return; 
 
-  File file = getDataDirectory().getChildFile("errors.txt");
+  juce::File file = getDataDirectory().getChildFile("errors.txt");
   file.appendText(error_log + "\n");
 }
 
 
-File LoadSave::getFavoritesFile() {
-    using namespace ProjectInfo;
-    #if defined(JUCE_DATA_STRUCTURES_H_INCLUDED)
-    PropertiesFile::Options config_options;
-    config_options.applicationName = "Vial";
-    config_options.osxLibrarySubFolder = "Application Support";
-    config_options.filenameSuffix = "favorites";
-
-    #ifdef LINUX
-    config_options.folderName = "." + String(ProjectInfo::projectName).toLowerCase();
-    #else
-    config_options.folderName = String(ProjectInfo::projectName).toLowerCase();
-    #endif
-
-    return config_options.getDefaultFile();
-    #else
-    return File();
-    #endif
+juce::File LoadSave::getFavoritesFile() {
+//    //using namespace ProjectInfo;
+//    #if defined(JUCE_DATA_STRUCTURES_H_INCLUDED)
+//    juce::PropertiesFile::Options config_options;
+//    config_options.applicationName = "Vial";
+//    config_options.osxLibrarySubFolder = "Application Support";
+//    config_options.filenameSuffix = "favorites";
+//
+//    #ifdef LINUX
+//    config_options.folderName = "." + juce::String(ProjectInfo::projectName).toLowerCase();
+//    #else
+//    config_options.folderName = juce::String(ProjectInfo::projectName).toLowerCase();
+//    #endif
+//
+//    return config_options.getDefaultFile();
+//    #else
+//    return juce::File();
+//    #endif
 }
 
-File LoadSave::getDefaultSkin() {
+juce::File LoadSave::getDefaultSkin() {
 #if defined(JUCE_DATA_STRUCTURES_H_INCLUDED)
-  PropertiesFile::Options config_options;
+  juce::PropertiesFile::Options config_options;
   config_options.applicationName = "Vial";
   config_options.osxLibrarySubFolder = "Application Support";
   config_options.filenameSuffix = "skin";
 
 #ifdef LINUX
-  config_options.folderName = "." + String(ProjectInfo::projectName).toLowerCase();
+  config_options.folderName = "." + juce::String(ProjectInfo::projectName).toLowerCase();
 #else
-  config_options.folderName = String(ProjectInfo::projectName).toLowerCase();
+  config_options.folderName = juce::String(ProjectInfo::projectName).toLowerCase();
 #endif
 
   return config_options.getDefaultFile();
 #else
-  return File();
+  return juce::File();
 #endif
 }
 
@@ -208,42 +208,42 @@ File LoadSave::getDefaultSkin() {
 
 
 
-std::vector<File> LoadSave::getPresetDirectories() {
+std::vector<juce::File> LoadSave::getPresetDirectories() {
   return getDirectories(kPresetFolderName);
 }
 
 
-std::vector<File> LoadSave::getSampleDirectories() {
+std::vector<juce::File> LoadSave::getSampleDirectories() {
   return getDirectories(kSampleFolderName);
 }
 
-File LoadSave::getUserDirectory() {
-  File directory = getDataDirectory().getChildFile(kUserDirectoryName);
+juce::File LoadSave::getUserDirectory() {
+  juce::File directory = getDataDirectory().getChildFile(kUserDirectoryName);
   if (!directory.exists())
     directory.createDirectory();
   return directory;
 }
 
-File LoadSave::getUserPresetDirectory() {
-  File directory = getUserDirectory().getChildFile(kPresetFolderName);
+juce::File LoadSave::getUserPresetDirectory() {
+  juce::File directory = getUserDirectory().getChildFile(kPresetFolderName);
   if (!directory.exists())
     directory.createDirectory();
   return directory;
 }
 
-File LoadSave::getUserSampleDirectory() {
-  File directory = getUserDirectory().getChildFile(kSampleFolderName);
+juce::File LoadSave::getUserSampleDirectory() {
+  juce::File directory = getUserDirectory().getChildFile(kSampleFolderName);
   if (!directory.exists())
     directory.createDirectory();
   return directory;
 }
 
-void LoadSave::getAllFilesOfTypeInDirectories(Array<File>& files, const String& extensions,
-                                              const std::vector<File>& directories) {
+void LoadSave::getAllFilesOfTypeInDirectories(juce::Array<juce::File>& files, const juce::String& extensions,
+                                              const std::vector<juce::File>& directories) {
   files.clear();
-  for (const File& directory : directories) {
+  for (const juce::File& directory : directories) {
     if (directory.exists() && directory.isDirectory())
-      directory.findChildFiles(files, File::findFiles, true, extensions);
+      directory.findChildFiles(files, juce::File::findFiles, true, extensions);
   }
 }
 std::vector<std::string> LoadSave::getAdditionalFolders(const std::string& name) {
@@ -259,45 +259,45 @@ std::vector<std::string> LoadSave::getAdditionalFolders(const std::string& name)
 //    return folders;
 }
 
-File LoadSave::getDataDirectory() {
+juce::File LoadSave::getDataDirectory() {
 //    json data = getConfigJson();
 //    if (data.count("data_directory")) {
 //        std::string path = data["data_directory"];
-//        File folder(path);
+//        juce::File folder(path);
 //        if (folder.exists() && folder.isDirectory())
 //            return folder;
 //    }
 //
 //#ifdef LINUX
-//    File directory = File(kLinuxUserDataDirectory);
-//  String xdg_data_home = SystemStats::getEnvironmentVariable ("XDG_DATA_HOME", {});
+//    juce::File directory = juce::File(kLinuxUserDataDirectory);
+//  juce::String xdg_data_home = juce::SystemStats::getEnvironmentVariable ("XDG_DATA_HOME", {});
 //
 //  if (!xdg_data_home.trim().isEmpty())
-//    directory = File(xdg_data_home).getChildFile("vial");
+//    directory = juce::File(xdg_data_home).getChildFile("vial");
 //
 //#elif defined(__APPLE__)
-//    File home_directory = File::getSpecialLocation(File::userHomeDirectory);
-//    File directory = home_directory.getChildFile("Music").getChildFile("Vial");
+//    juce::File home_directory = juce::File::getSpecialLocation(juce::File::userHomeDirectory);
+//    juce::File directory = home_directory.getChildFile("Music").getChildFile("Vial");
 //#else
-//    File documents_dir = File::getSpecialLocation(File::userDocumentsDirectory);
-//  File directory = documents_dir.getChildFile("Vial");
+//    juce::File documents_dir = juce::File::getSpecialLocation(juce::File::userDocumentsDirectory);
+//  juce::File directory = documents_dir.getChildFile("Vial");
 //#endif
 //
 //    return directory;
 }
 
-std::vector<File> LoadSave::getDirectories(const String& folder_name) {
-    File data_dir = getDataDirectory();
-    std::vector<File> directories;
+std::vector<juce::File> LoadSave::getDirectories(const juce::String& folder_name) {
+    juce::File data_dir = getDataDirectory();
+    std::vector<juce::File> directories;
 
     if (!data_dir.exists() || !data_dir.isDirectory())
         return directories;
 
-    Array<File> sub_folders;
+    juce::Array<juce::File> sub_folders;
     sub_folders.add(data_dir);
-    data_dir.findChildFiles(sub_folders, File::findDirectories, false);
-    for (const File& sub_folder : sub_folders) {
-        File directory = sub_folder.getChildFile(folder_name);
+    data_dir.findChildFiles(sub_folders, juce::File::findDirectories, false);
+    for (const juce::File& sub_folder : sub_folders) {
+        juce::File directory = sub_folder.getChildFile(folder_name);
         if (directory.exists() && directory.isDirectory())
             directories.push_back(directory);
     }
@@ -305,20 +305,20 @@ std::vector<File> LoadSave::getDirectories(const String& folder_name) {
     return directories;
 }
 
-void LoadSave::getAllSamples(Array<File>& samples) {
+void LoadSave::getAllSamples(juce::Array<juce::File>& samples) {
   getAllFilesOfTypeInDirectories(samples, "*.wav", getSampleDirectories());
 }
 
-void LoadSave::getAllUserPresets(Array<File>& presets) {
-  std::vector<File> directories = {
+void LoadSave::getAllUserPresets(juce::Array<juce::File>& presets) {
+  std::vector<juce::File> directories = {
     getDataDirectory().getChildFile(kPresetFolderName),
     getUserPresetDirectory()
   };
-  getAllFilesOfTypeInDirectories(presets, String("*.") + bitklavier::kPresetExtension, directories);
+  getAllFilesOfTypeInDirectories(presets, juce::String("*.") + bitklavier::kPresetExtension, directories);
 }
 
-void LoadSave::getAllUserSamples(Array<File>& samples) {
-  std::vector<File> directories = {
+void LoadSave::getAllUserSamples(juce::Array<juce::File>& samples) {
+  std::vector<juce::File> directories = {
     getDataDirectory().getChildFile(kSampleFolderName),
     getUserSampleDirectory()
   }; 
@@ -327,19 +327,19 @@ void LoadSave::getAllUserSamples(Array<File>& samples) {
 
 
 
-File LoadSave::getShiftedFile(const String directory_name, const String& extensions,
-                              const std::string& additional_folders_name, const File& current_file, int shift) {
+juce::File LoadSave::getShiftedFile(const juce::String directory_name, const juce::String& extensions,
+                              const std::string& additional_folders_name, const juce::File& current_file, int shift) {
   FileSorterAscending file_sorter;
 
-  std::vector<File> directories = getDirectories(directory_name);
+  std::vector<juce::File> directories = getDirectories(directory_name);
   std::vector<std::string> additional = getAdditionalFolders(additional_folders_name);
   for (const std::string& path : additional)
-    directories.push_back(File(path));
+    directories.push_back(juce::File(path));
 
-  Array<File> all_files;
+  juce::Array<juce::File> all_files;
   getAllFilesOfTypeInDirectories(all_files, extensions, directories);
   if (all_files.isEmpty())
-    return File();
+    return juce::File();
 
   all_files.sort(file_sorter);
   int index = all_files.indexOf(current_file);

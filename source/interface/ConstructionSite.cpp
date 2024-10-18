@@ -8,6 +8,7 @@
 #include "synth_gui_interface.h"
 #include "Preparations.h"
 #include "sound_engine.h"
+#include "SampleLoadManager.h"
 ConstructionSite::ConstructionSite( juce::ValueTree &v,  juce::UndoManager &um, OpenGlWrapper &open_gl, SynthGuiData* data) : SynthSection("Construction Site"),
                                                                                  tracktion::engine::ValueTreeObjectList<PreparationSection>(v),
                                                                                      undo(um), open_gl(open_gl),
@@ -60,13 +61,13 @@ void ConstructionSite::valueTreeRedirected (juce::ValueTree&)
 } // may need to add handling if this is hit
 
 void ConstructionSite::deleteObject(PreparationSection *at)  {
-    if ((OpenGLContext::getCurrentContext() == nullptr))
+    if ((juce::OpenGLContext::getCurrentContext() == nullptr))
     {
         SynthGuiInterface* _parent = findParentComponentOfClass<SynthGuiInterface>();
 
         //safe to do on message thread because we have locked processing if this is called
         at->setVisible(false);
-        open_gl.context.executeOnGLThread([this,&at](OpenGLContext &openGLContext) {
+        open_gl.context.executeOnGLThread([this,&at](juce::OpenGLContext &openGLContext) {
            this->removeSubSection(at);
         },false);
     }
@@ -86,7 +87,7 @@ PreparationSection* ConstructionSite::createNewObject (const juce::ValueTree& v)
     s->setSizeRatio(size_ratio_);
     s->setCentrePosition(s->x, s->y);
     s->setSize(s->width, s->height);
-    s->addSoundSet(parent->sampleLoadManager.global_soundset);
+    s->addSoundSet(parent->sampleLoadManager->global_soundset);
     s->selectedSet = &(preparationSelector.getLassoSelection());
     preparationSelector.getLassoSelection().addChangeListener(s);
     s->addListener(&cableView);
@@ -154,19 +155,19 @@ bool ConstructionSite::keyPressed (const juce::KeyPress& k, juce::Component* c)
 
     if (code == 68) //D Direct
     {
-        ValueTree t(IDs::PREPARATION);
+        juce::ValueTree t(IDs::PREPARATION);
 
         t.setProperty(IDs::type,bitklavier::BKPreparationType::PreparationTypeDirect, nullptr);
         t.setProperty(IDs::width, 260, nullptr);
         t.setProperty(IDs::height, 132, nullptr);
         t.setProperty(IDs::x,lastX - 260/2, nullptr);
         t.setProperty(IDs::y,lastY - 132 /2, nullptr);
-       // DBG("Position" + String(lastX) + " " + String(lastY));
+       // DBG("Position" + juce::String(lastX) + " " + juce::String(lastY));
         parent.addChild(t,-1, nullptr);
-        //DBG("place" + String(lastX) + " " + String(lastY));
+        //DBG("place" + juce::String(lastX) + " " + juce::String(lastY));
     } else if (code == 78) // N nostalgic
     {
-        ValueTree t(IDs::PREPARATION);
+        juce::ValueTree t(IDs::PREPARATION);
 
         t.setProperty(IDs::type,bitklavier::BKPreparationType::PreparationTypeNostalgic, nullptr);
         t.setProperty(IDs::width, 260, nullptr);
@@ -177,19 +178,19 @@ bool ConstructionSite::keyPressed (const juce::KeyPress& k, juce::Component* c)
         parent.addChild(t,-1, nullptr);
     } else if (code == 75) // K Keymap
     {
-        ValueTree t(IDs::PREPARATION);
+        juce::ValueTree t(IDs::PREPARATION);
 
         t.setProperty(IDs::type,bitklavier::BKPreparationType::PreparationTypeKeymap, nullptr);
         t.setProperty(IDs::width, 114, nullptr);
         t.setProperty(IDs::height, 76, nullptr);
         t.setProperty(IDs::x,lastX - 114/2, nullptr);
         t.setProperty(IDs::y,lastY - 76 /2, nullptr);
-        // DBG("Position" + String(lastX) + " " + String(lastY));
+        // DBG("Position" + juce::String(lastX) + " " + juce::String(lastY));
         parent.addChild(t,-1, nullptr);
-        //DBG("place" + String(lastX) + " " + String(lastY));
+        //DBG("place" + juce::String(lastX) + " " + juce::String(lastY));
     } else if (code == 82) // R resonance
     {
-        ValueTree t(IDs::PREPARATION);
+        juce::ValueTree t(IDs::PREPARATION);
 
         t.setProperty(IDs::type, bitklavier::BKPreparationType::PreparationTypeResonance, nullptr);
         t.setProperty(IDs::width, 260, nullptr);
@@ -199,7 +200,7 @@ bool ConstructionSite::keyPressed (const juce::KeyPress& k, juce::Component* c)
         parent.addChild(t, -1, nullptr);
     } else if (code == 83) // S synchronic
     {
-        ValueTree t(IDs::PREPARATION);
+        juce::ValueTree t(IDs::PREPARATION);
 
         t.setProperty(IDs::type, bitklavier::BKPreparationType::PreparationTypeSynchronic, nullptr);
         t.setProperty(IDs::width, 260, nullptr);
@@ -209,7 +210,7 @@ bool ConstructionSite::keyPressed (const juce::KeyPress& k, juce::Component* c)
         parent.addChild(t, -1, nullptr);
     } else if (code == 66) // B blendronic
     {
-        ValueTree t(IDs::PREPARATION);
+        juce::ValueTree t(IDs::PREPARATION);
 
         t.setProperty(IDs::type, bitklavier::BKPreparationType::PreparationTypeBlendronic, nullptr);
         t.setProperty(IDs::width, 260, nullptr);
@@ -219,7 +220,7 @@ bool ConstructionSite::keyPressed (const juce::KeyPress& k, juce::Component* c)
         parent.addChild(t, -1, nullptr);
     } else if (code == 77) // M tempo
     {
-        ValueTree t(IDs::PREPARATION);
+        juce::ValueTree t(IDs::PREPARATION);
 
         t.setProperty(IDs::type, bitklavier::BKPreparationType::PreparationTypeTempo, nullptr);
         t.setProperty(IDs::width, 132, nullptr);
@@ -230,7 +231,7 @@ bool ConstructionSite::keyPressed (const juce::KeyPress& k, juce::Component* c)
     }
     else if (code == 84) // T tuning
     {
-        ValueTree t(IDs::PREPARATION);
+        juce::ValueTree t(IDs::PREPARATION);
 
         t.setProperty(IDs::type, bitklavier::BKPreparationType::PreparationTypeTuning, nullptr);
         t.setProperty(IDs::width, 132, nullptr);
@@ -244,7 +245,7 @@ bool ConstructionSite::keyPressed (const juce::KeyPress& k, juce::Component* c)
 
 
 
-void ConstructionSite::itemIsBeingDragged(BKItem* thisItem, const MouseEvent& e)
+void ConstructionSite::itemIsBeingDragged(BKItem* thisItem, const juce::MouseEvent& e)
 {
     repaint();
 }
@@ -266,14 +267,14 @@ void ConstructionSite::draw(void)
 }
 
 
-void ConstructionSite::prepareItemDrag(BKItem* item, const MouseEvent& e, bool center)
+void ConstructionSite::prepareItemDrag(BKItem* item, const juce::MouseEvent& e, bool center)
 {
 //    if (center)
 //    {
 //        float X = item->getPosition().getX() + item->getWidth() / 2.0f;
 //        float Y = item->getPosition().getY() + item->getHeight() / 2.0f;
 //        juce::Point<float>pos(X,Y);
-//        MouseEvent newEvent = e.withNewPosition(pos);
+//        juce::MouseEvent newEvent = e.withNewPosition(pos);
 //
 //        item->prepareDrag(newEvent);
 //    }
@@ -291,10 +292,10 @@ void ConstructionSite::prepareItemDrag(BKItem* item, const MouseEvent& e, bool c
 
 
 
-void ConstructionSite::mouseMove (const MouseEvent& eo)
+void ConstructionSite::mouseMove (const juce::MouseEvent& eo)
 {
-    MouseEvent e = eo.getEventRelativeTo(this);
-    //MouseEvent a = eo.getEventRelativeTo(this);
+    juce::MouseEvent e = eo.getEventRelativeTo(this);
+    //juce::MouseEvent a = eo.getEventRelativeTo(this);
 //    if (e.x != lastEX) lastX = e.x;
 //
 //    if (e.y != lastEY) lastY = e.y;
@@ -304,9 +305,9 @@ void ConstructionSite::mouseMove (const MouseEvent& eo)
     mouse = e.position;
     lastX = e.x;
     lastY = e.y;
-    //DBG("screen" + String(lastX) + " " + String(lastY));
-    //DBG("global" + String(e.getMouseDownX()) +" " + String(e.getMouseDownY()));
-    //DBG("site" + String(a.getMouseDownX()) +" " + String(a.getMouseDownY()));
+    //DBG("screen" + juce::String(lastX) + " " + juce::String(lastY));
+    //DBG("global" + juce::String(e.getMouseDownX()) +" " + juce::String(e.getMouseDownY()));
+    //DBG("site" + juce::String(a.getMouseDownX()) +" " + juce::String(a.getMouseDownY()));
     if (connect)
     {
 
@@ -317,11 +318,11 @@ void ConstructionSite::mouseMove (const MouseEvent& eo)
 
 
 
-void ConstructionSite::mouseDown (const MouseEvent& eo)
+void ConstructionSite::mouseDown (const juce::MouseEvent& eo)
 {
 
 
-    MouseEvent e = eo.getEventRelativeTo(this);
+    juce::MouseEvent e = eo.getEventRelativeTo(this);
     auto itemToSelect = dynamic_cast<PreparationSection*> (e.originalComponent->getParentComponent());
     if(itemToSelect == nullptr)
     {
@@ -364,12 +365,12 @@ void ConstructionSite::mouseDown (const MouseEvent& eo)
 //            if (processor.wrapperType == juce::AudioPluginInstance::wrapperType_Standalone)
 //            {
 //                getEditMenuStandalone(&buttonsAndMenusLAF, graph->getSelectedItems().size(), false, true).showMenuAsync
-//                    (PopupMenu::Options(), ModalCallbackFunction::forComponent (editMenuCallback, this) );
+//                    (juce::PopupMenu::Options(), juce::ModalCallbackFunction::forComponent (editMenuCallback, this) );
 //            }
 //            else
 //            {
 //                getEditMenu(&buttonsAndMenusLAF, graph->getSelectedItems().size(), false, true).showMenuAsync
-//                    (PopupMenu::Options(), ModalCallbackFunction::forComponent (editMenuCallback, this) );
+//                    (juce::PopupMenu::Options(), juce::ModalCallbackFunction::forComponent (editMenuCallback, this) );
 //            }
         }
         // Control click (same as right click on Mac)
@@ -384,12 +385,12 @@ void ConstructionSite::mouseDown (const MouseEvent& eo)
 //            if (processor.wrapperType == juce::AudioPluginInstance::wrapperType_Standalone)
 //            {
 //                getEditMenuStandalone(&buttonsAndMenusLAF, graph->getSelectedItems().size(), false, true).showMenuAsync
-//                    (PopupMenu::Options(), ModalCallbackFunction::forComponent (editMenuCallback, this) );
+//                    (juce::PopupMenu::Options(), juce::ModalCallbackFunction::forComponent (editMenuCallback, this) );
 //            }
 //            else
 //            {
 //                getEditMenu(&buttonsAndMenusLAF, graph->getSelectedItems().size(), false, true).showMenuAsync
-//                    (PopupMenu::Options(), ModalCallbackFunction::forComponent (editMenuCallback, this) );
+//                    (juce::PopupMenu::Options(), juce::ModalCallbackFunction::forComponent (editMenuCallback, this) );
 //            }
         }
 #endif
@@ -455,12 +456,12 @@ void ConstructionSite::mouseDown (const MouseEvent& eo)
 //            if (processor.wrapperType == juce::AudioPluginInstance::wrapperType_Standalone)
 //            {
 //                getEditMenuStandalone(&buttonsAndMenusLAF, graph->getSelectedItems().size(), true, true).showMenuAsync
-//                    (PopupMenu::Options(), ModalCallbackFunction::forComponent (editMenuCallback, this) );
+//                    (juce::PopupMenu::Options(), juce::ModalCallbackFunction::forComponent (editMenuCallback, this) );
 //            }
 //            else
 //            {
 //                getEditMenu(&buttonsAndMenusLAF, graph->getSelectedItems().size(), true, true).showMenuAsync
-//                    (PopupMenu::Options(), ModalCallbackFunction::forComponent (editMenuCallback, this) );
+//                    (juce::PopupMenu::Options(), juce::ModalCallbackFunction::forComponent (editMenuCallback, this) );
 //            }
         }
 #if JUCE_MAC
@@ -469,12 +470,12 @@ void ConstructionSite::mouseDown (const MouseEvent& eo)
 //            if (processor.wrapperType == juce::AudioPluginInstance::wrapperType_Standalone)
 //            {
 //                getEditMenuStandalone(&buttonsAndMenusLAF, graph->getSelectedItems().size(), true, true).showMenuAsync
-//                    (PopupMenu::Options(), ModalCallbackFunction::forComponent (editMenuCallback, this) );
+//                    (juce::PopupMenu::Options(), juce::ModalCallbackFunction::forComponent (editMenuCallback, this) );
 //            }
 //            else
 //            {
 //                getEditMenu(&buttonsAndMenusLAF, graph->getSelectedItems().size(), true, true).showMenuAsync
-//                    (PopupMenu::Options(), ModalCallbackFunction::forComponent (editMenuCallback, this) );
+//                    (juce::PopupMenu::Options(), juce::ModalCallbackFunction::forComponent (editMenuCallback, this) );
 //            }
         }
 #endif
@@ -486,12 +487,12 @@ void ConstructionSite::mouseDown (const MouseEvent& eo)
 //            }
 //            lassoSelection.deselectAll();
 //
-//            lasso = std::make_unique<LassoComponent<BKItem*>>();
+//            lasso = std::make_unique<juce::LassoComponent<BKItem*>>();
 //            addAndMakeVisible(*lasso);
 //
 //            lasso->setAlpha(0.5);
-//            lasso->setColour(LassoComponent<BKItem*>::ColourIds::lassoFillColourId, Colours::lightgrey);
-//            lasso->setColour(LassoComponent<BKItem*>::ColourIds::lassoOutlineColourId, Colours::antiquewhite);
+//            lasso->setColour(juce::LassoComponent<BKItem*>::ColourIds::lassoFillColourId, juce::Colours::lightgrey);
+//            lasso->setColour(juce::LassoComponent<BKItem*>::ColourIds::lassoOutlineColourId, juce::Colours::antiquewhite);
 //
 //            lasso->beginLasso(eo, this);
 //            inLasso = true;
@@ -501,7 +502,7 @@ void ConstructionSite::mouseDown (const MouseEvent& eo)
 
 }
 
-void ConstructionSite::mouseUp (const MouseEvent& eo)
+void ConstructionSite::mouseUp (const juce::MouseEvent& eo)
 {
     //inLasso = false;
 DBG("mouseupconst");
@@ -509,7 +510,7 @@ DBG("mouseupconst");
     removeChildComponent(&selectorLasso);
     if (edittingComment) return;
 
-    MouseEvent e = eo.getEventRelativeTo(this);
+    juce::MouseEvent e = eo.getEventRelativeTo(this);
     cableView.mouseUp(e);
     // Do nothing on right click mouse up
     if (e.mods.isRightButtonDown()) return;
@@ -561,7 +562,7 @@ DBG("mouseupconst");
     redraw();
 }
 
-void ConstructionSite::mouseDrag (const MouseEvent& e)
+void ConstructionSite::mouseDrag (const juce::MouseEvent& e)
 {
     if (edittingComment) return;
 

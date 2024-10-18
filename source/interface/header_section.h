@@ -17,13 +17,12 @@
 #pragma once
 
 
-
 #include "synth_section.h"
 #include "open_gl_background.h"
 
-class LogoButton : public Button {
+class LogoButton : public juce::Button {
 public:
-    LogoButton(const String& name) : Button(name), image_component_(new OpenGlImageComponent())
+    LogoButton(const juce::String& name) : juce::Button(name), image_component_(new OpenGlImageComponent())
     {
         image_component_->setComponent(this);
         auto paths = Paths::logoPaths();
@@ -38,29 +37,29 @@ public:
     void resized() override {
 
 
-        const DropShadow shadow(Colours::white, 5,juce::Point<int>(0, 0));
+        const juce::DropShadow shadow(juce::Colours::white, 5,juce::Point<int>(0, 0));
 
         if (shadow_.getWidth() == getWidth() && shadow_.getHeight() == getHeight())
             return;
 
-        Rectangle<float> bounds = getLocalBounds().toFloat();
+        juce::Rectangle<float> bounds = getLocalBounds().toFloat();
         //letter_.applyTransform(letter_.getTransformToScaleToFit(bounds, true));
         //ring_.applyTransform(ring_.getTransformToScaleToFit(bounds, true));
         layer_1_.applyTransform(layer_1_.getTransformToScaleToFit(bounds,true));
 
-        shadow_ = Image(Image::SingleChannel, getWidth(), getHeight(), true);
+        shadow_ = juce::Image(juce::Image::SingleChannel, getWidth(), getHeight(), true);
 
-        Graphics shadow_g(shadow_);
+        juce::Graphics shadow_g(shadow_);
         //shadow.drawForPath(shadow_g, letter_);
         //shadow.drawForPath(shadow_g, ring_);
         shadow.drawForPath(shadow_g, layer_1_);
         redoImage();
     }
 
-    void paintButton(Graphics& g, bool hover, bool down) override {
+    void paintButton(juce::Graphics& g, bool hover, bool down) override {
 
         // Ascertains the current section size
-        Rectangle<float> bounds = getLocalBounds().toFloat();
+        juce::Rectangle<float> bounds = getLocalBounds().toFloat();
 
 
         // Ascertains the appropriate location for layer_1 based on the section
@@ -133,19 +132,19 @@ public:
         g.setColour(findColour(Skin::kShadow, true));
         g.drawImageAt(shadow_, 0, 0, true);
 
-        ColourGradient letter_gradient(letter_top_color_, 0.0f, 0.0f, letter_bottom_color_, 0.0f, getHeight(), false);
-        ColourGradient ring_gradient(ring_top_color_, 0.0f, 0.0f, ring_bottom_color_, 0.0f, getHeight(), false);
+        juce::ColourGradient letter_gradient(letter_top_color_, 0.0f, 0.0f, letter_bottom_color_, 0.0f, getHeight(), false);
+        juce::ColourGradient ring_gradient(ring_top_color_, 0.0f, 0.0f, ring_bottom_color_, 0.0f, getHeight(), false);
 
-        g.setColour(Colours::brown);
+        g.setColour(juce::Colours::brown);
         g.fillPath(layer_1_);
 
-        g.setColour(Colours::black);
+        g.setColour(juce::Colours::black);
         g.fillPath(layer_2_);
 
-        g.setColour(Colours::white);
+        g.setColour(juce::Colours::white);
         g.fillPath(layer_3_);
 
-        g.setColour(Colours::goldenrod);
+        g.setColour(juce::Colours::goldenrod);
         g.fillPath(layer_4_);
         g.fillPath(layer_5_);
 
@@ -160,26 +159,26 @@ public:
         }
     }
 
-    void setLetterColors(Colour top, Colour bottom) {
+    void setLetterColors(juce::Colour top, juce::Colour bottom) {
         letter_top_color_ = top;
         letter_bottom_color_ = bottom;
         redoImage();
     }
 
-    void setRingColors(Colour top, Colour bottom) {
+    void setRingColors(juce::Colour top, juce::Colour bottom) {
         ring_top_color_ = top;
         ring_bottom_color_ = bottom;
         redoImage();
     }
 
-    void mouseEnter(const MouseEvent& e) override {
-        Button::mouseEnter(e);
-        image_component_->setColor(Colour(0xffdddddd));
+    void mouseEnter(const juce::MouseEvent& e) override {
+        juce::Button::mouseEnter(e);
+        image_component_->setColor(juce::Colour(0xffdddddd));
     }
 
-    void mouseExit(const MouseEvent& e) override {
-        Button::mouseExit(e);
-        image_component_->setColor(Colours::white);
+    void mouseExit(const juce::MouseEvent& e) override {
+        juce::Button::mouseExit(e);
+        image_component_->setColor(juce::Colours::white);
     }
 
     std::shared_ptr<OpenGlImageComponent> getImageComponent() { return image_component_; }
@@ -194,13 +193,13 @@ private:
     juce::Path layer_4_;
     juce::Path layer_5_;
 
-    Image shadow_;
+    juce::Image shadow_;
 
-    Colour letter_top_color_;
-    Colour letter_bottom_color_;
+    juce::Colour letter_top_color_;
+    juce::Colour letter_bottom_color_;
 
-    Colour ring_top_color_;
-    Colour ring_bottom_color_;
+    juce::Colour ring_top_color_;
+    juce::Colour ring_bottom_color_;
 };
 
 class LogoSection : public SynthSection {
@@ -217,8 +216,8 @@ class LogoSection : public SynthSection {
     LogoSection();
 
     void resized() override;
-    void paintBackground(Graphics& g) override;
-    void buttonClicked(Button* clicked_button) override;
+    void paintBackground(juce::Graphics& g) override;
+    void buttonClicked(juce::Button* clicked_button) override;
     void addListener(Listener* listener) { listeners_.push_back(listener); }
 
   private:
@@ -237,15 +236,15 @@ class HeaderSection : public SynthSection, public LogoSection::Listener {
 
     HeaderSection();
 
-    void paintBackground(Graphics& g) override;
+    void paintBackground(juce::Graphics& g) override;
     void resized() override;
     void reset() override;
 
-    void buttonClicked(Button* clicked_button) override;
-    void sliderValueChanged(Slider* slider) override;
+    void buttonClicked(juce::Button* clicked_button) override;
+    void sliderValueChanged(juce::Slider* slider) override;
 
 
-    void setTemporaryTab(String name);
+    void setTemporaryTab(juce::String name);
 
 //    void showAboutSection() override {
 //      for (Listener* listener : listeners_)
@@ -273,13 +272,13 @@ class HeaderSection : public SynthSection, public LogoSection::Listener {
 
     int currentSampleType;
     std::shared_ptr<PlainTextComponent> sampleSelectText;
-    std::unique_ptr<ShapeButton> sampleSelector ;
+    std::unique_ptr<juce::ShapeButton> sampleSelector ;
     std::unique_ptr<SynthButton> printButton;
     std::unique_ptr<SynthButton> printSelected;
     std::unique_ptr<SynthButton> saveButton;
     std::unique_ptr<SynthButton> loadButton;
-    std::unique_ptr<FileChooser> filechooser;
-    //Image background_image_;
+    std::unique_ptr<juce::FileChooser> filechooser;
+    //juce::Image background_image_;
     //std::unique_ptr<SynthButton> click_me;
    // juce::TextButton inspectButton { "Inspect the UI" };
     //std::unique_ptr<melatonin::Inspector> inspector;

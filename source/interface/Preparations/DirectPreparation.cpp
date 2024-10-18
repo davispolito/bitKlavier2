@@ -7,7 +7,7 @@
 #include "synth_slider.h"
 
 // Definition for the DirectPreparation constructor.  It takes three parameters: a pointer to
-// a Direct Processor p, a ValueTree v, and a reference to an OpenGlWrapper object.  Initializes
+// a Direct Processor p, a juce::ValueTree v, and a reference to an OpenGlWrapper object.  Initializes
 // the base class members and private DirectPreparation member proc with an initialization list.
 DirectPreparation::DirectPreparation (std::unique_ptr<DirectProcessor> p,
     juce::ValueTree v, OpenGlWrapper& um) :
@@ -25,12 +25,12 @@ DirectPreparation::DirectPreparation (std::unique_ptr<DirectProcessor> p,
 
     addAndMakeVisible (item.get());
     setSkinOverride (Skin::kDirect);
-    MemoryBlock data;
+    juce::MemoryBlock data;
 //    proc.getStateInformation(data);
 //    auto xml = juce::parseXML(data.toString());
-////auto xml = AudioProcessor::getXmlF(data.getData(), (int)data.getSize());
+////auto xml = juce::AudioProcessor::getXmlF(data.getData(), (int)data.getSize());
 //    if (!state.getChild(0).isValid())
-//        state.addChild(ValueTree::fromXml(*xml),0,nullptr);
+//        state.addChild(juce::ValueTree::fromXml(*xml),0,nullptr);
 //    DBG(state.toXmlString());
     DBG("add processor params");
 }
@@ -53,7 +53,7 @@ void DirectPreparation::resized()
 {
 
     PreparationSection::resized();
-//    Rectangle<float> bounds = getLocalBounds().toFloat();
+//    juce::Rectangle<float> bounds = getLocalBounds().toFloat();
 //    int item_padding_y = kItemPaddingY * size_ratio_;
 //    int item_height = getHeight() - 2 * item_padding_y;
 //    int item_padding_x = kItemPaddingX * size_ratio_;
@@ -62,7 +62,7 @@ void DirectPreparation::resized()
 ////    constrainer.checkBounds (newBounds, getBoundsInParent(),
 ////        getParentComponent()->getLocalBounds(),
 ////        false, false, false, false);
-//    DBG("item_padding x " + String(item_padding_x) + "item_padding y" + String(item_padding_y));
+//    DBG("item_padding x " + juce::String(item_padding_x) + "item_padding y" + juce::String(item_padding_y));
 //
 //    auto portDim = proportionOfWidth(0.1f);
 //
@@ -97,7 +97,7 @@ void DirectPreparation::DirectPopup::renderOpenGlComponents(OpenGlWrapper& open_
         if (open_gl_component->isVisible() && !open_gl_component->isAlwaysOnTop()) {
             open_gl_component->render(open_gl, animate);
             GLenum gl =  juce::gl::glGetError();
-            //DBG(String(gl));
+            //DBG(juce::String(gl));
             _ASSERT(gl == juce::gl::GL_NO_ERROR);
         }
     }
@@ -151,8 +151,8 @@ void DirectPreparation::DirectPopup::redoImage()
     int mult = getPixelMultiple();
     int image_width = getWidth() * mult;
     int image_height = getHeight() * mult;
-    //Image background_image(Image::ARGB,image_width, image_height, true);
-    //Graphics g (background_image);
+    //juce::Image background_image(juce::Image::ARGB,image_width, image_height, true);
+    //juce::Graphics g (background_image);
 
     //paintKnobShadows(g);
     //sliderShadows.setOwnImage(background_image);
@@ -169,7 +169,7 @@ void DirectPreparation::DirectPopup::resized() {
     // DYNAMICALLY POSITIONS SLIDER WITHIN THE DIRECT POPUP
 
     // Retrieves the size specifications of the current popup
-    Rectangle<int> bounds = getLocalBounds();
+    juce::Rectangle<int> bounds = getLocalBounds();
     int widget_margin = findValue(Skin::kWidgetMargin);
     int section_height = getHeight();
     int section_width = getWidth();
@@ -237,10 +237,10 @@ void DirectPreparation::DirectPopup::resized() {
 
 
 
-//    placeKnobsInArea(Rectangle<int>(knobs_area.getX(), 0, knobs_area.getWidth(), section_height),
+//    placeKnobsInArea(juce::Rectangle<int>(knobs_area.getX(), 0, knobs_area.getWidth(), section_height),
 //                     { drive_.get(), mix_.get() });
 //
-//    placeKnobsInArea(Rectangle<int>(knobs_area.getX(), knob_y2, knobs_area.getWidth(), section_height),
+//    placeKnobsInArea(juce::Rectangle<int>(knobs_area.getX(), knob_y2, knobs_area.getWidth(), section_height),
 //                     { filter_cutoff_.get(), filter_resonance_.get(), filter_blend_.get() });
 //    setFilterActive(filter_order_->getValue() != 0.0f && isActive());
 //
@@ -248,12 +248,12 @@ void DirectPreparation::DirectPopup::resized() {
 
 
 
-    // Image image(Image::ARGB, 1, 1, false);
-    // Graphics g(image);
+    // juce::Image image(juce::Image::ARGB, 1, 1, false);
+    // juce::Graphics g(image);
     // paintKnobShadows(g);
     //gainSlider->redoImage();
-    // Image image(Image::ARGB, 1, 1, false);
-    // Graphics g(image);
+    // juce::Image image(juce::Image::ARGB, 1, 1, false);
+    // juce::Graphics g(image);
     // paintOpenGlChildrenBackgrounds(g);
     // paintKnobShadows(g);
 }

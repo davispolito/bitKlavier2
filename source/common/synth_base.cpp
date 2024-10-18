@@ -24,7 +24,7 @@
 #include "Identifiers.h"
 #include "Synthesiser/Sample.h"
 #include "load_save.h"
-SynthBase::SynthBase(AudioDeviceManager * deviceManager) : expired_(false), manager(deviceManager) {
+SynthBase::SynthBase(juce::AudioDeviceManager * deviceManager) : expired_(false), manager(deviceManager) {
 
   self_reference_ = std::make_shared<SynthBase*>();
   *self_reference_ = this;
@@ -36,19 +36,17 @@ SynthBase::SynthBase(AudioDeviceManager * deviceManager) : expired_(false), mana
 
 
 
-  keyboard_state_ = std::make_unique<MidiKeyboardState>();
-  ValueTree v;
+  keyboard_state_ = std::make_unique<juce::MidiKeyboardState>();
+  juce::ValueTree v;
   midi_manager_ = std::make_unique<MidiManager>( keyboard_state_.get(),manager, v ,this);
 
-  last_played_note_ = 0.0f;
-  last_num_pressed_ = 0;
 
 
 
 
 
   Startup::doStartupChecks();
-  tree = ValueTree(IDs::GALLERY);
+  tree = juce::ValueTree(IDs::GALLERY);
   tree.addListener(this);
 }
 
@@ -90,7 +88,7 @@ void SynthBase::modWheelGuiChanged(bitklavier::mono_float value) {
   engine_->setModWheelAllChannels(value);
 }
 
-void SynthBase::presetChangedThroughMidi(File preset) {
+void SynthBase::presetChangedThroughMidi(juce::File preset) {
   SynthGuiInterface* gui_interface = getGuiInterface();
   if (gui_interface) {
     gui_interface->updateFullGui();
@@ -149,16 +147,16 @@ juce::AudioProcessorGraph::Node::Ptr SynthBase::addProcessor(std::unique_ptr<juc
     return engine_->addNode(std::move(processor) , id);
 }
 
-juce::AudioProcessorGraph::Node * SynthBase::getNodeForId(AudioProcessorGraph::NodeID id)
+juce::AudioProcessorGraph::Node * SynthBase::getNodeForId(juce::AudioProcessorGraph::NodeID id)
 {
 return engine_->processorGraph->getNodeForId(id);
 }
 
-void SynthBase::addConnection(AudioProcessorGraph::Connection &connect)
+void SynthBase::addConnection(juce::AudioProcessorGraph::Connection &connect)
 {
     _ASSERT(engine_->processorGraph->addConnection(connect));
 }
-bool SynthBase::loadFromValueTree(const ValueTree& state)
+bool SynthBase::loadFromValueTree(const juce::ValueTree& state)
 {
     pauseProcessing(true);
     engine_->allSoundsOff();
@@ -170,7 +168,7 @@ bool SynthBase::loadFromValueTree(const ValueTree& state)
     return false;
 }
 
-bool SynthBase::loadFromFile(File preset, std::string& error) {
+bool SynthBase::loadFromFile(juce::File preset, std::string& error) {
     DBG("laoding from file");
     if (!preset.exists())
         return false;
@@ -181,15 +179,15 @@ bool SynthBase::loadFromFile(File preset, std::string& error) {
         error = "Error loading preset";
         return false;
     }
-    auto parsed_value_tree = ValueTree::fromXml(*xml);
+    auto parsed_value_tree = juce::ValueTree::fromXml(*xml);
     if(!parsed_value_tree.isValid()) {
 
-        error = "Error converting XML to ValueTree";
+        error = "Error converting XML to juce::ValueTree";
         return false;
     }
     if(!loadFromValueTree(parsed_value_tree))
     {
-        error = "Error Initializing ValueTree";
+        error = "Error Initializing juce::ValueTree";
         return false;
     }
 
@@ -203,10 +201,10 @@ bool SynthBase::loadFromFile(File preset, std::string& error) {
 
     return true;
 }
-bool SynthBase::saveToFile(File preset) {
-    preset = preset.withFileExtension(String(bitklavier::kPresetExtension));
+bool SynthBase::saveToFile(juce::File preset) {
+    preset = preset.withFileExtension(juce::String(bitklavier::kPresetExtension));
 
-    File parent = preset.getParentDirectory();
+    juce::File parent = preset.getParentDirectory();
     if (!parent.exists()) {
         if (!parent.createDirectory().wasOk() || !parent.hasWriteAccess())
             return false;
@@ -233,7 +231,7 @@ bool SynthBase::saveToActiveFile() {
 }
 
 
-void SynthBase::processAudio(AudioSampleBuffer* buffer, int channels, int samples, int offset) {
+void SynthBase::processAudio(juce::AudioSampleBuffer* buffer, int channels, int samples, int offset) {
   if (expired_)
     return;
   AudioThreadAction action;
@@ -257,7 +255,7 @@ void SynthBase::processAudioAndMidi(juce::AudioBuffer<float>& audio_buffer, juce
 
 
 }
-void SynthBase::processAudioWithInput(AudioSampleBuffer* buffer, const bitklavier::mono_float* input_buffer,
+void SynthBase::processAudioWithInput(juce::AudioSampleBuffer* buffer, const bitklavier::mono_float* input_buffer,
                                       int channels, int samples, int offset) {
   if (expired_)
     return;
@@ -266,7 +264,7 @@ void SynthBase::processAudioWithInput(AudioSampleBuffer* buffer, const bitklavie
   writeAudio(buffer, channels, samples, offset);
 }
 
-void SynthBase::writeAudio(AudioSampleBuffer* buffer, int channels, int samples, int offset) {
+void SynthBase::writeAudio(juce::AudioSampleBuffer* buffer, int channels, int samples, int offset) {
   //const bitklavier::mono_float* engine_output = (const bitklavier::mono_float*)engine_->output(0)->buffer;
   /* get output of engine here */
   for (int channel = 0; channel < channels; ++channel) {
@@ -281,62 +279,20 @@ void SynthBase::writeAudio(AudioSampleBuffer* buffer, int channels, int samples,
   //updateMemoryOutput(samples, engine_->output(0)->buffer);
 }
 
-void SynthBase::processMidi(MidiBuffer& midi_messages, int start_sample, int end_sample) {
+void SynthBase::processMidi(juce::MidiBuffer& midi_messages, int start_sample, int end_sample) {
   bool process_all = end_sample == 0;
-  for (const MidiMessageMetadata message : midi_messages) {
+  for (const juce::MidiMessageMetadata message : midi_messages) {
     int midi_sample = message.samplePosition;
     if (process_all || (midi_sample >= start_sample && midi_sample < end_sample))
       midi_manager_->processMidiMessage(message.getMessage(), midi_sample - start_sample);
   }
 }
 
-void SynthBase::processKeyboardEvents(MidiBuffer& buffer, int num_samples) {
+void SynthBase::processKeyboardEvents(juce::MidiBuffer& buffer, int num_samples) {
   midi_manager_->replaceKeyboardMessages(buffer, num_samples);
 }
 
 
-
-void SynthBase::updateMemoryOutput(int samples, const bitklavier::poly_float* audio) {
-//  for (int i = 0; i < samples; ++i)
-//    audio_memory_->push(audio[i]);
-//
-//  bitklavier::mono_float last_played = engine_->getLastActiveNote();
-//  last_played = bitklavier::utils::clamp(last_played, kOutputWindowMinNote, kOutputWindowMaxNote);
-//
-//  int num_pressed = engine_->getNumPressedNotes();
-//  int output_inc = std::max<int>(1, engine_->getSampleRate() / bitklavier::kOscilloscopeMemorySampleRate);
-//  int oscilloscope_samples = 2 * bitklavier::kOscilloscopeMemoryResolution;
-//
-//  if (last_played && (last_played_note_ != last_played || num_pressed > last_num_pressed_)) {
-//    last_played_note_ = last_played;
-//
-//    //bitklavier::utils::copyBuffer(oscilloscope_memory_, oscilloscope_memory_write_, oscilloscope_samples);
-//  }
-//  last_num_pressed_ = num_pressed;
-//
-////  for (; memory_input_offset_ < samples; memory_input_offset_ += output_inc) {
-////    int input_index = bitklavier::utils::iclamp(memory_input_offset_, 0, samples);
-////    memory_index_ = bitklavier::utils::iclamp(memory_index_, 0, oscilloscope_samples - 1);
-////    _ASSERT(input_index >= 0);
-////    _ASSERT(input_index < samples);
-////    _ASSERT(memory_index_ >= 0);
-////    _ASSERT(memory_index_ < oscilloscope_samples);
-////    //oscilloscope_memory_write_[memory_index_++] = audio[input_index];
-////
-////    if (memory_index_ * output_inc >= memory_reset_period_) {
-////      memory_input_offset_ += memory_reset_period_ - memory_index_ * output_inc;
-////      memory_index_ = 0;
-////      //bitklavier::utils::copyBuffer(oscilloscope_memory_, oscilloscope_memory_write_, oscilloscope_samples);
-////    }
-////  }
-//
-//  memory_input_offset_ -= samples;
-}
-
-//void SynthBase::armMidiLearn(const std::string& name) {
-//  midi_manager_->armMidiLearn(name);
-//}
-//
 //void SynthBase::cancelMidiLearn() {
 //  midi_manager_->cancelMidiLearn();
 //}
@@ -366,39 +322,39 @@ bool SynthBase::isMidiMapped(const std::string& name) {
   return midi_manager_->isMidiMapped(name);
 }
 
-void SynthBase::setAuthor(const String& author) {
+void SynthBase::setAuthor(const juce::String& author) {
   save_info_["author"] = author;
 }
 
-void SynthBase::setComments(const String& comments) {
+void SynthBase::setComments(const juce::String& comments) {
   save_info_["comments"] = comments;
 }
 
-void SynthBase::setStyle(const String& style) {
+void SynthBase::setStyle(const juce::String& style) {
   save_info_["style"] = style;
 }
 
-void SynthBase::setPresetName(const String& preset_name) {
+void SynthBase::setPresetName(const juce::String& preset_name) {
   save_info_["preset_name"] = preset_name;
 }
 
-void SynthBase::setMacroName(int index, const String& macro_name) {
+void SynthBase::setMacroName(int index, const juce::String& macro_name) {
   save_info_["macro" + std::to_string(index + 1)] = macro_name;
 }
 
-String SynthBase::getAuthor() {
+juce::String SynthBase::getAuthor() {
   return save_info_["author"];
 }
 
-String SynthBase::getComments() {
+juce::String SynthBase::getComments() {
   return save_info_["comments"];
 }
 
-String SynthBase::getStyle() {
+juce::String SynthBase::getStyle() {
   return save_info_["style"];
 }
 
-String SynthBase::getPresetName() {
+juce::String SynthBase::getPresetName() {
   return save_info_["preset_name"];
 }
 
@@ -422,7 +378,7 @@ void SynthBase::ValueChangedCallback::messageCallback() {
   if (auto synth_base = listener.lock()) {
     SynthGuiInterface* gui_interface = (*synth_base)->getGuiInterface();
     if (gui_interface) {
-      gui_interface->updateGuiControl(control_name, value);
+      //gui_interface->updateGuiControl(control_name, value);
       if (control_name != "pitch_wheel")
         gui_interface->notifyChange();
     }

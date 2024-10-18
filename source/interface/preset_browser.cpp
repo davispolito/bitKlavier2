@@ -29,24 +29,24 @@
 
 namespace {
   template<class Comparator>
-  void sortFileArray(Array<File>& file_array) {
+  void sortFileArray(juce::Array<juce::File>& file_array) {
     Comparator comparator;
     file_array.sort(comparator, true);
   }
 
 template<class Comparator>
-  void sortFileArrayWithCache(Array<File>& file_array, PresetInfoCache* cache) {
+  void sortFileArrayWithCache(juce::Array<juce::File>& file_array, PresetInfoCache* cache) {
     Comparator comparator(cache);
     file_array.sort(comparator, true);
   }
 
   const std::string kPresetStoreUrl = "";
 
-  class FileNameFilter : public TextEditor::InputFilter {
+  class FileNameFilter : public juce::TextEditor::InputFilter {
     public:
-      FileNameFilter() : TextEditor::InputFilter() { }
+      FileNameFilter() : juce::TextEditor::InputFilter() { }
 
-      String filterNewText(TextEditor& editor, const String& new_input) override {
+      juce::String filterNewText(juce::TextEditor& editor, const juce::String& new_input) override {
         return new_input.removeCharacters("<>?*/|\\[]\":");
       }
   };
@@ -74,7 +74,7 @@ PresetList::PresetList() : SynthSection("Preset List"),
 
 }
 
-void PresetList::paintBackground(Graphics& g) {
+void PresetList::paintBackground(juce::Graphics& g) {
   int title_width = getTitleWidth();
   g.setColour(findColour(Skin::kWidgetBackground, true));
   g.fillRoundedRectangle(getLocalBounds().toFloat(), findValue(Skin::kBodyRounding));
@@ -90,11 +90,11 @@ void PresetList::paintBackground(Graphics& g) {
   g.saveState();
   g.setColour(findColour(Skin::kBody, true));
   g.reduceClipRegion(getLocalBounds().removeFromTop(title_width));
-  Rectangle<float> top = getLocalBounds().toFloat().removeFromTop(title_width * 2.0f);
+  juce::Rectangle<float> top = getLocalBounds().toFloat().removeFromTop(title_width * 2.0f);
   g.fillRoundedRectangle(top, findValue(Skin::kBodyRounding));
   g.restoreState();
 
-  Colour lighten = findColour(Skin::kLightenScreen, true);
+  juce::Colour lighten = findColour(Skin::kLightenScreen, true);
   scroll_bar_->setColor(lighten);
   g.setColour(lighten);
   g.fillRect(0, 0, 1, title_width);
@@ -104,18 +104,18 @@ void PresetList::paintBackground(Graphics& g) {
     g.setColour(findColour(Skin::kTextComponentText, true));
     g.setFont(Fonts::instance()->proportional_regular().withPointHeight(title_width * 0.5f));
 //
-//  Path star = Paths::star();
+//  juce::Path star = Paths::star();
 //  float star_draw_width = title_width * 0.8f;
 //  float star_y = (title_width - star_draw_width) / 2.0f;
-//  Rectangle<float> star_bounds((star_width - star_draw_width) / 2.0f, star_y, star_draw_width, star_draw_width);
+//  juce::Rectangle<float> star_bounds((star_width - star_draw_width) / 2.0f, star_y, star_draw_width, star_draw_width);
 //  g.fillPath(star, star.getTransformToScaleToFit(star_bounds, true));
 
-  g.drawText("Name", text_padding, 0, name_width, title_width, Justification::centredLeft);
+  g.drawText("Name", text_padding, 0, name_width, title_width, juce::Justification::centredLeft);
  // int style_x = star_width + name_width + text_padding;
- // g.drawText("Style", style_x, 0, style_width, title_width, Justification::centredLeft);
+ // g.drawText("Style", style_x, 0, style_width, title_width, juce::Justification::centredLeft);
  // int author_x = star_width + name_width + text_padding + style_width;
- // g.drawText("Author", author_x, 0, author_width, title_width, Justification::centredLeft);
- // g.drawText("Date", getWidth() - date_width, 0, date_width - text_padding, title_width, Justification::centredRight);
+ // g.drawText("Author", author_x, 0, author_width, title_width, juce::Justification::centredLeft);
+ // g.drawText("Date", getWidth() - date_width, 0, date_width - text_padding, title_width, juce::Justification::centredRight);
 
   paintBorder(g);
   setWantsKeyboardFocus(true);
@@ -159,13 +159,13 @@ if (sort_column_ == kName && sort_ascending_)
 //  filter(filter_string_, filter_styles_);
 }
 
-void PresetList::setPresets(Array<File> presets) {
+void PresetList::setPresets(juce::Array<juce::File> presets) {
   presets_ = presets;
   sort();
   redoCache();
 }
 
-void PresetList::mouseWheelMove(const MouseEvent& e, const MouseWheelDetails& wheel) {
+void PresetList::mouseWheelMove(const juce::MouseEvent& e, const juce::MouseWheelDetails& wheel) {
   view_position_ -= wheel.deltaY * kScrollSensitivity;
   view_position_ = std::max(0.0f, view_position_);
   int title_width = getTitleWidth();
@@ -183,13 +183,13 @@ int PresetList::getRowFromPosition(float mouse_position) {
   return floorf((mouse_position + getViewPosition() - title_width) / getRowHeight());
 }
 
-void PresetList::mouseMove(const MouseEvent& e) {
+void PresetList::mouseMove(const juce::MouseEvent& e) {
   hover_preset_ = getRowFromPosition(e.position.y);
   if (hover_preset_ >= filtered_presets_.size())
     hover_preset_ = -1;
 }
 
-void PresetList::mouseExit(const MouseEvent& e) {
+void PresetList::mouseExit(const juce::MouseEvent& e) {
   hover_preset_ = -1;
 }
 
@@ -197,17 +197,17 @@ void PresetList::respondToMenuCallback(int result) {
   if (click_preset_ < 0 || click_preset_ >= filtered_presets_.size())
     return;
 
-  File preset = filtered_presets_[click_preset_];
+  juce::File preset = filtered_presets_[click_preset_];
   if (result == kOpenFileLocation)
     preset.revealToUser();
   else if (result == kRename && rename_editor_) {
     renaming_preset_ = preset;
     int y = getTitleWidth() + click_preset_ * getRowHeight() - getViewPosition();
     rename_editor_->setBounds(0, y, kNameWidthPercent * getWidth(), getRowHeight());
-    rename_editor_->setColour(CaretComponent::caretColourId, findColour(Skin::kTextEditorCaret, true));
-    rename_editor_->setColour(TextEditor::textColourId, findColour(Skin::kBodyText, true));
-    rename_editor_->setColour(TextEditor::highlightedTextColourId, findColour(Skin::kBodyText, true));
-    rename_editor_->setColour(TextEditor::highlightColourId, findColour(Skin::kTextEditorSelection, true));
+    rename_editor_->setColour(juce::CaretComponent::caretColourId, findColour(Skin::kTextEditorCaret, true));
+    rename_editor_->setColour(juce::TextEditor::textColourId, findColour(Skin::kBodyText, true));
+    rename_editor_->setColour(juce::TextEditor::highlightedTextColourId, findColour(Skin::kBodyText, true));
+    rename_editor_->setColour(juce::TextEditor::highlightColourId, findColour(Skin::kTextEditorSelection, true));
     rename_editor_->setText(renaming_preset_.getFileNameWithoutExtension());
     rename_editor_->setVisible(true);
     rename_editor_->grabKeyboardFocus();
@@ -219,16 +219,16 @@ void PresetList::respondToMenuCallback(int result) {
   }
 }
 
-void PresetList::menuClick(const MouseEvent& e) {
+void PresetList::menuClick(const juce::MouseEvent& e) {
   float click_y_position = e.position.y;
   int row = getRowFromPosition(click_y_position);
 
   if (row >= 0 && hover_preset_ >= 0) {
     click_preset_ = hover_preset_;
     PopupItems options;
-    options.addItem(kOpenFileLocation, "Open File Location");
+    options.addItem(kOpenFileLocation, "Open juce::File Location");
 
-    File preset = filtered_presets_[click_preset_];
+    juce::File preset = filtered_presets_[click_preset_];
     if (preset.exists() && preset.hasWriteAccess()) {
       options.addItem(kRename, "Rename");
       options.addItem(kDelete, "Delete");
@@ -238,7 +238,7 @@ void PresetList::menuClick(const MouseEvent& e) {
   }
 }
 
-void PresetList::leftClick(const MouseEvent& e) {
+void PresetList::leftClick(const juce::MouseEvent& e) {
   int title_width = getTitleWidth();
   float click_y_position = e.position.y;
   float click_x_position = e.position.x;
@@ -271,7 +271,7 @@ void PresetList::leftClick(const MouseEvent& e) {
     redoCache();
   }
   else if (row < filtered_presets_.size() && row >= 0) {
-    File preset = filtered_presets_[row];
+    juce::File preset = filtered_presets_[row];
 //    if (click_x_position < star_right) {
 //      std::string path = preset.getFullPathName().toStdString();
 //      if (favorites_.count(path)) {
@@ -293,28 +293,28 @@ void PresetList::leftClick(const MouseEvent& e) {
   }
 }
 
-void PresetList::mouseDown(const MouseEvent& e) {
+void PresetList::mouseDown(const juce::MouseEvent& e) {
   if (e.mods.isPopupMenu())
     menuClick(e);
   else
     leftClick(e);
 }
 
-void PresetList::textEditorReturnKeyPressed(TextEditor& text_editor) {
+void PresetList::textEditorReturnKeyPressed(juce::TextEditor& text_editor) {
   if (renaming_preset_.exists())
     finishRename();
 }
 
-void PresetList::textEditorFocusLost(TextEditor& text_editor) {
+void PresetList::textEditorFocusLost(juce::TextEditor& text_editor) {
   if (renaming_preset_.exists())
     finishRename();
 }
 
-void PresetList::textEditorEscapeKeyPressed(TextEditor& editor) {
+void PresetList::textEditorEscapeKeyPressed(juce::TextEditor& editor) {
   rename_editor_->setVisible(false);
 }
 
-void PresetList::scrollBarMoved(ScrollBar* scroll_bar, double range_start) {
+void PresetList::scrollBarMoved(juce::ScrollBar* scroll_bar, double range_start) {
   view_position_ = range_start;
   viewPositionChanged();
 }
@@ -325,21 +325,21 @@ void PresetList::setScrollBarRange() {
   int title_width = getTitleWidth();
   float scaled_height = getHeight() - title_width;
   scroll_bar_->setRangeLimits(0.0f, getScrollableRange());
-  scroll_bar_->setCurrentRange(getViewPosition(), scaled_height, dontSendNotification);
+  scroll_bar_->setCurrentRange(getViewPosition(), scaled_height, juce::NotificationType::dontSendNotification);
   scroll_bar_->setSingleStepSize(scroll_bar_->getHeight() * kScrollStepRatio);
   scroll_bar_->cancelPendingUpdate();
 }
 
 void PresetList::finishRename() {
-  String text = rename_editor_->getText();
+  juce::String text = rename_editor_->getText();
   rename_editor_->setVisible(false);
   if (text.trim().isEmpty() || !renaming_preset_.exists())
     return;
 
-  File parent = renaming_preset_.getParentDirectory();
-  File new_file = parent.getChildFile(text + renaming_preset_.getFileExtension());
+  juce::File parent = renaming_preset_.getParentDirectory();
+  juce::File new_file = parent.getChildFile(text + renaming_preset_.getFileExtension());
   renaming_preset_.moveFileTo(new_file);
-  renaming_preset_ = File();
+  renaming_preset_ = juce::File();
 
   reloadPresets();
 }
@@ -347,7 +347,7 @@ void PresetList::finishRename() {
 void PresetList::reloadPresets() {
   presets_.clear();
   if (current_folder_.exists() && current_folder_.isDirectory())
-    current_folder_.findChildFiles(presets_, File::findFiles, true, "*.xml");
+    current_folder_.findChildFiles(presets_, juce::File::findFiles, true, "*.xml");
   //else
     //LoadSave::getAllPresets(presets_);
   sort();
@@ -374,14 +374,14 @@ void PresetList::redoCache() {
   loadBrowserCache(position, position + kNumCachedRows);
 }
 
-void PresetList::filter(String filter_string, const std::set<std::string>& styles) {
+void PresetList::filter(juce::String filter_string, const std::set<std::string>& styles) {
   filter_string_ = filter_string.toLowerCase();
   filter_styles_ = styles;
-  StringArray tokens;
+  juce::StringArray tokens;
   tokens.addTokens(filter_string_, " ", "");
   filtered_presets_.clear();
 
-  for (const File& preset : presets_) {
+  for (const juce::File& preset : presets_) {
     bool match = true;
     std::string path = preset.getFullPathName().toStdString();
 //    if (!styles.empty()) {
@@ -390,10 +390,10 @@ void PresetList::filter(String filter_string, const std::set<std::string>& style
 //        match = false;
 //    }
 //    if (match && tokens.size()) {
-//      String name = preset.getFileNameWithoutExtension().toLowerCase();
-//      String author = String(preset_info_cache_.getAuthor(preset)).toLowerCase();
+//      juce::String name = preset.getFileNameWithoutExtension().toLowerCase();
+//      juce::String author = juce::String(preset_info_cache_.getAuthor(preset)).toLowerCase();
 //
-//      for (const String& token : tokens) {
+//      for (const juce::String& token : tokens) {
 //        if (!name.contains(token) && !author.contains(token))
 //          match = false;
 //      }
@@ -425,7 +425,7 @@ void PresetList::initOpenGlComponents(OpenGlWrapper& open_gl) {
   for (int i = 0; i < kNumCachedRows; ++i) {
     rows_[i].setScissor(true);
     rows_[i].init(open_gl);
-    rows_[i].setColor(Colours::white);
+    rows_[i].setColor(juce::Colours::white);
   }
 
   highlight_.init(open_gl);
@@ -467,24 +467,24 @@ void PresetList::loadBrowserCache(int start_index, int end_index) {
   int date_x = image_width - date_width + text_padding;
 
   end_index = std::min(static_cast<int>(filtered_presets_.size()), end_index);
-  Font font = Fonts::instance()->proportional_light().withPointHeight(row_height * 0.5f);
+  juce::Font font = Fonts::instance()->proportional_light().withPointHeight(row_height * 0.5f);
 
-//  Path star = Paths::star();
+//  juce::Path star = Paths::star();
 //  float star_draw_width = row_height * 0.8f;
 //  float star_y = (row_height - star_draw_width) / 2.0f;
-//  Rectangle<float> star_bounds((star_width - star_draw_width) / 2.0f, star_y, star_draw_width, star_draw_width);
+//  juce::Rectangle<float> star_bounds((star_width - star_draw_width) / 2.0f, star_y, star_draw_width, star_draw_width);
 //  star.applyTransform(star.getTransformToScaleToFit(star_bounds, true));
-//  PathStrokeType star_stroke(1.0f, PathStrokeType::curved);
+//  juce::PathStrokeType star_stroke(1.0f, juce::PathStrokeType::curved);
 
-  Colour text_color = findColour(Skin::kTextComponentText, true);
+  juce::Colour text_color = findColour(Skin::kTextComponentText, true);
  ;
 
   for (int i = start_index; i < end_index; ++i) {
-    Image row_image(Image::ARGB, image_width, row_height, true);
-    Graphics g(row_image);
+    juce::Image row_image(juce::Image::ARGB, image_width, row_height, true);
+    juce::Graphics g(row_image);
 
-    File preset = filtered_presets_[i];
-    String name = preset.getFileNameWithoutExtension();
+    juce::File preset = filtered_presets_[i];
+    juce::String name = preset.getFileNameWithoutExtension();
 
 
 
@@ -493,7 +493,7 @@ void PresetList::loadBrowserCache(int start_index, int end_index) {
 
     g.setColour(text_color);
     g.setFont(font);
-    g.drawText(name, name_x, 0, name_width   - 2 * text_padding, row_height, Justification::centredLeft, true);
+    g.drawText(name, name_x, 0, name_width   - 2 * text_padding, row_height, juce::Justification::centredLeft, true);
 
 
     rows_[i % kNumCachedRows].setOwnImage(row_image);
@@ -519,7 +519,7 @@ void PresetList::renderOpenGlComponents(OpenGlWrapper& open_gl, bool animate) {
   int view_position = getViewPosition();
   float y_offset = 2.0f * view_position / view_height;
 
-  Rectangle<int> view_bounds(0, title_width, getWidth(), getHeight() - title_width);
+  juce::Rectangle<int> view_bounds(0, title_width, getWidth(), getHeight() - title_width);
   OpenGlComponent::setViewPort(this, view_bounds, open_gl);
 
   float image_width = bitklavier::utils::nextPowerOfTwo(getWidth());
@@ -535,7 +535,7 @@ void PresetList::renderOpenGlComponents(OpenGlWrapper& open_gl, bool animate) {
     float offset = (2.0f * row_height * row) / view_height;
     float y = 1.0f + y_offset - offset;
 
-    Rectangle<int> row_bounds(0, row_height * row - view_position + title_width, getWidth(), row_height);
+    juce::Rectangle<int> row_bounds(0, row_height * row - view_position + title_width, getWidth(), row_height);
     OpenGlComponent::setScissorBounds(this, row_bounds, open_gl);
 
     rows_[cache_index].setTopLeft(-1.0f, y);
@@ -585,9 +585,9 @@ PresetBrowser::PresetBrowser() : SynthSection("preset_browser") {
 //  folder_list_->addListener(this);
 //  addSubSection(folder_list_.get());
 //  folder_list_->setPassthroughFolderName(LoadSave::kPresetFolderName);
-//  std::vector<File> directories = File::getSpecialLocation(File::userDocumentsDirectory);//LoadSave::getPresetDirectories();
-//  Array<File> selections;
-//  for (const File& directory : directories)
+//  std::vector<juce::File> directories = juce::File::getSpecialLocation(juce::File::userDocumentsDirectory);//LoadSave::getPresetDirectories();
+//  juce::Array<juce::File> selections;
+//  for (const juce::File& directory : directories)
 //    selections.add(directory);
 //  folder_list_->setSelections(selections);
 
@@ -607,32 +607,32 @@ PresetBrowser::PresetBrowser() : SynthSection("preset_browser") {
   preset_text_ = std::make_shared<PlainTextComponent>("Preset", "Preset name");
   addOpenGlComponent(preset_text_);
   preset_text_->setFontType(PlainTextComponent::kLight);
-  preset_text_->setJustification(Justification::centredLeft);
+  preset_text_->setJustification(juce::Justification::centredLeft);
 
 //  author_text_ = std::make_unique<PlainTextComponent>("Author", "Author");
 //  addOpenGlComponent(author_text_.get());
 //  author_text_->setFontType(PlainTextComponent::kLight);
-//  author_text_->setJustification(Justification::centredLeft);
+//  author_text_->setJustification(juce::Justification::centredLeft);
 //
 //#if !defined(NO_TEXT_ENTRY)
 //  search_box_ = std::make_unique<OpenGlTextEditor>("Search");
 //  search_box_->addListener(this);
 //  search_box_->setSelectAllWhenFocused(true);
 //  search_box_->setMultiLine(false, false);
-//  search_box_->setJustification(Justification::centredLeft);
+//  search_box_->setJustification(juce::Justification::centredLeft);
 //  addAndMakeVisible(search_box_.get());
 //  addOpenGlComponent(search_box_->getImageComponent());
 //
 //  comments_ = std::make_unique<OpenGlTextEditor>("Comments");
 //  comments_->setSelectAllWhenFocused(false);
-//  comments_->setJustification(Justification::topLeft);
+//  comments_->setJustification(juce::Justification::topLeft);
 //  comments_->setReadOnly(true);
 //  addAndMakeVisible(comments_.get());
 //  addOpenGlComponent(comments_->getImageComponent());
 //  comments_->setMultiLine(true, true);
 //#endif
 
-  Array<File> presets;
+  juce::Array<juce::File> presets;
 //  LoadSave::getAllPresets(presets);
   preset_list_->setPresets(presets);
 
@@ -643,9 +643,9 @@ PresetBrowser::PresetBrowser() : SynthSection("preset_browser") {
 
 PresetBrowser::~PresetBrowser() { }
 
-void PresetBrowser::paintBackground(Graphics& g) {
-  Rectangle<int> search_rect = getSearchRect();
-  Rectangle<int> info_rect = getInfoRect();
+void PresetBrowser::paintBackground(juce::Graphics& g) {
+  juce::Rectangle<int> search_rect = getSearchRect();
+  juce::Rectangle<int> info_rect = getInfoRect();
   paintBody(g, search_rect);
   paintBorder(g, search_rect);
   paintBody(g, info_rect);
@@ -669,13 +669,13 @@ void PresetBrowser::paintBackground(Graphics& g) {
 
   g.setColour(findColour(Skin::kWidgetBackground, true));
   int rounding = findValue(Skin::kWidgetRoundedCorner);
-//  Rectangle<float> folder_bounds = folder_list_->getBounds().toFloat().expanded(1);
+//  juce::Rectangle<float> folder_bounds = folder_list_->getBounds().toFloat().expanded(1);
 //  g.fillRoundedRectangle(folder_bounds, rounding);
 
   paintChildrenBackgrounds(g);
 }
 
-void PresetBrowser::paintBackgroundShadow(Graphics& g) {
+void PresetBrowser::paintBackgroundShadow(juce::Graphics& g) {
   paintTabShadow(g, getSearchRect());
   paintTabShadow(g, getInfoRect());
 }
@@ -686,20 +686,20 @@ void PresetBrowser::resized() {
 
   SynthSection::resized();
 
-  Colour empty_color = findColour(Skin::kBodyText, true);
+  juce::Colour empty_color = findColour(Skin::kBodyText, true);
   empty_color = empty_color.withAlpha(0.5f * empty_color.getFloatAlpha());
 
 //  if (search_box_) {
 //    search_box_->setTextToShowWhenEmpty(TRANS("Search"), empty_color);
-//    search_box_->setColour(CaretComponent::caretColourId, findColour(Skin::kTextEditorCaret, true));
-//    search_box_->setColour(TextEditor::textColourId, findColour(Skin::kBodyText, true));
-//    search_box_->setColour(TextEditor::highlightedTextColourId, findColour(Skin::kBodyText, true));
-//    search_box_->setColour(TextEditor::highlightColourId, findColour(Skin::kTextEditorSelection, true));
+//    search_box_->setColour(juce::CaretComponent::caretColourId, findColour(Skin::kTextEditorCaret, true));
+//    search_box_->setColour(juce::TextEditor::textColourId, findColour(Skin::kBodyText, true));
+//    search_box_->setColour(juce::TextEditor::highlightedTextColourId, findColour(Skin::kBodyText, true));
+//    search_box_->setColour(juce::TextEditor::highlightColourId, findColour(Skin::kTextEditorSelection, true));
 //  }
 //  if (comments_) {
-//    comments_->setColour(TextEditor::textColourId, findColour(Skin::kBodyText, true));
-//    comments_->setColour(TextEditor::highlightedTextColourId, findColour(Skin::kBodyText, true));
-//    comments_->setColour(TextEditor::highlightColourId, findColour(Skin::kTextEditorSelection, true));
+//    comments_->setColour(juce::TextEditor::textColourId, findColour(Skin::kBodyText, true));
+//    comments_->setColour(juce::TextEditor::highlightedTextColourId, findColour(Skin::kBodyText, true));
+//    comments_->setColour(juce::TextEditor::highlightColourId, findColour(Skin::kTextEditorSelection, true));
 //  }
 
   int padding = findValue(Skin::kLargePadding);
@@ -708,8 +708,8 @@ void PresetBrowser::resized() {
   if (isVisible())
     preset_list_->redoCache();
 
-  Rectangle<int> search_rect = getSearchRect();
-  Rectangle<int> info_rect = getInfoRect();
+  juce::Rectangle<int> search_rect = getSearchRect();
+  juce::Rectangle<int> info_rect = getInfoRect();
   int top_padding = kTopPadding * size_ratio_;
   int left_padding = kLeftPadding * size_ratio_;
   int middle_padding = kMiddlePadding * size_ratio_;
@@ -740,7 +740,7 @@ void PresetBrowser::resized() {
 }
 
 void PresetBrowser::setCommentsBounds() {
-  Rectangle<int> info_rect = getInfoRect();
+  juce::Rectangle<int> info_rect = getInfoRect();
   int left_padding = kLeftPadding * size_ratio_;
   int top_padding = kTopPadding * size_ratio_;
   int top_info_height = (kNameFontHeight + kAuthorFontHeight + kMiddlePadding * 4) * size_ratio_;
@@ -767,18 +767,18 @@ void PresetBrowser::visibilityChanged() {
   loadPresetInfo();
 }
 
-Rectangle<int> PresetBrowser::getSearchRect() {
-  Rectangle<int> info_rect = getInfoRect();
+juce::Rectangle<int> PresetBrowser::getSearchRect() {
+  juce::Rectangle<int> info_rect = getInfoRect();
   int padding = findValue(Skin::kLargePadding);
   int y = info_rect.getBottom() + padding;
-  return Rectangle<int>(0, y, info_rect.getWidth(), getHeight() - y);
+  return juce::Rectangle<int>(0, y, info_rect.getWidth(), getHeight() - y);
 }
 
-Rectangle<int> PresetBrowser::getInfoRect() {
+juce::Rectangle<int> PresetBrowser::getInfoRect() {
   static constexpr float kInfoHeightRatio = 0.43f;
   int width = preset_list_->getX() - findValue(Skin::kLargePadding);
   int height = getHeight() * kInfoHeightRatio;
-  return Rectangle<int>(0, 0, width, height);
+  return juce::Rectangle<int>(0, 0, width, height);
 }
 
 void PresetBrowser::loadPresets() {
@@ -795,49 +795,49 @@ void PresetBrowser::filterPresets() {
 //  preset_list_->redoCache();
 }
 
-void PresetBrowser::textEditorTextChanged(TextEditor& editor) {
+void PresetBrowser::textEditorTextChanged(juce::TextEditor& editor) {
   filterPresets();
 }
 
-void PresetBrowser::textEditorEscapeKeyPressed(TextEditor& editor) {
+void PresetBrowser::textEditorEscapeKeyPressed(juce::TextEditor& editor) {
   editor.setText("");
 }
 
 
 
-void PresetBrowser::buttonClicked(Button* clicked_button) {
+void PresetBrowser::buttonClicked(juce::Button* clicked_button) {
 //  if (clicked_button == store_button_.get()) {
-//    String encoded_author = URL::addEscapeChars(author_text_->getText().toStdString(), true);
+//    juce::String encoded_author = juce::URL::addEscapeChars(author_text_->getText().toStdString(), true);
 //    encoded_author = encoded_author.replace("+", "%2B");
 //
-//    URL url(String(kPresetStoreUrl) + encoded_author);
+//    juce::URL url(juce::String(kPresetStoreUrl) + encoded_author);
 //    url.launchInDefaultBrowser();
 //  }
 ////  else
 ////    filterPresets();
 }
 
-bool PresetBrowser::keyPressed(const KeyPress &key, Component *origin) {
+bool PresetBrowser::keyPressed(const juce::KeyPress &key, juce::Component *origin) {
 //  if (!isVisible())
 //    return search_box_->hasKeyboardFocus(true);
 
-  if (key.getKeyCode() == KeyPress::escapeKey) {
+  if (key.getKeyCode() == juce::KeyPress::escapeKey) {
     for (Listener* listener : listeners_)
       listener->hidePresetBrowser();
     return true;
   }
-  if (key.getKeyCode() == KeyPress::upKey || key.getKeyCode() == KeyPress::leftKey) {
+  if (key.getKeyCode() == juce::KeyPress::upKey || key.getKeyCode() == juce::KeyPress::leftKey) {
     loadPrevPreset();
     return true;
   }
-  if (key.getKeyCode() == KeyPress::downKey || key.getKeyCode() == KeyPress::rightKey) {
+  if (key.getKeyCode() == juce::KeyPress::downKey || key.getKeyCode() == juce::KeyPress::rightKey) {
     loadNextPreset();
     return true;
   }
 //  return search_box_->hasKeyboardFocus(true);
 }
 
-bool PresetBrowser::keyStateChanged(bool is_key_down, Component *origin) {
+bool PresetBrowser::keyStateChanged(bool is_key_down, juce::Component *origin) {
 //  if (is_key_down)
 //    return search_box_->hasKeyboardFocus(true);
   return false;
@@ -846,15 +846,15 @@ bool PresetBrowser::keyStateChanged(bool is_key_down, Component *origin) {
 void PresetBrowser::jumpToPreset(int indices) {
   static const LoadSave::FileSorterAscending kFileSorter;
 
-  File parent = external_preset_.getParentDirectory();
+  juce::File parent = external_preset_.getParentDirectory();
   if (parent.exists()) {
-    Array<File> presets;
-    parent.findChildFiles(presets, File::findFiles, false, String("*.") + bitklavier::kPresetExtension);
+    juce::Array<juce::File> presets;
+    parent.findChildFiles(presets, juce::File::findFiles, false, juce::String("*.") + bitklavier::kPresetExtension);
     presets.sort(kFileSorter);
     int index = presets.indexOf(external_preset_);
     index = (index + indices + presets.size()) % presets.size();
 
-    File new_preset = presets[index];
+    juce::File new_preset = presets[index];
     loadFromFile(new_preset);
     externalPresetLoaded(new_preset);
   }
@@ -870,12 +870,12 @@ void PresetBrowser::loadNextPreset() {
   jumpToPreset(1);
 }
 
-void PresetBrowser::externalPresetLoaded(File file) {
+void PresetBrowser::externalPresetLoaded(juce::File file) {
   external_preset_ = file;
   setPresetInfo(file);
 }
 
-bool PresetBrowser::loadFromFile(File& preset) {
+bool PresetBrowser::loadFromFile(juce::File& preset) {
   SynthGuiInterface* parent = findParentComponentOfClass<SynthGuiInterface>();
   if (parent == nullptr)
     return false;
@@ -887,7 +887,7 @@ bool PresetBrowser::loadFromFile(File& preset) {
     synth->setPresetName(preset.getFileNameWithoutExtension());
     synth->setAuthor(author_);
 
-    String comments = parent->getSynth()->getComments();
+    juce::String comments = parent->getSynth()->getComments();
     int comments_font_size = kCommentsFontHeight * size_ratio_;
     if (comments_) {
       comments_->setText(comments);
@@ -904,12 +904,12 @@ void PresetBrowser::loadPresetInfo() {
   if (parent == nullptr)
     return;
 
-  Colour background = findColour(Skin::kBody, true);
-  Colour lighten = findColour(Skin::kLightenScreen, true);
+  juce::Colour background = findColour(Skin::kBody, true);
+  juce::Colour lighten = findColour(Skin::kLightenScreen, true);
   lighten = background.overlaidWith(lighten);
-  Colour regular_text = findColour(Skin::kBodyText, true);
+  juce::Colour regular_text = findColour(Skin::kBodyText, true);
 
-  String preset = parent->getSynth()->getPresetName();
+  juce::String preset = parent->getSynth()->getPresetName();
   if (preset.isEmpty()) {
     preset_text_->setText("Preset name");
     preset_text_->setColor(lighten);
@@ -921,7 +921,7 @@ void PresetBrowser::loadPresetInfo() {
   }
 }
 
-void PresetBrowser::setPresetInfo(File& preset) {
+void PresetBrowser::setPresetInfo(juce::File& preset) {
   if (preset.exists())
   {
   }
@@ -933,7 +933,7 @@ void PresetBrowser::addListener(Listener* listener) {
 
 
 
-//void PresetBrowser::newSelection(File selection) {
+//void PresetBrowser::newSelection(juce::File selection) {
 //  if (selection.exists() && selection.isDirectory())
 //    preset_list_->setCurrentFolder(selection);
 //}

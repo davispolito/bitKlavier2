@@ -7,7 +7,7 @@
 namespace
 {
     // Returns the path for each preparation type
-    Array<Path> getPathForPreparation (bitklavier::BKPreparationType type)
+    juce::Array<juce::Path> getPathForPreparation (bitklavier::BKPreparationType type)
     {
         // Returns the paths for a keymap preparation window
         if (type == bitklavier::BKPreparationType::PreparationTypeKeymap)
@@ -43,14 +43,14 @@ namespace
     }
 }
 
-BKItem::BKItem (bitklavier::BKPreparationType type) : Button("bkitem")
+BKItem::BKItem (bitklavier::BKPreparationType type) : juce::Button("bkitem")
 {
 
     image_component_ = std::make_shared<OpenGlImageComponent>();
     image_component_->setComponent(this);
 
 
-    Array<Path> paths;
+    juce::Array<juce::Path> paths;
     paths = getPathForPreparation(type);
     layer_1_ = paths.getUnchecked(0);
     layer_2_ = paths.getUnchecked(1);
@@ -60,17 +60,17 @@ BKItem::BKItem (bitklavier::BKPreparationType type) : Button("bkitem")
 }
 
 
-void BKItem::mouseDown(const MouseEvent& e)
+void BKItem::mouseDown(const juce::MouseEvent& e)
 {
     getParentComponent()->mouseDown(e);
 }
 
-void BKItem::mouseDrag(const MouseEvent& e)
+void BKItem::mouseDrag(const juce::MouseEvent& e)
 {
     getParentComponent()->mouseDrag(e);
 }
 
-void BKItem::mouseDoubleClick(const MouseEvent& e)
+void BKItem::mouseDoubleClick(const juce::MouseEvent& e)
 {
 
 }

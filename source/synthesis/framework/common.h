@@ -21,7 +21,7 @@
  */
 
 #pragma once
-#include <juce_core/juce_core.h>
+
 
 // Debugging.
 #if DEBUG
@@ -112,7 +112,7 @@ namespace bitklavier {
 
 //    //==============================================================================
 //    /**
-//    Utility wrapper for ValueTree::Listener's that only want to override valueTreePropertyChanged.
+//    Utility wrapper for juce::ValueTree::Listener's that only want to override valueTreePropertyChanged.
 //*/
 //    struct ValueTreePropertyChangeListener  : public juce::ValueTree::Listener
 //    {
@@ -123,50 +123,7 @@ namespace bitklavier {
 //        void valueTreeRedirected (juce::ValueTree&) override {}
 //    };
 
-    static juce::String getMidiMessageDescription (const juce::MidiMessage& m)
-    {
-        if (m.isNoteOn())           return "Note on "          + juce::MidiMessage::getMidiNoteName (m.getNoteNumber(), true, true, 3);
-        if (m.isNoteOff())          return "Note off "         + juce::MidiMessage::getMidiNoteName (m.getNoteNumber(), true, true, 3);
-        if (m.isProgramChange())    return "Program change "   + juce::String (m.getProgramChangeNumber());
-        if (m.isPitchWheel())       return "Pitch wheel "      + juce::String (m.getPitchWheelValue());
-        if (m.isAftertouch())       return "After touch "      + juce::MidiMessage::getMidiNoteName (m.getNoteNumber(), true, true, 3) +  ": " + juce::String (m.getAfterTouchValue());
-        if (m.isChannelPressure())  return "Channel pressure " + juce::String (m.getChannelPressureValue());
-        if (m.isAllNotesOff())      return "All notes off";
-        if (m.isAllSoundOff())      return "All sound off";
-        if (m.isMetaEvent())        return "Meta event";
 
-        if (m.isController())
-        {
-            juce::String name (juce::MidiMessage::getControllerName (m.getControllerNumber()));
-
-            if (name.isEmpty())
-                name = "[" + juce::String (m.getControllerNumber()) + "]";
-
-            return "Controller " + name + ": " + juce::String (m.getControllerValue());
-        }
-
-        return juce::String::toHexString (m.getRawData(), m.getRawDataSize());
-    }
-    static juce::String printMidi(juce::MidiMessage& message, const juce::String& source)
-    {
-
-        auto time = message.getTimeStamp(); //- startTime;
-
-        auto hours   = ((int) (time / 3600.0)) % 24;
-        auto minutes = ((int) (time / 60.0)) % 60;
-        auto seconds = ((int) time) % 60;
-        auto millis  = ((int) (time * 1000.0)) % 1000;
-
-        auto timecode = juce::String::formatted ("%02d:%02d:%02d.%03d",
-                                                 hours,
-                                                 minutes,
-                                                 seconds,
-                                                 millis);
-
-        auto description = getMidiMessageDescription (message);
-
-        return juce::String(timecode + "  -  " + description + " (" + source + ")"); // [7]
-    }
 } // namespace vital
 
 

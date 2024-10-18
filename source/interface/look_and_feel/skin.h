@@ -231,6 +231,6 @@ class SkinDesigner : public juce::DocumentWindow {
     }
 
   protected:
-    std::unique_ptr<Component> container_;
+    std::unique_ptr<juce::Component> container_;
 };
 

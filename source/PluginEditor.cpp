@@ -9,7 +9,7 @@
 //    const int          versionNumber  = 0x30400;
 //}
 PluginEditor::PluginEditor (PluginProcessor& p)
-    : AudioProcessorEditor (&p), SynthGuiInterface(&p), processorRef (p), was_animating_(true)
+    : juce::AudioProcessorEditor (&p), SynthGuiInterface(&p), processorRef (p), was_animating_(true)
 {
     static constexpr int kHeightBuffer = 50;
     juce::ignoreUnused (processorRef);
@@ -24,7 +24,7 @@ PluginEditor::PluginEditor (PluginProcessor& p)
     setConstrainer(&constrainer_);
 
 
-    Rectangle<int> total_bounds = Desktop::getInstance().getDisplays().getTotalBounds(true);
+   juce::Rectangle<int> total_bounds = juce::Desktop::getInstance().getDisplays().getTotalBounds(true);
     total_bounds.removeFromBottom(kHeightBuffer);
 
     float window_size = 1.0f;
@@ -58,7 +58,7 @@ void PluginEditor::resized()
     // layout the positions of your child components here
     auto area = getLocalBounds();
     area.removeFromBottom(50);
-    AudioProcessorEditor::resized();
+    juce::AudioProcessorEditor::resized();
     gui_->setBounds(getLocalBounds());
 
 
@@ -71,7 +71,7 @@ void PluginEditor::resized()
 
 
 void PluginEditor::setScaleFactor(float newScale) {
-    AudioProcessorEditor::setScaleFactor(newScale);
+    juce::AudioProcessorEditor::setScaleFactor(newScale);
     gui_->redoBackground();
 }
 

@@ -5,7 +5,8 @@
 #ifndef BITKLAVIER2_FULLINTERFACE_H
 #define BITKLAVIER2_FULLINTERFACE_H
 
-#include "open_gl_background.h"
+
+//#include "open_gl_background.h"
 #include "header_section.h"
 #include "main_section.h"
 #include "synth_section.h"
@@ -23,7 +24,7 @@ namespace bitklavier{
     constexpr int kDefaultWindowHeight = 820;
 }
 class FullInterface : public SynthSection, public juce::OpenGLRenderer, public HeaderSection::Listener,
-                      public MainSection::Listener, DragAndDropContainer, private Timer
+                      public MainSection::Listener, juce::DragAndDropContainer, private juce::Timer
 {
 
 public :
@@ -31,7 +32,7 @@ public :
     FullInterface(SynthGuiData *synth_gui_data);
      ~FullInterface() override;
 
-     void paintBackground(Graphics& g) override;
+     void paintBackground(juce::Graphics& g) override;
 
     void parentHierarchyChanged() override {
         SynthSection::parentHierarchyChanged();
@@ -73,11 +74,11 @@ public :
             resized();
     }
     void hideDisplay(bool primary);
-    void popupSelector(Component* source, juce::Point<int> position, const PopupItems& options,
+    void popupSelector(juce::Component* source, juce::Point<int> position, const PopupItems& options,
         std::function<void(int)> callback, std::function<void()> cancel);
 
-    void popupDisplay(Component* source, const std::string& text,
-        BubbleComponent::BubblePlacement placement, bool primary);
+    void popupDisplay(juce::Component* source, const std::string& text,
+        juce::BubbleComponent::BubblePlacement placement, bool primary);
 
     void prepDisplay(PreparationSection* source);
     std::unique_ptr<SinglePopupSelector> popup_selector_;
@@ -86,8 +87,8 @@ public :
     std::unique_ptr<PopupDisplay> popup_display_2_;
     SynthGuiData* data;
     SynthSection* full_screen_section_;
-    OpenGLContext open_gl_context_;
-    CriticalSection open_gl_critical_section_;
+    juce::OpenGLContext open_gl_context_;
+    juce::CriticalSection open_gl_critical_section_;
     OpenGlWrapper open_gl_;
 private :
 
@@ -103,10 +104,10 @@ private :
     float display_scale_;
     int pixel_multiple_;
 
-    //OpenGLContext open_gl_context_;
+    //juce::OpenGLContext open_gl_context_;
     std::unique_ptr<Shaders> shaders_;
 
-    Image background_image_;
+    juce::Image background_image_;
     OpenGlBackground background_;
     //juce::TextButton inspectButton { "Inspect the UI" };
     std::unique_ptr<melatonin::Inspector> inspector;

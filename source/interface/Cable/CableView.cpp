@@ -3,8 +3,10 @@
 //
 
 #include "CableView.h"
+
 #include "ConstructionSite.h"
 #include "sound_engine.h"
+
 
 CableView::CableView (ConstructionSite &site) :site(site), tracktion::engine::ValueTreeObjectList<Cable>(site.getState()), /*pathTask (*this),*/ SynthSection("cableView")
 {
@@ -37,9 +39,9 @@ bool CableView::mouseDraggingOverOutputPort()
     return false;
 }
 
-void CableView::beginConnectorDrag (AudioProcessorGraph::NodeAndChannel source,
-                         AudioProcessorGraph::NodeAndChannel dest,
-                         const MouseEvent& e)
+void CableView::beginConnectorDrag (juce::AudioProcessorGraph::NodeAndChannel source,
+                         juce::AudioProcessorGraph::NodeAndChannel dest,
+                         const juce::MouseEvent& e)
 {
     auto c = dynamic_cast<Cable*> (e.originalComponent);
     int index = objects.indexOf(c);
@@ -56,8 +58,8 @@ void CableView::beginConnectorDrag (AudioProcessorGraph::NodeAndChannel source,
     addOpenGlComponent(draggingConnector->getImageComponent(), true, false);
     site.open_gl.initOpenGlComp.try_enqueue([this] {
         draggingConnector->getImageComponent()->init(site.open_gl);
-        MessageManager::callAsync(
-            [safeComp = Component::SafePointer<Cable>(draggingConnector.get())] {
+        juce::MessageManager::callAsync(
+            [safeComp = juce::Component::SafePointer<Cable>(draggingConnector.get())] {
                 if (auto *comp = safeComp.getComponent()) {
                 comp->setVisible(true);
                comp->getImageComponent()->setVisible(true);
@@ -73,7 +75,7 @@ void CableView::beginConnectorDrag (AudioProcessorGraph::NodeAndChannel source,
     dragConnector (e);
 }
 
-void CableView::paint (Graphics& g)
+void CableView::paint (juce::Graphics& g)
 {
 
 }
@@ -91,17 +93,17 @@ void CableView::resized()
         cable->setBounds (getLocalBounds());
 }
 
-void CableView::mouseMove (const MouseEvent& e)
+void CableView::mouseMove (const juce::MouseEvent& e)
 {
     mousePosition = e.getEventRelativeTo (this).getPosition();
 }
 
-void CableView::mouseExit (const MouseEvent&)
+void CableView::mouseExit (const juce::MouseEvent&)
 {
     mousePosition = std::nullopt;
 }
 
-void CableView::mouseDown (const MouseEvent& e)
+void CableView::mouseDown (const juce::MouseEvent& e)
 {
 
     DBG("cabledowns");
@@ -111,7 +113,7 @@ void CableView::mouseDown (const MouseEvent& e)
 
 }
 
-void CableView::mouseDrag (const MouseEvent& e)
+void CableView::mouseDrag (const juce::MouseEvent& e)
 {
 
     if (e.eventComponent == nullptr)
@@ -131,7 +133,7 @@ juce::Point<float> CableView::getCableMousePosition() const
     return mousePosition.value_or (juce::Point<int> {}).toFloat();
 }
 
-void CableView::mouseUp (const MouseEvent& e)
+void CableView::mouseUp (const juce::MouseEvent& e)
 {
     //DBG("mousei[can");
     if (isDraggingCable)
@@ -149,7 +151,7 @@ void CableView::mouseUp (const MouseEvent& e)
 }
 
 
-void CableView::endDraggingConnector (const MouseEvent& e)
+void CableView::endDraggingConnector (const juce::MouseEvent& e)
 {
     if (draggingConnector == nullptr)
         return;
@@ -167,7 +169,7 @@ void CableView::endDraggingConnector (const MouseEvent& e)
     });
     if (auto* pin = site.findPinAt (e2.position))
     {
-        if (connection.source.nodeID == AudioProcessorGraph::NodeID())
+        if (connection.source.nodeID == juce::AudioProcessorGraph::NodeID())
         {
             if (pin->isInput)
                 return;
@@ -183,13 +185,12 @@ void CableView::endDraggingConnector (const MouseEvent& e)
         }
 //// this doesnt feel threadsafe but putting it in the processorqueue breaks.
 
-        ValueTree _connection(IDs::CONNECTION);
-        _connection.setProperty(IDs::src,  VariantConverter<juce::AudioProcessorGraph::NodeID>::toVar(connection.source.nodeID), nullptr);
+        juce::ValueTree _connection(IDs::CONNECTION);
+        _connection.setProperty(IDs::src,  juce::VariantConverter<juce::AudioProcessorGraph::NodeID>::toVar(connection.source.nodeID), nullptr);
         _connection.setProperty(IDs::srcIdx, connection.source.channelIndex, nullptr);
-        _connection.setProperty(IDs::dest,  VariantConverter<juce::AudioProcessorGraph::NodeID>::toVar(connection.destination.nodeID), nullptr);
+        _connection.setProperty(IDs::dest,  juce::VariantConverter<juce::AudioProcessorGraph::NodeID>::toVar(connection.destination.nodeID), nullptr);
         _connection.setProperty(IDs::destIdx, connection.destination.channelIndex, nullptr);
         parent.appendChild(_connection,nullptr);
-;
     }
 }
 
@@ -235,13 +236,13 @@ void CableView::newObjectAdded(Cable *c) {
 
 }
 void CableView::deleteObject(Cable *at)  {
-    if ((OpenGLContext::getCurrentContext() == nullptr))
+    if ((juce::OpenGLContext::getCurrentContext() == nullptr))
     {
         SynthGuiInterface* _parent = findParentComponentOfClass<SynthGuiInterface>();
 
         //safe to do on message thread because we have locked processing if this is called
         at->setVisible(false);
-        site.open_gl.context.executeOnGLThread([this,&at](OpenGLContext &openGLContext) {
+        site.open_gl.context.executeOnGLThread([this,&at](juce::OpenGLContext &openGLContext) {
             this->destroyOpenGlComponent(*(at->getImageComponent()), this->site.open_gl);
         },true);
     }
@@ -266,8 +267,8 @@ Cable* CableView::createNewObject(const juce::ValueTree &v) {
     addOpenGlComponent(comp->getImageComponent(), true, false);
     site.open_gl.initOpenGlComp.try_enqueue([this, comp] {
         comp->getImageComponent()->init(site.open_gl);
-        MessageManager::callAsync(
-                [safeComp = Component::SafePointer<Cable>(comp)] {
+        juce::MessageManager::callAsync(
+                [safeComp = juce::Component::SafePointer<Cable>(comp)] {
                     if (auto *_comp = safeComp.getComponent()) {
                         _comp->setVisible(true);
                         _comp->getImageComponent()->setVisible(true);
@@ -304,16 +305,16 @@ void CableView::updateComponents()
 //        if (getComponentForConnection (c) == nullptr)
 //        {
 //            auto source = parent.getChildWithProperty(IDs::nodeID,
-//                                                                VariantConverter<juce::AudioProcessorGraph::NodeID>::toVar(c.source.nodeID));
+//                                                                juce::VariantConverter<juce::AudioProcessorGraph::NodeID>::toVar(c.source.nodeID));
 //
 //            auto destination = parent.getChildWithProperty(IDs::nodeID,
-//                                                                     VariantConverter<juce::AudioProcessorGraph::NodeID>::toVar(c.destination.nodeID));
+//                                                                     juce::VariantConverter<juce::AudioProcessorGraph::NodeID>::toVar(c.destination.nodeID));
 //            if(source.isValid() && destination.isValid())
 //            {
-//                ValueTree connection(IDs::CONNECTION);
-//                connection.setProperty(IDs::src,  VariantConverter<juce::AudioProcessorGraph::NodeID>::toVar(c.source.nodeID), nullptr);
+//                juce::ValueTree connection(IDs::CONNECTION);
+//                connection.setProperty(IDs::src,  juce::VariantConverter<juce::AudioProcessorGraph::NodeID>::toVar(c.source.nodeID), nullptr);
 //                connection.setProperty(IDs::srcIdx, c.source.channelIndex, nullptr);
-//                connection.setProperty(IDs::dest,  VariantConverter<juce::AudioProcessorGraph::NodeID>::toVar(c.destination.nodeID), nullptr);
+//                connection.setProperty(IDs::dest,  juce::VariantConverter<juce::AudioProcessorGraph::NodeID>::toVar(c.destination.nodeID), nullptr);
 //                connection.setProperty(IDs::destIdx, c.destination.channelIndex, nullptr);
 //                parent.appendChild(connection,nullptr);
 //            }
@@ -321,7 +322,7 @@ void CableView::updateComponents()
     }
 }
 
-void CableView::dragConnector(const MouseEvent& e)
+void CableView::dragConnector(const juce::MouseEvent& e)
 {
 
         auto e2 = e.getEventRelativeTo (this);
@@ -336,11 +337,11 @@ void CableView::dragConnector(const MouseEvent& e)
             {
                 auto connection = draggingConnector->connection;
 
-                if (connection.source.nodeID == AudioProcessorGraph::NodeID() && ! pin->isInput)
+                if (connection.source.nodeID == juce::AudioProcessorGraph::NodeID() && ! pin->isInput)
                 {
                     connection.source = pin->pin;
                 }
-                else if (connection.destination.nodeID == AudioProcessorGraph::NodeID() && pin->isInput)
+                else if (connection.destination.nodeID == juce::AudioProcessorGraph::NodeID() && pin->isInput)
                 {
                     connection.destination = pin->pin;
                 }
@@ -352,7 +353,7 @@ void CableView::dragConnector(const MouseEvent& e)
 //                }
             }
 
-            if (draggingConnector->connection.source.nodeID == AudioProcessorGraph::NodeID())
+            if (draggingConnector->connection.source.nodeID == juce::AudioProcessorGraph::NodeID())
                 draggingConnector->dragStart (pos);
             else
                 draggingConnector->dragEnd (pos);

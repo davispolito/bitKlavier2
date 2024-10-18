@@ -35,7 +35,7 @@
 //   vertex_buffer_ = 0;
 //   indices_buffer_ = 0;
 //
-//   mod_color_ = Colours::transparentBlack;
+//   mod_color_ = juce::Colours::transparentBlack;
 //
 //   for (int i = 0; i < max_quads_; ++i) {
 //     setCoordinates(i, -1.0f, -1.0f, 2.0f, 2.0f);
@@ -141,11 +141,11 @@ void OpenGlMultiQuad::destroy(OpenGlWrapper &open_gl)
 
 void OpenGlMultiQuad::render(OpenGlWrapper &open_gl, bool animate)
 {
-  Component *component = target_component_ ? target_component_ : this;
+  juce::Component *component = target_component_ ? target_component_ : this;
   if (!active_ || (!draw_when_not_visible_ && !component->isVisible()) || !setViewPort(component, open_gl))
     return;
 
-  Component *scissor_component = scissor_component_;
+  juce::Component *scissor_component = scissor_component_;
   if (scissor_component)
     setScissor(scissor_component, open_gl);
 

@@ -19,7 +19,7 @@
 #include "LokiTypeInfo.h"
 #include "AssocVector.h"
 #include <exception>
-
+#include <map>
 namespace Loki
 {
 

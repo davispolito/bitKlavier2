@@ -32,7 +32,7 @@ public:
     ~DirectPreparation();
 
     // Static function that returns a pointer to a DirectPreparation object
-    static PreparationSection* createDirectSection(ValueTree v, SynthGuiInterface* interface) {
+    static PreparationSection* createDirectSection(juce::ValueTree v, SynthGuiInterface* interface) {
 
         return new DirectPreparation(std::make_unique<DirectProcessor>(v), v, interface->getGui()->open_gl_);
     }
@@ -79,7 +79,7 @@ private:
         void initOpenGlComponents(OpenGlWrapper &open_gl) override;
         void renderOpenGlComponents(OpenGlWrapper& open_gl, bool animate) override;
         void resized() override;
-        void paintBackground(Graphics& g) override
+        void paintBackground(juce::Graphics& g) override
         {
              SynthSection::paintContainer(g);
              paintHeadingText(g);

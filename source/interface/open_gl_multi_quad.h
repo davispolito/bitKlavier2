@@ -252,12 +252,12 @@ public:
     }
   }
 
-  void setTargetComponent(Component *target_component)
+  void setTargetComponent(juce::Component *target_component)
   {
     target_component_ = target_component;
   }
 
-  void setScissorComponent(Component *scissor_component)
+  void setScissorComponent(juce::Component *scissor_component)
   {
     scissor_component_ = scissor_component;
   }
@@ -275,8 +275,8 @@ public:
   void setDrawWhenNotVisible(bool draw) { draw_when_not_visible_ = draw; }
 
 protected:
-  Component *target_component_;
-  Component *scissor_component_;
+  juce::Component *target_component_;
+  juce::Component *scissor_component_;
   Shaders::FragmentShader fragment_shader_;
   int max_quads_;
   int num_quads_;
@@ -383,7 +383,7 @@ private:
 class OpenGlScrollBar : public juce::ScrollBar
 {
 public:
-  OpenGlScrollBar() : ScrollBar(true), bar_(new OpenGlScrollQuad())
+  OpenGlScrollBar() : juce::ScrollBar(true), bar_(new OpenGlScrollQuad())
   {
     bar_->setTargetComponent(this);
     addAndMakeVisible(bar_.get());
@@ -394,32 +394,32 @@ public:
 
   void resized() override
   {
-    ScrollBar::resized();
+    juce::ScrollBar::resized();
     bar_->setBounds(getLocalBounds());
     bar_->setRounding(getWidth() * 0.25f);
   }
 
   void mouseEnter(const juce::MouseEvent &e) override
   {
-    ScrollBar::mouseEnter(e);
+    juce::ScrollBar::mouseEnter(e);
     bar_->setHover(true);
   }
 
   void mouseExit(const juce::MouseEvent &e) override
   {
-    ScrollBar::mouseExit(e);
+    juce::ScrollBar::mouseExit(e);
     bar_->setHover(false);
   }
 
   void mouseDown(const juce::MouseEvent &e) override
   {
-    ScrollBar::mouseDown(e);
+    juce::ScrollBar::mouseDown(e);
     bar_->setColor(color_.overlaidWith(color_));
   }
 
   void mouseUp(const juce::MouseEvent &e) override
   {
-    ScrollBar::mouseDown(e);
+    juce::ScrollBar::mouseDown(e);
     bar_->setColor(color_);
   }
 

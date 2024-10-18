@@ -18,12 +18,12 @@
 
 
 
+#include "synth_button.h"
 #include "look_and_feel/fonts.h"
 #include "paths.h"
-#include "open_gl_image_component.h"
-#include "open_gl_multi_quad.h"
+//#include "open_gl_image_component.h"
+//#include "open_gl_multi_quad.h"
 #include "look_and_feel/shaders.h"
-#include "synth_button.h"
 
 #include <functional>
 #include <map>
@@ -69,7 +69,7 @@ struct PopupItems {
 //    void resized() override {
 //      OpenGlQuad::resized();
 //
-//      Colour color = findColour(Skin::kWidgetAccent1, true);
+//      juce::Colour color = findColour(Skin::kWidgetAccent1, true);
 //      setColor(color);
 //      setModColor(color);
 //      setAltColor(color);
@@ -113,13 +113,13 @@ struct PopupItems {
 
 //class AppLogo : public OpenGlImageComponent {
 //  public:
-//    AppLogo(String name) : OpenGlImageComponent(std::move(name)) {
+//    AppLogo(juce::String name) : OpenGlImageComponent(std::move(name)) {
 //      logo_letter_ = Paths::vitalV();
 //      logo_ring_ = Paths::vitalRing();
 //    }
 //
-//    void paint(Graphics& g) override {
-//      const DropShadow shadow(findColour(Skin::kShadow, true), 10.0f,juce::Point<int>(0, 0));
+//    void paint(juce::Graphics& g) override {
+//      const juce::DropShadow shadow(findColour(Skin::kShadow, true), 10.0f,juce::Point<int>(0, 0));
 //
 //      logo_letter_.applyTransform(logo_letter_.getTransformToScaleToFit(getLocalBounds().toFloat(), true));
 //      logo_ring_.applyTransform(logo_ring_.getTransformToScaleToFit(getLocalBounds().toFloat(), true));
@@ -127,12 +127,12 @@ struct PopupItems {
 //      shadow.drawForPath(g, logo_letter_);
 //      shadow.drawForPath(g, logo_ring_);
 //
-//      Colour letter_top_color = findColour(Skin::kWidgetSecondary1, true);
-//      Colour letter_bottom_color = findColour(Skin::kWidgetSecondary2, true);
-//      Colour ring_top_color = findColour(Skin::kWidgetPrimary1, true);
-//      Colour ring_bottom_color = findColour(Skin::kWidgetPrimary2, true);
-//      ColourGradient letter_gradient(letter_top_color, 0.0f, 12.0f, letter_bottom_color, 0.0f, 96.0f, false);
-//      ColourGradient ring_gradient(ring_top_color, 0.0f, 12.0f, ring_bottom_color, 0.0f, 96.0f, false);
+//      juce::Colour letter_top_color = findColour(Skin::kWidgetSecondary1, true);
+//      juce::Colour letter_bottom_color = findColour(Skin::kWidgetSecondary2, true);
+//      juce::Colour ring_top_color = findColour(Skin::kWidgetPrimary1, true);
+//      juce::Colour ring_bottom_color = findColour(Skin::kWidgetPrimary2, true);
+//      juce::ColourGradient letter_gradient(letter_top_color, 0.0f, 12.0f, letter_bottom_color, 0.0f, 96.0f, false);
+//      juce::ColourGradient ring_gradient(ring_top_color, 0.0f, 12.0f, ring_bottom_color, 0.0f, 96.0f, false);
 //      g.setGradientFill(letter_gradient);
 //      g.fillPath(logo_letter_);
 //
@@ -141,8 +141,8 @@ struct PopupItems {
 //    }
 //
 //  private:
-//    Path logo_letter_;
-//    Path logo_ring_;
+//    juce::Path logo_letter_;
+//    juce::Path logo_ring_;
 //
 //    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(AppLogo)
 //};
@@ -150,12 +150,12 @@ struct PopupItems {
 
 //class AppLogo : public OpenGlImageComponent {
 //public:
-//    AppLogo(String name) : OpenGlImageComponent(std::move(name)) {
+//    AppLogo(juce::String name) : OpenGlImageComponent(std::move(name)) {
 //
 //    }
 //
-//    void paint(Graphics& g) override {
-//        const DropShadow shadow(findColour(Skin::kShadow, true), 10.0f, juce::Point<int>(0, 0));
+//    void paint(juce::Graphics& g) override {
+//        const juce::DropShadow shadow(findColour(Skin::kShadow, true), 10.0f, juce::Point<int>(0, 0));
 //
 //        logo_letter_.applyTransform(logo_letter_.getTransformToScaleToFit(getLocalBounds().toFloat(), true));
 //        logo_ring_.applyTransform(logo_ring_.getTransformToScaleToFit(getLocalBounds().toFloat(), true));
@@ -163,12 +163,12 @@ struct PopupItems {
 //        shadow.drawForPath(g, logo_letter_);
 //        shadow.drawForPath(g, logo_ring_);
 //
-//        Colour letter_top_color = findColour(Skin::kWidgetSecondary1, true);
-//        Colour letter_bottom_color = findColour(Skin::kWidgetSecondary2, true);
-//        Colour ring_top_color = findColour(Skin::kWidgetPrimary1, true);
-//        Colour ring_bottom_color = findColour(Skin::kWidgetPrimary2, true);
-//        ColourGradient letter_gradient(letter_top_color, 0.0f, 12.0f, letter_bottom_color, 0.0f, 96.0f, false);
-//        ColourGradient ring_gradient(ring_top_color, 0.0f, 12.0f, ring_bottom_color, 0.0f, 96.0f, false);
+//        juce::Colour letter_top_color = findColour(Skin::kWidgetSecondary1, true);
+//        juce::Colour letter_bottom_color = findColour(Skin::kWidgetSecondary2, true);
+//        juce::Colour ring_top_color = findColour(Skin::kWidgetPrimary1, true);
+//        juce::Colour ring_bottom_color = findColour(Skin::kWidgetPrimary2, true);
+//        juce::ColourGradient letter_gradient(letter_top_color, 0.0f, 12.0f, letter_bottom_color, 0.0f, 96.0f, false);
+//        juce::ColourGradient ring_gradient(ring_top_color, 0.0f, 12.0f, ring_bottom_color, 0.0f, 96.0f, false);
 //        g.setGradientFill(letter_gradient);
 //        g.fillPath(logo_letter_);
 //
@@ -177,14 +177,14 @@ struct PopupItems {
 //    }
 //
 //private:
-//    Path logo_letter_;
-//    Path logo_ring_;
+//    juce::Path logo_letter_;
+//    juce::Path logo_ring_;
 //
 //    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(AppLogo)
 //};
 
-class SynthSection : public Component, public Slider::Listener,
-                     public Button::Listener, public SynthButton::ButtonListener {
+class SynthSection : public juce::Component, public juce::Slider::Listener,
+                     public juce::Button::Listener, public SynthButton::ButtonListener {
   public:
     static constexpr int kDefaultPowerButtonOffset = 0;
     static constexpr float kPowerButtonPaddingPercent = 0.29f;
@@ -225,11 +225,11 @@ class SynthSection : public Component, public Slider::Listener,
       public:
         OffOverlay() : OpenGlQuad(Shaders::kColorFragment) { }
 
-        void paintBackground(Graphics& g) override { }
+        void paintBackground(juce::Graphics& g) override { }
     };
 
-    SynthSection(const String& name);
-    SynthSection(const String& name, OpenGlWrapper* open_gl);
+    SynthSection(const juce::String& name);
+    SynthSection(const juce::String& name, OpenGlWrapper* open_gl);
     virtual ~SynthSection() = default;
 
     void setParent(const SynthSection* parent) { parent_ = parent; }
@@ -237,74 +237,74 @@ class SynthSection : public Component, public Slider::Listener,
 
     virtual void reset();
     virtual void resized() override;
-    virtual void paint(Graphics& g) override;
-    virtual void paintSidewaysHeadingText(Graphics& g);
-    virtual void paintHeadingText(Graphics& g);
-    virtual void paintBackground(Graphics& g);
+    virtual void paint(juce::Graphics& g) override;
+    virtual void paintSidewaysHeadingText(juce::Graphics& g);
+    virtual void paintHeadingText(juce::Graphics& g);
+    virtual void paintBackground(juce::Graphics& g);
     virtual void repaintBackground();
-    void showPopupBrowser(SynthSection* owner, Rectangle<int> bounds, std::vector<File> directories,
-                          String extensions, std::string passthrough_name, std::string additional_folders_name);
+    void showPopupBrowser(SynthSection* owner, juce::Rectangle<int> bounds, std::vector<juce::File> directories,
+                          juce::String extensions, std::string passthrough_name, std::string additional_folders_name);
 //    void updatePopupBrowser(SynthSection* owner);
 //
-    void showPopupSelector(Component* source,juce::Point<int> position, const PopupItems& options,
+    void showPopupSelector(juce::Component* source,juce::Point<int> position, const PopupItems& options,
                            std::function<void(int)> callback, std::function<void()> cancel = { });
-//    void showDualPopupSelector(Component* source,juce::Point<int> position, int width,
+//    void showDualPopupSelector(juce::Component* source,juce::Point<int> position, int width,
 //                               const PopupItems& options, std::function<void(int)> callback);
-    void showPopupDisplay(Component* source, const std::string& text,
-                          BubbleComponent::BubblePlacement placement, bool primary);
+    void showPopupDisplay(juce::Component* source, const std::string& text,
+                          juce::BubbleComponent::BubblePlacement placement, bool primary);
     void hidePopupDisplay(bool primary);
 
-    virtual void loadFile(const File& file) { }
-    virtual File getCurrentFile() { return File(); }
+    virtual void loadFile(const juce::File& file) { }
+    virtual juce::File getCurrentFile() { return juce::File(); }
     virtual std::string getFileName() { return ""; }
     virtual std::string getFileAuthor() { return ""; }
-    virtual void paintContainer(Graphics& g);
-    virtual void paintBody(Graphics& g, Rectangle<int> bounds);
-    virtual void paintBorder(Graphics& g, Rectangle<int> bounds);
-    virtual void paintBody(Graphics& g);
-    virtual void paintBorder(Graphics& g);
+    virtual void paintContainer(juce::Graphics& g);
+    virtual void paintBody(juce::Graphics& g, juce::Rectangle<int> bounds);
+    virtual void paintBorder(juce::Graphics& g, juce::Rectangle<int> bounds);
+    virtual void paintBody(juce::Graphics& g);
+    virtual void paintBorder(juce::Graphics& g);
     int getComponentShadowWidth();
-    virtual void paintTabShadow(Graphics& g);
-    void paintTabShadow(Graphics& g, Rectangle<int> bounds);
-    virtual void paintBackgroundShadow(Graphics& g) { }
+    virtual void paintTabShadow(juce::Graphics& g);
+    void paintTabShadow(juce::Graphics& g, juce::Rectangle<int> bounds);
+    virtual void paintBackgroundShadow(juce::Graphics& g) { }
     virtual void setSizeRatio(float ratio);
-    void paintKnobShadows(Graphics& g);
-    Font getLabelFont();
-    void setLabelFont(Graphics& g);
-    void drawLabelConnectionForComponents(Graphics& g, Component* left, Component* right);
-    void drawLabelBackground(Graphics& g, Rectangle<int> bounds, bool text_component = false);
-    void drawLabelBackgroundForComponent(Graphics& g, Component* component);
-    Rectangle<int> getDividedAreaBuffered(Rectangle<int> full_area, int num_sections, int section, int buffer);
-    Rectangle<int> getDividedAreaUnbuffered(Rectangle<int> full_area, int num_sections, int section, int buffer);
-    Rectangle<int> getLabelBackgroundBounds(Rectangle<int> bounds, bool text_component = false);
-    Rectangle<int> getLabelBackgroundBounds(Component* component, bool text_component = false) {
+    void paintKnobShadows(juce::Graphics& g);
+    juce::Font getLabelFont();
+    void setLabelFont(juce::Graphics& g);
+    void drawLabelConnectionForComponents(juce::Graphics& g, juce::Component* left, juce::Component* right);
+    void drawLabelBackground(juce::Graphics& g, juce::Rectangle<int> bounds, bool text_component = false);
+    void drawLabelBackgroundForComponent(juce::Graphics& g, juce::Component* component);
+    juce::Rectangle<int> getDividedAreaBuffered(juce::Rectangle<int> full_area, int num_sections, int section, int buffer);
+    juce::Rectangle<int> getDividedAreaUnbuffered(juce::Rectangle<int> full_area, int num_sections, int section, int buffer);
+    juce::Rectangle<int> getLabelBackgroundBounds(juce::Rectangle<int> bounds, bool text_component = false);
+    juce::Rectangle<int> getLabelBackgroundBounds(juce::Component* component, bool text_component = false) {
       return getLabelBackgroundBounds(component->getBounds(), text_component);
     }
-    void drawLabel(Graphics& g, String text, Rectangle<int> component_bounds, bool text_component = false);
-    void drawLabelForComponent(Graphics& g, String text, Component* component, bool text_component = false) {
+    void drawLabel(juce::Graphics& g, juce::String text, juce::Rectangle<int> component_bounds, bool text_component = false);
+    void drawLabelForComponent(juce::Graphics& g, juce::String text, juce::Component* component, bool text_component = false) {
       drawLabel(g, std::move(text), component->getBounds(), text_component);
     }
-    void drawTextBelowComponent(Graphics& g, String text, Component* component, int space, int padding = 0);
+    void drawTextBelowComponent(juce::Graphics& g, juce::String text, juce::Component* component, int space, int padding = 0);
 
-    virtual void paintChildrenShadows(Graphics& g);
-    void paintChildrenBackgrounds(Graphics& g);
-    void paintOpenGlChildrenBackgrounds(Graphics& g);
-    void paintChildBackground(Graphics& g, SynthSection* child);
-    void paintChildShadow(Graphics& g, SynthSection* child);
-    void paintOpenGlBackground(Graphics& g, OpenGlComponent* child);
-    void drawTextComponentBackground(Graphics& g, Rectangle<int> bounds, bool extend_to_label);
-    void drawTempoDivider(Graphics& g, Component* sync);
+    virtual void paintChildrenShadows(juce::Graphics& g);
+    void paintChildrenBackgrounds(juce::Graphics& g);
+    void paintOpenGlChildrenBackgrounds(juce::Graphics& g);
+    void paintChildBackground(juce::Graphics& g, SynthSection* child);
+    void paintChildShadow(juce::Graphics& g, SynthSection* child);
+    void paintOpenGlBackground(juce::Graphics& g, OpenGlComponent* child);
+    void drawTextComponentBackground(juce::Graphics& g, juce::Rectangle<int> bounds, bool extend_to_label);
+    void drawTempoDivider(juce::Graphics& g, juce::Component* sync);
     virtual void initOpenGlComponents(OpenGlWrapper& open_gl);
     virtual void renderOpenGlComponents(OpenGlWrapper& open_gl, bool animate);
     virtual void destroyOpenGlComponents(OpenGlWrapper& open_gl);
     void destroyOpenGlComponent(OpenGlComponent & open_gl_component, OpenGlWrapper& open_gl);
 
-    virtual void sliderValueChanged(Slider* moved_slider) override;
-    virtual void buttonClicked(Button* clicked_button) override;
+    virtual void sliderValueChanged(juce::Slider* moved_slider) override;
+    virtual void buttonClicked(juce::Button* clicked_button) override;
     virtual void guiChanged(SynthButton* button) override;
 
     std::map<std::string, SynthSlider*> getAllSliders() { return all_sliders_; }
-    std::map<std::string, ToggleButton*> getAllButtons() { return all_buttons_; }
+    std::map<std::string, juce::ToggleButton*> getAllButtons() { return all_buttons_; }
 
     std::vector<juce::Component*> getAllSlidersVec() { return all_sliders_v; }
     float getKnobSectionHeight();
@@ -318,7 +318,7 @@ class SynthSection : public Component, public Slider::Listener,
     void addSubSection(SynthSection* section, bool show = true);
     void removeSubSection(SynthSection* section);
     virtual void setScrollWheelEnabled(bool enabled);
-    ToggleButton* activator() const { return activator_; }
+    juce::ToggleButton* activator() const { return activator_; }
     void showPrepPopup(PreparationSection* prep);
     float getTitleWidth();
     float getPadding();
@@ -347,7 +347,7 @@ class SynthSection : public Component, public Slider::Listener,
   protected:
     void setSliderHasHzAlternateDisplay(SynthSlider* slider);
     void setSidewaysHeading(bool sideways) { sideways_heading_ = sideways; }
-    void addToggleButton(ToggleButton* button, bool show);
+    void addToggleButton(juce::ToggleButton* button, bool show);
     void addButton(OpenGlToggleButton* button, bool show = true);
     void addButton(OpenGlShapeButton* button, bool show = true);
 
@@ -360,21 +360,21 @@ class SynthSection : public Component, public Slider::Listener,
       preset_selector_ = preset_selector;
       preset_selector_half_width_ = half;
     }
-    void paintJointControlSliderBackground(Graphics& g, int x, int y, int width, int height);
-    void paintJointControlBackground(Graphics& g, int x, int y, int width, int height);
-    void paintJointControl(Graphics& g, int x, int y, int width, int height, const std::string& name);
+    void paintJointControlSliderBackground(juce::Graphics& g, int x, int y, int width, int height);
+    void paintJointControlBackground(juce::Graphics& g, int x, int y, int width, int height);
+    void paintJointControl(juce::Graphics& g, int x, int y, int width, int height, const std::string& name);
     void placeJointControls(int x, int y, int width, int height,
-                            SynthSlider* left, SynthSlider* right, Component* widget = nullptr);
+                            SynthSlider* left, SynthSlider* right, juce::Component* widget = nullptr);
     void placeTempoControls(int x, int y, int width, int height, SynthSlider* tempo, SynthSlider* sync);
-    void placeRotaryOption(Component* option, SynthSlider* rotary);
-    void placeKnobsInArea(Rectangle<int> area, std::vector<Component*> knobs);
+    void placeRotaryOption(juce::Component* option, SynthSlider* rotary);
+    void placeKnobsInArea(juce::Rectangle<int> area, std::vector<juce::Component*> knobs);
 
     void lockCriticalSection();
     void unlockCriticalSection();
-    Rectangle<int> getPresetBrowserBounds();
+    juce::Rectangle<int> getPresetBrowserBounds();
     int getTitleTextRight();
-    Rectangle<int> getPowerButtonBounds();
-    Rectangle<int> getTitleBounds();
+    juce::Rectangle<int> getPowerButtonBounds();
+    juce::Rectangle<int> getTitleBounds();
     float getDisplayScale() const;
     virtual int getPixelMultiple() const;
 
@@ -383,12 +383,12 @@ class SynthSection : public Component, public Slider::Listener,
     std::vector<std::shared_ptr<OpenGlComponent>> open_gl_components_;
     OpenGlBackground* background_;
     std::map<std::string, SynthSlider*> slider_lookup_;
-    std::map<std::string, Button*> button_lookup_;
+    std::map<std::string, juce::Button*> button_lookup_;
 
 
     std::map<std::string, SynthSlider*> all_sliders_;
     std::vector<juce::Component*> all_sliders_v;
-    std::map<std::string, ToggleButton*> all_buttons_;
+    std::map<std::string, juce::ToggleButton*> all_buttons_;
     std::map<Skin::ValueId, float> value_lookup_;
 
     const SynthSection* parent_;

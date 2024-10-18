@@ -6,8 +6,7 @@
 #include "Synthesiser/Sample.h"
 #include "synth_base.h"
 SampleLoadManager::SampleLoadManager(UserPreferences &preferences, SynthBase* synth_) : preferences(preferences) ,
-audioFormatManager(new AudioFormatManager()),
-synth(synth_)
+audioFormatManager(new juce::AudioFormatManager())
 {
     audioFormatManager->registerBasicFormats();
 //    for(auto str : bitklavier::utils::samplepaths)
@@ -24,8 +23,8 @@ SampleLoadManager::~SampleLoadManager()
 
 void SampleLoadManager::handleAsyncUpdate()
 {
-    DBG("samples loaded, tell the audio thread its okay to change the move soundsets");
-    DBG(String(sampler_soundset[globalSoundSet].size()));
+    DBG("samples loaded, tell the audio thread its okay to move  soundsets");
+    DBG(juce::String(sampler_soundset[globalSoundSet].size()));
     synth->processorInitQueue.try_enqueue([this]
                  {
 //                     SynthGuiInterface* _parent = findParentComponentOfClass<SynthGuiInterface>();
@@ -38,7 +37,7 @@ void SampleLoadManager::handleAsyncUpdate()
 class MyComparator
 {
 public:
-    static int compareElements (File first, File second) {
+    static int compareElements (juce::File first, juce::File second) {
         if (first.getFileNameWithoutExtension() < second.getFileNameWithoutExtension())
             return -1;
         else if (first.getFileNameWithoutExtension() < second.getFileNameWithoutExtension())
@@ -52,7 +51,7 @@ public:
 class VelocityComparator
 {
 public:
-    static int compareElements (File first, File second) {
+    static int compareElements (juce::File first, juce::File second) {
         // assumes sample names of form [PitchLetter(s)][octave]v[velocity].wav
         //      so A3v13.wav, of C#0v2.wav
         //      with only sharps, and ABCDEFG
@@ -77,18 +76,18 @@ public:
 };
 
 // sort array of sample files into arrays of velocities by pitch
-Array<File> SampleLoadManager::samplesByPitch(String whichPitch, Array<File> inFiles)
+juce::Array<juce::File> SampleLoadManager::samplesByPitch(juce::String whichPitch, juce::Array<juce::File> inFiles)
 {
     VelocityComparator vsorter;
 
-    Array<File> outFiles;
+    juce::Array<juce::File> outFiles;
     bool sharp = false;
 
     if (whichPitch.contains("#")) sharp = true;
 
     for ( auto file : inFiles)
     {
-        String fileToPlace = file.getFileNameWithoutExtension();
+        juce::String fileToPlace = file.getFileNameWithoutExtension();
         if (sharp)
         {
             if (fileToPlace.startsWith (whichPitch))
@@ -121,14 +120,14 @@ Array<File> SampleLoadManager::samplesByPitch(String whichPitch, Array<File> inF
 bool SampleLoadManager::loadSamples( int selection, bool isGlobal)
 {
     MyComparator sorter;
-    String samplePath = preferences.tree.getProperty("default_sample_path");
+    juce::String samplePath = preferences.tree.getProperty("default_sample_path");
 
     samplePath.append(bitklavier::utils::samplepaths[selection], 10); // change to "orig" to test that way
     //samplePath.append("/orig", 10);
     DBG("sample path = " + samplePath);
-    File directory(samplePath);
+    juce::File directory(samplePath);
     DBG(samplePath);
-    Array<File> allSamples = directory.findChildFiles(File::TypesOfFileToFind::findFiles, false, "*.wav");
+    juce::Array<juce::File> allSamples = directory.findChildFiles(juce::File::TypesOfFileToFind::findFiles, false, "*.wav");
     allSamples.sort(sorter);
     samplesByPitch("A1", allSamples);
     // look for how many of each type there are: 3 A0 samples, 7 C3 samples, 0 D# samples, 1 C# sample, etc...
@@ -139,7 +138,7 @@ bool SampleLoadManager::loadSamples( int selection, bool isGlobal)
     int i = 0;
     for ( auto file : allSamples)
     {
-        DBG(file.getFullPathName() + " " + String(++i));
+        DBG(file.getFullPathName() + " " + juce::String(++i));
     }
 
     if (isGlobal)
@@ -163,14 +162,14 @@ bool SampleLoadManager::loadSamples( int selection, bool isGlobal)
 {
 
     MyComparator sorter;
-    String samplePath = preferences.tree.getProperty("default_sample_path");
+    juce::String samplePath = preferences.tree.getProperty("default_sample_path");
 
     samplePath.append(bitklavier::utils::samplepaths[selection], 10); // change to "orig" to test that way
     //samplePath.append("/orig", 10);
     DBG("sample path = " + samplePath);
-    File directory(samplePath);
+    juce::File directory(samplePath);
     DBG(samplePath);
-    Array<File> allSamples = directory.findChildFiles(File::TypesOfFileToFind::findFiles, false, "*.wav");
+    juce::Array<juce::File> allSamples = directory.findChildFiles(juce::File::TypesOfFileToFind::findFiles, false, "*.wav");
     allSamples.sort(sorter);
     // look for how many of each type there are: 3 A0 samples, 7 C3 samples, 0 D# samples, 1 C# sample, etc...
     // divide up the velocity range depending on how many there are, and/or using dBFS
@@ -180,7 +179,7 @@ bool SampleLoadManager::loadSamples( int selection, bool isGlobal)
     int i = 0;
     for ( auto file : allSamples)
     {
-        DBG(file.getFullPathName() + " " + String(++i));
+        DBG(file.getFullPathName() + " " + juce::String(++i));
     }
 
     if (isGlobal)
@@ -203,7 +202,7 @@ bool SampleLoadManager::loadSamples( int selection, bool isGlobal)
 }
  */
 
-static inline int noteNameToRoot(String name)
+static inline int noteNameToRoot(juce::String name)
 {
     int root = 0;
     if (name[0] == 'C') root = 0;
@@ -324,13 +323,13 @@ void SampleLoadJob::loadMainPianoSamples()
         DBG("**** loading sample: " + filename);
         auto sample = new Sample(*(reader.get()), 90);
 
-        StringArray stringArray;
+        juce::StringArray stringArray;
         stringArray.addTokens(filename, "v", "");
-        String noteName = stringArray[0];
-        String velLayer = stringArray[1];
+        juce::String noteName = stringArray[0];
+        juce::String velLayer = stringArray[1];
         int midiNote = noteNameToRoot(noteName);
         int vel = velLayer.getIntValue();
-        BigInteger midiNoteRange;
+        juce::BigInteger midiNoteRange;
         int start = midiNote -1;
 
         //reset dbfs values
@@ -346,8 +345,8 @@ void SampleLoadJob::loadMainPianoSamples()
         } else midiNoteRange.setRange(start, 3, true);
 
         auto [begin, end] = ranges.values[vel];
-        DBG("velocity min/max = " + String(begin) + "/" + String(end));
-        BigInteger velRange;
+        DBG("velocity min/max = " + juce::String(begin) + "/" + juce::String(end));
+        juce::BigInteger velRange;
         velRange.setRange(begin, end - begin, true);
         auto sound = soundset->add(new BKSamplerSound(filename, std::shared_ptr<Sample<juce::AudioFormatReader>>(sample),
                                               midiNoteRange,

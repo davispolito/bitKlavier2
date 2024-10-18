@@ -8,16 +8,16 @@
 #include "open_gl_image_component.h"
 #include "common.h"
 
-class BKItem : /*public DraggableComponent,*/ public Button
+class BKItem : /*public DraggableComponent,*/ public juce::Button
 {
 public:
     BKItem (bitklavier::BKPreparationType type);
-    void mouseDown (const MouseEvent& e) override;
-    void mouseDoubleClick (const MouseEvent& e) override;
-    void mouseDrag(const MouseEvent& e) override;
+    void mouseDown (const juce::MouseEvent& e) override;
+    void mouseDoubleClick (const juce::MouseEvent& e) override;
+    void mouseDrag(const juce::MouseEvent& e) override;
 
-    // void paint(Graphics& g) override;
-    void setIcons (const Path& layer_1, const Path& layer_2, const Path& layer_3)
+    // void paint(juce::Graphics& g) override;
+    void setIcons (const juce::Path& layer_1, const juce::Path& layer_2, const juce::Path& layer_3)
     {
         layer_1_ = layer_1;
         layer_2_ = layer_2;
@@ -28,22 +28,22 @@ public:
     void resized() override
     {
         //redoImage();
-        const DropShadow shadow(Colours::white, 5, juce::Point<int>(0, 0));
+        const juce::DropShadow shadow(juce::Colours::white, 5, juce::Point<int>(0, 0));
 
         if (shadow_.getWidth() == getWidth() && shadow_.getHeight() == getHeight())
             return;
 
-        Rectangle<float> bounds = getLocalBounds().toFloat();//.reduced(10).withX(0).withY(0);
+        juce::Rectangle<float> bounds = getLocalBounds().toFloat();//.reduced(10).withX(0).withY(0);
 
-        Rectangle<float> s = bounds.getProportion<float>({0.0f, 0.0f, 0.9f, 0.9f});
+        juce::Rectangle<float> s = bounds.getProportion<float>({0.0f, 0.0f, 0.9f, 0.9f});
         s.setCentre(bounds.getCentre());
         layer_1_.applyTransform(layer_1_.getTransformToScaleToFit(s,true));
         int width = getWidth();
         int height = getHeight();
 
-        shadow_ = Image(Image::SingleChannel,width, height, true);
+        shadow_ = juce::Image(juce::Image::SingleChannel,width, height, true);
 
-        Graphics shadow_g(shadow_);
+        juce::Graphics shadow_g(shadow_);
         shadow.drawForPath(shadow_g, layer_1_);
 
         redoImage();
@@ -64,7 +64,7 @@ public:
     std::shared_ptr<OpenGlImageComponent> getImageComponent() { return image_component_; }
     void redoImage() { image_component_->redrawImage (true); } //image_component_.redrawImage(true); }
 
-    void setColor (Colour col)
+    void setColor (juce::Colour col)
     {
         prep_color_ = col;
     }
@@ -76,7 +76,7 @@ protected:
     //void valueTreePropertyChanged (juce::ValueTree& v, const juce::Identifier& i) override;
     //    juce::ValueTree &state;
     //    juce::UndoManager &um;
-    Image shadow_;
+    juce::Image shadow_;
     std::vector<Listener*> listeners_;
     std::shared_ptr<OpenGlImageComponent> image_component_;
 
@@ -84,7 +84,7 @@ protected:
     juce::Path layer_2_;
     juce::Path layer_3_;
     juce::Path layer_4_;
-    Colour prep_color_;
+    juce::Colour prep_color_;
     bool wasJustDragged;
 
 };
@@ -100,7 +100,7 @@ public:
     void paintButton (juce::Graphics& g, bool shouldDrawButtonAsHighlighted, bool shouldDrawButtonAsDown)
     {
         // Ascertains the current window size
-        Rectangle<float> bounds = getLocalBounds().toFloat();
+        juce::Rectangle<float> bounds = getLocalBounds().toFloat();
 
         // Ascertains the appropriate location for layer_2 based on the preparation
         // window size
@@ -134,7 +134,7 @@ public:
 
         g.setColour(findColour(Skin::kShadow, true));
         g.drawImageAt(shadow_, 0, 0, true);
-        Colour c;
+        juce::Colour c;
         c = findColour(Skin::kWidgetPrimary2, true);
         g.setColour(c);
         g.fillPath(layer_1_);
@@ -159,7 +159,7 @@ public:
     void paintButton (juce::Graphics& g, bool shouldDrawButtonAsHighlighted, bool shouldDrawButtonAsDown)
     {
         // Ascertains the current window size
-        Rectangle<float> bounds = getLocalBounds().toFloat();
+        juce::Rectangle<float> bounds = getLocalBounds().toFloat();
 
         // Ascertains the appropriate location for layer_2 based on the preparation
         // window size
@@ -195,7 +195,7 @@ public:
         g.drawImageAt(shadow_, 0, 0, true);
         g.fillPath(layer_1_);
 
-        Colour c;
+        juce::Colour c;
         c = findColour(Skin::kWidgetPrimary1, true);
         g.setColour(c);
         g.fillPath(layer_2_);
@@ -216,7 +216,7 @@ public:
     void paintButton (juce::Graphics& g, bool shouldDrawButtonAsHighlighted, bool shouldDrawButtonAsDown)
     {
         // Ascertains the current window size
-        Rectangle<float> bounds = getLocalBounds().toFloat();
+        juce::Rectangle<float> bounds = getLocalBounds().toFloat();
 
         // Ascertains the appropriate location for layer_2 based on the preparation
         // window size
@@ -252,7 +252,7 @@ public:
         g.drawImageAt(shadow_, 0, 0, true);
         g.fillPath(layer_1_);
 
-        Colour c;
+        juce::Colour c;
         c = findColour(Skin::kWidgetPrimary1, true);
         g.setColour(c);
         g.fillPath(layer_2_);
@@ -274,7 +274,7 @@ public:
     void paintButton (juce::Graphics& g, bool shouldDrawButtonAsHighlighted, bool shouldDrawButtonAsDown)
     {
         // Ascertains the current window size
-        Rectangle<float> bounds = getLocalBounds().toFloat();
+        juce::Rectangle<float> bounds = getLocalBounds().toFloat();
 
         // Ascertains the appropriate location for layer_2 based on the preparation
         // window size
@@ -310,7 +310,7 @@ public:
         g.drawImageAt(shadow_, 0, 0, true);
         g.fillPath(layer_1_);
 
-        Colour c;
+        juce::Colour c;
         c = findColour(Skin::kWidgetPrimary1, true);
         g.setColour(c);
         g.fillPath(layer_2_);
@@ -332,7 +332,7 @@ public:
     void paintButton (juce::Graphics& g, bool shouldDrawButtonAsHighlighted, bool shouldDrawButtonAsDown)
     {
         // Ascertains the current window size
-        Rectangle<float> bounds = getLocalBounds().toFloat();
+        juce::Rectangle<float> bounds = getLocalBounds().toFloat();
 
         // Ascertains the appropriate location for layer_2 based on the preparation
         // window size
@@ -368,7 +368,7 @@ public:
         g.drawImageAt(shadow_, 0, 0, true);
         g.fillPath(layer_1_);
 
-        Colour c;
+        juce::Colour c;
         c = findColour(Skin::kWidgetPrimary1, true);
         g.setColour(c);
         g.fillPath(layer_2_);
@@ -390,7 +390,7 @@ public:
     void paintButton (juce::Graphics& g, bool shouldDrawButtonAsHighlighted, bool shouldDrawButtonAsDown)
     {
         // Ascertains the current window size
-        Rectangle<float> bounds = getLocalBounds().toFloat();
+        juce::Rectangle<float> bounds = getLocalBounds().toFloat();
 
         // Ascertains the appropriate location for layer_2 based on the preparation
         // window size
@@ -426,7 +426,7 @@ public:
         g.drawImageAt(shadow_, 0, 0, true);
         g.fillPath(layer_1_);
 
-        Colour c;
+        juce::Colour c;
         c = findColour(Skin::kWidgetPrimary1, true);
         g.setColour(c);
         g.fillPath(layer_2_);
@@ -447,7 +447,7 @@ public:
     void paintButton (juce::Graphics& g, bool shouldDrawButtonAsHighlighted, bool shouldDrawButtonAsDown)
     {
         // Ascertains the current window size
-        Rectangle<float> bounds = getLocalBounds().toFloat();
+        juce::Rectangle<float> bounds = getLocalBounds().toFloat();
 
         // Ascertains the appropriate location for layer_2 based on the preparation
         // window size
@@ -470,7 +470,7 @@ public:
         g.drawImageAt(shadow_, 0, 0, true);
         g.fillPath(layer_1_);
 
-        Colour c;
+        juce::Colour c;
         c = findColour(Skin::kWidgetPrimary1, true);
         g.setColour(c);
         g.fillPath(layer_2_);
@@ -491,7 +491,7 @@ public:
     void paintButton (juce::Graphics& g, bool shouldDrawButtonAsHighlighted, bool shouldDrawButtonAsDown)
     {
         // Ascertains the current window size
-        Rectangle<float> bounds = getLocalBounds().toFloat();
+        juce::Rectangle<float> bounds = getLocalBounds().toFloat();
 
         // Ascertains the appropriate location for layer_2 based on the preparation
         // window size
@@ -514,7 +514,7 @@ public:
         g.drawImageAt(shadow_, 0, 0, true);
         g.fillPath(layer_1_);
 
-        Colour c;
+        juce::Colour c;
         c = findColour(Skin::kWidgetPrimary1, true);
         g.setColour(c);
         g.fillPath(layer_2_);

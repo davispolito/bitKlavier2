@@ -17,16 +17,15 @@
 #pragma once
 #include <juce_graphics/juce_graphics.h>
 
-using namespace juce;
 class Fonts {
   public:
     virtual ~Fonts() { }
 
-    Font& proportional_regular() { return proportional_regular_; }
-    Font& proportional_light() { return proportional_light_; }
-    Font& proportional_title() { return proportional_title_; }
-    Font& proportional_title_regular() { return proportional_title_regular_; }
-    Font& monospace() { return monospace_; }
+    juce::Font& proportional_regular() { return proportional_regular_; }
+    juce::Font& proportional_light() { return proportional_light_; }
+    juce::Font& proportional_title() { return proportional_title_; }
+    juce::Font& proportional_title_regular() { return proportional_title_regular_; }
+    juce::Font& monospace() { return monospace_; }
 
     static Fonts* instance() {
       static Fonts instance;
@@ -36,11 +35,11 @@ class Fonts {
   private:
     Fonts();
 
-    Font proportional_regular_;
-    Font proportional_light_;
-    Font proportional_title_;
-    Font proportional_title_regular_;
-    Font monospace_;
+    juce::Font proportional_regular_;
+    juce::Font proportional_light_;
+    juce::Font proportional_title_;
+    juce::Font proportional_title_regular_;
+    juce::Font monospace_;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(Fonts)
 };

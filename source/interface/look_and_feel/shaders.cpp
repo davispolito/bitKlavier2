@@ -18,7 +18,7 @@
 
 
 #include "shaders.h"
-#include "../open_gl_component.h"
+#include "open_gl_component.h"
 
 
 #if JUCE_OPENGL_ES || OPENGL_ES
@@ -948,32 +948,32 @@ namespace {
       "    gl_Position.w = 1.0;\n"
       "}\n";
 
-  inline String translateFragmentShader(const String& code) {
+  inline juce::String translateFragmentShader(const juce::String& code) {
   #if OPENGL_ES
-    return String("#version 300 es\n") + "out mediump vec4 fragColor;\n" +
+    return juce::String("#version 300 es\n") + "out mediump vec4 fragColor;\n" +
       code.replace("varying", "in").replace("texture2D", "texture").replace("gl_FragColor", "fragColor");
   #else
-    return OpenGLHelpers::translateFragmentShaderToV3(code);
+    return juce::OpenGLHelpers::translateFragmentShaderToV3(code);
   #endif
   }
 
-  inline String translateVertexShader(const String& code) {
+  inline juce::String translateVertexShader(const juce::String& code) {
   #if OPENGL_ES
-    return String("#version 300 es\n") + code.replace("attribute", "in").replace("varying", "out");
+    return juce::String("#version 300 es\n") + code.replace("attribute", "in").replace("varying", "out");
   #else
-    return OpenGLHelpers::translateVertexShaderToV3(code);
+    return juce::OpenGLHelpers::translateVertexShaderToV3(code);
   #endif
   }
 } // namespace
 
-OpenGLShaderProgram* Shaders::getShaderProgram(VertexShader vertex_shader, FragmentShader fragment_shader,
+juce::OpenGLShaderProgram* Shaders::getShaderProgram(VertexShader vertex_shader, FragmentShader fragment_shader,
                                                const GLchar** varyings) {
   int shader_program_index = vertex_shader * kNumFragmentShaders + fragment_shader;
   if (shader_programs_.count(shader_program_index))
     return shader_programs_.at(shader_program_index).get();
 
-  shader_programs_[shader_program_index] = std::make_unique<OpenGLShaderProgram>(*open_gl_context_);
-  OpenGLShaderProgram* result = shader_programs_[shader_program_index].get();
+  shader_programs_[shader_program_index] = std::make_unique<juce::OpenGLShaderProgram>(*open_gl_context_);
+  juce::OpenGLShaderProgram* result = shader_programs_[shader_program_index].get();
   GLuint program_id = result->getProgramID();
   open_gl_context_->extensions.glAttachShader(program_id, getVertexShaderId(vertex_shader));
   open_gl_context_->extensions.glAttachShader(program_id, getFragmentShaderId(fragment_shader));
@@ -1084,7 +1084,7 @@ const char* Shaders::getFragmentShader(FragmentShader shader) {
   }
 }
 
-bool Shaders::checkShaderCorrect(OpenGLExtensionFunctions& extensions, GLuint shader_id) const {
+bool Shaders::checkShaderCorrect(juce::OpenGLExtensionFunctions& extensions, GLuint shader_id) const {
   GLint status = juce::gl::GL_FALSE;
   extensions.glGetShaderiv(shader_id, juce::gl::GL_COMPILE_STATUS, &status);
 
@@ -1094,13 +1094,13 @@ bool Shaders::checkShaderCorrect(OpenGLExtensionFunctions& extensions, GLuint sh
   GLchar info[16384];
   GLsizei info_length = 0;
   extensions.glGetShaderInfoLog(shader_id, sizeof(info), &info_length, info);
-  DBG(String(info, (size_t)info_length));
+  DBG(juce::String(info, (size_t)info_length));
   return false;
 }
 
-GLuint Shaders::createVertexShader(OpenGLExtensionFunctions& extensions, VertexShader shader) const {
+GLuint Shaders::createVertexShader(juce::OpenGLExtensionFunctions& extensions, VertexShader shader) const {
   GLuint shader_id = extensions.glCreateShader(juce::gl::GL_VERTEX_SHADER);
-  String code_string = translateVertexShader(getVertexShader(shader));
+  juce::String code_string = translateVertexShader(getVertexShader(shader));
   const GLchar* code = code_string.toRawUTF8();
   extensions.glShaderSource(shader_id, 1, &code, nullptr);
   extensions.glCompileShader(shader_id);
@@ -1109,9 +1109,9 @@ GLuint Shaders::createVertexShader(OpenGLExtensionFunctions& extensions, VertexS
   return shader_id;
 }
 
-GLuint Shaders::createFragmentShader(OpenGLExtensionFunctions& extensions, FragmentShader shader) const {
+GLuint Shaders::createFragmentShader(juce::OpenGLExtensionFunctions& extensions, FragmentShader shader) const {
   GLuint shader_id = extensions.glCreateShader(juce::gl::GL_FRAGMENT_SHADER);
-  String code_string = translateFragmentShader(getFragmentShader(shader));
+  juce::String code_string = translateFragmentShader(getFragmentShader(shader));
   const GLchar* code = code_string.toRawUTF8();
   extensions.glShaderSource(shader_id, 1, &code, nullptr);
   extensions.glCompileShader(shader_id);
@@ -1120,5 +1120,5 @@ GLuint Shaders::createFragmentShader(OpenGLExtensionFunctions& extensions, Fragm
   return shader_id;
 }
 
-Shaders::Shaders(OpenGLContext& open_gl_context) : open_gl_context_(&open_gl_context),
+Shaders::Shaders(juce::OpenGLContext& open_gl_context) : open_gl_context_(&open_gl_context),
                                                    vertex_shader_ids_(), fragment_shader_ids_() { }

@@ -17,14 +17,14 @@
 #include "OpenGLImageFileComponent.h"
 #include "../synthesis/framework/utils.h"
 #include "BinaryData.h"
-OpenGlImageFileComponent::OpenGlImageFileComponent(String name) : OpenGlComponent(name), component_(nullptr),
+OpenGlImageFileComponent::OpenGlImageFileComponent(juce::String name) : OpenGlComponent(name), component_(nullptr),
                                                           active_(true), static_image_(false),
                                                           paint_entire_component_(true) {
    image_.setTopLeft(-1.0f, 1.0f);
    image_.setTopRight(1.0f, 1.0f);
    image_.setBottomLeft(-1.0f, -1.0f);
    image_.setBottomRight(1.0f, -1.0f);
-   image_.setColor(Colours::white);
+   image_.setColor(juce::Colours::white);
 
    if (name == "")
        setInterceptsMouseClicks(false, false);
@@ -34,9 +34,9 @@ void OpenGlImageFileComponent::redrawImage(bool force) {
    if (!active_)
        return;
 
-   Component* component = component_ ? component_ : this;
+   juce::Component* component = component_ ? component_ : this;
 
-   float pixel_scale = Desktop::getInstance().getDisplays().getDisplayForPoint(getScreenPosition())->scale;
+   float pixel_scale = juce::Desktop::getInstance().getDisplays().getDisplayForPoint(getScreenPosition())->scale;
    int width = component->getWidth() * pixel_scale;
    int height = component->getHeight() * pixel_scale;
    if (width <= 0 || height <= 0)
@@ -49,12 +49,12 @@ void OpenGlImageFileComponent::redrawImage(bool force) {
    image_.lock();
 
   // if (new_image)
-       //draw_image_ = std::make_unique<Image>(ImageCache::getFromMemory(BinaryData::direct_icon_png, BinaryData::direct_icon_pngSize));
+       //draw_image_ = std::make_unique<juce::Image>(juce::ImageCache::getFromMemory(BinaryData::direct_icon_png, BinaryData::direct_icon_pngSize));
        //draw_image_ = image_->;
 
-   //draw_image_->clear(Rectangle<int>(0, 0, width, height));
-//   Graphics g(image_.g);
-//   g.addTransform(AffineTransform::scale(pixel_scale));
+   //draw_image_->clear(juce::Rectangle<int>(0, 0, width, height));
+//   juce::Graphics g(image_.g);
+//   g.addTransform(juce::AffineTransform::scale(pixel_scale));
 //   paintToImage(g);
    //image_.setImage(draw_image_.get());
     //image_.drawImage()
@@ -77,7 +77,7 @@ void OpenGlImageFileComponent::init(OpenGlWrapper& open_gl) {
 }
 
 void OpenGlImageFileComponent::render(OpenGlWrapper& open_gl, bool animate) {
-   Component* component = component_ ? component_ : this;
+   juce::Component* component = component_ ? component_ : this;
    if (!active_ || !setViewPort(component, open_gl) || !component->isVisible() ) //|| draw_image_ == nullptr)
        return;
 

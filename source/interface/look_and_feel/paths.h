@@ -26,20 +26,20 @@ class Paths {
 
     Paths() = delete;
 
-    static Path fromSvgData(const void* data, size_t data_size) {
-      std::unique_ptr<Drawable> drawable(Drawable::createFromImageData(data, data_size));
+    static juce::Path fromSvgData(const void* data, size_t data_size) {
+      std::unique_ptr<juce::Drawable> drawable(juce::Drawable::createFromImageData(data, data_size));
       return drawable->getOutlineAsPath();
     }
 
-    static Path fromPngData(const void* data, size_t data_size) {
-      std::unique_ptr<Drawable> drawable(Drawable::createFromImageData(data, data_size));
+    static juce::Path fromPngData(const void* data, size_t data_size) {
+      std::unique_ptr<juce::Drawable> drawable(juce::Drawable::createFromImageData(data, data_size));
       return drawable->getOutlineAsPath();
     }
 
     // Returns the paths for a keymap preparation window
-    static Array<Path> keymapPaths()
+    static juce::Array<juce::Path> keymapPaths()
     {
-        Array<Path> arr;
+        juce::Array<juce::Path> arr;
         arr.add(fromSvgData((const void*)BinaryData::Layer_1_keymap_svg,BinaryData::Layer_1_keymap_svgSize));
         arr.add(fromSvgData((const void*)BinaryData::Layer_2_keymap_svg,BinaryData::Layer_2_keymap_svgSize));
         arr.add(fromSvgData((const void*)BinaryData::Layer_3_keymap_svg,BinaryData::Layer_3_keymap_svgSize));
@@ -47,18 +47,18 @@ class Paths {
         return arr;
     }
 
-    static Array<Path> portPaths()
+    static juce::Array<juce::Path> portPaths()
     {
-        Array<Path> arr;
+        juce::Array<juce::Path> arr;
         arr.add(fromSvgData((const void*)BinaryData::port_outline_svg,BinaryData::port_outline_svgSize));
         arr.add(fromSvgData((const void*)BinaryData::port_fill_svg,BinaryData::port_fill_svgSize));
 
         return arr;
     }
     // Returns the paths for a nostalgic preparation window
-    static Array<Path> nostalgicPaths()
+    static juce::Array<juce::Path> nostalgicPaths()
     {
-      Array<Path> arr;
+      juce::Array<juce::Path> arr;
       arr.add(fromSvgData((const void*)BinaryData::Layer_1_nostalgic_svg,BinaryData::Layer_1_nostalgic_svgSize));
       arr.add(fromSvgData((const void*)BinaryData::Layer_2_nostalgic_svg,BinaryData::Layer_2_nostalgic_svgSize));
       arr.add(fromSvgData((const void*)BinaryData::Layer_3_nostalgic_svg,BinaryData::Layer_3_nostalgic_svgSize));
@@ -67,9 +67,9 @@ class Paths {
     }
 
     // Returns the paths for a direct preparation window
-    static Array<Path> directPaths()
+    static juce::Array<juce::Path> directPaths()
     {
-      Array<Path> arr;
+      juce::Array<juce::Path> arr;
       arr.add(fromSvgData((const void*)BinaryData::Layer_1_direct_svg,BinaryData::Layer_1_direct_svgSize));
       arr.add(fromSvgData((const void*)BinaryData::Layer_2_direct_svg,BinaryData::Layer_2_direct_svgSize));
       arr.add(fromSvgData((const void*)BinaryData::Layer_3_direct_svg,BinaryData::Layer_3_direct_svgSize));
@@ -79,9 +79,9 @@ class Paths {
 
 
     // Returns the paths for a synchronic preparation window
-    static Array<Path> synchronicPaths()
+    static juce::Array<juce::Path> synchronicPaths()
     {
-        Array<Path> arr;
+        juce::Array<juce::Path> arr;
         arr.add(fromSvgData((const void*)BinaryData::Layer_1_synchronic_svg,BinaryData::Layer_1_synchronic_svgSize));
         arr.add(fromSvgData((const void*)BinaryData::Layer_2_synchronic_svg,BinaryData::Layer_2_synchronic_svgSize));
         arr.add(fromSvgData((const void*)BinaryData::Layer_3_synchronic_svg,BinaryData::Layer_3_synchronic_svgSize));
@@ -90,9 +90,9 @@ class Paths {
     }
 
     // Returns the paths for a blendronic preparation window
-    static Array<Path> blendronicPaths()
+    static juce::Array<juce::Path> blendronicPaths()
     {
-        Array<Path> arr;
+        juce::Array<juce::Path> arr;
         arr.add(fromSvgData((const void*)BinaryData::Layer_1_blendronic_svg,BinaryData::Layer_1_blendronic_svgSize));
         arr.add(fromSvgData((const void*)BinaryData::Layer_2_blendronic_svg,BinaryData::Layer_2_blendronic_svgSize));
         arr.add(fromSvgData((const void*)BinaryData::Layer_3_blendronic_svg,BinaryData::Layer_3_blendronic_svgSize));
@@ -101,9 +101,9 @@ class Paths {
     }
 
     // Returns the paths for a resonance preparation window
-    static Array<Path> resonancePaths()
+    static juce::Array<juce::Path> resonancePaths()
     {
-        Array<Path> arr;
+        juce::Array<juce::Path> arr;
         arr.add(fromSvgData((const void*)BinaryData::Layer_1_resonance_svg,BinaryData::Layer_1_resonance_svgSize));
         arr.add(fromSvgData((const void*)BinaryData::Layer_2_resonance_svg,BinaryData::Layer_2_resonance_svgSize));
         arr.add(fromSvgData((const void*)BinaryData::Layer_3_resonance_svg,BinaryData::Layer_3_resonance_svgSize));
@@ -112,9 +112,9 @@ class Paths {
     }
 
     // Returns the paths for a tuning preparation window
-    static Array<Path> tuningPaths()
+    static juce::Array<juce::Path> tuningPaths()
     {
-        Array<Path> arr;
+        juce::Array<juce::Path> arr;
         arr.add(fromSvgData((const void*)BinaryData::Layer_1_tuning_svg,BinaryData::Layer_1_tuning_svgSize));
         arr.add(fromSvgData((const void*)BinaryData::Layer_2_tuning_svg,BinaryData::Layer_2_tuning_svgSize));
 
@@ -122,18 +122,18 @@ class Paths {
     }
 
     // Returns the paths for a tempo preparation window
-    static Array<Path> tempoPaths()
+    static juce::Array<juce::Path> tempoPaths()
     {
-        Array<Path> arr;
+        juce::Array<juce::Path> arr;
         arr.add(fromSvgData((const void*)BinaryData::Layer_1_tempo_svg,BinaryData::Layer_1_tempo_svgSize));
         arr.add(fromSvgData((const void*)BinaryData::Layer_2_tempo_svg,BinaryData::Layer_2_tempo_svgSize));
 
         return arr;
     }
 
-    static Array<Path> logoPaths()
+    static juce::Array<juce::Path> logoPaths()
     {
-        Array<Path> arr;
+        juce::Array<juce::Path> arr;
         arr.add(fromSvgData((const void*)BinaryData::layer_1_logo_svg,BinaryData::layer_1_logo_svgSize));
         arr.add(fromSvgData((const void*)BinaryData::layer_2_logo_svg,BinaryData::layer_2_logo_svgSize));
         arr.add(fromSvgData((const void*)BinaryData::layer_3_logo_svg,BinaryData::layer_3_logo_svgSize));
@@ -145,101 +145,101 @@ class Paths {
 
 
 //
-//    static Path vitalWord() {
+//    static juce::Path vitalWord() {
 //      return fromSvgData((const void*)BinaryData::vital_word_svg, BinaryData::vital_word_svgSize);
 //    }
 //
-//    static Path vitalWordRing() {
+//    static juce::Path vitalWordRing() {
 //      return fromSvgData((const void*)BinaryData::vital_word_ring_svg, BinaryData::vital_word_ring_svgSize);
 //    }
 //
-//    static Path chorus() {
+//    static juce::Path chorus() {
 //      return fromSvgData((const void*)BinaryData::chorus_svg, BinaryData::chorus_svgSize);
 //    }
 //
-//    static Path compressor() {
+//    static juce::Path compressor() {
 //      return fromSvgData((const void*)BinaryData::compressor_svg, BinaryData::compressor_svgSize);
 //    }
 //
-//    static Path delay() {
+//    static juce::Path delay() {
 //      return fromSvgData((const void*)BinaryData::delay_svg, BinaryData::delay_svgSize);
 //    }
 //
-//    static Path distortion() {
+//    static juce::Path distortion() {
 //      return fromSvgData((const void*)BinaryData::distortion_svg, BinaryData::distortion_svgSize);
 //    }
 //
-//    static Path equalizer() {
+//    static juce::Path equalizer() {
 //      return fromSvgData((const void*)BinaryData::equalizer_svg, BinaryData::equalizer_svgSize);
 //    }
 //
-//    static Path effectsFilter() {
+//    static juce::Path effectsFilter() {
 //      return fromSvgData((const void*)BinaryData::effects_filter_svg, BinaryData::effects_filter_svgSize);
 //    }
 //
-//    static Path flanger() {
+//    static juce::Path flanger() {
 //      return fromSvgData((const void*)BinaryData::flanger_svg, BinaryData::flanger_svgSize);
 //    }
 //
-//    static Path folder() {
+//    static juce::Path folder() {
 //      return fromSvgData((const void*)BinaryData::folder_svg, BinaryData::folder_svgSize);
 //    }
 //
-//    static Path phaser() {
+//    static juce::Path phaser() {
 //      return fromSvgData((const void*)BinaryData::phaser_svg, BinaryData::phaser_svgSize);
 //    }
 //
-//    static Path reverb() {
+//    static juce::Path reverb() {
 //      return fromSvgData((const void*)BinaryData::reverb_svg, BinaryData::reverb_svgSize);
 //    }
 
-    static Path prev() {
-      static const PathStrokeType arrow_stroke(0.1f, PathStrokeType::JointStyle::curved,
-                                               PathStrokeType::EndCapStyle::rounded);
+    static juce::Path prev() {
+      static const juce::PathStrokeType arrow_stroke(0.1f, juce::PathStrokeType::JointStyle::curved,
+                                               juce::PathStrokeType::EndCapStyle::rounded);
 
-      Path prev_line, prev_shape;
+      juce::Path prev_line, prev_shape;
       prev_line.startNewSubPath(0.65f, 0.3f);
       prev_line.lineTo(0.35f, 0.5f);
       prev_line.lineTo(0.65f, 0.7f);
 
       arrow_stroke.createStrokedPath(prev_shape, prev_line);
-      prev_shape.addLineSegment(Line<float>(0.0f, 0.0f, 0.0f, 0.0f), 0.2f);
-      prev_shape.addLineSegment(Line<float>(1.0f, 1.0f, 1.0f, 1.0f), 0.2f);
+      prev_shape.addLineSegment(juce::Line<float>(0.0f, 0.0f, 0.0f, 0.0f), 0.2f);
+      prev_shape.addLineSegment(juce::Line<float>(1.0f, 1.0f, 1.0f, 1.0f), 0.2f);
       return prev_shape;
     }
 
-    static Path next() {
-      static const PathStrokeType arrow_stroke(0.1f, PathStrokeType::JointStyle::curved,
-                                               PathStrokeType::EndCapStyle::rounded);
+    static juce::Path next() {
+      static const juce::PathStrokeType arrow_stroke(0.1f, juce::PathStrokeType::JointStyle::curved,
+                                               juce::PathStrokeType::EndCapStyle::rounded);
 
-      Path next_line, next_shape;
+      juce::Path next_line, next_shape;
       next_line.startNewSubPath(0.35f, 0.3f);
       next_line.lineTo(0.65f, 0.5f);
       next_line.lineTo(0.35f, 0.7f);
 
       arrow_stroke.createStrokedPath(next_shape, next_line);
-      next_shape.addLineSegment(Line<float>(0.0f, 0.0f, 0.0f, 0.0f), 0.2f);
-      next_shape.addLineSegment(Line<float>(1.0f, 1.0f, 1.0f, 1.0f), 0.2f);
+      next_shape.addLineSegment(juce::Line<float>(0.0f, 0.0f, 0.0f, 0.0f), 0.2f);
+      next_shape.addLineSegment(juce::Line<float>(1.0f, 1.0f, 1.0f, 1.0f), 0.2f);
       return next_shape;
     }
 
-    static Path clock() {
+    static juce::Path clock() {
       static const float kClockAngle = 1.0f;
       static const float kClockWidth = 0.4f;
       static const float kBuffer = (1.0f - kClockWidth) / 2.0f;
 
-      Path path;
+      juce::Path path;
       path.addPieSegment(kBuffer, kBuffer, kClockWidth, kClockWidth, 0.0f, kClockAngle - 2.0f * bitklavier::kPi, 0.0f);
-      path.addLineSegment(Line<float>(0.0f, 0.0f, 0.0f, 0.0f), 0.2f);
-      path.addLineSegment(Line<float>(1.0f, 1.0f, 1.0f, 1.0f), 0.2f);
+      path.addLineSegment(juce::Line<float>(0.0f, 0.0f, 0.0f, 0.0f), 0.2f);
+      path.addLineSegment(juce::Line<float>(1.0f, 1.0f, 1.0f, 1.0f), 0.2f);
       return path;
     }
 
-//    static Path dragDropArrows() {
+//    static juce::Path dragDropArrows() {
 //      return fromSvgData((const void*)BinaryData::drag_drop_arrows_svg, BinaryData::drag_drop_arrows_svgSize);
 //    }
 
-    static Path note() {
+    static juce::Path note() {
       static constexpr float kLeftAdjustment = 1.0f / 32.0f;
       static constexpr float kNoteWidth = 1.0f / 4.0f;
       static constexpr float kNoteHeight = 1.0f / 5.0f;
@@ -248,17 +248,17 @@ class Paths {
       static constexpr float kY = 1.0f - (1.0f - kBarHeight + kNoteHeight / 2.0f) / 2.0f;
       static constexpr float kX = (1.0f - kNoteWidth) / 2.0f - kLeftAdjustment;
 
-      Path path;
+      juce::Path path;
       path.addEllipse(kX, kY - kNoteHeight / 2.0f, kNoteWidth, kNoteHeight);
       path.addRectangle(kX + kNoteWidth - kBarWidth, kY - kBarHeight, kBarWidth, kBarHeight);
       path.closeSubPath();
 
-      path.addLineSegment(Line<float>(0.0f, 0.0f, 0.0f, 0.0f), 0.2f);
-      path.addLineSegment(Line<float>(1.0f, 1.0f, 1.0f, 1.0f), 0.2f);
+      path.addLineSegment(juce::Line<float>(0.0f, 0.0f, 0.0f, 0.0f), 0.2f);
+      path.addLineSegment(juce::Line<float>(1.0f, 1.0f, 1.0f, 1.0f), 0.2f);
       return path;
     }
 
-    static Path tripletNotes() {
+    static juce::Path tripletNotes() {
       static constexpr float kNoteWidth = 1.0f / 5.0f;
       static constexpr float kNoteHeight = 1.0f / 6.0f;
       static constexpr float kX = (1.0f - 3.0f * kNoteWidth) / 2.0f;
@@ -266,7 +266,7 @@ class Paths {
       static constexpr float kBarHeight = 1.0f / 4.0f;
       static constexpr float kY = 1.0f - (1.0f - kBarHeight) / 2.0f;
 
-      Path path;
+      juce::Path path;
       path.addRectangle(kX + kNoteWidth - kBarWidth, kY - kBarHeight - kBarWidth,
                         2.0f * kNoteWidth + kBarWidth, kBarWidth);
 
@@ -278,22 +278,22 @@ class Paths {
       path.addRectangle(kX + kNoteWidth - kBarWidth + 2.0f * kNoteWidth, kY - kBarHeight, kBarWidth, kBarHeight);
       path.closeSubPath();
 
-      path.addLineSegment(Line<float>(0.0f, 0.0f, 0.0f, 0.0f), 0.2f);
-      path.addLineSegment(Line<float>(1.0f, 1.0f, 1.0f, 1.0f), 0.2f);
+      path.addLineSegment(juce::Line<float>(0.0f, 0.0f, 0.0f, 0.0f), 0.2f);
+      path.addLineSegment(juce::Line<float>(1.0f, 1.0f, 1.0f, 1.0f), 0.2f);
       return path;
     }
 
-    static Path menu() {
-      Path path;
-      path.addLineSegment(Line<float>(0.0f, 0.0f, 0.0f, 0.0f), 0.2f);
-      path.addLineSegment(Line<float>(1.0f, 1.0f, 1.0f, 1.0f), 0.2f);
-      path.addLineSegment(Line<float>(0.2f, 0.3f, 0.8f, 0.3f), 0.05f);
-      path.addLineSegment(Line<float>(0.2f, 0.5f, 0.8f, 0.5f), 0.05f);
-      path.addLineSegment(Line<float>(0.2f, 0.7f, 0.8f, 0.7f), 0.05f);
+    static juce::Path menu() {
+      juce::Path path;
+      path.addLineSegment(juce::Line<float>(0.0f, 0.0f, 0.0f, 0.0f), 0.2f);
+      path.addLineSegment(juce::Line<float>(1.0f, 1.0f, 1.0f, 1.0f), 0.2f);
+      path.addLineSegment(juce::Line<float>(0.2f, 0.3f, 0.8f, 0.3f), 0.05f);
+      path.addLineSegment(juce::Line<float>(0.2f, 0.5f, 0.8f, 0.5f), 0.05f);
+      path.addLineSegment(juce::Line<float>(0.2f, 0.7f, 0.8f, 0.7f), 0.05f);
       return path;
     }
 
-    static Path menu(int width) {
+    static juce::Path menu(int width) {
       static constexpr float kBuffer = 0.2f;
       static constexpr float kLineWidth = 0.04f;
       static constexpr float kSpacing = 0.2f;
@@ -303,16 +303,16 @@ class Paths {
       int spacing = width * kSpacing;
 
       float center = (line_width % 2) * 0.5f + (width / 2);
-      Path path;
-      path.addLineSegment(Line<float>(buffer, center - spacing, width - buffer, center - spacing), line_width);
-      path.addLineSegment(Line<float>(buffer, center, width - buffer, center), line_width);
-      path.addLineSegment(Line<float>(buffer, center + spacing, width - buffer, center + spacing), line_width);
-      path.addLineSegment(Line<float>(0.0f, 0.0f, 0.0f, 0.0f), 0.2f);
-      path.addLineSegment(Line<float>(width, width, width, width), 0.2f);
+      juce::Path path;
+      path.addLineSegment(juce::Line<float>(buffer, center - spacing, width - buffer, center - spacing), line_width);
+      path.addLineSegment(juce::Line<float>(buffer, center, width - buffer, center), line_width);
+      path.addLineSegment(juce::Line<float>(buffer, center + spacing, width - buffer, center + spacing), line_width);
+      path.addLineSegment(juce::Line<float>(0.0f, 0.0f, 0.0f, 0.0f), 0.2f);
+      path.addLineSegment(juce::Line<float>(width, width, width, width), 0.2f);
       return path;
     }
 
-    static Path plus(int width) {
+    static juce::Path plus(int width) {
       static constexpr float kBuffer = 0.35f;
       static constexpr float kLineWidth = 0.04f;
 
@@ -320,16 +320,16 @@ class Paths {
       int line_width = std::max<int>(1, width * kLineWidth);
 
       float center = (line_width % 2) * 0.5f + (width / 2);
-      Path path;
-      path.addLineSegment(Line<float>(buffer, center, width - buffer, center), line_width);
-      path.addLineSegment(Line<float>(center, buffer, center, width - buffer), line_width);
+      juce::Path path;
+      path.addLineSegment(juce::Line<float>(buffer, center, width - buffer, center), line_width);
+      path.addLineSegment(juce::Line<float>(center, buffer, center, width - buffer), line_width);
 
-      path.addLineSegment(Line<float>(0.0f, 0.0f, 0.0f, 0.0f), 0.2f);
-      path.addLineSegment(Line<float>(width, width, width, width), 0.2f);
+      path.addLineSegment(juce::Line<float>(0.0f, 0.0f, 0.0f, 0.0f), 0.2f);
+      path.addLineSegment(juce::Line<float>(width, width, width, width), 0.2f);
       return path;
     }
 
-    static Path plusOutline() {
+    static juce::Path plusOutline() {
       static constexpr float kBuffer = 0.2f;
       static constexpr float kLineWidth = 0.15f;
 
@@ -338,7 +338,7 @@ class Paths {
       float close = 0.5f - kLineWidth * 0.5f;
       float far = 0.5f + kLineWidth * 0.5f;
 
-      Path path;
+      juce::Path path;
       path.startNewSubPath(start, close);
       path.lineTo(start, far);
       path.lineTo(close, far);
@@ -354,12 +354,12 @@ class Paths {
       path.lineTo(start, close);
       path.closeSubPath();
 
-      path.addLineSegment(Line<float>(0.0f, 0.0f, 0.0f, 0.0f), 0.2f);
-      path.addLineSegment(Line<float>(1.0f, 1.0f, 1.0f, 1.0f), 0.2f);
+      path.addLineSegment(juce::Line<float>(0.0f, 0.0f, 0.0f, 0.0f), 0.2f);
+      path.addLineSegment(juce::Line<float>(1.0f, 1.0f, 1.0f, 1.0f), 0.2f);
       return path;
     }
 
-    static Path save(int width) {
+    static juce::Path save(int width) {
       static constexpr float kLineWidth = 0.04f;
       static constexpr float kSpacingX = 0.3f;
       static constexpr float kSpacingY = 0.25f;
@@ -374,7 +374,7 @@ class Paths {
 
       float center = (line_width % 2) * 0.5f + (width / 2);
 
-      Path outline;
+      juce::Path outline;
       outline.startNewSubPath(center, center - spacing_y);
       outline.lineTo(center, center + movement);
 
@@ -389,82 +389,82 @@ class Paths {
       outline.lineTo(center + spacing_x, center);
       outline.lineTo(center + spacing_x - wrap, center);
 
-      Path path;
-      PathStrokeType stroke(line_width, PathStrokeType::curved, PathStrokeType::rounded);
+      juce::Path path;
+      juce::PathStrokeType stroke(line_width, juce::PathStrokeType::curved, juce::PathStrokeType::rounded);
       stroke.createStrokedPath(path, outline);
-      path.addLineSegment(Line<float>(0.0f, 0.0f, 0.0f, 0.0f), 0.2f);
-      path.addLineSegment(Line<float>(width, width, width, width), 0.2f);
+      path.addLineSegment(juce::Line<float>(0.0f, 0.0f, 0.0f, 0.0f), 0.2f);
+      path.addLineSegment(juce::Line<float>(width, width, width, width), 0.2f);
       return path;
     }
 
-    static Path downTriangle() {
-      Path path;
+    static juce::Path downTriangle() {
+      juce::Path path;
 
       path.startNewSubPath(0.33f, 0.4f);
       path.lineTo(0.66f, 0.4f);
       path.lineTo(0.5f, 0.6f);
       path.closeSubPath();
 
-      path.addLineSegment(Line<float>(0.0f, 0.0f, 0.0f, 0.0f), 0.2f);
-      path.addLineSegment(Line<float>(1.0f, 1.0f, 1.0f, 1.0f), 0.2f);
+      path.addLineSegment(juce::Line<float>(0.0f, 0.0f, 0.0f, 0.0f), 0.2f);
+      path.addLineSegment(juce::Line<float>(1.0f, 1.0f, 1.0f, 1.0f), 0.2f);
       return path;
     }
 
-    static Path upTriangle() {
-      Path path;
+    static juce::Path upTriangle() {
+      juce::Path path;
 
       path.startNewSubPath(0.33f, 0.6f);
       path.lineTo(0.66f, 0.6f);
       path.lineTo(0.5f, 0.4f);
       path.closeSubPath();
 
-      path.addLineSegment(Line<float>(0.0f, 0.0f, 0.0f, 0.0f), 0.2f);
-      path.addLineSegment(Line<float>(1.0f, 1.0f, 1.0f, 1.0f), 0.2f);
+      path.addLineSegment(juce::Line<float>(0.0f, 0.0f, 0.0f, 0.0f), 0.2f);
+      path.addLineSegment(juce::Line<float>(1.0f, 1.0f, 1.0f, 1.0f), 0.2f);
       return path;
     }
 
-    static Path exitX() {
-      Path outline;
+    static juce::Path exitX() {
+      juce::Path outline;
       outline.startNewSubPath(0.25f, 0.25f);
       outline.lineTo(0.75f, 0.75f);
       outline.startNewSubPath(0.25f, 0.75f);
       outline.lineTo(0.75f, 0.25f);
 
-      Path path;
-      PathStrokeType stroke(0.03f, PathStrokeType::curved, PathStrokeType::rounded);
+      juce::Path path;
+      juce::PathStrokeType stroke(0.03f, juce::PathStrokeType::curved, juce::PathStrokeType::rounded);
       stroke.createStrokedPath(path, outline);
-      path.addLineSegment(Line<float>(0.0f, 0.0f, 0.0f, 0.0f), 0.2f);
-      path.addLineSegment(Line<float>(1.0f, 1.0f, 1.0f, 1.0f), 0.2f);
+      path.addLineSegment(juce::Line<float>(0.0f, 0.0f, 0.0f, 0.0f), 0.2f);
+      path.addLineSegment(juce::Line<float>(1.0f, 1.0f, 1.0f, 1.0f), 0.2f);
       return path;
     }
 
-    static Path thickX() {
-      Path outline;
+    static juce::Path thickX() {
+      juce::Path outline;
       outline.startNewSubPath(0.25f, 0.25f);
       outline.lineTo(0.75f, 0.75f);
       outline.startNewSubPath(0.25f, 0.75f);
       outline.lineTo(0.75f, 0.25f);
 
-      Path path;
-      PathStrokeType stroke(0.1f, PathStrokeType::curved, PathStrokeType::butt);
+      juce::Path path;
+      juce::PathStrokeType stroke(0.1f, juce::PathStrokeType::curved, juce::PathStrokeType::butt);
       stroke.createStrokedPath(path, outline);
-      path.addLineSegment(Line<float>(0.0f, 0.0f, 0.0f, 0.0f), 0.2f);
-      path.addLineSegment(Line<float>(1.0f, 1.0f, 1.0f, 1.0f), 0.2f);
+      path.addLineSegment(juce::Line<float>(0.0f, 0.0f, 0.0f, 0.0f), 0.2f);
+      path.addLineSegment(juce::Line<float>(1.0f, 1.0f, 1.0f, 1.0f), 0.2f);
       return path;
     }
 
-    static Path star() {
-      Path path;
+    static juce::Path star() {
+      juce::Path path;
       path.addStar(juce::Point<float>(0.5f, 0.5f), 5, 0.2f, 0.4f);
-      path.addLineSegment(Line<float>(0.0f, 0.0f, 0.0f, 0.0f), 0.2f);
-      path.addLineSegment(Line<float>(1.0f, 1.0f, 1.0f, 1.0f), 0.2f);
+      path.addLineSegment(juce::Line<float>(0.0f, 0.0f, 0.0f, 0.0f), 0.2f);
+      path.addLineSegment(juce::Line<float>(1.0f, 1.0f, 1.0f, 1.0f), 0.2f);
       return path;
     }
 
-    static Path keyboard() {
-      Path path;
-      path.addLineSegment(Line<float>(0.2f, 0.2f, 0.2f, 0.2f), 0.01f);
-      path.addLineSegment(Line<float>(0.8f, 0.8f, 0.8f, 0.8f), 0.01f);
+    static juce::Path keyboard() {
+      juce::Path path;
+      path.addLineSegment(juce::Line<float>(0.2f, 0.2f, 0.2f, 0.2f), 0.01f);
+      path.addLineSegment(juce::Line<float>(0.8f, 0.8f, 0.8f, 0.8f), 0.01f);
 
       path.startNewSubPath(0.24f, 0.35f);
       path.lineTo(0.24f, 0.65f);
@@ -497,16 +497,16 @@ class Paths {
       return path;
     }
 
-    static Path keyboardBordered() {
-      Path board = keyboard();
+    static juce::Path keyboardBordered() {
+      juce::Path board = keyboard();
 
-      board.addLineSegment(Line<float>(0.0f, 0.0f, 0.0f, 0.0f), 0.01f);
-      board.addLineSegment(Line<float>(1.0f, 1.0f, 1.0f, 1.0f), 0.01f);
+      board.addLineSegment(juce::Line<float>(0.0f, 0.0f, 0.0f, 0.0f), 0.01f);
+      board.addLineSegment(juce::Line<float>(1.0f, 1.0f, 1.0f, 1.0f), 0.01f);
       return board;
     }
 
-    static Path fullKeyboard() {
-      Path path;
+    static juce::Path fullKeyboard() {
+      juce::Path path;
       path.startNewSubPath(1, 0);
       path.lineTo(1, 2);
       path.lineTo(23, 2);
@@ -572,14 +572,14 @@ class Paths {
       return path;
     }
 
-    static Path gear() {
+    static juce::Path gear() {
       static constexpr float kRadius = 0.3f;
       static constexpr float kGearOuterRatio = 1.2f;
       static constexpr int kNumGearTeeth = 8;
 
-      Path path;
-      path.addLineSegment(Line<float>(0.0f, 0.0f, 0.0f, 0.0f), 0.2f);
-      path.addLineSegment(Line<float>(1.0f, 1.0f, 1.0f, 1.0f), 0.2f);
+      juce::Path path;
+      path.addLineSegment(juce::Line<float>(0.0f, 0.0f, 0.0f, 0.0f), 0.2f);
+      path.addLineSegment(juce::Line<float>(1.0f, 1.0f, 1.0f, 1.0f), 0.2f);
       float offset = 0.5f - kRadius;
       float diameter = 2.0f * kRadius;
       path.addPieSegment(offset, offset, diameter, diameter, 0.0f, 2.0f * bitklavier::kPi, 0.5f);
@@ -587,7 +587,7 @@ class Paths {
         float phase = 2.0f * i * bitklavier::kPi / kNumGearTeeth;
         float x_offset = kRadius * cosf(phase);
         float y_offset = kRadius * sinf(phase);
-        Line<float> line(0.5f + x_offset, 0.5f + y_offset,
+        juce::Line<float> line(0.5f + x_offset, 0.5f + y_offset,
                          0.5f + kGearOuterRatio * x_offset, 0.5f + kGearOuterRatio * y_offset);
         path.addLineSegment(line, 0.13f);
       }
@@ -595,27 +595,27 @@ class Paths {
       return path;
     }
 
-    static Path magnifyingGlass() {
+    static juce::Path magnifyingGlass() {
       static constexpr float kRadius = 0.22f;
       static constexpr float kWidthRatio = 0.3f;
       static constexpr float kGlassOffset = 0.2f;
       static constexpr float kSqrt2 = 1.41421356237f;
 
-      Path path;
-      path.addLineSegment(Line<float>(0.0f, 0.0f, 0.0f, 0.0f), 0.2f);
-      path.addLineSegment(Line<float>(1.0f, 1.0f, 1.0f, 1.0f), 0.2f);
+      juce::Path path;
+      path.addLineSegment(juce::Line<float>(0.0f, 0.0f, 0.0f, 0.0f), 0.2f);
+      path.addLineSegment(juce::Line<float>(1.0f, 1.0f, 1.0f, 1.0f), 0.2f);
       float diameter = 2.0f * kRadius;
       path.addPieSegment(kGlassOffset, kGlassOffset, diameter, diameter, 0.0f, 2.0f * bitklavier::kPi, 1.0f - kWidthRatio);
 
       float line_width = kWidthRatio * kRadius;
       float line_start = kGlassOffset + kSqrt2 * kRadius + line_width / 2.0f;
-      path.addLineSegment(Line<float>(line_start, line_start, 1.0f - kGlassOffset, 1.0f - kGlassOffset), line_width);
+      path.addLineSegment(juce::Line<float>(line_start, line_start, 1.0f - kGlassOffset, 1.0f - kGlassOffset), line_width);
 
       return path;
     }
 
-    static Path save() {
-      Path outline;
+    static juce::Path save() {
+      juce::Path outline;
       outline.startNewSubPath(0.5f, 0.25f);
       outline.lineTo(0.5f, 0.6f);
       outline.startNewSubPath(0.35f, 0.45f);
@@ -629,117 +629,117 @@ class Paths {
       outline.lineTo(0.8f, 0.5f);
       outline.lineTo(0.75f, 0.5f);
 
-      Path path;
-      PathStrokeType stroke(0.05f, PathStrokeType::curved, PathStrokeType::rounded);
+      juce::Path path;
+      juce::PathStrokeType stroke(0.05f, juce::PathStrokeType::curved, juce::PathStrokeType::rounded);
       stroke.createStrokedPath(path, outline);
-      path.addLineSegment(Line<float>(0.0f, 0.0f, 0.0f, 0.0f), 0.2f);
-      path.addLineSegment(Line<float>(1.0f, 1.0f, 1.0f, 1.0f), 0.2f);
+      path.addLineSegment(juce::Line<float>(0.0f, 0.0f, 0.0f, 0.0f), 0.2f);
+      path.addLineSegment(juce::Line<float>(1.0f, 1.0f, 1.0f, 1.0f), 0.2f);
       return path;
     }
 
-    static Path loop() {
-      Path outline;
+    static juce::Path loop() {
+      juce::Path outline;
       outline.startNewSubPath(0.68f, 0.3f);
       outline.lineTo(0.85f, 0.3f);
       outline.lineTo(0.85f, 0.7f);
       outline.lineTo(0.15f, 0.7f);
       outline.lineTo(0.15f, 0.3f);
       outline.lineTo(0.61f, 0.3f);
-      PathStrokeType outer_stroke(0.12f, PathStrokeType::curved, PathStrokeType::rounded);
+      juce::PathStrokeType outer_stroke(0.12f, juce::PathStrokeType::curved, juce::PathStrokeType::rounded);
 
-      Path path;
+      juce::Path path;
       outer_stroke.createStrokeWithArrowheads(path, outline, 0.0f, 0.0f, 0.4f, 0.26f);
-      path.addLineSegment(Line<float>(0.0f, 0.0f, 0.0f, 0.0f), 0.2f);
-      path.addLineSegment(Line<float>(1.0f, 1.0f, 1.0f, 1.0f), 0.2f);
+      path.addLineSegment(juce::Line<float>(0.0f, 0.0f, 0.0f, 0.0f), 0.2f);
+      path.addLineSegment(juce::Line<float>(1.0f, 1.0f, 1.0f, 1.0f), 0.2f);
       return path;
     }
 
-    static Path bounce() {
-      Path left_outline, right_outline;
+    static juce::Path bounce() {
+      juce::Path left_outline, right_outline;
       left_outline.startNewSubPath(0.5f, 0.5f);
       left_outline.lineTo(0.0f, 0.5f);
       left_outline.startNewSubPath(0.5f, 0.5f);
       left_outline.lineTo(1.0f, 0.5f);
 
-      PathStrokeType stroke(0.12f, PathStrokeType::curved, PathStrokeType::butt);
-      Path left_path, right_path;
+      juce::PathStrokeType stroke(0.12f, juce::PathStrokeType::curved, juce::PathStrokeType::butt);
+      juce::Path left_path, right_path;
       stroke.createStrokeWithArrowheads(left_path, left_outline, 0.0f, 0.0f, 0.4f, 0.26f);
       stroke.createStrokeWithArrowheads(right_path, right_outline, 0.0f, 0.0f, 0.4f, 0.26f);
 
-      Path path;
+      juce::Path path;
       path.addPath(left_path);
       path.addPath(right_path);
 
-      path.addLineSegment(Line<float>(0.0f, 0.0f, 0.0f, 0.0f), 0.2f);
-      path.addLineSegment(Line<float>(1.0f, 1.0f, 1.0f, 1.0f), 0.2f);
+      path.addLineSegment(juce::Line<float>(0.0f, 0.0f, 0.0f, 0.0f), 0.2f);
+      path.addLineSegment(juce::Line<float>(1.0f, 1.0f, 1.0f, 1.0f), 0.2f);
       return path;
     }
 
-    static Path bipolar() {
-      Path left_outline, right_outline;
+    static juce::Path bipolar() {
+      juce::Path left_outline, right_outline;
       left_outline.startNewSubPath(0.3f, 0.5f);
       left_outline.lineTo(0.0f, 0.5f);
       left_outline.startNewSubPath(0.7f, 0.5f);
       left_outline.lineTo(1.0f, 0.5f);
 
-      PathStrokeType stroke(0.12f, PathStrokeType::curved, PathStrokeType::rounded);
-      Path left_path, right_path;
+      juce::PathStrokeType stroke(0.12f, juce::PathStrokeType::curved, juce::PathStrokeType::rounded);
+      juce::Path left_path, right_path;
       stroke.createStrokeWithArrowheads(left_path, left_outline, 0.0f, 0.0f, 0.4f, 0.26f);
       stroke.createStrokeWithArrowheads(right_path, right_outline, 0.0f, 0.0f, 0.4f, 0.26f);
 
-      Path path;
+      juce::Path path;
       path.addEllipse(0.4f, 0.4f, 0.2f, 0.2f);
       path.addPath(left_path);
       path.addPath(right_path);
 
-      path.addLineSegment(Line<float>(0.0f, 0.0f, 0.0f, 0.0f), 0.2f);
-      path.addLineSegment(Line<float>(1.0f, 1.0f, 1.0f, 1.0f), 0.2f);
+      path.addLineSegment(juce::Line<float>(0.0f, 0.0f, 0.0f, 0.0f), 0.2f);
+      path.addLineSegment(juce::Line<float>(1.0f, 1.0f, 1.0f, 1.0f), 0.2f);
       return path;
     }
 
-    static Path shuffle() {
-      Path over;
+    static juce::Path shuffle() {
+      juce::Path over;
       over.startNewSubPath(0.1f, 0.7f);
       over.lineTo(0.25f, 0.7f);
       over.lineTo(0.55f, 0.3f);
       over.lineTo(0.95f, 0.3f);
 
-      Path under_first;
+      juce::Path under_first;
       under_first.startNewSubPath(0.1f, 0.3f);
       under_first.lineTo(0.25f, 0.3f);
       under_first.lineTo(0.325f, 0.4f);
 
-      Path under_second;
+      juce::Path under_second;
       under_second.startNewSubPath(0.475f, 0.6f);
       under_second.lineTo(0.55f, 0.7f);
       under_second.lineTo(0.95f, 0.7f);
 
-      PathStrokeType stroke(0.12f, PathStrokeType::curved, PathStrokeType::butt);
-      Path over_path;
+      juce::PathStrokeType stroke(0.12f, juce::PathStrokeType::curved, juce::PathStrokeType::butt);
+      juce::Path over_path;
       stroke.createStrokeWithArrowheads(over_path, over, 0.0f, 0.0f, 0.35f, 0.26f);
-      Path under_path_first;
+      juce::Path under_path_first;
       stroke.createStrokedPath(under_path_first, under_first);
-      Path under_path_second;
+      juce::Path under_path_second;
       stroke.createStrokeWithArrowheads(under_path_second, under_second, 0.0f, 0.0f, 0.35f, 0.26f);
 
-      Path path;
+      juce::Path path;
       path.addPath(over_path);
       path.addPath(under_path_first);
       path.addPath(under_path_second);
 
-      path.addLineSegment(Line<float>(0.0f, 0.0f, 0.0f, 0.0f), 0.2f);
-      path.addLineSegment(Line<float>(1.0f, 1.0f, 1.0f, 1.0f), 0.2f);
+      path.addLineSegment(juce::Line<float>(0.0f, 0.0f, 0.0f, 0.0f), 0.2f);
+      path.addLineSegment(juce::Line<float>(1.0f, 1.0f, 1.0f, 1.0f), 0.2f);
       return path;
     }
 
-    static Path pencil() {
+    static juce::Path pencil() {
       static constexpr float kPencilDimension = 0.14f;
       static constexpr float kEraserLength = 0.6f * kPencilDimension;
       static constexpr float kSeparatorWidth = 0.15f * kPencilDimension;
       static constexpr float kPencilRemoval = kEraserLength + kSeparatorWidth;
       static constexpr float kBorder = 0.22f;
 
-      Path path;
+      juce::Path path;
       path.startNewSubPath(kBorder, 1.0f - kBorder);
       path.lineTo(kBorder + kPencilDimension, 1.0f - kBorder);
       path.lineTo(1.0f - kBorder - kPencilRemoval, kBorder + kPencilDimension + kPencilRemoval);
@@ -753,12 +753,12 @@ class Paths {
       path.lineTo(1.0f - kBorder - kEraserLength - kPencilDimension, kBorder + kEraserLength);
       path.closeSubPath();
       
-      path.addLineSegment(Line<float>(0.0f, 0.0f, 0.0f, 0.0f), 0.2f);
-      path.addLineSegment(Line<float>(1.0f, 1.0f, 1.0f, 1.0f), 0.2f);
+      path.addLineSegment(juce::Line<float>(0.0f, 0.0f, 0.0f, 0.0f), 0.2f);
+      path.addLineSegment(juce::Line<float>(1.0f, 1.0f, 1.0f, 1.0f), 0.2f);
       return path;
     }
 
-    static Path halfSinCurve() {
+    static juce::Path halfSinCurve() {
       static constexpr float kBorder = 0.15f;
       static constexpr float kLineWidth = 0.1f;
       static constexpr float kEndpointStrokeWidth = 0.08f;
@@ -768,7 +768,7 @@ class Paths {
       static constexpr float kBumpIn = kEndpointRadius;
       static constexpr float kAdjustXIn = kBumpIn + kEndpointRadius / 2.0f;
 
-      Path curve;
+      juce::Path curve;
       float start_x = kBorder + kAdjustXIn;
       float start_y = 1.0f - kBorder - kBumpIn;
       float end_x = 1.0f - kBorder - kAdjustXIn;
@@ -783,35 +783,35 @@ class Paths {
         curve.lineTo(x, y);
       }
 
-      Path path;
-      PathStrokeType line_stroke(kLineWidth, PathStrokeType::curved, PathStrokeType::butt);
-      PathStrokeType endpoint_stroke(kEndpointStrokeWidth, PathStrokeType::curved, PathStrokeType::butt);
+      juce::Path path;
+      juce::PathStrokeType line_stroke(kLineWidth, juce::PathStrokeType::curved, juce::PathStrokeType::butt);
+      juce::PathStrokeType endpoint_stroke(kEndpointStrokeWidth, juce::PathStrokeType::curved, juce::PathStrokeType::butt);
       line_stroke.createStrokedPath(path, curve);
 
-      Path arc;
+      juce::Path arc;
       arc.addCentredArc(end_x + kBumpIn, end_y, kEndpointRadius, kEndpointRadius, 0.0f, 0.0f, kFullRadians, true);
       arc.addCentredArc(start_x - kBumpIn, start_y, kEndpointRadius, kEndpointRadius, 0.0f, 0.0f, kFullRadians, true);
-      Path end_points;
+      juce::Path end_points;
       endpoint_stroke.createStrokedPath(end_points, arc);
       path.addPath(end_points);
 
-      path.addLineSegment(Line<float>(0.0f, 0.0f, 0.0f, 0.0f), 0.2f);
-      path.addLineSegment(Line<float>(1.0f, 1.0f, 1.0f, 1.0f), 0.2f);
+      path.addLineSegment(juce::Line<float>(0.0f, 0.0f, 0.0f, 0.0f), 0.2f);
+      path.addLineSegment(juce::Line<float>(1.0f, 1.0f, 1.0f, 1.0f), 0.2f);
       return path;
     }
 
-    static Path ellipses() {
-      Path path;
+    static juce::Path ellipses() {
+      juce::Path path;
       path.addEllipse(0.1f, 0.4f, 0.2f, 0.2f);
       path.addEllipse(0.4f, 0.4f, 0.2f, 0.2f);
       path.addEllipse(0.7f, 0.4f, 0.2f, 0.2f);
 
-      path.addLineSegment(Line<float>(0.0f, 0.0f, 0.0f, 0.0f), 0.2f);
-      path.addLineSegment(Line<float>(1.0f, 1.0f, 1.0f, 1.0f), 0.2f);
+      path.addLineSegment(juce::Line<float>(0.0f, 0.0f, 0.0f, 0.0f), 0.2f);
+      path.addLineSegment(juce::Line<float>(1.0f, 1.0f, 1.0f, 1.0f), 0.2f);
       return path;
     }
 
-    static Path paintBrush() {
+    static juce::Path paintBrush() {
       static constexpr float kBrushWideDimension = 0.3f;
       static constexpr float kBrushHandleDimension = 0.08f;
       static constexpr float kBrushLength = 0.6f * kBrushWideDimension;
@@ -820,7 +820,7 @@ class Paths {
       static constexpr float kHandleDistance = kConnectionDistance + kBrushWideDimension * 0.8f;
       static constexpr float kBorder = 0.15f;
 
-      Path path;
+      juce::Path path;
       path.startNewSubPath(kBorder, 1.0f - kBorder);
       path.lineTo(kBorder + kBrushHandleDimension, 1.0f - kBorder);
       path.lineTo(1.0f - kBorder - kHandleDistance, kBorder + kBrushHandleDimension + kHandleDistance);
@@ -836,62 +836,62 @@ class Paths {
       path.lineTo(1.0f - kBorder - kBrushLength - kBrushWideDimension, kBorder + kBrushLength);
       path.closeSubPath();
 
-      path.addLineSegment(Line<float>(0.0f, 0.0f, 0.0f, 0.0f), 0.2f);
-      path.addLineSegment(Line<float>(1.0f, 1.0f, 1.0f, 1.0f), 0.2f);
+      path.addLineSegment(juce::Line<float>(0.0f, 0.0f, 0.0f, 0.0f), 0.2f);
+      path.addLineSegment(juce::Line<float>(1.0f, 1.0f, 1.0f, 1.0f), 0.2f);
       return path;
     }
 
-    static Path createFilterStroke(const Path& outline, float line_thickness = 0.1f) {
-      PathStrokeType stroke(line_thickness, PathStrokeType::curved, PathStrokeType::rounded);
+    static juce::Path createFilterStroke(const juce::Path& outline, float line_thickness = 0.1f) {
+      juce::PathStrokeType stroke(line_thickness, juce::PathStrokeType::curved, juce::PathStrokeType::rounded);
 
-      Path path;
+      juce::Path path;
       stroke.createStrokedPath(path, outline);
       return path;
     }
 
-    static Path lowPass(float line_thickness = 0.1f) {
-      Path outline;
+    static juce::Path lowPass(float line_thickness = 0.1f) {
+      juce::Path outline;
       outline.startNewSubPath(1.0f, 0.8f);
       outline.lineTo(0.7f, 0.3f);
       outline.lineTo(0.5f, 0.5f);
       outline.lineTo(0.0f, 0.5f);
-      Path path = createFilterStroke(outline, line_thickness);
-      path.addLineSegment(Line<float>(1.0f, 0.2f, 1.0f, 0.2f), 0.2f);
+      juce::Path path = createFilterStroke(outline, line_thickness);
+      path.addLineSegment(juce::Line<float>(1.0f, 0.2f, 1.0f, 0.2f), 0.2f);
       return path;
     }
 
-    static Path highPass() {
-      Path outline;
+    static juce::Path highPass() {
+      juce::Path outline;
       outline.startNewSubPath(0.0f, 0.8f);
       outline.lineTo(0.3f, 0.3f);
       outline.lineTo(0.5f, 0.5f);
       outline.lineTo(1.0f, 0.5f);
-      Path path = createFilterStroke(outline);
-      path.addLineSegment(Line<float>(1.0f, 0.2f, 1.0f, 0.2f), 0.2f);
+      juce::Path path = createFilterStroke(outline);
+      path.addLineSegment(juce::Line<float>(1.0f, 0.2f, 1.0f, 0.2f), 0.2f);
       return path;
     }
 
-    static Path bandPass() {
+    static juce::Path bandPass() {
       static constexpr float kMiddle = 3.0f / 5.0f;
       static constexpr float kBottom = 4.0f / 5.0f;
 
-      Path outline;
+      juce::Path outline;
       outline.startNewSubPath(0.0f, kBottom);
       outline.lineTo(1.0f / 3.0f, kMiddle);
       outline.lineTo(0.5f, 0.25f);
       outline.lineTo(2.0f / 3.0f, kMiddle);
       outline.lineTo(1.0f, kBottom);
 
-      Path path = createFilterStroke(outline);
-      path.addLineSegment(Line<float>(1.0f, 0.2f, 1.0f, 0.2f), 0.2f);
+      juce::Path path = createFilterStroke(outline);
+      path.addLineSegment(juce::Line<float>(1.0f, 0.2f, 1.0f, 0.2f), 0.2f);
       return path;
     }
 
-    static Path leftArrow() {
+    static juce::Path leftArrow() {
       static constexpr float kArrowAmount = 1.0f / 3.0f;
       static constexpr float kBuffer = 0.0f;
 
-      Path outline;
+      juce::Path outline;
       outline.startNewSubPath(1.0f - kBuffer, 0.5f);
       outline.lineTo(kBuffer, 0.5f);
       outline.startNewSubPath(kBuffer, 0.5f);
@@ -901,11 +901,11 @@ class Paths {
       return createFilterStroke(outline);
     }
 
-    static Path rightArrow() {
+    static juce::Path rightArrow() {
       static constexpr float kArrowAmount = 1.0f / 3.0f;
       static constexpr float kBuffer = 0.0f;
 
-      Path outline;
+      juce::Path outline;
       outline.startNewSubPath(1.0f - kBuffer, 0.5f);
       outline.lineTo(kBuffer, 0.5f);
       outline.startNewSubPath(1.0f - kBuffer, 0.5f);
@@ -915,28 +915,28 @@ class Paths {
       return createFilterStroke(outline);
     }
 
-    static Path phaser1() {
-      Path outline;
+    static juce::Path phaser1() {
+      juce::Path outline;
       outline.startNewSubPath(0.0f, 0.5f);
       outline.lineTo(1.0f / 3.0f, 3.0f / 4.0f);
       outline.lineTo(1.0f / 2.0f, 1.0f / 4.0f);
       outline.lineTo(2.0f / 3.0f, 3.0f / 4.0f);
       outline.lineTo(1.0f, 0.5f);
 
-      Path path = createFilterStroke(outline);
-      path.addLineSegment(Line<float>(1.0f, 0.15f, 1.0f, 0.15f), 0.1f);
-      path.addLineSegment(Line<float>(1.0f, 0.85f, 1.0f, 0.85f), 0.1f);
+      juce::Path path = createFilterStroke(outline);
+      path.addLineSegment(juce::Line<float>(1.0f, 0.15f, 1.0f, 0.15f), 0.1f);
+      path.addLineSegment(juce::Line<float>(1.0f, 0.85f, 1.0f, 0.85f), 0.1f);
       return path;
     }
 
-    static Path phaser3() {
+    static juce::Path phaser3() {
       static constexpr int kNumHumps = 5;
 
       static const float kUp = 1.0f / 4.0f;
       static const float kDown = 3.0f / 4.0f;
 
       float delta = 1.0f / (2 * kNumHumps + 2);
-      Path outline;
+      juce::Path outline;
       outline.startNewSubPath(0.0f, 0.5f);
 
       float position = 0.0f;
@@ -950,56 +950,56 @@ class Paths {
       outline.lineTo(position, kDown);
       outline.lineTo(1.0f, 0.5f);
 
-      Path path = createFilterStroke(outline);
-      path.addLineSegment(Line<float>(1.0f, 0.15f, 1.0f, 0.15f), 0.1f);
-      path.addLineSegment(Line<float>(1.0f, 0.85f, 1.0f, 0.85f), 0.1f);
+      juce::Path path = createFilterStroke(outline);
+      path.addLineSegment(juce::Line<float>(1.0f, 0.15f, 1.0f, 0.15f), 0.1f);
+      path.addLineSegment(juce::Line<float>(1.0f, 0.85f, 1.0f, 0.85f), 0.1f);
       return path;
     }
 
-    static Path notch() {
+    static juce::Path notch() {
       static constexpr float kTop = 2.0f / 5.0f;
       static constexpr float kBottom = 4.0f / 5.0f;
 
-      Path outline;
+      juce::Path outline;
       outline.startNewSubPath(0.0f, kTop);
       outline.lineTo(1.0f / 3.0f, kTop);
       outline.lineTo(1.0f / 2.0f, kBottom);
       outline.lineTo(2.0f / 3.0f, kTop);
       outline.lineTo(1.0f, kTop);
 
-      Path path = createFilterStroke(outline);
-      path.addLineSegment(Line<float>(1.0f, 0.2f, 1.0f, 0.2f), 0.1f);
+      juce::Path path = createFilterStroke(outline);
+      path.addLineSegment(juce::Line<float>(1.0f, 0.2f, 1.0f, 0.2f), 0.1f);
       return path;
     }
 
-    static Path narrowBand() {
+    static juce::Path narrowBand() {
       static constexpr float kTop = 2.0f / 5.0f;
       static constexpr float kBottom = 4.0f / 5.0f;
 
-      Path outline;
+      juce::Path outline;
       outline.startNewSubPath(0.0f, kBottom);
       outline.lineTo(1.0f / 3.0f, kBottom);
       outline.lineTo(0.5f, kTop);
       outline.lineTo(2.0f / 3.0f, kBottom);
       outline.lineTo(1.0f, kBottom);
 
-      Path path = createFilterStroke(outline);
-      path.addLineSegment(Line<float>(1.0f, 0.2f, 1.0f, 0.2f), 0.1f);
+      juce::Path path = createFilterStroke(outline);
+      path.addLineSegment(juce::Line<float>(1.0f, 0.2f, 1.0f, 0.2f), 0.1f);
       return path;
     }
 
-    static Path wideBand() {
+    static juce::Path wideBand() {
       static constexpr float kTop = 2.0f / 5.0f;
       static constexpr float kBottom = 4.0f / 5.0f;
 
-      Path outline;
+      juce::Path outline;
       outline.startNewSubPath(0.0f, kBottom);
       outline.lineTo(1.0f / 3.0f, kTop);
       outline.lineTo(2.0f / 3.0f, kTop);
       outline.lineTo(1.0f, kBottom);
 
-      Path path = createFilterStroke(outline);
-      path.addLineSegment(Line<float>(1.0f, 0.2f, 1.0f, 0.2f), 0.1f);
+      juce::Path path = createFilterStroke(outline);
+      path.addLineSegment(juce::Line<float>(1.0f, 0.2f, 1.0f, 0.2f), 0.1f);
       return path;
     }
 };

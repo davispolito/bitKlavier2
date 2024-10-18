@@ -34,7 +34,7 @@ public:
     ~ResonancePreparation();
 
     // Static function that returns a pointer to a ResonancePreparation object
-    static PreparationSection* createResonanceSection(ValueTree v, SynthGuiInterface* interface) {
+    static PreparationSection* createResonanceSection(juce::ValueTree v, SynthGuiInterface* interface) {
 
         return new ResonancePreparation(std::make_unique<ResonanceProcessor>(), v, interface->getGui()->open_gl_);
     }
@@ -69,7 +69,7 @@ private:
         void initOpenGlComponents(OpenGlWrapper &open_gl) override;
         void renderOpenGlComponents(OpenGlWrapper& open_gl, bool animate) override;
         void resized() override;
-        void paintBackground(Graphics& g) override
+        void paintBackground(juce::Graphics& g) override
         {
             SynthSection::paintContainer(g);
             paintHeadingText(g);

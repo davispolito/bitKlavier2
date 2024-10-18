@@ -18,14 +18,10 @@
 
 #include <map>
 
-#include <juce_dsp/juce_dsp.h>
-#include <juce_core/juce_core.h>
 #include <juce_opengl/juce_opengl.h>
 
 #include "chowdsp_dsp_data_structures/third_party/moodycamel/concurrentqueue.h"
-#include "common.h"
-
-using namespace juce;
+#include <juce_dsp/juce_dsp.h>
 
 class Shaders {
   public:
@@ -93,26 +89,26 @@ class Shaders {
       return fragment_shader_ids_[shader];
     }
 
-    OpenGLShaderProgram* getShaderProgram(VertexShader vertex_shader, FragmentShader fragment_shader,
+    juce::OpenGLShaderProgram* getShaderProgram(VertexShader vertex_shader, FragmentShader fragment_shader,
                                           const GLchar** varyings = nullptr);
 
   private:
     static const char* getVertexShader(VertexShader shader);
     static const char* getFragmentShader(FragmentShader shader);
 
-    bool checkShaderCorrect(OpenGLExtensionFunctions& extensions, GLuint shader_id) const;
-    GLuint createVertexShader(OpenGLExtensionFunctions& extensions, VertexShader shader) const;
-    GLuint createFragmentShader(OpenGLExtensionFunctions& extensions, FragmentShader shader) const;
+    bool checkShaderCorrect(juce::OpenGLExtensionFunctions& extensions, GLuint shader_id) const;
+    GLuint createVertexShader(juce::OpenGLExtensionFunctions& extensions, VertexShader shader) const;
+    GLuint createFragmentShader(juce::OpenGLExtensionFunctions& extensions, FragmentShader shader) const;
 
-    OpenGLContext* open_gl_context_;
+    juce::OpenGLContext* open_gl_context_;
     GLuint vertex_shader_ids_[kNumVertexShaders];
     GLuint fragment_shader_ids_[kNumFragmentShaders];
 
-    std::map<int, std::unique_ptr<OpenGLShaderProgram>> shader_programs_;
+    std::map<int, std::unique_ptr<juce::OpenGLShaderProgram>> shader_programs_;
 };
 
 struct OpenGlWrapper {
-  OpenGlWrapper(OpenGLContext& c) : context(c), shaders(nullptr), display_scale(1.0f) { }
+  OpenGlWrapper(juce::OpenGLContext& c) : context(c), shaders(nullptr), display_scale(1.0f) { }
 
   static constexpr size_t actionSize = 64;
   //std::vector<Broadcaster<void()>> audioThreadBroadcasters { totalNumParams };
@@ -123,8 +119,8 @@ struct OpenGlWrapper {
 
   moodycamel::ConcurrentQueue<glInitAction> initOpenGlComp { 20 };
   //moodycamel::ReaderWriterQueue
-  std::vector<Component*> init_comp;
-  OpenGLContext& context;
+  std::vector<juce::Component*> init_comp;
+  juce::OpenGLContext& context;
   Shaders* shaders;
   float display_scale;
 };

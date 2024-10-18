@@ -24,18 +24,18 @@
 //#include <melatonin_perfetto/melatonin_perfetto.h>
 //class SynthComputerKeyboard;
 
-class SynthEditor : public AudioAppComponent, public SynthBase, public SynthGuiInterface, public Timer {
+class SynthEditor : public juce::AudioAppComponent, public SynthBase, public SynthGuiInterface, public juce::Timer {
   public:
     SynthEditor(bool use_gui = true);
     ~SynthEditor();
 
     void prepareToPlay(int buffer_size, double sample_rate) override;
-    void getNextAudioBlock(const AudioSourceChannelInfo& buffer) override;
+    void getNextAudioBlock(const juce::AudioSourceChannelInfo& buffer) override;
     void releaseResources() override;
-    void paint(Graphics& g) override { }
+    void paint(juce::Graphics& g) override { }
     void resized() override;
 
-    const CriticalSection& getCriticalSection() override { return critical_section_; }
+    const juce::CriticalSection& getCriticalSection() override { return critical_section_; }
     void pauseProcessing(bool pause) override {
       if (pause)
         critical_section_.enter();
@@ -44,7 +44,7 @@ class SynthEditor : public AudioAppComponent, public SynthBase, public SynthGuiI
     }
     SynthGuiInterface* getGuiInterface() override { return this; }
 
-    AudioDeviceManager* getAudioDeviceManager() override { return &deviceManager; }
+    juce::AudioDeviceManager* getAudioDeviceManager() override { return &deviceManager; }
 
     void timerCallback() override;
     
@@ -52,8 +52,8 @@ class SynthEditor : public AudioAppComponent, public SynthBase, public SynthGuiI
 
   private:
     //std::unique_ptr<SynthComputerKeyboard> computer_keyboard_;
-    CriticalSection critical_section_;
-    StringArray current_midi_ins_;
+    juce::CriticalSection critical_section_;
+    juce::StringArray current_midi_ins_;
     double current_time_;
 #if PERFETTO
     std::unique_ptr<perfetto::TracingSession> tracingSession;

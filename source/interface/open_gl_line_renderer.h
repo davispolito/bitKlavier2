@@ -39,7 +39,7 @@ class OpenGlLineRenderer : public OpenGlComponent {
     virtual void render(OpenGlWrapper& open_gl, bool animate) override;
     virtual void destroy(OpenGlWrapper& open_gl) override;
 
-    force_inline void setColor(Colour color) { color_ = color; }
+    force_inline void setColor(juce::Colour color) { color_ = color; }
     force_inline void setLineWidth(float width) { line_width_ = width; }
     force_inline void setBoost(float boost) { boost_ = boost; }
 
@@ -73,10 +73,10 @@ class OpenGlLineRenderer : public OpenGlComponent {
     void setLineVertices(bool left);
 
     force_inline void setFill(bool fill) { fill_ = fill; }
-    force_inline void setFillColor(Colour fill_color) {
+    force_inline void setFillColor(juce::Colour fill_color) {
       setFillColors(fill_color, fill_color);
     }
-    force_inline void setFillColors(Colour fill_color_from, Colour fill_color_to) {
+    force_inline void setFillColors(juce::Colour fill_color_from, juce::Colour fill_color_to) {
       fill_color_from_ = fill_color_from;
       fill_color_to_ = fill_color_to;
     }
@@ -94,15 +94,15 @@ class OpenGlLineRenderer : public OpenGlComponent {
     void enableBackwardBoost(bool enable) { enable_backward_boost_ = enable; }
 
     force_inline int numPoints() const { return num_points_; }
-    force_inline Colour color() const { return color_; }
+    force_inline juce::Colour color() const { return color_; }
 
     void drawLines(OpenGlWrapper& open_gl, bool left);
     bool anyBoostValue() { return any_boost_value_; }
 
   private:
-    Colour color_;
-    Colour fill_color_from_;
-    Colour fill_color_to_;
+    juce::Colour color_;
+    juce::Colour fill_color_from_;
+    juce::Colour fill_color_to_;
 
     int num_points_;
     float line_width_;
@@ -127,20 +127,20 @@ class OpenGlLineRenderer : public OpenGlComponent {
     int num_line_floats_;
     int num_fill_floats_;
 
-    OpenGLShaderProgram* shader_;
-    std::unique_ptr<OpenGLShaderProgram::Uniform> scale_uniform_;
-    std::unique_ptr<OpenGLShaderProgram::Uniform> color_uniform_;
-    std::unique_ptr<OpenGLShaderProgram::Uniform> boost_uniform_;
-    std::unique_ptr<OpenGLShaderProgram::Uniform> line_width_uniform_;
-    std::unique_ptr<OpenGLShaderProgram::Attribute> position_;
+    juce::OpenGLShaderProgram* shader_;
+    std::unique_ptr<juce::OpenGLShaderProgram::Uniform> scale_uniform_;
+    std::unique_ptr<juce::OpenGLShaderProgram::Uniform> color_uniform_;
+    std::unique_ptr<juce::OpenGLShaderProgram::Uniform> boost_uniform_;
+    std::unique_ptr<juce::OpenGLShaderProgram::Uniform> line_width_uniform_;
+    std::unique_ptr<juce::OpenGLShaderProgram::Attribute> position_;
 
-    OpenGLShaderProgram* fill_shader_;
-    std::unique_ptr<OpenGLShaderProgram::Uniform> fill_scale_uniform_;
-    std::unique_ptr<OpenGLShaderProgram::Uniform> fill_color_from_uniform_;
-    std::unique_ptr<OpenGLShaderProgram::Uniform> fill_color_to_uniform_;
-    std::unique_ptr<OpenGLShaderProgram::Uniform> fill_center_uniform_;
-    std::unique_ptr<OpenGLShaderProgram::Uniform> fill_boost_amount_uniform_;
-    std::unique_ptr<OpenGLShaderProgram::Attribute> fill_position_;
+    juce::OpenGLShaderProgram* fill_shader_;
+    std::unique_ptr<juce::OpenGLShaderProgram::Uniform> fill_scale_uniform_;
+    std::unique_ptr<juce::OpenGLShaderProgram::Uniform> fill_color_from_uniform_;
+    std::unique_ptr<juce::OpenGLShaderProgram::Uniform> fill_color_to_uniform_;
+    std::unique_ptr<juce::OpenGLShaderProgram::Uniform> fill_center_uniform_;
+    std::unique_ptr<juce::OpenGLShaderProgram::Uniform> fill_boost_amount_uniform_;
+    std::unique_ptr<juce::OpenGLShaderProgram::Attribute> fill_position_;
 
     GLuint vertex_array_object_;
     GLuint line_buffer_;

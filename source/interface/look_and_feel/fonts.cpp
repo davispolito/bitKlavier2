@@ -17,14 +17,14 @@
 #include "fonts.h"
 
 Fonts::Fonts() :
-    proportional_regular_(Font(Font::plain)),
-    proportional_light_(Font(Font::plain)),
-    proportional_title_(Font(Font::plain)),
-    proportional_title_regular_(Font(Font::plain)),
-    monospace_(Font(Font::plain)) {
+    proportional_regular_(juce::Font(juce::Font::plain)),
+    proportional_light_(juce::Font(juce::Font::plain)),
+    proportional_title_(juce::Font(juce::Font::plain)),
+    proportional_title_regular_(juce::Font(juce::Font::plain)),
+    monospace_(juce::Font(juce::Font::plain)) {
 //
-//  Array<int> glyphs;
-//  Array<float> x_offsets;
+//  juce::Array<int> glyphs;
+//  juce::Array<float> x_offsets;
 //  proportional_regular_.getGlyphPositions("test", glyphs, x_offsets);
 //  proportional_light_.getGlyphPositions("test", glyphs, x_offsets);
 //  proportional_title_.getGlyphPositions("test", glyphs, x_offsets);

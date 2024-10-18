@@ -24,7 +24,7 @@ class SynthGuiInterface;
 /************************************************************************************/
 /*     CLASS: PreparationSection, inherits from SynthSection and Listener           */
 /************************************************************************************/
-class PreparationSection : public SynthSection, public BKItem::Listener, public BKPort::Listener,  public ChangeListener,
+class PreparationSection : public SynthSection, public BKItem::Listener, public BKPort::Listener,  public juce::ChangeListener,
         public tracktion::engine::ValueTreeObjectList<BKPort>
 
 {
@@ -37,17 +37,17 @@ public:
     public:
         virtual ~Listener() = default;
 //        virtual void portClicked(const juce::Point<int>& pos, juce::AudioProcessorGraph::Node::Ptr) = 0;
-        virtual void beginConnectorDrag(AudioProcessorGraph::NodeAndChannel source,
-                                        AudioProcessorGraph::NodeAndChannel dest,
-                                        const MouseEvent& e) = 0;
-        virtual void dragConnector(const MouseEvent& e) = 0;
-        virtual void endDraggingConnector(const MouseEvent& e) = 0;
+        virtual void beginConnectorDrag(juce::AudioProcessorGraph::NodeAndChannel source,
+                                        juce::AudioProcessorGraph::NodeAndChannel dest,
+                                        const juce::MouseEvent& e) = 0;
+        virtual void dragConnector(const juce::MouseEvent& e) = 0;
+        virtual void endDraggingConnector(const juce::MouseEvent& e) = 0;
         virtual void _update() = 0;
     };
 
-    void beginConnectorDrag(AudioProcessorGraph::NodeAndChannel source,
-                                    AudioProcessorGraph::NodeAndChannel dest,
-                                    const MouseEvent& e)
+    void beginConnectorDrag(juce::AudioProcessorGraph::NodeAndChannel source,
+                                    juce::AudioProcessorGraph::NodeAndChannel dest,
+                                    const juce::MouseEvent& e)
     {
         for (auto listener: listeners_)
         {
@@ -56,14 +56,14 @@ public:
                                          e);
         }
     }
-    void dragConnector(const MouseEvent& e)
+    void dragConnector(const juce::MouseEvent& e)
     {for (auto listener: listeners_)
         {
             listener->dragConnector(e);
         }
 
     }
-    void endDraggingConnector(const MouseEvent& e)
+    void endDraggingConnector(const juce::MouseEvent& e)
     {
         for (auto listener: listeners_)
         {
@@ -83,9 +83,9 @@ public:
     // Public member variables for a PreparationSection object
     juce::ValueTree state;
     OpenGlWrapper &_open_gl;
-    SelectedItemSet<PreparationSection*> *selectedSet;
+    juce::SelectedItemSet<PreparationSection*> *selectedSet;
     std::unique_ptr<BKItem> item;
-    CachedValue<int> x, y, width, height, numIns, numOuts;
+    juce::CachedValue<int> x, y, width, height, numIns, numOuts;
     juce::ComponentDragger myDragger;
     juce::ComponentBoundsConstrainer constrainer;
 
@@ -110,7 +110,7 @@ public:
 
     void update()
     {
-//        const AudioProcessorGraph::Node::Ptr f (graph.graph.getNodeForId (pluginID));
+//        const juce::AudioProcessorGraph::Node::Ptr f (graph.graph.getNodeForId (pluginID));
 //        jassert (f != nullptr);
 //
 //        auto& processor = *f->getProcessor();
@@ -126,10 +126,10 @@ public:
 //        int w = 100;
 //        int h = 60;
 //
-//        w = jmax (w, (jmax (numIns, numOuts) + 1) * 20);
+//        w = juce::jmax (w, (juce::jmax (numIns, numOuts) + 1) * 20);
 //
 //        const int textWidth = font.getStringWidth (processor.getName());
-//        w = jmax (w, 16 + jmin (textWidth, 300));
+//        w = juce::jmax (w, 16 + juce::Colours (textWidth, 300));
 //        if (textWidth > 300)
 //            h = 100;
 //
@@ -152,19 +152,19 @@ public:
 //                addAndMakeVisible (pins.add (new PinComponent (panel, { pluginID, i }, true)));
 //
 //            if (processor.acceptsMidi())
-//                addAndMakeVisible (pins.add (new PinComponent (panel, { pluginID, AudioProcessorGraph::midiChannelIndex }, true)));
+//                addAndMakeVisible (pins.add (new PinComponent (panel, { pluginID, juce::AudioProcessorGraph::midiChannelIndex }, true)));
 //
 //            for (int i = 0; i < processor.getTotalNumOutputChannels(); ++i)
 //                addAndMakeVisible (pins.add (new PinComponent (panel, { pluginID, i }, false)));
 //
 //            if (processor.producesMidi())
-//                addAndMakeVisible (pins.add (new PinComponent (panel, { pluginID, AudioProcessorGraph::midiChannelIndex }, false)));
+//                addAndMakeVisible (pins.add (new PinComponent (panel, { pluginID, juce::AudioProcessorGraph::midiChannelIndex }, false)));
 //
 //            resized();
 //        }
     }
 
-    void changeListenerCallback(ChangeBroadcaster *source)
+    void changeListenerCallback(juce::ChangeBroadcaster *source)
     {
        //DBG("changelistener");
         if(selectedSet->isSelected(this))
@@ -268,8 +268,8 @@ public:
             auto& processor = *this->node->getProcessor();
             for (int i = 0; i < processor.getTotalNumInputChannels(); ++i)
             {
-                ValueTree v{IDs::PORT} ;
-                v.setProperty(IDs::nodeID,VariantConverter<juce::AudioProcessorGraph::NodeID>::toVar(this->pluginID), nullptr);
+                juce::ValueTree v{IDs::PORT} ;
+                v.setProperty(IDs::nodeID,juce::VariantConverter<juce::AudioProcessorGraph::NodeID>::toVar(this->pluginID), nullptr);
                 v.setProperty(IDs::chIdx, i, nullptr);
                 state.addChild(v, -1, nullptr) ;
             }
@@ -277,17 +277,17 @@ public:
 
             if(processor.acceptsMidi())
             {
-                ValueTree v{IDs::PORT} ;
-                v.setProperty(IDs::nodeID,VariantConverter<juce::AudioProcessorGraph::NodeID>::toVar(this->pluginID), nullptr);
-                v.setProperty(IDs::chIdx, AudioProcessorGraph::midiChannelIndex, nullptr);
+                juce::ValueTree v{IDs::PORT} ;
+                v.setProperty(IDs::nodeID,juce::VariantConverter<juce::AudioProcessorGraph::NodeID>::toVar(this->pluginID), nullptr);
+                v.setProperty(IDs::chIdx, juce::AudioProcessorGraph::midiChannelIndex, nullptr);
                 v.setProperty(IDs::isIn, true, nullptr);
                 state.addChild(v, -1, nullptr) ;
             }
 
             for(int i = 0; i < processor.getTotalNumOutputChannels(); ++i)
             {
-                ValueTree v{IDs::PORT} ;
-                v.setProperty(IDs::nodeID,VariantConverter<juce::AudioProcessorGraph::NodeID>::toVar(this->pluginID), nullptr);
+                juce::ValueTree v{IDs::PORT} ;
+                v.setProperty(IDs::nodeID,juce::VariantConverter<juce::AudioProcessorGraph::NodeID>::toVar(this->pluginID), nullptr);
                 v.setProperty(IDs::chIdx, i, nullptr);
                 v.setProperty(IDs::isIn, false, nullptr);
                 state.addChild(v, -1, nullptr) ;
@@ -295,9 +295,9 @@ public:
 
             if(processor.producesMidi())
             {
-                ValueTree v{IDs::PORT} ;
-                v.setProperty(IDs::nodeID,VariantConverter<juce::AudioProcessorGraph::NodeID>::toVar(this->pluginID), nullptr);
-                v.setProperty(IDs::chIdx, AudioProcessorGraph::midiChannelIndex, nullptr);
+                juce::ValueTree v{IDs::PORT} ;
+                v.setProperty(IDs::nodeID,juce::VariantConverter<juce::AudioProcessorGraph::NodeID>::toVar(this->pluginID), nullptr);
+                v.setProperty(IDs::chIdx, juce::AudioProcessorGraph::midiChannelIndex, nullptr);
                 v.setProperty(IDs::isIn, false, nullptr);
                 state.addChild(v, -1, nullptr) ;
             }
@@ -310,12 +310,12 @@ public:
 //                for (auto *port: this->objects) {
 //
 //                    port->getImageComponent()->init(this->_open_gl);
-//                    MessageManagerLock mm;
+//                    juce::MessageManagerLock mm;
 //                    this->addOpenGlComponent(port->getImageComponent(),false, true);
 //                    this->addAndMakeVisible(port);
 //                    port->addListener(this);
 //                }
-//                MessageManagerLock mm;
+//                juce::MessageManagerLock mm;
 //                this->resized();
 //                DBG("ports added");
 //            });
@@ -329,11 +329,11 @@ public:
     {
         node = _node;
         pluginID = node->nodeID;
-        this->state.setProperty(IDs::nodeID,  VariantConverter<juce::AudioProcessorGraph::NodeID>::toVar(this->pluginID), nullptr);
+        this->state.setProperty(IDs::nodeID,  juce::VariantConverter<juce::AudioProcessorGraph::NodeID>::toVar(this->pluginID), nullptr);
         int i = 0;
         auto& processor = *_node->getProcessor();
         if (objects.isEmpty()) {
-            MessageManager::callAsync ([safeComp = Component::SafePointer<PreparationSection> (this)]
+            juce::MessageManager::callAsync ([safeComp = juce::Component::SafePointer<PreparationSection> (this)]
                                        {
                 safeComp->setPortInfo();
                                        });
@@ -345,7 +345,7 @@ public:
     }
     juce::AudioProcessorGraph::Node::Ptr node;
     juce::AudioProcessorGraph::NodeID pluginID;
-    CachedValue<juce::Uuid> uuid;
+    juce::CachedValue<juce::Uuid> uuid;
 //juce::AudioProcessor _proc;
     virtual juce::AudioProcessor* getProcessor(){}
     virtual std::unique_ptr<juce::AudioProcessor> getProcessorPtr(){}

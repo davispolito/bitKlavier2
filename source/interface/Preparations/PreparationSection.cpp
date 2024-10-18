@@ -6,7 +6,7 @@
 #include "synth_gui_interface.h"
 
 #include "FullInterface.h"
-PreparationSection::PreparationSection(String name, ValueTree v, OpenGlWrapper &open_gl, juce::AudioProcessor* proc) : tracktion::engine::ValueTreeObjectList<BKPort>(v), SynthSection(name), state(v), _open_gl(open_gl), _proc(proc)
+PreparationSection::PreparationSection(juce::String name, juce::ValueTree v, OpenGlWrapper &open_gl, juce::AudioProcessor* proc) : tracktion::engine::ValueTreeObjectList<BKPort>(v), SynthSection(name), state(v), _open_gl(open_gl), _proc(proc)
 {
     //_parent = findParentComponentOfClass<SynthGuiInterface>();
     x.referTo(v,IDs::x,nullptr);
@@ -19,7 +19,7 @@ PreparationSection::PreparationSection(String name, ValueTree v, OpenGlWrapper &
     createUuidProperty(state);
     uuid.referTo(state,IDs::uuid,nullptr);
 
-    pluginID = VariantConverter<juce::AudioProcessorGraph::NodeID>::fromVar(v.getProperty(IDs::nodeID));
+    pluginID = juce::VariantConverter<juce::AudioProcessorGraph::NodeID>::fromVar(v.getProperty(IDs::nodeID));
     //pluginID.uid = static_cast<uint32>(int(state.getProperty(IDs::uuid)));
     constrainer.setMinimumOnscreenAmounts(0xffffff,0xffffff,0xffffff,0xffffff);
     rebuildObjects();
@@ -29,27 +29,27 @@ PreparationSection::PreparationSection(String name, ValueTree v, OpenGlWrapper &
 
             object->getImageComponent()->init(open_gl);
 
-            MessageManagerLock mm;
+            juce::MessageManagerLock mm;
             this->addOpenGlComponent(object->getImageComponent(),false, true);
             this->addAndMakeVisible(object);
             object->addListener(this);
             this->resized();
         });
     }
-    MemoryBlock data;
+    juce::MemoryBlock data;
     proc->getStateInformation(data);
     auto xml = juce::parseXML(data.toString());
-//auto xml = AudioProcessor::getXmlF(data.getData(), (int)data.getSize());
+//auto xml = juce::AudioProcessor::getXmlF(data.getData(), (int)data.getSize());
     if (!state.getChild(0).isValid())
-        state.addChild(ValueTree::fromXml(*xml),0,nullptr);
+        state.addChild(juce::ValueTree::fromXml(*xml),0,nullptr);
     DBG(state.toXmlString());
 
 }
 
-void PreparationSection::paintBackground(Graphics& g)
+void PreparationSection::paintBackground(juce::Graphics& g)
 {
 //    g.saveState();
-//    Rectangle<int> bounds = getLocalArea(item.get(), item->getLocalBounds());
+//    juce::Rectangle<int> bounds = getLocalArea(item.get(), item->getLocalBounds());
 //    g.reduceClipRegion(bounds);
 //    g.setOrigin(bounds.getTopLeft());
 //    //item->paintBackground(g);
@@ -64,7 +64,7 @@ void PreparationSection::paintBackground(Graphics& g)
 }
 
 void PreparationSection:: resized() {
-    Rectangle<float> bounds = getLocalBounds().toFloat();
+    juce::Rectangle<float> bounds = getLocalBounds().toFloat();
     int item_padding_y = kItemPaddingY * size_ratio_;
     int item_height = getHeight() - 2 * item_padding_y;
     int item_padding_x = kItemPaddingX * size_ratio_;
@@ -85,7 +85,7 @@ void PreparationSection:: resized() {
             int index = port->pin.isMIDI() ? (total - 1) : channelIndex;
 
             auto totalSpaces = static_cast<float> (total) +
-                               (static_cast<float> (jmax(0, processor->getBusCount(isInput) - 1)) * 0.5f);
+                               (static_cast<float> (juce::jmax(0, processor->getBusCount(isInput) - 1)) * 0.5f);
             auto indexPos = static_cast<float> (index) + (static_cast<float> (busIdx) * 0.5f);
             if( port->pin.isMIDI())
             {
@@ -107,10 +107,9 @@ PreparationSection::~PreparationSection()
 {
 }
 
-BKPort *PreparationSection::createNewObject(const ValueTree &v) {
-    SynthGuiInterface* _parent = findParentComponentOfClass<SynthGuiInterface>();
+BKPort *PreparationSection::createNewObject(const juce::ValueTree &v) {
 
-    return new BKPort(_parent, v);
+    return new BKPort( v);
 }
 
 void PreparationSection::deleteObject(BKPort *at) {
@@ -127,7 +126,7 @@ void PreparationSection::newObjectAdded(BKPort * object) {
     parent->getGui()->open_gl_.initOpenGlComp.try_enqueue([this, object] {
         SynthGuiInterface* _parent = findParentComponentOfClass<SynthGuiInterface>();
         object->getImageComponent()->init(_parent->getGui()->open_gl_);
-        MessageManagerLock mm;
+        juce::MessageManagerLock mm;
         this->addOpenGlComponent(object->getImageComponent(),false, true);
         this->addAndMakeVisible(object);
         object->addListener(this);
@@ -135,7 +134,7 @@ void PreparationSection::newObjectAdded(BKPort * object) {
     });
 }
 
-void PreparationSection::valueTreeRedirected(ValueTree &) {
+void PreparationSection::valueTreeRedirected(juce::ValueTree &) {
 }
 
 
@@ -157,7 +156,7 @@ void PreparationSection::valueTreeRedirected(ValueTree &) {
 //
 //}
 
-//PreparationList::PreparationList(ValueTree editTree, juce::UndoManager& um)
+//PreparationList::PreparationList(juce::ValueTree editTree, juce::UndoManager& um)
 //    : SynthSection("preplist"),
 //      tracktion::engine::ValueTreeObjectList<PreparationSection>(editTree),
 //      undo(um)

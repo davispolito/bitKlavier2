@@ -42,12 +42,12 @@ public:
 
     LibrarySection();
 
-    void paintBackground(Graphics& g) override;
+    void paintBackground(juce::Graphics& g) override;
     void resized() override;
     void reset() override;
 
-    void buttonClicked(Button* clicked_button) override;
-    void sliderValueChanged(Slider* slider) override;
+    void buttonClicked(juce::Button* clicked_button) override;
+    void sliderValueChanged(juce::Slider* slider) override;
 
 
 
@@ -65,7 +65,7 @@ private:
     std::vector<Listener*> listeners_;
     std::shared_ptr<OpenGlQuad> body_;
 
-    //Image background_image_;
+    //juce::Image background_image_;
     //std::unique_ptr<SynthButton> click_me;
     // juce::TextButton inspectButton { "Inspect the UI" };
     //std::unique_ptr<melatonin::Inspector> inspector;

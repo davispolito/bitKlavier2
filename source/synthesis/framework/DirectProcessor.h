@@ -25,7 +25,7 @@ struct DirectParams : chowdsp::ParamHolder
 
     }
 
-    // Gain param
+    // juce::Gain param
     chowdsp::GainDBParameter::Ptr gainParam {
         juce::ParameterID { "gain", 100 },
         "Gain",

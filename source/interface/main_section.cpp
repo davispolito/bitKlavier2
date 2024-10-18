@@ -3,6 +3,7 @@
 //
 
 #include "main_section.h"
+#include "synth_section.h"
 #include "ConstructionSite.h"
 
 MainSection::MainSection(juce::ValueTree v, juce::UndoManager &um, OpenGlWrapper & open_gl, SynthGuiData* data) : SynthSection("main_section"), um(um)
@@ -16,7 +17,7 @@ MainSection::MainSection(juce::ValueTree v, juce::UndoManager &um, OpenGlWrapper
     addSubSection(constructionSite_.get(), true);
     //addAndMakeVisible(constructionSite_.get());
     //addAndMakeVisible(constructionPort);
-//    ValueTree t(IDs::PREPARATION);
+//    juce::ValueTree t(IDs::PREPARATION);
 //
 //    t.setProperty(IDs::type,bitklavier::BKPreparationType::PreparationTypeDirect, nullptr);
 //    t.setProperty(IDs::x,255, nullptr);
@@ -41,7 +42,7 @@ void MainSection::paintBackground(juce::Graphics& g)
 
 void MainSection::resized()
 {
-    constructionSite_->setColour(Skin::kBody,Colours::antiquewhite);
+    constructionSite_->setColour(Skin::kBody,juce::Colours::antiquewhite);
     int height = getHeight();
     int width = getWidth();
     int widget_margin = findValue(Skin::kWidgetMargin);
@@ -51,8 +52,8 @@ void MainSection::resized()
     //constructionPort.setBounds(large_padding, 0,width, height);
     DBG (":");
     DBG("main section");
-    DBG("display scale" + String(getDisplayScale()));
-    DBG("width" + String(getWidth()));
-    DBG("height" + String(getHeight()));
+    DBG("display scale" + juce::String(getDisplayScale()));
+    DBG("width" + juce::String(getWidth()));
+    DBG("height" + juce::String(getHeight()));
     SynthSection::resized();
 }

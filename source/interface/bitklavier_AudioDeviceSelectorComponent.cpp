@@ -40,10 +40,10 @@
 namespace bitklavier
 {
 
-    struct SimpleDeviceManagerInputLevelMeter final : public Component,
-                                                      public Timer
+    struct SimpleDeviceManagerInputLevelMeter final : public juce::Component,
+                                                      public juce::Timer
     {
-        SimpleDeviceManagerInputLevelMeter (AudioDeviceManager& m)  : manager (m)
+        SimpleDeviceManagerInputLevelMeter (juce::AudioDeviceManager& m)  : manager (m)
         {
             startTimerHz (20);
             inputLevelGetter = manager.getInputLevelGetter();
@@ -67,31 +67,31 @@ namespace bitklavier
             }
         }
 
-        void paint (Graphics& g) override
+        void paint (juce::Graphics& g) override
         {
             // (add a bit of a skew to make the level more obvious)
             getLookAndFeel().drawLevelMeter (g, getWidth(), getHeight(),
                                              (float) std::exp (std::log (level) / 3.0));
         }
 
-        AudioDeviceManager& manager;
-        AudioDeviceManager::LevelMeter::Ptr inputLevelGetter;
+        juce::AudioDeviceManager& manager;
+        juce::AudioDeviceManager::LevelMeter::Ptr inputLevelGetter;
         float level = 0;
 
         JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SimpleDeviceManagerInputLevelMeter)
     };
 
-    static void drawTextLayout (Graphics& g, Component& owner, StringRef text, const Rectangle<int>& textBounds, bool enabled)
+    static void drawTextLayout (juce::Graphics& g, juce::Component& owner, juce::StringRef text, const juce::Rectangle<int>& textBounds, bool enabled)
     {
-        const auto textColour = owner.findColour (ListBox::textColourId, true).withMultipliedAlpha (enabled ? 1.0f : 0.6f);
+        const auto textColour = owner.findColour (juce::ListBox::textColourId, true).withMultipliedAlpha (enabled ? 1.0f : 0.6f);
 
-        AttributedString attributedString { text };
+        juce::AttributedString attributedString { text };
         attributedString.setColour (textColour);
-        attributedString.setFont (owner.withDefaultMetrics (FontOptions { (float) textBounds.getHeight() * 0.6f }));
-        attributedString.setJustification (Justification::centredLeft);
-        attributedString.setWordWrap (AttributedString::WordWrap::none);
+        attributedString.setFont (owner.withDefaultMetrics (juce::FontOptions { (float) textBounds.getHeight() * 0.6f }));
+        attributedString.setJustification (juce::Justification::centredLeft);
+        attributedString.setWordWrap (juce::AttributedString::WordWrap::none);
 
-        TextLayout textLayout;
+        juce::TextLayout textLayout;
         textLayout.createLayout (attributedString,
                                  (float) textBounds.getWidth(),
                                  (float) textBounds.getHeight());
@@ -100,13 +100,13 @@ namespace bitklavier
 
 
 //==============================================================================
-    class AudioDeviceSelectorComponent::MidiInputSelectorComponentListBox final : public ListBox,
-                                                                                  private ListBoxModel
+    class AudioDeviceSelectorComponent::MidiInputSelectorComponentListBox final : public juce::ListBox,
+                                                                                  private juce::ListBoxModel
     {
     public:
-//        struct MidiDeviceInfoWrapper : public MidiDeviceInfo
+//        struct MidiDeviceInfoWrapper : public juce::MidiDeviceInfo
 //        {
-//            MidiDeviceInfoWrapper(const ValueTree& v) : state(v)
+//            MidiDeviceInfoWrapper(const juce::ValueTree& v) : state(v)
 //            {
 //                jassert(v.hasType(IDs::midiInput));
 //                _name.referTo(state,IDs::name, nullptr, this->name);
@@ -115,12 +115,12 @@ namespace bitklavier
 //
 //
 //
-//            ValueTree state;
-//            CachedValue <String> _name;
-//            CachedValue <String> _identifier;
+//            juce::ValueTree state;
+//            juce::CachedValue <juce::String> _name;
+//            juce::CachedValue <juce::String> _identifier;
 //        };
-        MidiInputSelectorComponentListBox (AudioDeviceManager& dm, const String& noItems)
-                : ListBox ({}, nullptr),
+        MidiInputSelectorComponentListBox (juce::AudioDeviceManager& dm, const juce::String& noItems)
+                : juce::ListBox ({}, nullptr),
                   deviceManager (dm),
                   noItemsMessage (noItems)
 
@@ -132,7 +132,7 @@ namespace bitklavier
 
         void updateDevices()
         {
-            items = MidiInput::getAvailableDevices();
+            items = juce::MidiInput::getAvailableDevices();
         }
 
         int getNumRows() override
@@ -140,12 +140,12 @@ namespace bitklavier
             return items.size();
         }
 
-        void paintListBoxItem (int row, Graphics& g, int width, int height, bool rowIsSelected) override
+        void paintListBoxItem (int row, juce::Graphics& g, int width, int height, bool rowIsSelected) override
         {
-            if (isPositiveAndBelow (row, items.size()))
+            if (juce::isPositiveAndBelow (row, items.size()))
             {
                 if (rowIsSelected)
-                    g.fillAll (findColour (TextEditor::highlightColourId)
+                    g.fillAll (findColour (juce::TextEditor::highlightColourId)
                                        .withMultipliedAlpha (0.3f));
 
                 auto item = items[row];
@@ -161,7 +161,7 @@ namespace bitklavier
             }
         }
 
-        void listBoxItemClicked (int row, const MouseEvent& e) override
+        void listBoxItemClicked (int row, const juce::MouseEvent& e) override
         {
             selectRow (row);
 
@@ -169,7 +169,7 @@ namespace bitklavier
                 flipEnablement (row);
         }
 
-        void listBoxItemDoubleClicked (int row, const MouseEvent&) override
+        void listBoxItemDoubleClicked (int row, const juce::MouseEvent&) override
         {
             flipEnablement (row);
         }
@@ -179,17 +179,17 @@ namespace bitklavier
             flipEnablement (row);
         }
 
-        void paint (Graphics& g) override
+        void paint (juce::Graphics& g) override
         {
-            ListBox::paint (g);
+            juce::ListBox::paint (g);
 
             if (items.isEmpty())
             {
-                g.setColour (Colours::grey);
+                g.setColour (juce::Colours::grey);
                 g.setFont (0.5f * (float) getRowHeight());
                 g.drawText (noItemsMessage,
                             0, 0, getWidth(), getHeight() / 2,
-                            Justification::centred, true);
+                            juce::Justification::centred, true);
             }
         }
 
@@ -197,19 +197,19 @@ namespace bitklavier
         {
             auto extra = getOutlineThickness() * 2;
 
-            return jmax (getRowHeight() * 2 + extra,
-                         jmin (getRowHeight() * getNumRows() + extra,
+            return juce::jmax (getRowHeight() * 2 + extra,
+                         juce::jmin (getRowHeight() * getNumRows() + extra,
                                preferredHeight));
         }
 
     private:
         //==============================================================================
-        AudioDeviceManager& deviceManager;
-        const String noItemsMessage;
-        Array<MidiDeviceInfo> items;
+        juce::AudioDeviceManager& deviceManager;
+        const juce::String noItemsMessage;
+        juce::Array<juce::MidiDeviceInfo> items;
         void flipEnablement (const int row)
         {
-            if (isPositiveAndBelow (row, items.size()))
+            if (juce::isPositiveAndBelow (row, items.size()))
             {
                 auto identifier = items[row].identifier;
                 deviceManager.setMidiInputDeviceEnabled (identifier, ! deviceManager.isMidiInputDeviceEnabled (identifier));
@@ -228,20 +228,20 @@ namespace bitklavier
 //==============================================================================
     struct AudioDeviceSetupDetails
     {
-        AudioDeviceManager* manager;
+        juce::AudioDeviceManager* manager;
         int minNumInputChannels, maxNumInputChannels;
         int minNumOutputChannels, maxNumOutputChannels;
         bool useStereoPairs;
     };
 
-    static String getNoDeviceString()   { return "<< " + TRANS ("none") + " >>"; }
+    static juce::String getNoDeviceString()   { return "<< " + TRANS ("none") + " >>"; }
 
 //==============================================================================
-    class AudioDeviceSelectorComponent::MidiOutputSelector final : public Component,
-                                                                   private ChangeListener
+    class AudioDeviceSelectorComponent::MidiOutputSelector final : public juce::Component,
+                                                                   private juce::ChangeListener
     {
     public:
-        explicit MidiOutputSelector (AudioDeviceManager& dm)
+        explicit MidiOutputSelector (juce::AudioDeviceManager& dm)
                 : deviceManager (dm)
         {
             deviceManager.addChangeListener (this);
@@ -251,8 +251,8 @@ namespace bitklavier
                 jassert (selectedId != 0);
 
                 const auto deviceId = selectedId == -1
-                                      ? String{}
-                                      : MidiOutput::getAvailableDevices()[selectedId - 1].identifier;
+                                      ? juce::String{}
+                                      : juce::MidiOutput::getAvailableDevices()[selectedId - 1].identifier;
                 deviceManager.setDefaultMidiOutputDevice (deviceId);
             };
 
@@ -272,10 +272,10 @@ namespace bitklavier
         {
             selector.clear();
 
-            const auto midiOutputs = MidiOutput::getAvailableDevices();
+            const auto midiOutputs = juce::MidiOutput::getAvailableDevices();
 
             selector.addItem (getNoDeviceString(), -1);
-            selector.setSelectedId (-1, dontSendNotification);
+            selector.setSelectedId (-1, juce::dontSendNotification);
             selector.addSeparator();
 
             for (auto [id, midiOutput] : enumerate (midiOutputs, 1))
@@ -283,29 +283,29 @@ namespace bitklavier
                 selector.addItem (midiOutput.name, id);
 
                 if (midiOutput.identifier == deviceManager.getDefaultMidiOutputIdentifier())
-                    selector.setSelectedId (id, dontSendNotification);
+                    selector.setSelectedId (id, juce::dontSendNotification);
             }
         }
 
-        void changeListenerCallback (ChangeBroadcaster*) final { updateListOfDevices(); }
+        void changeListenerCallback (juce::ChangeBroadcaster*) final { updateListOfDevices(); }
 
-        ComboBox selector;
-        AudioDeviceManager& deviceManager;
+        juce::ComboBox selector;
+        juce::AudioDeviceManager& deviceManager;
     };
 
 //==============================================================================
-    class AudioDeviceSettingsPanel : public Component,
-                                     private ChangeListener
+    class AudioDeviceSettingsPanel : public juce::Component,
+                                     private juce::ChangeListener
     {
     public:
-        AudioDeviceSettingsPanel (AudioIODeviceType& t, AudioDeviceSetupDetails& setupDetails,
+        AudioDeviceSettingsPanel (juce::AudioIODeviceType& t, AudioDeviceSetupDetails& setupDetails,
                                   const bool hideAdvancedOptionsWithButton,
                                   AudioDeviceSelectorComponent& p)
                 : type (t), setup (setupDetails), parent (p)
         {
             if (hideAdvancedOptionsWithButton)
             {
-                showAdvancedSettingsButton = std::make_unique <TextButton> (TRANS ("Show advanced settings..."));
+                showAdvancedSettingsButton = std::make_unique <juce::TextButton> (TRANS ("Show advanced settings..."));
                 addAndMakeVisible (showAdvancedSettingsButton.get());
                 showAdvancedSettingsButton->setClickingTogglesState (true);
                 showAdvancedSettingsButton->onClick = [this] { toggleAdvancedSettings(); };
@@ -325,7 +325,7 @@ namespace bitklavier
 
         void resized() override
         {
-            Rectangle<int> r (proportionOfWidth (0.35f), 0, proportionOfWidth (0.6f), 3000);
+            juce::Rectangle<int> r (proportionOfWidth (0.35f), 0, proportionOfWidth (0.6f), 3000);
 
             const int maxListBoxHeight = 100;
             const int h = parent.getItemHeight();
@@ -358,7 +358,7 @@ namespace bitklavier
 
             if (outputChanList != nullptr)
             {
-                outputChanList->setRowHeight (jmin (22, h));
+                outputChanList->setRowHeight (juce::jmin (22, h));
                 outputChanList->setBounds (r.removeFromTop (outputChanList->getBestHeight (maxListBoxHeight)));
                 outputChanLabel->setBounds (0, outputChanList->getBounds().getCentreY() - h / 2, r.getX(), h);
                 r.removeFromTop (space);
@@ -366,7 +366,7 @@ namespace bitklavier
 
             if (inputChanList != nullptr)
             {
-                inputChanList->setRowHeight (jmin (22, h));
+                inputChanList->setRowHeight (juce::jmin (22, h));
                 inputChanList->setBounds (r.removeFromTop (inputChanList->getBestHeight (maxListBoxHeight)));
                 inputChanLabel->setBounds (0, inputChanList->getBounds().getCentreY() - h / 2, r.getX(), h);
                 r.removeFromTop (space);
@@ -437,16 +437,16 @@ namespace bitklavier
         void updateConfig (bool updateOutputDevice, bool updateInputDevice, bool updateSampleRate, bool updateBufferSize)
         {
             auto config = setup.manager->getAudioDeviceSetup();
-            String error;
+            juce::String error;
 
             if (updateOutputDevice || updateInputDevice)
             {
                 if (outputDeviceDropDown != nullptr)
-                    config.outputDeviceName = outputDeviceDropDown->getSelectedId() < 0 ? String()
+                    config.outputDeviceName = outputDeviceDropDown->getSelectedId() < 0 ? juce::String()
                                                                                         : outputDeviceDropDown->getText();
 
                 if (inputDeviceDropDown != nullptr)
-                    config.inputDeviceName = inputDeviceDropDown->getSelectedId() < 0 ? String()
+                    config.inputDeviceName = inputDeviceDropDown->getSelectedId() < 0 ? juce::String()
                                                                                       : inputDeviceDropDown->getText();
 
                 if (! type.hasSeparateInputsAndOutputs())
@@ -482,7 +482,7 @@ namespace bitklavier
             }
 
             if (error.isNotEmpty())
-                messageBox = AlertWindow::showScopedAsync (MessageBoxOptions().withIconType (MessageBoxIconType::WarningIcon)
+                messageBox = juce::AlertWindow::showScopedAsync (juce::MessageBoxOptions().withIconType (juce::MessageBoxIconType::WarningIcon)
                                                                    .withTitle (TRANS ("Error when trying to open audio device!"))
                                                                    .withMessage (error)
                                                                    .withButton (TRANS ("OK")),
@@ -493,7 +493,7 @@ namespace bitklavier
         {
             if (auto* device = setup.manager->getCurrentAudioDevice())
             {
-                Component modalWindow;
+                juce::Component modalWindow;
                 modalWindow.setOpaque (true);
                 modalWindow.addToDesktop (0);
                 modalWindow.enterModalState();
@@ -507,7 +507,7 @@ namespace bitklavier
         void toggleAdvancedSettings()
         {
             showAdvancedSettingsButton->setButtonText ((showAdvancedSettingsButton->getToggleState() ? "Hide " : "Show ")
-                                                       + String ("advanced settings..."));
+                                                       + juce::String ("advanced settings..."));
             resized();
         }
 
@@ -544,8 +544,8 @@ namespace bitklavier
                         outputChanList = std::make_unique<ChannelSelectorListBox> (setup, ChannelSelectorListBox::audioOutputType,
                                                                                    TRANS ("(no audio output channels found)"));
                         addAndMakeVisible (outputChanList.get());
-                        outputChanLabel = std::make_unique<Label> (String{}, TRANS ("Active output channels:"));
-                        outputChanLabel->setJustificationType (Justification::centredRight);
+                        outputChanLabel = std::make_unique<juce::Label> (juce::String{}, TRANS ("Active output channels:"));
+                        outputChanLabel->setJustificationType (juce::Justification::centredRight);
                         outputChanLabel->attachToComponent (outputChanList.get(), true);
                     }
 
@@ -565,8 +565,8 @@ namespace bitklavier
                         inputChanList = std::make_unique<ChannelSelectorListBox> (setup, ChannelSelectorListBox::audioInputType,
                                                                                   TRANS ("(no audio input channels found)"));
                         addAndMakeVisible (inputChanList.get());
-                        inputChanLabel = std::make_unique<Label> (String{}, TRANS ("Active input channels:"));
-                        inputChanLabel->setJustificationType (Justification::centredRight);
+                        inputChanLabel = std::make_unique<juce::Label> (juce::String{}, TRANS ("Active input channels:"));
+                        inputChanLabel->setJustificationType (juce::Justification::centredRight);
                         inputChanLabel->attachToComponent (inputChanList.get(), true);
                     }
 
@@ -596,10 +596,10 @@ namespace bitklavier
                 bufferSizeDropDown.reset();
 
                 if (outputDeviceDropDown != nullptr)
-                    outputDeviceDropDown->setSelectedId (-1, dontSendNotification);
+                    outputDeviceDropDown->setSelectedId (-1, juce::NotificationType::dontSendNotification);
 
                 if (inputDeviceDropDown != nullptr)
-                    inputDeviceDropDown->setSelectedId (-1, dontSendNotification);
+                    inputDeviceDropDown->setSelectedId (-1, juce::NotificationType::dontSendNotification);
             }
 
             sendLookAndFeelChange();
@@ -607,7 +607,7 @@ namespace bitklavier
             setSize (getWidth(), getLowestY() + 4);
         }
 
-        void changeListenerCallback (ChangeBroadcaster*) override
+        void changeListenerCallback (juce::ChangeBroadcaster*) override
         {
             updateAllControls();
         }
@@ -619,15 +619,15 @@ namespace bitklavier
         }
 
     private:
-        AudioIODeviceType& type;
+        juce::AudioIODeviceType& type;
         const AudioDeviceSetupDetails setup;
         AudioDeviceSelectorComponent& parent;
 
-        std::unique_ptr<ComboBox> outputDeviceDropDown, inputDeviceDropDown, sampleRateDropDown, bufferSizeDropDown;
-        std::unique_ptr<Label> outputDeviceLabel, inputDeviceLabel, sampleRateLabel, bufferSizeLabel, inputChanLabel, outputChanLabel;
-        std::unique_ptr<TextButton> testButton;
-        std::unique_ptr<Component> inputLevelMeter;
-        std::unique_ptr<TextButton> showUIButton, showAdvancedSettingsButton, resetDeviceButton;
+        std::unique_ptr<juce::ComboBox> outputDeviceDropDown, inputDeviceDropDown, sampleRateDropDown, bufferSizeDropDown;
+        std::unique_ptr<juce::Label> outputDeviceLabel, inputDeviceLabel, sampleRateLabel, bufferSizeLabel, inputChanLabel, outputChanLabel;
+        std::unique_ptr<juce::TextButton> testButton;
+        std::unique_ptr<juce::Component> inputLevelMeter;
+        std::unique_ptr<juce::TextButton> showUIButton, showAdvancedSettingsButton, resetDeviceButton;
 
         int findSelectedDeviceIndex (bool isInput) const
         {
@@ -650,26 +650,26 @@ namespace bitklavier
                 testButton->setEnabled (findSelectedDeviceIndex (isInput) >= 0);
         }
 
-        void showCorrectDeviceName (ComboBox* box, bool isInput)
+        void showCorrectDeviceName (juce::ComboBox* box, bool isInput)
         {
             if (box == nullptr)
                 return;
 
             const auto index = findSelectedDeviceIndex (isInput);
-            box->setSelectedId (index < 0 ? index : index + 1, dontSendNotification);
+            box->setSelectedId (index < 0 ? index : index + 1, juce::NotificationType::dontSendNotification);
         }
 
-        void addNamesToDeviceBox (ComboBox& combo, bool isInputs)
+        void addNamesToDeviceBox (juce::ComboBox& combo, bool isInputs)
         {
-            const StringArray devs (type.getDeviceNames (isInputs));
+            const juce::StringArray devs (type.getDeviceNames (isInputs));
 
-            combo.clear (dontSendNotification);
+            combo.clear (juce::NotificationType::dontSendNotification);
 
             for (int i = 0; i < devs.size(); ++i)
                 combo.addItem (devs[i], i + 1);
 
             combo.addItem (getNoDeviceString(), -1);
-            combo.setSelectedId (-1, dontSendNotification);
+            combo.setSelectedId (-1, juce::NotificationType::dontSendNotification);
         }
 
         int getLowestY() const
@@ -677,7 +677,7 @@ namespace bitklavier
             int y = 0;
 
             for (auto* c : getChildren())
-                y = jmax (y, c->getBottom());
+                y = juce::jmax (y, c->getBottom());
 
             return y;
         }
@@ -689,7 +689,7 @@ namespace bitklavier
 
             if (currentDevice != nullptr && currentDevice->hasControlPanel())
             {
-                showUIButton = std::make_unique<TextButton> (TRANS ("Control Panel"),
+                showUIButton = std::make_unique<juce::TextButton> (TRANS ("Control Panel"),
                                                              TRANS ("Opens the device's own control panel"));
                 addAndMakeVisible (showUIButton.get());
                 showUIButton->onClick = [this] { showDeviceUIPanel(); };
@@ -706,7 +706,7 @@ namespace bitklavier
                 {
                     if (resetDeviceButton == nullptr)
                     {
-                        resetDeviceButton = std::make_unique<TextButton> (TRANS ("Reset Device"),
+                        resetDeviceButton = std::make_unique<juce::TextButton> (TRANS ("Reset juce::Device"),
                                                                           TRANS ("Resets the audio interface - sometimes needed after changing a device's properties in its custom control panel"));
                         addAndMakeVisible (resetDeviceButton.get());
                         resetDeviceButton->onClick = [this] { resetDevice(); };
@@ -726,18 +726,18 @@ namespace bitklavier
             {
                 if (outputDeviceDropDown == nullptr)
                 {
-                    outputDeviceDropDown = std::make_unique<ComboBox>();
+                    outputDeviceDropDown = std::make_unique<juce::ComboBox>();
                     outputDeviceDropDown->onChange = [this] { updateConfig (true, false, false, false); };
 
                     addAndMakeVisible (outputDeviceDropDown.get());
 
-                    outputDeviceLabel = std::make_unique<Label> (String{}, type.hasSeparateInputsAndOutputs() ? TRANS ("Output:")
+                    outputDeviceLabel = std::make_unique<juce::Label> (juce::String{}, type.hasSeparateInputsAndOutputs() ? TRANS ("Output:")
                                                                                                               : TRANS ("Device:"));
                     outputDeviceLabel->attachToComponent (outputDeviceDropDown.get(), true);
 
                     if (setup.maxNumOutputChannels > 0)
                     {
-                        testButton = std::make_unique<TextButton> (TRANS ("Test"), TRANS ("Plays a test tone"));
+                        testButton = std::make_unique<juce::TextButton> (TRANS ("Test"), TRANS ("Plays a test tone"));
                         addAndMakeVisible (testButton.get());
                         testButton->onClick = [this] { playTestSound(); };
                     }
@@ -755,11 +755,11 @@ namespace bitklavier
             {
                 if (inputDeviceDropDown == nullptr)
                 {
-                    inputDeviceDropDown = std::make_unique<ComboBox>();
+                    inputDeviceDropDown = std::make_unique<juce::ComboBox>();
                     inputDeviceDropDown->onChange = [this] { updateConfig (false, true, false, false); };
                     addAndMakeVisible (inputDeviceDropDown.get());
 
-                    inputDeviceLabel = std::make_unique<Label> (String{}, TRANS ("Input:"));
+                    inputDeviceLabel = std::make_unique<juce::Label> (juce::String{}, TRANS ("Input:"));
                     inputDeviceLabel->attachToComponent (inputDeviceDropDown.get(), true);
 
                     inputLevelMeter = std::make_unique<SimpleDeviceManagerInputLevelMeter> (*setup.manager);
@@ -772,14 +772,14 @@ namespace bitklavier
             updateSelectedInput();
         }
 
-        void updateSampleRateComboBox (AudioIODevice* currentDevice)
+        void updateSampleRateComboBox (juce::AudioIODevice* currentDevice)
         {
             if (sampleRateDropDown == nullptr)
             {
-                sampleRateDropDown = std::make_unique<ComboBox>();
+                sampleRateDropDown = std::make_unique<juce::ComboBox>();
                 addAndMakeVisible (sampleRateDropDown.get());
 
-                sampleRateLabel = std::make_unique<Label> (String{}, TRANS ("Sample rate:"));
+                sampleRateLabel = std::make_unique<juce::Label> (juce::String{}, TRANS ("Sample rate:"));
                 sampleRateLabel->attachToComponent (sampleRateDropDown.get(), true);
             }
             else
@@ -788,28 +788,29 @@ namespace bitklavier
                 sampleRateDropDown->onChange = nullptr;
             }
 
-            const auto getFrequencyString = [] (int rate) { return String (rate) + " Hz"; };
+            const auto getFrequencyString = [] (int rate) { return juce::String (rate) + " Hz"; };
 
             for (auto rate : currentDevice->getAvailableSampleRates())
             {
-                const auto intRate = roundToInt (rate);
+                const auto intRate = juce::roundToInt (rate);
                 sampleRateDropDown->addItem (getFrequencyString (intRate), intRate);
             }
 
-            const auto intRate = roundToInt (currentDevice->getCurrentSampleRate());
-            sampleRateDropDown->setText (getFrequencyString (intRate), dontSendNotification);
+            const auto intRate = juce::roundToInt (currentDevice->getCurrentSampleRate());
+
+            sampleRateDropDown->setText (getFrequencyString (intRate), juce::NotificationType::dontSendNotification);
 
             sampleRateDropDown->onChange = [this] { updateConfig (false, false, true, false); };
         }
 
-        void updateBufferSizeComboBox (AudioIODevice* currentDevice)
+        void updateBufferSizeComboBox (juce::AudioIODevice* currentDevice)
         {
             if (bufferSizeDropDown == nullptr)
             {
-                bufferSizeDropDown = std::make_unique<ComboBox>();
+                bufferSizeDropDown = std::make_unique<juce::ComboBox>();
                 addAndMakeVisible (bufferSizeDropDown.get());
 
-                bufferSizeLabel = std::make_unique<Label> (String{}, TRANS ("Audio buffer size:"));
+                bufferSizeLabel = std::make_unique<juce::Label> (juce::String{}, TRANS ("Audio buffer size:"));
                 bufferSizeLabel->attachToComponent (bufferSizeDropDown.get(), true);
             }
             else
@@ -820,20 +821,20 @@ namespace bitklavier
 
             auto currentRate = currentDevice->getCurrentSampleRate();
 
-            if (exactlyEqual (currentRate, 0.0))
+            if (juce::exactlyEqual (currentRate, 0.0))
                 currentRate = 48000.0;
 
             for (auto bs : currentDevice->getAvailableBufferSizes())
-                bufferSizeDropDown->addItem (String (bs) + " samples (" + String (bs * 1000.0 / currentRate, 1) + " ms)", bs);
+                bufferSizeDropDown->addItem (juce::String (bs) + " samples (" + juce::String (bs * 1000.0 / currentRate, 1) + " ms)", bs);
 
-            bufferSizeDropDown->setSelectedId (currentDevice->getCurrentBufferSizeSamples(), dontSendNotification);
+            bufferSizeDropDown->setSelectedId (currentDevice->getCurrentBufferSizeSamples(), juce::NotificationType::dontSendNotification);
             bufferSizeDropDown->onChange = [this] { updateConfig (false, false, false, true); };
         }
 
     public:
         //==============================================================================
-        class ChannelSelectorListBox final : public ListBox,
-                                             private ListBoxModel
+        class ChannelSelectorListBox final : public juce::ListBox,
+                                             private juce::ListBoxModel
         {
         public:
             enum BoxType
@@ -843,8 +844,8 @@ namespace bitklavier
             };
 
             //==============================================================================
-            ChannelSelectorListBox (const AudioDeviceSetupDetails& setupDetails, BoxType boxType, const String& noItemsText)
-                    : ListBox ({}, nullptr), setup (setupDetails), type (boxType), noItemsMessage (noItemsText)
+            ChannelSelectorListBox (const AudioDeviceSetupDetails& setupDetails, BoxType boxType, const juce::String& noItemsText)
+                    : juce::ListBox ({}, nullptr), setup (setupDetails), type (boxType), noItemsMessage (noItemsText)
             {
                 refresh();
                 setModel (this);
@@ -864,7 +865,7 @@ namespace bitklavier
 
                     if (setup.useStereoPairs)
                     {
-                        StringArray pairs;
+                        juce::StringArray pairs;
 
                         for (int i = 0; i < items.size(); i += 2)
                         {
@@ -889,11 +890,11 @@ namespace bitklavier
                 return items.size();
             }
 
-            void paintListBoxItem (int row, Graphics& g, int width, int height, bool) override
+            void paintListBoxItem (int row, juce::Graphics& g, int width, int height, bool) override
             {
-                if (isPositiveAndBelow (row, items.size()))
+                if (juce::isPositiveAndBelow (row, items.size()))
                 {
-                    g.fillAll (findColour (ListBox::backgroundColourId));
+                    g.fillAll (findColour (juce::ListBox::backgroundColourId));
 
                     auto item = items[row];
                     bool enabled = false;
@@ -924,7 +925,7 @@ namespace bitklavier
                 }
             }
 
-            void listBoxItemClicked (int row, const MouseEvent& e) override
+            void listBoxItemClicked (int row, const juce::MouseEvent& e) override
             {
                 selectRow (row);
 
@@ -932,7 +933,7 @@ namespace bitklavier
                     flipEnablement (row);
             }
 
-            void listBoxItemDoubleClicked (int row, const MouseEvent&) override
+            void listBoxItemDoubleClicked (int row, const juce::MouseEvent&) override
             {
                 flipEnablement (row);
             }
@@ -942,23 +943,23 @@ namespace bitklavier
                 flipEnablement (row);
             }
 
-            void paint (Graphics& g) override
+            void paint (juce::Graphics& g) override
             {
-                ListBox::paint (g);
+                juce::ListBox::paint (g);
 
                 if (items.isEmpty())
                 {
-                    g.setColour (Colours::grey);
+                    g.setColour (juce::Colours::grey);
                     g.setFont (0.5f * (float) getRowHeight());
                     g.drawText (noItemsMessage,
                                 0, 0, getWidth(), getHeight() / 2,
-                                Justification::centred, true);
+                                juce::Justification::centred, true);
                 }
             }
 
             int getBestHeight (int maxHeight)
             {
-                return getRowHeight() * jlimit (2, jmax (2, maxHeight / getRowHeight()),
+                return getRowHeight() * juce::jlimit (2, juce::jmax (2, maxHeight / getRowHeight()),
                                                 getNumRows())
                        + getOutlineThickness() * 2;
             }
@@ -967,12 +968,12 @@ namespace bitklavier
             //==============================================================================
             const AudioDeviceSetupDetails setup;
             const BoxType type;
-            const String noItemsMessage;
-            StringArray items;
+            const juce::String noItemsMessage;
+            juce::StringArray items;
 
-            static String getNameForChannelPair (const String& name1, const String& name2)
+            static juce::String getNameForChannelPair (const juce::String& name1, const juce::String& name2)
             {
-                String commonBit;
+                juce::String commonBit;
 
                 for (int j = 0; j < name1.length(); ++j)
                     if (name1.substring (0, j).equalsIgnoreCase (name2.substring (0, j)))
@@ -980,7 +981,7 @@ namespace bitklavier
 
                 // Make sure we only split the name at a space, because otherwise, things
                 // like "input 11" + "input 12" would become "input 11 + 2"
-                while (commonBit.isNotEmpty() && ! CharacterFunctions::isWhitespace (commonBit.getLastCharacter()))
+                while (commonBit.isNotEmpty() && ! juce::CharacterFunctions::isWhitespace (commonBit.getLastCharacter()))
                     commonBit = commonBit.dropLastCharacters (1);
 
                 return name1.trim() + " + " + name2.substring (commonBit.length()).trim();
@@ -990,13 +991,13 @@ namespace bitklavier
             {
                 jassert (type == audioInputType || type == audioOutputType);
 
-                if (isPositiveAndBelow (row, items.size()))
+                if (juce::isPositiveAndBelow (row, items.size()))
                 {
                     auto config = setup.manager->getAudioDeviceSetup();
 
                     if (setup.useStereoPairs)
                     {
-                        BigInteger bits;
+                        juce::BigInteger bits;
                         auto& original = (type == audioInputType ? config.inputChannels
                                                                  : config.outputChannels);
 
@@ -1035,7 +1036,7 @@ namespace bitklavier
                 }
             }
 
-            static void flipBit (BigInteger& chans, int index, int minNumber, int maxNumber)
+            static void flipBit (juce::BigInteger& chans, int index, int minNumber, int maxNumber)
             {
                 auto numActive = chans.countNumberOfSetBits();
 
@@ -1066,14 +1067,14 @@ namespace bitklavier
 
     private:
         std::unique_ptr<ChannelSelectorListBox> inputChanList, outputChanList;
-        ScopedMessageBox messageBox;
+        juce::ScopedMessageBox messageBox;
 
         JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AudioDeviceSettingsPanel)
     };
 
 
 //==============================================================================
-    AudioDeviceSelectorComponent::AudioDeviceSelectorComponent (AudioDeviceManager& dm,
+    AudioDeviceSelectorComponent::AudioDeviceSelectorComponent (juce::AudioDeviceManager& dm,
                                                                 int minInputChannelsToUse,
                                                                 int maxInputChannelsToUse,
                                                                 int minOutputChannelsToUse,
@@ -1081,7 +1082,7 @@ namespace bitklavier
                                                                 bool showMidiInputOptions,
                                                                 bool showMidiOutputSelector,
                                                                 bool showChannelsAsStereoPairsToUse,
-                                                                bool hideAdvancedOptionsWithButtonToUse, ValueTree tree)
+                                                                bool hideAdvancedOptionsWithButtonToUse, juce::ValueTree tree)
             : deviceManager (dm),
               itemHeight (24),
               minOutputChannels (minOutputChannelsToUse),
@@ -1094,7 +1095,7 @@ namespace bitklavier
     {
         jassert (minOutputChannels >= 0 && minOutputChannels <= maxOutputChannels);
         jassert (minInputChannels >= 0 && minInputChannels <= maxInputChannels);
-        for (auto device : MidiInput::getAvailableDevices())
+        for (auto device : juce::MidiInput::getAvailableDevices())
         {
             if (auto _child = state.getChildWithName("midiPrefs").getChildWithProperty("midiDeviceId", device.identifier); _child.isValid())
             {
@@ -1103,7 +1104,7 @@ namespace bitklavier
             }
             else
             {
-                ValueTree t(IDs::midiInput);
+                juce::ValueTree t(IDs::midiInput);
                 t.setProperty(IDs::name, device.name, nullptr);
                 t.setProperty(IDs::midiDeviceId, device.identifier, nullptr);
                 t.setProperty(IDs::active, deviceManager.isMidiInputDeviceEnabled (device.identifier),nullptr);
@@ -1111,11 +1112,11 @@ namespace bitklavier
                 deviceManager.setMidiInputDeviceEnabled (device.identifier, 0);
             }
         }
-        const OwnedArray<AudioIODeviceType>& types = deviceManager.getAvailableDeviceTypes();
+        const juce::OwnedArray<juce::AudioIODeviceType>& types = deviceManager.getAvailableDeviceTypes();
 
         if (types.size() > 1)
         {
-            deviceTypeDropDown = std::make_unique<ComboBox>();
+            deviceTypeDropDown = std::make_unique<juce::ComboBox>();
 
             for (int i = 0; i < types.size(); ++i)
                 deviceTypeDropDown->addItem (types.getUnchecked (i)->getTypeName(), i + 1);
@@ -1123,8 +1124,8 @@ namespace bitklavier
             addAndMakeVisible (deviceTypeDropDown.get());
             deviceTypeDropDown->onChange = [this] { updateDeviceType(); };
 
-            deviceTypeDropDownLabel = std::make_unique<Label> (String{}, TRANS ("Audio device type:"));
-            deviceTypeDropDownLabel->setJustificationType (Justification::centredRight);
+            deviceTypeDropDownLabel = std::make_unique<juce::Label> (juce::String{}, TRANS ("Audio device type:"));
+            deviceTypeDropDownLabel->setJustificationType (juce::Justification::centredRight);
             deviceTypeDropDownLabel->attachToComponent (deviceTypeDropDown.get(), true);
         }
 
@@ -1134,13 +1135,13 @@ namespace bitklavier
                                                                                    "(" + TRANS ("No MIDI inputs available") + ")");
             addAndMakeVisible (midiInputsList.get());
 
-            midiInputsLabel = std::make_unique<Label> (String{}, TRANS ("Active MIDI inputs:"));
-            midiInputsLabel->setJustificationType (Justification::topRight);
+            midiInputsLabel = std::make_unique<juce::Label> (juce::String{}, TRANS ("Active MIDI inputs:"));
+            midiInputsLabel->setJustificationType (juce::Justification::topRight);
             midiInputsLabel->attachToComponent (midiInputsList.get(), true);
 
-            if (BluetoothMidiDevicePairingDialogue::isAvailable())
+            if (juce::BluetoothMidiDevicePairingDialogue::isAvailable())
             {
-                bluetoothButton = std::make_unique<TextButton> (TRANS ("Bluetooth MIDI"), TRANS ("Scan for bluetooth MIDI devices"));
+                bluetoothButton = std::make_unique<juce::TextButton> (TRANS ("Bluetooth MIDI"), TRANS ("Scan for bluetooth MIDI devices"));
                 addAndMakeVisible (bluetoothButton.get());
                 bluetoothButton->onClick = [this] { handleBluetoothButton(); };
             }
@@ -1157,7 +1158,7 @@ namespace bitklavier
             midiOutputSelector = std::make_unique<MidiOutputSelector> (deviceManager);
             addAndMakeVisible (midiOutputSelector.get());
 
-            midiOutputLabel = std::make_unique<Label> ("lm", TRANS ("MIDI Output:"));
+            midiOutputLabel = std::make_unique<juce::Label> ("lm", TRANS ("MIDI Output:"));
             midiOutputLabel->attachToComponent (midiOutputSelector.get(), true);
         }
         else
@@ -1183,7 +1184,7 @@ namespace bitklavier
 
     void AudioDeviceSelectorComponent::resized()
     {
-        Rectangle<int> r (proportionOfWidth (0.35f), 15, proportionOfWidth (0.6f), 3000);
+        juce::Rectangle<int> r (proportionOfWidth (0.35f), 15, proportionOfWidth (0.6f), 3000);
         auto space = itemHeight / 4;
 
         if (deviceTypeDropDown != nullptr)
@@ -1202,8 +1203,8 @@ namespace bitklavier
 
         if (midiInputsList != nullptr)
         {
-            midiInputsList->setRowHeight (jmin (22, itemHeight));
-            midiInputsList->setBounds (r.removeFromTop (midiInputsList->getBestHeight (jmin (itemHeight * 8,
+            midiInputsList->setRowHeight (juce::jmin (22, itemHeight));
+            midiInputsList->setBounds (r.removeFromTop (midiInputsList->getBestHeight (juce::jmin (itemHeight * 8,
                                                                                              getHeight() - r.getY() - space - itemHeight))));
             r.removeFromTop (space);
         }
@@ -1221,7 +1222,7 @@ namespace bitklavier
         setSize (getWidth(), r.getY());
     }
 
-    void AudioDeviceSelectorComponent::childBoundsChanged (Component* child)
+    void AudioDeviceSelectorComponent::childBoundsChanged (juce::Component* child)
     {
         if (child == audioDeviceSettingsComp.get())
             resized();
@@ -1237,7 +1238,7 @@ namespace bitklavier
         }
     }
 
-    void AudioDeviceSelectorComponent::changeListenerCallback (ChangeBroadcaster*)
+    void AudioDeviceSelectorComponent::changeListenerCallback (juce::ChangeBroadcaster*)
     {
         updateAllControls();
     }
@@ -1245,7 +1246,7 @@ namespace bitklavier
     void AudioDeviceSelectorComponent::updateAllControls()
     {
         if (deviceTypeDropDown != nullptr)
-            deviceTypeDropDown->setText (deviceManager.getCurrentAudioDeviceType(), dontSendNotification);
+            deviceTypeDropDown->setText (deviceManager.getCurrentAudioDeviceType(), juce::NotificationType::dontSendNotification);
 
         if (audioDeviceSettingsComp == nullptr
             || audioDeviceSettingsCompType != deviceManager.getCurrentAudioDeviceType())
@@ -1275,7 +1276,7 @@ namespace bitklavier
             midiInputsList->updateContent();
             midiInputsList->repaint();
 
-            for (auto device : MidiInput::getAvailableDevices())
+            for (auto device : juce::MidiInput::getAvailableDevices())
             {
                 if (auto _child = state.getChildWithName("midiPrefs").getChildWithProperty("midiDeviceId", device.identifier); _child.isValid())
                 {
@@ -1284,7 +1285,7 @@ namespace bitklavier
                 }
                 else
                 {
-                    ValueTree t(IDs::midiInput);
+                    juce::ValueTree t(IDs::midiInput);
                     t.setProperty(IDs::name, device.name, nullptr);
                     t.setProperty(IDs::midiDeviceId, device.identifier, nullptr);
                     t.setProperty(IDs::active, deviceManager.isMidiInputDeviceEnabled (device.identifier),nullptr);
@@ -1298,21 +1299,21 @@ namespace bitklavier
 
     void AudioDeviceSelectorComponent::handleBluetoothButton()
     {
-        if (RuntimePermissions::isGranted (RuntimePermissions::bluetoothMidi))
+        if (juce::RuntimePermissions::isGranted (juce::RuntimePermissions::bluetoothMidi))
         {
-            BluetoothMidiDevicePairingDialogue::open();
+            juce::BluetoothMidiDevicePairingDialogue::open();
         }
         else
         {
-            RuntimePermissions::request (RuntimePermissions::bluetoothMidi, [] (auto)
+            juce::RuntimePermissions::request (juce::RuntimePermissions::bluetoothMidi, [] (auto)
             {
-                if (RuntimePermissions::isGranted (RuntimePermissions::bluetoothMidi))
-                    BluetoothMidiDevicePairingDialogue::open();
+                if (juce::RuntimePermissions::isGranted (juce::RuntimePermissions::bluetoothMidi))
+                    juce::BluetoothMidiDevicePairingDialogue::open();
             });
         }
     }
 
-    ListBox* AudioDeviceSelectorComponent::getMidiInputSelectorListBox() const noexcept
+    juce::ListBox* AudioDeviceSelectorComponent::getMidiInputSelectorListBox() const noexcept
     {
         return midiInputsList.get();
     }

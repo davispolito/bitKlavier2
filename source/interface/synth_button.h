@@ -17,24 +17,22 @@
 #pragma once
 
 
+#include "synth_gui_interface.h"
 #include "open_gl_image_component.h"
 #include "open_gl_multi_quad.h"
-#include "../common/synth_gui_interface.h"
+
 
 class OpenGlShapeButtonComponent : public OpenGlComponent {
   public:
     static constexpr float kHoverInc = 0.2f;
 
-    OpenGlShapeButtonComponent(Button* button) : button_(button), down_(false), hover_(false), hover_amount_(0.0f),
+    OpenGlShapeButtonComponent(juce::Button* button) : button_(button), down_(false), hover_(false), hover_amount_(0.0f),
                                                  use_on_colors_(false), shape_("shape") {
       shape_.setComponent(button);
       shape_.setScissor(true);
     }
 
-    void parentHierarchyChanged() override {
-      if (findParentComponentOfClass<SynthGuiInterface>())
-        setColors();
-    }
+    void parentHierarchyChanged() override;
 
     void setColors() {
       off_normal_color_ = button_->findColour(Skin::kIconButtonOff, true);
@@ -61,7 +59,7 @@ class OpenGlShapeButtonComponent : public OpenGlComponent {
 
     void redoImage() { shape_.redrawImage(true); setColors(); }
 
-    void setShape(const Path& shape) { shape_.setShape(shape); }
+    void setShape(const juce::Path& shape) { shape_.setShape(shape); }
 
     void useOnColors(bool use) { use_on_colors_ = use; }
   
@@ -69,56 +67,56 @@ class OpenGlShapeButtonComponent : public OpenGlComponent {
     void setHover(bool hover) { hover_ = hover; }
 
   private:
-    Button* button_;
+    juce::Button* button_;
 
     bool down_;
     bool hover_;
     float hover_amount_;
     bool use_on_colors_;
     PlainShapeComponent shape_;
-    Colour off_normal_color_;
-    Colour off_hover_color_;
-    Colour off_down_color_;
-    Colour on_normal_color_;
-    Colour on_hover_color_;
-    Colour on_down_color_;
+    juce::Colour off_normal_color_;
+    juce::Colour off_hover_color_;
+    juce::Colour off_down_color_;
+    juce::Colour on_normal_color_;
+    juce::Colour on_hover_color_;
+    juce::Colour on_down_color_;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(OpenGlShapeButtonComponent)
 };
 
-class OpenGlShapeButton : public ToggleButton {
+class OpenGlShapeButton : public juce::ToggleButton {
   public:
-    OpenGlShapeButton(String name) : gl_component_(new OpenGlShapeButtonComponent(this)) {
+    OpenGlShapeButton(juce::String name) : gl_component_(new OpenGlShapeButtonComponent(this)) {
       setName(name);
     }
 
     std::shared_ptr<OpenGlComponent> getGlComponent() { return gl_component_; }
 
-    void setShape(const Path& shape) { gl_component_->setShape(shape); }
+    void setShape(const juce::Path& shape) { gl_component_->setShape(shape); }
     void useOnColors(bool use) { gl_component_->useOnColors(use); }
 
     void resized() override {
-      ToggleButton::resized();
+      juce::ToggleButton::resized();
       gl_component_->redoImage();
     }
   
-    void mouseEnter(const MouseEvent& e) override {
-      ToggleButton::mouseEnter(e);
+    void mouseEnter(const juce::MouseEvent& e) override {
+      juce::ToggleButton::mouseEnter(e);
       gl_component_->setHover(true);
     }
   
-    void mouseExit(const MouseEvent& e) override {
-      ToggleButton::mouseExit(e);
+    void mouseExit(const juce::MouseEvent& e) override {
+      juce::ToggleButton::mouseExit(e);
       gl_component_->setHover(false);
     }
     
-    void mouseDown(const MouseEvent& e) override {
-      ToggleButton::mouseDown(e);
+    void mouseDown(const juce::MouseEvent& e) override {
+      juce::ToggleButton::mouseDown(e);
       gl_component_->setDown(true);
     }
     
-    void mouseUp(const MouseEvent& e) override {
-      ToggleButton::mouseUp(e);
+    void mouseUp(const juce::MouseEvent& e) override {
+      juce::ToggleButton::mouseUp(e);
       gl_component_->setDown(false);
     }
 
@@ -141,12 +139,12 @@ class OpenGlButtonComponent : public OpenGlComponent {
       kNumButtonStyles
     };
 
-    OpenGlButtonComponent(Button* button) : style_(kTextButton), button_(button),
+    OpenGlButtonComponent(juce::Button* button) : style_(kTextButton), button_(button),
                                             show_on_colors_(true), primary_ui_button_(false),
                                             down_(false), hover_(false), hover_amount_(0.0f),
                                             background_(Shaders::kRoundedRectangleFragment), text_("text", "") {
       background_.setTargetComponent(button);
-      background_.setColor(Colours::orange);
+      background_.setColor(juce::Colours::orange);
       background_.setQuad(0, -1.0f, -1.0f, 2.0f, 2.0f);
 
       addChildComponent(text_);
@@ -186,7 +184,7 @@ class OpenGlButtonComponent : public OpenGlComponent {
     }
 
     void setText() {
-      String text = button_->getButtonText();
+      juce::String text = button_->getButtonText();
       if (!text.isEmpty()) {
         text_.setActive(true);
         text_.setText(text);
@@ -201,12 +199,12 @@ class OpenGlButtonComponent : public OpenGlComponent {
       text_.destroy(open_gl);
     }
 
-    void setJustification(Justification justification) { text_.setJustification(justification); }
+    void setJustification(juce::Justification justification) { text_.setJustification(justification); }
     void setStyle(ButtonStyle style) { style_ = style; }
     void setShowOnColors(bool show) { show_on_colors_ = show; }
     void setPrimaryUiButton(bool primary) { primary_ui_button_ = primary; }
 
-    void paintBackground(Graphics& g) override { }
+    void paintBackground(juce::Graphics& g) override { }
 
     OpenGlQuad& background() { return background_; }
     PlainTextComponent& text() { return text_; }
@@ -214,7 +212,7 @@ class OpenGlButtonComponent : public OpenGlComponent {
 
   protected:
     ButtonStyle style_;
-    Button* button_;
+    juce::Button* button_;
     bool show_on_colors_;
     bool primary_ui_button_;
     bool down_;
@@ -223,20 +221,20 @@ class OpenGlButtonComponent : public OpenGlComponent {
     OpenGlQuad background_;
     PlainTextComponent text_;
 
-    Colour on_color_;
-    Colour on_pressed_color_;
-    Colour on_hover_color_;
-    Colour off_color_;
-    Colour off_pressed_color_;
-    Colour off_hover_color_;
-    Colour background_color_;
-    Colour body_color_;
+    juce::Colour on_color_;
+    juce::Colour on_pressed_color_;
+    juce::Colour on_hover_color_;
+    juce::Colour off_color_;
+    juce::Colour off_pressed_color_;
+    juce::Colour off_hover_color_;
+    juce::Colour background_color_;
+    juce::Colour body_color_;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(OpenGlButtonComponent)
 };
-class OpenGlTextButton : public TextButton {
+class OpenGlTextButton : public juce::TextButton {
 public:
-    OpenGlTextButton(String name) : TextButton(name), active_(true), button_component_(this) {}
+    OpenGlTextButton(juce::String name) : juce::TextButton(name), active_(true), button_component_(this) {}
     OpenGlButtonComponent* getGlComponent() { return &button_component_; }
 
     void setActive(bool active = true) { active_ = active; }
@@ -244,7 +242,7 @@ public:
 
     void resized() override;
 
-    void setText(String text) {
+    void setText(juce::String text) {
       setButtonText(text);
       button_component_.setText();
     }
@@ -257,7 +255,7 @@ public:
       button_component_.setStyle(OpenGlButtonComponent::kJustText);
     }
 
-    void setJustification(Justification justification) {
+    void setJustification(juce::Justification justification) {
       button_component_.setJustification(justification);
     }
 
@@ -275,27 +273,27 @@ public:
     }
 
     virtual void enablementChanged() override {
-      TextButton::enablementChanged();
+      juce::TextButton::enablementChanged();
       button_component_.setColors();
     }
 
-    void mouseEnter(const MouseEvent& e) override {
-      TextButton::mouseEnter(e);
+    void mouseEnter(const juce::MouseEvent& e) override {
+      juce::TextButton::mouseEnter(e);
       button_component_.setHover(true);
     }
 
-    void mouseExit(const MouseEvent& e) override {
-      TextButton::mouseExit(e);
+    void mouseExit(const juce::MouseEvent& e) override {
+      juce::TextButton::mouseExit(e);
       button_component_.setHover(false);
     }
 
-    void mouseDown(const MouseEvent& e) override {
-      TextButton::mouseDown(e);
+    void mouseDown(const juce::MouseEvent& e) override {
+      juce::TextButton::mouseDown(e);
       button_component_.setDown(true);
     }
 
-    void mouseUp(const MouseEvent& e) override {
-      TextButton::mouseUp(e);
+    void mouseUp(const juce::MouseEvent& e) override {
+      juce::TextButton::mouseUp(e);
       button_component_.setDown(false);
     }
 private:
@@ -304,9 +302,9 @@ private:
 };
 
 
-class OpenGlToggleButton : public ToggleButton {
+class OpenGlToggleButton : public juce::ToggleButton {
   public:
-    OpenGlToggleButton(String name) : ToggleButton(name), active_(true), button_component_(new OpenGlButtonComponent(this)) { }
+    OpenGlToggleButton(juce::String name) : juce::ToggleButton(name), active_(true), button_component_(new OpenGlButtonComponent(this)) { }
 
     std::shared_ptr<OpenGlButtonComponent> getGlComponent() { return button_component_; }
 
@@ -315,7 +313,7 @@ class OpenGlToggleButton : public ToggleButton {
 
     void resized() override;
 
-    void setText(String text) {
+    void setText(juce::String text) {
       setButtonText(text);
       button_component_->setText();
     }
@@ -328,7 +326,7 @@ class OpenGlToggleButton : public ToggleButton {
       button_component_->setStyle(OpenGlButtonComponent::kJustText);
     }
 
-    void setJustification(Justification justification) {
+    void setJustification(juce::Justification justification) {
       button_component_->setJustification(justification);
     }
 
@@ -346,27 +344,27 @@ class OpenGlToggleButton : public ToggleButton {
     }
   
     virtual void enablementChanged() override {
-      ToggleButton::enablementChanged();
+      juce::ToggleButton::enablementChanged();
       button_component_->setColors();
     }
   
-    void mouseEnter(const MouseEvent& e) override {
-      ToggleButton::mouseEnter(e);
+    void mouseEnter(const juce::MouseEvent& e) override {
+      juce::ToggleButton::mouseEnter(e);
       button_component_->setHover(true);
     }
   
-    void mouseExit(const MouseEvent& e) override {
-      ToggleButton::mouseExit(e);
+    void mouseExit(const juce::MouseEvent& e) override {
+      juce::ToggleButton::mouseExit(e);
       button_component_->setHover(false);
     }
     
-    void mouseDown(const MouseEvent& e) override {
-      ToggleButton::mouseDown(e);
+    void mouseDown(const juce::MouseEvent& e) override {
+      juce::ToggleButton::mouseDown(e);
       button_component_->setDown(true);
     }
     
-    void mouseUp(const MouseEvent& e) override {
-      ToggleButton::mouseUp(e);
+    void mouseUp(const juce::MouseEvent& e) override {
+      juce::ToggleButton::mouseUp(e);
       button_component_->setDown(false);
     }
 
@@ -391,18 +389,18 @@ class SynthButton : public OpenGlToggleButton {
         virtual void guiChanged(SynthButton* button) { }
     };
 
-    SynthButton(String name);
+    SynthButton(juce::String name);
 
     void setStringLookup(const std::string* lookup) {
       string_lookup_ = lookup;
     }
     const std::string* getStringLookup() const { return string_lookup_; }
-    String getTextFromValue(bool value);
+    juce::String getTextFromValue(bool value);
 
     void handlePopupResult(int result);
 
-    virtual void mouseDown(const MouseEvent& e) override;
-    virtual void mouseUp(const MouseEvent& e) override;
+    virtual void mouseDown(const juce::MouseEvent& e) override;
+    virtual void mouseUp(const juce::MouseEvent& e) override;
 
     void addButtonListener(ButtonListener* listener);
 
@@ -413,7 +411,7 @@ class SynthButton : public OpenGlToggleButton {
     }
 
   private:
-    void clicked(const ModifierKeys& modifiers) override;
+    void clicked(const juce::ModifierKeys& modifiers) override;
 
     const std::string* string_lookup_;
 

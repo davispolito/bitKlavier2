@@ -6,17 +6,17 @@
 #define BITKLAVIER2_PREPARATIONSELECTOR_H
 #include "PreparationSection.h"
 class ConstructionSite;
-class PreparationSelector : public LassoSource<PreparationSection*>
+class PreparationSelector : public juce::LassoSource<PreparationSection*>
 {
 public:
     explicit PreparationSelector (const ConstructionSite&);
     
-    void findLassoItemsInArea (Array<PreparationSection*>& results, const juce::Rectangle<int>& area) override;
-    SelectedItemSet<PreparationSection*>& getLassoSelection() override { return selectedPreparationSet; }
+    void findLassoItemsInArea (juce::Array<PreparationSection*>& results, const juce::Rectangle<int>& area) override;
+    juce::SelectedItemSet<PreparationSection*>& getLassoSelection() override { return selectedPreparationSet; }
 
 private:
     const ConstructionSite& csite;
-    SelectedItemSet<PreparationSection*> selectedPreparationSet;
+    juce::SelectedItemSet<PreparationSection*> selectedPreparationSet;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PreparationSelector)
 };

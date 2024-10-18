@@ -8,7 +8,7 @@
 #include "synth_slider.h"
 
 // Definition for the BlendronicPreparation constructor.  It takes three parameters: a pointer to
-// a Blendronic Processor p, a ValueTree v, and a reference to an OpenGlWrapper object.  Initializes
+// a Blendronic Processor p, a juce::ValueTree v, and a reference to an OpenGlWrapper object.  Initializes
 // the base class members and private BlendronicPreparation member proc with an initialization list.
 BlendronicPreparation::BlendronicPreparation (std::unique_ptr<BlendronicProcessor> p,
                                             juce::ValueTree v, OpenGlWrapper& um) :
@@ -69,7 +69,7 @@ void BlendronicPreparation::BlendronicPopup::renderOpenGlComponents(OpenGlWrappe
         if (open_gl_component->isVisible() && !open_gl_component->isAlwaysOnTop()) {
             open_gl_component->render(open_gl, animate);
             GLenum gl =  juce::gl::glGetError();
-            //DBG(String(gl));
+            //DBG(juce::String(gl));
             _ASSERT(gl == juce::gl::GL_NO_ERROR);
         }
     }

@@ -24,7 +24,6 @@
 #include <juce_core/juce_core.h>
 #include <juce_audio_basics/juce_audio_basics.h>
 #include "common.h"
-using namespace juce;
 #define NAME_AND_VALUE(x) #x, x
 
   namespace bitklavier::utils {

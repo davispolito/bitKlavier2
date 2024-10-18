@@ -21,12 +21,16 @@
 
 #include "synth_section.h"
 
+void OpenGlShapeButtonComponent::parentHierarchyChanged() {
+            if (findParentComponentOfClass<SynthGuiInterface>())
+            setColors();
 
+    }
 void OpenGlShapeButtonComponent::render(OpenGlWrapper& open_gl, bool animate) {
   incrementHover();
 
-  Colour active_color;
-  Colour hover_color;
+  juce::Colour active_color;
+  juce::Colour hover_color;
   if (button_->getToggleState() && use_on_colors_) {
     if (down_)
       active_color = on_down_color_;
@@ -95,7 +99,7 @@ void OpenGlButtonComponent::setColors() {
 //    background_color_ = button_->findColour(Skin::kUiButtonText, true);
 //  }
 //  else if (style_ == kLightenButton) {
-//    on_color_ = Colours::transparentWhite;
+//    on_color_ = juce::Colours::transparentWhite;
 //    on_pressed_color_ = button_->findColour(Skin::kOverlayScreen, true);
 //    on_hover_color_ = button_->findColour(Skin::kLightenScreen, true);
 //    off_color_ = on_color_;
@@ -108,8 +112,8 @@ void OpenGlButtonComponent::setColors() {
 void OpenGlButtonComponent::renderTextButton(OpenGlWrapper& open_gl, bool animate) {
   incrementHover();
 
-  Colour active_color;
-  Colour hover_color;
+  juce::Colour active_color;
+  juce::Colour hover_color;
   if (button_->getToggleState() && show_on_colors_) {
     if (down_)
       active_color = on_pressed_color_;
@@ -174,7 +178,7 @@ void OpenGlButtonComponent::renderUiButton(OpenGlWrapper& open_gl, bool animate)
   bool enabled = button_->isEnabled();
   incrementHover();
 
-  Colour active_color;
+  juce::Colour active_color;
   if (down_)
     active_color = on_pressed_color_;
   else
@@ -207,7 +211,7 @@ void OpenGlButtonComponent::renderLightenButton(OpenGlWrapper& open_gl, bool ani
   bool enabled = button_->isEnabled();
   incrementHover();
 
-  Colour active_color;
+  juce::Colour active_color;
   if (down_)
     active_color = on_pressed_color_;
   else
@@ -231,7 +235,7 @@ void OpenGlButtonComponent::incrementHover() {
 void OpenGlTextButton::resized() {
   static constexpr float kUiButtonSizeMult = 0.45f;
 
-  TextButton::resized();
+  juce::TextButton::resized();
   SynthSection* section = findParentComponentOfClass<SynthSection>();
   getGlComponent()->setText();
   getGlComponent()->background().markDirty();
@@ -249,7 +253,7 @@ void OpenGlTextButton::resized() {
 void OpenGlToggleButton::resized() {
   static constexpr float kUiButtonSizeMult = 0.45f;
  
-  ToggleButton::resized();
+  juce::ToggleButton::resized();
   SynthSection* section = findParentComponentOfClass<SynthSection>();
   getGlComponent()->setText();
   getGlComponent()->background().markDirty();
@@ -264,11 +268,11 @@ void OpenGlToggleButton::resized() {
   }
 }
 
-SynthButton::SynthButton(String name) : OpenGlToggleButton(name), string_lookup_(nullptr) {
+SynthButton::SynthButton(juce::String name) : OpenGlToggleButton(name), string_lookup_(nullptr) {
 
 }
 
-void SynthButton::clicked(const ModifierKeys& modifiers) {
+void SynthButton::clicked(const juce::ModifierKeys& modifiers) {
   OpenGlToggleButton::clicked(modifiers);
 
   if (!modifiers.isPopupMenu()) {
@@ -277,7 +281,7 @@ void SynthButton::clicked(const ModifierKeys& modifiers) {
   }
 }
 
-String SynthButton::getTextFromValue(bool on) {
+juce::String SynthButton::getTextFromValue(bool on) {
   int lookup = on ? 1 : 0;
 
   if (string_lookup_)
@@ -299,7 +303,7 @@ void SynthButton::handlePopupResult(int result) {
 //    synth->clearMidiLearn(getName().toStdString());
 }
 
-void SynthButton::mouseDown(const MouseEvent& e) {
+void SynthButton::mouseDown(const juce::MouseEvent& e) {
   SynthGuiInterface* parent = findParentComponentOfClass<SynthGuiInterface>();
   if (parent == nullptr)
     return;
@@ -323,7 +327,7 @@ void SynthButton::mouseDown(const MouseEvent& e) {
 //  }
 }
 
-void SynthButton::mouseUp(const MouseEvent& e) {
+void SynthButton::mouseUp(const juce::MouseEvent& e) {
   if (!e.mods.isPopupMenu()) {
     OpenGlToggleButton::mouseUp(e);
 

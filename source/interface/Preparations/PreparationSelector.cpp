@@ -8,7 +8,7 @@ PreparationSelector::PreparationSelector (const ConstructionSite& csite) : csite
 {
 }
 
-void PreparationSelector::findLassoItemsInArea (Array<PreparationSection*>& results, const juce::Rectangle<int>& area)
+void PreparationSelector::findLassoItemsInArea (juce::Array<PreparationSection*>& results, const juce::Rectangle<int>& area)
 {
     const auto checkAndAddEditor = [&results, area] (PreparationSection* editor)
     {

@@ -28,9 +28,9 @@ class OpenGlComponent : public juce::Component
 {
 public:
   static bool setViewPort(juce::Component *component, juce::Rectangle<int> bounds, OpenGlWrapper &open_gl);
-  static bool setViewPort(Component *component, OpenGlWrapper &open_gl);
-  static void setScissor(Component *component, OpenGlWrapper &open_gl);
-  static void setScissorBounds(Component *component, juce::Rectangle<int> bounds, OpenGlWrapper &open_gl);
+  static bool setViewPort(juce::Component *component, OpenGlWrapper &open_gl);
+  static void setScissor(juce::Component *component, OpenGlWrapper &open_gl);
+  static void setScissorBounds(juce::Component *component, juce::Rectangle<int> bounds, OpenGlWrapper &open_gl);
 
   static std::unique_ptr<juce::OpenGLShaderProgram::Uniform> getUniform(const OpenGlWrapper &open_gl,
                                                                         const juce::OpenGLShaderProgram &program,
@@ -80,7 +80,7 @@ public:
   static inline juce::String translateFragmentShader(const juce::String &code)
   {
 #if OPENGL_ES
-    return String("#version 300 es\n") + "out mediump vec4 fragColor;\n" +
+    return juce::String("#version 300 es\n") + "out mediump vec4 fragColor;\n" +
            code.replace("varying", "in").replace("texture2D", "texture").replace("gl_FragColor", "fragColor");
 #else
     return juce::OpenGLHelpers::translateFragmentShaderToV3(code);
@@ -90,7 +90,7 @@ public:
   static inline juce::String translateVertexShader(const juce::String &code)
   {
 #if OPENGL_ES
-    return String("#version 300 es\n") + code.replace("attribute", "in").replace("varying", "out");
+    return juce::String("#version 300 es\n") + code.replace("attribute", "in").replace("varying", "out");
 #else
     return juce::OpenGLHelpers::translateVertexShaderToV3(code);
 #endif

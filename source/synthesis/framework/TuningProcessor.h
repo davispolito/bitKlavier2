@@ -25,7 +25,7 @@ struct TuningParams : chowdsp::ParamHolder
              decayParam, sustainParam, releaseParam);
     }
 
-    // Gain param
+    // juce::Gain param
     chowdsp::GainDBParameter::Ptr gainParam {
             juce::ParameterID { "gain", 100 },
             "Gain",

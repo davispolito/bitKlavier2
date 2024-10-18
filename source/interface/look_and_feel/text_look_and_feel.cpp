@@ -24,15 +24,15 @@
 
 TextLookAndFeel::TextLookAndFeel() { }
 
-//void TextLookAndFeel::drawRotarySlider(Graphics& g, int x, int y, int width, int height,
+//void TextLookAndFeel::drawRotarySlider(juce::Graphics& g, int x, int y, int width, int height,
 //                                       float slider_t, float start_angle, float end_angle,
-//                                       Slider& slider) {
+//                                       juce::Slider& slider) {
 //  static constexpr float kTextPercentage = 0.5f;
 //
 //  SynthSlider* s_slider = dynamic_cast<SynthSlider*>(&slider);
 //  float text_percentage = kTextPercentage;
 //  bool active = true;
-//  String text = slider.getTextFromValue(slider.getValue());
+//  juce::String text = slider.getTextFromValue(slider.getValue());
 //  float offset = 0.0f;
 //  float font_size = slider.getHeight() * text_percentage;
 //  if (s_slider) {
@@ -46,16 +46,16 @@ TextLookAndFeel::TextLookAndFeel() { }
 //      font_size = s_slider->findValue(Skin::kTextComponentFontSize);
 //  }
 //
-//  Colour text_color = slider.findColour(Skin::kTextComponentText, true);
+//  juce::Colour text_color = slider.findColour(Skin::kTextComponentText, true);
 //  if (!active)
 //    text_color = text_color.withMultipliedAlpha(0.5f);
 //
 //  g.setColour(text_color);
 //  g.setFont(Fonts::instance()->proportional_light().withPointHeight(font_size));
-//  g.drawText(text, x, y + std::round(offset), width, height, Justification::centred, false);
+//  g.drawText(text, x, y + std::round(offset), width, height, juce::Justification::centred, false);
 //}
 
-void TextLookAndFeel::drawToggleButton(Graphics& g, ToggleButton& button, bool hover, bool is_down) {
+void TextLookAndFeel::drawToggleButton(juce::Graphics& g, juce::ToggleButton& button, bool hover, bool is_down) {
   static constexpr float kTextPercentage = 0.7f;
   static constexpr float kTextShrinkage = 0.98f;
 
@@ -83,7 +83,7 @@ void TextLookAndFeel::drawToggleButton(Graphics& g, ToggleButton& button, bool h
       g.setColour(button.findColour(Skin::kIconButtonOff, true));
   }
 
-  String text = button.getButtonText();
+  juce::String text = button.getButtonText();
   if (string_lookup) {
     int index = toggled ? 1 : 0;
     text = string_lookup[index];
@@ -105,38 +105,38 @@ void TextLookAndFeel::drawToggleButton(Graphics& g, ToggleButton& button, bool h
     g.fillRoundedRectangle(button.getLocalBounds().toFloat(), rounding);
   else {
     g.setFont(Fonts::instance()->monospace().withPointHeight(font_size));
-    g.drawText(text, 0, 0, button.getWidth(), button.getHeight(), Justification::centred);
+    g.drawText(text, 0, 0, button.getWidth(), button.getHeight(), juce::Justification::centred);
   }
 }
 
-void TextLookAndFeel::drawTickBox(Graphics& g, Component& component,
+void TextLookAndFeel::drawTickBox(juce::Graphics& g, juce::Component& component,
                                   float x, float y, float w, float h, bool ticked,
                                   bool enabled, bool mouse_over, bool button_down) {
   float border_width = 1.5f;
   if (ticked) {
-    g.setColour(Colours::red);
+    g.setColour(juce::Colours::red);
     g.fillRect(x + 3 * border_width, y + 3 * border_width,
                w - 6 * border_width, h - 6 * border_width);
   }
 }
 
-void TextLookAndFeel::drawLabel(Graphics& g, Label& label) {
-  Colour text = label.findColour(Skin::kBodyText, true);
-  label.setColour(Label::textColourId, text);
+void TextLookAndFeel::drawLabel(juce::Graphics& g, juce::Label& label) {
+  juce::Colour text = label.findColour(Skin::kBodyText, true);
+  label.setColour(juce::Label::textColourId, text);
 
   DefaultLookAndFeel::drawLabel(g, label);
 }
 
-void TextLookAndFeel::drawComboBox(Graphics& g, int width, int height, bool is_down,
-                                   int button_x, int button_y, int button_w, int button_h, ComboBox& box) {
-  Colour background = box.findColour(Skin::kTextComponentBackground, true);
-  Colour text = box.findColour(Skin::kBodyText, true);
-  Colour caret = box.findColour(Skin::kTextEditorCaret, true);
+void TextLookAndFeel::drawComboBox(juce::Graphics& g, int width, int height, bool is_down,
+                                   int button_x, int button_y, int button_w, int button_h, juce::ComboBox& box) {
+  juce::Colour background = box.findColour(Skin::kTextComponentBackground, true);
+  juce::Colour text = box.findColour(Skin::kBodyText, true);
+  juce::Colour caret = box.findColour(Skin::kTextEditorCaret, true);
 
-  box.setColour(ComboBox::backgroundColourId, background);
-  box.setColour(ComboBox::arrowColourId, caret);
-  box.setColour(ComboBox::outlineColourId, Colours::transparentBlack);
-  box.setColour(ComboBox::textColourId, text);
+  box.setColour(juce::ComboBox::backgroundColourId, background);
+  box.setColour(juce::ComboBox::arrowColourId, caret);
+  box.setColour(juce::ComboBox::outlineColourId, juce::Colours::transparentBlack);
+  box.setColour(juce::ComboBox::textColourId, text);
 
   DefaultLookAndFeel::drawComboBox(g, width, height, is_down, button_x, button_y, button_w, button_h, box);
 }

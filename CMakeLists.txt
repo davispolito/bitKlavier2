@@ -216,9 +216,9 @@ target_link_libraries(SharedCode
         #tracktion::engine
         )
 
-message(WARNING "The JUCE HEADERS WILL BE GENERATED FOR ${PROJECT_NAME} at ${CMAKE_BINARY_DIR}")
-juce_generate_juce_header(${PROJECT_NAME})
-include_directories(${CMAKE_BINARY_DIR}/${PROJECT_NAME}_artefacts/JuceLibraryCode)
+#message(WARNING "The JUCE HEADERS WILL BE GENERATED FOR ${PROJECT_NAME} at ${CMAKE_BINARY_DIR}")
+#juce_generate_juce_header(${PROJECT_NAME})
+#include_directories(${CMAKE_BINARY_DIR}/${PROJECT_NAME}_artefacts/JuceLibraryCode)
 include (FetchContent)
 
 FetchContent_Declare (melatonin_perfetto

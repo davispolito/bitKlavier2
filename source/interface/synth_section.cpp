@@ -23,14 +23,14 @@
 #include "synth_gui_interface.h"
 #include "synth_slider.h"
 
-SynthSection::SynthSection(const String& name) : Component(name), parent_(nullptr), activator_(nullptr),
+SynthSection::SynthSection(const juce::String& name) : juce::Component(name), parent_(nullptr), activator_(nullptr),
                                                  preset_selector_(nullptr), preset_selector_half_width_(false),
                                                  skin_override_(Skin::kNone), size_ratio_(1.0f),
                                                  active_(true), sideways_heading_(true), background_(nullptr) {
   setWantsKeyboardFocus(true);
 }
 
-SynthSection::SynthSection(const String& name, OpenGlWrapper* open_gl)  : Component(name), parent_(nullptr), activator_(nullptr),
+SynthSection::SynthSection(const juce::String& name, OpenGlWrapper* open_gl)  : juce::Component(name), parent_(nullptr), activator_(nullptr),
 preset_selector_(nullptr), preset_selector_half_width_(false),
 skin_override_(Skin::kNone), size_ratio_(1.0f),
 active_(true), sideways_heading_(true), background_(nullptr), open_gl(open_gl) {
@@ -57,7 +57,7 @@ void SynthSection::reset() {
 }
 
 void SynthSection::resized() {
-  Component::resized();
+  juce::Component::resized();
 //  if (off_overlay_) {
 //    off_overlay_->setBounds(getLocalBounds());
 //    off_overlay_->setColor(findColour(Skin:kBackground, true).withMultipliedAlpha(0.8f));
@@ -70,24 +70,24 @@ void SynthSection::resized() {
 //  }
 }
 
-void SynthSection::paint(Graphics& g) { }
+void SynthSection::paint(juce::Graphics& g) { }
 
-void SynthSection::paintSidewaysHeadingText(Graphics& g) {
+void SynthSection::paintSidewaysHeadingText(juce::Graphics& g) {
   int title_width = findValue(Skin::kTitleWidth);
   g.setColour(findColour(Skin::kHeadingText, true));
   g.setFont(Fonts::instance()->proportional_light().withPointHeight(size_ratio_ * 14.0f));
   g.saveState();
   g.setOrigin(juce::Point<int>(0, getHeight()));
-  g.addTransform(AffineTransform::rotation(-bitklavier::kPi / 2.0f));
+  g.addTransform(juce::AffineTransform::rotation(-bitklavier::kPi / 2.0f));
   int height = getHeight();
   if (activator_)
     height = getHeight() - title_width / 2;
 
-  g.drawText(getName(), Rectangle<int>(0, 0, height, title_width), Justification::centred, false);
+  g.drawText(getName(), juce::Rectangle<int>(0, 0, height, title_width), juce::Justification::centred, false);
   g.restoreState();
 }
 
-void SynthSection::paintHeadingText(Graphics& g) {
+void SynthSection::paintHeadingText(juce::Graphics& g) {
   if (sideways_heading_) {
     paintSidewaysHeadingText(g);
     return;
@@ -95,10 +95,10 @@ void SynthSection::paintHeadingText(Graphics& g) {
 
   g.setColour(findColour(Skin::kHeadingText, true));
   g.setFont(Fonts::instance()->proportional_light().withPointHeight(size_ratio_ * 14.0f));
-  g.drawText(TRANS(getName()), getTitleBounds(), Justification::centred, false);
+  g.drawText(TRANS(getName()), getTitleBounds(), juce::Justification::centred, false);
 }
 
-void SynthSection::paintBackground(Graphics& g) {
+void SynthSection::paintBackground(juce::Graphics& g) {
   paintContainer(g);
   paintHeadingText(g);
 
@@ -132,7 +132,7 @@ void SynthSection::repaintBackground() {
 
 
 
-void SynthSection::paintContainer(Graphics& g) {
+void SynthSection::paintContainer(juce::Graphics& g) {
   paintBody(g);
   
   g.saveState();
@@ -151,22 +151,22 @@ void SynthSection::paintContainer(Graphics& g) {
   g.restoreState();
 }
 
-void SynthSection::paintBody(Graphics& g, Rectangle<int> bounds) {
+void SynthSection::paintBody(juce::Graphics& g, juce::Rectangle<int> bounds) {
   g.setColour(findColour(Skin::kBody, true));
   g.fillRoundedRectangle(bounds.toFloat(), findValue(Skin::kBodyRounding));
 }
 
-void SynthSection::paintBorder(Graphics& g, Rectangle<int> bounds) {
+void SynthSection::paintBorder(juce::Graphics& g, juce::Rectangle<int> bounds) {
   int body_rounding = findValue(Skin::kBodyRounding);
   g.setColour(findColour(Skin::kBorder, true));
   g.drawRoundedRectangle(bounds.toFloat().reduced(0.5f), body_rounding, 1.0f);
 }
 
-void SynthSection::paintBody(Graphics& g) {
+void SynthSection::paintBody(juce::Graphics& g) {
   paintBody(g, getLocalBounds());
 }
 
-void SynthSection::paintBorder(Graphics& g) {
+void SynthSection::paintBorder(juce::Graphics& g) {
   paintBorder(g, getLocalBounds());
 }
 
@@ -174,11 +174,11 @@ int SynthSection::getComponentShadowWidth() {
   return std::round(size_ratio_ * 2.0f);
 }
 
-void SynthSection::paintTabShadow(Graphics& g) {
+void SynthSection::paintTabShadow(juce::Graphics& g) {
   paintTabShadow(g, getLocalBounds());
 }
 
-void SynthSection::paintTabShadow(Graphics& g, Rectangle<int> bounds) {
+void SynthSection::paintTabShadow(juce::Graphics& g, juce::Rectangle<int> bounds) {
   static constexpr float kCornerScale = 0.70710678119f;
   int corner_size = findValue(Skin::kBodyRounding);
   int shadow_size = getComponentShadowWidth();
@@ -187,45 +187,45 @@ void SynthSection::paintTabShadow(Graphics& g, Rectangle<int> bounds) {
   float corner_shadow_offset = corner_size - corner_and_shadow * kCornerScale;
   float corner_ratio = corner_size * 1.0f / corner_and_shadow;
 
-  Colour shadow_color = findColour(Skin::kShadow, true);
-  Colour transparent = shadow_color.withAlpha(0.0f);
+  juce::Colour shadow_color = findColour(Skin::kShadow, true);
+  juce::Colour transparent = shadow_color.withAlpha(0.0f);
 
   int left = bounds.getX();
   int top = bounds.getY();
   int right = bounds.getRight();
   int bottom = bounds.getBottom();
 
-  g.setGradientFill(ColourGradient(shadow_color, left, 0, transparent, left - shadow_size, 0, false));
+  g.setGradientFill(juce::ColourGradient(shadow_color, left, 0, transparent, left - shadow_size, 0, false));
   g.fillRect(left - shadow_size, top + corner_size, shadow_size, bottom - top - corner_size * 2);
 
-  g.setGradientFill(ColourGradient(shadow_color, right, 0, transparent, right + shadow_size, 0, false));
+  g.setGradientFill(juce::ColourGradient(shadow_color, right, 0, transparent, right + shadow_size, 0, false));
   g.fillRect(right, top + corner_size, shadow_size, bottom - top - corner_size * 2);
 
-  g.setGradientFill(ColourGradient(shadow_color, 0, top, transparent, 0, top - shadow_size, false));
+  g.setGradientFill(juce::ColourGradient(shadow_color, 0, top, transparent, 0, top - shadow_size, false));
   g.fillRect(left + corner_size, top - shadow_size, right - left - corner_size * 2, shadow_size);
 
-  g.setGradientFill(ColourGradient(shadow_color, 0, bottom, transparent, 0, bottom + shadow_size, false));
+  g.setGradientFill(juce::ColourGradient(shadow_color, 0, bottom, transparent, 0, bottom + shadow_size, false));
   g.fillRect(left + corner_size, bottom, right - left - corner_size * 2, shadow_size);
 
-  ColourGradient top_left_corner(shadow_color, left + corner_size, top + corner_size,
+  juce::ColourGradient top_left_corner(shadow_color, left + corner_size, top + corner_size,
                                  transparent, left + corner_shadow_offset, top + corner_shadow_offset, true);
   top_left_corner.addColour(corner_ratio, shadow_color);
   g.setGradientFill(top_left_corner);
   g.fillRect(left - shadow_size, top - shadow_size, corner_and_shadow, corner_and_shadow);
 
-  ColourGradient top_right_corner(shadow_color, right - corner_size, top + corner_size,
+  juce::ColourGradient top_right_corner(shadow_color, right - corner_size, top + corner_size,
                                   transparent, right - corner_shadow_offset, top + corner_shadow_offset, true);
   top_right_corner.addColour(corner_ratio, shadow_color);
   g.setGradientFill(top_right_corner);
   g.fillRect(right - corner_size, top - shadow_size, corner_and_shadow, corner_and_shadow);
 
-  ColourGradient bottom_left_corner(shadow_color, left + corner_size, bottom - corner_size,
+  juce::ColourGradient bottom_left_corner(shadow_color, left + corner_size, bottom - corner_size,
                                     transparent, left + corner_shadow_offset, bottom - corner_shadow_offset, true);
   bottom_left_corner.addColour(corner_ratio, shadow_color);
   g.setGradientFill(bottom_left_corner);
   g.fillRect(left - shadow_size, bottom - corner_size, corner_and_shadow, corner_and_shadow);
 
-  ColourGradient bottom_right_corner(shadow_color, right - corner_size, bottom - corner_size,
+  juce::ColourGradient bottom_right_corner(shadow_color, right - corner_size, bottom - corner_size,
                                      transparent, right - corner_shadow_offset, bottom - corner_shadow_offset, true);
   bottom_right_corner.addColour(corner_ratio, shadow_color);
   g.setGradientFill(bottom_right_corner);
@@ -239,28 +239,28 @@ void SynthSection::setSizeRatio(float ratio) {
     sub_section->setSizeRatio(ratio);
 }
 
-void SynthSection::paintKnobShadows(Graphics& g) {
+void SynthSection::paintKnobShadows(juce::Graphics& g) {
   for (auto& slider : slider_lookup_) {
     if (slider.second->isVisible() && slider.second->getWidth() && slider.second->getHeight())
       slider.second->drawShadow(g);
   }
 }
 
-void SynthSection::paintChildrenShadows(Graphics& g) {
+void SynthSection::paintChildrenShadows(juce::Graphics& g) {
   for (auto& sub_section : sub_sections_) {
     if (sub_section->isVisible())
       paintChildShadow(g, sub_section);
   }
 }
 
-void SynthSection::paintOpenGlChildrenBackgrounds(Graphics& g) {
+void SynthSection::paintOpenGlChildrenBackgrounds(juce::Graphics& g) {
   for (auto& open_gl_component : open_gl_components_) {
     if (open_gl_component->isVisible())
       paintOpenGlBackground(g, open_gl_component.get());
   }
 }
 
-void SynthSection::paintChildrenBackgrounds(Graphics& g) {
+void SynthSection::paintChildrenBackgrounds(juce::Graphics& g) {
   for (auto& sub_section : sub_sections_) {
     if (sub_section->isVisible())
       paintChildBackground(g, sub_section);
@@ -270,7 +270,7 @@ void SynthSection::paintChildrenBackgrounds(Graphics& g) {
 
 //  if (preset_selector_) {
 //    g.saveState();
-//    Rectangle<int> bounds = getLocalArea(preset_selector_, preset_selector_->getLocalBounds());
+//    juce::Rectangle<int> bounds = getLocalArea(preset_selector_, preset_selector_->getLocalBounds());
 //    g.reduceClipRegion(bounds);
 //    g.setOrigin(bounds.getTopLeft());
 //    preset_selector_->paintBackground(g);
@@ -278,34 +278,34 @@ void SynthSection::paintChildrenBackgrounds(Graphics& g) {
 //  }
 }
 
-void SynthSection::paintChildBackground(Graphics& g, SynthSection* child) {
+void SynthSection::paintChildBackground(juce::Graphics& g, SynthSection* child) {
   g.saveState();
-  Rectangle<int> bounds = getLocalArea(child, child->getLocalBounds());
+  juce::Rectangle<int> bounds = getLocalArea(child, child->getLocalBounds());
   g.reduceClipRegion(bounds);
   g.setOrigin(bounds.getTopLeft());
   child->paintBackground(g);
   g.restoreState();
 }
 
-void SynthSection::paintChildShadow(Graphics& g, SynthSection* child) {
+void SynthSection::paintChildShadow(juce::Graphics& g, SynthSection* child) {
   g.saveState();
-  Rectangle<int> bounds = getLocalArea(child, child->getLocalBounds());
+  juce::Rectangle<int> bounds = getLocalArea(child, child->getLocalBounds());
   g.setOrigin(bounds.getTopLeft());
   child->paintBackgroundShadow(g);
   child->paintChildrenShadows(g);
   g.restoreState();
 }
 
-void SynthSection::paintOpenGlBackground(Graphics &g, OpenGlComponent* open_gl_component) {
+void SynthSection::paintOpenGlBackground(juce::Graphics &g, OpenGlComponent* open_gl_component) {
   g.saveState();
-  Rectangle<int> bounds = getLocalArea(open_gl_component, open_gl_component->getLocalBounds());
+  juce::Rectangle<int> bounds = getLocalArea(open_gl_component, open_gl_component->getLocalBounds());
   g.reduceClipRegion(bounds);
   g.setOrigin(bounds.getTopLeft());
   open_gl_component->paintBackground(g);
   g.restoreState();
 }
 
-void SynthSection::drawTextComponentBackground(Graphics& g, Rectangle<int> bounds, bool extend_to_label) {
+void SynthSection::drawTextComponentBackground(juce::Graphics& g, juce::Rectangle<int> bounds, bool extend_to_label) {
   if (bounds.getWidth() <= 0 || bounds.getHeight() <= 0)
     return;
 
@@ -325,7 +325,7 @@ void SynthSection::drawTextComponentBackground(Graphics& g, Rectangle<int> bound
     g.fillRoundedRectangle(bounds.toFloat(), rounding);
 }
 
-void SynthSection::drawTempoDivider(Graphics& g, Component* sync) {
+void SynthSection::drawTempoDivider(juce::Graphics& g, juce::Component* sync) {
   static constexpr float kLineRatio = 0.5f;
 
   g.setColour(findColour(Skin::kLightenScreen, true));
@@ -336,9 +336,9 @@ void SynthSection::drawTempoDivider(Graphics& g, Component* sync) {
 }
 
 void SynthSection::initOpenGlComponents(OpenGlWrapper& open_gl) {
-    if ((OpenGLContext::getCurrentContext() == nullptr))
+    if ((juce::OpenGLContext::getCurrentContext() == nullptr))
     {
-        open_gl.context.executeOnGLThread([this, &open_gl](OpenGLContext &openGLContext) {
+        open_gl.context.executeOnGLThread([this, &open_gl](juce::OpenGLContext &openGLContext) {
             for (auto &open_gl_component: open_gl_components_) {
                 open_gl_component->init(open_gl);
                 DBG("init " + open_gl_component->getName());
@@ -385,7 +385,7 @@ void SynthSection::renderOpenGlComponents(OpenGlWrapper& open_gl, bool animate) 
     if (open_gl_component->isVisible() && !open_gl_component->isAlwaysOnTop()) {
       open_gl_component->render(open_gl, animate);
       GLenum gl =  juce::gl::glGetError();
-      //DBG(String(gl));
+      //DBG(juce::String(gl));
       _ASSERT(gl == juce::gl::GL_NO_ERROR);
     }
   }
@@ -412,9 +412,9 @@ void SynthSection::renderOpenGlComponents(OpenGlWrapper& open_gl, bool animate) 
 }
 
 void SynthSection::destroyOpenGlComponents(OpenGlWrapper& open_gl) {
-    if ((OpenGLContext::getCurrentContext() == nullptr))
+    if ((juce::OpenGLContext::getCurrentContext() == nullptr))
     {
-        open_gl.context.executeOnGLThread([this, &open_gl](OpenGLContext &openGLContext) {
+        open_gl.context.executeOnGLThread([this, &open_gl](juce::OpenGLContext &openGLContext) {
             for (auto& open_gl_component : open_gl_components_)
                 open_gl_component->destroy(open_gl);
 
@@ -429,7 +429,7 @@ void SynthSection::destroyOpenGlComponents(OpenGlWrapper& open_gl) {
                 background_->destroy(open_gl);
             DBG("finished openglexercuted");
             GLenum gl =  juce::gl::glGetError();
-            DBG(String(gl));
+            DBG(juce::String(gl));
 
         }, false);
     } else
@@ -451,7 +451,7 @@ void SynthSection::destroyOpenGlComponent(OpenGlComponent & open_gl_component, O
     //moves the component to the end of the array
     //erases it from the vector
     /////TODO: remove this lock can cause opengldeadlocks
-    const MessageManagerLock mmLock;
+    const juce::MessageManagerLock mmLock;
     auto new_logical_end = std::remove_if(open_gl_components_.begin(), open_gl_components_.end(), [&](std::shared_ptr<OpenGlComponent> const& p)
     {
         return *p == open_gl_component;
@@ -465,7 +465,7 @@ void SynthSection::destroyOpenGlComponent(OpenGlComponent & open_gl_component, O
 
 }
 
-void SynthSection::sliderValueChanged(Slider* moved_slider) {
+void SynthSection::sliderValueChanged(juce::Slider* moved_slider) {
 //  std::string name = moved_slider->getName().toStdString();
 //  SynthGuiInterface* parent = findParentComponentOfClass<SynthGuiInterface>();
 //  if (parent)
@@ -494,7 +494,7 @@ void SynthSection::setSliderHasHzAlternateDisplay(SynthSlider* slider) {
 //  slider->setDisplayExponentialBase(pow(2.0f, 1.0f / 12.0f));
 }
 
-void SynthSection::addToggleButton(ToggleButton* button, bool show) {
+void SynthSection::addToggleButton(juce::ToggleButton* button, bool show) {
   button_lookup_[button->getName().toStdString()] = button;
   all_buttons_[button->getName().toStdString()] = button;
   button->addListener(this);
@@ -541,7 +541,7 @@ void SynthSection::addSubSection(SynthSection* sub_section, bool show) {
   std::map<std::string, SynthSlider*> sub_sliders = sub_section->getAllSliders();
   all_sliders_.insert(sub_sliders.begin(), sub_sliders.end());
 
-  std::map<std::string, ToggleButton*> sub_buttons = sub_section->getAllButtons();
+  std::map<std::string, juce::ToggleButton*> sub_buttons = sub_section->getAllButtons();
   all_buttons_.insert(sub_buttons.begin(), sub_buttons.end());
 
 
@@ -608,7 +608,7 @@ void SynthSection::createOffOverlay() {
   off_overlay_->setInterceptsMouseClicks(false, false);
 }
 
-void SynthSection::paintJointControlSliderBackground(Graphics& g, int x, int y, int width, int height) {
+void SynthSection::paintJointControlSliderBackground(juce::Graphics& g, int x, int y, int width, int height) {
   float rounding = findValue(Skin::kLabelBackgroundRounding);
   g.setColour(findColour(Skin::kTextComponentBackground, true));
   int widget_margin = findValue(Skin::kWidgetMargin);
@@ -625,7 +625,7 @@ void SynthSection::paintJointControlSliderBackground(Graphics& g, int x, int y, 
   g.fillRect(x + width1, y + widget_margin, 1, height - 2 * widget_margin);
 }
 
-void SynthSection::paintJointControlBackground(Graphics& g, int x, int y, int width, int height) {
+void SynthSection::paintJointControlBackground(juce::Graphics& g, int x, int y, int width, int height) {
   float rounding = findValue(Skin::kLabelBackgroundRounding);
   g.setColour(findColour(Skin::kLabelBackground, true));
   g.fillRect(x + rounding, y * 1.0f, width - 2.0f * rounding, height / 2.0f);
@@ -638,7 +638,7 @@ void SynthSection::paintJointControlBackground(Graphics& g, int x, int y, int wi
   g.fillRoundedRectangle(x, y, side_width, height, rounding);
   g.fillRoundedRectangle(x + width - side_width, y, side_width, height, rounding);
 
-  Colour label_color = findColour(Skin::kLabelBackground, true);
+  juce::Colour label_color = findColour(Skin::kLabelBackground, true);
   if (label_color.getAlpha() == 0)
     label_color = findColour(Skin::kBody, true);
   g.setColour(label_color);
@@ -647,12 +647,12 @@ void SynthSection::paintJointControlBackground(Graphics& g, int x, int y, int wi
   g.fillRoundedRectangle(x + side_width, y, rect_width, label_height, rounding);
 }
 
-void SynthSection::paintJointControl(Graphics& g, int x, int y, int width, int height, const std::string& name) {
+void SynthSection::paintJointControl(juce::Graphics& g, int x, int y, int width, int height, const std::string& name) {
   paintJointControlBackground(g, x, y, width, height);
 
   setLabelFont(g);
   g.setColour(findColour(Skin::kBodyText, true));
-  g.drawText(name, x, y, width, findValue(Skin::kLabelBackgroundHeight), Justification::centred, false);
+  g.drawText(name, x, y, width, findValue(Skin::kLabelBackgroundHeight), juce::Justification::centred, false);
 }
 
 
@@ -660,14 +660,14 @@ void SynthSection::paintJointControl(Graphics& g, int x, int y, int width, int h
 
 
 
-void SynthSection::placeKnobsInArea(Rectangle<int> area, std::vector<Component*> knobs) {
+void SynthSection::placeKnobsInArea(juce::Rectangle<int> area, std::vector<juce::Component*> knobs) {
   int widget_margin = findValue(Skin::kWidgetMargin);
   float component_width = (area.getWidth() - (knobs.size() + 1) * widget_margin) / (1.0f * knobs.size());
 
   int y = area.getY();
   int height = area.getHeight() - widget_margin;
   float x = area.getX() + widget_margin;
-  for (Component* knob : knobs) {
+  for (juce::Component* knob : knobs) {
     int left = std::round(x);
     int right = std::round(x + component_width);
     if (knob)
@@ -729,7 +729,7 @@ float SynthSection::getWidgetRounding() {
   return findValue(Skin::kWidgetRoundedCorner);
 }
 
-Rectangle<int> SynthSection::getPresetBrowserBounds() {
+juce::Rectangle<int> SynthSection::getPresetBrowserBounds() {
   static constexpr float kXPercent = 0.4f;
   int title_width = getTitleWidth();
   int widget_margin = getWidgetMargin();
@@ -737,7 +737,7 @@ Rectangle<int> SynthSection::getPresetBrowserBounds() {
   int x = width * kXPercent;
   if (preset_selector_half_width_)
     x = width * 0.7f + findValue(Skin::kWidgetMargin);
-  return Rectangle<int>(x, widget_margin, width - x - widget_margin, title_width - 2 * widget_margin);
+  return juce::Rectangle<int>(x, widget_margin, width - x - widget_margin, title_width - 2 * widget_margin);
 }
 
 int SynthSection::getTitleTextRight() {
@@ -749,28 +749,28 @@ int SynthSection::getTitleTextRight() {
   return getPresetBrowserBounds().getX();
 }
 
-Rectangle<int> SynthSection::getPowerButtonBounds() {
+juce::Rectangle<int> SynthSection::getPowerButtonBounds() {
   int title_width = getTitleWidth();
-  return Rectangle<int>(getPowerButtonOffset(), 0, title_width, title_width);
+  return juce::Rectangle<int>(getPowerButtonOffset(), 0, title_width, title_width);
 }
 
-Rectangle<int> SynthSection::getTitleBounds() {
+juce::Rectangle<int> SynthSection::getTitleBounds() {
   int title_width = getTitleWidth();
   int from = 0;
   if (activator_)
     from = getPowerButtonBounds().getRight() - title_width * kPowerButtonPaddingPercent;
 
   int to = getTitleTextRight();
-  return Rectangle<int>(from, 0, to - from, title_width);
+  return juce::Rectangle<int>(from, 0, to - from, title_width);
 }
 
 float SynthSection::getDisplayScale() const {
   if (getWidth() <= 0)
     return 1.0f;
   
-  Component* top_level = getTopLevelComponent();
-  Rectangle<int> global_bounds = top_level->getLocalArea(this, getLocalBounds());
-  float display_scale = Desktop::getInstance().getDisplays().getDisplayForRect(top_level->getScreenBounds())->scale;
+  juce::Component* top_level = getTopLevelComponent();
+  juce::Rectangle<int> global_bounds = top_level->getLocalArea(this, getLocalBounds());
+  float display_scale = juce::Desktop::getInstance().getDisplays().getDisplayForRect(top_level->getScreenBounds())->scale;
   return display_scale * (1.0f * global_bounds.getWidth()) / getWidth();
 }
 
@@ -780,67 +780,67 @@ int SynthSection::getPixelMultiple() const {
   return 1.0f;
 }
 
-Font SynthSection::getLabelFont() {
+juce::Font SynthSection::getLabelFont() {
   float height = findValue(Skin::kLabelHeight);
   return Fonts::instance()->proportional_regular().withPointHeight(height);
 }
 
-void SynthSection::setLabelFont(Graphics& g) {
+void SynthSection::setLabelFont(juce::Graphics& g) {
   g.setColour(findColour(Skin::kBodyText, true));
   g.setFont(getLabelFont());
 }
 
 
 
-void SynthSection::drawLabelBackground(Graphics& g, Rectangle<int> bounds, bool text_component) {
+void SynthSection::drawLabelBackground(juce::Graphics& g, juce::Rectangle<int> bounds, bool text_component) {
   int background_rounding = findValue(Skin::kLabelBackgroundRounding);
   g.setColour(findColour(Skin::kLabelBackground, true));
-  Rectangle<float> label_bounds = getLabelBackgroundBounds(bounds, text_component).toFloat();
+  juce::Rectangle<float> label_bounds = getLabelBackgroundBounds(bounds, text_component).toFloat();
   g.fillRoundedRectangle(label_bounds, background_rounding);
   if (text_component && !findColour(Skin::kTextComponentBackground, true).isTransparent())
     g.fillRect(label_bounds.withHeight(label_bounds.getHeight() / 2));
 }
 
-void SynthSection::drawLabelBackgroundForComponent(Graphics& g, Component* component) {
+void SynthSection::drawLabelBackgroundForComponent(juce::Graphics& g, juce::Component* component) {
   drawLabelBackground(g, component->getBounds());
 }
 
-Rectangle<int> SynthSection::getDividedAreaUnbuffered(Rectangle<int> full_area, int num_sections,
+juce::Rectangle<int> SynthSection::getDividedAreaUnbuffered(juce::Rectangle<int> full_area, int num_sections,
                                                       int section, int buffer) {
   float component_width = (full_area.getWidth() - (num_sections + 1) * buffer) / (1.0f * num_sections);
   int x = full_area.getX() + std::round(section * (component_width + buffer) + buffer);
   int right = full_area.getX() + std::round((section + 1.0f) * (component_width + buffer));
-  return Rectangle<int>(x, full_area.getY(), right - x, full_area.getHeight());
+  return juce::Rectangle<int>(x, full_area.getY(), right - x, full_area.getHeight());
 }
 
-Rectangle<int> SynthSection::getDividedAreaBuffered(Rectangle<int> full_area, int num_sections,
+juce::Rectangle<int> SynthSection::getDividedAreaBuffered(juce::Rectangle<int> full_area, int num_sections,
                                                     int section, int buffer) {
-  Rectangle<int> area = getDividedAreaUnbuffered(full_area, num_sections, section, buffer);
+  juce::Rectangle<int> area = getDividedAreaUnbuffered(full_area, num_sections, section, buffer);
   return area.expanded(buffer, 0);
 }
 
-Rectangle<int> SynthSection::getLabelBackgroundBounds(Rectangle<int> bounds, bool text_component) {
+juce::Rectangle<int> SynthSection::getLabelBackgroundBounds(juce::Rectangle<int> bounds, bool text_component) {
   int background_height = findValue(Skin::kLabelBackgroundHeight);
   int label_offset = text_component ? findValue(Skin::kTextComponentLabelOffset) : findValue(Skin::kLabelOffset);
   int background_y = bounds.getBottom() - background_height + label_offset;
-  return Rectangle<int>(bounds.getX(), background_y, bounds.getWidth(), background_height);
+  return juce::Rectangle<int>(bounds.getX(), background_y, bounds.getWidth(), background_height);
 }
 
-void SynthSection::drawLabel(Graphics& g, String text, Rectangle<int> component_bounds, bool text_component) {
+void SynthSection::drawLabel(juce::Graphics& g, juce::String text, juce::Rectangle<int> component_bounds, bool text_component) {
   if (component_bounds.getWidth() <= 0 || component_bounds.getHeight() <= 0)
     return;
 
   drawLabelBackground(g, component_bounds, text_component);
   g.setColour(findColour(Skin::kBodyText, true));
-  Rectangle<int> background_bounds = getLabelBackgroundBounds(component_bounds, text_component);
+  juce::Rectangle<int> background_bounds = getLabelBackgroundBounds(component_bounds, text_component);
   g.drawText(text, component_bounds.getX(), background_bounds.getY(),
-                   component_bounds.getWidth(), background_bounds.getHeight(), Justification::centred, false);
+                   component_bounds.getWidth(), background_bounds.getHeight(), juce::Justification::centred, false);
 }
 
-void SynthSection::drawTextBelowComponent(Graphics& g, String text, Component* component, int space, int padding) {
+void SynthSection::drawTextBelowComponent(juce::Graphics& g, juce::String text, juce::Component* component, int space, int padding) {
   int height = findValue(Skin::kLabelBackgroundHeight);
   g.drawText(text, component->getX() - padding, component->getBottom() + space,
-             component->getWidth() + 2 * padding, height, Justification::centred, false);
+             component->getWidth() + 2 * padding, height, juce::Justification::centred, false);
 }
 
 void SynthSection::setActive(bool active) {
@@ -860,8 +860,8 @@ void SynthSection::animate(bool animate) {
   for (auto& sub_section : sub_sections_)
     sub_section->animate(animate);
 }
-void SynthSection::showPopupDisplay(Component* source, const std::string& text,
-    BubbleComponent::BubblePlacement placement, bool primary) {
+void SynthSection::showPopupDisplay(juce::Component* source, const std::string& text,
+    juce::BubbleComponent::BubblePlacement placement, bool primary) {
   FullInterface* parent = findParentComponentOfClass<FullInterface>();
   if (parent)
     parent->popupDisplay(source, text, placement, primary);
@@ -872,7 +872,7 @@ void SynthSection::hidePopupDisplay(bool primary) {
   if (parent)
     parent->hideDisplay(primary);
 }
-void SynthSection::showPopupSelector(Component* source, juce::Point<int> position, const PopupItems& options,
+void SynthSection::showPopupSelector(juce::Component* source, juce::Point<int> position, const PopupItems& options,
     std::function<void(int)> callback, std::function<void()> cancel) {
   FullInterface* parent = findParentComponentOfClass<FullInterface>();
   if (parent)
