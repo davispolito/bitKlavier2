@@ -29,7 +29,7 @@ class juce::AudioDeviceManager { };
 class SampleLoadManager;
 class UserPreferencesWrapper;
 class FullInterface;
-
+struct OpenGlWrapper;
 
 struct SynthGuiData {
   SynthGuiData(SynthBase* synth_base);
@@ -47,7 +47,7 @@ class SynthGuiInterface {
     virtual juce::AudioDeviceManager* getAudioDeviceManager() { return nullptr; }
     SynthBase* getSynth() { return synth_; }
     virtual void updateFullGui();
-    //virtual void updateGuiControl(const std::string& name, bitklavier::mono_float value);
+    virtual void updateGuiControl(const std::string& name, bitklavier::mono_float value);
     bitklavier::mono_float getControlValue(const std::string& name);
 
 
@@ -58,6 +58,7 @@ class SynthGuiInterface {
     void externalPresetLoaded(juce::File preset);
     void setGuiSize(float scale);
     FullInterface* getGui() { return gui_.get(); }
+    OpenGlWrapper* getOpenGlWrapper();
     UserPreferencesWrapper* userPreferences;
     SynthBase* synth_;
     SampleLoadManager* sampleLoadManager ;

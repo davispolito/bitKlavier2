@@ -6,6 +6,7 @@
 #include "Synthesiser/Sample.h"
 #include "synth_base.h"
 SampleLoadManager::SampleLoadManager(UserPreferences &preferences, SynthBase* synth_) : preferences(preferences) ,
+synth(synth_),
 audioFormatManager(new juce::AudioFormatManager())
 {
     audioFormatManager->registerBasicFormats();

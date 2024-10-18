@@ -76,8 +76,16 @@ void SynthGuiInterface::updateFullGui() {
 //  gui_->setAllValues(synth_->getControls());
   gui_->reset();
 }
+ OpenGlWrapper* SynthGuiInterface::getOpenGlWrapper() {
+    return &gui_->open_gl_;
+}
 
+void SynthGuiInterface::updateGuiControl(const std::string& name, bitklavier::mono_float value) {
+    if (gui_ == nullptr)
+        return;
 
+//  gui_->setValue(name, value, NotificationType::dontSendNotification);
+}
 //void SynthGuiInterface::notifyModulationsChanged() {
 //  gui_->modulationChanged();
 //}

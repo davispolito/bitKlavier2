@@ -2,7 +2,7 @@
 
 #include <chowdsp_plugin_state/chowdsp_plugin_state.h>
 #include "synth_section.h"
-class OpenGlWrapper;
+struct OpenGlWrapper;
 
 namespace bitklavier {
 /** Clone of juce::GenericAudioProcessorEditor, but usable as a generic component */

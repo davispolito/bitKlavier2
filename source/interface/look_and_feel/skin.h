@@ -17,32 +17,31 @@
 #pragma once
 
 #include <juce_gui_basics/juce_gui_basics.h>
-
+#include "BinaryData.h"
 #include "json.hpp"
-
 using json = nlohmann::json;
 class FullInterface;
 class SynthSection;
 
 class Skin {
-  public:
+public:
     enum SectionOverride {
-      kNone,
-      kLogo,
-      kHeader,
-      kOverlay,
-      kPopupBrowser,
-      kPresetBrowser,
-      kConstructionSite,
-      kDirect,
-      kKeymap,
-      kNostalgic,
-      kSynchronic,
-      kBlendronic,
-      kResonance,
-      kTuning,
-      kTempo,
-      kNumSectionOverrides
+        kNone,
+        kLogo,
+        kHeader,
+        kOverlay,
+        kPopupBrowser,
+        kPresetBrowser,
+        kConstructionSite,
+        kDirect,
+        kKeymap,
+        kNostalgic,
+        kSynchronic,
+        kBlendronic,
+        kResonance,
+        kTuning,
+        kTempo,
+        kNumSectionOverrides
     };
 
     enum ValueId {
@@ -214,23 +213,11 @@ class Skin {
     void loadDefaultSkin();
     void clearSkin();
 
-  protected:
+protected:
     juce::Colour colors_[kNumColors];
     float values_[kNumSkinValueIds];
     std::map<ColorId, juce::Colour> color_overrides_[kNumSectionOverrides];
     std::map<ValueId, float> value_overrides_[kNumSectionOverrides];
 };
 
-class SkinDesigner : public juce::DocumentWindow {
-  public:
-    SkinDesigner(Skin* skin, FullInterface* full_interface);
-    ~SkinDesigner();
-
-    void closeButtonPressed() override {
-      delete this;
-    }
-
-  protected:
-    std::unique_ptr<juce::Component> container_;
-};
 
