@@ -49,7 +49,7 @@ struct DirectParams : chowdsp::ParamHolder
         -6.0f
     };
 
-    // Resonance param
+    // Pedal param
     chowdsp::GainDBParameter::Ptr pedalParam {
         juce::ParameterID { "pedal", 100 },
         "Pedal",
