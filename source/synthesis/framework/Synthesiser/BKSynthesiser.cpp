@@ -14,6 +14,14 @@ BKSynthesiser::BKSynthesiser()
     globalADSR.decay = 0.0f;
     globalADSR.sustain = 1.0f;
     globalADSR.release = 0.1f;
+
+
+    //playingVoicesByNote.ensureStorageAllocated(128);
+    for (int i = 0; i<=128; i++)
+    {
+        playingVoicesByNote[i].add({  });
+    }
+
 }
 
 BKSynthesiser::~BKSynthesiser()
@@ -114,6 +122,8 @@ void BKSynthesiser::processNextBlock (juce::AudioBuffer<floatType>& outputAudio,
                                     int startSample,
                                     int numSamples)
 {
+    // perhaps return here if synthGain is below a min threshold?
+
     // must set the sample rate before using this!
     jassert (! juce::exactlyEqual (sampleRate, 0.0));
     const int targetChannels = outputAudio.getNumChannels();
@@ -250,31 +260,44 @@ void BKSynthesiser::noteOn (const int midiChannel,
 {
     const juce::ScopedLock sl (lock);
 
-    // DBG("num noteOn sounds = " + juce::String(sounds->size()));
-    for (auto* sound : *sounds)
+    for (auto transpOffset : midiNoteOffsets)
     {
-        //DBG("noteOn velocity = " + juce::String(velocity));
-        if (sound->appliesToNote (midiNoteNumber) && sound->appliesToChannel (midiChannel) && sound->appliesToVelocity(velocity))
+        // DBG("num noteOn sounds = " + juce::String(sounds->size()));
+        for (auto* sound : *sounds)
         {
-            // If hitting a note that's still ringing, stop it first (it could be
-            // still playing because of the sustain or sostenuto pedal).
-            for (auto* voice : voices)
-                if (voice->getCurrentlyPlayingNote() == midiNoteNumber && voice->isPlayingChannel (midiChannel))
-                    stopVoice (voice, 1.0f, true);
+            //DBG("noteOn velocity = " + juce::String(velocity));
+            if (sound->appliesToNote (std::round(midiNoteNumber + transpOffset)) && sound->appliesToChannel (midiChannel) && sound->appliesToVelocity (velocity))
+            {
+                // If hitting a note that's still ringing, stop it first (it could be
+                // still playing because of the sustain or sostenuto pedal).
+                for (auto* voice : voices)
+                    if (voice->getCurrentlyPlayingNote() == midiNoteNumber && voice->isPlayingChannel (midiChannel))
+                        stopVoice (voice, 1.0f, true);
 
-            startVoice (findFreeVoice (sound, midiChannel, midiNoteNumber, shouldStealNotes),
-                        sound, midiChannel, midiNoteNumber, velocity);
-            break;
+                startVoice (findFreeVoice (sound, midiChannel, midiNoteNumber, shouldStealNotes),
+                    sound,
+                    midiChannel,
+                    midiNoteNumber,
+                    velocity,
+                    transpOffset);
+                break;
+            }
         }
     }
 }
 
 void BKSynthesiser::startVoice (BKSamplerVoice* const voice,
                                 BKSamplerSound<juce::AudioFormatReader>* const sound,
-                              const int midiChannel,
-                              const int midiNoteNumber,
-                              const float velocity)
+                                const int midiChannel,
+                                const int midiNoteNumber,
+                                const float velocity,
+                                const float tuningOffset)
 {
+
+    playingVoicesByNote.getReference(midiNoteNumber).addIfNotAlreadyThere(voice);
+    //playingVoicesByNote[midiNoteNumber].addIfNotAlreadyThere(voice);
+    DBG("playingVoicesByNote[midiNoteNumber] adding = " + juce::String(midiNoteNumber) + " " + juce::String(tuningOffset) + " size = " + juce::String(playingVoicesByNote[midiNoteNumber].size()));
+
     //if (voice != nullptr && sound != nullptr)
     {
         if (voice->currentlyPlayingSound != nullptr)
@@ -289,8 +312,11 @@ void BKSynthesiser::startVoice (BKSamplerVoice* const voice,
         voice->setSostenutoPedalDown (false);
         voice->setSustainPedalDown (sustainPedalsDown[midiChannel]);
 
-        voice->startNote (midiNoteNumber, velocity, sound,
+        voice->startNote (midiNoteNumber, velocity, tuningOffset, sound,
                           lastPitchWheelValues [midiChannel - 1]);
+
+
+
     }
 }
 
@@ -311,6 +337,60 @@ void BKSynthesiser::noteOff (const int midiChannel,
 {
     const juce::ScopedLock sl (lock);
 
+    /*
+    DBG("playingVoicesByNote[midiNoteNumber] size = " + juce::String(midiNoteNumber) + " " + juce::String(playingVoicesByNote[midiNoteNumber].size()));
+    for (auto* voice : playingVoicesByNote[midiNoteNumber])
+    {
+        voice->setKeyDown (false);
+
+        //DBG("noteOff for transpOffset " + juce::String(midiNoteNumber) + " " + juce::String(transpOffset));
+        if (!(voice->isSustainPedalDown() || voice->isSostenutoPedalDown()))
+        {
+            DBG("noteOff for " + juce::String(voice->getCurrentlyPlayingNote()) + " " + juce::String(midiNoteNumber));
+            stopVoice (voice, velocity, allowTailOff);
+        }
+    }
+    playingVoicesByNote[midiNoteNumber].clear();
+     */
+
+    /*
+    for (auto transpOffset : midiNoteOffsets) // need to take into account that this might have changed in the meantime...
+    {
+        //DBG("noteOff for transpOffset " + juce::String(midiNoteNumber) + " " + juce::String(transpOffset));
+
+        for (auto* voice : voices)
+        {
+            if (voice->getCurrentlyPlayingNote() == midiNoteNumber
+                && voice->isPlayingChannel (midiChannel))
+            {
+                //DBG("noteOff for transpOffset " + juce::String(midiNoteNumber) + " " + juce::String(transpOffset));
+                if (auto sound = voice->getCurrentlyPlayingSound())
+                {
+                    //DBG("noteOff for transpOffset " + juce::String(midiNoteNumber) + " " + juce::String(transpOffset));
+                    //for (auto transpOffset : midiNoteOffsets)
+                    {
+                        if (sound->appliesToNote (std::round (midiNoteNumber + transpOffset))
+                            && sound->appliesToChannel (midiChannel))
+                        {
+                            jassert (!voice->keyIsDown || voice->isSustainPedalDown() == sustainPedalsDown[midiChannel]);
+
+                            voice->setKeyDown (false);
+
+
+                            //DBG("noteOff for transpOffset " + juce::String(midiNoteNumber) + " " + juce::String(transpOffset));
+                            if (!(voice->isSustainPedalDown() || voice->isSostenutoPedalDown()))
+                            {
+                                DBG("noteOff for transpOffset " + juce::String(voice->getCurrentlyPlayingNote()) + " " + juce::String(transpOffset));
+                                stopVoice (voice, velocity, allowTailOff);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    } */
+
+
     for (auto* voice : voices)
     {
         if (voice->getCurrentlyPlayingNote() == midiNoteNumber
@@ -321,12 +401,14 @@ void BKSynthesiser::noteOff (const int midiChannel,
                 if (sound->appliesToNote (midiNoteNumber)
                     && sound->appliesToChannel (midiChannel))
                 {
-                    jassert (! voice->keyIsDown || voice->isSustainPedalDown() == sustainPedalsDown [midiChannel]);
+                    jassert (!voice->keyIsDown || voice->isSustainPedalDown() == sustainPedalsDown[midiChannel]);
 
                     voice->setKeyDown (false);
 
-                    if (! (voice->isSustainPedalDown() || voice->isSostenutoPedalDown()))
+                    if (!(voice->isSustainPedalDown() || voice->isSostenutoPedalDown()))
+                    {
                         stopVoice (voice, velocity, allowTailOff);
+                    }
                 }
             }
         }

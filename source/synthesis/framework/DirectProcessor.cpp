@@ -20,7 +20,7 @@ DirectProcessor::DirectProcessor (const juce::ValueTree& v) : PluginBase (v, nul
     // connect these to sliders, as with ADSR
     mainSynth.setSynthGain (1.);
     hammerSynth.setSynthGain (0.05);
-    releaseResonanceSynth.setSynthGain (2.);
+    releaseResonanceSynth.setSynthGain (1.0 * releaseResonanceSynthGainMultiplier);
     pedalSynth.setSynthGain (0.4);
 
     //    std::unique_ptr<XmlElement> xml = chowdsp::Serialization::serialize<chowdsp::XMLSerializer>(state);
@@ -45,7 +45,7 @@ DirectProcessor::DirectProcessor (const juce::ValueTree& v) : PluginBase (v, nul
         state.addParameterListener (*state.params.releaseResonanceParam,
             chowdsp::ParameterListenerThread::AudioThread,
             [this] {
-                releaseResonanceSynth.setSynthGain (juce::Decibels::decibelsToGain (state.params.releaseResonanceParam->get()));
+                releaseResonanceSynth.setSynthGain (juce::Decibels::decibelsToGain (state.params.releaseResonanceParam->get()) * releaseResonanceSynthGainMultiplier);
                 DBG ("release resonance gain: " + juce::String (state.params.releaseResonanceParam->get()));
             }),
 
@@ -149,19 +149,51 @@ void DirectProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::Midi
 #if JUCE_MODULE_AVAILABLE_chowdsp_plugin_state
     state.getParameterListeners().callAudioThreadBroadcasters();
 #endif
-    for (auto mi : midiMessages)
+
+    /**
+     * do transpositions here
+     * noteOn will generate multiple noteOns, which must be saved and associated with the original noteOn
+     *      so that the corresponding noteOff can trigger noteOff for all the transposed notes
+     *
+     * will need to remove the original noteOn if there is only one transposition value and it's not set to 1.
+     * otherwise, add noteOn messages for every additional transposition
+     *
+     * noteOff will need to send multiple noteOffs
+     *
+     * also need to make sure that interim changes to transpositionsByNoteOnNumber don't leave already playing notes hanging...
+     *
+     * NO: move all this to BKSynthesizer noteOn and noteOff
+     */
+     /*
+    if(transpositionsByNoteOnNumber.size() > 0 )
+    // add || transpositionNotesPlaying == true, where this indicates that some transp notes are playing and might need to be stopped
     {
-        auto message = mi.getMessage();
+        for (auto mi : midiMessages)
+        {
+            auto message = mi.getMessage();
 
-        //        DBG(bitklavier::printMidi(message, "direct"));
-        //        state.params.doForAllParameters([this](auto& param, size_t) {
-        //           param.printDebug();
-        //           });
+            //        DBG(bitklavier::printMidi(message, "direct"));
+            //        state.params.doForAllParameters([this](auto& param, size_t) {
+            //           param.printDebug();
+            //           });
 
-        // do transpositions in here?
+            for (auto transpArray : transpositionsByNoteOnNumber)
+            {
+                juce::approximatelyEqual(0.1, 0.13);
+                if(transpArray.size() == 1)
+                {
+                    // remove current noteOn and replace with new one
+                }
+                else
+                {
+                    // add these, leaving all the current ones
+                }
+            }
+        }
     }
+      */
 
-    buffer.clear(); // always
+    buffer.clear(); // always top of the chain as an instrument source; doesn't take audio in
 
     if (mainSynth.getNumSounds() > 0)
         mainSynth.renderNextBlock (buffer, midiMessages, 0, buffer.getNumSamples());

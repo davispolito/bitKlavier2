@@ -297,9 +297,12 @@ class BKSynthesiser
                  */
                 void isPedalSynth(bool mode) { pedalSynth = mode; }
 
-                void setSynthGain(float g)
-                {
+                void setSynthGain(float g) {
                     synthGain = g;
+                }
+
+                void updateMidiNoteOffsets(juce::Array<float> newOffsets) {
+                    midiNoteOffsets = newOffsets;
                 }
 
                 juce::ADSR::Parameters globalADSR;
@@ -349,11 +352,13 @@ protected:
                     You'll probably never need to call this, it's used internally by noteOn(), but
                     may be needed by subclasses for custom behaviours.
                 */
-                void startVoice ( BKSamplerVoice* voice,
-                BKSamplerSound<juce::AudioFormatReader>* sound,
-                int midiChannel,
-                int midiNoteNumber,
-                float velocity);
+                void startVoice (
+                    BKSamplerVoice* voice,
+                    BKSamplerSound<juce::AudioFormatReader>* sound,
+                    int midiChannel,
+                    int midiNoteNumber,
+                    float velocity,
+                    float tuningOffset);
 
                 /** Stops a given voice.
                     You should never need to call this, it's used internally by noteOff, but is protected
@@ -379,6 +384,27 @@ private:
                 bool keyReleaseSynth = false;   // by default, synths play on keyPress (noteOn), not the opposite!
                 bool pedalSynth = false;        // for sustain pedal sounds; will ignore noteOn messages
                 bool sustainPedalAlreadyDown = false; // to avoid retriggering of pedalDown sounds
+
+                /**
+                 * midiNoteOffsets is an arrays of tuning offsets, in MidiNoteCents (.01 = 1 cent)
+                 *      - these offsets are set by transposition controls in Direct, Nostalgic, and Synchronic
+                 *
+                 * by default, there is only one offset in each subarray, with value 0., for regular un-transposed notes
+                 *
+                 * through the parent preparation owning this synth, the user might set this array in a variety of ways:
+                 *      - {0.} will just be the default note, no tuning adjustment
+                 *      - {0., 0.5} will be the default note, plus another note a quarter-tone away
+                 *      - {0., 12.5} will be the default note, plus another an active and a quarter-tone away
+                 *      - {-5, 4, 12.5} will be down a 4th, up a 3rd, and up an octave and a quarter-tone from the played note
+                 *                      and no un-transposed note
+                 *      - {-0.5} default note is tuned down a quarter-tone
+                 *
+                 * Synchronic will send one of these with each beat
+                 *
+                 * the "un-transposed" midiNoteNumber is the midi note played by the performer, and used for voice tracking
+                 */
+                juce::Array<float> midiNoteOffsets = { 0.};
+                juce::HashMap<int, juce::Array<BKSamplerVoice*>> playingVoicesByNote; // Hash of current voices playing for a particular midiNoteNumber
 
                 template <typename floatType>
                 void processNextBlock (juce::AudioBuffer<floatType>&, const juce::MidiBuffer&, int startSample, int numSamples);

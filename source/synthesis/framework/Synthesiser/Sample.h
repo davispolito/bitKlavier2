@@ -276,7 +276,9 @@ public:
     bool appliesToChannel (int midiNoteNumber)  {
         return true;
     }
-    bool appliesToVelocity (int midiNoteVelocity) {return midiVelocities[midiNoteVelocity];}
+    bool appliesToVelocity (int midiNoteVelocity) {
+        return midiVelocities[midiNoteVelocity];
+    }
     void setSample (std::unique_ptr<Sample<T>> value)
     {
         sample = std::move (value);
@@ -595,6 +597,15 @@ public:
         else return ( pow(2, (f - 69) / 12.0) * 440.0 );
     }
 
+    static double mtof( double f, double a ) // a = frequency of A4
+    {
+        if( f <= -1500 ) return (0);
+        else if( f > 1499 ) return (mtof(1499));
+        // else return (8.17579891564 * exp(.0577622650 * f));
+        // TODO: optimize
+        else return ( pow(2, (f - 69) / 12.0) * a );
+    }
+
     void setCurrentPlaybackSampleRate(double newRate) override {
 
        // BKSynthesiserVoice::setCurrentPlaybackSampleRate(newRate);
@@ -615,6 +626,7 @@ public:
 
     virtual void startNote (int midiNoteNumber,
                             float velocity,
+                            float tuningOffset,
                             BKSamplerSound<juce::AudioFormatReader> * _sound,
                             int currentPitchWheelPosition)
     {
@@ -627,7 +639,7 @@ public:
         level.setTargetValue(samplerSound->getGainMultiplierFromVelocity(velocity) * voiceGain); // need gain setting for each synth
         //DBG("gain from velocity = " + juce::String(velocity) + ":" + juce::String(samplerSound->getGainMultiplierFromVelocity(velocity)));
 
-        frequency.setTargetValue(mtof(midiNoteNumber));
+        frequency.setTargetValue(mtof(midiNoteNumber + tuningOffset));
         //melatonin::printSparkline(m_Buffer);
 
         auto loopPoints = samplerSound->getLoopPointsInSeconds();
@@ -643,6 +655,7 @@ public:
     {
         if (allowTailOff)
         {
+            DBG("Sample::stopNote rootMidiNote " + juce::String(this->samplerSound->rootMidiNote));
             ampEnv.noteOff();
             tailOff = 1.;
         }

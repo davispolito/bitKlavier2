@@ -188,10 +188,15 @@ private:
     //chowdsp::experimental::Directillator<float> oscillator;
     chowdsp::Gain<float> gain;
     juce::ADSR::Parameters adsrParams;
+
     BKSynthesiser mainSynth;
     BKSynthesiser hammerSynth;
     BKSynthesiser releaseResonanceSynth;
     BKSynthesiser pedalSynth;
+
+    float releaseResonanceSynthGainMultiplier = 10.; // because these are very soft
+    juce::HashMap<int, juce::Array<float>> transpositionsByNoteOnNumber; // indexed by noteNumber
+
     chowdsp::ScopedCallbackList adsrCallbacks;
     chowdsp::ScopedCallbackList vtCallbacks;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (DirectProcessor)
