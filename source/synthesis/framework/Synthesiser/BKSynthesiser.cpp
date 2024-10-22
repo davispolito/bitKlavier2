@@ -271,6 +271,11 @@ void BKSynthesiser::noteOn (const int midiChannel,
             stopVoice (voice, 1.0f, true);
 
 
+    /**
+     * a midiNoteNumber, reflective of what key the player plays, might result in multiple notes being played
+     *      as set by transposition sliders in Direct/Nostalgic/Synchronic.
+     *      iterate through each transposition here, but they are all tracked by the same original midiNoteNumber
+     */
     for (auto transp : midiNoteTranspositions)
     {
         // DBG("num noteOn sounds = " + juce::String(sounds->size()));
@@ -279,8 +284,6 @@ void BKSynthesiser::noteOn (const int midiChannel,
             //DBG("noteOn velocity = " + juce::String(velocity));
             if (sound->appliesToNote (std::round(midiNoteNumber + transp)) && sound->appliesToChannel (midiChannel) && sound->appliesToVelocity (velocity))
             {
-                // If hitting a note that's still ringing, stop it first (it could be
-                // still playing because of the sustain or sostenuto pedal).
                 /**
                  * moved loop below up out of the transp loop, to avoid voice handling problems with multiple transpositions
                  */
@@ -311,9 +314,11 @@ void BKSynthesiser::startVoice (BKSamplerVoice* const voice,
                                 const float transposition)
 {
 
+    /**
+     * save this voice, since it might be one of several associated with this midiNoteNumber
+     * and we will need to be able to stop it on noteOff(midiNoteNumber)
+     */
     playingVoicesByNote.getReference(midiNoteNumber).addIfNotAlreadyThere(voice);
-    //playingVoicesByNote[midiNoteNumber].addIfNotAlreadyThere(voice);
-    //DBG("playingVoicesByNote[midiNoteNumber] adding = " + juce::String(midiNoteNumber) + " " + juce::String(transposition) + " size = " + juce::String(playingVoicesByNote[midiNoteNumber].size()));
 
     //if (voice != nullptr && sound != nullptr)
     {
@@ -354,16 +359,17 @@ void BKSynthesiser::noteOff (const int midiChannel,
 {
     const juce::ScopedLock sl (lock);
 
-
-    //DBG("playingVoicesByNote[midiNoteNumber] size = " + juce::String(midiNoteNumber) + " " + juce::String(playingVoicesByNote[midiNoteNumber].size()));
+    /**
+     * go through all voices that were triggered by this particular midiNoteNumber and turn them off
+     * by storing voices as they are played, we can avoid the problem where the transpositions change
+     * while the notes are still held and turn them off here
+     */
     for (auto* voice : playingVoicesByNote[midiNoteNumber])
     {
         voice->setKeyDown (false);
 
-        //DBG("noteOff for transpOffset " + juce::String(midiNoteNumber) + " " + juce::String(transpOffset));
         if (!(voice->isSustainPedalDown() || voice->isSostenutoPedalDown()))
         {
-            DBG("noteOff for " + juce::String(voice->getCurrentlyPlayingNote()) + " " + juce::String(midiNoteNumber));
             stopVoice (voice, velocity, allowTailOff);
         }
     }

@@ -637,11 +637,12 @@ public:
         // this will adjust the loudness of this layer according to velocity, based on the
         //      dB difference between this layer and the layer below
         level.setTargetValue(samplerSound->getGainMultiplierFromVelocity(velocity) * voiceGain); // need gain setting for each synth
-        //DBG("gain from velocity = " + juce::String(velocity) + ":" + juce::String(samplerSound->getGainMultiplierFromVelocity(velocity)));
 
         /**
-         * transposition is from Transposition sliders in Direct/Nostalgic/Synchronic
-         *      NOT from the Tuning preparation
+         * "frequency" handles transposition (from transposition sliders, which might be fractional) and tuning
+         *
+         * need to be careful about tuning the transposition, which is a user option in the original bK
+         * also, if we want to update tuning mid-block, need to keep track of transposition as well...
          */
         frequency.setTargetValue(mtof(midiNoteNumber + transposition)); // need to sort out A440 reference freq as well...
         //melatonin::printSparkline(m_Buffer);
