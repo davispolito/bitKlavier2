@@ -682,6 +682,10 @@ public:
             float newOffset = (currentTuning[(currentlyPlayingNote + (int)std::trunc(currentTransposition) - currentTuningFundamental) % currentTuning.size()]);
             return mtof ( newOffset + (double)currentlyPlayingNote + currentTransposition );
         }
+
+        /**
+         * need to add functionality here for getting adaptive and spring tuning values
+         */
     }
 
     virtual void stopNote (float velocity, bool allowTailOff)
@@ -759,7 +763,7 @@ private:
         updateParams(); // NB: important line (except this function doesn't do anything right now!)
 
         // update frequency target here as well; i don't think we need to update this every sample!
-        //tPartialTuning;
+        frequency.setTargetValue(getTargetFrequency());
 
         auto loopPoints = samplerSound->getLoopPointsInSeconds();
         loopBegin.setTargetValue(loopPoints.getStart() * samplerSound->getSample()->getSampleRate());
