@@ -18,7 +18,7 @@ BKSynthesiser::BKSynthesiser()
     // init hash of currently playing notes
     for (int i = 0; i<=128; i++)
     {
-        playingVoicesByNote[i].add({  });
+        playingVoicesByNote.insert(0, {  });
     }
 
 }
@@ -317,7 +317,9 @@ void BKSynthesiser::startVoice (BKSamplerVoice* const voice,
      * save this voice, since it might be one of several associated with this midiNoteNumber
      * and we will need to be able to stop it on noteOff(midiNoteNumber)
      */
-    playingVoicesByNote.getReference(midiNoteNumber).addIfNotAlreadyThere(voice);
+    auto tempv = playingVoicesByNote.getUnchecked(midiNoteNumber);
+    tempv.insert(0, voice);
+    playingVoicesByNote.set(midiNoteNumber, tempv);
 
     //if (voice != nullptr && sound != nullptr)
     {
@@ -369,8 +371,7 @@ void BKSynthesiser::noteOff (const int midiChannel,
             stopVoice (voice, velocity, allowTailOff);
         }
     }
-    playingVoicesByNote[midiNoteNumber].clear();
-
+    playingVoicesByNote.set(midiNoteNumber, {}); // clear and clearQuick didn't actually do the trick for this!
 
     /*
     for (auto transpOffset : midiNoteTranspositions) // need to take into account that this might have changed in the meantime...
