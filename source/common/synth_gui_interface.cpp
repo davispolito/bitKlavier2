@@ -154,4 +154,15 @@ void SynthGuiInterface::setGuiSize(float scale) {
   gui_->getParentComponent()->setBounds(bounds);
   gui_->redoBackground();
 }
+
+void SynthGuiInterface::addCableConnection (Cable* c) {
+    SynthBase* synth = getSynth();
+    synth->processorInitQueue.try_enqueue([c,synth]
+        {
+            synth->addConnection(c->connection);
+           //changelistener callback is causing timing errors here.
+           //last_proc.reset();
+        });
+}
+
 #endif

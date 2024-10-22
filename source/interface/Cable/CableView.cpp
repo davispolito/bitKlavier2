@@ -216,23 +216,16 @@ void CableView::valueTreeRedirected (juce::ValueTree&)
 } // may need to add handling if this is hit
 
 void CableView::newObjectAdded(Cable *c) {
-    ////IS THIS THREAD SAFE? IDK
-    //        parent->getSynth()->processorInitQueue.try_enqueue([this, &connection]
-//                                                           {
-//                                                               SynthGuiInterface* parent = findParentComponentOfClass<SynthGuiInterface>();
-//                                                               parent->getSynth()->addConnection(connection);
-//                                                           });
+    //IS THIS THREAD SAFE? IDK
+    //parent->getSynth()->processorInitQueue.try_enqueue([this, &connection] {
+    //  SynthGuiInterface* parent = findParentComponentOfClass<SynthGuiInterface>();
+    //  parent->getSynth()->addConnection(connection);
+    //});
 
-//        graph.graph.addConnection (connection)
+    //graph.graph.addConnection (connection)
+    //TODO: ENCAPSULATE THIS INTO A FUNCTION INSIDE OF SynthGuiInterface (also getGUI())
     SynthGuiInterface* _parent = findParentComponentOfClass<SynthGuiInterface>();
-    _parent->getSynth()->processorInitQueue.try_enqueue([this,c]
-                                                       {
-                                                           SynthGuiInterface* _parent = findParentComponentOfClass<SynthGuiInterface>();
-                                                           _parent->getSynth()->addConnection(c->connection);
-                                                           //changelistener callback is causing timing errors here.
-
-                                                           //last_proc.reset();
-                                                       });
+    _parent->addCableConnection(c);
 
 }
 void CableView::deleteObject(Cable *at)  {

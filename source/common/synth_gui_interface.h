@@ -15,7 +15,7 @@
  */
 
 #pragma once
-
+#include "Cable/Cable.h"
 
 class SynthBase;
 #if HEADLESS
@@ -57,6 +57,7 @@ class SynthGuiInterface {
     void openSaveDialog();
     void externalPresetLoaded(juce::File preset);
     void setGuiSize(float scale);
+    void addCableConnection(Cable* c);
     FullInterface* getGui() { return gui_.get(); }
     UserPreferencesWrapper* userPreferences;
     SynthBase* synth_;
