@@ -659,7 +659,7 @@ public:
         ampEnv.noteOn();
     }
 
-    float getTargetFrequency()
+    double getTargetFrequency()
     {
         /**
          * lastNoteOffset = (currentTuning[(midiNoteNumber - tuning->prep->getFundamental()) % currentTuning.size()]
@@ -668,7 +668,7 @@ public:
          */
 
         float newOffset = (currentTuning[(currentlyPlayingNote - currentTuningFundamental) % currentTuning.size()]);
-        return mtof ( newOffset + currentlyPlayingNote + currentTransposition );
+        return mtof ( newOffset + (double)currentlyPlayingNote + currentTransposition );
     }
 
     virtual void stopNote (float velocity, bool allowTailOff)
