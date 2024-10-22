@@ -639,7 +639,11 @@ public:
         level.setTargetValue(samplerSound->getGainMultiplierFromVelocity(velocity) * voiceGain); // need gain setting for each synth
         //DBG("gain from velocity = " + juce::String(velocity) + ":" + juce::String(samplerSound->getGainMultiplierFromVelocity(velocity)));
 
-        frequency.setTargetValue(mtof(midiNoteNumber + tuningOffset));
+        /**
+         * tuningOffset is from Transposition sliders in Direct/Nostalgic/Synchronic
+         *      NOT from the Tuning preparation
+         */
+        frequency.setTargetValue(mtof(midiNoteNumber + tuningOffset)); // need to sort out A440 reference freq as well...
         //melatonin::printSparkline(m_Buffer);
 
         auto loopPoints = samplerSound->getLoopPointsInSeconds();
@@ -751,6 +755,7 @@ private:
                           Element* outR,
                           size_t writePos)
     {
+        //update frequency target value here, so that dynamic/adaptive tuning can be within block?
         auto currentFrequency = frequency.getNextValue();  // based on note pitch
         auto currentLoopBegin = loopBegin.getNextValue();
         auto currentLoopEnd = loopEnd.getNextValue();

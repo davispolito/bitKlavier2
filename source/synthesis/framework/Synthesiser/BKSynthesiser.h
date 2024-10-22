@@ -381,9 +381,9 @@ private:
                 mutable juce::CriticalSection stealLock;
                 mutable juce::Array<BKSamplerVoice*> usableVoicesToStealArray;
 
-                bool keyReleaseSynth = false;   // by default, synths play on keyPress (noteOn), not the opposite!
-                bool pedalSynth = false;        // for sustain pedal sounds; will ignore noteOn messages
-                bool sustainPedalAlreadyDown = false; // to avoid retriggering of pedalDown sounds
+                bool keyReleaseSynth = false;           // by default, synths play on keyPress (noteOn), not the opposite!
+                bool pedalSynth = false;                // for sustain pedal sounds; will ignore noteOn messages
+                bool sustainPedalAlreadyDown = false;   // to avoid re-triggering of pedalDown sounds
 
                 /**
                  * midiNoteOffsets is an arrays of tuning offsets, in MidiNoteCents (.01 = 1 cent)
@@ -403,7 +403,7 @@ private:
                  *
                  * the "un-transposed" midiNoteNumber is the midi note played by the performer, and used for voice tracking
                  */
-                juce::Array<float> midiNoteOffsets = { 0., 6, 15};
+                juce::Array<float> midiNoteOffsets = { 0.}; // needs to be set via UI
                 juce::HashMap<int, juce::Array<BKSamplerVoice*>> playingVoicesByNote; // Hash of current voices playing for a particular midiNoteNumber
 
                 template <typename floatType>
