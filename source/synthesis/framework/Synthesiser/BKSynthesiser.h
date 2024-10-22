@@ -403,7 +403,7 @@ private:
                  *
                  * the "un-transposed" midiNoteNumber is the midi note played by the performer, and used for voice tracking
                  */
-                juce::Array<float> midiNoteTranspositions = { 0.}; // needs to be set via UI
+                juce::Array<float> midiNoteTranspositions = { 0., 4, 7, 10}; // needs to be set via UI
                 juce::HashMap<int, juce::Array<BKSamplerVoice*>> playingVoicesByNote; // Hash of current voices playing for a particular midiNoteNumber (perhaps should just be an array)
 
                 template <typename floatType>

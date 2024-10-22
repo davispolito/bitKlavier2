@@ -662,13 +662,26 @@ public:
     double getTargetFrequency()
     {
         /**
-         * lastNoteOffset = (currentTuning[(midiNoteNumber - tuning->prep->getFundamental()) % currentTuning.size()]
-                + tuning->prep->getAbsoluteOffsets().getUnchecked(midiNoteNumber)
-                + tuning->prep->getFundamentalOffset());
+         * by default, transpositions are tuned literally, relative to the played note
+         *      using whatever value, fractional or otherwise, that the user indicates
+         *      and ignores the tuning system
+         *      The played note is tuned according to the tuning system, but the transpositions are not
+         *
+         * if "tuneTranspositions" is set to true, then the transposed notes themselves are also tuned
+         *      according to the current tuning system
+         *
+         * this should be the same behavior we had in the original bK, with "use Tuning" on transposition sliders
          */
-
-        float newOffset = (currentTuning[(currentlyPlayingNote - currentTuningFundamental) % currentTuning.size()]);
-        return mtof ( newOffset + (double)currentlyPlayingNote + currentTransposition );
+        if (!tuneTranspositions)
+        {
+            float newOffset = (currentTuning[(currentlyPlayingNote - currentTuningFundamental) % currentTuning.size()]);
+            return mtof ( newOffset + (double)currentlyPlayingNote + currentTransposition );
+        }
+        else
+        {
+            float newOffset = (currentTuning[(currentlyPlayingNote + (int)std::trunc(currentTransposition) - currentTuningFundamental) % currentTuning.size()]);
+            return mtof ( newOffset + (double)currentlyPlayingNote + currentTransposition );
+        }
     }
 
     virtual void stopNote (float velocity, bool allowTailOff)
@@ -931,8 +944,8 @@ private:
 
     float currentTransposition; // comes from Transposition sliders in Direct/Nostalgic/Synchronic
     juce::Array<float> currentTuning = tPartialTuning;
-    //juce::Array<float> currentTuning = { 0., .117313, .039101, -.331291, -.13686, -.019547, -.486824, .019547, .405273, -.15641, -.311745, -.506371 };
     int currentTuningFundamental = 0;
+    bool tuneTranspositions = false; // if this is true, then Transposition slider values will be tuned using the currentTuning system
 
     juce::SmoothedValue<double> level { 0 };
     juce::SmoothedValue<double> frequency { 0 };
