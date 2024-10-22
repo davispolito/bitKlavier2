@@ -930,7 +930,8 @@ private:
     float voiceGain {1.};
 
     float currentTransposition; // comes from Transposition sliders in Direct/Nostalgic/Synchronic
-    Array<float> currentTuning = tPartialTuning;
+    juce::Array<float> currentTuning = tPartialTuning;
+    //juce::Array<float> currentTuning = { 0., .117313, .039101, -.331291, -.13686, -.019547, -.486824, .019547, .405273, -.15641, -.311745, -.506371 };
     int currentTuningFundamental = 0;
 
     juce::SmoothedValue<double> level { 0 };
