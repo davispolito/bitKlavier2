@@ -15,8 +15,7 @@ BKSynthesiser::BKSynthesiser()
     globalADSR.sustain = 1.0f;
     globalADSR.release = 0.1f;
 
-
-    //playingVoicesByNote.ensureStorageAllocated(128);
+    // init hash of currently playing notes
     for (int i = 0; i<=128; i++)
     {
         playingVoicesByNote[i].add({  });
@@ -273,8 +272,8 @@ void BKSynthesiser::noteOn (const int midiChannel,
 
     /**
      * a midiNoteNumber, reflective of what key the player plays, might result in multiple notes being played
-     *      as set by transposition sliders in Direct/Nostalgic/Synchronic.
-     *      iterate through each transposition here, but they are all tracked by the same original midiNoteNumber
+     *      as set by currentTransposition sliders in Direct/Nostalgic/Synchronic.
+     *      iterate through each currentTransposition here, but they are all tracked by the same original midiNoteNumber
      */
     for (auto transp : midiNoteTranspositions)
     {
@@ -336,9 +335,6 @@ void BKSynthesiser::startVoice (BKSamplerVoice* const voice,
 
         voice->startNote (midiNoteNumber, velocity, transposition, sound,
                           lastPitchWheelValues [midiChannel - 1]);
-
-
-
     }
 }
 

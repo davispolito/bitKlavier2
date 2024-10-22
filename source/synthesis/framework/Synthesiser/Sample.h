@@ -19,6 +19,7 @@
 #include <juce_audio_formats/juce_audio_formats.h>
 //#ifdef DEBUG
 #include "common.h"
+#include "tuning_systems.h"
 #include "utils.h"
 
 //#endif
@@ -633,6 +634,7 @@ public:
         samplerSound = _sound;
         currentlyPlayingSound = _sound;
         currentlyPlayingNote = midiNoteNumber;
+        currentTransposition = transposition;
 
         // this will adjust the loudness of this layer according to velocity, based on the
         //      dB difference between this layer and the layer below
@@ -644,7 +646,8 @@ public:
          * need to be careful about tuning the transposition, which is a user option in the original bK
          * also, if we want to update tuning mid-block, need to keep track of transposition as well...
          */
-        frequency.setTargetValue(mtof(midiNoteNumber + transposition)); // need to sort out A440 reference freq as well...
+        //frequency.setTargetValue(mtof(midiNoteNumber + transposition)); // need to sort out A440 reference freq as well...
+        frequency.setTargetValue(getTargetFrequency());
         //melatonin::printSparkline(m_Buffer);
 
         auto loopPoints = samplerSound->getLoopPointsInSeconds();
@@ -654,6 +657,18 @@ public:
         tailOff = 0.0;
 
         ampEnv.noteOn();
+    }
+
+    float getTargetFrequency()
+    {
+        /**
+         * lastNoteOffset = (currentTuning[(midiNoteNumber - tuning->prep->getFundamental()) % currentTuning.size()]
+                + tuning->prep->getAbsoluteOffsets().getUnchecked(midiNoteNumber)
+                + tuning->prep->getFundamentalOffset());
+         */
+
+        float newOffset = (currentTuning[(currentlyPlayingNote - currentTuningFundamental) % currentTuning.size()]);
+        return mtof ( newOffset + currentlyPlayingNote + currentTransposition );
     }
 
     virtual void stopNote (float velocity, bool allowTailOff)
@@ -728,7 +743,10 @@ private:
     {
         jassert(samplerSound->getSample() != nullptr);
 
-        updateParams(); // NB: important line
+        updateParams(); // NB: important line (except this function doesn't do anything right now!)
+
+        // update frequency target here as well; i don't think we need to update this every sample!
+        //tPartialTuning;
 
         auto loopPoints = samplerSound->getLoopPointsInSeconds();
         loopBegin.setTargetValue(loopPoints.getStart() * samplerSound->getSample()->getSampleRate());
@@ -756,14 +774,11 @@ private:
                           Element* outR,
                           size_t writePos)
     {
-        //update frequency target value here, so that dynamic/adaptive tuning can be within block?
         auto currentFrequency = frequency.getNextValue();  // based on note pitch
         auto currentLoopBegin = loopBegin.getNextValue();
         auto currentLoopEnd = loopEnd.getNextValue();
 
         float ampEnvLast = ampEnv.getNextSample();
-        //DBG("ampEnv sample for block : " + juce::String(ampEnvLast));
-        //DBG("ampEnv isActive: " + juce::String(static_cast<int>(ampEnv.isActive())));
         if (ampEnv.isActive() && isTailingOff())
         {
             if (ampEnvLast < 0.001)
@@ -913,6 +928,11 @@ private:
 
     BKSamplerSound<juce::AudioFormatReader>* samplerSound;
     float voiceGain {1.};
+
+    float currentTransposition; // comes from Transposition sliders in Direct/Nostalgic/Synchronic
+    Array<float> currentTuning = tPartialTuning;
+    int currentTuningFundamental = 0;
+
     juce::SmoothedValue<double> level { 0 };
     juce::SmoothedValue<double> frequency { 0 };
     juce::SmoothedValue<double> loopBegin;

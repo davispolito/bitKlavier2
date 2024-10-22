@@ -155,8 +155,8 @@ void DirectProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::Midi
      * noteOn will generate multiple noteOns, which must be saved and associated with the original noteOn
      *      so that the corresponding noteOff can trigger noteOff for all the transposed notes
      *
-     * will need to remove the original noteOn if there is only one transposition value and it's not set to 1.
-     * otherwise, add noteOn messages for every additional transposition
+     * will need to remove the original noteOn if there is only one currentTransposition value and it's not set to 1.
+     * otherwise, add noteOn messages for every additional currentTransposition
      *
      * noteOff will need to send multiple noteOffs
      *

@@ -115,6 +115,7 @@ add_library(SharedCode INTERFACE
         source/interface/synth_slider.h
         source/interface/Cable/CableView.cpp
         source/interface/Cable/CableView.h
+        source/synthesis/framework/tuning_systems.h
 )
 
 # C++20, please

@@ -387,7 +387,7 @@ private:
 
                 /**
                  * midiNoteTranspositions is an arrays of tuning offsets, in MidiNoteCents (.01 = 1 cent)
-                 *      - these offsets are set by transposition controls in Direct, Nostalgic, and Synchronic
+                 *      - these offsets are set by currentTransposition controls in Direct, Nostalgic, and Synchronic
                  *
                  * by default, there is only one offset in each subarray, with value 0., for regular un-transposed notes
                  *
@@ -404,7 +404,7 @@ private:
                  * the "un-transposed" midiNoteNumber is the midi note played by the performer, and used for voice tracking
                  */
                 juce::Array<float> midiNoteTranspositions = { 0.}; // needs to be set via UI
-                juce::HashMap<int, juce::Array<BKSamplerVoice*>> playingVoicesByNote; // Hash of current voices playing for a particular midiNoteNumber
+                juce::HashMap<int, juce::Array<BKSamplerVoice*>> playingVoicesByNote; // Hash of current voices playing for a particular midiNoteNumber (perhaps should just be an array)
 
                 template <typename floatType>
                 void processNextBlock (juce::AudioBuffer<floatType>&, const juce::MidiBuffer&, int startSample, int numSamples);
