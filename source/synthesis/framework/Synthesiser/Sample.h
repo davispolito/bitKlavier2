@@ -662,6 +662,8 @@ public:
     double getTargetFrequency()
     {
         /**
+         * Static Tuning
+         *
          * by default, transpositions are tuned literally, relative to the played note
          *      using whatever value, fractional or otherwise, that the user indicates
          *      and ignores the tuning system
@@ -762,7 +764,7 @@ private:
 
         updateParams(); // NB: important line (except this function doesn't do anything right now!)
 
-        // update frequency target here as well; i don't think we need to update this every sample!
+        // update frequency target here at the block as well; i don't think we need to update this every sample!
         frequency.setTargetValue(getTargetFrequency());
 
         auto loopPoints = samplerSound->getLoopPointsInSeconds();
@@ -946,8 +948,9 @@ private:
     BKSamplerSound<juce::AudioFormatReader>* samplerSound;
     float voiceGain {1.};
 
-    float currentTransposition; // comes from Transposition sliders in Direct/Nostalgic/Synchronic
-    juce::Array<float> currentTuning = tPartialTuning;
+    double currentTransposition; // comes from Transposition sliders in Direct/Nostalgic/Synchronic
+
+    juce::Array<float> currentTuning = tPartialTuning; // hard-wire these static tuning setups to start
     int currentTuningFundamental = 0;
     bool tuneTranspositions = false; // if this is true, then Transposition slider values will be tuned using the currentTuning system
 
