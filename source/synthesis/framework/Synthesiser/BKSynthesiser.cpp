@@ -260,6 +260,17 @@ void BKSynthesiser::noteOn (const int midiChannel,
 {
     const juce::ScopedLock sl (lock);
 
+    /**
+     * moved this out of the loop below because it was messing up voice handling with multiple transpositions
+     * however, this move might break something else in the future, we'll have to see..
+     */
+    // If hitting a note that's still ringing, stop it first (it could be
+    // still playing because of the sustain or sostenuto pedal).
+    for (auto* voice : voices)
+        if (voice->getCurrentlyPlayingNote() == midiNoteNumber && voice->isPlayingChannel (midiChannel))
+            stopVoice (voice, 1.0f, true);
+
+
     for (auto transpOffset : midiNoteOffsets)
     {
         // DBG("num noteOn sounds = " + juce::String(sounds->size()));
@@ -270,9 +281,14 @@ void BKSynthesiser::noteOn (const int midiChannel,
             {
                 // If hitting a note that's still ringing, stop it first (it could be
                 // still playing because of the sustain or sostenuto pedal).
+                /**
+                 * moved loop below up out of the transpOffset loop, to avoid voice handling problems with multiple transpositions
+                 */
+                /*
                 for (auto* voice : voices)
                     if (voice->getCurrentlyPlayingNote() == midiNoteNumber && voice->isPlayingChannel (midiChannel))
                         stopVoice (voice, 1.0f, true);
+                 */
 
                 startVoice (findFreeVoice (sound, midiChannel, midiNoteNumber, shouldStealNotes),
                     sound,
@@ -280,6 +296,7 @@ void BKSynthesiser::noteOn (const int midiChannel,
                     midiNoteNumber,
                     velocity,
                     transpOffset);
+
                 break;
             }
         }
@@ -296,7 +313,7 @@ void BKSynthesiser::startVoice (BKSamplerVoice* const voice,
 
     playingVoicesByNote.getReference(midiNoteNumber).addIfNotAlreadyThere(voice);
     //playingVoicesByNote[midiNoteNumber].addIfNotAlreadyThere(voice);
-    DBG("playingVoicesByNote[midiNoteNumber] adding = " + juce::String(midiNoteNumber) + " " + juce::String(tuningOffset) + " size = " + juce::String(playingVoicesByNote[midiNoteNumber].size()));
+    //DBG("playingVoicesByNote[midiNoteNumber] adding = " + juce::String(midiNoteNumber) + " " + juce::String(tuningOffset) + " size = " + juce::String(playingVoicesByNote[midiNoteNumber].size()));
 
     //if (voice != nullptr && sound != nullptr)
     {
@@ -337,8 +354,8 @@ void BKSynthesiser::noteOff (const int midiChannel,
 {
     const juce::ScopedLock sl (lock);
 
-    /*
-    DBG("playingVoicesByNote[midiNoteNumber] size = " + juce::String(midiNoteNumber) + " " + juce::String(playingVoicesByNote[midiNoteNumber].size()));
+
+    //DBG("playingVoicesByNote[midiNoteNumber] size = " + juce::String(midiNoteNumber) + " " + juce::String(playingVoicesByNote[midiNoteNumber].size()));
     for (auto* voice : playingVoicesByNote[midiNoteNumber])
     {
         voice->setKeyDown (false);
@@ -351,7 +368,7 @@ void BKSynthesiser::noteOff (const int midiChannel,
         }
     }
     playingVoicesByNote[midiNoteNumber].clear();
-     */
+
 
     /*
     for (auto transpOffset : midiNoteOffsets) // need to take into account that this might have changed in the meantime...
@@ -391,6 +408,7 @@ void BKSynthesiser::noteOff (const int midiChannel,
     } */
 
 
+    /* orig
     for (auto* voice : voices)
     {
         if (voice->getCurrentlyPlayingNote() == midiNoteNumber
@@ -413,6 +431,7 @@ void BKSynthesiser::noteOff (const int midiChannel,
             }
         }
     }
+     */
 }
 
 void BKSynthesiser::allNotesOff (const int midiChannel, const bool allowTailOff)
