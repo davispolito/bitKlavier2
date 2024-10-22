@@ -302,7 +302,7 @@ class BKSynthesiser
                 }
 
                 void updateMidiNoteOffsets(juce::Array<float> newOffsets) {
-                    midiNoteOffsets = newOffsets;
+                    midiNoteTranspositions = newOffsets;
                 }
 
                 juce::ADSR::Parameters globalADSR;
@@ -358,7 +358,7 @@ protected:
                     int midiChannel,
                     int midiNoteNumber,
                     float velocity,
-                    float tuningOffset);
+                    float transposition);
 
                 /** Stops a given voice.
                     You should never need to call this, it's used internally by noteOff, but is protected
@@ -386,7 +386,7 @@ private:
                 bool sustainPedalAlreadyDown = false;   // to avoid re-triggering of pedalDown sounds
 
                 /**
-                 * midiNoteOffsets is an arrays of tuning offsets, in MidiNoteCents (.01 = 1 cent)
+                 * midiNoteTranspositions is an arrays of tuning offsets, in MidiNoteCents (.01 = 1 cent)
                  *      - these offsets are set by transposition controls in Direct, Nostalgic, and Synchronic
                  *
                  * by default, there is only one offset in each subarray, with value 0., for regular un-transposed notes
@@ -403,7 +403,7 @@ private:
                  *
                  * the "un-transposed" midiNoteNumber is the midi note played by the performer, and used for voice tracking
                  */
-                juce::Array<float> midiNoteOffsets = { 0.}; // needs to be set via UI
+                juce::Array<float> midiNoteTranspositions = { 0.}; // needs to be set via UI
                 juce::HashMap<int, juce::Array<BKSamplerVoice*>> playingVoicesByNote; // Hash of current voices playing for a particular midiNoteNumber
 
                 template <typename floatType>

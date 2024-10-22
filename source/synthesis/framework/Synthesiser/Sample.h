@@ -626,7 +626,7 @@ public:
 
     virtual void startNote (int midiNoteNumber,
                             float velocity,
-                            float tuningOffset,
+                            float transposition,
                             BKSamplerSound<juce::AudioFormatReader> * _sound,
                             int currentPitchWheelPosition)
     {
@@ -640,10 +640,10 @@ public:
         //DBG("gain from velocity = " + juce::String(velocity) + ":" + juce::String(samplerSound->getGainMultiplierFromVelocity(velocity)));
 
         /**
-         * tuningOffset is from Transposition sliders in Direct/Nostalgic/Synchronic
+         * transposition is from Transposition sliders in Direct/Nostalgic/Synchronic
          *      NOT from the Tuning preparation
          */
-        frequency.setTargetValue(mtof(midiNoteNumber + tuningOffset)); // need to sort out A440 reference freq as well...
+        frequency.setTargetValue(mtof(midiNoteNumber + transposition)); // need to sort out A440 reference freq as well...
         //melatonin::printSparkline(m_Buffer);
 
         auto loopPoints = samplerSound->getLoopPointsInSeconds();
