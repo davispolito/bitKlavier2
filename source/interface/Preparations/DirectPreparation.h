@@ -10,11 +10,57 @@
 #include "popup_browser.h"
 #include "ParameterView/ParametersView.h"
 #include "FullInterface.h"
+#include "BKSliders.h"
 /************************************************************************************/
 /*                              CLASS: OpenGlSlider                                 */
 /************************************************************************************/
 
-class OpenGlSlider;
+class OpenGlTranspositionSlider : public OpenGlAutoImageComponent<BKStackedSlider>
+{
+public:
+    OpenGlTranspositionSlider(const juce::ValueTree& v) :
+               OpenGlAutoImageComponent<BKStackedSlider>(
+                   "Transpositions",    // slider name
+                   0.,                  // min
+                   10.,                 // max
+                   0.,                  // default min
+                   10.,                 // default max
+                   1.,                  // default val
+                   0.001)
+    {             // increment
+        image_component_ = std::make_shared<OpenGlImageComponent>();
+        setLookAndFeel(DefaultLookAndFeel::instance());
+        image_component_->setComponent(this);
+    }
+
+    virtual void resized() override
+    {
+        OpenGlAutoImageComponent<BKStackedSlider>::resized();
+        if (isShowing())
+            redoImage();
+    }
+};
+
+/*
+ * class OpenGlMidiSelector : public OpenGlAutoImageComponent<MidiInputSelectorComponentListBox> {
+public:
+    OpenGlMidiSelector(const juce::ValueTree& v) :
+            OpenGlAutoImageComponent<MidiInputSelectorComponentListBox>(v) {
+        image_component_ = std::make_shared<OpenGlImageComponent>();
+        setLookAndFeel(DefaultLookAndFeel::instance());
+        image_component_->setComponent(this);
+    }
+
+virtual void resized() override {
+    OpenGlAutoImageComponent<MidiInputSelectorComponentListBox>::resized();
+    if (isShowing())
+        redoImage();
+}
+
+private:
+JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(OpenGlMidiSelector)
+};
+ */
 
 /************************************************************************************/
 /*             CLASS: DirectPreparation, inherits from PreparationSection           */
