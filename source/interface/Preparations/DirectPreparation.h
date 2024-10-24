@@ -33,6 +33,21 @@ public:
         image_component_->setComponent(this);
     }
 
+    OpenGlTranspositionSlider() :
+                                                           OpenGlAutoImageComponent<BKStackedSlider>(
+                                                               "Transpositions",    // slider name
+                                                               0.,                  // min
+                                                               10.,                 // max
+                                                               0.,                  // default min
+                                                               10.,                 // default max
+                                                               1.,                  // default val
+                                                               0.001)
+    {             // increment
+        image_component_ = std::make_shared<OpenGlImageComponent>();
+        setLookAndFeel(DefaultLookAndFeel::instance());
+        image_component_->setComponent(this);
+    }
+
     virtual void resized() override
     {
         OpenGlAutoImageComponent<BKStackedSlider>::resized();
@@ -158,6 +173,8 @@ private:
         void redoImage();
         DirectParams* params = nullptr;
         DirectProcessor& proc;
+        std::unique_ptr<OpenGlTranspositionSlider> transpositionSlider;
+
 
         bitklavier::ParametersView view;
 //        // Parameter sliders for the Direct Popup

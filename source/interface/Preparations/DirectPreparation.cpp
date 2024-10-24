@@ -138,6 +138,8 @@ DirectPreparation::DirectPopup::DirectPopup(DirectProcessor& _proc, OpenGlWrappe
     addSubSection(&view);
 //    view.init_();
 
+    transpositionSlider = std::make_unique<OpenGlTranspositionSlider>();
+
     /*********************************************************************************************/
 }
 
@@ -174,19 +176,20 @@ void DirectPreparation::DirectPopup::resized() {
     int section_height = getHeight();
     int section_width = getWidth();
     view.setBounds(getLocalBounds());
+
 //    // Relatively defines slider size
-//    int sliderWidth = (section_width - (4 * widget_margin))  / 3;
-//    int sliderHeight = (section_height - (4 * widget_margin))  / 3;
+    int sliderWidth = (section_width - (4 * widget_margin))  / 3;
+    int sliderHeight = (section_height - (4 * widget_margin))  / 3;
 //
 //    // Relatively defines column locations
-//    int column1 = bounds.getX() + widget_margin;
+    int column1 = bounds.getX() + widget_margin;
 //    int column1andAHalf = bounds.getX() + (sliderWidth / 2) + widget_margin;
 //    int column2 = bounds.getX() + sliderWidth + (2 * widget_margin);
 //    int column2andAHalf = bounds.getX() + (3 * sliderWidth / 2) + (2 * widget_margin);
 //    int column3 = bounds.getX() + (2 * sliderWidth) + (3 * widget_margin);
 //
 //    // Relatively defines row locations
-//    int row1 = bounds.getY() + widget_margin;
+    int row1 = bounds.getY() + widget_margin;
 //    int row2 = bounds.getY() + sliderHeight + (2 * widget_margin);
 //    int row3 = bounds.getY() + (2 * sliderHeight) + (3 * widget_margin);
 //
@@ -231,6 +234,8 @@ void DirectPreparation::DirectPopup::resized() {
 
 //    transpositionsSlider->redoImage();
 //    blendronicSendSlider->redoImage();
+
+    transpositionSlider->setBounds(column1, row1, sliderWidth, sliderHeight);
 
     redoImage();
     SynthSection::resized();

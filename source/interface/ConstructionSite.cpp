@@ -80,6 +80,7 @@ PreparationSection* ConstructionSite::createNewObject (const juce::ValueTree& v)
     auto s = prepFactory.CreateObject ((int) v.getProperty (IDs::type), v, parent);
 
     //    last_proc = s->getProcessor();
+    DBG("createNewObject: " + (s->getName()));
     addSubSection (s);
     Skin default_skin;
     s->setSkinValues (default_skin, false);
