@@ -142,6 +142,7 @@ DirectPreparation::DirectPopup::DirectPopup(DirectProcessor& _proc, OpenGlWrappe
     addAndMakeVisible(*transpositionSlider);
     transpositionSlider->setValue(1., juce::dontSendNotification);
     transpositionSlider->setColour(juce::Slider::ColourIds::backgroundColourId , juce::Colours::red);
+    transpositionSlider->setColour(juce::Slider::ColourIds::thumbColourId , juce::Colours::blue);
 
     /*********************************************************************************************/
 }
@@ -240,7 +241,9 @@ void DirectPreparation::DirectPopup::resized() {
 
     transpositionSlider->setBounds(column1, row1, sliderWidth, sliderHeight);
     transpositionSlider->setBounds(0, 30, 400, 200);
+    transpositionSlider->toFront(false);
     transpositionSlider->redoImage();
+    transpositionSlider->repaint();
 
     redoImage();
     SynthSection::resized();
