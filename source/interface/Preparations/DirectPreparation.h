@@ -20,13 +20,14 @@ class OpenGlTranspositionSlider : public OpenGlAutoImageComponent<BKStackedSlide
 public:
     OpenGlTranspositionSlider(const juce::ValueTree& v) :
                OpenGlAutoImageComponent<BKStackedSlider>(
-                   "Transpositions",    // slider name
-                   0.,                  // min
-                   10.,                 // max
-                   0.,                  // default min
-                   10.,                 // default max
-                   1.,                  // default val
-                   0.001)
+                   "Transpositions",   // slider name
+                   -12,                // min
+                   12,                 // max
+                   -12,                // default min
+                   12,                 // default max
+                   0,                  // default val
+                   0.01)               // increment
+    //-12, 12, -12, 12, 0, 0.01
     {             // increment
         image_component_ = std::make_shared<OpenGlImageComponent>();
         setLookAndFeel(DefaultLookAndFeel::instance());
@@ -36,12 +37,12 @@ public:
     OpenGlTranspositionSlider() :
                                                            OpenGlAutoImageComponent<BKStackedSlider>(
                                                                "Transpositions",    // slider name
-                                                               0.,                  // min
-                                                               10.,                 // max
-                                                               0.,                  // default min
-                                                               10.,                 // default max
-                                                               1.,                  // default val
-                                                               0.001)
+                                                               -12,                 // min
+                                                               12,                  // max
+                                                               -12,                 // default min
+                                                               12,                  // default max
+                                                               0,                   // default val
+                                                               0.01)                // increment
     {             // increment
         image_component_ = std::make_shared<OpenGlImageComponent>();
         setLookAndFeel(DefaultLookAndFeel::instance());

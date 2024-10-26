@@ -278,6 +278,7 @@ void BKStackedSlider::mouseDown (const juce::MouseEvent &event)
 
 void BKStackedSlider::mouseDrag(const juce::MouseEvent& e)
 {
+    //DBG("BKStacked Slider: mouseDrag");
     if(!mouseJustDown)
     {
         juce::Slider* currentSlider = dataSliders.operator[](clickedSlider);
@@ -290,11 +291,11 @@ void BKStackedSlider::mouseDrag(const juce::MouseEvent& e)
             }
             else {
                 currentSlider->setValue(topSlider->getValue(), juce::sendNotification);
+                DBG("slider val = " + juce::String(topSlider->getValue()));
             }
         }
     }
     else mouseJustDown = false;
-
 }
 
 void BKStackedSlider::mouseUp(const juce::MouseEvent& e)
