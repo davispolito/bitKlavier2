@@ -150,49 +150,6 @@ void DirectProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::Midi
     state.getParameterListeners().callAudioThreadBroadcasters();
 #endif
 
-    /**
-     * do transpositions here
-     * noteOn will generate multiple noteOns, which must be saved and associated with the original noteOn
-     *      so that the corresponding noteOff can trigger noteOff for all the transposed notes
-     *
-     * will need to remove the original noteOn if there is only one currentTransposition value and it's not set to 1.
-     * otherwise, add noteOn messages for every additional currentTransposition
-     *
-     * noteOff will need to send multiple noteOffs
-     *
-     * also need to make sure that interim changes to transpositionsByNoteOnNumber don't leave already playing notes hanging...
-     *
-     * NO: move all this to BKSynthesizer noteOn and noteOff
-     */
-     /*
-    if(transpositionsByNoteOnNumber.size() > 0 )
-    // add || transpositionNotesPlaying == true, where this indicates that some transp notes are playing and might need to be stopped
-    {
-        for (auto mi : midiMessages)
-        {
-            auto message = mi.getMessage();
-
-            //        DBG(bitklavier::printMidi(message, "direct"));
-            //        state.params.doForAllParameters([this](auto& param, size_t) {
-            //           param.printDebug();
-            //           });
-
-            for (auto transpArray : transpositionsByNoteOnNumber)
-            {
-                juce::approximatelyEqual(0.1, 0.13);
-                if(transpArray.size() == 1)
-                {
-                    // remove current noteOn and replace with new one
-                }
-                else
-                {
-                    // add these, leaving all the current ones
-                }
-            }
-        }
-    }
-      */
-
     buffer.clear(); // always top of the chain as an instrument source; doesn't take audio in
 
     if (mainSynth.getNumSounds() > 0)

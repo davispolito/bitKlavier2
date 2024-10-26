@@ -241,9 +241,7 @@ void DirectPreparation::DirectPopup::resized() {
 
     transpositionSlider->setBounds(column1, row1, sliderWidth, sliderHeight);
     transpositionSlider->setBounds(0, 30, 400, 200);
-    transpositionSlider->toFront(false);
     transpositionSlider->redoImage();
-    transpositionSlider->repaint();
 
     redoImage();
     SynthSection::resized();

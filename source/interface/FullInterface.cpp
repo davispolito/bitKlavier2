@@ -99,7 +99,7 @@ FullInterface::FullInterface(SynthGuiData* synth_data) : SynthSection("full_inte
    open_gl_context_.setSwapInterval(0);
    open_gl_context_.setRenderer(this);
    //componentpaintingenabled fixes flickering
-   open_gl_context_.setComponentPaintingEnabled(false);
+   open_gl_context_.setComponentPaintingEnabled(true); // set to true, and the non-OpenGL components will draw
    open_gl_context_.attachTo(*this);
 
    ///startTimer(100);
