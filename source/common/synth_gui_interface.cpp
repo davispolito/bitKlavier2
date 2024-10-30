@@ -27,12 +27,12 @@ SynthGuiData::SynthGuiData(SynthBase* synth_base) : synth(synth_base),
                                                      um(synth_base->getUndoManager())
 
 {
-    //tree = synth->getValueTree();
+    //tree = mainSynth->getValueTree();
 //    um = synth_base->getUndoManager();
 }
 #if HEADLESS
 
-SynthGuiInterface::SynthGuiInterface(SynthBase* synth, bool use_gui) : synth_(synth) { }
+SynthGuiInterface::SynthGuiInterface(SynthBase* mainSynth, bool use_gui) : synth_(mainSynth) { }
 SynthGuiInterface::~SynthGuiInterface() { }
 void SynthGuiInterface::updateFullGui() { }
 void SynthGuiInterface::updateGuiControl(const std::string& name, bitklavier::mono_float value) { }
@@ -76,8 +76,16 @@ void SynthGuiInterface::updateFullGui() {
 //  gui_->setAllValues(synth_->getControls());
   gui_->reset();
 }
+ OpenGlWrapper* SynthGuiInterface::getOpenGlWrapper() {
+    return &gui_->open_gl_;
+}
 
+void SynthGuiInterface::updateGuiControl(const std::string& name, bitklavier::mono_float value) {
+    if (gui_ == nullptr)
+        return;
 
+//  gui_->setValue(name, value, NotificationType::dontSendNotification);
+}
 //void SynthGuiInterface::notifyModulationsChanged() {
 //  gui_->modulationChanged();
 //}

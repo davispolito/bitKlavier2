@@ -8,6 +8,12 @@ BKSynthesiser::BKSynthesiser()
 {
     for (int i = 0; i < juce::numElementsInArray (lastPitchWheelValues); ++i)
         lastPitchWheelValues[i] = 0x2000;
+
+    // init ADSR
+    globalADSR.attack = 0.005f;
+    globalADSR.decay = 0.0f;
+    globalADSR.sustain = 1.0f;
+    globalADSR.release = 0.1f;
 }
 
 BKSynthesiser::~BKSynthesiser()
@@ -184,13 +190,30 @@ void BKSynthesiser::handleMidiEvent (const juce::MidiMessage& m)
 {
     const int channel = m.getChannel();
 
+    /**
+     * regarding keyReleaseSynths:
+     * in most cases, this operates as expected
+     *
+     * for a synth that is in keyRelease mode, however, the function of noteOn and noteOff releases are reversed
+     *
+     * note that this is separate from the "invert noteOn/Off" modality in KeyMap, which could effectively
+     * reverse this already reversed behaviour!
+     */
     if (m.isNoteOn())
     {
-        noteOn (channel, m.getNoteNumber(), m.getVelocity());
+        if(pedalSynth) return;
+        if (!keyReleaseSynth)
+            noteOn (channel, m.getNoteNumber(), m.getVelocity());
+        else
+            noteOff (channel, m.getNoteNumber(), m.getVelocity(), true);
     }
     else if (m.isNoteOff())
     {
-        noteOff (channel, m.getNoteNumber(), m.getVelocity(), true);
+        if(pedalSynth) return;
+        if (keyReleaseSynth)
+            noteOn (channel, m.getNoteNumber(), m.getVelocity());
+        else
+            noteOff (channel, m.getNoteNumber(), m.getVelocity(), true);
     }
     else if (m.isAllNotesOff() || m.isAllSoundOff())
     {
@@ -227,8 +250,10 @@ void BKSynthesiser::noteOn (const int midiChannel,
 {
     const juce::ScopedLock sl (lock);
 
+    // DBG("num noteOn sounds = " + juce::String(sounds->size()));
     for (auto* sound : *sounds)
     {
+        //DBG("noteOn velocity = " + juce::String(velocity));
         if (sound->appliesToNote (midiNoteNumber) && sound->appliesToChannel (midiChannel) && sound->appliesToVelocity(velocity))
         {
             // If hitting a note that's still ringing, stop it first (it could be
@@ -236,6 +261,7 @@ void BKSynthesiser::noteOn (const int midiChannel,
             for (auto* voice : voices)
                 if (voice->getCurrentlyPlayingNote() == midiNoteNumber && voice->isPlayingChannel (midiChannel))
                     stopVoice (voice, 1.0f, true);
+
             startVoice (findFreeVoice (sound, midiChannel, midiNoteNumber, shouldStealNotes),
                         sound, midiChannel, midiNoteNumber, velocity);
             break;
@@ -254,6 +280,7 @@ void BKSynthesiser::startVoice (BKSamplerVoice* const voice,
         if (voice->currentlyPlayingSound != nullptr)
             voice->stopNote (0.0f, false);
         voice->copyAmpEnv(globalADSR);
+        voice->setGain(synthGain);
         voice->currentlyPlayingNote = midiNoteNumber;
         voice->currentPlayingMidiChannel = midiChannel;
         voice->noteOnTime = ++lastNoteOnCounter;
@@ -262,7 +289,7 @@ void BKSynthesiser::startVoice (BKSamplerVoice* const voice,
         voice->setSostenutoPedalDown (false);
         voice->setSustainPedalDown (sustainPedalsDown[midiChannel]);
 
-        voice->startNote (midiNoteNumber, velocity * (1.0f / 127.0f), sound,
+        voice->startNote (midiNoteNumber, velocity, sound,
                           lastPitchWheelValues [midiChannel - 1]);
     }
 }
@@ -366,31 +393,57 @@ void BKSynthesiser::handleChannelPressure (int midiChannel, int channelPressureV
 
 void BKSynthesiser::handleSustainPedal (int midiChannel, bool isDown)
 {
+    DBG("BKSynthesiser::handleSustainPedal");
     jassert (midiChannel > 0 && midiChannel <= 16);
     const juce::ScopedLock sl (lock);
 
     if (isDown)
     {
-        sustainPedalsDown.setBit (midiChannel);
-
-        for (auto* voice : voices)
-            if (voice->isPlayingChannel (midiChannel) && voice->isKeyDown())
-                voice->setSustainPedalDown (true);
-    }
-    else
-    {
-        for (auto* voice : voices)
+        if (pedalSynth) // only do this if this is a sustainPedal synth
         {
-            if (voice->isPlayingChannel (midiChannel))
-            {
-                voice->setSustainPedalDown (false);
-
-                if (! (voice->isKeyDown() || voice->isSostenutoPedalDown()))
-                    stopVoice (voice, 1.0f, true);
+            DBG("pressing sustain pedal");
+            if (!sustainPedalAlreadyDown){
+                // play pedal down sample here
+                sustainPedalAlreadyDown = true;
+                noteOn(midiChannel, 65, 64); // 64 for pedal down. velocity?
             }
         }
 
-        sustainPedalsDown.clearBit (midiChannel);
+        else { // regular synth
+            sustainPedalsDown.setBit (midiChannel);
+
+            for (auto* voice : voices)
+                if (voice->isPlayingChannel (midiChannel) && voice->isKeyDown())
+                    voice->setSustainPedalDown (true);
+        }
+    }
+    else
+    {
+        if (pedalSynth)
+        {
+            if(sustainPedalAlreadyDown)
+            {
+                DBG("releasing sustain pedal");
+                // play pedal up sample here
+                noteOff(midiChannel, 65, 64, true); // turn off sustain pedal down sample, which can be long
+                noteOn(midiChannel, 66, 64); // 65 for pedal up
+            }
+            sustainPedalAlreadyDown = false;
+        }
+
+        else {
+            for (auto* voice : voices)
+            {
+                if (voice->isPlayingChannel (midiChannel))
+                {
+                    voice->setSustainPedalDown (false);
+
+                    if (! (voice->isKeyDown() || voice->isSostenutoPedalDown()))
+                        stopVoice (voice, 1.0f, true);
+                }
+            }
+            sustainPedalsDown.clearBit (midiChannel);
+        }
     }
 }
 
@@ -518,7 +571,7 @@ BKSamplerVoice* BKSynthesiser::findVoiceToSteal (BKSamplerSound<juce::AudioForma
     // We've only got "protected" voices now: lowest note takes priority
     jassert (low != nullptr);
 
-    // Duophonic synth: give priority to the bass note:
+    // Duophonic mainSynth: give priority to the bass note:
     if (top != nullptr)
         return top;
 

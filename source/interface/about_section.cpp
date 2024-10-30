@@ -41,7 +41,7 @@ AboutSection::AboutSection(const juce::String& name) : Overlay(name), body_(new 
     addOpenGlComponent (name_text_);
     name_text_->setFontType (PlainTextComponent::kRegular);
     name_text_->setTextSize (40.0f);
-    version_text_ = std::make_shared<PlainTextComponent> ("version", juce::String ("version  ") + "bitklavier2");//ProjectInfo::versionString);
+    version_text_ = std::make_shared<PlainTextComponent> ("version", juce::String ("version  ") + "bitklavier");//ProjectInfo::versionString);
     addOpenGlComponent (version_text_);
     version_text_->setFontType (PlainTextComponent::kLight);
     version_text_->setTextSize (12.0f);

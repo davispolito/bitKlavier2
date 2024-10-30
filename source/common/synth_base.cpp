@@ -378,7 +378,7 @@ void SynthBase::ValueChangedCallback::messageCallback() {
   if (auto synth_base = listener.lock()) {
     SynthGuiInterface* gui_interface = (*synth_base)->getGuiInterface();
     if (gui_interface) {
-      //gui_interface->updateGuiControl(control_name, value);
+      gui_interface->updateGuiControl(control_name, value);
       if (control_name != "pitch_wheel")
         gui_interface->notifyChange();
     }

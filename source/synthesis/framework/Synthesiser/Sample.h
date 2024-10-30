@@ -19,6 +19,7 @@
 #include <juce_audio_formats/juce_audio_formats.h>
 //#ifdef DEBUG
 #include "common.h"
+#include "utils.h"
 
 //#endif
 //==============================================================================
@@ -57,10 +58,6 @@ public:
 
         //upsample(8);
     }
-
-
-
-
 
 //    Sample(std::vector<std::vector<float>> soundData, double sr) : m_sourceSampleRate{ sr },
 //        m_length((int)soundData.at(0).size()) {
@@ -217,14 +214,6 @@ template<typename T>
 class BKSamplerSound :  public juce::SynthesiserSound
 {
 public:
-    static double mtof( double f )
-    {
-        if( f <= -1500 ) return (0);
-        else if( f > 1499 ) return (mtof(1499));
-            // else return (8.17579891564 * exp(.0577622650 * f));
-            // TODO: optimize
-        else return ( pow(2, (f - 69) / 12.0) * 440.0 );
-    }
 
 
     BKSamplerSound( const juce::String& soundName,
@@ -234,12 +223,12 @@ public:
                     int transpose,
                     const juce::BigInteger& midiVelocities,
                     int numLayers,
-                    int layerId,
+                    //int layerId,
                     float dBFSBelow
                     ) :
                     dBFSBelow(dBFSBelow),
-                    numLayers(numLayers),
-                    layerId(layerId),
+                    numLayers(numLayers), // i don't think we need this argument anymore
+                    //layerId(layerId),
                     rootMidiNote(rootMidiNote),
                     transpose(transpose),
                     midiNotes(midiNotes),
@@ -249,30 +238,34 @@ public:
         // Print the class name and action
         DBG("Create BKSamplerSound");
 
+        setCentreFrequencyInHz(mtof(rootMidiNote));
         dBFSLevel = sample->getRMS();
 
         // Print the standard values
-        DBG("soundName: " + soundName);
-        DBG("Sample Pointer: " + juce::String((uintptr_t)sample.get()));
-        DBG("rootMidiNote: " + juce::String(rootMidiNote));
-        DBG("transpose: " + juce::String(transpose));
-        DBG("numLayers: " + juce::String(numLayers));
-        DBG("layerId: " + juce::String(layerId));
-        DBG("dbfsLevel: " + juce::String(dBFSLevel));
-        DBG("dbfsBelow: " + juce::String(dBFSBelow));
+        //DBG("soundName: " + soundName);
+        //DBG("Sample Pointer: " + juce::String((uintptr_t)sample.get()));
+        //DBG("rootMidiNote: " + juce::String(rootMidiNote));
+        //DBG("transpose: " + juce::String(transpose));
+        //DBG("numLayers: " + juce::String(numLayers));
+        //DBG("layerId: " + juce::String(layerId));
+        //DBG("dbfsLevel: " + juce::String(dBFSLevel));
+        //DBG("dbfsBelow: " + juce::String(dBFSBelow));
 
         // Print the highest bit and bit count for midiNotes
         int midiNotesHighestBit = midiNotes.getHighestBit();
         int midiNotesBitCount = midiNotes.countNumberOfSetBits();
-        DBG("midiNotes Highest Bit: " + juce::String(midiNotesHighestBit));
-        DBG("midiNotes Bit Count: " + juce::String(midiNotesBitCount));
+        //DBG("midiNotes Highest Bit: " + juce::String(midiNotesHighestBit));
+        //DBG("midiNotes Bit Count: " + juce::String(midiNotesBitCount));
 
         // Print the highest bit and bit count for midiVelocities
-        int midiVelocitiesHighestBit = midiVelocities.getHighestBit();
-        int midiVelocitiesBitCount = midiVelocities.countNumberOfSetBits();
-        DBG("midiVelocities Highest Bit: " + juce::String(midiVelocitiesHighestBit));
-        DBG("midiVelocities Bit Count: " + juce::String(midiVelocitiesBitCount));
-        setCentreFrequencyInHz(mtof(rootMidiNote));
+        //int midiVelocitiesHighestBit = midiVelocities.getHighestBit();
+        //int midiVelocitiesBitCount = midiVelocities.countNumberOfSetBits();
+
+        //DBG("midiVelocities Highest Bit: " + juce::String(midiVelocitiesHighestBit));
+        //DBG("midiVelocities Bit Count: " + juce::String(midiVelocitiesBitCount));
+        //DBG("min Velocity " + juce::String(minVelocity()));
+        //DBG("max Velocity " + juce::String(maxVelocity()));
+
 
 
     }
@@ -327,13 +320,29 @@ public:
         return loopMode;
     }
 
+    // find the bounding velocities for this sound
+    int minVelocity (void) { return midiVelocities.findNextSetBit(0); }
+    int maxVelocity (void) { return midiVelocities.findNextClearBit(midiVelocities.findNextSetBit(0)); }
+
+    // use the velocity to set a gain multiplier
+    //  - if the velocity is at the top velocity range for this layer, then this will return 1.
+    //  - if the velocity is at the bottom velocity range for this layer, it will return a value that
+    //      should result in a dBFS equivalent to the max loudness of the layer below (dBFSBelow)
+    float getGainMultiplierFromVelocity(float velocity) // velocity [0, 127]
+    {
+        //DBG("layer dB size = " + juce::String(dBFSLevel - dBFSBelow));
+        float dbOffset = (dBFSLevel - dBFSBelow) * (velocity - maxVelocity()) / (maxVelocity() - minVelocity());
+        return juce::Decibels::decibelsToGain(dbOffset);
+    }
+
     void setEnvelopeParameters (juce::ADSR::Parameters parametersToUse)    { params = parametersToUse; }
     /** The class is reference-counted, so this is a handy pointer class for it. */
     typedef juce::ReferenceCountedObjectPtr<BKSamplerSound<T>> Ptr;
+
     float dBFSLevel; // dBFS value of this velocity layer
-    float dBFSBelow; //// dBFS value of velocity layer below this layer
-    int numLayers;
-    int layerId;
+    float dBFSBelow; // dBFS value of velocity layer below this layer
+    int numLayers; // don't think we need this...
+    //int layerId;
     int rootMidiNote;
     int transpose;
 private:
@@ -406,7 +415,7 @@ public:
 
         If allowTailOff is false or the voice doesn't want to tail-off, then it must stop all
         sound immediately, and must call clearCurrentNote() to reset the state of this voice
-        and allow the synth to reassign it another sound.
+        and allow the mainSynth to reassign it another sound.
 
         If allowTailOff is true and the voice decides to do a tail-off, then it's allowed to
         begin fading out its sound, and it can stop playing until it's finished. As soon as it
@@ -468,7 +477,7 @@ public:
         The rate is set so that subclasses know the output rate and can set their pitch
         accordingly.
 
-        This method is called by the synth, and subclasses can access the current rate with
+        This method is called by the mainSynth, and subclasses can access the current rate with
         the currentSampleRate member.
     */
     virtual void setCurrentPlaybackSampleRate (double newRate);
@@ -573,7 +582,7 @@ public:
             /*: samplerSound(std::move(sound))*/
     {
         //jassert(samplerSound != nullptr);
-        ampEnv.setParameters(juce::ADSR::Parameters(0.1, 1.0,1.0,1.0));
+        ampEnv.setParameters(juce::ADSR::Parameters(0.005, 0.5,1.0,0.1));
         m_Buffer.setSize(2, 1, false, true, false);
     }
 
@@ -605,16 +614,22 @@ public:
     }
 
     virtual void startNote (int midiNoteNumber,
-                           float velocity,
+                            float velocity,
                             BKSamplerSound<juce::AudioFormatReader> * _sound,
-                           int currentPitchWheelPosition)
+                            int currentPitchWheelPosition)
     {
         samplerSound = _sound;
         currentlyPlayingSound = _sound;
         currentlyPlayingNote = midiNoteNumber;
-        level.setTargetValue(velocity * 40);
+
+        // this will adjust the loudness of this layer according to velocity, based on the
+        //      dB difference between this layer and the layer below
+        level.setTargetValue(samplerSound->getGainMultiplierFromVelocity(velocity) * voiceGain); // need gain setting for each synth
+        //DBG("gain from velocity = " + juce::String(velocity) + ":" + juce::String(samplerSound->getGainMultiplierFromVelocity(velocity)));
+
         frequency.setTargetValue(mtof(midiNoteNumber));
         //melatonin::printSparkline(m_Buffer);
+
         auto loopPoints = samplerSound->getLoopPointsInSeconds();
         loopBegin.setTargetValue(loopPoints.getStart() * samplerSound->getSample()->getSampleRate());
         loopEnd.setTargetValue(loopPoints.getEnd() * samplerSound->getSample()->getSampleRate());
@@ -626,15 +641,27 @@ public:
 
     virtual void stopNote (float velocity, bool allowTailOff)
     {
+        if (allowTailOff)
+        {
+            ampEnv.noteOff();
+            tailOff = 1.;
+        }
+        else
+            stopNote();
 
-        ampEnv.noteOff();
-
+        /*
+         * for some reason this was causing clicking when replaying a note with a long release time over and over
         if (allowTailOff && juce::approximatelyEqual (tailOff, 0.0))
             tailOff = 1.0;
         else
             stopNote();
+            */
     }
 
+    void setGain(float g)
+    {
+        voiceGain = g;
+    }
 
     void renderNextBlock(juce::AudioBuffer<float>& outputBuffer,
                          int startSample,
@@ -866,13 +893,14 @@ private:
     //juce::AudioProcessorValueTreeState& valueTreeState;  // from the SamplerAudioProcessor
 
     BKSamplerSound<juce::AudioFormatReader>* samplerSound;
+    float voiceGain {1.};
     juce::SmoothedValue<double> level { 0 };
-    juce::SmoothedValue<double> frequency{ 0 };
+    juce::SmoothedValue<double> frequency { 0 };
     juce::SmoothedValue<double> loopBegin;
     juce::SmoothedValue<double> loopEnd;
     double previousPressure { 0 };
-    double currentSamplePos{ 0 };
-    double tailOff{ 0 };
+    double currentSamplePos { 0 };
+    double tailOff { 0 };
     Direction currentDirection{ Direction::forward };
     double smoothingLengthInSeconds{ 0.01 };
 
