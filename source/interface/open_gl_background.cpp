@@ -20,7 +20,7 @@
 #include "../synthesis/framework/common.h"
 #include "look_and_feel/shaders.h"
 
-OpenGlBackground::OpenGlBackground() : image_shader_(nullptr), vertices_() {
+OpenGlBackground::OpenGlBackground() : component_(nullptr),image_shader_(nullptr), vertices_() {
   new_background_ = false;
   vertex_buffer_ = 0;
   triangle_buffer_ = 0;
@@ -105,6 +105,10 @@ void OpenGlBackground::disableAttributes(juce::OpenGLContext& open_gl_context) {
 
 void OpenGlBackground::render(OpenGlWrapper& open_gl) {
   mutex_.lock();
+  if( component_!=nullptr)
+  {
+      OpenGlComponent::setViewPort(component_, component_->getLocalBounds(),open_gl) ;
+  }
   if ((new_background_ || background_.getWidth() == 0) && background_image_.getWidth() > 0) {
     new_background_ = false;
     background_.loadImage(background_image_);

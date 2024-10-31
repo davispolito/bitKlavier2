@@ -24,7 +24,6 @@
 #include "FullInterface.h"
 
 #include "chowdsp_parameters/ParamUtils/chowdsp_ParameterTypes.h"
-#include "chowdsp_plugin_state/Backend/chowdsp_PluginState.h"
 #include "synth_gui_interface.h"
 #include "synth_section.h"
 
@@ -604,63 +603,62 @@ void SynthSlider::drawShadow(juce::Graphics &g) {
 }
 
 void SynthSlider::drawRotaryShadow(juce::Graphics &g) {
-  juce::Colour shadow_color = findColour(Skin::kShadow, true);
+    juce::Colour shadow_color = findColour(Skin::kShadow, true);
+    int width = getWidth();
+    int height = getHeight();
+    float center_x = (float)width / 2.0f;
+    float center_y = (float)height / 2.0f;
+    float stroke_width = findValue(Skin::kKnobArcThickness);
+    float radius = knob_size_scale_ * findValue(Skin::kKnobArcSize) / 2.0f;
+    center_y += findValue(Skin::kKnobOffset);
+    float shadow_width = findValue(Skin::kKnobShadowWidth);
+    float shadow_offset = findValue(Skin::kKnobShadowOffset);
 
-  float center_x = getWidth() / 2.0f;
-  float center_y = getHeight() / 2.0f;
-  float stroke_width = findValue(Skin::kKnobArcThickness);
-  float radius = knob_size_scale_ * findValue(Skin::kKnobArcSize) / 2.0f;
-  center_y += findValue(Skin::kKnobOffset);
-  float shadow_width = findValue(Skin::kKnobShadowWidth);
-  float shadow_offset = findValue(Skin::kKnobShadowOffset);
+    juce::PathStrokeType outer_stroke(stroke_width, juce::PathStrokeType::beveled, juce::PathStrokeType::rounded);
+    juce::PathStrokeType shadow_stroke(stroke_width + 1, juce::PathStrokeType::beveled, juce::PathStrokeType::rounded);
 
-  juce::PathStrokeType outer_stroke(stroke_width, juce::PathStrokeType::beveled, juce::PathStrokeType::rounded);
-  juce::PathStrokeType shadow_stroke(stroke_width + 1, juce::PathStrokeType::beveled, juce::PathStrokeType::rounded);
+    g.saveState();
+    g.fillRect(getX(), getY(), width, height);
+    g.setOrigin(getX(), getY());
+    juce::Colour body = findColour(Skin::kRotaryBody, true);
+    float body_radius = knob_size_scale_ * findValue(Skin::kKnobBodySize) / 2.0f;
+    if (body_radius >= 0.0f && body_radius < width) {
 
-  g.saveState();
-  g.setOrigin(getX(), getY());
+        if (shadow_width > 0.0f) {
+            juce::Colour transparent_shadow = shadow_color.withAlpha(0.0f);
+            float shadow_radius = body_radius + shadow_width;
+            juce::ColourGradient shadow_gradient(shadow_color, center_x, center_y + shadow_offset,
+                                           transparent_shadow, center_x - shadow_radius, center_y + shadow_offset, true);
+            float shadow_start = std::max(0.0f, (body_radius - std::abs(shadow_offset))) / shadow_radius;
+            shadow_gradient.addColour(shadow_start, shadow_color);
+            shadow_gradient.addColour(1.0f - (1.0f - shadow_start) * 0.75f, shadow_color.withMultipliedAlpha(0.5625f));
+            shadow_gradient.addColour(1.0f - (1.0f - shadow_start) * 0.5f, shadow_color.withMultipliedAlpha(0.25f));
+            shadow_gradient.addColour(1.0f - (1.0f - shadow_start) * 0.25f, shadow_color.withMultipliedAlpha(0.0625f));
+            g.setGradientFill(shadow_gradient);
+            g.fillRect(getLocalBounds());
+        }
 
-  juce::Colour body = findColour(Skin::kRotaryBody, true);
-  float body_radius = knob_size_scale_ * findValue(Skin::kKnobBodySize) / 2.0f;
-  if (body_radius >= 0.0f && body_radius < getWidth()) {
+        g.setColour(body);
+        juce::Rectangle<float> ellipse(center_x - body_radius, center_y - body_radius, 2.0f * body_radius, 2.0f * body_radius);
+        g.fillEllipse(ellipse);
 
-    if (shadow_width > 0.0f) {
-      juce::Colour transparent_shadow = shadow_color.withAlpha(0.0f);
-      float shadow_radius = body_radius + shadow_width;
-      juce::ColourGradient shadow_gradient(shadow_color, center_x, center_y + shadow_offset,
-                                     transparent_shadow, center_x - shadow_radius, center_y + shadow_offset, true);
-      float shadow_start = std::max(0.0f, (body_radius - std::abs(shadow_offset))) / shadow_radius;
-      shadow_gradient.addColour(shadow_start, shadow_color);
-      shadow_gradient.addColour(1.0f - (1.0f - shadow_start) * 0.75f, shadow_color.withMultipliedAlpha(0.5625f));
-      shadow_gradient.addColour(1.0f - (1.0f - shadow_start) * 0.5f, shadow_color.withMultipliedAlpha(0.25f));
-      shadow_gradient.addColour(1.0f - (1.0f - shadow_start) * 0.25f, shadow_color.withMultipliedAlpha(0.0625f));
-      g.setGradientFill(shadow_gradient);
-      g.fillRect(getLocalBounds());
+        g.setColour(findColour(Skin::kRotaryBodyBorder, true));
+        g.drawEllipse(ellipse.reduced(0.5f), 1.0f);
     }
 
-    g.setColour(body);
-    //juce::Rectangle<float> ellipse(center_x - body_radius, center_y - body_radius, 2.0f * body_radius, 2.0f * body_radius);
-      juce::Rectangle<float> ellipse(0, 0, 300,300);
+    juce::Path shadow_outline;
+    juce::Path shadow_path;
 
-    g.fillEllipse(ellipse);
+    shadow_outline.addCentredArc(center_x, center_y, radius, radius,
+                                 0, -kRotaryAngle, kRotaryAngle, true);
+    shadow_stroke.createStrokedPath(shadow_path, shadow_outline);
+    if ((!findColour(Skin::kRotaryArcUnselected, true).isTransparent() && isActive()) ||
+        (!findColour(Skin::kRotaryArcUnselectedDisabled, true).isTransparent() && !isActive())) {
+        g.setColour(shadow_color);
+        g.fillPath(shadow_path);
+    }
 
-    g.setColour(findColour(Skin::kRotaryBodyBorder, true));
-    g.drawEllipse(ellipse.reduced(0.5f), 1.0f);
-  }
-
-  juce::Path shadow_outline;
-  juce::Path shadow_path;
-
-  shadow_outline.addCentredArc(center_x, center_y, radius, radius,
-                               0, -kRotaryAngle, kRotaryAngle, true);
-  shadow_stroke.createStrokedPath(shadow_path, shadow_outline);
-  if ((!findColour(Skin::kRotaryArcUnselected, true).isTransparent() && isActive()) ||
-      (!findColour(Skin::kRotaryArcUnselectedDisabled, true).isTransparent() && !isActive())) {
-    g.setColour(shadow_color); 
-    g.fillPath(shadow_path);
-  }
-
-  g.restoreState();
+    g.restoreState();
 }
 
 void SynthSlider::setDefaultRange() {

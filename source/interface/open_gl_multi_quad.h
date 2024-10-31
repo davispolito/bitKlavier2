@@ -41,6 +41,7 @@ public:
   void resized() override
   {
     OpenGlComponent::resized();
+    OpenGlComponent::resized();
     dirty_ = true;
   }
 

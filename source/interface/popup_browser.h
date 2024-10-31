@@ -63,8 +63,22 @@ private:
 class PreparationPopup : public SynthSection {
 public:
     PreparationPopup();
-    void paintBackground(juce::Graphics& g) override { }
+    void paintBackground(juce::Graphics& g) override {SynthSection::paintContainer(g);
+        paintHeadingText(g);
+        paintBorder(g);
+        paintKnobShadows(g);
+        paintChildrenBackgrounds(g); }
     void paintBackgroundShadow(juce::Graphics& g) override { }
+    void repaintPrepBackground()
+    {
+        background_->lock();
+        background_image_ = juce::Image(juce::Image::RGB, getWidth(),getHeight(), true);
+        juce::Graphics g(background_image_);
+        paintChildBackground(g, prep_view.get());
+        background_->updateBackgroundImage(background_image_);
+        background_->unlock();
+    }
+
     void resized() override;
 
     void setContent(std::shared_ptr<SynthSection>);
@@ -97,9 +111,9 @@ private:
     std::shared_ptr<OpenGlShapeButton> exit_button_;
     std::shared_ptr<OpenGlQuad> body_;
     std::shared_ptr<OpenGlQuad> border_;
-
+    std::shared_ptr<OpenGlBackground> background_;
     std::shared_ptr<SynthSection> prep_view;
-
+    juce::Image background_image_;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PreparationPopup)
 };
 

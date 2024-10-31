@@ -307,11 +307,11 @@ void ConstructionSite::mouseDown (const juce::MouseEvent& eo)
     if (itemToSelect == nullptr)
     {
         preparationSelector.getLassoSelection().deselectAll();
-        DBG ("mousedown empty space");
+        //DBG ("mousedown empty space");
     }
     else
     {
-        DBG ("mousedown on object");
+       // DBG ("mousedown on object");
     }
     addChildComponent (selectorLasso);
     selectorLasso.beginLasso (e, &preparationSelector);
@@ -481,7 +481,7 @@ void ConstructionSite::mouseDown (const juce::MouseEvent& eo)
 void ConstructionSite::mouseUp (const juce::MouseEvent& eo)
 {
     //inLasso = false;
-    DBG ("mouseupconst");
+    //DBG ("mouseupconst");
     selectorLasso.endLasso();
     removeChildComponent (&selectorLasso);
     if (edittingComment)

@@ -35,7 +35,7 @@ LogoSection::LogoSection() : SynthSection("logo_section") {
 }
 
 void LogoSection::resized() {
-  int logo_padding_y = kLogoPaddingY * size_ratio_;
+  int logo_padding_y = kLogoPaddingY;
   int logo_height = getHeight() - 2 * logo_padding_y;
   int logo_padding_x = (getWidth() - logo_height) / 2;
   if (logo_button_)
@@ -93,67 +93,7 @@ HeaderSection::HeaderSection() : SynthSection("header_section"), tab_offset_(0),
     loadButton->setButtonText("load");
     loadButton->setLookAndFeel(TextLookAndFeel::instance());
     loadButton->addListener(this);
-//  tab_selector_ = std::make_unique<TabSelector>("tab_selector");
-//  tab_selector_ = std::make_unique<TabSelector>("tab_selector");
-//  tab_selector_ = std::make_unique<TabSelector>("tab_selector");
-//  addAndMakeVisible(tab_selector_.get());
-//  addOpenGlComponent(tab_selector_->getImageComponent());
-//  tab_selector_->setSliderStyle(juce::Slider::LinearBar);
-//  tab_selector_->setRange(0, 3);
-//  tab_selector_->addListener(this);
-//  tab_selector_->setNames({"VOICE", "EFFECTS", "MATRIX", "ADVANCED"});
-//  tab_selector_->setScrollWheelEnabled(false);
 
-//  synth_preset_selector_ = std::make_unique<SynthPresetSelector>();
-//  addSubSection(synth_preset_selector_.get());
-//  synth_preset_selector_->addListener(this);
-
-  
-//  volume_section_ = std::make_unique<VolumeSection>("VOLUME");
-//  addSubSection(volume_section_.get());
-//
-//  oscilloscope_ = std::make_unique<Oscilloscope>();
-//  addOpenGlComponent(oscilloscope_.get());
-//
-//  spectrogram_ = std::make_unique<Spectrogram>();
-//  addOpenGlComponent(spectrogram_.get());
-//  spectrogram_->setVisible(false);
-//  spectrogram_->paintBackgroundLines(false);
-//  spectrogram_->setMinDb(-40.0f);
-//  spectrogram_->setMaxDb(0.0f);
-//
-//  view_spectrogram_ = std::make_unique<SynthButton>("view_spectrogram");
-//  addButton(view_spectrogram_.get());
-//  view_spectrogram_->getGlComponent()->setVisible(false);
-
-//  exit_temporary_button_ = std::make_unique<OpenGlShapeButton>("Exit");
-//  addChildComponent(exit_temporary_button_.get());
-//  addOpenGlComponent(exit_temporary_button_->getGlComponent());
-//  exit_temporary_button_->addListener(this);
-//  exit_temporary_button_->setShape(Paths::exitX());
-//
-//  temporary_tab_ = std::make_unique<PlainTextComponent>("Temporary", "");
-//  addOpenGlComponent(temporary_tab_.get());
-//  temporary_tab_->setFontType(PlainTextComponent::kLight);
-//  temporary_tab_->setJustification(juce::Justification::centredLeft);
-  //inspectButton = std::make_unique<OpenGlToggleButton>("Inspect the UI");
-  //inspectButton->setUiButton(false);
-  //inspectButton->
-  //addAndMakeVisible(inspectButton.get());
-  //addChildComponent(inspectButton.get());
-
-//  addOpenGlComponent(inspectButton->getGlComponent());
-//  inspectButton->setText("Inspect");
-//  // this chunk of code instantiates and opens the melatonin inspector
-//  inspectButton->onClick = [&] {
-//      if (!inspector)
-//      {
-//          inspector = std::make_unique<melatonin::Inspector> (*this);
-//          inspector->onClose = [this]() { inspector.reset(); };
-//      }
-//
-//      inspector->setVisible (true);
-//  };
   setAlwaysOnTop(true);
   setSkinOverride(Skin::kHeader);
 }
@@ -163,31 +103,12 @@ void HeaderSection::paintBackground(juce::Graphics& g) {
     paintChildrenBackgrounds(g);
   g.setColour(findColour(Skin::kBody, true));
   int logo_section_width = 32.0 + getPadding();
-  g.fillRect(0, 0, logo_section_width, getHeight());
+ g.fillRect(0, 0, logo_section_width, getHeight());
 
-    int label_rounding = findValue(Skin::kLabelBackgroundRounding);
-    //g.setColour(findColour(Skin::kTextComponentBackground, true));
-    g.setColour(juce::Colours::white);
-    //g.fillRoundedRectangle(sampleSelector->getBounds().toFloat(), label_rounding);
-    g.fillRect(100, 50, 100, 100);
   paintKnobShadows(g);
 
 
-  //g.saveState();
-//  juce::Rectangle<int> bounds = getLocalArea(synth_preset_selector_.get(), synth_preset_selector_->getLocalBounds());
-//  g.reduceClipRegion(bounds);
-//  g.setOrigin(bounds.getTopLeft());
-  //synth_preset_selector_->paintBackground(g);
-  //g.restoreState();
 
-//  if (LoadSave::doesExpire()) {
-//    juce::String countdown = "Beta expires in: " + juce::String(LoadSave::getDaysToExpire()) + " days";
-//    int countdown_height = volume_section_->getY() + volume_section_->getBuffer();
-//    g.setFont(Fonts::instance()->proportional_regular().withPointHeight(countdown_height / 2.0f));
-//    g.setColour(findColour(Skin::kTextComponentText, true));
-//    g.drawText(countdown, volume_section_->getX(), 0,
-//               volume_section_->getWidth(), countdown_height, juce::Justification::centred);
-//  }
 }
 
 void HeaderSection::resized() {
@@ -208,14 +129,14 @@ void HeaderSection::resized() {
 
     int logo_width = findValue(Skin::kModulationButtonWidth);
     int label_height = findValue(Skin::kLabelBackgroundHeight);
-    logo_section_->setBounds(0, -10, logo_width , height );
-    sampleSelector->setBounds(logo_width  + widget_margin, logo_section_->getBottom()/2, 100, label_height);
+    logo_section_->setBounds(0, 0, logo_width , height );
+    sampleSelector->setBounds(logo_width  + widget_margin, 10, 100, label_height);
     sampleSelectText->setBounds(sampleSelector->getBounds());
     float label_text_height = findValue(Skin::kLabelHeight);
     sampleSelectText->setTextSize(label_text_height);
-    printButton->setBounds(sampleSelector->getX() + 100, sampleSelector->getY(), 100, 50);
-    loadButton->setBounds(printButton->getX() + 100, sampleSelector->getY(), 100, 50);
-    saveButton->setBounds(loadButton->getX() + 100, sampleSelector->getY(), 100, 50);
+    printButton->setBounds(sampleSelector->getX() + 100, sampleSelector->getY(), 80, 20);
+    loadButton->setBounds(printButton->getX() + 100, sampleSelector->getY(),80, 20);
+    saveButton->setBounds(loadButton->getX() + 100, sampleSelector->getY(), 80, 20);
   //int logo_width = findValue(Skin::kModulationButtonWidth);
  // logo_section_->setBounds(large_padding, 0, logo_width, height);
   //inspectButton->setBounds(large_padding, 0, 100, height);

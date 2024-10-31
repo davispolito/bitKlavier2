@@ -288,7 +288,7 @@ void FullInterface::resized() {
    int voice_padding = findValue(Skin::kLargePadding);
 
    int main_x = left + 2 * voice_padding;
-   int top_height = kTopHeight * ratio;
+   int top_height = kTopHeight * display_scale_;
    int section_one_width = 350 * ratio;
    int section_two_width = section_one_width;
    int audio_width = section_one_width + section_two_width + padding;

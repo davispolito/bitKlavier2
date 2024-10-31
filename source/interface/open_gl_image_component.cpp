@@ -30,43 +30,44 @@ OpenGlImageComponent::OpenGlImageComponent(juce::String name) : OpenGlComponent(
 }
 
 void OpenGlImageComponent::redrawImage(bool force, bool clear) {
-   if (!active_)
-       return;
+    if (!active_)
+        return;
+    Component* component = component_ ? component_ : this;
 
-   juce::Component* component = component_ ? component_ : this;
+    float pixel_scale =  juce::Desktop::getInstance().getDisplays().getDisplayForRect(getScreenBounds())->scale;
+    int width = component->getWidth() * pixel_scale;
+    int height = component->getHeight() * pixel_scale;
+    float val = getApproximateScaleFactorForComponent(component);
+    DBG("approx scale " + juce::String(val));
+    DBG("pixel scale" + juce::String(pixel_scale) );
+    if (width <= 0 || height <= 0)
+        return;
 
-   float pixel_scale =2* juce::Desktop::getInstance().getDisplays().getDisplayForRect(getScreenBounds())->scale;
-   int width = component->getWidth() * pixel_scale;
-   int height = component->getHeight() * pixel_scale;
-   if (width <= 0 || height <= 0)
-       return;
+    bool new_image = draw_image_ == nullptr || draw_image_->getWidth() != width || draw_image_->getHeight() != height;
+    if (!new_image && (static_image_ || !force))
+        return;
 
-   bool new_image = draw_image_ == nullptr || draw_image_->getWidth() != width || draw_image_->getHeight() != height;
-   if (!new_image && (static_image_ || !force))
-       return;
+    image_.lock();
 
-   image_.lock();
+    if (new_image)
+        draw_image_ = std::make_unique<juce::Image>(juce::Image::ARGB, width, height, false);
 
-   if (new_image)
-       draw_image_ = std::make_unique<juce::Image>(juce::Image::ARGB, width, height, false);
+    draw_image_->clear(juce::Rectangle<int>(0, 0, width, height));
+    juce::Graphics g(*draw_image_);
+    g.addTransform(juce::AffineTransform::scale(pixel_scale));
+    paintToImage(g);
+    image_.setImage(draw_image_.get());
 
-   draw_image_->clear(juce::Rectangle<int>(0, 0, width, height));
-   juce::Graphics g(*draw_image_);
-   g.addTransform(juce::AffineTransform::scale(pixel_scale));
-   paintToImage(g);
-   image_.setImage(draw_image_.get());
-
-   float gl_width = bitklavier::utils::nextPowerOfTwo(width);
-   float gl_height = bitklavier::utils::nextPowerOfTwo(height);
-   float width_ratio = gl_width / width;
-   float height_ratio = gl_height / height;
-
-   float right = -1.0f + 2.0f * width_ratio;
-   float bottom = 1.0f - 2.0f * height_ratio;
-//   image_.setTopRight(right, 1.0f);
-//   image_.setBottomLeft(-1.0f, bottom);
-//   image_.setBottomRight(right, bottom);
-   image_.unlock();
+    auto gl_width = (float)bitklavier::utils::nextPowerOfTwo(width);
+    auto gl_height = (float)bitklavier::utils::nextPowerOfTwo(height);
+    float width_ratio = gl_width / (float)width;
+    float height_ratio = gl_height / (float)height;
+    float right = -1.0f + pixel_scale * width_ratio;
+    float bottom = 1.0f - pixel_scale * height_ratio;
+//    image_.setTopRight(right, 1.0f);
+//    image_.setBottomLeft(-1.0f, bottom);
+//    image_.setBottomRight(right, bottom);
+    image_.unlock();
 }
 
 void OpenGlImageComponent::init(OpenGlWrapper& open_gl) {

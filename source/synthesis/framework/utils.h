@@ -209,7 +209,7 @@
       return kCentsPerNote * frequencyToMidiNote(frequency);
     }
 
-    force_inline int nextPowerOfTwo(mono_float value) {
+    force_inline int nextPowerOfTwo(float value) {
       return roundf(powf(2.0f, ceilf(logf(value) * kInvLogOf2)));
     }
 

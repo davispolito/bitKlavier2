@@ -1400,12 +1400,13 @@ void DualPopupSelector::newSelection(PopupList* list, int id, int index) {
 PreparationPopup::PreparationPopup() : SynthSection("prep_popup"),
                                        body_(new OpenGlQuad(Shaders::kRoundedRectangleFragment)),
                                        border_(new OpenGlQuad(Shaders::kRoundedRectangleBorderFragment)),
-                                       exit_button_(new OpenGlShapeButton("Exit"))
+                                       exit_button_(new OpenGlShapeButton("Exit")),
+                                       background_(new OpenGlBackground())
                                        {
-
-
-    addOpenGlComponent(body_);
-    addOpenGlComponent(border_);
+                                           addBackgroundComponent(background_.get());
+    //addOpenGlComponent(body_);
+    //addOpenGlComponent(border_);
+    background_->setComponent(this);
     //_border = std::make_unique<OpenGlBorder>(this, nullptr);
 
     //addBackgroundComponent(&background_);
@@ -1437,6 +1438,7 @@ void PreparationPopup::setContent(std::shared_ptr<SynthSection> prep)
     prep_view->setAlwaysOnTop(true);
 
     resized();
+    repaintPrepBackground();
 }
 
 void PreparationPopup::buttonClicked(juce::Button *clicked_button)
@@ -1456,14 +1458,14 @@ void PreparationPopup::resized() {
     juce::Rectangle<int> bounds = getLocalBounds();
     int rounding = findValue(Skin::kBodyRounding);
 
-    body_->setBounds(bounds);
-    body_->setRounding(rounding);
-    body_->setColor(findColour(Skin::kBody, true));
-
-    border_->setBounds(bounds);
-    border_->setRounding(rounding);
-    border_->setThickness(1.0f, true);
-    border_->setColor(findColour(Skin::kBorder, true));
+//    body_->setBounds(bounds);
+//    body_->setRounding(rounding);
+//    body_->setColor(findColour(Skin::kBody, true));
+//
+//    border_->setBounds(bounds);
+//    border_->setRounding(rounding);
+//    border_->setThickness(1.0f, true);
+//    border_->setColor(findColour(Skin::kBorder, true));
     auto header_bounds = bounds.removeFromTop(35);
     exit_button_->setBounds(header_bounds.removeFromLeft(35).reduced(5));
 
