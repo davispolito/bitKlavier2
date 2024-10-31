@@ -225,8 +225,11 @@ void CableView::newObjectAdded(Cable *c) {
     //graph.graph.addConnection (connection)
     //TODO: ENCAPSULATE THIS INTO A FUNCTION INSIDE OF SynthGuiInterface (also getGUI())
     SynthGuiInterface* _parent = findParentComponentOfClass<SynthGuiInterface>();
-    _parent->addCableConnection(c);
-
+    juce::FixedSizeFunction<16, void()> callback = [this,c] {
+        SynthGuiInterface* _parent = findParentComponentOfClass<SynthGuiInterface>();
+        _parent->addCableConnection(c);
+    };
+    _parent->tryEnqueueProcessorInitQueue(std::move(callback));
 }
 void CableView::deleteObject(Cable *at)  {
     if ((juce::OpenGLContext::getCurrentContext() == nullptr))

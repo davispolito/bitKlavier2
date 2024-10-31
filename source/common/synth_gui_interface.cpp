@@ -163,14 +163,12 @@ void SynthGuiInterface::setGuiSize(float scale) {
   gui_->redoBackground();
 }
 
-void SynthGuiInterface::addCableConnection (Cable* c) {
-    SynthBase* synth = getSynth();
-    synth->processorInitQueue.try_enqueue([c,synth]
-        {
-            synth->addConnection(c->connection);
-           //changelistener callback is causing timing errors here.
-           //last_proc.reset();
-        });
+void SynthGuiInterface::tryEnqueueProcessorInitQueue (juce::FixedSizeFunction<16, void()> callback) {
+    getSynth()->processorInitQueue.try_enqueue(std::move(callback));
+}
+
+void SynthGuiInterface::addCableConnection(Cable* c){
+    getSynth()->addConnection(c->connection);
 }
 
 #endif
