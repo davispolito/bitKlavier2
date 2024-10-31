@@ -57,13 +57,23 @@ class SynthGuiInterface {
     void openSaveDialog();
     void externalPresetLoaded(juce::File preset);
     void setGuiSize(float scale);
+
     void tryEnqueueProcessorInitQueue(juce::FixedSizeFunction<16, void()> callback);
+
+    /* SynthBase Wrapper Functions */
+    bool isMidiMapped(const std::string& name);
     void addCableConnection(Cable* c);
+    void resetSynthEngine();
+    juce::ValueTree& getValueTree();
+    juce::String getComments();
+
     FullInterface* getGui() { return gui_.get(); }
     OpenGlWrapper* getOpenGlWrapper();
     UserPreferencesWrapper* userPreferences;
     SynthBase* synth_; //does this need to be there??
     SampleLoadManager* sampleLoadManager ;
+
+
   protected:
 
 
@@ -71,4 +81,6 @@ class SynthGuiInterface {
   
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(SynthGuiInterface)
 };
+
+
 

@@ -887,7 +887,7 @@ bool PresetBrowser::loadFromFile(juce::File& preset) {
     synth->setPresetName(preset.getFileNameWithoutExtension());
     synth->setAuthor(author_);
 
-    juce::String comments = parent->getSynth()->getComments();
+    juce::String comments = parent->getComments();
     int comments_font_size = kCommentsFontHeight * size_ratio_;
     if (comments_) {
       comments_->setText(comments);

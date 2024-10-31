@@ -171,4 +171,20 @@ void SynthGuiInterface::addCableConnection(Cable* c){
     getSynth()->addConnection(c->connection);
 }
 
+bool SynthGuiInterface::isMidiMapped(const std::string& name){
+    return getSynth()->isMidiMapped(name);
+}
+
+void SynthGuiInterface::resetSynthEngine(){
+    getSynth()->getEngine()->resetEngine();
+}
+
+juce::ValueTree& SynthGuiInterface::getValueTree(){
+    return getSynth()->getValueTree(); //Not sure if std::move should be used here, I figured don't copy the whole thing
+}
+
+juce::String SynthGuiInterface::getComments(){
+    return getSynth()->getComments();
+}
+
 #endif

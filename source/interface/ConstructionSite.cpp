@@ -103,8 +103,8 @@ void ConstructionSite::reset()
 {
     SynthGuiInterface* _parent = findParentComponentOfClass<SynthGuiInterface>();
     //safe to do on message thread because we have locked processing if this is called
-    _parent->getSynth()->getEngine()->resetEngine();
-    parent = _parent->getSynth()->getValueTree().getChildWithName (IDs::PIANO);
+    _parent->resetSynthEngine();
+    parent = _parent->getValueTree().getChildWithName (IDs::PIANO);
 
     cableView.reset();
 }

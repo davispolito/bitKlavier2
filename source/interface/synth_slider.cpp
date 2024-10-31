@@ -278,7 +278,7 @@ PopupItems SynthSlider::createPopupMenu() {
   if (has_parameter_assignment_)
     options.addItem(kArmMidiLearn, "Learn MIDI Assignment");
 
-  if (has_parameter_assignment_ && synth_interface_->getSynth()->isMidiMapped(getName().toStdString()))
+  if (has_parameter_assignment_ && synth_interface_->isMidiMapped (getName().toStdString()))
     options.addItem(kClearMidiLearn, "Clear MIDI Assignment");
 
   options.addItem(kManualEntry, "Enter juce::Value");
