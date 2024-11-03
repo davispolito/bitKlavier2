@@ -306,13 +306,13 @@ void HeaderSection::buttonClicked(juce::Button* clicked_button) {
   else if (clicked_button == printButton.get())
     {
       SynthGuiInterface* interface = findParentComponentOfClass<SynthGuiInterface>();
-      interface->getSynth()->getValueTree().getChild(0).setProperty("sync", 1, nullptr);
-      DBG(interface->getSynth()->getValueTree().toXmlString());
+      interface->getValueTree().getChild(0).setProperty("sync", 1, nullptr);
+      DBG(interface->getValueTree().toXmlString());
     }
   else if (clicked_button == loadButton.get())
     {
         SynthGuiInterface* parent = findParentComponentOfClass<SynthGuiInterface>();
-        juce::File active_file = parent->getSynth()->getActiveFile();
+        juce::File active_file = parent->getActiveFile();
         filechooser = std::make_unique<juce::FileChooser> ("Open Preset", active_file, juce::String("*.") + bitklavier::kPresetExtension);
 
         auto flags = juce::FileBrowserComponent::openMode
@@ -320,20 +320,20 @@ void HeaderSection::buttonClicked(juce::Button* clicked_button) {
         filechooser->launchAsync(flags, [this] (const juce::FileChooser& fc) {
             if (fc.getResult() == juce::File{})
             {
-               return ;
+               return;
             }
             SynthGuiInterface* _parent = findParentComponentOfClass<SynthGuiInterface>();
             std::string error;
-                    juce::File choice = fc.getResult();
-        if (!_parent->getSynth()->loadFromFile(choice, error)) {
-//            std::string name = ProjectInfo::projectName;
-//            error = "There was an error open the preset. " + error;
-            //juce::AlertWindow::showMessageBoxAsync(MessageBoxIconType::WarningIcon, "PRESET ERROR, ""Error opening preset", error);
-            DBG("errrrrr");
-            DBG(error);
-        }
-//        else
-//            parent->externalPresetLoaded(choice);
+            juce::File choice = fc.getResult();
+            if (!_parent->loadFromFile(choice, error)) {
+    //            std::string name = ProjectInfo::projectName;
+    //            error = "There was an error open the preset. " + error;
+                //juce::AlertWindow::showMessageBoxAsync(MessageBoxIconType::WarningIcon, "PRESET ERROR, ""Error opening preset", error);
+                DBG("errrrrr");
+                DBG(error);
+            }
+    //      else
+    //            parent->externalPresetLoaded(choice);
 
         });
 

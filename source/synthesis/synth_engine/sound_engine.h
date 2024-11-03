@@ -19,7 +19,6 @@
 #include <juce_audio_processors/juce_audio_processors.h>
 
 
-
 namespace bitklavier {
 
     using AudioGraphIOProcessor = juce::AudioProcessorGraph::AudioGraphIOProcessor;
@@ -35,15 +34,9 @@ namespace bitklavier {
 //      void init() override;
       void processWithInput(const mono_float* audio_in, int num_samples) {
           //_ASSERT(num_samples <= output()->buffer_size);
-
           juce::FloatVectorOperations::disableDenormalisedNumberSupport();
-
-
-
-
-
-
       }
+
       void process(int num_samples, juce::AudioSampleBuffer& buffer);
 
       void releaseResources()

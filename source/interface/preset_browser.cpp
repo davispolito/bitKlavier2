@@ -880,12 +880,11 @@ bool PresetBrowser::loadFromFile(juce::File& preset) {
   if (parent == nullptr)
     return false;
 
-  SynthBase* synth = parent->getSynth();
   std::string error;
-  if (synth->loadFromFile(preset, error)) {
+  if (parent->loadFromFile(preset, error)) {
     setPresetInfo(preset);
-    synth->setPresetName(preset.getFileNameWithoutExtension());
-    synth->setAuthor(author_);
+    parent->setPresetName(preset.getFileNameWithoutExtension());
+    parent->setAuthor(author_);
 
     juce::String comments = parent->getComments();
     int comments_font_size = kCommentsFontHeight * size_ratio_;
@@ -909,7 +908,7 @@ void PresetBrowser::loadPresetInfo() {
   lighten = background.overlaidWith(lighten);
   juce::Colour regular_text = findColour(Skin::kBodyText, true);
 
-  juce::String preset = parent->getSynth()->getPresetName();
+  juce::String preset = parent->getPresetName();
   if (preset.isEmpty()) {
     preset_text_->setText("Preset name");
     preset_text_->setColor(lighten);

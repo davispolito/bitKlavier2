@@ -679,13 +679,13 @@ void SynthSection::placeKnobsInArea(juce::Rectangle<int> area, std::vector<juce:
 void SynthSection::lockCriticalSection() {
   SynthGuiInterface* parent = findParentComponentOfClass<SynthGuiInterface>();
   if (parent)
-    parent->getSynth()->getCriticalSection().enter();
+    parent->enterCriticalSection();
 }
 
 void SynthSection::unlockCriticalSection() {
   SynthGuiInterface* parent = findParentComponentOfClass<SynthGuiInterface>();
   if (parent)
-    parent->getSynth()->getCriticalSection().exit();
+    parent->exitCriticalSection();
 }
 
 float SynthSection::getTitleWidth() {

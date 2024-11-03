@@ -85,7 +85,7 @@ void CableView::reset()
     SynthGuiInterface* _parent = findParentComponentOfClass<SynthGuiInterface>();
     //safe to do on message thread because we have locked processing if this is called
     //_parent->getSynth()->getEngine()->resetEngine();
-    parent = _parent->getSynth()->getValueTree().getChildWithName(IDs::PIANO);
+    parent = _parent->getValueTree().getChildWithName(IDs::PIANO);
 }
 void CableView::resized()
 {
@@ -287,7 +287,7 @@ void CableView::updateComponents()
     SynthGuiInterface* _parent = findParentComponentOfClass<SynthGuiInterface>();
     for (int i = objects.size(); --i >= 0;)
     {
-        if (! _parent->getSynth()->getEngine()->processorGraph->isConnected (objects.getUnchecked (i)->connection))
+        if (! _parent->getEngine()->processorGraph->isConnected (objects.getUnchecked (i)->connection))
         {
             objects.remove (i);
         }
@@ -296,7 +296,7 @@ void CableView::updateComponents()
     for (auto* cc : objects)
         cc->update();
 
-    for (auto& c : _parent->getSynth()->getEngine()->processorGraph->getConnections())
+    for (auto& c : _parent->getEngine()->processorGraph->getConnections())
     {
 //        if (getComponentForConnection (c) == nullptr)
 //        {

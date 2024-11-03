@@ -38,7 +38,6 @@ struct SynthGuiData {
   SynthBase* synth;
 };
 
-
 class SynthGuiInterface {
   public:
     SynthGuiInterface(SynthBase* synth, bool use_gui = true);
@@ -62,10 +61,21 @@ class SynthGuiInterface {
 
     /* SynthBase Wrapper Functions */
     bool isMidiMapped(const std::string& name);
+    bool loadFromFile(juce::File file, std::string& error);
+
     void addCableConnection(Cable* c);
     void resetSynthEngine();
+    void setAuthor(const juce::String& author);
+    void setPresetName(const juce::String& preset_name);
+
     juce::ValueTree& getValueTree();
     juce::String getComments();
+    juce::File getActiveFile();
+    juce::String getPresetName();
+    bitklavier::SoundEngine* getEngine();
+    //juce::AudioProcessorGraph::Node::Ptr addProcessor (PreparationSection* object);
+    void enterCriticalSection();
+    void exitCriticalSection();
 
     FullInterface* getGui() { return gui_.get(); }
     OpenGlWrapper* getOpenGlWrapper();

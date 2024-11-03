@@ -112,13 +112,14 @@ void ConstructionSite::reset()
 void ConstructionSite::newObjectAdded (PreparationSection* object)
 {
     SynthGuiInterface* parent = findParentComponentOfClass<SynthGuiInterface>();
-    parent->getSynth()->processorInitQueue.try_enqueue ([this, object] {
+
+    juce::FixedSizeFunction<16, void()> callback = [this, object] {
         SynthGuiInterface* _parent = findParentComponentOfClass<SynthGuiInterface>();
         object->setNodeInfo (_parent->getSynth()->addProcessor (std::move (object->getProcessorPtr()), object->pluginID));
         //changelistener callback is causing timing errors here.
-
         //last_proc.reset();
-    });
+    };
+    parent->tryEnqueueProcessorInitQueue(std::move(callback));
 }
 
 ConstructionSite::~ConstructionSite (void)

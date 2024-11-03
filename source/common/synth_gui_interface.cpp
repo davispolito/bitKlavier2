@@ -134,8 +134,6 @@ void SynthGuiInterface::notifyFresh() {
 }
 
 
-
-
 void SynthGuiInterface::setGuiSize(float scale) {
   if (gui_ == nullptr)
     return;
@@ -187,4 +185,47 @@ juce::String SynthGuiInterface::getComments(){
     return getSynth()->getComments();
 }
 
+juce::File SynthGuiInterface::getActiveFile(){
+    return getSynth()->getActiveFile();
+}
+
+juce::String SynthGuiInterface::getPresetName()
+{
+    return getSynth()->getPresetName();
+}
+
+bitklavier::SoundEngine* SynthGuiInterface::getEngine()
+{
+    return getSynth()->getEngine();
+}
+
+bool SynthGuiInterface::loadFromFile(juce::File file, std::string& error)
+{
+    return getSynth()->loadFromFile(file, error);
+}
+
+void SynthGuiInterface::setAuthor(const juce::String& author)
+{
+    return getSynth()->setAuthor(author);
+}
+
+void SynthGuiInterface::setPresetName(const juce::String& preset_name)
+{
+    return getSynth()->setPresetName(preset_name);
+}
+
+void SynthGuiInterface::enterCriticalSection()
+{
+    getSynth()->getCriticalSection().enter();
+}
+
+void SynthGuiInterface::exitCriticalSection()
+{
+    getSynth()->getCriticalSection().exit();
+}
+//
+// juce::AudioProcessorGraph::Node::Ptr SynthGuiInterface::addProcessor(PreparationSection* object)
+// {
+//     return getSynth()->addProcessor(std::move (object->getProcessorPtr()), object->pluginID);
+// }
 #endif
