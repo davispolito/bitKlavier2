@@ -25,348 +25,348 @@
 #include "FullInterface.h"
 
 namespace {
-  template<class Comparator>
-  void sortSelectionArray(juce::Array<juce::File>& selection_array) {
-    Comparator comparator;
-    selection_array.sort(comparator, true);
-  }
-
-  const std::string kAddFolderName = "Add Folder";
-  const std::string kStoreUrl = "";
-  constexpr int kMaxRootFiles = 8000;
-
-  bool isAcceptableRoot(const juce::File& file) {
-    std::list<juce::File> folders;
-    folders.push_back(file);
-    int num_files = 0;
-
-    while (!folders.empty()) {
-      juce::File current_file = folders.back();
-      folders.pop_back();
-
-      num_files += current_file.getNumberOfChildFiles(juce::File::findFiles);
-      if (num_files > kMaxRootFiles)
-        return false;
-
-      juce::Array<juce::File> sub_folders = current_file.findChildFiles(juce::File::findDirectories, false);
-
-      for (const juce::File& folder : sub_folders)
-        folders.push_back(folder);
-
+    template<class Comparator>
+    void sortSelectionArray(juce::Array<juce::File>& selection_array) {
+        Comparator comparator;
+        selection_array.sort(comparator, true);
     }
-    return true;
-  }
 
-  void showAddRootWarning() {
-    juce::String error = juce::String("Folder has too many files to add to browser. Max: ") + juce::String(kMaxRootFiles);
-    juce::NativeMessageBox::showMessageBoxAsync(juce::AlertWindow::WarningIcon, "Error Adding Folder", error);
-  }
+    const std::string kAddFolderName = "Add Folder";
+    const std::string kStoreUrl = "";
+    constexpr int kMaxRootFiles = 8000;
+
+    bool isAcceptableRoot(const juce::File& file) {
+        std::list<juce::File> folders;
+        folders.push_back(file);
+        int num_files = 0;
+
+        while (!folders.empty()) {
+            juce::File current_file = folders.back();
+            folders.pop_back();
+
+            num_files += current_file.getNumberOfChildFiles(juce::File::findFiles);
+            if (num_files > kMaxRootFiles)
+                return false;
+
+            juce::Array<juce::File> sub_folders = current_file.findChildFiles(juce::File::findDirectories, false);
+
+            for (const juce::File& folder : sub_folders)
+                folders.push_back(folder);
+
+        }
+        return true;
+    }
+
+    void showAddRootWarning() {
+        juce::String error = juce::String("Folder has too many files to add to browser. Max: ") + juce::String(kMaxRootFiles);
+        juce::NativeMessageBox::showMessageBoxAsync(juce::AlertWindow::WarningIcon, "Error Adding Folder", error);
+    }
 }
 
 PopupDisplay::PopupDisplay() : SynthSection("Popup Display"), text_(new PlainTextComponent("Popup Text", "")),
                                body_(new OpenGlQuad(Shaders::kRoundedRectangleFragment)),
                                border_(new OpenGlQuad(Shaders::kRoundedRectangleFragment))
-                               {
-  addOpenGlComponent(body_);
-  addOpenGlComponent(border_);
-  addOpenGlComponent(text_);
+{
+    addOpenGlComponent(body_);
+    addOpenGlComponent(border_);
+    addOpenGlComponent(text_);
 
-  text_->setJustification(juce::Justification::centred);
-  text_->setFontType(PlainTextComponent::kLight);
+    text_->setJustification(juce::Justification::centred);
+    text_->setFontType(PlainTextComponent::kLight);
 
-  setSkinOverride(Skin::kPopupBrowser);
+    setSkinOverride(Skin::kPopupBrowser);
 }
 
 void PopupDisplay::resized() {
-  juce::Rectangle<int> bounds = getLocalBounds();
-  int rounding = findValue(Skin::kBodyRounding);
+    juce::Rectangle<int> bounds = getLocalBounds();
+    int rounding = findValue(Skin::kBodyRounding);
 
-  body_->setBounds(bounds);
-  body_->setRounding(rounding);
-  body_->setColor(findColour(Skin::kBody, true));
+    body_->setBounds(bounds);
+    body_->setRounding(rounding);
+    body_->setColor(findColour(Skin::kBody, true));
 
-  border_->setBounds(bounds);
-  border_->setRounding(rounding);
-  border_->setThickness(1.0f, true);
-  border_->setColor(findColour(Skin::kBorder, true));
+    border_->setBounds(bounds);
+    border_->setRounding(rounding);
+    border_->setThickness(1.0f, true);
+    border_->setColor(findColour(Skin::kBorder, true));
 
-  text_->setBounds(bounds);
-  text_->setColor(findColour(Skin::kBodyText, true));
+    text_->setBounds(bounds);
+    text_->setColor(findColour(Skin::kBodyText, true));
 }
 
 void PopupDisplay::setContent(const std::string& text, juce::Rectangle<int> bounds,
                               juce::BubbleComponent::BubblePlacement placement) {
-  static constexpr int kHeight = 24;
+    static constexpr int kHeight = 24;
 
-  int height = kHeight * size_ratio_;
-  int mult = getPixelMultiple();
-  juce::Font font = Fonts::instance()->proportional_light().withPointHeight(height * 0.5f * mult);
-  int padding = height / 4;
-  int buffer = padding * 2 + 2;
-  int width = (font.getStringWidth(text) / getPixelMultiple()) + buffer;
+    int height = kHeight * size_ratio_;
+    int mult = getPixelMultiple();
+    juce::Font font = Fonts::instance()->proportional_light().withPointHeight(height * 0.5f * mult);
+    int padding = height / 4;
+    int buffer = padding * 2 + 2;
+    int width = (font.getStringWidth(text) / getPixelMultiple()) + buffer;
 
-  int middle_x = bounds.getX() + bounds.getWidth() / 2;
-  int middle_y = bounds.getY() + bounds.getHeight() / 2;
+    int middle_x = bounds.getX() + bounds.getWidth() / 2;
+    int middle_y = bounds.getY() + bounds.getHeight() / 2;
 
-  if (placement == juce::BubbleComponent::above)
-    setBounds(middle_x - width / 2, bounds.getY() - height, width, height);
-  else if (placement == juce::BubbleComponent::below)
-    setBounds(middle_x - width / 2, bounds.getBottom(), width, height);
-  else if (placement == juce::BubbleComponent::left)
-    setBounds(bounds.getX() - width, middle_y - height / 2, width, height);
-  else if (placement == juce::BubbleComponent::right)
-    setBounds(bounds.getRight(), middle_y - height / 2, width, height);
+    if (placement == juce::BubbleComponent::above)
+        setBounds(middle_x - width / 2, bounds.getY() - height, width, height);
+    else if (placement == juce::BubbleComponent::below)
+        setBounds(middle_x - width / 2, bounds.getBottom(), width, height);
+    else if (placement == juce::BubbleComponent::left)
+        setBounds(bounds.getX() - width, middle_y - height / 2, width, height);
+    else if (placement == juce::BubbleComponent::right)
+        setBounds(bounds.getRight(), middle_y - height / 2, width, height);
 
-  text_->setText(text);
-  text_->setTextSize(height * 0.5f);
+    text_->setText(text);
+    text_->setTextSize(height * 0.5f);
 }
 
 PopupList::PopupList() : SynthSection("Popup List"),
                          selected_(-1), hovered_(-1), show_selected_(false), view_position_(0.0f),
                          highlight_(new OpenGlQuad(Shaders::kColorFragment)), hover_(new OpenGlQuad(Shaders::kColorFragment)), rows_(new OpenGlImage()) {
-  highlight_->setTargetComponent(this);
-  highlight_->setAdditive(true);
+    highlight_->setTargetComponent(this);
+    highlight_->setAdditive(true);
 
-  hover_->setTargetComponent(this);
-  hover_->setAdditive(true);
+    hover_->setTargetComponent(this);
+    hover_->setAdditive(true);
 
-  scroll_bar_ = std::make_unique<OpenGlScrollBar>();
-  addAndMakeVisible(scroll_bar_.get());
-  addOpenGlComponent(scroll_bar_->getGlComponent());
-  scroll_bar_->addListener(this);
+    scroll_bar_ = std::make_unique<OpenGlScrollBar>();
+    addAndMakeVisible(scroll_bar_.get());
+    addOpenGlComponent(scroll_bar_->getGlComponent());
+    scroll_bar_->addListener(this);
 }
 
 void PopupList::resized() {
-  juce::Colour lighten = findColour(Skin::kLightenScreen, true);
-  scroll_bar_->setColor(lighten);
+    juce::Colour lighten = findColour(Skin::kLightenScreen, true);
+    scroll_bar_->setColor(lighten);
 
-  if (getScrollableRange() > getHeight()) {
-    int scroll_bar_width = kScrollBarWidth * getSizeRatio();
-    int scroll_bar_height = getHeight();
-    scroll_bar_->setVisible(true);
-    scroll_bar_->setBounds(getWidth() - scroll_bar_width, 0, scroll_bar_width, scroll_bar_height);
-    setScrollBarRange();
-  }
-  else
-    scroll_bar_->setVisible(false);
+    if (getScrollableRange() > getHeight()) {
+        int scroll_bar_width = kScrollBarWidth * getSizeRatio();
+        int scroll_bar_height = getHeight();
+        scroll_bar_->setVisible(true);
+        scroll_bar_->setBounds(getWidth() - scroll_bar_width, 0, scroll_bar_width, scroll_bar_height);
+        setScrollBarRange();
+    }
+    else
+        scroll_bar_->setVisible(false);
 
-  redoImage();
+    redoImage();
 }
 
 void PopupList::setSelections(PopupItems selections) {
-  selections_ = std::move(selections);
-  selected_ = std::min(selected_, selections_.size() - 1);
-  hovered_ = std::min(hovered_, selections_.size() - 1);
-  for (int i = 0; i < selections_.size(); ++i) {
-    if (selections_.items[i].selected)
-      selected_ = i;
-  }
-  resized();
+    selections_ = std::move(selections);
+    selected_ = std::min(selected_, selections_.size() - 1);
+    hovered_ = std::min(hovered_, selections_.size() - 1);
+    for (int i = 0; i < selections_.size(); ++i) {
+        if (selections_.items[i].selected)
+            selected_ = i;
+    }
+    resized();
 }
 
 int PopupList::getRowFromPosition(float mouse_position) {
-  int index = floorf((mouse_position + getViewPosition()) / getRowHeight());
-  if (index < selections_.size() && index >= 0 && selections_.items[index].id < 0)
-    return -1;
-  return index;
+    int index = floorf((mouse_position + getViewPosition()) / getRowHeight());
+    if (index < selections_.size() && index >= 0 && selections_.items[index].id < 0)
+        return -1;
+    return index;
 }
 
 int PopupList::getBrowseWidth() {
-  static constexpr int kMinWidth = 150;
+    static constexpr int kMinWidth = 150;
 
-  juce::Font font = getFont();
-  int max_width = kMinWidth * size_ratio_;
-  int buffer = getTextPadding() * 2 + 2;
-  for (int i = 0; i < selections_.size(); ++i)
-    max_width = std::max(max_width, font.getStringWidth(selections_.items[i].name) / getPixelMultiple() + buffer);
+    juce::Font font = getFont();
+    int max_width = kMinWidth * size_ratio_;
+    int buffer = getTextPadding() * 2 + 2;
+    for (int i = 0; i < selections_.size(); ++i)
+        max_width = std::max(max_width, font.getStringWidth(selections_.items[i].name) / getPixelMultiple() + buffer);
 
-  return max_width;
+    return max_width;
 }
 
 void PopupList::mouseMove(const juce::MouseEvent& e) {
-  int row = getRowFromPosition(e.position.y);
-  if (row >= selections_.size() || row < 0)
-    row = -1;
-  hovered_ = row;
+    int row = getRowFromPosition(e.position.y);
+    if (row >= selections_.size() || row < 0)
+        row = -1;
+    hovered_ = row;
 }
 
 void PopupList::mouseDrag(const juce::MouseEvent& e) {
-  int row = getRowFromPosition(e.position.y);
-  if (e.position.x < 0 || e.position.x > getWidth() || row >= selections_.size() || row < 0)
-    row = -1;
-  hovered_ = row;
+    int row = getRowFromPosition(e.position.y);
+    if (e.position.x < 0 || e.position.x > getWidth() || row >= selections_.size() || row < 0)
+        row = -1;
+    hovered_ = row;
 }
 
 void PopupList::mouseExit(const juce::MouseEvent& e) {
-  hovered_ = -1;
+    hovered_ = -1;
 }
 
 int PopupList::getSelection(const juce::MouseEvent& e) {
-  float click_y_position = e.position.y;
-  int row = getRowFromPosition(click_y_position);
-  if (row < selections_.size() && row >= 0)
-    return row;
+    float click_y_position = e.position.y;
+    int row = getRowFromPosition(click_y_position);
+    if (row < selections_.size() && row >= 0)
+        return row;
 
-  return -1;
+    return -1;
 }
 
 void PopupList::mouseUp(const juce::MouseEvent& e) {
-  if (e.position.x < 0 || e.position.x > getWidth())
-    return;
+    if (e.position.x < 0 || e.position.x > getWidth())
+        return;
 
-  select(getSelection(e));
+    select(getSelection(e));
 }
 
 void PopupList::mouseDoubleClick(const juce::MouseEvent& e) {
-  int selection = getSelection(e);
-  if (selection != selected_ || selection < 0)
-    return;
+    int selection = getSelection(e);
+    if (selection != selected_ || selection < 0)
+        return;
 
-  for (Listener* listener : listeners_)
-    listener->doubleClickedSelected(this, selections_.items[selection].id, selection);
+    for (Listener* listener : listeners_)
+        listener->doubleClickedSelected(this, selections_.items[selection].id, selection);
 }
 
 void PopupList::select(int selection) {
-  if (selection < 0 || selection >= selections_.size())
-    return;
+    if (selection < 0 || selection >= selections_.size())
+        return;
 
-  selected_ = selection;
-  for (int i = 0; i < selections_.size(); ++i)
-    selections_.items[i].selected = false;
-  selections_.items[selected_].selected = true;
+    selected_ = selection;
+    for (int i = 0; i < selections_.size(); ++i)
+        selections_.items[i].selected = false;
+    selections_.items[selected_].selected = true;
 
-  for (Listener* listener : listeners_)
-    listener->newSelection(this, selections_.items[selection].id, selection);
+    for (Listener* listener : listeners_)
+        listener->newSelection(this, selections_.items[selection].id, selection);
 }
 
 void PopupList::initOpenGlComponents(OpenGlWrapper& open_gl) {
-  rows_->init(open_gl);
-  rows_->setColor(juce::Colours::white);
+    rows_->init(open_gl);
+    rows_->setColor(juce::Colours::white);
 
-  highlight_->init(open_gl);
-  hover_->init(open_gl);
-  SynthSection::initOpenGlComponents(open_gl);
+    highlight_->init(open_gl);
+    hover_->init(open_gl);
+    SynthSection::initOpenGlComponents(open_gl);
 }
 
 void PopupList::redoImage() {
-  if (getWidth() <= 0 || getHeight() <= 0)
-    return;
+    if (getWidth() <= 0 || getHeight() <= 0)
+        return;
 
-  int mult = getPixelMultiple();
-  int row_height = getRowHeight() * mult;
-  int image_width = getWidth() * mult;
+    int mult = getPixelMultiple();
+    int row_height = getRowHeight() * mult;
+    int image_width = getWidth() * mult;
 
-  juce::Colour text_color = findColour(Skin::kTextComponentText, true);
-  juce::Colour lighten = findColour(Skin::kLightenScreen, true);
-  int image_height = std::max(row_height * selections_.size(), getHeight());
-  juce::Image rows_image(juce::Image::ARGB, image_width, image_height, true);
-  juce::Graphics g(rows_image);
-  g.setColour(text_color);
-  g.setFont(getFont());
+    juce::Colour text_color = findColour(Skin::kTextComponentText, true);
+    juce::Colour lighten = findColour(Skin::kLightenScreen, true);
+    int image_height = std::max(row_height * selections_.size(), getHeight());
+    juce::Image rows_image(juce::Image::ARGB, image_width, image_height, true);
+    juce::Graphics g(rows_image);
+    g.setColour(text_color);
+    g.setFont(getFont());
 
-  int padding = getTextPadding();
-  int width = (getWidth() - 2 * padding) * mult;
-  for (int i = 0; i < selections_.size(); ++i) {
-    if (selections_.items[i].id < 0) {
-      g.setColour(lighten);
-      int y = row_height * (i + 0.5f);
-      g.drawRect(padding, y, width, 1);
+    int padding = getTextPadding();
+    int width = (getWidth() - 2 * padding) * mult;
+    for (int i = 0; i < selections_.size(); ++i) {
+        if (selections_.items[i].id < 0) {
+            g.setColour(lighten);
+            int y = row_height * (i + 0.5f);
+            g.drawRect(padding, y, width, 1);
+        }
+        else {
+            g.setColour(text_color);
+            juce::String name = selections_.items[i].name;
+            g.drawText(name, padding, row_height * i, width, row_height, juce::Justification::centredLeft, true);
+        }
     }
-    else {
-      g.setColour(text_color);
-      juce::String name = selections_.items[i].name;
-      g.drawText(name, padding, row_height * i, width, row_height, juce::Justification::centredLeft, true);
-    }
-  }
-  rows_->setOwnImage(rows_image);
+    rows_->setOwnImage(rows_image);
 }
 
 
 
 
 void PopupList::moveQuadToRow(OpenGlQuad& quad, int row) {
-  int row_height = getRowHeight();
-  float view_height = getHeight();
-  float open_gl_row_height = 2.0f * row_height / view_height;
-  float offset = row * open_gl_row_height - 2.0f * getViewPosition() / view_height;
+    int row_height = getRowHeight();
+    float view_height = getHeight();
+    float open_gl_row_height = 2.0f * row_height / view_height;
+    float offset = row * open_gl_row_height - 2.0f * getViewPosition() / view_height;
 
-  float y = 1.0f - offset;
-  quad.setQuad(0, -1.0f, y - open_gl_row_height, 2.0f, open_gl_row_height);
+    float y = 1.0f - offset;
+    quad.setQuad(0, -1.0f, y - open_gl_row_height, 2.0f, open_gl_row_height);
 }
 
 void PopupList::renderOpenGlComponents(OpenGlWrapper& open_gl, bool animate) {
-  juce::Rectangle<int> view_bounds(getLocalBounds());
-  OpenGlComponent::setViewPort(this, view_bounds, open_gl);
+    juce::Rectangle<int> view_bounds(getLocalBounds());
+    OpenGlComponent::setViewPort(this, view_bounds, open_gl);
 
-  float image_width = bitklavier::utils::nextPowerOfTwo(getWidth());
-  float image_height = bitklavier::utils::nextPowerOfTwo(rows_->getImageHeight());
-  float width_ratio = image_width / getWidth();
-  float height_ratio = image_height / (getPixelMultiple() * getHeight());
-  float y_offset = 2.0f * getViewPosition() / getHeight();
+    float image_width = bitklavier::utils::nextPowerOfTwo(getWidth());
+    float image_height = bitklavier::utils::nextPowerOfTwo(rows_->getImageHeight());
+    float width_ratio = image_width / getWidth();
+    float height_ratio = image_height / (getPixelMultiple() * getHeight());
+    float y_offset = 2.0f * getViewPosition() / getHeight();
 
-  rows_->setTopLeft(-1.0f, 1.0f + y_offset);
-  rows_->setTopRight(2.0f * width_ratio - 1.0f, 1.0f + y_offset);
-  rows_->setBottomLeft(-1.0f, 1.0f + y_offset - 2.0f * height_ratio);
-  rows_->setBottomRight(2.0f * width_ratio - 1.0f, 1.0f + y_offset - 2.0f * height_ratio);
-  rows_->drawImage(open_gl);
+    rows_->setTopLeft(-1.0f, 1.0f + y_offset);
+    rows_->setTopRight(2.0f * width_ratio - 1.0f, 1.0f + y_offset);
+    rows_->setBottomLeft(-1.0f, 1.0f + y_offset - 2.0f * height_ratio);
+    rows_->setBottomRight(2.0f * width_ratio - 1.0f, 1.0f + y_offset - 2.0f * height_ratio);
+    rows_->drawImage(open_gl);
 
-  if (hovered_ >= 0) {
-    moveQuadToRow(*hover_.get(), hovered_);
-    if (show_selected_)
-      hover_->setColor(findColour(Skin::kLightenScreen, true));
-    else
-      hover_->setColor(findColour(Skin::kWidgetPrimary1, true).darker(0.8f));
-    hover_->render(open_gl, animate);
-  }
-  if (selected_ >= 0 && show_selected_) {
-    moveQuadToRow(*highlight_.get(), selected_);
-    highlight_->setColor(findColour(Skin::kWidgetPrimary1, true).darker(0.8f));
-    highlight_->render(open_gl, animate);
-  }
+    if (hovered_ >= 0) {
+        moveQuadToRow(*hover_.get(), hovered_);
+        if (show_selected_)
+            hover_->setColor(findColour(Skin::kLightenScreen, true));
+        else
+            hover_->setColor(findColour(Skin::kWidgetPrimary1, true).darker(0.8f));
+        hover_->render(open_gl, animate);
+    }
+    if (selected_ >= 0 && show_selected_) {
+        moveQuadToRow(*highlight_.get(), selected_);
+        highlight_->setColor(findColour(Skin::kWidgetPrimary1, true).darker(0.8f));
+        highlight_->render(open_gl, animate);
+    }
 
-  SynthSection::renderOpenGlComponents(open_gl, animate);
+    SynthSection::renderOpenGlComponents(open_gl, animate);
 }
 
 void PopupList::destroyOpenGlComponents(OpenGlWrapper& open_gl) {
-  rows_->destroy(open_gl);
+    rows_->destroy(open_gl);
 
-  highlight_->destroy(open_gl);
-  hover_->destroy(open_gl);
-  SynthSection::destroyOpenGlComponents(open_gl);
+    highlight_->destroy(open_gl);
+    hover_->destroy(open_gl);
+    SynthSection::destroyOpenGlComponents(open_gl);
 }
 
 void PopupList::resetScrollPosition() {
-  view_position_ = 0;
-  setScrollBarRange();
+    view_position_ = 0;
+    setScrollBarRange();
 }
 
 void PopupList::mouseWheelMove(const juce::MouseEvent& e, const juce::MouseWheelDetails& wheel) {
-  view_position_ -= wheel.deltaY * kScrollSensitivity;
-  view_position_ = std::max(0.0f, view_position_);
-  float scaled_height = getHeight();
-  int scrollable_range = getScrollableRange();
-  view_position_ = std::min(view_position_, 1.0f * scrollable_range - scaled_height);
-  setScrollBarRange();
+    view_position_ -= wheel.deltaY * kScrollSensitivity;
+    view_position_ = std::max(0.0f, view_position_);
+    float scaled_height = getHeight();
+    int scrollable_range = getScrollableRange();
+    view_position_ = std::min(view_position_, 1.0f * scrollable_range - scaled_height);
+    setScrollBarRange();
 }
 
 void PopupList::scrollBarMoved(juce::ScrollBar* scroll_bar, double range_start) {
-  view_position_ = range_start;
+    view_position_ = range_start;
 }
 
 void PopupList::setScrollBarRange() {
-  static constexpr float kScrollStepRatio = 0.05f;
+    static constexpr float kScrollStepRatio = 0.05f;
 
-  float scaled_height = getHeight();
-  scroll_bar_->setRangeLimits(0.0f, getScrollableRange());
-  scroll_bar_->setCurrentRange(getViewPosition(), scaled_height, juce::NotificationType::dontSendNotification);
-  scroll_bar_->setSingleStepSize(scroll_bar_->getHeight() * kScrollStepRatio);
-  scroll_bar_->cancelPendingUpdate();
+    float scaled_height = getHeight();
+    scroll_bar_->setRangeLimits(0.0f, getScrollableRange());
+    scroll_bar_->setCurrentRange(getViewPosition(), scaled_height, juce::NotificationType::dontSendNotification);
+    scroll_bar_->setSingleStepSize(scroll_bar_->getHeight() * kScrollStepRatio);
+    scroll_bar_->cancelPendingUpdate();
 }
 
 int PopupList::getScrollableRange() {
-  int row_height = getRowHeight();
-  int selections_height = row_height * static_cast<int>(selections_.size());
-  return std::max(selections_height, getHeight());
+    int row_height = getRowHeight();
+    int selections_height = row_height * static_cast<int>(selections_.size());
+    return std::max(selections_height, getHeight());
 }
 
 //SelectionList::SelectionList() : SynthSection("Selection List"), favorites_option_(false),
@@ -933,134 +933,134 @@ int PopupList::getScrollableRange() {
 SinglePopupSelector::SinglePopupSelector() : SynthSection("Popup Selector"),
                                              body_(new OpenGlQuad(Shaders::kRoundedRectangleFragment)),
                                              border_(new OpenGlQuad(Shaders::kRoundedRectangleBorderFragment)) {
-  callback_ = nullptr;
-  cancel_ = nullptr;
-  addOpenGlComponent(body_);
-  addOpenGlComponent(border_);
+    callback_ = nullptr;
+    cancel_ = nullptr;
+    addOpenGlComponent(body_);
+    addOpenGlComponent(border_);
 
-  popup_list_ = std::make_unique<PopupList>();
-  popup_list_->addListener(this);
-  addSubSection(popup_list_.get());
-  popup_list_->setAlwaysOnTop(true);
-  popup_list_->setWantsKeyboardFocus(false);
+    popup_list_ = std::make_unique<PopupList>();
+    popup_list_->addListener(this);
+    addSubSection(popup_list_.get());
+    popup_list_->setAlwaysOnTop(true);
+    popup_list_->setWantsKeyboardFocus(false);
 
-  setSkinOverride(Skin::kPopupBrowser);
+    setSkinOverride(Skin::kPopupBrowser);
 }
 
 void SinglePopupSelector::resized() {
-  SynthSection::resized();
+    SynthSection::resized();
 
-  juce::Rectangle<int> bounds = getLocalBounds();
-  int rounding = findValue(Skin::kBodyRounding);
-  popup_list_->setBounds(1, rounding, getWidth() - 2, getHeight() - 2 * rounding);
+    juce::Rectangle<int> bounds = getLocalBounds();
+    int rounding = findValue(Skin::kBodyRounding);
+    popup_list_->setBounds(1, rounding, getWidth() - 2, getHeight() - 2 * rounding);
 
-  body_->setBounds(bounds);
-  body_->setRounding(findValue(Skin::kBodyRounding));
-  body_->setColor(findColour(Skin::kBody, true));
+    body_->setBounds(bounds);
+    body_->setRounding(findValue(Skin::kBodyRounding));
+    body_->setColor(findColour(Skin::kBody, true));
 
-  border_->setBounds(bounds);
-  border_->setRounding(findValue(Skin::kBodyRounding));
-  border_->setThickness(1.0f, true);
-  border_->setColor(findColour(Skin::kBorder, true));
+    border_->setBounds(bounds);
+    border_->setRounding(findValue(Skin::kBodyRounding));
+    border_->setThickness(1.0f, true);
+    border_->setColor(findColour(Skin::kBorder, true));
 }
 
 void SinglePopupSelector::setPosition(juce::Point<int> position, juce::Rectangle<int> bounds) {
-  int rounding = findValue(Skin::kBodyRounding);
-  int width = popup_list_->getBrowseWidth();
-  int height = popup_list_->getBrowseHeight() + 2 * rounding;
-  int x = position.x;
-  int y = position.y;
-  if (x + width > bounds.getRight())
-    x -= width;
-  if (y + height > bounds.getBottom())
-    y = bounds.getBottom() - height;
-  setBounds(x, y, width, height);
+    int rounding = findValue(Skin::kBodyRounding);
+    int width = popup_list_->getBrowseWidth();
+    int height = popup_list_->getBrowseHeight() + 2 * rounding;
+    int x = position.x;
+    int y = position.y;
+    if (x + width > bounds.getRight())
+        x -= width;
+    if (y + height > bounds.getBottom())
+        y = bounds.getBottom() - height;
+    setBounds(x, y, width, height);
 }
 
 DualPopupSelector::DualPopupSelector() : SynthSection("Dual Popup Selector"),
                                          body_(new OpenGlQuad(Shaders::kRoundedRectangleFragment)),
                                          border_(new OpenGlQuad(Shaders::kRoundedRectangleBorderFragment)),
                                          divider_(new OpenGlQuad(Shaders::kColorFragment)) {
-  callback_ = nullptr;
+    callback_ = nullptr;
 
-  addOpenGlComponent(body_);
-  addOpenGlComponent(border_);
-  addOpenGlComponent(divider_);
+    addOpenGlComponent(body_);
+    addOpenGlComponent(border_);
+    addOpenGlComponent(divider_);
 
-  left_list_ = std::make_unique<PopupList>();
-  left_list_->addListener(this);
-  addSubSection(left_list_.get());
-  left_list_->setAlwaysOnTop(true);
-  left_list_->setWantsKeyboardFocus(false);
-  left_list_->showSelected(true);
+    left_list_ = std::make_unique<PopupList>();
+    left_list_->addListener(this);
+    addSubSection(left_list_.get());
+    left_list_->setAlwaysOnTop(true);
+    left_list_->setWantsKeyboardFocus(false);
+    left_list_->showSelected(true);
 
-  right_list_ = std::make_unique<PopupList>();
-  right_list_->addListener(this);
-  addSubSection(right_list_.get());
-  right_list_->setAlwaysOnTop(true);
-  right_list_->setWantsKeyboardFocus(false);
-  right_list_->showSelected(true);
+    right_list_ = std::make_unique<PopupList>();
+    right_list_->addListener(this);
+    addSubSection(right_list_.get());
+    right_list_->setAlwaysOnTop(true);
+    right_list_->setWantsKeyboardFocus(false);
+    right_list_->showSelected(true);
 
-  setSkinOverride(Skin::kPopupBrowser);
+    setSkinOverride(Skin::kPopupBrowser);
 }
 
 void DualPopupSelector::resized() {
-  SynthSection::resized();
+    SynthSection::resized();
 
-  juce::Rectangle<int> bounds = getLocalBounds();
-  int rounding = findValue(Skin::kBodyRounding);
-  int height = getHeight() - 2 * rounding;
-  left_list_->setBounds(1, rounding, getWidth() / 2 - 2, height);
-  int right_x = left_list_->getRight() + 1;
-  right_list_->setBounds(right_x, rounding, getWidth() - right_x - 1, height);
+    juce::Rectangle<int> bounds = getLocalBounds();
+    int rounding = findValue(Skin::kBodyRounding);
+    int height = getHeight() - 2 * rounding;
+    left_list_->setBounds(1, rounding, getWidth() / 2 - 2, height);
+    int right_x = left_list_->getRight() + 1;
+    right_list_->setBounds(right_x, rounding, getWidth() - right_x - 1, height);
 
-  body_->setBounds(bounds);
-  body_->setRounding(findValue(Skin::kBodyRounding));
-  body_->setColor(findColour(Skin::kBody, true));
+    body_->setBounds(bounds);
+    body_->setRounding(findValue(Skin::kBodyRounding));
+    body_->setColor(findColour(Skin::kBody, true));
 
-  border_->setBounds(bounds);
-  border_->setRounding(findValue(Skin::kBodyRounding));
-  border_->setThickness(1.0f, true);
+    border_->setBounds(bounds);
+    border_->setRounding(findValue(Skin::kBodyRounding));
+    border_->setThickness(1.0f, true);
 
-  divider_->setBounds(getWidth() / 2 - 1, 1, 1, getHeight() - 2);
+    divider_->setBounds(getWidth() / 2 - 1, 1, 1, getHeight() - 2);
 
-  juce::Colour border = findColour(Skin::kBorder, true);
-  border_->setColor(border);
-  divider_->setColor(border);
+    juce::Colour border = findColour(Skin::kBorder, true);
+    border_->setColor(border);
+    divider_->setColor(border);
 }
 
 void DualPopupSelector::setPosition(juce::Point<int> position, int width, juce::Rectangle<int> bounds) {
-  int rounding = findValue(Skin::kBodyRounding);
-  int height = left_list_->getBrowseHeight() + 2 * rounding;
-  int x = position.x;
-  int y = position.y;
-  if (x + width > bounds.getRight())
-    x -= width;
-  if (y + height > bounds.getBottom())
-    y = bounds.getBottom() - height;
-  setBounds(x, y, width, height);
+    int rounding = findValue(Skin::kBodyRounding);
+    int height = left_list_->getBrowseHeight() + 2 * rounding;
+    int x = position.x;
+    int y = position.y;
+    if (x + width > bounds.getRight())
+        x -= width;
+    if (y + height > bounds.getBottom())
+        y = bounds.getBottom() - height;
+    setBounds(x, y, width, height);
 }
 
 void DualPopupSelector::newSelection(PopupList* list, int id, int index) {
-  if (list == left_list_.get()) {
-    PopupItems right_items = left_list_->getSelectionItems(index);
-    if (right_items.size() == 0) {
-      callback_(id);
-      right_list_->setSelections(right_items);
-      return;
-    }
+    if (list == left_list_.get()) {
+        PopupItems right_items = left_list_->getSelectionItems(index);
+        if (right_items.size() == 0) {
+            callback_(id);
+            right_list_->setSelections(right_items);
+            return;
+        }
 
-    int right_selection = right_list_->getSelected();
-    if (right_selection < 0 || right_selection >= right_items.size() ||
-      right_list_->getSelectionItems(right_selection).name != right_items.items[right_selection].name) {
-      right_selection = 0;
-    }
+        int right_selection = right_list_->getSelected();
+        if (right_selection < 0 || right_selection >= right_items.size() ||
+            right_list_->getSelectionItems(right_selection).name != right_items.items[right_selection].name) {
+            right_selection = 0;
+        }
 
-    right_list_->setSelections(right_items);
-    right_list_->select(right_selection);
-  }
-  else
-    callback_(id);
+        right_list_->setSelections(right_items);
+        right_list_->select(right_selection);
+    }
+    else
+        callback_(id);
 }
 
 //PopupBrowser::PopupBrowser() : SynthSection("Popup Browser"),
@@ -1400,12 +1400,13 @@ void DualPopupSelector::newSelection(PopupList* list, int id, int index) {
 PreparationPopup::PreparationPopup() : SynthSection("prep_popup"),
                                        body_(new OpenGlQuad(Shaders::kRoundedRectangleFragment)),
                                        border_(new OpenGlQuad(Shaders::kRoundedRectangleBorderFragment)),
-                                       exit_button_(new OpenGlShapeButton("Exit"))
-                                       {
-
-
-    addOpenGlComponent(body_);
-    addOpenGlComponent(border_);
+                                       exit_button_(new OpenGlShapeButton("Exit")),
+                                       background_(new OpenGlBackground())
+{
+    addBackgroundComponent(background_.get());
+    //addOpenGlComponent(body_);
+    //addOpenGlComponent(border_);
+    background_->setComponent(this);
     //_border = std::make_unique<OpenGlBorder>(this, nullptr);
 
     //addBackgroundComponent(&background_);
@@ -1437,6 +1438,7 @@ void PreparationPopup::setContent(std::shared_ptr<SynthSection> prep)
     prep_view->setAlwaysOnTop(true);
 
     resized();
+    repaintPrepBackground();
 }
 
 void PreparationPopup::buttonClicked(juce::Button *clicked_button)
@@ -1456,14 +1458,14 @@ void PreparationPopup::resized() {
     juce::Rectangle<int> bounds = getLocalBounds();
     int rounding = findValue(Skin::kBodyRounding);
 
-    body_->setBounds(bounds);
-    body_->setRounding(rounding);
-    body_->setColor(findColour(Skin::kBody, true));
-
-    border_->setBounds(bounds);
-    border_->setRounding(rounding);
-    border_->setThickness(1.0f, true);
-    border_->setColor(findColour(Skin::kBorder, true));
+//    body_->setBounds(bounds);
+//    body_->setRounding(rounding);
+//    body_->setColor(findColour(Skin::kBody, true));
+//
+//    border_->setBounds(bounds);
+//    border_->setRounding(rounding);
+//    border_->setThickness(1.0f, true);
+//    border_->setColor(findColour(Skin::kBorder, true));
     auto header_bounds = bounds.removeFromTop(35);
     exit_button_->setBounds(header_bounds.removeFromLeft(35).reduced(5));
 
@@ -1481,4 +1483,3 @@ void PreparationPopup::resized() {
 
 
 }
-
