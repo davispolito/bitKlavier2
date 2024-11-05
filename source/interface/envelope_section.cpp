@@ -71,10 +71,12 @@ void DragMagnifyingGlass::mouseDoubleClick(const juce::MouseEvent& e) {
 EnvelopeSection::EnvelopeSection(juce::String name, std::string value_prepend, EnvParams &params, chowdsp::ParameterListeners& listeners, SynthSection &parent) : SynthSection(name) {
 
     delay_ = std::make_unique<SynthSlider>("delay");
+    delay_attachment = std::make_unique<chowdsp::SliderAttachment>(params.delayParam, listeners, *delay_, nullptr);
     //delay_ = std::make_unique<SynthSlider>(value_prepend + "_delay");
   addSlider(delay_.get());
   delay_->setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
   delay_->setPopupPlacement(juce::BubbleComponent::below);
+  delay_->parentHierarchyChanged();
   
   attack_ = std::make_unique<SynthSlider>("attack");
   attack_attachment = std::make_unique<chowdsp::SliderAttachment>(params.attackParam, listeners, *attack_, nullptr);
@@ -89,9 +91,11 @@ EnvelopeSection::EnvelopeSection(juce::String name, std::string value_prepend, E
 
   hold_ = std::make_unique<SynthSlider>("hold");
   //hold_ = std::make_unique<SynthSlider>(value_prepend + "_hold");
+  hold_attachment = std::make_unique<chowdsp::SliderAttachment>(params.holdParam, listeners, *hold_, nullptr);
   addSlider(hold_.get());
   hold_->setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
   hold_->setPopupPlacement(juce::BubbleComponent::below);
+  hold_->parentHierarchyChanged();
 
   decay_ = std::make_unique<SynthSlider>("decay");
   addSlider(decay_.get());
@@ -149,6 +153,8 @@ EnvelopeSection::EnvelopeSection(juce::String name, std::string value_prepend, E
 //      });
 //
 
+  delay_attachment = std::make_unique<chowdsp::SliderAttachment>(params.delayParam, listeners, *delay_, nullptr);
+  hold_attachment = std::make_unique<chowdsp::SliderAttachment>(params.holdParam, listeners, *hold_, nullptr);
   decay_attachment = std::make_unique<chowdsp::SliderAttachment>(params.decayParam, listeners, *decay_, nullptr);
   sustain_attachment = std::make_unique<chowdsp::SliderAttachment>(params.sustainParam, listeners, *sustain_, nullptr);
   release_attachment = std::make_unique<chowdsp::SliderAttachment>(params.releaseParam, listeners, *release_, nullptr);
