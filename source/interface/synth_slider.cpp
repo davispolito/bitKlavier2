@@ -626,8 +626,8 @@ void SynthSlider::drawRotaryShadow(juce::Graphics &g) {
     juce::PathStrokeType outer_stroke(stroke_width, juce::PathStrokeType::beveled, juce::PathStrokeType::rounded);
     juce::PathStrokeType shadow_stroke(stroke_width + 1, juce::PathStrokeType::beveled, juce::PathStrokeType::rounded);
     g.saveState();
-    g.setColour(juce::Colours::white);
-    g.fillRect(x, y, width, height);
+    //g.setColour(juce::Colours::white);
+    //g.fillRect(x, y, width, height);
     g.setOrigin(x, y);
     juce::Colour body = findColour(Skin::kRotaryBody, true);
     float body_radius = parent_->getDisplayScale() * knob_size_scale_ * findValue(Skin::kKnobBodySize) / 2.0f;

@@ -68,13 +68,15 @@ void DragMagnifyingGlass::mouseDoubleClick(const juce::MouseEvent& e) {
   OpenGlShapeButton::mouseDoubleClick(e);
 }
 
-EnvelopeSection::EnvelopeSection(juce::String name, std::string value_prepend,chowdsp::ParamHolder &params, chowdsp::ParameterListeners& listeners) : SynthSection(name) {
+EnvelopeSection::EnvelopeSection(juce::String name, std::string value_prepend,EnvParams &params, chowdsp::ParameterListeners& listeners, SynthSection &parent) : SynthSection(name) {
+
   delay_ = std::make_unique<SynthSlider>(value_prepend + "_delay");
   addSlider(delay_.get());
   delay_->setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
   delay_->setPopupPlacement(juce::BubbleComponent::below);
   
   attack_ = std::make_unique<SynthSlider>("attack");
+  attack_attachment = std::make_unique<chowdsp::SliderAttachment>(params.attackParam, listeners, *attack_, nullptr);
   addSlider(attack_.get());
   attack_->setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
   attack_->setPopupPlacement(juce::BubbleComponent::below);
@@ -130,21 +132,21 @@ EnvelopeSection::EnvelopeSection(juce::String name, std::string value_prepend,ch
   addAndMakeVisible(drag_magnifying_glass_.get());
   addOpenGlComponent(drag_magnifying_glass_->getGlComponent());
 
-  params.doForAllParameters([this, &listeners](auto& param, size_t) {
-      if( auto *newparm = dynamic_cast<chowdsp::FloatParameter*>((static_cast<juce::RangedAudioParameter*>(&param))))
-      {
-          if(newparm->paramID == "attack") {
-              DBG("yeet");
-              attack_attachment = chowdsp::SliderAttachment(*newparm, listeners, *attack_, nullptr);
-          }
-      }
+//  params.doForAllParameters([this, &listeners](auto& param, size_t) {
+//      if( auto *newparm = dynamic_cast<chowdsp::FloatParameter*>((static_cast<juce::RangedAudioParameter*>(&param))))
+//      {
+//          if(newparm->paramID == "attack") {
+//              DBG("yeet");
+//              attack_attachment = chowdsp::SliderAttachment(*newparm, listeners, *attack_, nullptr);
+//          }
+//      }
+//
+//      });
+//
 
-      });
-
-//  attack_attachment = chowdsp::SliderAttachment(params., listeners, *attack_, nullptr);
-//  decay_attachment = chowdsp::SliderAttachment(params.decayParam, listeners, *decay_.get(), nullptr);
-//  sustain_attachment = chowdsp::SliderAttachment(params.sustainParam, listeners, *sustain_.get(), nullptr);
-//  release_attachment = chowdsp::SliderAttachment(params.releaseParam, listeners, *release_.get(), nullptr);
+  decay_attachment = std::make_unique<chowdsp::SliderAttachment>(params.decayParam, listeners, *decay_, nullptr);
+  sustain_attachment = std::make_unique<chowdsp::SliderAttachment>(params.sustainParam, listeners, *sustain_, nullptr);
+  release_attachment = std::make_unique<chowdsp::SliderAttachment>(params.releaseParam, listeners, *release_, nullptr);
   //setSkinOverride(Skin::kEnvelope);
 }
 
@@ -170,28 +172,28 @@ void EnvelopeSection::resized() {
 
   int widget_margin = findValue(Skin::kWidgetMargin);
   int envelope_height = knob_y - widget_margin;
-  //envelope_->setBounds(widget_margin, widget_margin, getWidth() - 2 * widget_margin, envelope_height);
+  envelope_->setBounds(widget_margin, widget_margin, getWidth() - 2 * widget_margin, envelope_height);
 
   juce::Rectangle<int> knobs_area(0, knob_y, getWidth(), knob_section_height);
   placeKnobsInArea(knobs_area, { delay_.get(), attack_.get(), hold_.get(),
                                  decay_.get(), sustain_.get(), release_.get() });
   SynthSection::resized();
-  //envelope_->setSizeRatio(getSizeRatio());
+  envelope_->setSizeRatio(getSizeRatio());
 
-//  int magnify_height = envelope_->getHeight() * kMagnifyingHeightRatio;
-//  drag_magnifying_glass_->setBounds(envelope_->getRight() - magnify_height, envelope_->getY(),
-//                                    magnify_height, magnify_height);
+  int magnify_height = envelope_->getHeight() * kMagnifyingHeightRatio;
+  drag_magnifying_glass_->setBounds(envelope_->getRight() - magnify_height, envelope_->getY(),
+                                    magnify_height, magnify_height);
 }
 
 void EnvelopeSection::reset() {
-//  envelope_->resetPositions();
-//  SynthSection::reset();
+  envelope_->resetPositions();
+  SynthSection::reset();
 }
 
 void EnvelopeSection::magnifyDragged(juce::Point<float> delta) {
-//  envelope_->magnifyZoom(delta);
+  envelope_->magnifyZoom(delta);
 }
 
 void EnvelopeSection::magnifyDoubleClicked() {
-//  envelope_->magnifyReset();
+  envelope_->magnifyReset();
 }

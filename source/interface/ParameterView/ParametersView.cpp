@@ -144,9 +144,9 @@ namespace bitklavier {
             juce::Label label;
         };
         std::unique_ptr<SynthSection> createEditorSection(chowdsp::ParamHolder &params, chowdsp::ParameterListeners& listeners, SynthSection &parent) {
-            //if (auto *envParams = dynamic_cast<EnvParams*>(&params))
+            if (auto *envParams = dynamic_cast<EnvParams*>(&params))
 //            if(params.getName() == "ENV")
-//                return std::make_unique<EnvelopeSection>("ENV", "ENV",params,listeners);//std::make_unique<BooleanParameterComponent>(*boolParam, listeners);
+                return std::make_unique<EnvelopeSection>("ENV", "ENV",*envParams,listeners, parent);//std::make_unique<BooleanParameterComponent>(*boolParam, listeners);
             //
             //            if (auto *choiceParam = dynamic_cast<chowdsp::ChoiceParameter *> (&parameter))
             //                return std::make_unique<ChoiceParameterComponent>(*choiceParam, listeners);

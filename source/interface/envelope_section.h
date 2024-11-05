@@ -49,7 +49,7 @@ class DragMagnifyingGlass : public OpenGlShapeButton {
 
 class EnvelopeSection : public SynthSection, public DragMagnifyingGlass::Listener {
   public:
-    EnvelopeSection(juce::String name, std::string value_prepend, chowdsp::ParamHolder &params, chowdsp::ParameterListeners& listeners);
+    EnvelopeSection(juce::String name, std::string value_prepend,EnvParams &params, chowdsp::ParameterListeners& listeners, SynthSection &parent);
 
     virtual ~EnvelopeSection();
 
@@ -71,10 +71,10 @@ class EnvelopeSection : public SynthSection, public DragMagnifyingGlass::Listene
     std::unique_ptr<SynthSlider> release_;
     std::unique_ptr<SynthSlider> release_power_;
     std::unique_ptr<DragMagnifyingGlass> drag_magnifying_glass_;
-    chowdsp::SliderAttachment attack_attachment;
-    chowdsp::SliderAttachment decay_attachment;
-    chowdsp::SliderAttachment sustain_attachment;
-    chowdsp::SliderAttachment release_attachment;
+    std::unique_ptr<chowdsp::SliderAttachment> attack_attachment;
+    std::unique_ptr<chowdsp::SliderAttachment> decay_attachment;
+    std::unique_ptr<chowdsp::SliderAttachment> sustain_attachment;
+    std::unique_ptr<chowdsp::SliderAttachment> release_attachment;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(EnvelopeSection)
 };
