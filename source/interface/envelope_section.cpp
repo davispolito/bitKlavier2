@@ -68,9 +68,10 @@ void DragMagnifyingGlass::mouseDoubleClick(const juce::MouseEvent& e) {
   OpenGlShapeButton::mouseDoubleClick(e);
 }
 
-EnvelopeSection::EnvelopeSection(juce::String name, std::string value_prepend,EnvParams &params, chowdsp::ParameterListeners& listeners, SynthSection &parent) : SynthSection(name) {
+EnvelopeSection::EnvelopeSection(juce::String name, std::string value_prepend, EnvParams &params, chowdsp::ParameterListeners& listeners, SynthSection &parent) : SynthSection(name) {
 
-  delay_ = std::make_unique<SynthSlider>(value_prepend + "_delay");
+    delay_ = std::make_unique<SynthSlider>("delay");
+    //delay_ = std::make_unique<SynthSlider>(value_prepend + "_delay");
   addSlider(delay_.get());
   delay_->setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
   delay_->setPopupPlacement(juce::BubbleComponent::below);
@@ -81,11 +82,13 @@ EnvelopeSection::EnvelopeSection(juce::String name, std::string value_prepend,En
   attack_->setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
   attack_->setPopupPlacement(juce::BubbleComponent::below);
   attack_->parentHierarchyChanged();
+
   attack_power_ = std::make_unique<SynthSlider>(value_prepend + "_attack_power");
   addSlider(attack_power_.get());
   attack_power_->setVisible(false);
 
-  hold_ = std::make_unique<SynthSlider>(value_prepend + "_hold");
+  hold_ = std::make_unique<SynthSlider>("hold");
+  //hold_ = std::make_unique<SynthSlider>(value_prepend + "_hold");
   addSlider(hold_.get());
   hold_->setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
   hold_->setPopupPlacement(juce::BubbleComponent::below);
@@ -99,7 +102,8 @@ EnvelopeSection::EnvelopeSection(juce::String name, std::string value_prepend,En
   addSlider(decay_power_.get());
   decay_power_->setVisible(false);
 
-  release_ = std::make_unique<SynthSlider>(value_prepend + "_release");
+  //release_ = std::make_unique<SynthSlider>(value_prepend + "_release");
+  release_ = std::make_unique<SynthSlider>("release");
   addSlider(release_.get());
   release_->setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
   release_->setPopupPlacement(juce::BubbleComponent::below);
@@ -108,7 +112,8 @@ EnvelopeSection::EnvelopeSection(juce::String name, std::string value_prepend,En
   addSlider(release_power_.get());
   release_power_->setVisible(false);
 
-  sustain_ = std::make_unique<SynthSlider>(value_prepend + "_sustain");
+  sustain_ = std::make_unique<SynthSlider>("sustain");
+  //sustain_ = std::make_unique<SynthSlider>(value_prepend + "_sustain");
   addSlider(sustain_.get());
   sustain_->setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
   sustain_->setPopupPlacement(juce::BubbleComponent::below);

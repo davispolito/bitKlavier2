@@ -20,6 +20,7 @@ struct EnvParams : public chowdsp::ParamHolder
         chowdsp::ParamUtils::createNormalisableRange (0.0f, 1000.0f, 500.0f),
         0.0f
     };
+
     // Decay param
     chowdsp::TimeMsParameter::Ptr decayParam {
         juce::ParameterID { "decay", 100 },
