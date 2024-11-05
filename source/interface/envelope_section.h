@@ -49,7 +49,7 @@ class DragMagnifyingGlass : public OpenGlShapeButton {
 
 class EnvelopeSection : public SynthSection, public DragMagnifyingGlass::Listener {
   public:
-    EnvelopeSection(juce::String name, std::string value_prepend, EnvParams &params, chowdsp::ParameterListeners& listeners);
+    EnvelopeSection(juce::String name, std::string value_prepend, chowdsp::ParamHolder &params, chowdsp::ParameterListeners& listeners);
 
     virtual ~EnvelopeSection();
 
@@ -60,7 +60,7 @@ class EnvelopeSection : public SynthSection, public DragMagnifyingGlass::Listene
     void magnifyDoubleClicked() override;
 
   private:
-    //std::shared_ptr<EnvelopeEditor> envelope_;
+    std::shared_ptr<EnvelopeEditor> envelope_;
     std::unique_ptr<SynthSlider> delay_;
     std::unique_ptr<SynthSlider> attack_;
     std::unique_ptr<SynthSlider> attack_power_;

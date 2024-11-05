@@ -68,7 +68,7 @@ void DragMagnifyingGlass::mouseDoubleClick(const juce::MouseEvent& e) {
   OpenGlShapeButton::mouseDoubleClick(e);
 }
 
-EnvelopeSection::EnvelopeSection(juce::String name, std::string value_prepend,EnvParams &params, chowdsp::ParameterListeners& listeners) : SynthSection(name) {
+EnvelopeSection::EnvelopeSection(juce::String name, std::string value_prepend,chowdsp::ParamHolder &params, chowdsp::ParameterListeners& listeners) : SynthSection(name) {
   delay_ = std::make_unique<SynthSlider>(value_prepend + "_delay");
   addSlider(delay_.get());
   delay_->setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
@@ -111,29 +111,40 @@ EnvelopeSection::EnvelopeSection(juce::String name, std::string value_prepend,En
   sustain_->setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
   sustain_->setPopupPlacement(juce::BubbleComponent::below);
 
-//  envelope_ = std::make_shared<EnvelopeEditor>(value_prepend);
-//  addOpenGlComponent(envelope_);
-//  envelope_->setName(value_prepend);
-//  envelope_->setDelaySlider(delay_.get());
-//  envelope_->setAttackSlider(attack_.get());
-//  envelope_->setAttackPowerSlider(attack_power_.get());
-//  envelope_->setHoldSlider(hold_.get());
-//  envelope_->setDecaySlider(decay_.get());
-//  envelope_->setDecayPowerSlider(decay_power_.get());
-//  envelope_->setSustainSlider(sustain_.get());
-//  envelope_->setReleaseSlider(release_.get());
-//  envelope_->setReleasePowerSlider(release_power_.get());
-//  envelope_->resetEnvelopeLine(-1);
+  envelope_ = std::make_shared<EnvelopeEditor>(value_prepend);
+  addOpenGlComponent(envelope_);
+  envelope_->setName(value_prepend);
+  envelope_->setDelaySlider(delay_.get());
+  envelope_->setAttackSlider(attack_.get());
+  envelope_->setAttackPowerSlider(attack_power_.get());
+  envelope_->setHoldSlider(hold_.get());
+  envelope_->setDecaySlider(decay_.get());
+  envelope_->setDecayPowerSlider(decay_power_.get());
+  envelope_->setSustainSlider(sustain_.get());
+  envelope_->setReleaseSlider(release_.get());
+  envelope_->setReleasePowerSlider(release_power_.get());
+  envelope_->resetEnvelopeLine(-1);
 
   drag_magnifying_glass_ = std::make_unique<DragMagnifyingGlass>();
   drag_magnifying_glass_->addListener(this);
   addAndMakeVisible(drag_magnifying_glass_.get());
   addOpenGlComponent(drag_magnifying_glass_->getGlComponent());
 
-  attack_attachment = chowdsp::SliderAttachment(params.attackParam, listeners, *attack_, nullptr);
-  decay_attachment = chowdsp::SliderAttachment(params.decayParam, listeners, *decay_.get(), nullptr);
-  sustain_attachment = chowdsp::SliderAttachment(params.sustainParam, listeners, *sustain_.get(), nullptr);
-  release_attachment = chowdsp::SliderAttachment(params.releaseParam, listeners, *release_.get(), nullptr);
+  params.doForAllParameters([this, &listeners](auto& param, size_t) {
+      if( auto *newparm = dynamic_cast<chowdsp::FloatParameter*>((static_cast<juce::RangedAudioParameter*>(&param))))
+      {
+          if(newparm->paramID == "attack") {
+              DBG("yeet");
+              attack_attachment = chowdsp::SliderAttachment(*newparm, listeners, *attack_, nullptr);
+          }
+      }
+
+      });
+
+//  attack_attachment = chowdsp::SliderAttachment(params., listeners, *attack_, nullptr);
+//  decay_attachment = chowdsp::SliderAttachment(params.decayParam, listeners, *decay_.get(), nullptr);
+//  sustain_attachment = chowdsp::SliderAttachment(params.sustainParam, listeners, *sustain_.get(), nullptr);
+//  release_attachment = chowdsp::SliderAttachment(params.releaseParam, listeners, *release_.get(), nullptr);
   //setSkinOverride(Skin::kEnvelope);
 }
 

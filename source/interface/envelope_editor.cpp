@@ -754,111 +754,111 @@ void EnvelopeEditor::init(OpenGlWrapper& open_gl) {
 }
 
 void EnvelopeEditor::render(OpenGlWrapper& open_gl, bool animate) {
-//  for (int i = 0; i < kMaxTimesShown; ++i)
-//    times_[i]->render(open_gl, animate);
-//
-//  setGlPositions();
-//  grid_lines_.render(open_gl, animate);
-//  sub_grid_lines_.render(open_gl, animate);
-//
-//  setLineWidth(findValue(Skin::kWidgetLineWidth));
-//  setFillCenter(findValue(Skin::kWidgetFillCenter));
-//  //bitklavier::poly_float input_phase = envelope_phase_->value();
-//  float input_phase = 1.0f;
-//  bitklavier::poly_mask off_mask = bitklavier::poly_float::equal(input_phase, bitklavier::kVoiceKill);
-//  float phase_length = bitklavier::kVoiceKill - bitklavier::kVoiceOn;
-//  float phase = (input_phase - bitklavier::kVoiceOn) * (1.0f / phase_length);
-//  //phase = bitklavier::utils::maskLoad(phase, 1.0f, off_mask);
-//  // phase = 1.0f; //bitklavier::utils::min(phase, 1.0f);
-//
-//  bitklavier::poly_mask reset_mask = bitklavier::poly_float::greaterThan(last_phase_, phase);
-//  bitklavier::poly_float backup_phase = 1.0f;//getBackupPhase(phase);
-//  last_phase_ = 1.0f;// bitklavier::utils::maskLoad(last_phase_, backup_phase, reset_mask);
-//
-//  if (!animate_)
-//    last_phase_ = phase;
-//
-//  animate_ = animate;
-//  bool animating = animate;
-//  if (parent_)
-//    animating = animating; //&& parent_->getSynth()->isModSourceEnabled(getName().toStdString());
-//
-//  juce::Colour envelope_graph_fill = fill_left_color_;
-//  float fill_fade = findValue(Skin::kWidgetFillFade);
-//  juce::Colour envelope_graph_fill_fade = envelope_graph_fill.withMultipliedAlpha(1.0f - fill_fade);
-//  juce::Colour envelope_graph_fill_stereo = fill_right_color_;
-//  juce::Colour envelope_graph_fill_stereo_fade = envelope_graph_fill_stereo.withMultipliedAlpha(1.0f - fill_fade);
-//
-//  if (animating) {
-//    decayBoosts(kTailDecay);
-//
-//    float release_point = (bitklavier::kVoiceOff - bitklavier::kVoiceOn) / phase_length;
-//    bitklavier::poly_mask released_mask = bitklavier::poly_float::greaterThan(phase, release_point);
-//    released_mask = released_mask & bitklavier::poly_float::lessThan(last_phase_, release_point) & ~reset_mask;
-//    //last_phase_ = bitklavier::utils::maskLoad(last_phase_, release_point, released_mask);
-//
-//    last_phase_ = bitklavier::utils::max(last_phase_, 0.0f);
-//   // if (!envelope_phase_->isClearValue(input_phase))
-//    //  boostRange(last_phase_, phase, 0, kTailDecay);
-//    last_phase_ = phase;
-//
-//    setFill(true);
-//    setBoostAmount(findValue(Skin::kWidgetLineBoost));
-//    setFillBoostAmount(findValue(Skin::kWidgetFillBoost));
-//    resetEnvelopeLine(1);
-//    setIndex(1);
-//    setColor(line_right_color_);
-//    setFillColors(envelope_graph_fill_stereo_fade, envelope_graph_fill_stereo);
-//    drawLines(open_gl, false);
-//
-//    resetEnvelopeLine(0);
-//    setIndex(0);
-//    setColor(line_left_color_);
-//    setFillColors(envelope_graph_fill_fade, envelope_graph_fill);
-//    drawLines(open_gl, anyBoostValue());
-//
-//    setFill(false);
-//    setBoostAmount(0.0f);
-//    setFillBoostAmount(0.0f);
-//    resetEnvelopeLine(-1);
-//    setColor(line_center_color_);
-//    drawLines(open_gl, anyBoostValue());
-//
-//    setViewPort(open_gl);
-//    drawPosition(open_gl, 1);
-//    drawPosition(open_gl, 0);
-//  }
-//  else {
-//    setBoostAmount(0.0f);
-//    setFillBoostAmount(0.0f);
-//    decayBoosts(0.0f);
-//    resetEnvelopeLine(-1);
-//
-//    setFill(true);
-//    setColor(line_right_color_);
-//    setFillColors(envelope_graph_fill_stereo_fade, envelope_graph_fill_stereo);
-//    drawLines(open_gl, false);
-//
-//    setColor(line_left_color_);
-//    setFillColors(envelope_graph_fill_fade, envelope_graph_fill);
-//    drawLines(open_gl, anyBoostValue());
-//
-//    setFill(false);
-//    setColor(line_center_color_);
-//    drawLines(open_gl, anyBoostValue());
-//  }
-//
-//  point_circles_.setColor(line_center_color_);
-//  point_circles_.setAltColor(background_color_);
-//  point_circles_.render(open_gl, animate);
-//
-//  power_circles_.setColor(line_center_color_);
-//  power_circles_.render(open_gl, animate);
-//
-//  drag_circle_.render(open_gl, animate);
-//  hover_circle_.render(open_gl, animate);
-//
-//  renderCorners(open_gl, animate);
+  for (int i = 0; i < kMaxTimesShown; ++i)
+    times_[i]->render(open_gl, animate);
+
+  setGlPositions();
+  grid_lines_.render(open_gl, animate);
+  sub_grid_lines_.render(open_gl, animate);
+
+  setLineWidth(findValue(Skin::kWidgetLineWidth));
+  setFillCenter(findValue(Skin::kWidgetFillCenter));
+  //bitklavier::poly_float input_phase = envelope_phase_->value();
+  float input_phase = 1.0f;
+  bitklavier::poly_mask off_mask = bitklavier::poly_float::equal(input_phase, bitklavier::kVoiceKill);
+  float phase_length = bitklavier::kVoiceKill - bitklavier::kVoiceOn;
+  float phase = (input_phase - bitklavier::kVoiceOn) * (1.0f / phase_length);
+  //phase = bitklavier::utils::maskLoad(phase, 1.0f, off_mask);
+  // phase = 1.0f; //bitklavier::utils::min(phase, 1.0f);
+
+  bitklavier::poly_mask reset_mask = bitklavier::poly_float::greaterThan(last_phase_, phase);
+  bitklavier::poly_float backup_phase = 1.0f;//getBackupPhase(phase);
+  last_phase_ = 1.0f;// bitklavier::utils::maskLoad(last_phase_, backup_phase, reset_mask);
+
+  if (!animate_)
+    last_phase_ = phase;
+
+  animate_ = animate;
+  bool animating = animate;
+  if (parent_)
+    animating = animating; //&& parent_->getSynth()->isModSourceEnabled(getName().toStdString());
+
+  juce::Colour envelope_graph_fill = fill_left_color_;
+  float fill_fade = findValue(Skin::kWidgetFillFade);
+  juce::Colour envelope_graph_fill_fade = envelope_graph_fill.withMultipliedAlpha(1.0f - fill_fade);
+  juce::Colour envelope_graph_fill_stereo = fill_right_color_;
+  juce::Colour envelope_graph_fill_stereo_fade = envelope_graph_fill_stereo.withMultipliedAlpha(1.0f - fill_fade);
+
+  if (animating) {
+    decayBoosts(kTailDecay);
+
+    float release_point = (bitklavier::kVoiceOff - bitklavier::kVoiceOn) / phase_length;
+    bitklavier::poly_mask released_mask = bitklavier::poly_float::greaterThan(phase, release_point);
+    released_mask = released_mask & bitklavier::poly_float::lessThan(last_phase_, release_point) & ~reset_mask;
+    //last_phase_ = bitklavier::utils::maskLoad(last_phase_, release_point, released_mask);
+
+    last_phase_ = bitklavier::utils::max(last_phase_, 0.0f);
+   // if (!envelope_phase_->isClearValue(input_phase))
+    //  boostRange(last_phase_, phase, 0, kTailDecay);
+    last_phase_ = phase;
+
+    setFill(true);
+    setBoostAmount(findValue(Skin::kWidgetLineBoost));
+    setFillBoostAmount(findValue(Skin::kWidgetFillBoost));
+    resetEnvelopeLine(1);
+    setIndex(1);
+    setColor(line_right_color_);
+    setFillColors(envelope_graph_fill_stereo_fade, envelope_graph_fill_stereo);
+    drawLines(open_gl, false);
+
+    resetEnvelopeLine(0);
+    setIndex(0);
+    setColor(line_left_color_);
+    setFillColors(envelope_graph_fill_fade, envelope_graph_fill);
+    drawLines(open_gl, anyBoostValue());
+
+    setFill(false);
+    setBoostAmount(0.0f);
+    setFillBoostAmount(0.0f);
+    resetEnvelopeLine(-1);
+    setColor(line_center_color_);
+    drawLines(open_gl, anyBoostValue());
+
+    setViewPort(open_gl);
+    drawPosition(open_gl, 1);
+    drawPosition(open_gl, 0);
+  }
+  else {
+    setBoostAmount(0.0f);
+    setFillBoostAmount(0.0f);
+    decayBoosts(0.0f);
+    resetEnvelopeLine(-1);
+
+    setFill(true);
+    setColor(line_right_color_);
+    setFillColors(envelope_graph_fill_stereo_fade, envelope_graph_fill_stereo);
+    drawLines(open_gl, false);
+
+    setColor(line_left_color_);
+    setFillColors(envelope_graph_fill_fade, envelope_graph_fill);
+    drawLines(open_gl, anyBoostValue());
+
+    setFill(false);
+    setColor(line_center_color_);
+    drawLines(open_gl, anyBoostValue());
+  }
+
+  point_circles_.setColor(line_center_color_);
+  point_circles_.setAltColor(background_color_);
+  point_circles_.render(open_gl, animate);
+
+  power_circles_.setColor(line_center_color_);
+  power_circles_.render(open_gl, animate);
+
+  drag_circle_.render(open_gl, animate);
+  hover_circle_.render(open_gl, animate);
+
+  renderCorners(open_gl, animate);
 }
 
 void EnvelopeEditor::destroy(OpenGlWrapper& open_gl) {

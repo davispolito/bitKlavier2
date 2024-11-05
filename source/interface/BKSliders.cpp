@@ -312,15 +312,15 @@ void BKStackedSlider::mouseUp(const juce::MouseEvent& e)
 void BKStackedSlider::mouseMove(const juce::MouseEvent& e)
 {
     //topSlider->setValue(topSlider->proportionOfLengthToValue((double)e.x / getWidth()), dontSendNotification);
-    topSlider->setValue(dataSliders.getUnchecked(whichSlider(e))->getValue());
-
-    for(int i=0; i<dataSliders.size(); i++)
-    {
-        if(dataSliders.getUnchecked(whichSlider(e)) == dataSliders.getUnchecked(i))
-            dataSliders.getUnchecked(i)->setTextBoxStyle(juce::Slider::TextBoxLeft, false, 50, 50);
-        else
-            dataSliders.getUnchecked(i)->setTextBoxStyle(juce::Slider::NoTextBox, false, 50, 50);
-    }
+//    topSlider->setValue(dataSliders.getUnchecked(whichSlider(e))->getValue());
+//
+//    for(int i=0; i<dataSliders.size(); i++)
+//    {
+//        if(dataSliders.getUnchecked(whichSlider(e)) == dataSliders.getUnchecked(i))
+//            dataSliders.getUnchecked(i)->setTextBoxStyle(juce::Slider::TextBoxLeft, false, 50, 50);
+//        else
+//            dataSliders.getUnchecked(i)->setTextBoxStyle(juce::Slider::NoTextBox, false, 50, 50);
+//    }
 }
 
 

@@ -97,7 +97,7 @@ namespace bitklavier {
                             for (auto &param: paramVec)
                             {
                                 comps.push_back(createParameterComp(listeners, param,*this).release());
-                                addAndMakeVisible(comps.back());
+                                //addAndMakeVisible(comps.back());
                             }
 
                         },
@@ -144,8 +144,9 @@ namespace bitklavier {
             juce::Label label;
         };
         std::unique_ptr<SynthSection> createEditorSection(chowdsp::ParamHolder &params, chowdsp::ParameterListeners& listeners, SynthSection &parent) {
-            if (auto *envParams = dynamic_cast<EnvParams*>(&params))
-                return std::make_unique<EnvelopeSection>("ENV", "ENV",*envParams ,listeners);//std::make_unique<BooleanParameterComponent>(*boolParam, listeners);
+            //if (auto *envParams = dynamic_cast<EnvParams*>(&params))
+//            if(params.getName() == "ENV")
+//                return std::make_unique<EnvelopeSection>("ENV", "ENV",params,listeners);//std::make_unique<BooleanParameterComponent>(*boolParam, listeners);
             //
             //            if (auto *choiceParam = dynamic_cast<chowdsp::ChoiceParameter *> (&parameter))
             //                return std::make_unique<ChoiceParameterComponent>(*choiceParam, listeners);
@@ -185,10 +186,11 @@ namespace bitklavier {
 //        auto *viewport = pimpl->view.getViewport();
         params.doForAllParameterContainers(
                 [this, &paramListeners](auto &paramVec) {
+                    DBG("----paramvec----");
                     for (auto &param: paramVec)
                     {
                         comps.push_back(parameters_view_detail::createParameterComp(paramListeners, param,*this).release());
-
+                        DBG("add" + param->paramID);
                     }
                 },
                 [this, &paramListeners](auto &paramHolder) {

@@ -163,7 +163,7 @@ void DirectProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::Midi
 
     if (pedalSynth.getNumSounds() > 0)
         pedalSynth.renderNextBlock (buffer, midiMessages, 0, buffer.getNumSamples());
-DBG ("attack: " + juce::String (state.params.env.attackParam->get()));
+//DBG ("attack: " + juce::String (state.params.env.attackParam->get()));
     //juce::dsp::AudioBlock<float> block(buffer);
     //melatonin::printSparkline(buffer);
 }
