@@ -85,39 +85,6 @@ std::unique_ptr<juce::AudioProcessor> DirectPreparation::getProcessorPtr()
     return std::move(_proc_ptr);
 }
 
-void DirectPreparation::DirectPopup::renderOpenGlComponents(OpenGlWrapper& open_gl, bool animate) {
-
-
-    for (auto& sub_section : sub_sections_) {
-        if (sub_section->isVisible() && !sub_section->isAlwaysOnTop())
-            sub_section->renderOpenGlComponents(open_gl, animate);
-    }
-
-    for (auto& open_gl_component : open_gl_components_) {
-        if (open_gl_component->isVisible() && !open_gl_component->isAlwaysOnTop()) {
-            open_gl_component->render(open_gl, animate);
-            GLenum gl =  juce::gl::glGetError();
-            //DBG(juce::String(gl));
-            _ASSERT(gl == juce::gl::GL_NO_ERROR);
-        }
-    }
-
-    for (auto& sub_section : sub_sections_) {
-        if (sub_section->isVisible() && sub_section->isAlwaysOnTop())
-            sub_section->renderOpenGlComponents(open_gl, animate);
-    }
-
-    for (auto& open_gl_component : open_gl_components_) {
-        if (open_gl_component->isVisible() && open_gl_component->isAlwaysOnTop()) {
-            open_gl_component->render(open_gl, animate);
-            _ASSERT(juce::gl::glGetError() == juce::gl::GL_NO_ERROR);
-        }
-    }
-    if (background_)
-    {
-        background_->render(open_gl);
-    }
-}
 
 void DirectPreparation::paintBackground(juce::Graphics &g)  {
     for (auto * port: objects)
@@ -142,7 +109,7 @@ DirectPreparation::DirectPopup::DirectPopup(DirectProcessor& _proc, OpenGlWrappe
     transpositionSlider->setValue(1., juce::dontSendNotification);
     transpositionSlider->setColour(juce::Slider::ColourIds::backgroundColourId , juce::Colours::red);
     transpositionSlider->setColour(juce::Slider::ColourIds::thumbColourId , juce::Colours::blue);
-
+    addOpenGlComponent(transpositionSlider->getImageComponent());
     /*********************************************************************************************/
 }
 
@@ -151,18 +118,7 @@ DirectPreparation::DirectPopup::~DirectPopup()
     //TODO
     //constructor sends destroy message to opengl thread
 }
-void DirectPreparation::DirectPopup::redoImage()
-{
-    int mult = getPixelMultiple();
-    int image_width = getWidth() * mult;
-    int image_height = getHeight() * mult;
-    //juce::Image background_image(juce::Image::ARGB,image_width, image_height, true);
-    //juce::Graphics g (background_image);
 
-    //paintKnobShadows(g);
-    //sliderShadows.setOwnImage(background_image);
-
-}
 void DirectPreparation::DirectPopup::initOpenGlComponents(OpenGlWrapper &open_gl) {
 
     view.initOpenGlComponents(open_gl);
@@ -240,9 +196,6 @@ void DirectPreparation::DirectPopup::resized() {
 
     transpositionSlider->setBounds(column1, row1, sliderWidth, sliderHeight);
     transpositionSlider->setBounds(0, 300, 400, 200);
-    transpositionSlider->redoImage();
-
-    redoImage();
     SynthSection::resized();
 
 

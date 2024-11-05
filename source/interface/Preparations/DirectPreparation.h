@@ -52,7 +52,7 @@ public:
     virtual void resized() override
     {
         OpenGlAutoImageComponent<BKStackedSlider>::resized();
-        if (isShowing())
+       // if (isShowing())
             redoImage();
     }
 };
@@ -149,7 +149,6 @@ private:
         // Public function definitions for the class, which override the base class methods for
         // initializing, rendering, resizing, and painting OpenGl components
         void initOpenGlComponents(OpenGlWrapper &open_gl) override;
-        void renderOpenGlComponents(OpenGlWrapper& open_gl, bool animate) override;
         void resized() override;
         void paintBackground(juce::Graphics& g) override
         {
@@ -171,7 +170,6 @@ private:
     private:
 
         // Private function definitions and member variables for the DirectPopup class
-        void redoImage();
         DirectParams* params = nullptr;
         DirectProcessor& proc;
         std::unique_ptr<OpenGlTranspositionSlider> transpositionSlider;
