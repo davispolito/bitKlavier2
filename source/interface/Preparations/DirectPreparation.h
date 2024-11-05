@@ -11,6 +11,7 @@
 #include "ParameterView/DirectParametersView.h"
 #include "FullInterface.h"
 #include "BKSliders.h"
+#include "envelope_section.h"
 /************************************************************************************/
 /*                              CLASS: OpenGlSlider                                 */
 /************************************************************************************/

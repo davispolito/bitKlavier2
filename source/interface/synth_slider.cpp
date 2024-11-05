@@ -314,8 +314,8 @@ void SynthSlider::mouseDown(const juce::MouseEvent& e) {
     OpenGlSlider::mouseDown(e);
     //mainSynth->beginChangeGesture(getName().toStdString());
 
-//    for (juce::SliderListener* listener : slider_listeners_)
-//      listener->mouseDown(this);
+    for (SliderListener* listener : slider_listeners_)
+      listener->mouseDown(this);
 
     showPopup(true);
   }
@@ -351,16 +351,16 @@ void SynthSlider::mouseUp(const juce::MouseEvent& e) {
   //setDefaultRange();
   OpenGlSlider::mouseUp(e);
 
-//  for (juce::SliderListener* listener : slider_listeners_)
-//    listener->mouseUp(this);
+  for (SliderListener* listener : slider_listeners_)
+    listener->mouseUp(this);
 
 //  synth_interface_->getSynth()->endChangeGesture(getName().toStdString());
 }
 
 void SynthSlider::mouseEnter(const juce::MouseEvent &e) {
   OpenGlSlider::mouseEnter(e);
-//  for (SynthSlider::SliderListener* listener : slider_listeners_)
-//    listener->hoverStarted(this);
+  for (SliderListener* listener : slider_listeners_)
+    listener->hoverStarted(this);
 
 //  if (show_popup_on_hover_)
 //    showPopup(true);
@@ -371,8 +371,8 @@ void SynthSlider::mouseEnter(const juce::MouseEvent &e) {
 
 void SynthSlider::mouseExit(const juce::MouseEvent &e) {
   OpenGlSlider::mouseExit(e);
-//  for (SynthSlider::SliderListener* listener : slider_listeners_)
-//    listener->hoverEnded(this);
+  for (SynthSlider::SliderListener* listener : slider_listeners_)
+    listener->hoverEnded(this);
 
   //hidePopup(true);
   hovering_ = false;
@@ -382,8 +382,8 @@ void SynthSlider::mouseExit(const juce::MouseEvent &e) {
 void SynthSlider::mouseDoubleClick(const juce::MouseEvent& e) {
   OpenGlSlider::mouseDoubleClick(e);
   if (!e.mods.isPopupMenu()) {
-//    for (juce::SliderListener* listener : slider_listeners_)
-//      listener->doubleClick(this);
+    for (SliderListener* listener : slider_listeners_)
+      listener->doubleClick(this);
   }
   showPopup(true);
 }
@@ -413,8 +413,8 @@ void SynthSlider::mouseWheelMove(const juce::MouseEvent& e, const juce::MouseWhe
 }
 
 void SynthSlider::focusLost(FocusChangeType cause) {
-//  for (SynthSlider::SliderListener* listener : slider_listeners_)
-//    listener->focusLost(this);
+  for (SliderListener* listener : slider_listeners_)
+    listener->focusLost(this);
 }
 
 void SynthSlider::valueChanged() {
@@ -569,8 +569,8 @@ void SynthSlider::setSliderPositionFromText() {
     setValue(getValueFromText(text_entry_->getText()));
   text_entry_->setVisible(false);
 
-//  for (juce::SliderListener* listener : slider_listeners_)
-//    listener->menuFinished(this);
+  for (SliderListener* listener : slider_listeners_)
+    listener->menuFinished(this);
 }
 
 void SynthSlider::showTextEntry() {
@@ -680,9 +680,9 @@ void SynthSlider::setDefaultRange() {
 //    setRange(details_.min, details_.max);
 }
 
-//void SynthSlider::addSliderListener(SynthSlider::SliderListener* listener) {
-//  slider_listeners_.push_back(listener);
-//}
+void SynthSlider::addSliderListener(SynthSlider::SliderListener* listener) {
+  slider_listeners_.push_back(listener);
+}
 
 void SynthSlider::showPopup(bool primary) {
   if (shouldShowPopup())

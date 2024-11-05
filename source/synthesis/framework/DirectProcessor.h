@@ -11,7 +11,7 @@
 #include <chowdsp_plugin_utils/chowdsp_plugin_utils.h>
 #include <chowdsp_serialization/chowdsp_serialization.h>
 #include <chowdsp_sources/chowdsp_sources.h>
-
+#include "EnvParams.h"
 struct DirectParams : chowdsp::ParamHolder
 {
     // gain slider params, for all gain-type knobs
@@ -24,7 +24,7 @@ struct DirectParams : chowdsp::ParamHolder
     {
         //add (gainParam, hammerParam, releaseResonanceParam, pedalParam, velocityParam, attackParam, decayParam, sustainParam, releaseParam, transpositionsParam);
         //add (gainParam, hammerParam, releaseResonanceParam, pedalParam, velocityParam, attackParam, decayParam, sustainParam, releaseParam);
-        add (gainParam, hammerParam, releaseResonanceParam, pedalParam, attackParam, decayParam, sustainParam, releaseParam);
+        add (gainParam, hammerParam, releaseResonanceParam, pedalParam,env);
     }
 
     // juce::Gain param
@@ -69,39 +69,7 @@ struct DirectParams : chowdsp::ParamHolder
         &chowdsp::ParamUtils::stringToFloatVal
     };
 
-    // Attack param
-    chowdsp::TimeMsParameter::Ptr attackParam {
-        juce::ParameterID { "attack", 100 },
-        "attack",
-        chowdsp::ParamUtils::createNormalisableRange (0.0f, 1000.0f, 500.0f),
-        0.0f
-    };
-
-    // Decay param
-    chowdsp::TimeMsParameter::Ptr decayParam {
-        juce::ParameterID { "decay", 100 },
-        "Decay",
-        chowdsp::ParamUtils::createNormalisableRange (0.0f, 1000.0f, 500.0f),
-        0.0f
-    };
-
-    // Sustain param
-    chowdsp::FloatParameter::Ptr sustainParam {
-        juce::ParameterID { "sustain", 100 },
-        "Sustain",
-        chowdsp::ParamUtils::createNormalisableRange (0.0f, 1.0f, 0.5f),
-        1.0f,
-        &chowdsp::ParamUtils::floatValToString,
-        &chowdsp::ParamUtils::stringToFloatVal
-    };
-
-    // Release param
-    chowdsp::TimeMsParameter::Ptr releaseParam {
-        juce::ParameterID { "release", 100 },
-        "Release",
-        chowdsp::ParamUtils::createNormalisableRange (0.0f, 1000.0f, 500.0f),
-        10.0f
-    };
+    EnvParams env;
 
     /*
     // Transpositions param

@@ -56,32 +56,32 @@ DirectProcessor::DirectProcessor (const juce::ValueTree& v) : PluginBase (v, nul
                 DBG ("pedal gain: " + juce::String (state.params.pedalParam->get()));
             }),
 
-        state.addParameterListener (*state.params.attackParam,
+        state.addParameterListener (*state.params.env.attackParam,
             chowdsp::ParameterListenerThread::AudioThread,
             [this] {
-                mainSynth.globalADSR.attack = state.params.attackParam->get() * .001f; //should fix, not do hard conversions between ms and seconds here
-                DBG ("attack: " + juce::String (state.params.attackParam->get()));
+                mainSynth.globalADSR.attack = state.params.env.attackParam->get() * .001f; //should fix, not do hard conversions between ms and seconds here
+                DBG ("attack: " + juce::String (state.params.env.attackParam->get()));
             }),
 
-        state.addParameterListener (*state.params.decayParam,
+        state.addParameterListener (*state.params.env.decayParam,
             chowdsp::ParameterListenerThread::AudioThread,
             [this] {
-                mainSynth.globalADSR.decay = state.params.decayParam->get() * .001f;
-                DBG ("decay: " + juce::String (state.params.decayParam->get()));
+                mainSynth.globalADSR.decay = state.params.env.decayParam->get() * .001f;
+                DBG ("decay: " + juce::String (state.params.env.decayParam->get()));
             }),
 
-        state.addParameterListener (*state.params.sustainParam,
+        state.addParameterListener (*state.params.env.sustainParam,
             chowdsp::ParameterListenerThread::AudioThread,
             [this] {
-                mainSynth.globalADSR.sustain = state.params.sustainParam->get();
-                DBG ("sustain: " + juce::String (state.params.sustainParam->get()));
+                mainSynth.globalADSR.sustain = state.params.env.sustainParam->get();
+                DBG ("sustain: " + juce::String (state.params.env.sustainParam->get()));
             }),
 
-        state.addParameterListener (*state.params.releaseParam,
+        state.addParameterListener (*state.params.env.releaseParam,
             chowdsp::ParameterListenerThread::AudioThread,
             [this] {
-                mainSynth.globalADSR.release = state.params.releaseParam->get() * .001f;
-                DBG ("release: " + juce::String (state.params.releaseParam->get()));
+                mainSynth.globalADSR.release = state.params.env.releaseParam->get() * .001f;
+                DBG ("release: " + juce::String (state.params.env.releaseParam->get()));
             })
 
     };
@@ -163,7 +163,7 @@ void DirectProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::Midi
 
     if (pedalSynth.getNumSounds() > 0)
         pedalSynth.renderNextBlock (buffer, midiMessages, 0, buffer.getNumSamples());
-
+DBG ("attack: " + juce::String (state.params.env.attackParam->get()));
     //juce::dsp::AudioBlock<float> block(buffer);
     //melatonin::printSparkline(buffer);
 }

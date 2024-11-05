@@ -120,6 +120,7 @@ add_library(SharedCode INTERFACE
         source/interface/BKSliders.h
         source/interface/ParameterView/DirectParametersView.cpp
         source/interface/ParameterView/DirectParametersView.h
+        source/synthesis/EnvParams.h
 )
 
 # C++20, please

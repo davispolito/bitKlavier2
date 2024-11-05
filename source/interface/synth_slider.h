@@ -333,23 +333,23 @@ class SynthSlider : public OpenGlSlider, public juce::TextEditor::Listener {
     static constexpr float kLinearHandlePercent = 1.2f;
     static constexpr float kLinearModulationPercent = 0.1f;
 
-//    class juce::SliderListener {
-//      public:
-//        virtual ~juce::SliderListener() { }
-//        virtual void hoverStarted(SynthSlider* slider) { }
-//        virtual void hoverEnded(SynthSlider* slider) { }
-//        virtual void mouseDown(SynthSlider* slider) { }
-//        virtual void mouseUp(SynthSlider* slider) { }
-//        virtual void beginModulationEdit(SynthSlider* slider) { }
-//        virtual void endModulationEdit(SynthSlider* slider) { }
-//        virtual void menuFinished(SynthSlider* slider) { }
-//        virtual void focusLost(SynthSlider* slider) { }
-//        virtual void doubleClick(SynthSlider* slider) { }
-//        virtual void modulationsChanged(const std::string& name) { }
-//        virtual void modulationAmountChanged(SynthSlider* slider) { }
-//        virtual void modulationRemoved(SynthSlider* slider) { }
-//        virtual void guiChanged(SynthSlider* slider) { }
-//    };
+    class SliderListener {
+      public:
+        virtual ~SliderListener() { }
+        virtual void hoverStarted(SynthSlider* slider) { }
+        virtual void hoverEnded(SynthSlider* slider) { }
+        virtual void mouseDown(SynthSlider* slider) { }
+        virtual void mouseUp(SynthSlider* slider) { }
+        virtual void beginModulationEdit(SynthSlider* slider) { }
+        virtual void endModulationEdit(SynthSlider* slider) { }
+        virtual void menuFinished(SynthSlider* slider) { }
+        virtual void focusLost(SynthSlider* slider) { }
+        virtual void doubleClick(SynthSlider* slider) { }
+        virtual void modulationsChanged(const std::string& name) { }
+        virtual void modulationAmountChanged(SynthSlider* slider) { }
+        virtual void modulationRemoved(SynthSlider* slider) { }
+        virtual void guiChanged(SynthSlider* slider) { }
+    };
 
     //SynthSlider(juce::String name, chowdsp::FloatParameter& param);
     SynthSlider(juce::String name);
@@ -411,7 +411,7 @@ class SynthSlider : public OpenGlSlider, public juce::TextEditor::Listener {
 
     void setDefaultRange();
 
-//    void addSliderListener(juce::SliderListener* listener);
+    void addSliderListener(SliderListener* listener);
 
     void showPopup(bool primary);
     void hidePopup(bool primary);
@@ -544,7 +544,7 @@ class SynthSlider : public OpenGlSlider, public juce::TextEditor::Listener {
     SynthGuiInterface* synth_interface_;
     std::unique_ptr<OpenGlTextEditor> text_entry_;
 
-//    std::vector<juce::SliderListener*> slider_listeners_;
+    std::vector<SliderListener*> slider_listeners_;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(SynthSlider)
 };

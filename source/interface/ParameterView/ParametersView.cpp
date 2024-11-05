@@ -2,6 +2,8 @@
 #include "synth_section.h"
 #include "synth_slider.h"
 #include "open_gl_background.h"
+
+#include "envelope_section.h"
 namespace bitklavier {
     namespace parameters_view_detail {
 
@@ -85,6 +87,7 @@ namespace bitklavier {
 
             return {};
         }
+
         struct ParameterGroupItem : public SynthSection {
             ParameterGroupItem(chowdsp::ParamHolder &params, chowdsp::ParameterListeners& listeners, SynthSection &parent)
                     : name(params.getName()), parent(parent), label(name,name), SynthSection(params.getName()) {
@@ -140,6 +143,18 @@ namespace bitklavier {
             juce::Grid grid;
             juce::Label label;
         };
+        std::unique_ptr<SynthSection> createEditorSection(chowdsp::ParamHolder &params, chowdsp::ParameterListeners& listeners, SynthSection &parent) {
+            if (auto *envParams = dynamic_cast<EnvParams*>(&params))
+                return std::make_unique<EnvelopeSection>("ENV", "ENV",*envParams ,listeners);//std::make_unique<BooleanParameterComponent>(*boolParam, listeners);
+            //
+            //            if (auto *choiceParam = dynamic_cast<chowdsp::ChoiceParameter *> (&parameter))
+            //                return std::make_unique<ChoiceParameterComponent>(*choiceParam, listeners);
+            //
+            //            if (auto *sliderParam = dynamic_cast<chowdsp::FloatParameter *> (&parameter))
+            //                return std::make_unique<SliderParameterComponent>(*sliderParam, listeners, parent);
+
+            return std::make_unique<ParameterGroupItem>(params,listeners, parent);
+        }
     } // namespace parameters_view_detail
 
 //==============================================================================
@@ -178,7 +193,9 @@ namespace bitklavier {
                 },
                 [this, &paramListeners](auto &paramHolder) {
                     DBG("add group item");
-//                    addSubSection(std::make_unique<ParameterGroupItem>(paramHolder,listeners, *this).release());
+
+                    DBG("paramholder name" + paramHolder.getName());
+                   addSubSection(parameters_view_detail::createEditorSection(paramHolder,paramListeners,*this).release());
                 });
         setLookAndFeel(DefaultLookAndFeel::instance());
         setOpaque(true);

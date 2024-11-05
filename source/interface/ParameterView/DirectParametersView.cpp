@@ -11,5 +11,10 @@ void DirectParametersView::resized()
     DBG("bounds x:" + juce::String(getLocalBounds().getX()) + " y:" + juce::String(getLocalBounds().getY()) + " width: " + juce::String(getLocalBounds().getWidth()) + " height: " + juce::String(getLocalBounds().getHeight()));
     //pimpl->groupItem.setBounds(getLocalBounds());
     placeKnobsInArea(getLocalBounds(), comps);
-
+    for(auto section: sub_sections_)
+    {
+        if(section->getName() == "ENV")
+            section->setBounds(0,400,400,200);
+    }
+    //envelope->setBounds(0,400, 400, 200);
 }
