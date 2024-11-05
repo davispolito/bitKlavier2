@@ -6,7 +6,7 @@ struct OpenGlWrapper;
 
 namespace bitklavier {
 /** Clone of juce::GenericAudioProcessorEditor, but usable as a generic component */
-    class ParametersView : public SynthSection {
+    class  ParametersView : public SynthSection {
     public:
         ParametersView (chowdsp::PluginState& pluginState, chowdsp::ParamHolder& params, OpenGlWrapper *open_gl);
         ParametersView (chowdsp::ParameterListeners& paramListeners, chowdsp::ParamHolder& params, OpenGlWrapper *open_gl);
@@ -34,6 +34,7 @@ namespace bitklavier {
     private:
         struct Pimpl;
         std::unique_ptr<Pimpl> pimpl;
+    protected:
         std::vector<juce::Component*> comps;
         JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ParametersView)
     };

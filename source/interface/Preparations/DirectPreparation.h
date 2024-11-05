@@ -8,7 +8,7 @@
 #include "DirectProcessor.h"
 #include "PreparationSection.h"
 #include "popup_browser.h"
-#include "ParameterView/ParametersView.h"
+#include "ParameterView/DirectParametersView.h"
 #include "FullInterface.h"
 #include "BKSliders.h"
 /************************************************************************************/
@@ -54,6 +54,11 @@ public:
         OpenGlAutoImageComponent<BKStackedSlider>::resized();
        // if (isShowing())
             redoImage();
+    }
+    virtual void mouseDrag(const juce::MouseEvent &e) override
+    {
+        OpenGlAutoImageComponent<BKStackedSlider>::mouseDrag(e);
+        redoImage();
     }
 };
 
@@ -175,7 +180,7 @@ private:
         std::unique_ptr<OpenGlTranspositionSlider> transpositionSlider;
 
 
-        bitklavier::ParametersView view;
+        DirectParametersView view;
 //        // Parameter sliders for the Direct Popup
 //        std::unique_ptr<SynthSlider> gainSlider;
 //        std::unique_ptr<SynthSlider> hammerSlider;

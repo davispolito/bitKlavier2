@@ -118,6 +118,8 @@ add_library(SharedCode INTERFACE
         source/synthesis/framework/tuning_systems.h
         source/interface/BKSliders.cpp
         source/interface/BKSliders.h
+        source/interface/ParameterView/DirectParametersView.cpp
+        source/interface/ParameterView/DirectParametersView.h
 )
 
 # C++20, please

@@ -220,54 +220,54 @@ SynthSlider::SynthSlider(juce::String name) : OpenGlSlider(name), show_popup_on_
     setVelocityBasedMode(false);
     setVelocityModeParameters(1.0, 0, 0.0, false, juce::ModifierKeys::ctrlAltCommandModifiers);
 }
-
-SynthSlider::SynthSlider(juce::String name, chowdsp::FloatParameter& param) : OpenGlSlider(name), show_popup_on_hover_(false), scroll_enabled_(true),
-                                        bipolar_modulation_(false), stereo_modulation_(false),
-                                        bypass_modulation_(false), modulation_bar_right_(true),
-                                        snap_to_value_(false), hovering_(false),
-                                        has_parameter_assignment_(false),
-                                        use_suffix_(true), snap_value_(0.0),
-                                        text_height_percentage_(0.0f),
-                                        sensitivity_(kDefaultSensitivity),
-                                        popup_placement_(juce::BubbleComponent::below),
-                                        modulation_control_placement_(juce::BubbleComponent::below),
-                                        max_display_characters_(kDefaultFormatLength),
-                                        max_decimal_places_(kDefaultFormatDecimalPlaces), shift_index_amount_(0),
-                                        shift_is_multiplicative_(false), mouse_wheel_index_movement_(1.0),
-                                        text_entry_width_percent_(kDefaultTextEntryWidthPercent),
-                                        text_entry_height_percent_(kDefaultTextEntryHeightPercent),
-                                        display_multiply_(0.0f), display_exponential_base_(2.0f),
-                                        string_lookup_(nullptr), extra_modulation_target_(nullptr),
-                                        synth_interface_(nullptr) /*attachment(param,pluginState, *this)*/{
-    //setAttachment(param, pluginState);
-    setComponentID (param.paramID);
-  text_entry_ = std::make_unique<OpenGlTextEditor>(name);
-  text_entry_->setMonospace();
-  text_entry_->setMultiLine(false);
-  text_entry_->setScrollToShowCursor(false);
-  text_entry_->addListener(this);
-  text_entry_->setSelectAllWhenFocused(true);
-  text_entry_->setKeyboardType(juce::TextEditor::numericKeyboard);
-  text_entry_->setJustification(juce::Justification::centred);
-  text_entry_->setAlwaysOnTop(true);
-  text_entry_->getImageComponent()->setAlwaysOnTop(true);
-  addChildComponent(text_entry_.get());
-
-  setWantsKeyboardFocus(true);
-  setTextBoxStyle(juce::Slider::NoTextBox, true, 0, 0);
-
-
-
-  setRotaryParameters(2.0f * bitklavier::kPi - kRotaryAngle, 2.0f * bitklavier::kPi + kRotaryAngle, true);
-
-
-
-
-  setDefaultRange();
-
-  setVelocityBasedMode(false);
-  setVelocityModeParameters(1.0, 0, 0.0, false, juce::ModifierKeys::ctrlAltCommandModifiers);
-}
+//
+//SynthSlider::SynthSlider(juce::String name, chowdsp::FloatParameter& param) : OpenGlSlider(name), show_popup_on_hover_(false), scroll_enabled_(true),
+//                                        bipolar_modulation_(false), stereo_modulation_(false),
+//                                        bypass_modulation_(false), modulation_bar_right_(true),
+//                                        snap_to_value_(false), hovering_(false),
+//                                        has_parameter_assignment_(false),
+//                                        use_suffix_(true), snap_value_(0.0),
+//                                        text_height_percentage_(0.0f),
+//                                        sensitivity_(kDefaultSensitivity),
+//                                        popup_placement_(juce::BubbleComponent::below),
+//                                        modulation_control_placement_(juce::BubbleComponent::below),
+//                                        max_display_characters_(kDefaultFormatLength),
+//                                        max_decimal_places_(kDefaultFormatDecimalPlaces), shift_index_amount_(0),
+//                                        shift_is_multiplicative_(false), mouse_wheel_index_movement_(1.0),
+//                                        text_entry_width_percent_(kDefaultTextEntryWidthPercent),
+//                                        text_entry_height_percent_(kDefaultTextEntryHeightPercent),
+//                                        display_multiply_(0.0f), display_exponential_base_(2.0f),
+//                                        string_lookup_(nullptr), extra_modulation_target_(nullptr),
+//                                        synth_interface_(nullptr) /*attachment(param,pluginState, *this)*/{
+//    //setAttachment(param, pluginState);
+//    setComponentID (param.paramID);
+//  text_entry_ = std::make_unique<OpenGlTextEditor>(name);
+//  text_entry_->setMonospace();
+//  text_entry_->setMultiLine(false);
+//  text_entry_->setScrollToShowCursor(false);
+//  text_entry_->addListener(this);
+//  text_entry_->setSelectAllWhenFocused(true);
+//  text_entry_->setKeyboardType(juce::TextEditor::numericKeyboard);
+//  text_entry_->setJustification(juce::Justification::centred);
+//  text_entry_->setAlwaysOnTop(true);
+//  text_entry_->getImageComponent()->setAlwaysOnTop(true);
+//  addChildComponent(text_entry_.get());
+//
+//  setWantsKeyboardFocus(true);
+//  setTextBoxStyle(juce::Slider::NoTextBox, true, 0, 0);
+//
+//
+//
+//  setRotaryParameters(2.0f * bitklavier::kPi - kRotaryAngle, 2.0f * bitklavier::kPi + kRotaryAngle, true);
+//
+//
+//
+//
+//  setDefaultRange();
+//
+//  setVelocityBasedMode(false);
+//  setVelocityModeParameters(1.0, 0, 0.0, false, juce::ModifierKeys::ctrlAltCommandModifiers);
+//}
 
 PopupItems SynthSlider::createPopupMenu() {
   PopupItems options;
@@ -685,8 +685,8 @@ void SynthSlider::setDefaultRange() {
 //}
 
 void SynthSlider::showPopup(bool primary) {
-//  if (shouldShowPopup())
-//    parent_->showPopupDisplay(this, getTextFromValue(getValue()).toStdString(), popup_placement_, primary);
+  if (shouldShowPopup())
+    parent_->showPopupDisplay(this, getTextFromValue(getValue()).toStdString(), popup_placement_, primary);
 }
 
 void SynthSlider::hidePopup(bool primary) {
