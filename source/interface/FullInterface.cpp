@@ -15,12 +15,12 @@
 */
 
 #include "FullInterface.h"
-
+#include "test_section.h"
 //#include "default_look_and_feel.h"
 #include "text_look_and_feel.h"
 #include "Identifiers.h"
 #include "about_section.h"
-
+#include "synth_slider.h"
 FullInterface::FullInterface(SynthGuiData* synth_data) : SynthSection("full_interface"), width_(0), resized_width_(0),
                                                          last_render_scale_(0.0f), display_scale_(1.0f),
                                                          pixel_multiple_(1),unsupported_(false), animate_(true),
@@ -33,7 +33,8 @@ FullInterface::FullInterface(SynthGuiData* synth_data) : SynthSection("full_inte
    setSkinValues(default_skin, true);
    default_skin.copyValuesToLookAndFeel(DefaultLookAndFeel::instance());
 
-
+//    test_ = std::make_unique<TestSection>();
+//    addSubSection(test_.get());
 
    juce::ValueTree t(IDs::PIANO);
    t.setProperty(IDs::name, "default", nullptr);
@@ -43,20 +44,20 @@ FullInterface::FullInterface(SynthGuiData* synth_data) : SynthSection("full_inte
    addSubSection(main_.get());
    main_->addListener(this);
 
-   inspectButton = std::make_unique<OpenGlToggleButton>("Inspect the UI");
-   addAndMakeVisible(inspectButton.get());
-   addOpenGlComponent(inspectButton->getGlComponent());
-   inspectButton->setText("Inspect");
-   // this chunk of code instantiates and opens the melatonin inspector
-   inspectButton->onClick = [&] {
-       if (!inspector)
-       {
-           inspector = std::make_unique<melatonin::Inspector> (*this);
-           inspector->onClose = [this]() { inspector.reset(); };
-       }
-
-       inspector->setVisible (true);
-   };
+//   inspectButton = std::make_unique<OpenGlToggleButton>("Inspect the UI");
+//   addAndMakeVisible(inspectButton.get());
+//   addOpenGlComponent(inspectButton->getGlComponent());
+//   inspectButton->setText("Inspect");
+//   // this chunk of code instantiates and opens the melatonin inspector
+//   inspectButton->onClick = [&] {
+//       if (!inspector)
+//       {
+//           inspector = std::make_unique<melatonin::Inspector> (*this);
+//           inspector->onClose = [this]() { inspector.reset(); };
+//       }
+//
+//       inspector->setVisible (true);
+//   };
 
    header_ = std::make_unique<HeaderSection>();
    addSubSection(header_.get());
@@ -93,7 +94,7 @@ FullInterface::FullInterface(SynthGuiData* synth_data) : SynthSection("full_inte
 
 
     about_section_->toFront(true);
-   //setOpaque(true);
+   setOpaque(true);
    open_gl_context_.setContinuousRepainting(true);
    open_gl_context_.setOpenGLVersionRequired(juce::OpenGLContext::openGL3_2);
    open_gl_context_.setSwapInterval(0);
@@ -294,11 +295,12 @@ void FullInterface::resized() {
    int audio_width = section_one_width + section_two_width + padding;
 
 
-//   header_->setTabOffset(2 * voice_padding);
+   header_->setTabOffset(2 * voice_padding);
    header_->setBounds(left, top, width,  top_height);
    juce::Rectangle<int> main_bounds(0, 0, width, height);
    juce::Rectangle<int> new_bounds(0, 0, width, height);
    main_->setBounds(main_bounds);
+   //test_->setBounds(main_bounds);
    prep_popup->setBounds(100, 100, 700, 700);
    about_section_->setBounds(new_bounds);
    //inspectButton->setBounds(10, 0, 100, 100);

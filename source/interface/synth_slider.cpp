@@ -27,7 +27,7 @@
 #include "chowdsp_plugin_state/Backend/chowdsp_PluginState.h"
 #include "synth_gui_interface.h"
 #include "synth_section.h"
-
+#include "synth_section.h"
 void OpenGlSliderQuad::init(OpenGlWrapper& open_gl) {
   if (slider_->isModulationKnob())
     setFragmentShader(Shaders::kModulationKnobFragment);
@@ -61,7 +61,7 @@ void OpenGlSlider::setSliderDisplayValues() {
     float size = findValue(Skin::kKnobArcSize) * getKnobSizeScale() + thickness;
     float offset = findValue(Skin::kKnobOffset);
     float radius_x = (size + 0.5f) / getWidth();
-    float center_y = 2.0f / getHeight();
+    float center_y = 2.0f *offset / getHeight();
     float radius_y = (size + 0.5f) / getHeight();
     slider_quad_->setQuad(0, -radius_x, -center_y - radius_y, 2.0f * radius_x, 2.0f * radius_y);
     slider_quad_->setThumbAmount(findValue(Skin::kKnobHandleLength));
@@ -173,53 +173,53 @@ void OpenGlSlider::setColors() {
   mod_color_ = getModColor();
 }
 
-//SynthSlider::SynthSlider(juce::String name) : OpenGlSlider(name), show_popup_on_hover_(false), scroll_enabled_(true),
-//                                                                                                           bipolar_modulation_(false), stereo_modulation_(false),
-//                                                                                                           bypass_modulation_(false), modulation_bar_right_(true),
-//                                                                                                           snap_to_value_(false), hovering_(false),
-//                                                                                                           has_parameter_assignment_(false),
-//                                                                                                           use_suffix_(true), snap_value_(0.0),
-//                                                                                                           text_height_percentage_(0.0f),
-//                                                                                                           sensitivity_(kDefaultSensitivity),
-//                                                                                                           popup_placement_(juce::BubbleComponent::below),
-//                                                                                                           modulation_control_placement_(juce::BubbleComponent::below),
-//                                                                                                           max_display_characters_(kDefaultFormatLength),
-//                                                                                                           max_decimal_places_(kDefaultFormatDecimalPlaces), shift_index_amount_(0),
-//                                                                                                           shift_is_multiplicative_(false), mouse_wheel_index_movement_(1.0),
-//                                                                                                           text_entry_width_percent_(kDefaultTextEntryWidthPercent),
-//                                                                                                           text_entry_height_percent_(kDefaultTextEntryHeightPercent),
-//                                                                                                           display_multiply_(0.0f), display_exponential_base_(2.0f),
-//                                                                                                           string_lookup_(nullptr), extra_modulation_target_(nullptr),
-//                                                                                                           synth_interface_(nullptr){
-//
-//
-//    text_entry_ = std::make_unique<OpenGlTextEditor>("text_entry");
-//    text_entry_->setMonospace();
-//    text_entry_->setMultiLine(false);
-//    text_entry_->setScrollToShowCursor(false);
-//    text_entry_->addListener(this);
-//    text_entry_->setSelectAllWhenFocused(true);
-//    text_entry_->setKeyboardType(juce::TextEditor::numericKeyboard);
-//    text_entry_->setJustification(juce::Justification::centred);
-//    text_entry_->setAlwaysOnTop(true);
-//    text_entry_->getImageComponent()->setAlwaysOnTop(true);
-//    addChildComponent(text_entry_.get());
-//
-//    setWantsKeyboardFocus(true);
-//    setTextBoxStyle(juce::Slider::NoTextBox, true, 0, 0);
-//
-//
-//
-//    setRotaryParameters(2.0f * bitklavier::kPi - kRotaryAngle, 2.0f * bitklavier::kPi + kRotaryAngle, true);
-//
-//
-//
-//
-//    setDefaultRange();
-//
-//    setVelocityBasedMode(false);
-//    setVelocityModeParameters(1.0, 0, 0.0, false, juce::ModifierKeys::ctrlAltCommandModifiers);
-//}
+SynthSlider::SynthSlider(juce::String name) : OpenGlSlider(name), show_popup_on_hover_(false), scroll_enabled_(true),
+                                                                              bipolar_modulation_(false), stereo_modulation_(false),
+                                                                              bypass_modulation_(false), modulation_bar_right_(true),
+                                                                              snap_to_value_(false), hovering_(false),
+                                                                              has_parameter_assignment_(false),
+                                                                              use_suffix_(true), snap_value_(0.0),
+                                                                              text_height_percentage_(0.0f),
+                                                                              sensitivity_(kDefaultSensitivity),
+                                                                              popup_placement_(juce::BubbleComponent::below),
+                                                                              modulation_control_placement_(juce::BubbleComponent::below),
+                                                                              max_display_characters_(kDefaultFormatLength),
+                                                                              max_decimal_places_(kDefaultFormatDecimalPlaces), shift_index_amount_(0),
+                                                                              shift_is_multiplicative_(false), mouse_wheel_index_movement_(1.0),
+                                                                              text_entry_width_percent_(kDefaultTextEntryWidthPercent),
+                                                                              text_entry_height_percent_(kDefaultTextEntryHeightPercent),
+                                                                              display_multiply_(0.0f), display_exponential_base_(2.0f),
+                                                                              string_lookup_(nullptr), extra_modulation_target_(nullptr),
+                                                                              synth_interface_(nullptr) /*attachment(param,pluginState, *this)*/{
+    //setAttachment(param, pluginState);
+    setComponentID (name);
+    text_entry_ = std::make_unique<OpenGlTextEditor>(name);
+    text_entry_->setMonospace();
+    text_entry_->setMultiLine(false);
+    text_entry_->setScrollToShowCursor(false);
+    text_entry_->addListener(this);
+    text_entry_->setSelectAllWhenFocused(true);
+    text_entry_->setKeyboardType(juce::TextEditor::numericKeyboard);
+    text_entry_->setJustification(juce::Justification::centred);
+    text_entry_->setAlwaysOnTop(true);
+    text_entry_->getImageComponent()->setAlwaysOnTop(true);
+    addChildComponent(text_entry_.get());
+
+    setWantsKeyboardFocus(true);
+    setTextBoxStyle(juce::Slider::NoTextBox, true, 0, 0);
+
+
+
+    setRotaryParameters(2.0f * bitklavier::kPi - kRotaryAngle, 2.0f * bitklavier::kPi + kRotaryAngle, true);
+
+
+
+
+    setDefaultRange();
+
+    setVelocityBasedMode(false);
+    setVelocityModeParameters(1.0, 0, 0.0, false, juce::ModifierKeys::ctrlAltCommandModifiers);
+}
 
 SynthSlider::SynthSlider(juce::String name, chowdsp::FloatParameter& param) : OpenGlSlider(name), show_popup_on_hover_(false), scroll_enabled_(true),
                                         bipolar_modulation_(false), stereo_modulation_(false),
@@ -604,63 +604,70 @@ void SynthSlider::drawShadow(juce::Graphics &g) {
 }
 
 void SynthSlider::drawRotaryShadow(juce::Graphics &g) {
-  juce::Colour shadow_color = findColour(Skin::kShadow, true);
+    juce::Colour shadow_color = findColour(Skin::kShadow, true);
+    DBG("drawshadow ----" + getName() + "-----");
 
-  float center_x = getWidth() / 2.0f;
-  float center_y = getHeight() / 2.0f;
-  float stroke_width = findValue(Skin::kKnobArcThickness);
-  float radius = knob_size_scale_ * findValue(Skin::kKnobArcSize) / 2.0f;
-  center_y += findValue(Skin::kKnobOffset);
-  float shadow_width = findValue(Skin::kKnobShadowWidth);
-  float shadow_offset = findValue(Skin::kKnobShadowOffset);
 
-  juce::PathStrokeType outer_stroke(stroke_width, juce::PathStrokeType::beveled, juce::PathStrokeType::rounded);
-  juce::PathStrokeType shadow_stroke(stroke_width + 1, juce::PathStrokeType::beveled, juce::PathStrokeType::rounded);
+    DBG("component x" + juce::String(getX()));
+    DBG("componoent y" + juce::String(getY()));
+    DBG("scale" + juce::String(parent_->getDisplayScale()));
+    int width = getWidth() *parent_->getDisplayScale();
+    int height = getHeight() *parent_->getDisplayScale();
+    int x = getX() * parent_->getDisplayScale();
+    int y = getY() * parent_->getDisplayScale();
+    float center_x = (float)width / 2.0f;
+    float center_y = (float)height / 2.0f;
+    float stroke_width = findValue(Skin::kKnobArcThickness);
+    float radius = parent_->getDisplayScale() * knob_size_scale_ * findValue(Skin::kKnobArcSize) / 2.0f;
+    center_y += findValue(Skin::kKnobOffset);
+    float shadow_width = findValue(Skin::kKnobShadowWidth);
+    float shadow_offset = findValue(Skin::kKnobShadowOffset);
 
-  g.saveState();
-  g.setOrigin(getX(), getY());
+    juce::PathStrokeType outer_stroke(stroke_width, juce::PathStrokeType::beveled, juce::PathStrokeType::rounded);
+    juce::PathStrokeType shadow_stroke(stroke_width + 1, juce::PathStrokeType::beveled, juce::PathStrokeType::rounded);
+    g.saveState();
+    g.setColour(juce::Colours::white);
+    g.fillRect(x, y, width, height);
+    g.setOrigin(x, y);
+    juce::Colour body = findColour(Skin::kRotaryBody, true);
+    float body_radius = parent_->getDisplayScale() * knob_size_scale_ * findValue(Skin::kKnobBodySize) / 2.0f;
+    if (body_radius >= 0.0f && body_radius < width) {
 
-  juce::Colour body = findColour(Skin::kRotaryBody, true);
-  float body_radius = knob_size_scale_ * findValue(Skin::kKnobBodySize) / 2.0f;
-  if (body_radius >= 0.0f && body_radius < getWidth()) {
+//        if (shadow_width > 0.0f) {
+//            juce::Colour transparent_shadow = shadow_color.withAlpha(0.0f);
+//            float shadow_radius = body_radius + shadow_width;
+//            juce::ColourGradient shadow_gradient(shadow_color, center_x, center_y + shadow_offset,
+//                                                 transparent_shadow, center_x - shadow_radius, center_y + shadow_offset, true);
+//            float shadow_start = std::max(0.0f, (body_radius - std::abs(shadow_offset))) / shadow_radius;
+//            shadow_gradient.addColour(shadow_start, shadow_color);
+//            shadow_gradient.addColour(1.0f - (1.0f - shadow_start) * 0.75f, shadow_color.withMultipliedAlpha(0.5625f));
+//            shadow_gradient.addColour(1.0f - (1.0f - shadow_start) * 0.5f, shadow_color.withMultipliedAlpha(0.25f));
+//            shadow_gradient.addColour(1.0f - (1.0f - shadow_start) * 0.25f, shadow_color.withMultipliedAlpha(0.0625f));
+//            g.setGradientFill(shadow_gradient);
+//            g.fillRect(getLocalBounds());
+//        }
 
-    if (shadow_width > 0.0f) {
-      juce::Colour transparent_shadow = shadow_color.withAlpha(0.0f);
-      float shadow_radius = body_radius + shadow_width;
-      juce::ColourGradient shadow_gradient(shadow_color, center_x, center_y + shadow_offset,
-                                     transparent_shadow, center_x - shadow_radius, center_y + shadow_offset, true);
-      float shadow_start = std::max(0.0f, (body_radius - std::abs(shadow_offset))) / shadow_radius;
-      shadow_gradient.addColour(shadow_start, shadow_color);
-      shadow_gradient.addColour(1.0f - (1.0f - shadow_start) * 0.75f, shadow_color.withMultipliedAlpha(0.5625f));
-      shadow_gradient.addColour(1.0f - (1.0f - shadow_start) * 0.5f, shadow_color.withMultipliedAlpha(0.25f));
-      shadow_gradient.addColour(1.0f - (1.0f - shadow_start) * 0.25f, shadow_color.withMultipliedAlpha(0.0625f));
-      g.setGradientFill(shadow_gradient);
-      g.fillRect(getLocalBounds());
+        g.setColour(body);
+        juce::Rectangle<float> ellipse(center_x - body_radius, center_y - body_radius, 2.0f * body_radius, 2.0f * body_radius);
+        g.fillEllipse(ellipse);
+
+        g.setColour(findColour(Skin::kRotaryBodyBorder, true));
+        g.drawEllipse(ellipse.reduced(0.5f), 1.0f);
     }
 
-    g.setColour(body);
-    //juce::Rectangle<float> ellipse(center_x - body_radius, center_y - body_radius, 2.0f * body_radius, 2.0f * body_radius);
-      juce::Rectangle<float> ellipse(0, 0, 300,300);
+    juce::Path shadow_outline;
+    juce::Path shadow_path;
 
-    g.fillEllipse(ellipse);
+    shadow_outline.addCentredArc(center_x, center_y, radius, radius,
+                                 0, -kRotaryAngle, kRotaryAngle, true);
+    shadow_stroke.createStrokedPath(shadow_path, shadow_outline);
+    if ((!findColour(Skin::kRotaryArcUnselected, true).isTransparent() && isActive()) ||
+        (!findColour(Skin::kRotaryArcUnselectedDisabled, true).isTransparent() && !isActive())) {
+        g.setColour(shadow_color);
+        g.fillPath(shadow_path);
+    }
 
-    g.setColour(findColour(Skin::kRotaryBodyBorder, true));
-    g.drawEllipse(ellipse.reduced(0.5f), 1.0f);
-  }
-
-  juce::Path shadow_outline;
-  juce::Path shadow_path;
-
-  shadow_outline.addCentredArc(center_x, center_y, radius, radius,
-                               0, -kRotaryAngle, kRotaryAngle, true);
-  shadow_stroke.createStrokedPath(shadow_path, shadow_outline);
-  if ((!findColour(Skin::kRotaryArcUnselected, true).isTransparent() && isActive()) ||
-      (!findColour(Skin::kRotaryArcUnselectedDisabled, true).isTransparent() && !isActive())) {
-    g.setColour(shadow_color); 
-    g.fillPath(shadow_path);
-  }
-
-  g.restoreState();
+    g.restoreState();
 }
 
 void SynthSlider::setDefaultRange() {

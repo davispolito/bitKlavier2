@@ -668,7 +668,7 @@ namespace {
       "    float thumb_y_distance = thumb_y * outside_arc_step + adjusted_thumb_y * (1.0 - outside_arc_step);\n"
       "    float thumb_distance = length(vec2(thumb_x, thumb_y_distance));\n"
       "    float thumb_alpha = clamp(thickness * 0.5 - thumb_distance + 0.5, 0.0, 1.0);\n"
-      "    gl_FragColor = gl_FragColor * (1.0 - thumb_alpha) + thumb_color * thumb_alpha;\n"
+      "    gl_FragColor = gl_FragColor * (1.0 - thumb_alpha) + thumb_color * thumb_alpha ;\n"
       "}\n";
 
   const char* kRotaryModulationFragmentShader =

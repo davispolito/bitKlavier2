@@ -771,7 +771,7 @@ float SynthSection::getDisplayScale() const {
   juce::Component* top_level = getTopLevelComponent();
   juce::Rectangle<int> global_bounds = top_level->getLocalArea(this, getLocalBounds());
   float display_scale = juce::Desktop::getInstance().getDisplays().getDisplayForRect(top_level->getScreenBounds())->scale;
-  return display_scale * (1.0f * global_bounds.getWidth()) / getWidth();
+  return 1;//display_scale * (1.0f * global_bounds.getWidth()) / getWidth();
 }
 
 int SynthSection::getPixelMultiple() const {

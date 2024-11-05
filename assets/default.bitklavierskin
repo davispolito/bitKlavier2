@@ -22,7 +22,7 @@
         "Knob Mod Amount Arc Thickness": 0.5,
         "Knob Mod Meter Arc Size": 39.0,
         "Knob Mod Meter Arc Thickness": 3.0,
-        "Knob Offset": -7.0,
+        "Knob Offset": 0,
         "Knob Section Height": 71.0,
         "Label Background": "ff3e4245",
         "Label Background Height": 18.0,

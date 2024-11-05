@@ -344,6 +344,7 @@ class SynthSection : public juce::Component, public juce::Slider::Listener,
 
     void addSlider(SynthSlider* slider, bool show = true, bool listen = true);
     OpenGlWrapper *open_gl;
+    float getDisplayScale() const;
   protected:
     void setSliderHasHzAlternateDisplay(SynthSlider* slider);
     void setSidewaysHeading(bool sideways) { sideways_heading_ = sideways; }
@@ -375,7 +376,7 @@ class SynthSection : public juce::Component, public juce::Slider::Listener,
     int getTitleTextRight();
     juce::Rectangle<int> getPowerButtonBounds();
     juce::Rectangle<int> getTitleBounds();
-    float getDisplayScale() const;
+
     virtual int getPixelMultiple() const;
 
 
