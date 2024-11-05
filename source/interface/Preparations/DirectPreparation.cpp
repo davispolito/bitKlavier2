@@ -102,7 +102,6 @@ void DirectPreparation::DirectPopup::renderOpenGlComponents(OpenGlWrapper& open_
         }
     }
 
-
     for (auto& sub_section : sub_sections_) {
         if (sub_section->isVisible() && sub_section->isAlwaysOnTop())
             sub_section->renderOpenGlComponents(open_gl, animate);
