@@ -22,7 +22,7 @@
 #include <mutex>
 
 class OpenGlBackground {
-  public:
+public:
     OpenGlBackground();
     virtual ~OpenGlBackground();
 
@@ -40,8 +40,9 @@ class OpenGlBackground {
     void bind(juce::OpenGLContext& open_gl_context);
     void enableAttributes(juce::OpenGLContext& open_gl_context);
     void disableAttributes(juce::OpenGLContext& open_gl_context);
+    void setComponent(juce::Component* component) { component_ = component; }
 
-  private:
+private:
     juce::OpenGLShaderProgram* image_shader_;
     std::unique_ptr<juce::OpenGLShaderProgram::Uniform> texture_uniform_;
     std::unique_ptr<juce::OpenGLShaderProgram::Attribute> position_;
@@ -56,7 +57,6 @@ class OpenGlBackground {
 
     GLuint vertex_buffer_;
     GLuint triangle_buffer_;
-
+    juce::Component* component_;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(OpenGlBackground)
 };
-

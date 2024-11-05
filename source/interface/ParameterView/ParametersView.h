@@ -26,6 +26,9 @@ namespace bitklavier {
             paintHeadingText(g);
             paintBorder(g);
             paintKnobShadows(g);
+            for (auto slider : all_sliders_v) {
+                drawLabelForComponent(g, slider->getName(), slider);
+            }
             paintChildrenBackgrounds(g);
         }
     private:

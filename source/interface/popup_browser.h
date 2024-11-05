@@ -25,14 +25,14 @@
 #include "open_gl_background.h"
 #include "default_look_and_feel.h"
 class PopupDisplay : public SynthSection {
-  public:
+public:
     PopupDisplay();
 
     void resized() override;
 
     void setContent(const std::string& text, juce::Rectangle<int> bounds, juce::BubbleComponent::BubblePlacement placement);
 
-  private:
+private:
     std::shared_ptr<PlainTextComponent> text_;
     std::shared_ptr<OpenGlQuad> body_;
     std::shared_ptr<OpenGlQuad> border_;
@@ -63,8 +63,22 @@ private:
 class PreparationPopup : public SynthSection {
 public:
     PreparationPopup();
-    void paintBackground(juce::Graphics& g) override { }
+    void paintBackground(juce::Graphics& g) override {SynthSection::paintContainer(g);
+        paintHeadingText(g);
+        paintBorder(g);
+        paintKnobShadows(g);
+        paintChildrenBackgrounds(g); }
     void paintBackgroundShadow(juce::Graphics& g) override { }
+    void repaintPrepBackground()
+    {
+        background_->lock();
+        background_image_ = juce::Image(juce::Image::RGB, getWidth(),getHeight(), true);
+        juce::Graphics g(background_image_);
+        paintChildBackground(g, prep_view.get());
+        background_->updateBackgroundImage(background_image_);
+        background_->unlock();
+    }
+
     void resized() override;
 
     void setContent(std::shared_ptr<SynthSection>);
@@ -97,16 +111,16 @@ private:
     std::shared_ptr<OpenGlShapeButton> exit_button_;
     std::shared_ptr<OpenGlQuad> body_;
     std::shared_ptr<OpenGlQuad> border_;
-
+    std::shared_ptr<OpenGlBackground> background_;
     std::shared_ptr<SynthSection> prep_view;
-
+    juce::Image background_image_;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PreparationPopup)
 };
 
 class PopupList : public SynthSection, juce::ScrollBar::Listener {
-  public:
+public:
     class Listener {
-      public:
+    public:
         virtual ~Listener() = default;
 
         virtual void newSelection(PopupList* list, int id, int index) = 0;
@@ -131,7 +145,7 @@ class PopupList : public SynthSection, juce::ScrollBar::Listener {
     int getBrowseWidth();
     int getBrowseHeight() { return getRowHeight() * selections_.size(); }
     juce::Font getFont() {
-      return Fonts::instance()->proportional_light().withPointHeight(getRowHeight() * 0.55f * getPixelMultiple());
+        return Fonts::instance()->proportional_light().withPointHeight(getRowHeight() * 0.55f * getPixelMultiple());
     }
     void mouseMove(const juce::MouseEvent& e) override;
     void mouseDrag(const juce::MouseEvent& e) override;
@@ -153,15 +167,15 @@ class PopupList : public SynthSection, juce::ScrollBar::Listener {
     void renderOpenGlComponents(OpenGlWrapper& open_gl, bool animate) override;
     void destroyOpenGlComponents(OpenGlWrapper& open_gl) override;
     void addListener(Listener* listener) {
-      listeners_.push_back(listener);
+        listeners_.push_back(listener);
     }
     void showSelected(bool show) { show_selected_ = show; }
     void select(int select);
 
-  private:
+private:
     int getViewPosition() {
-      int view_height = getHeight();
-      return std::max(0, std::min<int>(selections_.size() * getRowHeight() - view_height, view_position_));
+        int view_height = getHeight();
+        return std::max(0, std::min<int>(selections_.size() * getRowHeight() - view_height, view_position_));
     }
     void redoImage();
     void moveQuadToRow(OpenGlQuad& quad, int row);
@@ -313,7 +327,7 @@ class PopupList : public SynthSection, juce::ScrollBar::Listener {
 //};
 
 class SinglePopupSelector : public SynthSection, public PopupList::Listener {
-  public:
+public:
     SinglePopupSelector();
 
     void paintBackground(juce::Graphics& g) override { }
@@ -321,36 +335,36 @@ class SinglePopupSelector : public SynthSection, public PopupList::Listener {
     void resized() override;
 
     void visibilityChanged() override {
-      if (isShowing() && isVisible())
-        grabKeyboardFocus();
+        if (isShowing() && isVisible())
+            grabKeyboardFocus();
     }
 
     void setPosition(juce::Point<int> position, juce::Rectangle<int> bounds);
 
     void newSelection(PopupList* list, int id, int index) override {
-      if (id >= 0) {
-        cancel_ = nullptr;
-        callback_(id);
-        setVisible(false);
-      }
-      else
-        cancel_();
+        if (id >= 0) {
+            cancel_ = nullptr;
+            callback_(id);
+            setVisible(false);
+        }
+        else
+            cancel_();
     }
 
     void focusLost(FocusChangeType cause) override {
-      setVisible(false);
-      if (cancel_)
-        cancel_();
+        setVisible(false);
+        if (cancel_)
+            cancel_();
     }
 
     void setCallback(std::function<void(int)> callback) { callback_ = std::move(callback); }
     void setCancelCallback(std::function<void()> cancel) { cancel_ = std::move(cancel); }
 
     void showSelections(const PopupItems& selections) {
-      popup_list_->setSelections(selections);
+        popup_list_->setSelections(selections);
     }
 
-  private:
+private:
     std::shared_ptr<OpenGlQuad> body_;
     std::shared_ptr<OpenGlQuad> border_;
 
@@ -362,15 +376,15 @@ class SinglePopupSelector : public SynthSection, public PopupList::Listener {
 };
 
 class DualPopupSelector : public SynthSection, public PopupList::Listener {
-  public:
+public:
     DualPopupSelector();
 
     void paintBackground(juce::Graphics& g) override { }
     void paintBackgroundShadow(juce::Graphics& g) override { }
     void resized() override;
     void visibilityChanged() override {
-      if (isShowing() && isVisible())
-        grabKeyboardFocus();
+        if (isShowing() && isVisible())
+            grabKeyboardFocus();
     }
 
     void setPosition(juce::Point<int> position, int width, juce::Rectangle<int> bounds);
@@ -383,15 +397,15 @@ class DualPopupSelector : public SynthSection, public PopupList::Listener {
     void setCallback(std::function<void(int)> callback) { callback_ = std::move(callback); }
 
     void showSelections(const PopupItems& selections) {
-      left_list_->setSelections(selections);
+        left_list_->setSelections(selections);
 
-      for (int i = 0; i < selections.size(); ++i) {
-        if (selections.items[i].selected)
-          right_list_->setSelections(selections.items[i]);
-      }
+        for (int i = 0; i < selections.size(); ++i) {
+            if (selections.items[i].selected)
+                right_list_->setSelections(selections.items[i]);
+        }
     }
 
-  private:
+private:
     std::shared_ptr<OpenGlQuad> body_;
     std::shared_ptr<OpenGlQuad> border_;
     std::shared_ptr<OpenGlQuad> divider_;
@@ -404,23 +418,23 @@ class DualPopupSelector : public SynthSection, public PopupList::Listener {
 };
 
 class PopupClosingArea : public juce::Component {
-  public:
+public:
     PopupClosingArea() : juce::Component("Ignore Area") { }
-  
+
     class Listener {
-      public:
+    public:
         virtual ~Listener() = default;
         virtual void closingAreaClicked(PopupClosingArea* closing_area, const juce::MouseEvent& e) = 0;
     };
-  
+
     void mouseDown(const juce::MouseEvent& e) override {
-      for (Listener* listener : listeners_)
-        listener->closingAreaClicked(this, e);
+        for (Listener* listener : listeners_)
+            listener->closingAreaClicked(this, e);
     }
 
     void addListener(Listener* listener) { listeners_.push_back(listener); }
-  
-  private:
+
+private:
     std::vector<Listener*> listeners_;
 };
 

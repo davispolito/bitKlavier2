@@ -370,6 +370,8 @@ void SynthSection::initOpenGlComponents(OpenGlWrapper& open_gl) {
 }
 
 void SynthSection::renderOpenGlComponents(OpenGlWrapper& open_gl, bool animate) {
+    if(background_)
+        background_->render(open_gl);
   for (auto& sub_section : sub_sections_) {
     if (sub_section->isVisible() && !sub_section->isAlwaysOnTop())
       sub_section->renderOpenGlComponents(open_gl, animate);
@@ -407,8 +409,8 @@ void SynthSection::renderOpenGlComponents(OpenGlWrapper& open_gl, bool animate) 
       _ASSERT(juce::gl::glGetError() == juce::gl::GL_NO_ERROR);
     }
   }
-    if(background_)
-        background_->render(open_gl);
+//    if(background_)
+//        background_->render(open_gl);
 }
 
 void SynthSection::destroyOpenGlComponents(OpenGlWrapper& open_gl) {
@@ -665,7 +667,8 @@ void SynthSection::placeKnobsInArea(juce::Rectangle<int> area, std::vector<juce:
   float component_width = (area.getWidth() - (knobs.size() + 1) * widget_margin) / (1.0f * knobs.size());
 
   int y = area.getY();
-  int height = area.getHeight() - widget_margin;
+  //int height = area.getHeight() - widget_margin;
+  int height = std::min<int>(area.getHeight(),component_width) - widget_margin;
   float x = area.getX() + widget_margin;
   for (juce::Component* knob : knobs) {
     int left = std::round(x);
