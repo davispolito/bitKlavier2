@@ -239,7 +239,7 @@ void DirectPreparation::DirectPopup::resized() {
 //    blendronicSendSlider->redoImage();
 
     transpositionSlider->setBounds(column1, row1, sliderWidth, sliderHeight);
-    transpositionSlider->setBounds(0, 30, 400, 200);
+    transpositionSlider->setBounds(0, 300, 400, 200);
     transpositionSlider->redoImage();
 
     redoImage();
