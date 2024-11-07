@@ -462,6 +462,7 @@ float EnvelopeEditor::getBackupPhase(float phase) {
 float powerScale(float value, float power) {
     static constexpr float kMinPower = 0.01f;
 
+    //DBG("powerScale value and power: " + juce::String(value) + " " + juce::String(power));
     if (fabsf(power) < kMinPower)
         return value;
 

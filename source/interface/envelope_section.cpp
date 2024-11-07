@@ -79,7 +79,7 @@ EnvelopeSection::EnvelopeSection(juce::String name, std::string value_prepend, E
   delay_->parentHierarchyChanged();
   
   attack_ = std::make_unique<SynthSlider>("attack");
-  attack_attachment = std::make_unique<chowdsp::SliderAttachment>(params.attackParam, listeners, *attack_, nullptr);
+  //attack_attachment = std::make_unique<chowdsp::SliderAttachment>(params.attackParam, listeners, *attack_, nullptr);
   addSlider(attack_.get());
   attack_->setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
   attack_->setPopupPlacement(juce::BubbleComponent::below);
@@ -87,11 +87,12 @@ EnvelopeSection::EnvelopeSection(juce::String name, std::string value_prepend, E
 
   attack_power_ = std::make_unique<SynthSlider>(value_prepend + "_attack_power");
   addSlider(attack_power_.get());
+  attack_power_->setRange(-10., 10.); // don't need to do this in the original Vital version, not sure why we need this here
   attack_power_->setVisible(false);
 
   hold_ = std::make_unique<SynthSlider>("hold");
   //hold_ = std::make_unique<SynthSlider>(value_prepend + "_hold");
-  hold_attachment = std::make_unique<chowdsp::SliderAttachment>(params.holdParam, listeners, *hold_, nullptr);
+  //hold_attachment = std::make_unique<chowdsp::SliderAttachment>(params.holdParam, listeners, *hold_, nullptr);
   addSlider(hold_.get());
   hold_->setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
   hold_->setPopupPlacement(juce::BubbleComponent::below);
@@ -104,6 +105,7 @@ EnvelopeSection::EnvelopeSection(juce::String name, std::string value_prepend, E
   
   decay_power_ = std::make_unique<SynthSlider>(value_prepend + "_decay_power");
   addSlider(decay_power_.get());
+  decay_power_->setRange(-10., 10.);
   decay_power_->setVisible(false);
 
   //release_ = std::make_unique<SynthSlider>(value_prepend + "_release");
@@ -114,6 +116,7 @@ EnvelopeSection::EnvelopeSection(juce::String name, std::string value_prepend, E
 
   release_power_ = std::make_unique<SynthSlider>(value_prepend + "_release_power");
   addSlider(release_power_.get());
+  release_power_->setRange(-10., 10.);
   release_power_->setVisible(false);
 
   sustain_ = std::make_unique<SynthSlider>("sustain");
@@ -154,6 +157,7 @@ EnvelopeSection::EnvelopeSection(juce::String name, std::string value_prepend, E
 //
 
   delay_attachment = std::make_unique<chowdsp::SliderAttachment>(params.delayParam, listeners, *delay_, nullptr);
+  attack_attachment = std::make_unique<chowdsp::SliderAttachment>(params.attackParam, listeners, *attack_, nullptr);
   hold_attachment = std::make_unique<chowdsp::SliderAttachment>(params.holdParam, listeners, *hold_, nullptr);
   decay_attachment = std::make_unique<chowdsp::SliderAttachment>(params.decayParam, listeners, *decay_, nullptr);
   sustain_attachment = std::make_unique<chowdsp::SliderAttachment>(params.sustainParam, listeners, *sustain_, nullptr);

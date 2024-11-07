@@ -29,11 +29,11 @@ DirectProcessor::DirectProcessor (const juce::ValueTree& v) : PluginBase (v, nul
     adsrCallbacks += {
 
         state.addParameterListener (*state.params.gainParam,
-                 chowdsp::ParameterListenerThread::AudioThread,
-                 [this] {
-                     mainSynth.setSynthGain (juce::Decibels::decibelsToGain (state.params.gainParam->get()));
-                     DBG ("direct gain: " + juce::String (state.params.gainParam->get()));
-                 }),
+             chowdsp::ParameterListenerThread::AudioThread,
+             [this] {
+                 mainSynth.setSynthGain (juce::Decibels::decibelsToGain (state.params.gainParam->get()));
+                 DBG ("direct gain: " + juce::String (state.params.gainParam->get()));
+             }),
 
         state.addParameterListener (*state.params.hammerParam,
             chowdsp::ParameterListenerThread::AudioThread,

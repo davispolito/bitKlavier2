@@ -29,6 +29,16 @@ struct EnvParams : public chowdsp::ParamHolder
         0.0f
     };
 
+    // Attack Power param
+    chowdsp::FloatParameter::Ptr attackPowerParam {
+        juce::ParameterID { "attackpower", 100 },
+        "Attack Power",
+        chowdsp::ParamUtils::createNormalisableRange (-10.0f, 10.0f, 0.0f),
+        0.0f,
+        &chowdsp::ParamUtils::floatValToString,
+        &chowdsp::ParamUtils::stringToFloatVal
+    };
+
     // Hold param
     chowdsp::TimeMsParameter::Ptr holdParam {
         juce::ParameterID { "hold", 100 },
