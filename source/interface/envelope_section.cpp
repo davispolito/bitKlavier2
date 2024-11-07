@@ -84,6 +84,7 @@ EnvelopeSection::EnvelopeSection(juce::String name, std::string value_prepend, E
   attack_->setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
   attack_->setPopupPlacement(juce::BubbleComponent::below);
   attack_->parentHierarchyChanged();
+  attack_->setValue(params.attackParam->getDefaultValue());
 
   attack_power_ = std::make_unique<SynthSlider>(value_prepend + "_attack_power");
   addSlider(attack_power_.get());
@@ -102,6 +103,7 @@ EnvelopeSection::EnvelopeSection(juce::String name, std::string value_prepend, E
   addSlider(decay_.get());
   decay_->setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
   decay_->setPopupPlacement(juce::BubbleComponent::below);
+  decay_->setValue(params.decayParam->getDefaultValue());
   
   decay_power_ = std::make_unique<SynthSlider>(value_prepend + "_decay_power");
   addSlider(decay_power_.get());
@@ -113,6 +115,7 @@ EnvelopeSection::EnvelopeSection(juce::String name, std::string value_prepend, E
   addSlider(release_.get());
   release_->setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
   release_->setPopupPlacement(juce::BubbleComponent::below);
+  release_->setValue(params.releaseParam->getDefaultValue());
 
   release_power_ = std::make_unique<SynthSlider>(value_prepend + "_release_power");
   addSlider(release_power_.get());
@@ -124,6 +127,7 @@ EnvelopeSection::EnvelopeSection(juce::String name, std::string value_prepend, E
   addSlider(sustain_.get());
   sustain_->setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
   sustain_->setPopupPlacement(juce::BubbleComponent::below);
+  sustain_->setValue(params.sustainParam->getDefaultValue());
 
   envelope_ = std::make_shared<EnvelopeEditor>(value_prepend);
   addOpenGlComponent(envelope_);
@@ -203,6 +207,8 @@ void EnvelopeSection::resized() {
   int magnify_height = envelope_->getHeight() * kMagnifyingHeightRatio;
   drag_magnifying_glass_->setBounds(envelope_->getRight() - magnify_height, envelope_->getY(),
                                     magnify_height, magnify_height);
+
+  envelope_->magnifyReset();
 }
 
 void EnvelopeSection::reset() {

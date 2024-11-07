@@ -305,7 +305,7 @@ class BKSynthesiser
                     midiNoteTranspositions = newOffsets;
                 }
 
-                juce::ADSR::Parameters globalADSR;
+                BKADSR::Parameters globalADSR;
 protected:
                 //==============================================================================
                 /** This is used to control access to the rendering callback and the note trigger methods. */

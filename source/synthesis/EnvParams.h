@@ -25,8 +25,8 @@ struct EnvParams : public chowdsp::ParamHolder
     chowdsp::TimeMsParameter::Ptr attackParam {
         juce::ParameterID { "attack", 100 },
         "Attack",
-        chowdsp::ParamUtils::createNormalisableRange (0.0f, 1000.0f, 500.0f),
-        0.0f
+        chowdsp::ParamUtils::createNormalisableRange (0.0f, 10000.0f, 500.0f),
+        5.0f
     };
 
     // Attack Power param
@@ -52,7 +52,7 @@ struct EnvParams : public chowdsp::ParamHolder
         juce::ParameterID { "decay", 100 },
         "Decay",
         chowdsp::ParamUtils::createNormalisableRange (0.0f, 1000.0f, 500.0f),
-        0.0f
+        5.0f
     };
 
     // Sustain param
@@ -69,8 +69,8 @@ struct EnvParams : public chowdsp::ParamHolder
     chowdsp::TimeMsParameter::Ptr releaseParam {
         juce::ParameterID { "release", 100 },
         "Release",
-        chowdsp::ParamUtils::createNormalisableRange (0.0f, 1000.0f, 500.0f),
-        10.0f
+        chowdsp::ParamUtils::createNormalisableRange (0.0f, 10000.0f, 500.0f),
+        50.0f
     };
 
 };
