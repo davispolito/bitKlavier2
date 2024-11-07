@@ -53,6 +53,9 @@ EnvelopeEditor::EnvelopeEditor(
   addAndMakeVisible(point_circles_);
   addAndMakeVisible(power_circles_);
   hover_circle_.setThickness(1.0f);
+
+  // *** disabling the curved envelope stuff for now, until we can work out how we want to implement it on the back end
+  power_circles_.setVisible(false);
                                                    
   for (int i = 0; i < kMaxTimesShown; ++i) {
     times_[i] = std::make_unique<PlainTextComponent>("juce::Time", "");
@@ -214,24 +217,35 @@ void EnvelopeEditor::mouseDrag(const juce::MouseEvent& e) {
   float delta_power = (last_edit_position_.y - e.position.y) * kPowerMouseMultiplier;
   last_edit_position_ = e.position;
 
-  if (delay_hover_)
-    setDelayX(last_edit_position_.x);
-  else if (release_hover_)
-    setReleaseX(last_edit_position_.x);
+  // removing delay and hold for now, so it's just a simple ADSR until we are ready to implement the rest
+  if (release_hover_)
+      setReleaseX(last_edit_position_.x);
   else if (sustain_hover_) {
-    setDecayX(last_edit_position_.x);
-    setSustainY(last_edit_position_.y);
+      setDecayX(last_edit_position_.x);
+      setSustainY(last_edit_position_.y);
   }
   else if (attack_hover_)
-    setAttackX(last_edit_position_.x);
-  else if (hold_hover_)
-    setHoldX(last_edit_position_.x);
-  else if (attack_power_hover_)
-    setAttackPower(attack_power_slider_->getValue() + delta_power);
-  else if (decay_power_hover_)
-    setDecayPower(decay_power_slider_->getValue() + delta_power);
-  else if (release_power_hover_)
-    setReleasePower(release_power_slider_->getValue() + delta_power);
+      setAttackX(last_edit_position_.x);
+
+  // *** disabling the curved envelope stuff for now, until we can work out how we want to implement it on the back end
+//  if (delay_hover_)
+//    setDelayX(last_edit_position_.x);
+//  else if (release_hover_)
+//    setReleaseX(last_edit_position_.x);
+//  else if (sustain_hover_) {
+//    setDecayX(last_edit_position_.x);
+//    setSustainY(last_edit_position_.y);
+//  }
+//  else if (attack_hover_)
+//    setAttackX(last_edit_position_.x);
+//  else if (hold_hover_)
+//    setHoldX(last_edit_position_.x);
+//  else if (attack_power_hover_)
+//    setAttackPower(attack_power_slider_->getValue() + delta_power);
+//  else if (decay_power_hover_)
+//    setDecayPower(decay_power_slider_->getValue() + delta_power);
+//  else if (release_power_hover_)
+//    setReleasePower(release_power_slider_->getValue() + delta_power);
 
   resetPositions();
 }
