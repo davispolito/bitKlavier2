@@ -12,6 +12,10 @@
 //==============================================================================
 /**
 Based on the JUCE ADSR Class, with curvature additions
+
+ performance should be the same as JUCE::ADSR for curvature values of 0
+ otherwise, will have some performance impact
+
 **/
 
 class BKADSR
@@ -44,7 +48,26 @@ public:
         {
         }
 
+        Parameters (float attackTimeSeconds,
+            float decayTimeSeconds,
+            float sustainLevel,
+            float releaseTimeSeconds,
+            float attackPower,
+            float decayPower,
+            float releasePower)
+            : attack (attackTimeSeconds),
+              decay (decayTimeSeconds),
+              sustain (sustainLevel),
+              release (releaseTimeSeconds),
+              attackPower (attackPower),
+              decayPower (decayPower),
+              releasePower (releasePower)
+        {
+        }
+
         float attack = 0.1f, decay = 0.1f, sustain = 1.0f, release = 0.1f;
+        float attackPower = 0.0f, decayPower = 0.0f, releasePower = 0.0f;
+
     };
 
     /** Sets the parameters that will be used by an ADSR object.
@@ -143,53 +166,44 @@ public:
 
             case State::attack:
             {
-                if (fabsf (attackPower) < kMinPower)
+                envelopeVal += attackRate;
+
+                if (envelopeVal >= 1.0f)
                 {
-                    envelopeVal += attackRate;
-
-                    if (envelopeVal >= 1.0f)
-                    {
-                        envelopeVal = 1.0f;
-                        goToNextState();
-                    }
-
-                    break;
+                    envelopeVal = 1.0f;
+                    goToNextState();
                 }
+
+                return powerScale(envelopeVal, parameters.attackPower);
             }
 
             case State::decay:
             {
-                if (fabsf (decayPower) < kMinPower)
+                envelopeVal -= decayRate;
+
+                if (envelopeVal <= parameters.sustain)
                 {
-                    envelopeVal -= decayRate;
-
-                    if (envelopeVal <= parameters.sustain)
-                    {
-                        envelopeVal = parameters.sustain;
-                        goToNextState();
-                    }
-
-                    break;
+                    envelopeVal = parameters.sustain;
+                    goToNextState();
                 }
+
+                return powerScale(envelopeVal, parameters.decayPower);
             }
 
             case State::sustain:
             {
                 envelopeVal = parameters.sustain;
-                break;
+                return envelopeVal;
             }
 
             case State::release:
             {
-                if (fabsf (releasePower) < kMinPower)
-                {
-                    envelopeVal -= releaseRate;
+                envelopeVal -= releaseRate;
 
-                    if (envelopeVal <= 0.0f)
-                        goToNextState();
+                if (envelopeVal <= 0.0f)
+                    goToNextState();
 
-                    break;
-                }
+                return powerScale(envelopeVal, parameters.releasePower);
             }
         }
 
@@ -244,7 +258,7 @@ private:
         decayRate   = getRate (1.0f - parameters.sustain, parameters.decay, sampleRate);
         releaseRate = getRate (parameters.sustain, parameters.release, sampleRate);
 
-        if ((state == State::attack && attackRate <= 0.0f)
+        if (   (state == State::attack && attackRate <= 0.0f)
             || (state == State::decay && (decayRate <= 0.0f || envelopeVal <= parameters.sustain))
             || (state == State::release && releaseRate <= 0.0f))
         {
@@ -270,6 +284,25 @@ private:
             reset();
     }
 
+    /**
+     * powerScale, from Vital/Tytel
+     * for creating a curved table of values between 0 and 1
+     *
+     * @param value = [0, 1] linear input
+     * @param power = exponent coefficient [0 => linear, generally between +/- 2-10 for useful curves]
+     * @return output = [0, 1] curved output
+     *
+     * could replace with lookup table to see if that is better for performance
+     */
+    force_inline float powerScale(float value, float power) {
+
+        if (fabsf(power) <= kMinPower) return value;
+
+        float numerator = exp(power * value) - 1.0f;
+        float denominator = exp(power) - 1.0f;
+        return numerator / denominator;
+    }
+
     //==============================================================================
     enum class State { idle, attack, decay, sustain, release };
 
@@ -280,7 +313,8 @@ private:
     float envelopeVal = 0.0f, attackRate = 0.0f, decayRate = 0.0f, releaseRate = 0.0f;
 
     static constexpr float kMinPower = 0.01f;
-    float attackPower = 0.0f, decayPower = 0.0f, releasePower = 0.0f;
+    static constexpr int tableSize = 256;
+    std::vector<float> attackCurve, decayCurve, releaseCurve;
 };
 
 #endif //BITKLAVIER2_BKADSR_H

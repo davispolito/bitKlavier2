@@ -55,7 +55,7 @@ EnvelopeEditor::EnvelopeEditor(
   hover_circle_.setThickness(1.0f);
 
   // *** disabling the curved envelope stuff for now, until we can work out how we want to implement it on the back end
-  power_circles_.setVisible(false);
+  //power_circles_.setVisible(false);
                                                    
   for (int i = 0; i < kMaxTimesShown; ++i) {
     times_[i] = std::make_unique<PlainTextComponent>("juce::Time", "");
@@ -226,6 +226,12 @@ void EnvelopeEditor::mouseDrag(const juce::MouseEvent& e) {
   }
   else if (attack_hover_)
       setAttackX(last_edit_position_.x);
+  else if (attack_power_hover_)
+      setAttackPower(attack_power_slider_->getValue() + delta_power);
+  else if (decay_power_hover_)
+      setDecayPower(decay_power_slider_->getValue() + delta_power);
+  else if (release_power_hover_)
+      setReleasePower(release_power_slider_->getValue() + delta_power);
 
   // *** disabling the curved envelope stuff for now, until we can work out how we want to implement it on the back end
 //  if (delay_hover_)
@@ -240,12 +246,6 @@ void EnvelopeEditor::mouseDrag(const juce::MouseEvent& e) {
 //    setAttackX(last_edit_position_.x);
 //  else if (hold_hover_)
 //    setHoldX(last_edit_position_.x);
-//  else if (attack_power_hover_)
-//    setAttackPower(attack_power_slider_->getValue() + delta_power);
-//  else if (decay_power_hover_)
-//    setDecayPower(decay_power_slider_->getValue() + delta_power);
-//  else if (release_power_hover_)
-//    setReleasePower(release_power_slider_->getValue() + delta_power);
 
   resetPositions();
 }

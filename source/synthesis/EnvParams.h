@@ -10,7 +10,7 @@ struct EnvParams : public chowdsp::ParamHolder
 {
     EnvParams() : chowdsp::ParamHolder("ENV")
     {
-        add(decayParam, sustainParam, releaseParam, attackParam, holdParam, delayParam);
+        add(decayParam, sustainParam, releaseParam, attackParam, attackPowerParam, holdParam, delayParam);
     }
 
     // Delay param

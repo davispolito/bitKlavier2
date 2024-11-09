@@ -73,6 +73,7 @@ class EnvelopeSection : public SynthSection, public DragMagnifyingGlass::Listene
     std::unique_ptr<DragMagnifyingGlass> drag_magnifying_glass_;
     std::unique_ptr<chowdsp::SliderAttachment> delay_attachment;
     std::unique_ptr<chowdsp::SliderAttachment> attack_attachment;
+    std::unique_ptr<chowdsp::SliderAttachment> attackPower_attachment;
     std::unique_ptr<chowdsp::SliderAttachment> hold_attachment;
     std::unique_ptr<chowdsp::SliderAttachment> decay_attachment;
     std::unique_ptr<chowdsp::SliderAttachment> sustain_attachment;

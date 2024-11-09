@@ -63,6 +63,13 @@ DirectProcessor::DirectProcessor (const juce::ValueTree& v) : PluginBase (v, nul
                 DBG ("attack: " + juce::String (state.params.env.attackParam->get()));
             }),
 
+        state.addParameterListener (*state.params.env.attackPowerParam,
+            chowdsp::ParameterListenerThread::AudioThread,
+            [this] {
+                mainSynth.globalADSR.attackPower = state.params.env.attackPowerParam->get() * -1.;
+                DBG ("attack power: " + juce::String (state.params.env.attackPowerParam->get()));
+            }),
+
         state.addParameterListener (*state.params.env.decayParam,
             chowdsp::ParameterListenerThread::AudioThread,
             [this] {

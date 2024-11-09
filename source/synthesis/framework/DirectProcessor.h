@@ -24,7 +24,7 @@ struct DirectParams : chowdsp::ParamHolder
     {
         //add (gainParam, hammerParam, releaseResonanceParam, pedalParam, velocityParam, attackParam, decayParam, sustainParam, releaseParam, transpositionsParam);
         //add (gainParam, hammerParam, releaseResonanceParam, pedalParam, velocityParam, attackParam, decayParam, sustainParam, releaseParam);
-        add (gainParam, hammerParam, releaseResonanceParam, pedalParam,env);
+        add (gainParam, hammerParam, releaseResonanceParam, pedalParam, env);
     }
 
     // juce::Gain param
