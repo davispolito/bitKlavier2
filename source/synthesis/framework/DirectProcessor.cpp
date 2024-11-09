@@ -162,14 +162,15 @@ void DirectProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::Midi
     if (mainSynth.getNumSounds() > 0)
         mainSynth.renderNextBlock (buffer, midiMessages, 0, buffer.getNumSamples());
 
-    if (hammerSynth.getNumSounds() > 0)
-        hammerSynth.renderNextBlock (buffer, midiMessages, 0, buffer.getNumSamples());
+//    if (hammerSynth.getNumSounds() > 0)
+//        hammerSynth.renderNextBlock (buffer, midiMessages, 0, buffer.getNumSamples());
+//
+//    if (releaseResonanceSynth.getNumSounds() > 0)
+//        releaseResonanceSynth.renderNextBlock (buffer, midiMessages, 0, buffer.getNumSamples());
+//
+//    if (pedalSynth.getNumSounds() > 0)
+//        pedalSynth.renderNextBlock (buffer, midiMessages, 0, buffer.getNumSamples());
 
-    if (releaseResonanceSynth.getNumSounds() > 0)
-        releaseResonanceSynth.renderNextBlock (buffer, midiMessages, 0, buffer.getNumSamples());
-
-    if (pedalSynth.getNumSounds() > 0)
-        pedalSynth.renderNextBlock (buffer, midiMessages, 0, buffer.getNumSamples());
 //DBG ("attack: " + juce::String (state.params.env.attackParam->get()));
     //juce::dsp::AudioBlock<float> block(buffer);
     //melatonin::printSparkline(buffer);

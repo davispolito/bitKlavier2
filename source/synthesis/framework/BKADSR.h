@@ -25,6 +25,8 @@ public:
     BKADSR()
     {
         recalculateRates();
+        lastOut.reset(sampleRate, 0.005);
+        k_curvature.reset(sampleRate, 0.005);
     }
 
     //==============================================================================
@@ -110,7 +112,11 @@ public:
     /** Resets the envelope to an idle state. */
     void reset() noexcept
     {
+        DBG("reset");
         envelopeVal = 0.0f;
+        lastOut = 0.0f;
+        //lastOut.setCurrentAndTargetValue(0.0f);
+        //lastOut.setTargetValue(0.0f);
         state = State::idle;
     }
 
@@ -167,6 +173,8 @@ public:
             case State::attack:
             {
                 envelopeVal += attackRate;
+                lastOut.setTargetValue(powerScale(envelopeVal, parameters.attackPower));
+                float returnSample = lastOut.getNextValue();
 
                 if (envelopeVal >= 1.0f)
                 {
@@ -174,12 +182,14 @@ public:
                     goToNextState();
                 }
 
-                return powerScale(envelopeVal, parameters.attackPower);
+                return returnSample;
             }
 
             case State::decay:
             {
                 envelopeVal -= decayRate;
+                lastOut.setTargetValue(powerScale(envelopeVal, parameters.decayPower));
+                float returnSample = lastOut.getNextValue();
 
                 if (envelopeVal <= parameters.sustain)
                 {
@@ -187,27 +197,33 @@ public:
                     goToNextState();
                 }
 
-                return powerScale(envelopeVal, parameters.decayPower);
+                return returnSample;
             }
 
             case State::sustain:
             {
                 envelopeVal = parameters.sustain;
-                return envelopeVal;
+                lastOut.setTargetValue(envelopeVal);
+                return lastOut.getNextValue();
             }
 
             case State::release:
             {
                 envelopeVal -= releaseRate;
+                lastOut.setTargetValue(powerScale(envelopeVal, parameters.releasePower));
+                float returnSample = lastOut.getNextValue();
 
                 if (envelopeVal <= 0.0f)
+                {
                     goToNextState();
+                }
 
-                return powerScale(envelopeVal, parameters.releasePower);
+                return returnSample;
             }
         }
 
-        return envelopeVal;
+        lastOut.setTargetValue(0.0f);
+        return lastOut.getNextValue();
     }
 
     /** This method will conveniently apply the next numSamples number of envelope values
@@ -249,6 +265,7 @@ private:
     //==============================================================================
     void recalculateRates() noexcept
     {
+        DBG("recalculateRates");
         auto getRate = [] (float distance, float timeInSeconds, double sr)
         {
             return timeInSeconds > 0.0f ? (float) (distance / (timeInSeconds * sr)) : -1.0f;
@@ -281,7 +298,9 @@ private:
         }
 
         if (state == State::release)
+        {
             reset();
+        }
     }
 
     /**
@@ -293,13 +312,18 @@ private:
      * @return output = [0, 1] curved output
      *
      * could replace with lookup table to see if that is better for performance
+     *
+     * k_curvature (power) is smoothed to afford click-less transitions from one curvature to another
      */
     force_inline float powerScale(float value, float power) {
 
-        if (fabsf(power) <= kMinPower) return value;
+        k_curvature.setTargetValue(power);
+        float temp_power = k_curvature.getNextValue();
 
-        float numerator = exp(power * value) - 1.0f;
-        float denominator = exp(power) - 1.0f;
+        if (fabsf(temp_power) <= kMinPower) return value;
+
+        float numerator = exp(temp_power * value) - 1.0f;
+        float denominator = exp(temp_power) - 1.0f;
         return numerator / denominator;
     }
 
@@ -310,11 +334,13 @@ private:
     Parameters parameters;
 
     double sampleRate = 44100.0;
-    float envelopeVal = 0.0f, attackRate = 0.0f, decayRate = 0.0f, releaseRate = 0.0f;
+    juce::SmoothedValue<float> lastOut = 0.0f;
+    float envelopeVal = 0.0f;
+    float attackRate = 0.0f, decayRate = 0.0f, releaseRate = 0.0f;
 
     static constexpr float kMinPower = 0.01f;
-    static constexpr int tableSize = 256;
     std::vector<float> attackCurve, decayCurve, releaseCurve;
+    juce::SmoothedValue<float> k_curvature = 0.0f;
 };
 
 #endif //BITKLAVIER2_BKADSR_H
