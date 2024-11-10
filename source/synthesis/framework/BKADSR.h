@@ -324,6 +324,7 @@ private:
             goToNextState();
         }
 
+        // optimizations
         oneMinusSustain = 1.0f - parameters.sustain;
 
         if (parameters.sustain != 0.)
@@ -441,7 +442,7 @@ private:
 
     static constexpr float kMinPower = 0.01f; // ignore k values less than this
     std::vector<float> attackCurve, decayCurve, releaseCurve; // for lookup tables
-    const int curveTableSize = 256; // for lookup tables
+    static constexpr int curveTableSize = 256; // for lookup tables
 
     // precalculate optimizations
     float oneOverSustain, oneMinusSustain, oneOverOneMinusSustain;
