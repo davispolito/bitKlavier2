@@ -106,9 +106,6 @@ public:
     {
         jassert (newSampleRate > 0.0);
         sampleRate = newSampleRate;
-//        lastOut.reset(sampleRate, lastOutSmoothTime);
-//        k_curvature.reset(sampleRate, k_curvatureSmoothTime);
-
     }
 
     //==============================================================================
@@ -116,19 +113,12 @@ public:
     void reset() noexcept
     {
         envelopeVal = 0.0f;
-        lastOut = 0.0f;
         state = State::idle;
     }
 
     /** Starts the attack phase of the envelope. */
     void noteOn() noexcept
     {
-        DBG("just reset lastOut and k_curvature steps");
-        lastOut.reset(0);
-        k_curvature.reset(0);
-        //k_curvature.setCurrentAndTargetValue(parameters.attackPower);
-
-
         if (attackRate > 0.0f)
         {
             state = State::attack;
@@ -178,8 +168,6 @@ public:
             case State::attack:
             {
                 envelopeVal += attackRate;
-                lastOut.setTargetValue(powerScale(envelopeVal, parameters.attackPower));
-                float returnSample = lastOut.getNextValue();
 
                 if (envelopeVal >= 1.0f)
                 {
@@ -187,24 +175,15 @@ public:
                     goToNextState();
                 }
 
-                //DBG("attack envelopeVal & lastOut = " + juce::String(envelopeVal) + " & " + juce::String(lastOut.getCurrentValue()));
-                return returnSample;
+                if (parameters.attackPower != 0.0f)
+                    return powerScale(envelopeVal, parameters.attackPower);
+
+                return envelopeVal;
             }
 
             case State::decay:
             {
                 envelopeVal -= decayRate;
-                if (parameters.sustain < 1.0f)
-                {
-                    lastOut.setTargetValue (
-                        powerScale (
-                            (envelopeVal - parameters.sustain) / (1.0f - parameters.sustain),
-                            parameters.decayPower)
-                            * (1.0f - parameters.sustain)
-                        + parameters.sustain);
-                }
-                else lastOut.setCurrentAndTargetValue(1.0f);
-                float returnSample = lastOut.getNextValue();
 
                 if (envelopeVal <= parameters.sustain)
                 {
@@ -212,36 +191,42 @@ public:
                     goToNextState();
                 }
 
-                //DBG("decay envelopeVal & lastOut = " + juce::String(envelopeVal) + " & " + juce::String(lastOut.getCurrentValue()));
-                return returnSample;
+                if (parameters.decayPower != 0.0f)
+                {
+                    if (parameters.sustain < 1.0f)
+                    {
+                        return powerScale ((envelopeVal - parameters.sustain) / (1.0f - parameters.sustain), parameters.decayPower)
+                                      * (1.0f - parameters.sustain)
+                                  + parameters.sustain;
+                    }
+
+                    return 1.0f;
+                }
+                return envelopeVal;
             }
 
             case State::sustain:
             {
                 envelopeVal = parameters.sustain;
-                lastOut.setTargetValue(envelopeVal);
-                //DBG("sustain envelopeVal & lastOut = " + juce::String(envelopeVal) + " & " + juce::String(lastOut.getCurrentValue()));
-                return lastOut.getNextValue();
+                return envelopeVal;
             }
 
             case State::release:
             {
                 envelopeVal -= releaseRate;
-                lastOut.setTargetValue(powerScale(envelopeVal / parameters.sustain, parameters.releasePower) * envelopeVal);
-                float returnSample = lastOut.getNextValue();
 
                 if (envelopeVal <= 0.0f)
                 {
                     goToNextState();
                 }
 
-                //DBG("release envelopeVal & lastOut = " + juce::String(envelopeVal) + " & " + juce::String(lastOut.getCurrentValue()));
-                return returnSample;
+                if (parameters.releasePower != 0.0f)
+                    return powerScale(envelopeVal / parameters.sustain, parameters.releasePower) * envelopeVal;
+                return envelopeVal;
             }
         }
 
-        lastOut.setTargetValue(0.0f);
-        return lastOut.getNextValue();
+        return 0.0f;
     }
 
     /** This method will conveniently apply the next numSamples number of envelope values
@@ -334,14 +319,10 @@ private:
      */
     force_inline float powerScale(float value, float power) {
 
-        k_curvature.setTargetValue(power);
-        //float temp_power = k_curvature.getNextValue();
-        float temp_power = power;
+        if (fabsf(power) <= kMinPower) return value;
 
-        if (fabsf(temp_power) <= kMinPower) return value;
-
-        float numerator = exp(temp_power * value) - 1.0f;
-        float denominator = exp(temp_power) - 1.0f;
+        float numerator = exp(power * value) - 1.0f;
+        float denominator = exp(power) - 1.0f;
         return numerator / denominator;
     }
 
@@ -352,15 +333,11 @@ private:
     Parameters parameters;
 
     double sampleRate = 44100.0;
-    juce::SmoothedValue<float> lastOut = 0.0f;
-    float lastOutSmoothTime = 0.005f; // in seconds
     float envelopeVal = 0.0f;
     float attackRate = 0.0f, decayRate = 0.0f, releaseRate = 0.0f;
 
     static constexpr float kMinPower = 0.01f; // ignore k values less than this
     std::vector<float> attackCurve, decayCurve, releaseCurve;
-    juce::SmoothedValue<float> k_curvature = 0.0f;
-    float k_curvatureSmoothTime = 0.005f; //in seconds
 };
 
 #endif //BITKLAVIER2_BKADSR_H
