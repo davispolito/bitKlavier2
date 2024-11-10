@@ -309,6 +309,9 @@ inline float EnvelopeEditor::getSliderAttackX() {
     return 0.0f;
 
   float time = attack_slider_->getAdjustedValue(attack_slider_->getValue() * .001f);
+
+  resetPositions();
+
   return getSliderDelayX() + getWidth() * time / window_time_;
 }
 
