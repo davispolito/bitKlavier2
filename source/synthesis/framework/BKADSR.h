@@ -155,6 +155,8 @@ public:
     //==============================================================================
     /** Returns the next sample value for an ADSR object.
         @see applyEnvelopeToBuffer
+
+        MIGHT BE AN OPTIMIZATION OPPORTUNITY
     */
     float getNextSample() noexcept
     {
@@ -316,6 +318,8 @@ private:
      *
      * k_curvature (power) is smoothed to afford click-less transitions from one curvature to another
      * passes input through when power is near zero, minimizing performance hit
+     *
+     * MIGHT BE AN OPTIMIZATION OPPORTUNITY, lookup table or some such...
      */
     force_inline float powerScale(float value, float power) {
 
