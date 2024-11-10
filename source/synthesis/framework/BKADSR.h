@@ -16,6 +16,10 @@ Based on the JUCE ADSR Class, with curvature additions
  performance should be similar to JUCE::ADSR for curvature values close to 0
  otherwise, will have some performance impact
 
+ possible optimizations:
+    powerScaleTable, using lookup table
+    pre-calculating some factors in getNextSample to minimize divides
+
 **/
 
 class BKADSR
@@ -25,8 +29,7 @@ public:
     BKADSR()
     {
         recalculateRates();
-//        lastOut.reset(sampleRate, lastOutSmoothTime); // 5ms smoothing
-//        k_curvature.reset(sampleRate, k_curvatureSmoothTime);
+        recalculateCurveTables(); // optimization
     }
 
     //==============================================================================
@@ -86,6 +89,8 @@ public:
 
         parameters = newParameters;
         recalculateRates();
+        recalculateCurveTables(); //would happen here, if we optimize
+        // gets called every noteOn, so tables shouldn't be too big... 256?
     }
 
     /** Returns the parameters currently being used by an ADSR object.
@@ -177,10 +182,13 @@ public:
                     goToNextState();
                 }
 
-                if (parameters.attackPower != 0.0f)
-                    return powerScale(envelopeVal, parameters.attackPower);
+                // unoptimized, calling powerScale directly
+//                if (parameters.attackPower != 0.0f)
+//                    return powerScale(envelopeVal, parameters.attackPower);
+//                return envelopeVal;
 
-                return envelopeVal;
+                // optimized, using lookup table
+                return powerScale(envelopeVal, attackCurve);
             }
 
             case State::decay:
@@ -197,11 +205,16 @@ public:
                 {
                     if (parameters.sustain < 1.0f)
                     {
-                        return powerScale ((envelopeVal - parameters.sustain) / (1.0f - parameters.sustain), parameters.decayPower)
-                                      * (1.0f - parameters.sustain)
-                                  + parameters.sustain;
-                    }
+                        // unoptimized
+//                        return powerScale ((envelopeVal - parameters.sustain) / (1.0f - parameters.sustain), parameters.decayPower)
+//                                      * (1.0f - parameters.sustain)
+//                                  + parameters.sustain;
 
+                        // optimized, using lookup table
+                        return powerScale((envelopeVal - parameters.sustain) / (1.0f - parameters.sustain), decayCurve)
+                                   * (1.0f - parameters.sustain)
+                               + parameters.sustain;
+                    }
                     return 1.0f;
                 }
                 return envelopeVal;
@@ -222,11 +235,26 @@ public:
                     goToNextState();
                 }
 
+                // unoptimized
+//                if (parameters.releasePower != 0.0f)
+//                    return powerScale(envelopeVal / parameters.sustain, parameters.releasePower) * envelopeVal;
+//                return envelopeVal;
+
+                // optimized, using lookup table
                 if (parameters.releasePower != 0.0f)
-                    return powerScale(envelopeVal / parameters.sustain, parameters.releasePower) * envelopeVal;
+                    return powerScale(envelopeVal / parameters.sustain, releaseCurve) * envelopeVal;
                 return envelopeVal;
             }
         }
+
+        /**
+         * possible factors to pull out for optimization:
+         *
+         *      1/parameters.sustain, so we can multiple instead of divide in State::release
+         *      1.0f - parameters.sustain, for State::decay, just to remove the subtraction
+         *      1 / (1.0f - parameters.sustain), for State::decay, to multiple instead of divide
+         *
+         */
 
         return 0.0f;
     }
@@ -319,7 +347,6 @@ private:
      * k_curvature (power) is smoothed to afford click-less transitions from one curvature to another
      * passes input through when power is near zero, minimizing performance hit
      *
-     * MIGHT BE AN OPTIMIZATION OPPORTUNITY, lookup table or some such...
      */
     force_inline float powerScale(float value, float power) {
 
@@ -328,6 +355,48 @@ private:
         float numerator = exp(power * value) - 1.0f;
         float denominator = exp(power) - 1.0f;
         return numerator / denominator;
+    }
+
+    /**
+     * optimized version of powerScale, using simple lookup table
+     *
+     * we are truncating, not interpolating, so a larger table will be more accurate
+     *      but will also take more time to fill
+     *
+     *      truncating, with a table size of 256, seems to sound fine!
+     *
+     * @param value = [0, 1] linear input
+     * @param power = exponent coefficient [0 => linear, generally between +/- 2-10 for useful curves]
+     * @return output = [0, 1] curved output
+     */
+    force_inline float powerScale(float value, const std::vector<float>& table)
+    {
+        if(value > 1.0) value = 1.0f;
+        else if(value < 0.) value = 0.f;
+        return table[value * (curveTableSize - 1)]; // just return closest value, probably good enough if table is large enough
+    }
+
+    /**
+     * pre-calculates powerScale lookup table
+     *
+     * @param power
+     * @param table
+     */
+    void createTable(float power, std::vector<float>& table)
+    {
+        table.clear();
+        for (int i=0; i<curveTableSize; i++)
+            table.push_back(powerScale(static_cast<float>(i) / curveTableSize, power));
+    }
+
+    /**
+     * pre-calculate the three tables needed here
+     */
+    void recalculateCurveTables()
+    {
+        createTable(parameters.attackPower, attackCurve);
+        createTable(parameters.decayPower, decayCurve);
+        createTable(parameters.releasePower, releaseCurve);
     }
 
     //==============================================================================
@@ -341,7 +410,8 @@ private:
     float attackRate = 0.0f, decayRate = 0.0f, releaseRate = 0.0f;
 
     static constexpr float kMinPower = 0.01f; // ignore k values less than this
-    std::vector<float> attackCurve, decayCurve, releaseCurve;
+    std::vector<float> attackCurve, decayCurve, releaseCurve; // for lookup tables
+    const int curveTableSize = 256; // for lookup tables
 };
 
 #endif //BITKLAVIER2_BKADSR_H
