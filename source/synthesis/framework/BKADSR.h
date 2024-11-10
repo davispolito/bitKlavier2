@@ -160,8 +160,6 @@ public:
     //==============================================================================
     /** Returns the next sample value for an ADSR object.
         @see applyEnvelopeToBuffer
-
-        MIGHT BE AN OPTIMIZATION OPPORTUNITY
     */
     float getNextSample() noexcept
     {
@@ -182,7 +180,7 @@ public:
                     goToNextState();
                 }
 
-                // unoptimized, calling powerScale directly
+//                // unoptimized, calling powerScale directly
 //                if (parameters.attackPower != 0.0f)
 //                    return powerScale(envelopeVal, parameters.attackPower);
 //                return envelopeVal;
@@ -386,7 +384,7 @@ private:
      * we are truncating, not interpolating, so a larger table will be more accurate
      *      but will also take more time to fill
      *
-     *      truncating, with a table size of 256, seems to sound fine!
+     *      => truncating, with a table size of 256, seems to sound fine!
      *
      * @param value = [0, 1] linear input
      * @param power = exponent coefficient [0 => linear, generally between +/- 2-10 for useful curves]
