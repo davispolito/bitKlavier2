@@ -207,14 +207,19 @@ public:
                 {
                     if (parameters.sustain < 1.0f)
                     {
-                        // unoptimized
+//                        // unoptimized
 //                        return powerScale ((envelopeVal - parameters.sustain) / (1.0f - parameters.sustain), parameters.decayPower)
 //                                      * (1.0f - parameters.sustain)
 //                                  + parameters.sustain;
 
-                        // optimized, using lookup table
-                        return powerScale((envelopeVal - parameters.sustain) / (1.0f - parameters.sustain), decayCurve)
-                                   * (1.0f - parameters.sustain)
+//                        // optimized, using lookup table
+//                        return powerScale((envelopeVal - parameters.sustain) / (1.0f - parameters.sustain), decayCurve)
+//                                   * (1.0f - parameters.sustain)
+//                               + parameters.sustain;
+
+                        // further optimized
+                        return powerScale((envelopeVal - parameters.sustain) * oneOverOneMinusSustain, decayCurve)
+                                   * oneMinusSustain
                                + parameters.sustain;
                     }
                     return 1.0f;
@@ -237,15 +242,21 @@ public:
                     goToNextState();
                 }
 
-                // unoptimized
+//                // unoptimized
 //                if (parameters.releasePower != 0.0f)
 //                    return powerScale(envelopeVal / parameters.sustain, parameters.releasePower) * envelopeVal;
 //                return envelopeVal;
 
-                // optimized, using lookup table
+//                // optimized, using lookup table
+//                if (parameters.releasePower != 0.0f)
+//                    return powerScale(envelopeVal / parameters.sustain, releaseCurve) * envelopeVal;
+//                return envelopeVal;
+
+                // further optimized
                 if (parameters.releasePower != 0.0f)
-                    return powerScale(envelopeVal / parameters.sustain, releaseCurve) * envelopeVal;
+                    return powerScale(envelopeVal * oneOverSustain, releaseCurve) * envelopeVal;
                 return envelopeVal;
+
             }
         }
 
@@ -314,6 +325,16 @@ private:
         {
             goToNextState();
         }
+
+        oneMinusSustain = 1.0f - parameters.sustain;
+
+        if (parameters.sustain != 0.)
+            oneOverSustain = 1.0f / parameters.sustain;
+        else oneOverSustain = 10000.;
+
+        if (oneMinusSustain != 0.)
+            oneOverOneMinusSustain = 1.0f / oneMinusSustain;
+        else oneOverOneMinusSustain = 10000.;
     }
 
     void goToNextState() noexcept
@@ -414,6 +435,9 @@ private:
     static constexpr float kMinPower = 0.01f; // ignore k values less than this
     std::vector<float> attackCurve, decayCurve, releaseCurve; // for lookup tables
     const int curveTableSize = 256; // for lookup tables
+
+    // precalculate optimizations
+    float oneOverSustain, oneMinusSustain, oneOverOneMinusSustain;
 };
 
 #endif //BITKLAVIER2_BKADSR_H
