@@ -388,23 +388,26 @@ private:
      */
     force_inline float powerScale(float value, const std::vector<float>& table)
     {
-        if(value > 1.0) value = 1.0f;
-        else if(value < 0.) value = 0.f;
-
-        // just truncating here...
+        // ** just truncating here...
+        //if(value > 1.0) value = 1.0f;
+        //else if(value < 0.) value = 0.f;
         //return table[value * (curveTableSize - 1)]; // just return closest value, probably good enough if table is large enough
 
-        // using simple linear interpolation
+        // ** using simple linear interpolation
+        // table positions
         float currentSamplePos = static_cast<float>(curveTableSize - 1) * value;
         int pos = static_cast<int>(currentSamplePos);
+        if (pos < 0) pos = 0;
         int nextPos = pos + 1;
-        if (pos == curveTableSize) pos = curveTableSize - 1;
-        if (nextPos == curveTableSize) nextPos = curveTableSize - 1;
+        if (pos >= curveTableSize) pos = curveTableSize - 1;
+        if (nextPos >= curveTableSize) nextPos = curveTableSize - 1;
 
+        // coefficients
         float alpha = currentSamplePos - static_cast<float>(pos);
         float invAlpha = 1.0f - alpha;
 
-        return static_cast<float>(table[pos] * invAlpha + table[nextPos] * alpha);
+        // interpolate
+        return table[pos] * invAlpha + table[nextPos] * alpha;
     }
 
     /**
