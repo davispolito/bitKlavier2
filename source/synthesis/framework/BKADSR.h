@@ -13,7 +13,7 @@
 /**
 Based on the JUCE ADSR Class, with curvature additions
 
- performance should be the same as JUCE::ADSR for curvature values of 0
+ performance should be similar to JUCE::ADSR for curvature values close to 0
  otherwise, will have some performance impact
 
 **/
@@ -25,8 +25,8 @@ public:
     BKADSR()
     {
         recalculateRates();
-        lastOut.reset(sampleRate, 0.005);
-        k_curvature.reset(sampleRate, 0.005);
+//        lastOut.reset(sampleRate, lastOutSmoothTime); // 5ms smoothing
+//        k_curvature.reset(sampleRate, k_curvatureSmoothTime);
     }
 
     //==============================================================================
@@ -106,23 +106,29 @@ public:
     {
         jassert (newSampleRate > 0.0);
         sampleRate = newSampleRate;
+//        lastOut.reset(sampleRate, lastOutSmoothTime);
+//        k_curvature.reset(sampleRate, k_curvatureSmoothTime);
+
     }
 
     //==============================================================================
     /** Resets the envelope to an idle state. */
     void reset() noexcept
     {
-        DBG("reset");
         envelopeVal = 0.0f;
         lastOut = 0.0f;
-        //lastOut.setCurrentAndTargetValue(0.0f);
-        //lastOut.setTargetValue(0.0f);
         state = State::idle;
     }
 
     /** Starts the attack phase of the envelope. */
     void noteOn() noexcept
     {
+        DBG("just reset lastOut and k_curvature steps");
+        lastOut.reset(0);
+        k_curvature.reset(0);
+        //k_curvature.setCurrentAndTargetValue(parameters.attackPower);
+
+
         if (attackRate > 0.0f)
         {
             state = State::attack;
@@ -158,7 +164,6 @@ public:
 
     //==============================================================================
     /** Returns the next sample value for an ADSR object.
-
         @see applyEnvelopeToBuffer
     */
     float getNextSample() noexcept
@@ -182,13 +187,23 @@ public:
                     goToNextState();
                 }
 
+                //DBG("attack envelopeVal & lastOut = " + juce::String(envelopeVal) + " & " + juce::String(lastOut.getCurrentValue()));
                 return returnSample;
             }
 
             case State::decay:
             {
                 envelopeVal -= decayRate;
-                lastOut.setTargetValue(powerScale(envelopeVal, parameters.decayPower));
+                if (parameters.sustain < 1.0f)
+                {
+                    lastOut.setTargetValue (
+                        powerScale (
+                            (envelopeVal - parameters.sustain) / (1.0f - parameters.sustain),
+                            parameters.decayPower)
+                            * (1.0f - parameters.sustain)
+                        + parameters.sustain);
+                }
+                else lastOut.setCurrentAndTargetValue(1.0f);
                 float returnSample = lastOut.getNextValue();
 
                 if (envelopeVal <= parameters.sustain)
@@ -197,6 +212,7 @@ public:
                     goToNextState();
                 }
 
+                //DBG("decay envelopeVal & lastOut = " + juce::String(envelopeVal) + " & " + juce::String(lastOut.getCurrentValue()));
                 return returnSample;
             }
 
@@ -204,13 +220,14 @@ public:
             {
                 envelopeVal = parameters.sustain;
                 lastOut.setTargetValue(envelopeVal);
+                //DBG("sustain envelopeVal & lastOut = " + juce::String(envelopeVal) + " & " + juce::String(lastOut.getCurrentValue()));
                 return lastOut.getNextValue();
             }
 
             case State::release:
             {
                 envelopeVal -= releaseRate;
-                lastOut.setTargetValue(powerScale(envelopeVal, parameters.releasePower));
+                lastOut.setTargetValue(powerScale(envelopeVal / parameters.sustain, parameters.releasePower) * envelopeVal);
                 float returnSample = lastOut.getNextValue();
 
                 if (envelopeVal <= 0.0f)
@@ -218,6 +235,7 @@ public:
                     goToNextState();
                 }
 
+                //DBG("release envelopeVal & lastOut = " + juce::String(envelopeVal) + " & " + juce::String(lastOut.getCurrentValue()));
                 return returnSample;
             }
         }
@@ -228,7 +246,6 @@ public:
 
     /** This method will conveniently apply the next numSamples number of envelope values
         to an AudioBuffer.
-
         @see getNextSample
     */
     template <typename FloatType>
@@ -265,7 +282,6 @@ private:
     //==============================================================================
     void recalculateRates() noexcept
     {
-        DBG("recalculateRates");
         auto getRate = [] (float distance, float timeInSeconds, double sr)
         {
             return timeInSeconds > 0.0f ? (float) (distance / (timeInSeconds * sr)) : -1.0f;
@@ -314,11 +330,13 @@ private:
      * could replace with lookup table to see if that is better for performance
      *
      * k_curvature (power) is smoothed to afford click-less transitions from one curvature to another
+     * passes input through when power is near zero, minimizing performance hit
      */
     force_inline float powerScale(float value, float power) {
 
         k_curvature.setTargetValue(power);
-        float temp_power = k_curvature.getNextValue();
+        //float temp_power = k_curvature.getNextValue();
+        float temp_power = power;
 
         if (fabsf(temp_power) <= kMinPower) return value;
 
@@ -335,12 +353,14 @@ private:
 
     double sampleRate = 44100.0;
     juce::SmoothedValue<float> lastOut = 0.0f;
+    float lastOutSmoothTime = 0.005f; // in seconds
     float envelopeVal = 0.0f;
     float attackRate = 0.0f, decayRate = 0.0f, releaseRate = 0.0f;
 
-    static constexpr float kMinPower = 0.01f;
+    static constexpr float kMinPower = 0.01f; // ignore k values less than this
     std::vector<float> attackCurve, decayCurve, releaseCurve;
     juce::SmoothedValue<float> k_curvature = 0.0f;
+    float k_curvatureSmoothTime = 0.005f; //in seconds
 };
 
 #endif //BITKLAVIER2_BKADSR_H

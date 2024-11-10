@@ -77,6 +77,13 @@ DirectProcessor::DirectProcessor (const juce::ValueTree& v) : PluginBase (v, nul
                 DBG ("decay: " + juce::String (state.params.env.decayParam->get()));
             }),
 
+        state.addParameterListener (*state.params.env.decayPowerParam,
+            chowdsp::ParameterListenerThread::AudioThread,
+            [this] {
+                mainSynth.globalADSR.decayPower = state.params.env.decayPowerParam->get() * -1.;
+                DBG ("decay power: " + juce::String (state.params.env.decayPowerParam->get()));
+            }),
+
         state.addParameterListener (*state.params.env.sustainParam,
             chowdsp::ParameterListenerThread::AudioThread,
             [this] {
@@ -89,7 +96,14 @@ DirectProcessor::DirectProcessor (const juce::ValueTree& v) : PluginBase (v, nul
             [this] {
                 mainSynth.globalADSR.release = state.params.env.releaseParam->get() * .001f;
                 DBG ("release: " + juce::String (state.params.env.releaseParam->get()));
-            })
+            }),
+
+        state.addParameterListener (*state.params.env.releasePowerParam,
+            chowdsp::ParameterListenerThread::AudioThread,
+            [this] {
+                mainSynth.globalADSR.releasePower = state.params.env.releasePowerParam->get() * -1.;
+                DBG ("attack power: " + juce::String (state.params.env.releasePowerParam->get()));
+            }),
 
     };
 

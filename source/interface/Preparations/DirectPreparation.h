@@ -134,8 +134,8 @@ public:
     void paintBackground(juce::Graphics &g);
     juce::AudioProcessor* getProcessor() override;
     std::unique_ptr<juce::AudioProcessor> getProcessorPtr() override;
-private:
 
+private:
     // Private member variable for the DirectPreparation class: proc is a pointer to a
     // DirectProcessor Object
     DirectProcessor & proc;

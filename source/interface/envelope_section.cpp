@@ -165,8 +165,10 @@ EnvelopeSection::EnvelopeSection(juce::String name, std::string value_prepend, E
   attackPower_attachment = std::make_unique<chowdsp::SliderAttachment>(params.attackPowerParam, listeners, *attack_power_, nullptr);
   hold_attachment = std::make_unique<chowdsp::SliderAttachment>(params.holdParam, listeners, *hold_, nullptr);
   decay_attachment = std::make_unique<chowdsp::SliderAttachment>(params.decayParam, listeners, *decay_, nullptr);
+  decayPower_attachment = std::make_unique<chowdsp::SliderAttachment>(params.decayPowerParam, listeners, *decay_power_, nullptr);
   sustain_attachment = std::make_unique<chowdsp::SliderAttachment>(params.sustainParam, listeners, *sustain_, nullptr);
   release_attachment = std::make_unique<chowdsp::SliderAttachment>(params.releaseParam, listeners, *release_, nullptr);
+  releasePower_attachment = std::make_unique<chowdsp::SliderAttachment>(params.releasePowerParam, listeners, *release_power_, nullptr);
   //setSkinOverride(Skin::kEnvelope);
 }
 

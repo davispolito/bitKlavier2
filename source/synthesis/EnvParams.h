@@ -10,7 +10,15 @@ struct EnvParams : public chowdsp::ParamHolder
 {
     EnvParams() : chowdsp::ParamHolder("ENV")
     {
-        add(decayParam, sustainParam, releaseParam, attackParam, attackPowerParam, holdParam, delayParam);
+        add(decayParam,
+            sustainParam,
+            releaseParam,
+            attackParam,
+            attackPowerParam,
+            holdParam,
+            delayParam,
+            decayPowerParam,
+            releasePowerParam);
     }
 
     // Delay param
@@ -55,6 +63,16 @@ struct EnvParams : public chowdsp::ParamHolder
         5.0f
     };
 
+    // Decay Power param
+    chowdsp::FloatParameter::Ptr decayPowerParam {
+        juce::ParameterID { "decaypower", 100 },
+        "Decay Power",
+        chowdsp::ParamUtils::createNormalisableRange (-10.0f, 10.0f, 0.0f),
+        0.0f,
+        &chowdsp::ParamUtils::floatValToString,
+        &chowdsp::ParamUtils::stringToFloatVal
+    };
+
     // Sustain param
     chowdsp::FloatParameter::Ptr sustainParam {
         juce::ParameterID { "sustain", 100 },
@@ -71,6 +89,16 @@ struct EnvParams : public chowdsp::ParamHolder
         "Release",
         chowdsp::ParamUtils::createNormalisableRange (0.0f, 10000.0f, 500.0f),
         50.0f
+    };
+
+    // release Power param
+    chowdsp::FloatParameter::Ptr releasePowerParam {
+        juce::ParameterID { "releasepower", 100 },
+        "Release Power",
+        chowdsp::ParamUtils::createNormalisableRange (-10.0f, 10.0f, 0.0f),
+        0.0f,
+        &chowdsp::ParamUtils::floatValToString,
+        &chowdsp::ParamUtils::stringToFloatVal
     };
 
 };

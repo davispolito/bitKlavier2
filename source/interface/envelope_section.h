@@ -76,8 +76,10 @@ class EnvelopeSection : public SynthSection, public DragMagnifyingGlass::Listene
     std::unique_ptr<chowdsp::SliderAttachment> attackPower_attachment;
     std::unique_ptr<chowdsp::SliderAttachment> hold_attachment;
     std::unique_ptr<chowdsp::SliderAttachment> decay_attachment;
+    std::unique_ptr<chowdsp::SliderAttachment> decayPower_attachment;
     std::unique_ptr<chowdsp::SliderAttachment> sustain_attachment;
     std::unique_ptr<chowdsp::SliderAttachment> release_attachment;
+    std::unique_ptr<chowdsp::SliderAttachment> releasePower_attachment;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(EnvelopeSection)
 };
