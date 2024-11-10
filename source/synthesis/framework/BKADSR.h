@@ -379,12 +379,7 @@ private:
     }
 
     /**
-     * optimized version of powerScale, using simple lookup table
-     *
-     * we are truncating, not interpolating, so a larger table will be more accurate
-     *      but will also take more time to fill
-     *
-     *      => truncating, with a table size of 256, seems to sound fine!
+     * optimized version of powerScale, using simple lookup table and linear interpolation
      *
      * @param value = [0, 1] linear input
      * @param power = exponent coefficient [0 => linear, generally between +/- 2-10 for useful curves]
@@ -394,7 +389,21 @@ private:
     {
         if(value > 1.0) value = 1.0f;
         else if(value < 0.) value = 0.f;
-        return table[value * (curveTableSize - 1)]; // just return closest value, probably good enough if table is large enough
+
+        // just truncating here...
+        //return table[value * (curveTableSize - 1)]; // just return closest value, probably good enough if table is large enough
+
+        // using simple linear interpolation
+        float currentSamplePos = static_cast<float>(curveTableSize - 1) * value;
+        int pos = static_cast<int>(currentSamplePos);
+        int nextPos = pos + 1;
+        if (pos == curveTableSize) pos = curveTableSize - 1;
+        if (nextPos == curveTableSize) nextPos = curveTableSize - 1;
+
+        float alpha = currentSamplePos - static_cast<float>(pos);
+        float invAlpha = 1.0f - alpha;
+
+        return static_cast<float>(table[pos] * invAlpha + table[nextPos] * alpha);
     }
 
     /**
@@ -436,6 +445,8 @@ private:
 
     // precalculate optimizations
     float oneOverSustain, oneMinusSustain, oneOverOneMinusSustain;
+
+
 };
 
 #endif //BITKLAVIER2_BKADSR_H
