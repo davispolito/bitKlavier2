@@ -188,7 +188,9 @@ public:
 //                return envelopeVal;
 
                 // optimized, using lookup table
-                return powerScale(envelopeVal, attackCurve);
+                if (parameters.attackPower != 0.0f)
+                    return powerScale(envelopeVal, attackCurve);
+                return envelopeVal;
             }
 
             case State::decay:
