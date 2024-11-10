@@ -16,9 +16,9 @@ Based on the JUCE ADSR Class, with curvature additions
  performance should be similar to JUCE::ADSR for curvature values close to 0
  otherwise, will have some performance impact
 
- possible optimizations:
-    powerScaleTable, using lookup table
-    pre-calculating some factors in getNextSample to minimize divides
+ might want to do some performance tests to see if the lookup table version of powerScale
+ is actually worth it, given that it is at least possible that calculating powerScale
+ directly might sound better for long release tails and so on.
 
 **/
 
