@@ -35,7 +35,7 @@ namespace bitklavier {
         struct Pimpl;
         std::unique_ptr<Pimpl> pimpl;
     protected:
-        std::vector<juce::Component*> comps;
+        std::vector<std::unique_ptr<juce::Component>> comps;
         JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ParametersView)
     };
 

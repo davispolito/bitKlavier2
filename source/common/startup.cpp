@@ -28,9 +28,9 @@ void Startup::doStartupChecks(/*MidiManager* midi_manager*/) {
 }
 
 bool Startup::isComputerCompatible() {
-  #if defined(__ARM_NEON__)
-  return true;
-  #else
-  return juce::SystemStats::hasSSE2() || juce::SystemStats::hasAVX2();
-  #endif
+//  #if defined(__ARM_NEON__)
+//  return true;
+//  #else
+//  return juce::SystemStats::hasSSE2() || juce::SystemStats::hasAVX2();
+//  #endif
 }

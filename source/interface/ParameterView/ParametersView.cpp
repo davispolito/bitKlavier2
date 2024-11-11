@@ -96,7 +96,7 @@ namespace bitklavier {
                         [this, &listeners](auto &paramVec) {
                             for (auto &param: paramVec)
                             {
-                                comps.push_back(createParameterComp(listeners, param,*this).release());
+                                comps.push_back(createParameterComp(listeners, param,*this));
                                 //addAndMakeVisible(comps.back());
                             }
 
@@ -137,7 +137,7 @@ namespace bitklavier {
              {
                 return name;
              }
-             std::vector<juce::Component*> comps;
+             std::vector<std::unique_ptr<juce::Component>> comps;
             SynthSection &parent;
             juce::String name;
             juce::Grid grid;
