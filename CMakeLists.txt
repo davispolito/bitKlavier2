@@ -121,6 +121,7 @@ add_library(SharedCode INTERFACE
         source/interface/ParameterView/DirectParametersView.cpp
         source/interface/ParameterView/DirectParametersView.h
         source/synthesis/EnvParams.h
+        source/synthesis/framework/BKADSR.h
 )
 
 # C++20, please

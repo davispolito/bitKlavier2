@@ -21,6 +21,7 @@
 #include "common.h"
 #include "tuning_systems.h"
 #include "utils.h"
+#include "BKADSR.h"
 
 //#endif
 //==============================================================================
@@ -338,7 +339,7 @@ public:
         return juce::Decibels::decibelsToGain(dbOffset);
     }
 
-    void setEnvelopeParameters (juce::ADSR::Parameters parametersToUse)    { params = parametersToUse; }
+    void setEnvelopeParameters (BKADSR::Parameters parametersToUse)    { params = parametersToUse; }
     /** The class is reference-counted, so this is a handy pointer class for it. */
     typedef juce::ReferenceCountedObjectPtr<BKSamplerSound<T>> Ptr;
 
@@ -356,7 +357,7 @@ private:
     juce::BigInteger midiNotes;
     juce::BigInteger midiVelocities;
 
-    juce::ADSR::Parameters params;
+    BKADSR::Parameters params;
 
 };
 class BKSynthesiser;
@@ -585,7 +586,7 @@ public:
             /*: samplerSound(std::move(sound))*/
     {
         //jassert(samplerSound != nullptr);
-        ampEnv.setParameters(juce::ADSR::Parameters(0.005, 0.5,1.0,0.1));
+        ampEnv.setParameters(BKADSR::Parameters(0.005, 0.5,1.0,0.1));
         m_Buffer.setSize(2, 1, false, true, false);
     }
 
@@ -737,14 +738,14 @@ public:
         //updateAmpEnv();
     }
 
-    void copyAmpEnv(juce::ADSR::Parameters parameters)
+    void copyAmpEnv(BKADSR::Parameters parameters)
     {
         updateAmpEnv(parameters);
     }
 
 private:
 
-    void updateAmpEnv(juce::ADSR::Parameters &parameters) {
+    void updateAmpEnv(BKADSR::Parameters &parameters) {
 
 //        auto params = ampEnv.getParameters();
 ////        params.attack = *valueTreeState.getRawParameterValue(IDs::ampEnvAttack) * .001;
@@ -964,7 +965,8 @@ private:
     Direction currentDirection{ Direction::forward };
     double smoothingLengthInSeconds{ 0.01 };
 
-    juce::ADSR ampEnv;
+    //juce::ADSR ampEnv;
+    BKADSR ampEnv;
 
     //juce::ADSR filterEnv;
     double filterCutoff = 20000.;

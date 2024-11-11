@@ -53,6 +53,9 @@ EnvelopeEditor::EnvelopeEditor(
   addAndMakeVisible(point_circles_);
   addAndMakeVisible(power_circles_);
   hover_circle_.setThickness(1.0f);
+
+  // *** disabling the curved envelope stuff for now, until we can work out how we want to implement it on the back end
+  //power_circles_.setVisible(false);
                                                    
   for (int i = 0; i < kMaxTimesShown; ++i) {
     times_[i] = std::make_unique<PlainTextComponent>("juce::Time", "");
@@ -214,24 +217,35 @@ void EnvelopeEditor::mouseDrag(const juce::MouseEvent& e) {
   float delta_power = (last_edit_position_.y - e.position.y) * kPowerMouseMultiplier;
   last_edit_position_ = e.position;
 
-  if (delay_hover_)
-    setDelayX(last_edit_position_.x);
-  else if (release_hover_)
-    setReleaseX(last_edit_position_.x);
+  // removing delay and hold for now, so it's just a simple ADSR until we are ready to implement the rest
+  if (release_hover_)
+      setReleaseX(last_edit_position_.x);
   else if (sustain_hover_) {
-    setDecayX(last_edit_position_.x);
-    setSustainY(last_edit_position_.y);
+      setDecayX(last_edit_position_.x);
+      setSustainY(last_edit_position_.y);
   }
   else if (attack_hover_)
-    setAttackX(last_edit_position_.x);
-  else if (hold_hover_)
-    setHoldX(last_edit_position_.x);
+      setAttackX(last_edit_position_.x);
   else if (attack_power_hover_)
-    setAttackPower(attack_power_slider_->getValue() + delta_power);
+      setAttackPower(attack_power_slider_->getValue() + delta_power);
   else if (decay_power_hover_)
-    setDecayPower(decay_power_slider_->getValue() + delta_power);
+      setDecayPower(decay_power_slider_->getValue() + delta_power);
   else if (release_power_hover_)
-    setReleasePower(release_power_slider_->getValue() + delta_power);
+      setReleasePower(release_power_slider_->getValue() + delta_power);
+
+  // *** disabling the curved envelope stuff for now, until we can work out how we want to implement it on the back end
+//  if (delay_hover_)
+//    setDelayX(last_edit_position_.x);
+//  else if (release_hover_)
+//    setReleaseX(last_edit_position_.x);
+//  else if (sustain_hover_) {
+//    setDecayX(last_edit_position_.x);
+//    setSustainY(last_edit_position_.y);
+//  }
+//  else if (attack_hover_)
+//    setAttackX(last_edit_position_.x);
+//  else if (hold_hover_)
+//    setHoldX(last_edit_position_.x);
 
   resetPositions();
 }
@@ -286,7 +300,7 @@ inline float EnvelopeEditor::getSliderDelayX() {
   if (delay_slider_ == nullptr)
     return 0.0f;
 
-  float time = delay_slider_->getAdjustedValue(delay_slider_->getValue());
+  float time = delay_slider_->getAdjustedValue(delay_slider_->getValue() * .001f);
   return getWidth() * time / window_time_;
 }
 
@@ -294,7 +308,10 @@ inline float EnvelopeEditor::getSliderAttackX() {
   if (attack_slider_ == nullptr)
     return 0.0f;
 
-  float time = attack_slider_->getAdjustedValue(attack_slider_->getValue());
+  float time = attack_slider_->getAdjustedValue(attack_slider_->getValue() * .001f);
+
+  resetPositions();
+
   return getSliderDelayX() + getWidth() * time / window_time_;
 }
 
@@ -302,7 +319,7 @@ inline float EnvelopeEditor::getSliderHoldX() {
   if (hold_slider_ == nullptr)
     return 0.0f;
 
-  float time = hold_slider_->getAdjustedValue(hold_slider_->getValue());
+  float time = hold_slider_->getAdjustedValue(hold_slider_->getValue() * .001f);
   return getSliderAttackX()  + getWidth() * time / window_time_;
 }
 
@@ -310,7 +327,7 @@ float EnvelopeEditor::getSliderDecayX() {
   if (decay_slider_ == nullptr)
     return 0.0f;
 
-  float time = decay_slider_->getAdjustedValue(decay_slider_->getValue());
+  float time = decay_slider_->getAdjustedValue(decay_slider_->getValue() * .001f);
   return getSliderHoldX() + getWidth() * time / window_time_;
 }
 
@@ -326,33 +343,33 @@ float EnvelopeEditor::getSliderReleaseX() {
   if (release_slider_ == nullptr)
     return 0.0f;
 
-  float time = release_slider_->getAdjustedValue(release_slider_->getValue());
+  float time = release_slider_->getAdjustedValue(release_slider_->getValue() * .001f);
   return getSliderDecayX() + getWidth() * time / window_time_;
 }
 
 inline float EnvelopeEditor::getDelayTime(int index) {
  // bitklavier::poly_float delays = getOutputsTotal(delay_outputs_, delay_slider_->getValue());
-  return delay_slider_->getValue();///AdjustedValue(std::max<float>(0.0f, delays[index]));
+  return delay_slider_->getValue() * .001f;///AdjustedValue(std::max<float>(0.0f, delays[index]));
 }
 
 inline float EnvelopeEditor::getAttackTime(int index) {
   //bitklavier::poly_float attacks = getOutputsTotal(attack_outputs_, attack_slider_->getValue());
-  return attack_slider_->getValue();//getAdjustedValue(std::max<float>(0.0f, attacks[index]));
+  return attack_slider_->getValue() * .001f;//getAdjustedValue(std::max<float>(0.0f, attacks[index]));
 }
 
 inline float EnvelopeEditor::getHoldTime(int index) {
  // bitklavier::poly_float holds = getOutputsTotal(hold_outputs_, hold_slider_->getValue());
-  return hold_slider_->getValue();//getAdjustedValue(std::max<float>(0.0f, holds[index]));
+  return hold_slider_->getValue() * .001f;//getAdjustedValue(std::max<float>(0.0f, holds[index]));
 }
 
 inline float EnvelopeEditor::getDecayTime(int index) {
  // bitklavier::poly_float decays = getOutputsTotal(decay_outputs_, decay_slider_->getValue());
-  return decay_slider_->getValue();//getAdjustedValue(std::max<float>(0.0f, decays[index]));
+  return decay_slider_->getValue() * .001f;//getAdjustedValue(std::max<float>(0.0f, decays[index]));
 }
 
 inline float EnvelopeEditor::getReleaseTime(int index) {
 //  bitklavier::poly_float releases = getOutputsTotal(release_outputs_, release_slider_->getValue());
-  return release_slider_->getValue();//getAdjustedValue(std::max<float>(0.0f, releases[index]));
+  return release_slider_->getValue() * .001f;//getAdjustedValue(std::max<float>(0.0f, releases[index]));
 }
 
 inline float EnvelopeEditor::getDelayX(int index) {
@@ -462,6 +479,7 @@ float EnvelopeEditor::getBackupPhase(float phase) {
 float powerScale(float value, float power) {
     static constexpr float kMinPower = 0.01f;
 
+    //DBG("powerScale value and power: " + juce::String(value) + " " + juce::String(power));
     if (fabsf(power) < kMinPower)
         return value;
 
@@ -518,7 +536,7 @@ void EnvelopeEditor::setDelayX(float x) {
   if (delay_slider_ == nullptr)
     return;
 
-  float time = x * window_time_ / getWidth();
+  float time = x * window_time_ / getWidth() * 1000.f;
   delay_slider_->setValueFromAdjusted(time);
 }
 
@@ -526,7 +544,7 @@ void EnvelopeEditor::setAttackX(float x) {
   if (attack_slider_ == nullptr)
     return;
 
-  float time = (x - getSliderDelayX()) * window_time_ / getWidth();
+  float time = (x - getSliderDelayX()) * window_time_ / getWidth() * 1000.f;
   attack_slider_->setValueFromAdjusted(time);
 }
 
@@ -534,7 +552,7 @@ void EnvelopeEditor::setHoldX(float x) {
   if (delay_slider_ == nullptr)
     return;
 
-  float time = (x - getSliderAttackX()) * window_time_ / getWidth();
+  float time = (x - getSliderAttackX()) * window_time_ / getWidth() * 1000.f;
   hold_slider_->setValueFromAdjusted(time);
 }
 
@@ -559,7 +577,7 @@ void EnvelopeEditor::setDecayX(float x) {
   if (decay_slider_ == nullptr)
     return;
 
-  float time = (x - getSliderHoldX()) * window_time_ / getWidth();
+  float time = (x - getSliderHoldX()) * window_time_ / getWidth() * 1000.f;
   decay_slider_->setValueFromAdjusted(time);
   window_time_ = std::max(window_time_, x * window_time_ / getWidth());
   window_time_ = std::max(std::min(window_time_, kMaxWindowSize), kMinWindowSize);
@@ -577,7 +595,7 @@ void EnvelopeEditor::setReleaseX(float x) {
   if (release_slider_ == nullptr)
     return;
 
-  float time = (x - getSliderDecayX()) * window_time_ / getWidth();
+  float time = (x - getSliderDecayX()) * window_time_ / getWidth() * 1000.f;
   release_slider_->setValueFromAdjusted(time);
   window_time_ = std::max(window_time_, x * window_time_ / getWidth());
   window_time_ = std::max(std::min(window_time_, kMaxWindowSize), kMinWindowSize);

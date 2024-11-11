@@ -29,11 +29,11 @@ DirectProcessor::DirectProcessor (const juce::ValueTree& v) : PluginBase (v, nul
     adsrCallbacks += {
 
         state.addParameterListener (*state.params.gainParam,
-                 chowdsp::ParameterListenerThread::AudioThread,
-                 [this] {
-                     mainSynth.setSynthGain (juce::Decibels::decibelsToGain (state.params.gainParam->get()));
-                     DBG ("direct gain: " + juce::String (state.params.gainParam->get()));
-                 }),
+             chowdsp::ParameterListenerThread::AudioThread,
+             [this] {
+                 mainSynth.setSynthGain (juce::Decibels::decibelsToGain (state.params.gainParam->get()));
+                 DBG ("direct gain: " + juce::String (state.params.gainParam->get()));
+             }),
 
         state.addParameterListener (*state.params.hammerParam,
             chowdsp::ParameterListenerThread::AudioThread,
@@ -63,11 +63,25 @@ DirectProcessor::DirectProcessor (const juce::ValueTree& v) : PluginBase (v, nul
                 DBG ("attack: " + juce::String (state.params.env.attackParam->get()));
             }),
 
+        state.addParameterListener (*state.params.env.attackPowerParam,
+            chowdsp::ParameterListenerThread::AudioThread,
+            [this] {
+                mainSynth.globalADSR.attackPower = state.params.env.attackPowerParam->get() * -1.;
+                DBG ("attack power: " + juce::String (state.params.env.attackPowerParam->get()));
+            }),
+
         state.addParameterListener (*state.params.env.decayParam,
             chowdsp::ParameterListenerThread::AudioThread,
             [this] {
                 mainSynth.globalADSR.decay = state.params.env.decayParam->get() * .001f;
                 DBG ("decay: " + juce::String (state.params.env.decayParam->get()));
+            }),
+
+        state.addParameterListener (*state.params.env.decayPowerParam,
+            chowdsp::ParameterListenerThread::AudioThread,
+            [this] {
+                mainSynth.globalADSR.decayPower = state.params.env.decayPowerParam->get() * -1.;
+                DBG ("decay power: " + juce::String (state.params.env.decayPowerParam->get()));
             }),
 
         state.addParameterListener (*state.params.env.sustainParam,
@@ -82,7 +96,14 @@ DirectProcessor::DirectProcessor (const juce::ValueTree& v) : PluginBase (v, nul
             [this] {
                 mainSynth.globalADSR.release = state.params.env.releaseParam->get() * .001f;
                 DBG ("release: " + juce::String (state.params.env.releaseParam->get()));
-            })
+            }),
+
+        state.addParameterListener (*state.params.env.releasePowerParam,
+            chowdsp::ParameterListenerThread::AudioThread,
+            [this] {
+                mainSynth.globalADSR.releasePower = state.params.env.releasePowerParam->get() * -1.;
+                DBG ("attack power: " + juce::String (state.params.env.releasePowerParam->get()));
+            }),
 
     };
 
@@ -155,14 +176,15 @@ void DirectProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::Midi
     if (mainSynth.getNumSounds() > 0)
         mainSynth.renderNextBlock (buffer, midiMessages, 0, buffer.getNumSamples());
 
-    if (hammerSynth.getNumSounds() > 0)
-        hammerSynth.renderNextBlock (buffer, midiMessages, 0, buffer.getNumSamples());
+//    if (hammerSynth.getNumSounds() > 0)
+//        hammerSynth.renderNextBlock (buffer, midiMessages, 0, buffer.getNumSamples());
+//
+//    if (releaseResonanceSynth.getNumSounds() > 0)
+//        releaseResonanceSynth.renderNextBlock (buffer, midiMessages, 0, buffer.getNumSamples());
+//
+//    if (pedalSynth.getNumSounds() > 0)
+//        pedalSynth.renderNextBlock (buffer, midiMessages, 0, buffer.getNumSamples());
 
-    if (releaseResonanceSynth.getNumSounds() > 0)
-        releaseResonanceSynth.renderNextBlock (buffer, midiMessages, 0, buffer.getNumSamples());
-
-    if (pedalSynth.getNumSounds() > 0)
-        pedalSynth.renderNextBlock (buffer, midiMessages, 0, buffer.getNumSamples());
 //DBG ("attack: " + juce::String (state.params.env.attackParam->get()));
     //juce::dsp::AudioBlock<float> block(buffer);
     //melatonin::printSparkline(buffer);
