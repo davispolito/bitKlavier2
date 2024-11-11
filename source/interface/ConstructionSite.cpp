@@ -3,7 +3,6 @@
 //
 
 #include "ConstructionSite.h"
-#include "FullInterface.h"
 #include "Preparations.h"
 #include "SampleLoadManager.h"
 #include "sound_engine.h"
@@ -72,15 +71,20 @@ void ConstructionSite::deleteObject (PreparationSection* at)
         },
             false);
     }
+    else
+        delete at;
 }
 
 PreparationSection* ConstructionSite::createNewObject (const juce::ValueTree& v)
 {
+    DBG("createNewObject: func" );
     SynthGuiInterface* parent = findParentComponentOfClass<SynthGuiInterface>();
-    auto s = prepFactory.CreateObject ((int) v.getProperty (IDs::type), v, parent);
+    //must use auto * so that it doesnt create a copy and call this constructor twice
 
-    //    last_proc = s->getProcessor();
-    DBG("createNewObject: " + (s->getName()));
+
+    auto* s = prepFactory.CreateObject ((int) v.getProperty (IDs::type), v, parent);
+
+    DBG("finishobjectcreate");
     addSubSection (s);
     Skin default_skin;
     s->setSkinValues (default_skin, false);
@@ -160,6 +164,7 @@ bool ConstructionSite::keyPressed (const juce::KeyPress& k, juce::Component* c)
         t.setProperty (IDs::x, lastX - 260 / 2, nullptr);
         t.setProperty (IDs::y, lastY - 132 / 2, nullptr);
         // DBG("Position" + juce::String(lastX) + " " + juce::String(lastY));
+        DBG("createNewObject: " );
         parent.addChild (t, -1, nullptr);
         //DBG("place" + juce::String(lastX) + " " + juce::String(lastY));
     }

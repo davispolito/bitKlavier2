@@ -105,6 +105,7 @@ void PreparationSection:: resized() {
 }
 PreparationSection::~PreparationSection()
 {
+    freeObjects();
 }
 
 BKPort *PreparationSection::createNewObject(const juce::ValueTree &v) {
@@ -113,6 +114,19 @@ BKPort *PreparationSection::createNewObject(const juce::ValueTree &v) {
 }
 
 void PreparationSection::deleteObject(BKPort *at) {
+    if ((juce::OpenGLContext::getCurrentContext() == nullptr))
+    {
+        SynthGuiInterface* _parent = findParentComponentOfClass<SynthGuiInterface>();
+
+        //this might cause bugs when adding deletion of a prepartion and dynamic port adding and delting
+        at->setVisible (false);
+        _parent->getOpenGlWrapper()->context.executeOnGLThread ([this, &at] (juce::OpenGLContext& openGLContext) {
+                                               //this->destroyOpenGlComponent()
+                                           },
+                                           false);
+    }
+    else
+        delete at;
 
 }
 

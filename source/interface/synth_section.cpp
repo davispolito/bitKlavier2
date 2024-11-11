@@ -662,7 +662,7 @@ void SynthSection::paintJointControl(juce::Graphics& g, int x, int y, int width,
 
 
 
-void SynthSection::placeKnobsInArea(juce::Rectangle<int> area, std::vector<juce::Component*> knobs) {
+void SynthSection::placeKnobsInArea(juce::Rectangle<int> area, std::vector<std::unique_ptr<juce::Component>>& knobs) {
   int widget_margin = findValue(Skin::kWidgetMargin);
   float component_width = (area.getWidth() - (knobs.size() + 1) * widget_margin) / (1.0f * knobs.size());
 
@@ -670,7 +670,7 @@ void SynthSection::placeKnobsInArea(juce::Rectangle<int> area, std::vector<juce:
   //int height = area.getHeight() - widget_margin;
   int height = std::min<int>(area.getHeight(),component_width) - widget_margin;
   float x = area.getX() + widget_margin;
-  for (juce::Component* knob : knobs) {
+  for (const auto& knob : knobs) {
     int left = std::round(x);
     int right = std::round(x + component_width);
     if (knob)
@@ -685,6 +685,22 @@ void SynthSection::lockCriticalSection() {
     parent->getSynth()->getCriticalSection().enter();
 }
 
+void SynthSection::placeKnobsInArea(juce::Rectangle<int> area, std::vector<juce::Component*> knobs) {
+    int widget_margin = findValue(Skin::kWidgetMargin);
+    float component_width = (area.getWidth() - (knobs.size() + 1) * widget_margin) / (1.0f * knobs.size());
+
+    int y = area.getY();
+    //int height = area.getHeight() - widget_margin;
+    int height = std::min<int>(area.getHeight(),component_width) - widget_margin;
+    float x = area.getX() + widget_margin;
+    for (const auto& knob : knobs) {
+        int left = std::round(x);
+        int right = std::round(x + component_width);
+        if (knob)
+            knob->setBounds(left, y, right - left, height);
+        x += component_width + widget_margin;
+    }
+}
 void SynthSection::unlockCriticalSection() {
   SynthGuiInterface* parent = findParentComponentOfClass<SynthGuiInterface>();
   if (parent)

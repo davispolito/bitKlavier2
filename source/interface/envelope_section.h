@@ -60,6 +60,9 @@ class EnvelopeSection : public SynthSection, public DragMagnifyingGlass::Listene
     void magnifyDoubleClicked() override;
 
   private:
+
+
+    std::vector<std::unique_ptr<SynthSlider>> viewable;
     std::shared_ptr<EnvelopeEditor> envelope_;
     std::unique_ptr<SynthSlider> delay_;
     std::unique_ptr<SynthSlider> attack_;

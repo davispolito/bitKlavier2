@@ -59,9 +59,9 @@ class SynthGuiInterface {
     void setGuiSize(float scale);
     FullInterface* getGui() { return gui_.get(); }
     OpenGlWrapper* getOpenGlWrapper();
-    UserPreferencesWrapper* userPreferences;
+    std::shared_ptr<UserPreferencesWrapper> userPreferences;
     SynthBase* synth_;
-    SampleLoadManager* sampleLoadManager ;
+    std::unique_ptr<SampleLoadManager> sampleLoadManager ;
   protected:
 
 

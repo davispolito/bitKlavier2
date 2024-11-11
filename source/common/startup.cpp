@@ -33,4 +33,5 @@ bool Startup::isComputerCompatible() {
 //  #else
 //  return juce::SystemStats::hasSSE2() || juce::SystemStats::hasAVX2();
 //  #endif
+return true;
 }

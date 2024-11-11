@@ -87,14 +87,23 @@ public :
     std::unique_ptr<PopupDisplay> popup_display_2_;
     SynthGuiData* data;
     SynthSection* full_screen_section_;
+    std::unique_ptr<AboutSection> about_section_;
+    std::unique_ptr<MainSection> main_;
+    std::unique_ptr<HeaderSection> header_;
+    //juce::OpenGLContext open_gl_context_;
+    std::unique_ptr<Shaders> shaders_;
+
+    juce::Image background_image_;
+    OpenGlBackground background_;
+    //juce::TextButton inspectButton { "Inspect the UI" };
+    std::unique_ptr<melatonin::Inspector> inspector;
+    std::unique_ptr<OpenGlToggleButton> inspectButton;
     juce::OpenGLContext open_gl_context_;
     juce::CriticalSection open_gl_critical_section_;
     OpenGlWrapper open_gl_;
 private :
 
-    std::unique_ptr<AboutSection> about_section_;
-    std::unique_ptr<MainSection> main_;
-    std::unique_ptr<HeaderSection> header_;
+
 //std::unique_ptr<TestSection> test_;
     int width_;
     int resized_width_;
@@ -105,14 +114,7 @@ private :
     float display_scale_;
     int pixel_multiple_;
 
-    //juce::OpenGLContext open_gl_context_;
-    std::unique_ptr<Shaders> shaders_;
 
-    juce::Image background_image_;
-    OpenGlBackground background_;
-    //juce::TextButton inspectButton { "Inspect the UI" };
-    std::unique_ptr<melatonin::Inspector> inspector;
-    std::unique_ptr<OpenGlToggleButton> inspectButton;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(FullInterface)
 };
 

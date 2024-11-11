@@ -110,7 +110,10 @@ class DirectProcessor : public bitklavier::PluginBase<bitklavier::PreparationSta
 {
 public:
     DirectProcessor (const juce::ValueTree& v);
-
+    ~DirectProcessor()
+    {
+        DBG("hit");
+    }
     void prepareToPlay (double sampleRate, int samplesPerBlock) override;
     void releaseResources() override {}
     void processAudioBlock (juce::AudioBuffer<float>& buffer) override {};
@@ -124,7 +127,7 @@ public:
 
     void addSoundSet (juce::ReferenceCountedArray<BKSamplerSound<juce::AudioFormatReader>>* s)
     {
-        mainSynth.addSoundSet (s);
+        mainSynth->addSoundSet (s);
     }
 
     void addSoundSet (
@@ -134,10 +137,10 @@ public:
         juce::ReferenceCountedArray<BKSamplerSound<juce::AudioFormatReader>>* p) // pedal samples
     {
         DBG ("adding main, hammer and releaseResonance synths");
-        mainSynth.addSoundSet (s);
-        hammerSynth.addSoundSet (h);
-        releaseResonanceSynth.addSoundSet (r);
-        pedalSynth.addSoundSet (p);
+        mainSynth->addSoundSet (s);
+        hammerSynth->addSoundSet (h);
+        releaseResonanceSynth->addSoundSet (r);
+        pedalSynth->addSoundSet (p);
     }
 
     juce::AudioProcessor::BusesProperties directBusLayout()
@@ -161,10 +164,10 @@ private:
     chowdsp::Gain<float> gain;
     juce::ADSR::Parameters adsrParams;
 
-    BKSynthesiser mainSynth;
-    BKSynthesiser hammerSynth;
-    BKSynthesiser releaseResonanceSynth;
-    BKSynthesiser pedalSynth;
+    std::unique_ptr<BKSynthesiser> mainSynth;
+    std::unique_ptr<BKSynthesiser> hammerSynth;
+    std::unique_ptr<BKSynthesiser> releaseResonanceSynth;
+    std::unique_ptr<BKSynthesiser> pedalSynth;
 
     float releaseResonanceSynthGainMultiplier = 10.; // because these are very soft
     juce::HashMap<int, juce::Array<float>> transpositionsByNoteOnNumber; // indexed by noteNumber

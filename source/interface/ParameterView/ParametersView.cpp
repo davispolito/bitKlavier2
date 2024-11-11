@@ -189,7 +189,7 @@ namespace bitklavier {
                     DBG("----paramvec----");
                     for (auto &param: paramVec)
                     {
-                        comps.push_back(parameters_view_detail::createParameterComp(paramListeners, param,*this).release());
+                        comps.push_back(parameters_view_detail::createParameterComp(paramListeners, param,*this));
                         DBG("add" + param->paramID);
                     }
                 },

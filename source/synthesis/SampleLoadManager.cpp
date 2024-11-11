@@ -216,12 +216,12 @@ void SampleLoadManager::loadSamples_sub(bitklavier::utils::BKPianoSampleType thi
 
         juce::BigInteger midirange = getMidiRange(pitchName);
 
-        auto r = new FileArrayAudioFormatReaderFactory(onePitchSamples) ;
+
         sampleLoader.addJob(new SampleLoadJob(
                                     thisSampleType,
                                     onePitchSamples.size(),
                                     midirange,
-                                    std::unique_ptr<AudioFormatReaderFactory>(r),
+                                    std::make_unique<FileArrayAudioFormatReaderFactory>(onePitchSamples),
                                     audioFormatManager.get(),
                                     &samplerSoundset[soundsetName],
                                     this),
@@ -243,7 +243,7 @@ void SampleLoadManager::loadSamples_sub(bitklavier::utils::BKPianoSampleType thi
         // look for how many of each type there are: 3 A0 samples, 7 C3 samples, 0 D# samples, 1 C# sample, etc...
         // divide up the velocity range depending on how many there are, and/or using dBFS
         // load accordingly
-        auto r = new FileArrayAudioFormatReaderFactory (allSamples);
+        //auto r = new FileArrayAudioFormatReaderFactory (allSamples);
         //readerFactory =
         int i = 0;
         for (auto file : allSamples)

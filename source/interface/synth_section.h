@@ -368,8 +368,8 @@ class SynthSection : public juce::Component, public juce::Slider::Listener,
                             SynthSlider* left, SynthSlider* right, juce::Component* widget = nullptr);
     void placeTempoControls(int x, int y, int width, int height, SynthSlider* tempo, SynthSlider* sync);
     void placeRotaryOption(juce::Component* option, SynthSlider* rotary);
-    void placeKnobsInArea(juce::Rectangle<int> area, std::vector<juce::Component*> knobs);
-
+    void placeKnobsInArea(juce::Rectangle<int> area,  std::vector<std::unique_ptr<juce::Component>> &knobs);
+    void placeKnobsInArea(juce::Rectangle<int> area,  std::vector<juce::Component*> knobs);
     void lockCriticalSection();
     void unlockCriticalSection();
     juce::Rectangle<int> getPresetBrowserBounds();

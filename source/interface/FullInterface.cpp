@@ -125,8 +125,8 @@ FullInterface::FullInterface(SynthGuiData* synth_data) : SynthSection("full_inte
 FullInterface::~FullInterface() {
    //UpdateMemory::getInstance()->decrementChecker();
 
-   open_gl_context_.detach();
-   open_gl_context_.setRenderer(nullptr);
+   //open_gl_context_.detach();
+   //open_gl_context_.setRenderer(nullptr);
 }
 
 void FullInterface::paintBackground(juce::Graphics& g) {
@@ -426,7 +426,13 @@ void FullInterface::openGLContextClosing() {
        return;
 
    background_.destroy(open_gl_);
+    removeSubSection(main_.get());
+    removeSubSection(header_.get());
+   main_ = nullptr;
+   header_ = nullptr;
+
    destroyOpenGlComponents(open_gl_);
+
    open_gl_.shaders = nullptr;
    shaders_ = nullptr;
 }
