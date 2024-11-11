@@ -243,11 +243,10 @@ target_link_libraries("${PROJECT_NAME}" PRIVATE
 include(PamplejuceIPP)
 
 # Everything related to the tests target
-#include(Tests)
+include(Tests)
 
 # A separate target keeps the Tests target fast!
-#include(Benchmarks)
+include(Benchmarks)
 
 # Pass some config to GA (like our PRODUCT_NAME)
-#finclude(GitHubENV)
-#juce_generate_juce_header("${PROJECT_NAME}")
+include(GitHubENV)

@@ -68,69 +68,69 @@ const std::string LoadSave::kSampleFolderName = "Samples";
 ////    save_info["macro" + std::to_string(i + 1)] = "MACRO " + std::to_string(i + 1);
 //}
 
-
-juce::String LoadSave::getAuthorFromFile(const juce::File& file) {
-  static constexpr int kMaxCharacters = 40;
-  static constexpr int kMinSize = 60;
-  juce::FileInputStream file_stream(file);
-
-  if (file_stream.getTotalLength() < kMinSize)
-    return "";
-
-  file_stream.readByte();
-  file_stream.readByte();
-  juce::MemoryBlock author_memory_block;
-  file_stream.readIntoMemoryBlock(author_memory_block, 6);
-
-  char end_quote = file_stream.readByte();
-  char colon = file_stream.readByte();
-  char begin_quote = file_stream.readByte();
-  if (author_memory_block.toString() != "author" || end_quote != '"' || colon != ':' || begin_quote != '"') {
-    try {
-      json parsed_json_state = json::parse(file.loadFileAsString().toStdString(), nullptr, false);
-      return getAuthor(parsed_json_state);
-    }
-    catch (const json::exception& e) {
-      return "";
-    }
-  }
-
-  juce::MemoryBlock name_memory_block;
-  file_stream.readIntoMemoryBlock(name_memory_block, kMaxCharacters);
-  juce::String name = name_memory_block.toString();
-
-  if (!name.contains("\""))
-    return name.toStdString();
-
-  juce::StringArray tokens;
-  tokens.addTokens(name, "\"", "");
-
-  return tokens[0];
-}
-
-juce::String LoadSave::getStyleFromFile(const juce::File& file) {
-  static constexpr int kMinSize = 5000;
-  juce::FileInputStream file_stream(file);
-
-  if (file_stream.getTotalLength() < kMinSize)
-    return "";
-
-  juce::MemoryBlock style_memory_block;
-  file_stream.readIntoMemoryBlock(style_memory_block, kMinSize);
-
-  juce::StringArray tokens;
-  tokens.addTokens(style_memory_block.toString(), "\"", "");
-  bool found_style = false;
-  for (juce::String token : tokens) {
-    if (found_style && token.trim() != ":")
-      return token;
-    if (token == "preset_style")
-      found_style = true;
-  }
-
-  return "";
-}
-
+//
+//juce::String LoadSave::getAuthorFromFile(const juce::File& file) {
+//  static constexpr int kMaxCharacters = 40;
+//  static constexpr int kMinSize = 60;
+//  juce::FileInputStream file_stream(file);
+//
+//  if (file_stream.getTotalLength() < kMinSize)
+//    return "";
+//
+//  file_stream.readByte();
+//  file_stream.readByte();
+//  juce::MemoryBlock author_memory_block;
+//  file_stream.readIntoMemoryBlock(author_memory_block, 6);
+//
+//  char end_quote = file_stream.readByte();
+//  char colon = file_stream.readByte();
+//  char begin_quote = file_stream.readByte();
+//  if (author_memory_block.toString() != "author" || end_quote != '"' || colon != ':' || begin_quote != '"') {
+//    try {
+//      json parsed_json_state = json::parse(file.loadFileAsString().toStdString(), nullptr, false);
+//      return getAuthor(parsed_json_state);
+//    }
+//    catch (const json::exception& e) {
+//      return "";
+//    }
+//  }
+//
+//  juce::MemoryBlock name_memory_block;
+//  file_stream.readIntoMemoryBlock(name_memory_block, kMaxCharacters);
+//  juce::String name = name_memory_block.toString();
+//
+//  if (!name.contains("\""))
+//    return name.toStdString();
+//
+//  juce::StringArray tokens;
+//  tokens.addTokens(name, "\"", "");
+//
+//  return tokens[0];
+//}
+//
+//juce::String LoadSave::getStyleFromFile(const juce::File& file) {
+//  static constexpr int kMinSize = 5000;
+//  juce::FileInputStream file_stream(file);
+//
+//  if (file_stream.getTotalLength() < kMinSize)
+//    return "";
+//
+//  juce::MemoryBlock style_memory_block;
+//  file_stream.readIntoMemoryBlock(style_memory_block, kMinSize);
+//
+//  juce::StringArray tokens;
+//  tokens.addTokens(style_memory_block.toString(), "\"", "");
+//  bool found_style = false;
+//  for (juce::String token : tokens) {
+//    if (found_style && token.trim() != ":")
+//      return token;
+//    if (token == "preset_style")
+//      found_style = true;
+//  }
+//
+//  return "";
+//}
+//
 
 
 void LoadSave::writeCrashLog(juce::String crash_log) {
