@@ -94,34 +94,6 @@ juce_add_plugin("${PROJECT_NAME}"
 # This lets us use our code in both the JUCE targets and our Test target
 # Without running into ODR violations
 add_library(SharedCode INTERFACE
-        source/interface/open_gl_line_renderer.h
-        source/interface/open_gl_line_renderer.cpp
-        source/interface/FullInterface.cpp
-        source/interface/FullInterface.h
-        source/synthesis/framework/common.h
-        source/synthesis/framework/note_handler.h
-        source/synthesis/lookups/lookup_table.h
-        source/standalone/synth_editor.h
-        source/standalone/synth_editor.h
-        source/standalone/main.cpp
-        source/interface/header_section.h
-        source/interface/header_section.cpp
-        source/interface/popup_browser.cpp
-        source/interface/look_and_feel/text_look_and_feel.cpp
-        source/interface/Preparations/DirectPreparation.cpp
-        source/interface/Preparations/DirectPreparation.h
-        source/interface/BKitems/BKItem.cpp
-        source/interface/BKitems/BKItem.h
-        source/interface/synth_slider.h
-        source/interface/Cable/CableView.cpp
-        source/interface/Cable/CableView.h
-        source/synthesis/framework/tuning_systems.h
-        source/interface/BKSliders.cpp
-        source/interface/BKSliders.h
-        source/interface/ParameterView/DirectParametersView.cpp
-        source/interface/ParameterView/DirectParametersView.h
-        source/synthesis/EnvParams.h
-        source/synthesis/framework/BKADSR.h
 )
 
 # C++20, please

@@ -107,9 +107,15 @@ PreparationSection* ConstructionSite::createNewObject (const juce::ValueTree& v)
 void ConstructionSite::reset()
 {
     SynthGuiInterface* _parent = findParentComponentOfClass<SynthGuiInterface>();
+    if(_parent == nullptr )
+        return;
     //safe to do on message thread because we have locked processing if this is called
-    _parent->getSynth()->getEngine()->resetEngine();
-    parent = _parent->getSynth()->getValueTree().getChildWithName (IDs::PIANO);
+    if(_parent->getSynth() != nullptr)
+    {
+        _parent->getSynth()->getEngine()->resetEngine();
+        parent = _parent->getSynth()->getValueTree().getChildWithName (IDs::PIANO);
+    }
+
 
     cableView.reset();
 }
