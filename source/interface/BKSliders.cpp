@@ -121,7 +121,7 @@ BKStackedSlider::BKStackedSlider(
         newSlider->setTextBoxStyle(juce::Slider::NoTextBox, false, 0, 0);
         newSlider->setRange(sliderMin, sliderMax, sliderIncrement);
         newSlider->setValue(sliderDefault, juce::dontSendNotification);
-        //newSlider->setLookAndFeel(&stackedSliderLookAndFeel);
+        newSlider->setLookAndFeel(&stackedSliderLookAndFeel);
         //newSlider->addListener(this);
         addAndMakeVisible(newSlider);
         if(i>0) {
@@ -139,12 +139,12 @@ BKStackedSlider::BKStackedSlider(
     topSlider->setValue(sliderDefault, juce::dontSendNotification);
     topSlider->addListener(this);
     topSlider->addMouseListener(this, true);
-    //topSlider->setLookAndFeel(&topSliderLookAndFeel);
+    topSlider->setLookAndFeel(&topSliderLookAndFeel);
     topSlider->setAlpha(0.);
     addAndMakeVisible(*topSlider);
 
-    //topSliderLookAndFeel.setColour(juce::Slider::thumbColourId, juce::Colour::greyLevel (0.8f).contrasting().withAlpha (0.0f));
-    //stackedSliderLookAndFeel.setColour(juce::Slider::thumbColourId, juce::Colours::goldenrod.withMultipliedAlpha(0.95));
+    topSliderLookAndFeel.setColour(juce::Slider::thumbColourId, juce::Colour::greyLevel (0.8f).contrasting().withAlpha (0.0f));
+    stackedSliderLookAndFeel.setColour(juce::Slider::thumbColourId, juce::Colours::goldenrod.withMultipliedAlpha(0.95));
 
 }
 
@@ -326,13 +326,6 @@ void BKStackedSlider::mouseMove(const juce::MouseEvent& e)
 
 void BKStackedSlider::mouseDoubleClick (const juce::MouseEvent &e)
 {
-    //highlight number for current slider
-
-#if JUCE_IOS
-    hasBigOne = true;
-    editValsTextField->setText(floatArrayToString(getAllActiveValues()), dontSendNotification);
-    WantsBigOne::listeners.call(&WantsBigOne::Listener::iWantTheBigOne, editValsTextField.get(), sliderName);
-#else
     juce::StringArray tokens;
     tokens.addTokens(BKfloatArrayToString(getAllActiveValues()), false); //arrayFloatArrayToString
     int startPoint = 0;
@@ -354,8 +347,6 @@ void BKStackedSlider::mouseDoubleClick (const juce::MouseEvent &e)
     editValsTextField->setHighlightedRegion(highlightRange);
 
     focusLostByEscapeKey = false;
-#endif
-
 }
 
 void BKStackedSlider::textEditorReturnKeyPressed(juce::TextEditor& textEditor)

@@ -107,8 +107,6 @@ DirectPreparation::DirectPopup::DirectPopup(DirectProcessor& _proc, OpenGlWrappe
     transpositionSlider = std::make_unique<OpenGlTranspositionSlider>();
     addAndMakeVisible(*transpositionSlider);
     transpositionSlider->setValue(1., juce::dontSendNotification);
-    transpositionSlider->setColour(juce::Slider::ColourIds::backgroundColourId , juce::Colours::red);
-    transpositionSlider->setColour(juce::Slider::ColourIds::thumbColourId , juce::Colours::blue);
     addOpenGlComponent(transpositionSlider->getImageComponent());
 
 

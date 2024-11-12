@@ -9,6 +9,7 @@
 
 #include "FullInterface.h"
 #include "PreparationSection.h"
+#include "BKLookAndFeel.h"
 
 /**
  * BKStacked Slider
@@ -115,8 +116,8 @@ private:
     juce::Label showName;
     bool justifyRight;
 
-    //BKMultiSliderLookAndFeel stackedSliderLookAndFeel;
-    //BKMultiSliderLookAndFeel topSliderLookAndFeel;
+    BKMultiSliderLookAndFeel stackedSliderLookAndFeel;
+    BKMultiSliderLookAndFeel topSliderLookAndFeel;
 
     double sliderMin, sliderMax, sliderMinDefault, sliderMaxDefault;
     double sliderDefault;

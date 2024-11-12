@@ -24,7 +24,7 @@ struct DirectParams : chowdsp::ParamHolder
     {
         //add (gainParam, hammerParam, releaseResonanceParam, pedalParam, velocityParam, attackParam, decayParam, sustainParam, releaseParam, transpositionsParam);
         //add (gainParam, hammerParam, releaseResonanceParam, pedalParam, velocityParam, attackParam, decayParam, sustainParam, releaseParam);
-        add (gainParam, hammerParam, releaseResonanceParam, pedalParam, env);
+        add (gainParam, hammerParam, releaseResonanceParam, pedalParam, env, transpositionsParam);
     }
 
     // juce::Gain param
@@ -71,7 +71,7 @@ struct DirectParams : chowdsp::ParamHolder
 
     EnvParams env;
 
-    /*
+
     // Transpositions param
     chowdsp::FloatParameter::Ptr transpositionsParam {
             juce::ParameterID { "transpositions", 100 },
@@ -81,7 +81,7 @@ struct DirectParams : chowdsp::ParamHolder
             &chowdsp::ParamUtils::floatValToString,
             &chowdsp::ParamUtils::stringToFloatVal
     };
-     */
+
     //
     //
     //    // Blendronic Send param

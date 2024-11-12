@@ -109,6 +109,13 @@ pedalSynth(new BKSynthesiser())
                 DBG ("attack power: " + juce::String (state.params.env.releasePowerParam->get()));
             }),
 
+        state.addParameterListener (*state.params.transpositionsParam,
+            chowdsp::ParameterListenerThread::AudioThread,
+            [this] {
+                //mainSynth->globalADSR.releasePower = state.params.env.releasePowerParam->get() * -1.;
+                DBG ("transpositions: " + juce::String (state.params.transpositionsParam->get()));
+            }),
+
     };
 
     // these synths play their stuff on noteOff rather than noteOn
