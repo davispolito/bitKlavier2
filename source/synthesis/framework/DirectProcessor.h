@@ -69,8 +69,8 @@ struct DirectParams : chowdsp::ParamHolder
         &chowdsp::ParamUtils::stringToFloatVal
     };
 
+    // ADSR params
     EnvParams env;
-
 
     // Transpositions param
     chowdsp::FloatParameter::Ptr transpositionsParam {
@@ -162,7 +162,7 @@ public:
 private:
     //chowdsp::experimental::Directillator<float> oscillator;
     chowdsp::Gain<float> gain;
-    juce::ADSR::Parameters adsrParams;
+    //juce::ADSR::Parameters adsrParams;
 
     std::unique_ptr<BKSynthesiser> mainSynth;
     std::unique_ptr<BKSynthesiser> hammerSynth;

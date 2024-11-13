@@ -20,8 +20,8 @@ DirectPreparation::DirectPreparation (std::unique_ptr<DirectProcessor> p,
     addOpenGlComponent (item->getImageComponent()); // Calls member function of SynthSection (parent class to PreparationSection)
     //port = std::make_unique<BKPort> ();
     _open_gl.initOpenGlComp.try_enqueue([this]
-                                                  {item->getImageComponent()->init(_open_gl);
-                                                      });
+        {item->getImageComponent()->init(_open_gl);
+        });
 
     addAndMakeVisible (item.get());
     setSkinOverride (Skin::kDirect);
