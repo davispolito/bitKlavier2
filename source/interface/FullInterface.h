@@ -12,6 +12,7 @@
 #include "synth_section.h"
 #include "melatonin_inspector/melatonin_inspector.h"
 #include "popup_browser.h"
+#include "value_tree_debugger.cpp"
 class TestSection;
 class AboutSection;
 struct SynthGuiData;
@@ -101,6 +102,7 @@ public :
     juce::OpenGLContext open_gl_context_;
     juce::CriticalSection open_gl_critical_section_;
     OpenGlWrapper open_gl_;
+    juce::ScopedPointer<ValueTreeDebugger> valueTreeDebugger;
 private :
 
 

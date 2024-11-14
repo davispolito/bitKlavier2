@@ -234,8 +234,8 @@ class OpenGlButtonComponent : public OpenGlComponent {
 };
 class OpenGlTextButton : public juce::TextButton {
 public:
-    OpenGlTextButton(juce::String name) : juce::TextButton(name), active_(true), button_component_(this) {}
-    OpenGlButtonComponent* getGlComponent() { return &button_component_; }
+    OpenGlTextButton(juce::String name) : juce::TextButton(name), active_(true), button_component_(std::make_shared<OpenGlButtonComponent>(this)) {}
+   std::shared_ptr<OpenGlButtonComponent> getGlComponent() { return button_component_; }
 
     void setActive(bool active = true) { active_ = active; }
     bool isActive() const { return active_; }
@@ -244,61 +244,61 @@ public:
 
     void setText(juce::String text) {
       setButtonText(text);
-      button_component_.setText();
+      button_component_->setText();
     }
 
     void setPowerButton() {
-      button_component_.setStyle(OpenGlButtonComponent::kPowerButton);
+      button_component_->setStyle(OpenGlButtonComponent::kPowerButton);
     }
 
     void setNoBackground() {
-      button_component_.setStyle(OpenGlButtonComponent::kJustText);
+      button_component_->setStyle(OpenGlButtonComponent::kJustText);
     }
 
     void setJustification(juce::Justification justification) {
-      button_component_.setJustification(justification);
+      button_component_->setJustification(justification);
     }
 
     void setLightenButton() {
-      button_component_.setStyle(OpenGlButtonComponent::kLightenButton);
+      button_component_->setStyle(OpenGlButtonComponent::kLightenButton);
     }
 
     void setShowOnColors(bool show) {
-      button_component_.setShowOnColors(show);
+      button_component_->setShowOnColors(show);
     }
 
     void setUiButton(bool primary) {
-      button_component_.setStyle(OpenGlButtonComponent::kUiButton);
-      button_component_.setPrimaryUiButton(primary);
+      button_component_->setStyle(OpenGlButtonComponent::kUiButton);
+      button_component_->setPrimaryUiButton(primary);
     }
 
     virtual void enablementChanged() override {
       juce::TextButton::enablementChanged();
-      button_component_.setColors();
+      button_component_->setColors();
     }
 
     void mouseEnter(const juce::MouseEvent& e) override {
       juce::TextButton::mouseEnter(e);
-      button_component_.setHover(true);
+      button_component_->setHover(true);
     }
 
     void mouseExit(const juce::MouseEvent& e) override {
       juce::TextButton::mouseExit(e);
-      button_component_.setHover(false);
+      button_component_->setHover(false);
     }
 
     void mouseDown(const juce::MouseEvent& e) override {
       juce::TextButton::mouseDown(e);
-      button_component_.setDown(true);
+      button_component_->setDown(true);
     }
 
     void mouseUp(const juce::MouseEvent& e) override {
       juce::TextButton::mouseUp(e);
-      button_component_.setDown(false);
+      button_component_->setDown(false);
     }
 private:
         bool active_;
-    OpenGlButtonComponent button_component_;
+    std::shared_ptr<OpenGlButtonComponent> button_component_;
 };
 
 

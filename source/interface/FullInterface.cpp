@@ -27,6 +27,7 @@ FullInterface::FullInterface(SynthGuiData* synth_data) : SynthSection("full_inte
                                                         enable_redo_background_(true),
                                                          open_gl_(open_gl_context_),
                                                           data(synth_data)
+
 {
    full_screen_section_ = nullptr;
    Skin default_skin;
@@ -43,6 +44,7 @@ FullInterface::FullInterface(SynthGuiData* synth_data) : SynthSection("full_inte
    main_ = std::make_unique<MainSection>(data->tree.getChildWithName(IDs::PIANO), data->um, open_gl_, data);
    addSubSection(main_.get());
    main_->addListener(this);
+  valueTreeDebugger  = new ValueTreeDebugger(data->tree);
 
 //   inspectButton = std::make_unique<OpenGlToggleButton>("Inspect the UI");
 //   addAndMakeVisible(inspectButton.get());

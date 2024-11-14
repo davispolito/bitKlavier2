@@ -26,3 +26,6 @@
 	path = modules/melatonin_audio_sparklines
 	url = https://github.com/sudara/melatonin_audio_sparklines
 	branch = main
+[submodule "modules/juce-toys"]
+	path = modules/juce-toys
+	url = git@github.com:jcredland/juce-toys.git

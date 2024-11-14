@@ -76,20 +76,17 @@ HeaderSection::HeaderSection() : SynthSection("header_section"), tab_offset_(0),
     sampleSelectText = std::make_shared<PlainTextComponent>("Sample Select Text", "---");
     addOpenGlComponent(sampleSelectText);
 
-    printButton = std::make_unique<SynthButton>("header_print");
-    addButton(printButton.get());
-    printButton->setButtonText("PRINT");
-    printButton->setLookAndFeel(TextLookAndFeel::instance());
-    printButton->addListener(this);
-
-    saveButton = std::make_unique<SynthButton>("header_save");
-    addButton(saveButton.get());
+    saveButton = std::make_unique<OpenGlTextButton>("header_save");
+    addOpenGlComponent(saveButton->getGlComponent());
+    addAndMakeVisible(saveButton.get());
     saveButton->setButtonText("save");
     saveButton->setLookAndFeel(TextLookAndFeel::instance());
     saveButton->addListener(this);
 
-    loadButton = std::make_unique<SynthButton>("header_load");
-    addButton(loadButton.get());
+    loadButton = std::make_unique<OpenGlTextButton>("header_load");
+    addOpenGlComponent(loadButton->getGlComponent());
+    addAndMakeVisible(loadButton.get());
+
     loadButton->setButtonText("load");
     loadButton->setLookAndFeel(TextLookAndFeel::instance());
     loadButton->addListener(this);
@@ -213,9 +210,8 @@ void HeaderSection::resized() {
     sampleSelectText->setBounds(sampleSelector->getBounds());
     float label_text_height = findValue(Skin::kLabelHeight);
     sampleSelectText->setTextSize(label_text_height);
-    printButton->setBounds(sampleSelector->getX() + 100, sampleSelector->getY(), 100, 50);
-    loadButton->setBounds(printButton->getX() + 100, sampleSelector->getY(), 100, 50);
-    saveButton->setBounds(loadButton->getX() + 100, sampleSelector->getY(), 100, 50);
+    loadButton->setBounds(sampleSelector->getRight() + 100, 0, 100, 50);
+    saveButton->setBounds(loadButton->getX() + 100, 0, 100, 50);
   //int logo_width = findValue(Skin::kModulationButtonWidth);
  // logo_section_->setBounds(large_padding, 0, logo_width, height);
   //inspectButton->setBounds(large_padding, 0, 100, height);
@@ -303,12 +299,7 @@ void HeaderSection::buttonClicked(juce::Button* clicked_button) {
       });
 
     }
-  else if (clicked_button == printButton.get())
-    {
-      SynthGuiInterface* interface = findParentComponentOfClass<SynthGuiInterface>();
-      interface->getSynth()->getValueTree().getChild(0).setProperty("sync", 1, nullptr);
-      DBG(interface->getSynth()->getValueTree().toXmlString());
-    }
+
   else if (clicked_button == loadButton.get())
     {
         SynthGuiInterface* parent = findParentComponentOfClass<SynthGuiInterface>();
@@ -340,7 +331,37 @@ void HeaderSection::buttonClicked(juce::Button* clicked_button) {
     }
     else if (clicked_button == saveButton.get())
     {
+        SynthGuiInterface* interface = findParentComponentOfClass<SynthGuiInterface>();
+        interface->getSynth()->getValueTree().getChild(0).setProperty("sync", 1, nullptr);
+        juce::String mystr = (interface->getSynth()->getValueTree().toXmlString());
+        auto xml = interface->getSynth()->getValueTree().createXml();
+        juce::XmlElement xml_ = *xml;
+        filechooser = std::make_unique<juce::FileChooser>("Export the gallery", juce::File(), juce::String("*.") + bitklavier::kPresetExtension,true);
+        filechooser->launchAsync(juce::FileBrowserComponent::saveMode | juce::FileBrowserComponent::canSelectFiles | juce::FileBrowserComponent::canSelectDirectories,
+                                 [xml_](const juce::FileChooser& chooser)
+                                 {
 
+                                     auto result = chooser.getURLResult();
+                                     auto name = result.isEmpty() ? juce::String()
+                                                                  : (result.isLocalFile() ? result.getLocalFile().getFullPathName()
+                                                                                          : result.toString (true));
+                                     juce::File file (name);
+                                     if (! result.isEmpty())
+                                     {
+                                         juce::FileOutputStream output (file);
+                                         output.writeText(xml_.toString(),false,false,{}) ;
+//                                         std::unique_ptr<juce::InputStream> wi (file.createInputStream());
+//                                         std::unique_ptr<juce::OutputStream> wo (result.createOutputStream());
+//
+//                                         if (wi != nullptr && wo != nullptr)
+//                                         {
+//                                             //auto numWritten = wo->writeFromInputStream (*wi, -1);
+//                                             wo->flush();
+//                                         }
+                                        output.flush();
+                                     }
+
+                                 });
     }
     else
         SynthSection::buttonClicked(clicked_button);

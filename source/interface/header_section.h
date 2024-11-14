@@ -273,10 +273,10 @@ class HeaderSection : public SynthSection, public LogoSection::Listener {
     int currentSampleType;
     std::shared_ptr<PlainTextComponent> sampleSelectText;
     std::unique_ptr<juce::ShapeButton> sampleSelector ;
-    std::unique_ptr<SynthButton> printButton;
-    std::unique_ptr<SynthButton> printSelected;
-    std::unique_ptr<SynthButton> saveButton;
-    std::unique_ptr<SynthButton> loadButton;
+
+
+    std::unique_ptr<OpenGlTextButton> saveButton;
+    std::unique_ptr<OpenGlTextButton> loadButton;
     std::unique_ptr<juce::FileChooser> filechooser;
     //juce::Image background_image_;
     //std::unique_ptr<SynthButton> click_me;

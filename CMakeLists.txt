@@ -49,7 +49,9 @@ include(JUCEDefaults)
 # and later `git submodule update --remote --merge` to keep it up to date
 # On Github Actions, this is done as a part of actions/checkout
 add_subdirectory(JUCE)
-
+# Link to any other modules you added (with juce_add_module) here!
+juce_add_module(third_party/tracktion_engine/modules/tracktion_engine)
+juce_add_module(modules/melatonin_audio_sparklines)
 # Add any other modules you want modules here, before the juce_add_plugin call
 
 add_subdirectory(third_party/chowdsp_utils)
@@ -161,9 +163,6 @@ target_compile_definitions(SharedCode
 
 
 
-# Link to any other modules you added (with juce_add_module) here!
-juce_add_module(third_party/tracktion_engine/modules/tracktion_engine)
-juce_add_module(modules/melatonin_audio_sparklines)
 
 #juce_add_module(third_party/chowdsp_utils/modules/gui/chowdsp_gui)
 #juce_add_modules(chowdsp_utils)
@@ -191,7 +190,6 @@ target_link_libraries(SharedCode
     juce::juce_recommended_lto_flags
     juce::juce_recommended_warning_flags
 
-
         #tracktion::engine
         )
 
@@ -209,7 +207,10 @@ FetchContent_MakeAvailable (melatonin_perfetto)
 target_link_libraries("${PROJECT_NAME}" PRIVATE
         SharedCode
 
-        Melatonin::Perfetto)
+        Melatonin::Perfetto
+        jcf_debug
+)
+
 
 # IPP support, comment out to disable
 include(PamplejuceIPP)
