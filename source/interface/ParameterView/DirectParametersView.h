@@ -32,12 +32,14 @@ public:
                         transpositionSlider = std::make_unique<OpenGlTranspositionSlider>(transposeParam, listeners);
                        transposeParam->doForAllParameters([this, &pluginState] (auto& param, size_t indexInParamHolder)
                         {
-                            transposeCallbacks += pluginState.addParameterListener(param,
+                            transposeCallbacks += { pluginState.addParameterListener(param,
                                    chowdsp::ParameterListenerThread::MessageThread,
                                    [this] {
 
-                                       DBG ("transposeslider" + this -> getName());
-                                   });
+
+                                       DBG ("transposeslider" + this->getName());
+
+                                   })};
                         });
                     }
                     DBG("paramholder name" + paramHolder.getName());
