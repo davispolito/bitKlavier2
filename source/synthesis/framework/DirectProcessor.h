@@ -73,15 +73,7 @@ struct DirectParams : chowdsp::ParamHolder
     // ADSR params
     EnvParams env;
     TransposeParams transpose;
-    // Transpositions param
-    chowdsp::FloatParameter::Ptr transpositionsParam {
-            juce::ParameterID { "transpositions", 100 },
-            "Transpositions",
-            chowdsp::ParamUtils::createNormalisableRange (20.0f, 20000.0f, 2000.0f), // FIX
-            1000.0f,
-            &chowdsp::ParamUtils::floatValToString,
-            &chowdsp::ParamUtils::stringToFloatVal
-    };
+
 
     //
     //

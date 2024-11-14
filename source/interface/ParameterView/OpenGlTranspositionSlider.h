@@ -28,9 +28,10 @@ public:
         image_component_ = std::make_shared<OpenGlImageComponent>();
         setLookAndFeel(DefaultLookAndFeel::instance());
         image_component_->setComponent(this);
+        int i = 0;
         for(auto slider : dataSliders) {
-            chowdsp::SemitonesParameter::Ptr param = params->addNewSliderParam();
-            auto ptr = std::make_unique<chowdsp::SliderAttachment>(*param.get(),listeners,*slider,nullptr);
+            //chowdsp::SemitonesParameter::Ptr param = params->addNewSliderParam();
+            auto ptr = std::make_unique<chowdsp::SliderAttachment>(*(*params->getFloatParams())[i++].get(),listeners,*slider,nullptr);
             attachmentVec.emplace_back(std::move(ptr));
         }
 

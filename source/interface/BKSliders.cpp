@@ -92,7 +92,7 @@ BKStackedSlider::BKStackedSlider(
            sliderDefault(def),
            sliderIncrement(increment)
 {
-
+    clickedSlider = 0;
     showName.setText(sliderName, juce::dontSendNotification);
     showName.setInterceptsMouseClicks(false, true);
     addAndMakeVisible(showName);

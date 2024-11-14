@@ -178,10 +178,10 @@ void DirectProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::Midi
 #if JUCE_MODULE_AVAILABLE_chowdsp_plugin_state
     state.getParameterListeners().callAudioThreadBroadcasters();
 #endif
-    if(!state.params.transpose.floatParams.empty())
-    {
-    //DBG("jorps"+juce::String(state.params.transpose.floatParams[0]->getCurrentValueAsText()));
-    }
+//    if(!state.params.transpose.floatParams.empty())
+//    {
+//    //DBG("jorps"+juce::String(state.params.transpose.floatParams[0]->getCurrentValueAsText()));
+//    }
     buffer.clear(); // always top of the chain as an instrument source; doesn't take audio in
 
     if (mainSynth->getNumSounds() > 0)

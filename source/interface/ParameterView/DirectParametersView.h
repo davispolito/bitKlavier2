@@ -36,7 +36,7 @@ public:
                                    chowdsp::ParameterListenerThread::MessageThread,
                                    [this] {
 
-                                       DBG ("transposeslider");
+                                       DBG ("transposeslider" + this -> getName());
                                    });
                         });
                     }
