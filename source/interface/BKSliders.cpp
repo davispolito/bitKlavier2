@@ -114,8 +114,8 @@ BKStackedSlider::BKStackedSlider(
 
     for(int i=0; i<numSliders; i++)
     {
-        dataSliders.emplace_back(std::make_shared<juce::Slider>());
-         auto newSlider = dataSliders[i];
+        dataSliders.add(new juce::Slider);
+        juce::Slider* newSlider = dataSliders.getLast();
 
         newSlider->setSliderStyle(juce::Slider::LinearBar);
         newSlider->setTextBoxStyle(juce::Slider::NoTextBox, false, 0, 0);
@@ -123,7 +123,7 @@ BKStackedSlider::BKStackedSlider(
         newSlider->setValue(sliderDefault, juce::dontSendNotification);
         newSlider->setLookAndFeel(&stackedSliderLookAndFeel);
         //newSlider->addListener(this);
-        addAndMakeVisible(newSlider.get());
+        addAndMakeVisible(newSlider);
         if(i>0) {
             newSlider->setVisible(false);
             activeSliders.insert(i, false);
@@ -157,7 +157,7 @@ void BKStackedSlider::setDim(float alphaVal)
 
     for(int i=0; i<numSliders; i++)
     {
-        auto newSlider = dataSliders.operator[](i);
+        juce::Slider* newSlider = dataSliders.operator[](i);
         if(newSlider != nullptr)
         {
             if(activeSliders.getUnchecked(i))
@@ -175,7 +175,7 @@ void BKStackedSlider::setBright()
 
     for(int i=0; i<numSliders; i++)
     {
-        auto newSlider = dataSliders.operator[](i);
+        juce::Slider* newSlider = dataSliders.operator[](i);
         if(newSlider != nullptr)
         {
             if(activeSliders.getUnchecked(i))
@@ -188,8 +188,7 @@ void BKStackedSlider::setBright()
 
 void BKStackedSlider::sliderValueChanged (juce::Slider *slider)
 {
-    DBG("valuechanged");
-    dataSliders[clickedSlider]->setValue(slider->getValue(),juce::sendNotification);
+
 }
 
 void BKStackedSlider::addSlider(juce::NotificationType newnotify)
@@ -220,7 +219,7 @@ void BKStackedSlider::setTo(juce::Array<float> newvals, juce::NotificationType n
     for(int i=0; i<slidersToActivate; i++)
     {
 
-        auto newSlider = dataSliders.operator[](i);
+        juce::Slider* newSlider = dataSliders.operator[](i);
         if(newSlider != nullptr)
         {
             if(newvals.getUnchecked(i) > sliderMax)
@@ -240,7 +239,7 @@ void BKStackedSlider::setTo(juce::Array<float> newvals, juce::NotificationType n
     for(int i=slidersToActivate; i<numSliders; i++)
     {
 
-        auto newSlider = dataSliders.operator[](i);
+        juce::Slider* newSlider = dataSliders.operator[](i);
         if(newSlider != nullptr)
         {
             newSlider->setValue(sliderDefault);
@@ -253,13 +252,13 @@ void BKStackedSlider::setTo(juce::Array<float> newvals, juce::NotificationType n
     //make sure there is one!
     if(slidersToActivate <= 0)
     {
-        dataSliders[0]->setValue(sliderDefault);
+        dataSliders.getFirst()->setValue(sliderDefault);
         activeSliders.set(0, true);
     }
 
     resetRanges();
 
-    topSlider->setValue(dataSliders[0]->getValue(), juce::dontSendNotification);
+    topSlider->setValue(dataSliders.getFirst()->getValue(), juce::dontSendNotification);
 }
 
 
@@ -286,7 +285,7 @@ void BKStackedSlider::mouseDrag(const juce::MouseEvent& e)
     //DBG("BKStacked Slider: mouseDrag");
     if(!mouseJustDown)
     {
-         auto currentSlider = dataSliders.operator[](clickedSlider);
+        juce::Slider* currentSlider = dataSliders.operator[](clickedSlider);
         if(currentSlider != nullptr)
         {
             if(e.mods.isShiftDown())
@@ -410,7 +409,7 @@ void BKStackedSlider::resetRanges()
 
     for(int i = 0; i<dataSliders.size(); i++)
     {
-        auto currentSlider = dataSliders.operator[](i);
+        juce::Slider* currentSlider = dataSliders.operator[](i);
         if(currentSlider != nullptr)
         {
             if(currentSlider->getValue() > sliderMaxTemp) sliderMaxTemp = currentSlider->getValue();
@@ -425,7 +424,7 @@ void BKStackedSlider::resetRanges()
 
         for(int i = 0; i<dataSliders.size(); i++)
         {
-            auto currentSlider = dataSliders.operator[](i);
+            juce::Slider* currentSlider = dataSliders.operator[](i);
             if(currentSlider != nullptr)
             {
                 currentSlider->setRange(sliderMin, sliderMax, sliderIncrement);
@@ -443,7 +442,7 @@ juce::Array<float> BKStackedSlider::getAllActiveValues()
 
     for(int i=0; i<dataSliders.size(); i++)
     {
-        auto currentSlider = dataSliders.operator[](i);
+        juce::Slider* currentSlider = dataSliders.operator[](i);
         if(currentSlider != nullptr)
         {
             if(activeSliders.getUnchecked(i))
@@ -460,14 +459,14 @@ int BKStackedSlider::whichSlider()
     float refDistance;
     int whichSub = 0;
 
-    auto refSlider = dataSliders[0];
+    juce::Slider* refSlider = dataSliders.getFirst();
     refDistance = fabs(refSlider->getValue() - topSlider->getValue());
 
     for(int i=1; i<dataSliders.size(); i++)
     {
         if(activeSliders.getUnchecked(i))
         {
-            auto currentSlider = dataSliders.operator[](i);
+            juce::Slider* currentSlider = dataSliders.operator[](i);
             if(currentSlider != nullptr) {
                 float tempDistance = fabs(currentSlider->getValue() - topSlider->getValue());
                 if(tempDistance < refDistance)
@@ -490,14 +489,14 @@ int BKStackedSlider::whichSlider(const juce::MouseEvent& e)
 
     int whichSub = 0;
 
-    auto refSlider = dataSliders[0];
+    juce::Slider* refSlider = dataSliders.getFirst();
     refDistance = fabs(refSlider->getValue() - topSliderVal);
 
     for(int i=1; i<dataSliders.size(); i++)
     {
         if(activeSliders.getUnchecked(i))
         {
-            auto currentSlider = dataSliders.operator[](i);
+            juce::Slider* currentSlider = dataSliders.operator[](i);
             if(currentSlider != nullptr) {
                 float tempDistance = fabs(currentSlider->getValue() - topSliderVal);
                 if(tempDistance < refDistance)
@@ -555,7 +554,7 @@ void BKStackedSlider::resized ()
 
     for(int i=0; i<numSliders; i++)
     {
-        auto newSlider = dataSliders[0];
+        juce::Slider* newSlider = dataSliders.getUnchecked(i);
         newSlider->setBounds(area);
     }
 
