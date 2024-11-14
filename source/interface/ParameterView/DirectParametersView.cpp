@@ -16,5 +16,6 @@ void DirectParametersView::resized()
         if(section->getName() == "ENV")
             section->setBounds(0,400,400,200);
     }
+    transpositionSlider->setBounds(0, 200, 400, 200);
     //envelope->setBounds(0,400, 400, 200);
 }

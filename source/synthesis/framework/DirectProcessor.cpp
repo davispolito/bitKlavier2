@@ -109,14 +109,11 @@ pedalSynth(new BKSynthesiser())
                 DBG ("attack power: " + juce::String (state.params.env.releasePowerParam->get()));
             }),
 
-        state.addParameterListener (*state.params.transpositionsParam,
-            chowdsp::ParameterListenerThread::AudioThread,
-            [this] {
-                //mainSynth->globalADSR.releasePower = state.params.env.releasePowerParam->get() * -1.;
-                DBG ("transpositions: " + juce::String (state.params.transpositionsParam->get()));
-            }),
+
 
     };
+
+
 
     // these synths play their stuff on noteOff rather than noteOn
     hammerSynth->isKeyReleaseSynth (true);
@@ -181,7 +178,10 @@ void DirectProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::Midi
 #if JUCE_MODULE_AVAILABLE_chowdsp_plugin_state
     state.getParameterListeners().callAudioThreadBroadcasters();
 #endif
-
+    if(!state.params.transpose.floatParams.empty())
+    {
+    //DBG("jorps"+juce::String(state.params.transpose.floatParams[0]->getCurrentValueAsText()));
+    }
     buffer.clear(); // always top of the chain as an instrument source; doesn't take audio in
 
     if (mainSynth->getNumSounds() > 0)

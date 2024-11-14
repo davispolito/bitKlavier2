@@ -10,59 +10,8 @@
 #include "popup_browser.h"
 #include "ParameterView/DirectParametersView.h"
 #include "FullInterface.h"
-#include "BKSliders.h"
+
 #include "envelope_section.h"
-/************************************************************************************/
-/*                              CLASS: OpenGlSlider                                 */
-/************************************************************************************/
-
-class OpenGlTranspositionSlider : public OpenGlAutoImageComponent<BKStackedSlider>
-{
-public:
-    OpenGlTranspositionSlider(const juce::ValueTree& v) :
-               OpenGlAutoImageComponent<BKStackedSlider>(
-                   "Transpositions",   // slider name
-                   -12,                // min
-                   12,                 // max
-                   -12,                // default min
-                   12,                 // default max
-                   0,                  // default val
-                   0.01)               // increment
-    //-12, 12, -12, 12, 0, 0.01
-    {             // increment
-        image_component_ = std::make_shared<OpenGlImageComponent>();
-        setLookAndFeel(DefaultLookAndFeel::instance());
-        image_component_->setComponent(this);
-    }
-
-    OpenGlTranspositionSlider() :
-                                                           OpenGlAutoImageComponent<BKStackedSlider>(
-                                                               "Transpositions",    // slider name
-                                                               -12,                 // min
-                                                               12,                  // max
-                                                               -12,                 // default min
-                                                               12,                  // default max
-                                                               0,                   // default val
-                                                               0.01)                // increment
-    {             // increment
-        image_component_ = std::make_shared<OpenGlImageComponent>();
-        setLookAndFeel(DefaultLookAndFeel::instance());
-        image_component_->setComponent(this);
-    }
-
-    virtual void resized() override
-    {
-        OpenGlAutoImageComponent<BKStackedSlider>::resized();
-       // if (isShowing())
-            redoImage();
-    }
-    virtual void mouseDrag(const juce::MouseEvent &e) override
-    {
-        OpenGlAutoImageComponent<BKStackedSlider>::mouseDrag(e);
-        redoImage();
-    }
-};
-
 /*
  * class OpenGlMidiSelector : public OpenGlAutoImageComponent<MidiInputSelectorComponentListBox> {
 public:
@@ -178,7 +127,6 @@ private:
         // Private function definitions and member variables for the DirectPopup class
         DirectParams* params = nullptr;
         DirectProcessor& proc;
-        std::unique_ptr<OpenGlTranspositionSlider> transpositionSlider;
 
 
         DirectParametersView view;

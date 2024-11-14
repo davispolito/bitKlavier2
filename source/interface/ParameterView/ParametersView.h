@@ -35,7 +35,9 @@ namespace bitklavier {
         struct Pimpl;
         std::unique_ptr<Pimpl> pimpl;
     protected:
+        //chowdsp::PluginState& pluginState;
         std::vector<std::unique_ptr<juce::Component>> comps;
+        std::vector<std::unique_ptr<juce::Component>> paramHolderComps;
         JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ParametersView)
     };
 

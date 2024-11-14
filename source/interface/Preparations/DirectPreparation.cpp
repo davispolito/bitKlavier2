@@ -104,10 +104,7 @@ DirectPreparation::DirectPopup::DirectPopup(DirectProcessor& _proc, OpenGlWrappe
     addSubSection(&view);
 //    view.init_();
 
-    transpositionSlider = std::make_unique<OpenGlTranspositionSlider>();
-    addAndMakeVisible(*transpositionSlider);
-    transpositionSlider->setValue(1., juce::dontSendNotification);
-    addOpenGlComponent(transpositionSlider->getImageComponent());
+
 
 
     /*********************************************************************************************/
@@ -193,9 +190,9 @@ void DirectPreparation::DirectPopup::resized() {
 
 //    transpositionsSlider->redoImage();
 //    blendronicSendSlider->redoImage();
-
-    transpositionSlider->setBounds(column1, row1, sliderWidth, sliderHeight);
-    transpositionSlider->setBounds(0, 200, 400, 200);
+//
+//    transpositionSlider->setBounds(column1, row1, sliderWidth, sliderHeight);
+//    transpositionSlider->setBounds(0, 200, 400, 200);
     SynthSection::resized();
 
 

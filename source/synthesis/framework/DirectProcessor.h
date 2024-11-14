@@ -12,6 +12,7 @@
 #include <chowdsp_serialization/chowdsp_serialization.h>
 #include <chowdsp_sources/chowdsp_sources.h>
 #include "EnvParams.h"
+#include "TransposeParams.h"
 struct DirectParams : chowdsp::ParamHolder
 {
     // gain slider params, for all gain-type knobs
@@ -24,7 +25,7 @@ struct DirectParams : chowdsp::ParamHolder
     {
         //add (gainParam, hammerParam, releaseResonanceParam, pedalParam, velocityParam, attackParam, decayParam, sustainParam, releaseParam, transpositionsParam);
         //add (gainParam, hammerParam, releaseResonanceParam, pedalParam, velocityParam, attackParam, decayParam, sustainParam, releaseParam);
-        add (gainParam, hammerParam, releaseResonanceParam, pedalParam, env, transpositionsParam);
+        add (gainParam, hammerParam, releaseResonanceParam, pedalParam, env, transpose);
     }
 
     // juce::Gain param
@@ -71,7 +72,7 @@ struct DirectParams : chowdsp::ParamHolder
 
     // ADSR params
     EnvParams env;
-
+    TransposeParams transpose;
     // Transpositions param
     chowdsp::FloatParameter::Ptr transpositionsParam {
             juce::ParameterID { "transpositions", 100 },
@@ -112,7 +113,7 @@ public:
     DirectProcessor (const juce::ValueTree& v);
     ~DirectProcessor()
     {
-        DBG("hit");
+
     }
     void prepareToPlay (double sampleRate, int samplesPerBlock) override;
     void releaseResources() override {}

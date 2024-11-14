@@ -84,7 +84,6 @@ namespace bitklavier {
 
             if (auto *sliderParam = dynamic_cast<chowdsp::FloatParameter *> (&parameter))
                 return std::make_unique<SliderParameterComponent>(*sliderParam, listeners, parent);
-
             return {};
         }
 

@@ -99,13 +99,13 @@ public:
     void addMyListener(Listener* listener)     { listeners.add(listener);      }
     void removeMyListener(Listener* listener)  { listeners.remove(listener);   }
 
-
+    std::vector<std::shared_ptr<juce::Slider>> dataSliders;  //displays data, user controls with topSlider
 private:
 
     chowdsp::SliderAttachment attachment;
 
     std::unique_ptr<juce::Slider> topSlider; //user interacts with this
-    juce::OwnedArray<juce::Slider> dataSliders;  //displays data, user controls with topSlider
+
     juce::Array<bool> activeSliders;
 
     std::unique_ptr<juce::TextEditor> editValsTextField;
