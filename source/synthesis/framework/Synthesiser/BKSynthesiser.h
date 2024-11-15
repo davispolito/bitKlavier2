@@ -305,6 +305,7 @@ class BKSynthesiser
                     midiNoteTranspositions = newOffsets;
                 }
 
+
                 BKADSR::Parameters globalADSR;
 protected:
                 //==============================================================================

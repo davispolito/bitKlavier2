@@ -109,11 +109,7 @@ pedalSynth(new BKSynthesiser())
                 DBG ("attack power: " + juce::String (state.params.env.releasePowerParam->get()));
             }),
 
-
-
     };
-
-
 
     // these synths play their stuff on noteOff rather than noteOn
     hammerSynth->isKeyReleaseSynth (true);

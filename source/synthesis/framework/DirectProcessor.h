@@ -163,7 +163,8 @@ private:
     std::unique_ptr<BKSynthesiser> pedalSynth;
 
     float releaseResonanceSynthGainMultiplier = 10.; // because these are very soft
-    juce::HashMap<int, juce::Array<float>> transpositionsByNoteOnNumber; // indexed by noteNumber
+    //juce::HashMap<int, juce::Array<float>> transpositionsByNoteOnNumber; // indexed by noteNumber
+    juce::Array<float> midiNoteTranspositions;
 
     chowdsp::ScopedCallbackList adsrCallbacks;
     chowdsp::ScopedCallbackList vtCallbacks;
