@@ -19,7 +19,7 @@ namespace IDs
     DECLARE_ID (INPUT)
     DECLARE_ID (OUTPUT)
     DECLARE_ID (PIANO)
-
+    DECLARE_ID (GLOBALPIANOSAMPLES)
     DECLARE_ID (PREPARATIONS)
 
     DECLARE_ID (name)
@@ -51,6 +51,11 @@ namespace IDs
     DECLARE_ID (midiDeviceId)
     DECLARE_ID(active)
     DECLARE_ID(midiPrefs)
+    DECLARE_ID(mainSampleSet)
+    DECLARE_ID(hammerSampleSet)
+    DECLARE_ID(releaseResonanceSampleSet)
+    DECLARE_ID(pedalSampleSet)
+
 }
 
 #undef DECLARE_ID

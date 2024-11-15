@@ -92,11 +92,17 @@ PreparationSection* ConstructionSite::createNewObject (const juce::ValueTree& v)
     s->setSizeRatio (size_ratio_);
     s->setCentrePosition (s->x, s->y);
     s->setSize (s->width, s->height);
-    s->addSoundSet (
-        parent->sampleLoadManager->globalSoundset,
-        parent->sampleLoadManager->globalHammersSoundset,
-        parent->sampleLoadManager->globalReleaseResonanceSoundset,
-        parent->sampleLoadManager->globalPedalsSoundset);
+
+
+    s->addSoundSet(&parent->sampleLoadManager->samplerSoundset);
+    if(!parent->sampleLoadManager->samplerSoundset.empty())
+    {
+        s->addSoundSet (
+                &parent->sampleLoadManager->samplerSoundset[parent->sampleLoadManager->globalSoundset_name],
+                &parent->sampleLoadManager->samplerSoundset[parent->sampleLoadManager->globalHammersSoundset_name],
+                &parent->sampleLoadManager->samplerSoundset[parent->sampleLoadManager->globalReleaseResonanceSoundset_name],
+                &parent->sampleLoadManager->samplerSoundset[parent->sampleLoadManager->globalPedalsSoundset_name]);
+    }
     s->selectedSet = &(preparationSelector.getLassoSelection());
     preparationSelector.getLassoSelection().addChangeListener (s);
     s->addListener (&cableView);
@@ -125,7 +131,10 @@ void ConstructionSite::newObjectAdded (PreparationSection* object)
     SynthGuiInterface* parent = findParentComponentOfClass<SynthGuiInterface>();
     parent->getSynth()->processorInitQueue.try_enqueue ([this, object] {
         SynthGuiInterface* _parent = findParentComponentOfClass<SynthGuiInterface>();
+        if(auto listener = dynamic_cast<juce::ValueTree::Listener*>(object->getProcessor()))
+            _parent->sampleLoadManager->t.addListener(listener);
         object->setNodeInfo (_parent->getSynth()->addProcessor (std::move (object->getProcessorPtr()), object->pluginID));
+
         //changelistener callback is causing timing errors here.
 
         //last_proc.reset();

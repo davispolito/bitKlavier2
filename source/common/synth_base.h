@@ -35,7 +35,10 @@ class SynthBase : public MidiManager::Listener, public juce::ValueTree::Listener
 
     SynthBase(juce::AudioDeviceManager* ={});
     virtual ~SynthBase();
-
+//    void updateMainSoundSets( juce::ReferenceCountedArray<BKSamplerSound<juce::AudioFormatReader>>* s, // main samples
+//                               juce::ReferenceCountedArray<BKSamplerSound<juce::AudioFormatReader>>* h, // hammer samples
+//                               juce::ReferenceCountedArray<BKSamplerSound<juce::AudioFormatReader>>* r, // release samples
+//                               juce::ReferenceCountedArray<BKSamplerSound<juce::AudioFormatReader>>* p);
 
     void valueChanged(const std::string& name, bitklavier::mono_float value);
     void valueChangedThroughMidi(const std::string& name, bitklavier::mono_float value) override;

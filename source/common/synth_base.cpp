@@ -47,6 +47,7 @@ SynthBase::SynthBase(juce::AudioDeviceManager * deviceManager) : expired_(false)
 
   Startup::doStartupChecks();
   tree = juce::ValueTree(IDs::GALLERY);
+  tree.setProperty(IDs::mainSampleSet,"Piano (Default)",nullptr);
   tree.addListener(this);
 }
 
@@ -161,6 +162,7 @@ bool SynthBase::loadFromValueTree(const juce::ValueTree& state)
     pauseProcessing(true);
     engine_->allSoundsOff();
     tree.copyPropertiesAndChildrenFrom(state, nullptr);
+
     pauseProcessing(false);
     DBG("unpause processing");
     if (tree.isValid())

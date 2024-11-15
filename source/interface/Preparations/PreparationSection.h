@@ -79,7 +79,7 @@ public:
     // Destructor Declaration
     ~PreparationSection();
 
-    virtual void addSoundSet(juce::ReferenceCountedArray<BKSamplerSound<juce::AudioFormatReader>>* s) {}
+    virtual void addSoundSet(std::map<juce::String, juce::ReferenceCountedArray<BKSamplerSound<juce::AudioFormatReader>>>* s) {}
     virtual void addSoundSet(
         juce::ReferenceCountedArray<BKSamplerSound<juce::AudioFormatReader>>* s,
         juce::ReferenceCountedArray<BKSamplerSound<juce::AudioFormatReader>>* h,

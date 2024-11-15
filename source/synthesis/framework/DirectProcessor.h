@@ -14,6 +14,7 @@
 #include "EnvParams.h"
 #include "TransposeParams.h"
 #include "buffer_debugger.h"
+#include "Identifiers.h"
 struct DirectParams : chowdsp::ParamHolder
 {
     // gain slider params, for all gain-type knobs
@@ -100,7 +101,8 @@ struct DirectNonParameterState : chowdsp::NonParamState
     //chowdsp::StateValue<bool> isSelected { "selected", true };
 };
 
-class DirectProcessor : public bitklavier::PluginBase<bitklavier::PreparationStateImpl<DirectParams, DirectNonParameterState, chowdsp::XMLSerializer>>
+class DirectProcessor : public bitklavier::PluginBase<bitklavier::PreparationStateImpl<DirectParams, DirectNonParameterState, chowdsp::XMLSerializer>>,
+public juce::ValueTree::Listener
 {
 public:
     DirectProcessor (const juce::ValueTree& v);
@@ -119,9 +121,10 @@ public:
         return true;
     }
 
-    void addSoundSet (juce::ReferenceCountedArray<BKSamplerSound<juce::AudioFormatReader>>* s)
+    void addSoundSet (std::map<juce::String, juce::ReferenceCountedArray<BKSamplerSound<juce::AudioFormatReader>>>* s)
     {
-        mainSynth->addSoundSet (s);
+        ptrToSamples = s;
+
     }
 
     void addSoundSet (
@@ -152,7 +155,22 @@ public:
             vt.setProperty (param.paramID, chowdsp::ParameterTypeHelpers::getValue (param), nullptr);
         });
     }
+    void valueTreePropertyChanged   (juce::ValueTree& t, const juce::Identifier&) {
+        juce::String a  = t.getProperty(IDs::mainSampleSet, "");
+        juce::String b  = t.getProperty(IDs::hammerSampleSet, "");
+        juce::String c  = t.getProperty(IDs::releaseResonanceSampleSet, "");
+        juce::String d  = t.getProperty(IDs::pedalSampleSet, "");
+        addSoundSet (&(*ptrToSamples)[a],
+                &(*ptrToSamples)[b],
+                &(*ptrToSamples)[c],
+                &(*ptrToSamples)[d]);
 
+    }
+    void valueTreeChildAdded        (juce::ValueTree&, juce::ValueTree&)        {}
+    void valueTreeChildRemoved      (juce::ValueTree&, juce::ValueTree&, int)   {}
+    void valueTreeChildOrderChanged (juce::ValueTree&, int, int)          {}
+    void valueTreeParentChanged     (juce::ValueTree&)                    {}
+    void valueTreeRedirected        (juce::ValueTree&)                    {}
 private:
     //chowdsp::experimental::Directillator<float> oscillator;
     chowdsp::Gain<float> gain;
@@ -165,7 +183,7 @@ private:
 
     float releaseResonanceSynthGainMultiplier = 10.; // because these are very soft
     juce::HashMap<int, juce::Array<float>> transpositionsByNoteOnNumber; // indexed by noteNumber
-
+    std::map<juce::String, juce::ReferenceCountedArray<BKSamplerSound<juce::AudioFormatReader>>>* ptrToSamples;
     chowdsp::ScopedCallbackList adsrCallbacks;
     chowdsp::ScopedCallbackList vtCallbacks;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (DirectProcessor)

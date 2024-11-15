@@ -33,6 +33,19 @@ LogoSection::LogoSection() : SynthSection("logo_section") {
 
   setSkinOverride(Skin::kLogo);
 }
+namespace string_constants{
+
+    // i think the sample library menu should be autopopulated by subfolders in the samples folder
+    // and also by whatever other folders the user specifies in preferences for storing samples
+    // including SoundFonts
+    static const std::vector<std::string> cBKSampleLoadTypes = {
+            "Piano (Default)",
+            "Library 2",
+            "Library 3",
+            "Library 4"
+    };
+
+};
 
 void LogoSection::resized() {
   int logo_padding_y = kLogoPaddingY * size_ratio_;
@@ -71,10 +84,12 @@ HeaderSection::HeaderSection() : SynthSection("header_section"), tab_offset_(0),
     sampleSelector->addListener(this);
     sampleSelector->setTriggeredOnMouseDown(true);
     sampleSelector->setShape(juce::Path(), true, true, true);
-
+//    sampleSelector->triggerClick();
     currentSampleType = 0;
     sampleSelectText = std::make_shared<PlainTextComponent>("Sample Select Text", "---");
     addOpenGlComponent(sampleSelectText);
+    //parent->sampleLoadManager->loadSamples(selection, true);
+    sampleSelectText->setText(string_constants::cBKSampleLoadTypes[currentSampleType]);
 
     saveButton = std::make_unique<OpenGlTextButton>("header_save");
     addOpenGlComponent(saveButton->getGlComponent());
@@ -256,19 +271,7 @@ void HeaderSection::reset() {
 ////  oscilloscope_->setVisible(!view_spectrogram);
 ////  spectrogram_->setVisible(view_spectrogram);
 //}
-namespace string_constants{
 
-    // i think the sample library menu should be autopopulated by subfolders in the samples folder
-    // and also by whatever other folders the user specifies in preferences for storing samples
-    // including SoundFonts
-    static const std::vector<std::string> cBKSampleLoadTypes = {
-            "Piano (Default)",
-            "Library 2",
-            "Library 3",
-            "Library 4"
-    };
-
-};
 void HeaderSection::buttonClicked(juce::Button* clicked_button) {
   if (clicked_button == exit_temporary_button_.get()) {
 //    for (Listener* listener : listeners_)
@@ -316,7 +319,7 @@ void HeaderSection::buttonClicked(juce::Button* clicked_button) {
             SynthGuiInterface* _parent = findParentComponentOfClass<SynthGuiInterface>();
             std::string error;
                     juce::File choice = fc.getResult();
-        if (!_parent->getSynth()->loadFromFile(choice, error)) {
+        if (!_parent->loadFromFile(choice, error)) {
 //            std::string name = ProjectInfo::projectName;
 //            error = "There was an error open the preset. " + error;
             //juce::AlertWindow::showMessageBoxAsync(MessageBoxIconType::WarningIcon, "PRESET ERROR, ""Error opening preset", error);

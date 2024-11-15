@@ -73,16 +73,16 @@ void DirectProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::Midi
 
     buffer.clear(); // always top of the chain as an instrument source; doesn't take audio in
 
-    if (mainSynth->getNumSounds() > 0)
+    if (mainSynth->hasSamples() )
         mainSynth->renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
 
-    if (hammerSynth->getNumSounds() > 0)
+    if (hammerSynth->hasSamples())
         hammerSynth->renderNextBlock (buffer, midiMessages, 0, buffer.getNumSamples());
 
-    if (releaseResonanceSynth->getNumSounds() > 0)
+    if (releaseResonanceSynth->hasSamples())
         releaseResonanceSynth->renderNextBlock (buffer, midiMessages, 0, buffer.getNumSamples());
 
-    if (pedalSynth->getNumSounds() > 0)
+    if (pedalSynth->hasSamples())
         pedalSynth->renderNextBlock (buffer, midiMessages, 0, buffer.getNumSamples());
 
 //DBG ("attack: " + juce::String (state.params.env.attackParam->get()));

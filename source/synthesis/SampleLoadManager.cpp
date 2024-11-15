@@ -13,6 +13,7 @@
 SampleLoadManager::SampleLoadManager (UserPreferences& preferences, SynthBase* synth_) : preferences (preferences),
                                                                                          synth (synth_),
                                                                                          audioFormatManager (new juce::AudioFormatManager())
+
 {
     audioFormatManager->registerBasicFormats();
 
@@ -25,25 +26,41 @@ SampleLoadManager::SampleLoadManager (UserPreferences& preferences, SynthBase* s
             allPitches.add (noteOctave);
         }
     }
+    synth_->getValueTree().addChild(t,1,nullptr);
+
 }
 
 SampleLoadManager::~SampleLoadManager()
 {
 }
 
+void SampleLoadManager::clearAllSamples() {
+//    globalHammersSoundset = nullptr;
+//    globalPedalsSoundset = nullptr;
+//    globalReleaseResonanceSoundset = nullptr;
+//    globalSoundset = nullptr;
+    samplerSoundset.clear();
+
+}
 void SampleLoadManager::handleAsyncUpdate()
 {
+    if(sampleLoader.getNumJobs() > 0)
+        return;
     DBG ("samples loaded, tell the audio thread its okay to change the move soundsets");
     DBG ("samplerSoundset size = " + juce::String (samplerSoundset[globalSoundset_name].size()));
     synth->processorInitQueue.try_enqueue ([this] {
         //SynthGuiInterface* _parent = findParentComponentOfClass<SynthGuiInterface>();
         //object->setNodeAndPortInfo(_parent->getSynth()->addProcessor(std::move(object->getProcessorPtr())));
-
-        globalSoundset = &samplerSoundset[globalSoundset_name];
-        globalHammersSoundset = &samplerSoundset[globalHammersSoundset_name];
-        globalReleaseResonanceSoundset = &samplerSoundset[globalReleaseResonanceSoundset_name];
-        globalPedalsSoundset = &samplerSoundset[globalPedalsSoundset_name];
+        //synth->updateMainSoundSets(&samplerSoundset[globalSoundset_name],&samplerSoundset[globalHammersSoundset_name],&samplerSoundset[globalReleaseResonanceSoundset_name],&samplerSoundset[globalPedalsSoundset_name] );
+//        globalSoundset = &samplerSoundset[globalSoundset_name];
+//        globalHammersSoundset = &samplerSoundset[globalHammersSoundset_name];
+//        globalReleaseResonanceSoundset = &samplerSoundset[globalReleaseResonanceSoundset_name];
+//        globalPedalsSoundset = &samplerSoundset[globalPedalsSoundset_name];
         //last_proc.reset();
+        t.setProperty(IDs::mainSampleSet,globalSoundset_name ,nullptr);
+        t.setProperty(IDs::hammerSampleSet,globalHammersSoundset_name ,nullptr);
+        t.setProperty(IDs::releaseResonanceSampleSet,globalReleaseResonanceSoundset_name ,nullptr);
+        t.setProperty(IDs::pedalSampleSet,globalPedalsSoundset_name ,nullptr);
     });
 }
 
@@ -173,7 +190,7 @@ void SampleLoadManager::loadSamples_sub(bitklavier::utils::BKPianoSampleType thi
     // loop through all 12 notes and octaves
     for (auto pitchName : allPitches)
     {
-        DBG ("*****>>>>> LOADING " + juce::String (BKPianoSampleType_string[thisSampleType]) + " " + pitchName + " <<<<<*****");
+//        DBG ("*****>>>>> LOADING " + juce::String (BKPianoSampleType_string[thisSampleType]) + " " + pitchName + " <<<<<*****");
 
         juce::Array<juce::File> onePitchSamples (allSamples);
         if (thisSampleType == BKPianoMain || thisSampleType == BKPianoReleaseResonance)
@@ -226,6 +243,7 @@ void SampleLoadManager::loadSamples_sub(bitklavier::utils::BKPianoSampleType thi
                                     &samplerSoundset[soundsetName],
                                     this),
                             true );
+
     }
 }
     bool SampleLoadManager::loadSamples (int selection, bool isGlobal)
@@ -272,8 +290,11 @@ void SampleLoadManager::loadSamples_sub(bitklavier::utils::BKPianoSampleType thi
 
     juce::ThreadPoolJob::JobStatus SampleLoadJob::runJob()
     {
-        loadSamples();
-        loadManager->triggerAsyncUpdate();
+
+        if(!loadSamples())
+        {
+            return jobNeedsRunningAgain;
+        }
         return jobHasFinished;
     }
 
@@ -332,22 +353,22 @@ void SampleLoadManager::loadSamples_sub(bitklavier::utils::BKPianoSampleType thi
         return layersToReturn;
     }
 
-    void SampleLoadJob::loadSamples()
+    bool SampleLoadJob::loadSamples()
     {
         using namespace bitklavier::utils;
         DBG ("loadSamples called for " + juce::String (BKPianoSampleType_string[thisSampleType]));
 
         if (thisSampleType == BKPianoMain)
-            loadMainSamplesByPitch();
+            return loadMainSamplesByPitch();
         else if (thisSampleType == BKPianoHammer)
-            loadHammerSamples();
+            return loadHammerSamples();
         else if (thisSampleType == BKPianoReleaseResonance)
-            loadReleaseResonanceSamples();
+            return loadReleaseResonanceSamples();
         else if (thisSampleType == BKPianoPedal)
-            loadPedalSamples();
+            return loadPedalSamples();
     }
 
-    void SampleLoadJob::loadHammerSamples()
+    bool SampleLoadJob::loadHammerSamples()
     {
         //for v1 samples, to define bottom threshold.
         //  for hammers, just to define a baseline, since we don't have velocity layers here
@@ -366,7 +387,7 @@ void SampleLoadManager::loadSamples_sub(bitklavier::utils::BKPianoSampleType thi
             stringArray.addTokens (filename, "l", "");
             int midiNote = stringArray[1].getIntValue() + 20;
 
-            DBG ("**** loading hammer sample: " + filename + " " + juce::String (midiNote));
+//            DBG ("**** loading hammer sample: " + filename + " " + juce::String (midiNote));
 
             // hammers are only assigned to their one key (rel1 => A0 only, etc...)
             juce::BigInteger midiNoteRange;
@@ -376,12 +397,14 @@ void SampleLoadManager::loadSamples_sub(bitklavier::utils::BKPianoSampleType thi
             velRange.setRange (0, 128, true);
 
             auto sound = soundset->add (new BKSamplerSound (filename, std::shared_ptr<Sample<juce::AudioFormatReader>> (sample), midiNoteRange, midiNote, 0, velRange, 1, dBFSBelow));
+            if (shouldExit())
+                return false;
         }
-
+        return true;
         DBG ("done loading hammer samples");
     }
 
-    void SampleLoadJob::loadReleaseResonanceSamples()
+    bool SampleLoadJob::loadReleaseResonanceSamples()
     {
         DBG ("loadReleaseResonanceSamples called");
         auto ranges = getVelLayers (velocityLayers);
@@ -398,7 +421,7 @@ void SampleLoadManager::loadSamples_sub(bitklavier::utils::BKPianoSampleType thi
             if (!reader)
                 break; // Break the loop if the reader is null
 
-            DBG ("**** loading resonance sample: " + filename);
+//            DBG ("**** loading resonance sample: " + filename);
             auto sample = new Sample (*(reader.get()), 90);
 
             juce::StringArray stringArray;
@@ -415,13 +438,16 @@ void SampleLoadManager::loadSamples_sub(bitklavier::utils::BKPianoSampleType thi
 
             dBFSBelow = sound->dBFSLevel; // to pass on to next sample, which should be the next velocity layer above
 
-            DBG ("**** loading resonance sample: " + filename);
-            DBG ("");
+//            DBG ("**** loading resonance sample: " + filename);
+//            DBG ("");
+            if (shouldExit())
+                return false;
         }
+        return true;
         DBG ("done loading resonance samples, with this many velocity layers " + juce::String (currentVelLayer));
     }
 
-    void SampleLoadJob::loadPedalSamples()
+    bool SampleLoadJob::loadPedalSamples()
     {
         //for v1 samples, to define bottom threshold.
         float dBFSBelow = -50.f;
@@ -444,7 +470,7 @@ void SampleLoadManager::loadSamples_sub(bitklavier::utils::BKPianoSampleType thi
             else if (filename.contains ("U"))
                 midiNote = 66;
 
-            DBG ("**** loading pedal sample: " + filename + " " + juce::String (midiNote));
+//            DBG ("**** loading pedal sample: " + filename + " " + juce::String (midiNote));
 
             // pedals set to single keys: 65 for pedalDown, 66 for pedalUp
             juce::BigInteger midiNoteRange;
@@ -453,16 +479,18 @@ void SampleLoadManager::loadSamples_sub(bitklavier::utils::BKPianoSampleType thi
             auto [begin, end] = ranges.getUnchecked (currentVelLayer++);
             juce::BigInteger velRange;
             velRange.setRange (begin, end - begin, true);
-            DBG ("pedal vel range = " + juce::String (begin) + " to " + juce::String (end) + " for " + filename);
+//            DBG ("pedal vel range = " + juce::String (begin) + " to " + juce::String (end) + " for " + filename);
 
             auto sound = soundset->add (new BKSamplerSound (filename, std::shared_ptr<Sample<juce::AudioFormatReader>> (sample), midiNoteRange, midiNote, 0, velRange, 1, dBFSBelow));
+            if (shouldExit())
+                return false;
         }
-
+        return true;
         DBG ("done loading pedal samples");
     }
 
     // load all the velocity layers samples for a particular pitch/key
-    void SampleLoadJob::loadMainSamplesByPitch()
+    bool SampleLoadJob::loadMainSamplesByPitch()
     {
         auto ranges = getVelLayers (velocityLayers);
         int layers = ranges.size();
@@ -478,7 +506,7 @@ void SampleLoadManager::loadSamples_sub(bitklavier::utils::BKPianoSampleType thi
             if (!reader)
                 break; // Break the loop if the reader is null
 
-            DBG ("**** loading sample: " + filename);
+//            DBG ("**** loading sample: " + filename);
             auto sample = new Sample (*(reader.get()), 90);
 
             juce::StringArray stringArray;
@@ -495,8 +523,11 @@ void SampleLoadManager::loadSamples_sub(bitklavier::utils::BKPianoSampleType thi
 
             dBFSBelow = sound->dBFSLevel; // to pass on to next sample, which should be the next velocity layer above
 
-            DBG ("**** loading sample: " + filename);
-            DBG ("");
+//            DBG ("**** loading sample: " + filename);
+//            DBG ("");
+            if (shouldExit())
+                return false;
         }
+        return true;
         DBG ("done loading string samples");
     }

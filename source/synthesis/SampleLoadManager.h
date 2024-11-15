@@ -109,10 +109,7 @@ public:
     juce::String globalHammersSoundset_name;
     juce::String globalReleaseResonanceSoundset_name;
     juce::String globalPedalsSoundset_name;
-    juce::ReferenceCountedArray<BKSamplerSound<juce::AudioFormatReader>>* globalSoundset = nullptr;
-    juce::ReferenceCountedArray<BKSamplerSound<juce::AudioFormatReader>>* globalHammersSoundset = nullptr;
-    juce::ReferenceCountedArray<BKSamplerSound<juce::AudioFormatReader>>* globalReleaseResonanceSoundset = nullptr;
-    juce::ReferenceCountedArray<BKSamplerSound<juce::AudioFormatReader>>* globalPedalsSoundset = nullptr;
+
 
     UserPreferences& preferences;
     void handleAsyncUpdate() override;
@@ -126,6 +123,8 @@ public:
     juce::Array<juce::String> allPitchClasses = { "A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#" };
     juce::Array<int> allKeysWithSamples; // array that keeps track of which keys have samples, for building start/end ranges in keymap
     juce::BigInteger getMidiRange (juce::String pitchName);
+    void clearAllSamples();
+    juce::ValueTree t {IDs::GLOBALPIANOSAMPLES};
 };
 
 /* SampleLoadJob is setup to load the standard bK sample setup, with main, hammer (rel), release resonance Harm, and pedal samples
@@ -156,15 +155,17 @@ public:
         thisSampleType = sampleType;
         velocityLayers = numLayers;
         thisMidiRange = newMidiRange;
+        DBG("job created");
     };
-
+    ~SampleLoadJob()
+    {loadManager->triggerAsyncUpdate();}
     JobStatus runJob() override;
 
-    void loadSamples(); // calls one of the following, depending on context
-    void loadMainSamplesByPitch();
-    void loadHammerSamples();
-    void loadReleaseResonanceSamples();
-    void loadPedalSamples();
+    bool loadSamples(); // calls one of the following, depending on context
+    bool loadMainSamplesByPitch();
+    bool loadHammerSamples();
+    bool loadReleaseResonanceSamples();
+    bool loadPedalSamples();
 
     int thisSampleType;
     int velocityLayers; // how many velocity layers for this particular string
