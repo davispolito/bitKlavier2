@@ -20,106 +20,12 @@ pedalSynth(new BKSynthesiser(state.params.env,state.params.pedalParam))
         pedalSynth->addVoice (new BKSamplerVoice());
     }
 
-    // mixer
-    // connect these to sliders, as with ADSR
-//    mainSynth->setSynthGain (1.);
-//    hammerSynth->setSynthGain (0.05);
-//    releaseResonanceSynth->setSynthGain (1.0 * releaseResonanceSynthGainMultiplier);
-//    pedalSynth->setSynthGain (0.4);
-
-    //    std::unique_ptr<XmlElement> xml = chowdsp::Serialization::serialize<chowdsp::XMLSerializer>(state);
-    //    DBG(chowdsp::Serialization::serialize<chowdsp::XMLSerializer>(state)->toString());
-    //chowdsp::Serialization::deserialize<chowdsp::XMLSerializer>(xml,state);
-    adsrCallbacks += {
-//
-//        state.addParameterListener (*state.params.gainParam,
-//             chowdsp::ParameterListenerThread::AudioThread,
-//             [this] {
-//                 mainSynth->setSynthGain (juce::Decibels::decibelsToGain (state.params.gainParam->get()));
-//                 DBG ("direct gain: " + juce::String (state.params.gainParam->get()));
-//             }),
-//
-//        state.addParameterListener (*state.params.hammerParam,
-//            chowdsp::ParameterListenerThread::AudioThread,
-//            [this] {
-//                hammerSynth->setSynthGain (juce::Decibels::decibelsToGain (state.params.hammerParam->get()));
-//                DBG ("hammer gain: " + juce::String (state.params.hammerParam->get()));
-//            }),
-//
-//        state.addParameterListener (*state.params.releaseResonanceParam,
-//            chowdsp::ParameterListenerThread::AudioThread,
-//            [this] {
-//                releaseResonanceSynth->setSynthGain (juce::Decibels::decibelsToGain (state.params.releaseResonanceParam->get()) * releaseResonanceSynthGainMultiplier);
-//                DBG ("release resonance gain: " + juce::String (state.params.releaseResonanceParam->get()));
-//            }),
-//
-//        state.addParameterListener (*state.params.pedalParam,
-//            chowdsp::ParameterListenerThread::AudioThread,
-//            [this] {
-//                pedalSynth->setSynthGain (juce::Decibels::decibelsToGain (state.params.pedalParam->get()));
-//                DBG ("pedal gain: " + juce::String (state.params.pedalParam->get()));
-//            }),
-//
-//        state.addParameterListener (*state.params.env.attackParam,
-//            chowdsp::ParameterListenerThread::AudioThread,
-//            [this] {
-//                mainSynth->globalADSR.attack = state.params.env.attackParam->get() * .001f; //should fix, not do hard conversions between ms and seconds here
-//                DBG ("attack: " + juce::String (state.params.env.attackParam->get()));
-//            }),
-//
-//        state.addParameterListener (*state.params.env.attackPowerParam,
-//            chowdsp::ParameterListenerThread::AudioThread,
-//            [this] {
-//                mainSynth->globalADSR.attackPower = state.params.env.attackPowerParam->get() * -1.;
-//                DBG ("attack power: " + juce::String (state.params.env.attackPowerParam->get()));
-//            }),
-//
-//        state.addParameterListener (*state.params.env.decayParam,
-//            chowdsp::ParameterListenerThread::AudioThread,
-//            [this] {
-//                mainSynth->globalADSR.decay = state.params.env.decayParam->get() * .001f;
-//                DBG ("decay: " + juce::String (state.params.env.decayParam->get()));
-//            }),
-//
-//        state.addParameterListener (*state.params.env.decayPowerParam,
-//            chowdsp::ParameterListenerThread::AudioThread,
-//            [this] {
-//                mainSynth->globalADSR.decayPower = state.params.env.decayPowerParam->get() * -1.;
-//                DBG ("decay power: " + juce::String (state.params.env.decayPowerParam->get()));
-//            }),
-//
-//        state.addParameterListener (*state.params.env.sustainParam,
-//            chowdsp::ParameterListenerThread::AudioThread,
-//            [this] {
-//                mainSynth->globalADSR.sustain = state.params.env.sustainParam->get();
-//                DBG ("sustain: " + juce::String (state.params.env.sustainParam->get()));
-//            }),
-//
-//        state.addParameterListener (*state.params.env.releaseParam,
-//            chowdsp::ParameterListenerThread::AudioThread,
-//            [this] {
-//                mainSynth->globalADSR.release = state.params.env.releaseParam->get() * .001f;
-//                DBG ("release: " + juce::String (state.params.env.releaseParam->get()));
-//            }),
-//
-//        state.addParameterListener (*state.params.env.releasePowerParam,
-//            chowdsp::ParameterListenerThread::AudioThread,
-//            [this] {
-//                mainSynth->globalADSR.releasePower = state.params.env.releasePowerParam->get() * -1.;
-//                DBG ("attack power: " + juce::String (state.params.env.releasePowerParam->get()));
-//            }),
-
-
-
-    };
-
-
 
     // these synths play their stuff on noteOff rather than noteOn
     hammerSynth->isKeyReleaseSynth (true);
     releaseResonanceSynth->isKeyReleaseSynth (true);
     pedalSynth->isPedalSynth (true);
-
+    bufferDebugger = new BufferDebugger();
 
 }
 
@@ -164,10 +70,7 @@ void DirectProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::Midi
 #if JUCE_MODULE_AVAILABLE_chowdsp_plugin_state
     state.getParameterListeners().callAudioThreadBroadcasters();
 #endif
-//    if(!state.params.transpose.floatParams.empty())
-//    {
-//    //DBG("jorps"+juce::String(state.params.transpose.floatParams[0]->getCurrentValueAsText()));
-//    }
+
     buffer.clear(); // always top of the chain as an instrument source; doesn't take audio in
 
     if (mainSynth->getNumSounds() > 0)
@@ -185,4 +88,5 @@ void DirectProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::Midi
 //DBG ("attack: " + juce::String (state.params.env.attackParam->get()));
     //juce::dsp::AudioBlock<float> block(buffer);
     //melatonin::printSparkline(buffer);
+    bufferDebugger->capture("direct", buffer.getReadPointer(0), buffer.getNumSamples(), -1.f, 1.f);
 }
