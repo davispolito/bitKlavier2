@@ -13,6 +13,7 @@
 #include <chowdsp_sources/chowdsp_sources.h>
 #include "EnvParams.h"
 #include "TransposeParams.h"
+#include "buffer_debugger.h"
 struct DirectParams : chowdsp::ParamHolder
 {
     // gain slider params, for all gain-type knobs
@@ -156,7 +157,7 @@ private:
     //chowdsp::experimental::Directillator<float> oscillator;
     chowdsp::Gain<float> gain;
     //juce::ADSR::Parameters adsrParams;
-
+    juce::ScopedPointer<BufferDebugger> bufferDebugger;
     std::unique_ptr<BKSynthesiser> mainSynth;
     std::unique_ptr<BKSynthesiser> hammerSynth;
     std::unique_ptr<BKSynthesiser> releaseResonanceSynth;

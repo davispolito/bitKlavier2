@@ -4,16 +4,16 @@
 
 #include "BKSynthesiser.h"
 //==============================================================================
-BKSynthesiser::BKSynthesiser()
+BKSynthesiser::BKSynthesiser(EnvParams &params, chowdsp::GainDBParameter& gain) : params(params), synthGain(gain)
 {
     for (int i = 0; i < juce::numElementsInArray (lastPitchWheelValues); ++i)
         lastPitchWheelValues[i] = 0x2000;
 
-    // init ADSR
-    globalADSR.attack = 0.005f;
-    globalADSR.decay = 0.0f;
-    globalADSR.sustain = 1.0f;
-    globalADSR.release = 0.1f;
+//    // init ADSR
+//    globalADSR.attack = 0.005f;
+//    globalADSR.decay = 0.0f;
+//    globalADSR.sustain = 1.0f;
+//    globalADSR.release = 0.1f;
 
     // init hash of currently playing notes
     for (int i = 0; i<=128; i++)
@@ -325,8 +325,15 @@ void BKSynthesiser::startVoice (BKSamplerVoice* const voice,
     {
         if (voice->currentlyPlayingSound != nullptr)
             voice->stopNote (0.0f, false);
-        voice->copyAmpEnv(globalADSR);
-        voice->setGain(synthGain);
+
+        voice->copyAmpEnv( {params.attackParam->getCurrentValue() * 0.001f,
+                            params.decayParam->getCurrentValue() * 0.001f,
+                            params.sustainParam->getCurrentValue(),
+                            params.releaseParam->getCurrentValue() * 0.001f,
+                            params.attackPowerParam->getCurrentValue(),
+                            params.decayPowerParam->getCurrentValue(),
+                            params.releasePowerParam->getCurrentValue()});
+        voice->setGain(juce::Decibels::decibelsToGain (synthGain.getCurrentValue()));
         voice->currentlyPlayingNote = midiNoteNumber;
         voice->currentPlayingMidiChannel = midiChannel;
         voice->noteOnTime = ++lastNoteOnCounter;

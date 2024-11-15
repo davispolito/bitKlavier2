@@ -107,8 +107,8 @@ void SynthEditor::getNextAudioBlock(const juce::AudioSourceChannelInfo& buffer) 
 
   //processModulationChanges();
   juce::MidiBuffer midi_messages;
-  midi_manager_->removeNextBlockOfMessages(midi_messages, num_samples);
-  processKeyboardEvents(midi_messages, num_samples);
+//  midi_manager_->removeNextBlockOfMessages(midi_messages, num_samples);
+//  processKeyboardEvents(midi_messages, num_samples);
 
   double sample_time = 1.0 / getSampleRate();
 //  for (int b = 0; b < num_samples; b += synth_samples) {
