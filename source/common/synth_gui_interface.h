@@ -57,6 +57,7 @@ class SynthGuiInterface {
     void openSaveDialog();
     void externalPresetLoaded(juce::File preset);
     void setGuiSize(float scale);
+    bool loadFromFile(juce::File preset, std::string& error);
     FullInterface* getGui() { return gui_.get(); }
     OpenGlWrapper* getOpenGlWrapper();
     std::shared_ptr<UserPreferencesWrapper> userPreferences;

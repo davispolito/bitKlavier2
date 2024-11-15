@@ -237,8 +237,8 @@ public:
                     midiVelocities(midiVelocities),
                     sample(std::move(samp))
     {
-        // Print the class name and action
-        DBG("Create BKSamplerSound");
+//        // Print the class name and action
+//        DBG("Create BKSamplerSound");
 
         setCentreFrequencyInHz(mtof(rootMidiNote));
         dBFSLevel = sample->getRMS();

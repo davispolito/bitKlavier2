@@ -29,6 +29,7 @@ SynthGuiData::SynthGuiData(SynthBase* synth_base) : synth(synth_base),
 {
     //tree = mainSynth->getValueTree();
 //    um = synth_base->getUndoManager();
+    //sampleLoadManager->loadSamples(0, true);
 }
 #if HEADLESS
 
@@ -64,7 +65,7 @@ SynthGuiInterface::SynthGuiInterface(SynthBase* synth, bool use_gui) : synth_(sy
     gui_ = std::make_unique<FullInterface>(&synth_data);
   }
     sampleLoadManager->preferences = userPreferences->userPreferences.get();
-
+    //sampleLoadManager->loadSamples(0, true);
 }
 
 SynthGuiInterface::~SynthGuiInterface() { }
@@ -102,14 +103,17 @@ void SynthGuiInterface::updateGuiControl(const std::string& name, bitklavier::mo
 //}
 
 //void SynthGuiInterface::connectModulation(bitklavier::ModulationConnection* connection) {
-//  synth_->connectModulation(connection);
+//  synth_->connecotModulation(connection);
 //  notifyModulationsChanged();
 //}
 
 
 
 
-
+bool SynthGuiInterface::loadFromFile(juce::File preset, std::string &error) {
+    return getSynth()->loadFromFile(preset,error);
+    //sampleLoadManager->loadSamples()
+}
 
 
 void SynthGuiInterface::setFocus() {

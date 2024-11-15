@@ -71,6 +71,7 @@ class BKSynthesiser
                 //==============================================================================
                 /** Deletes all sounds. */
                 //void clearSounds();
+                bool hasSamples() {return sounds != nullptr;}
 
                 /** Returns the number of sounds that have been added to the mainSynth. */
                 int getNumSounds() const noexcept                               { return sounds->size(); }
