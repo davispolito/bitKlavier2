@@ -12,7 +12,7 @@
 #include "synth_section.h"
 #include "melatonin_inspector/melatonin_inspector.h"
 #include "popup_browser.h"
-#include "value_tree_debugger.cpp"
+#include "value_tree_debugger.h"
 class TestSection;
 class AboutSection;
 struct SynthGuiData;
