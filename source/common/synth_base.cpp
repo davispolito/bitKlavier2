@@ -154,7 +154,7 @@ return engine_->processorGraph->getNodeForId(id);
 
 void SynthBase::addConnection(juce::AudioProcessorGraph::Connection &connect)
 {
-    _ASSERT(engine_->processorGraph->addConnection(connect));
+    engine_->processorGraph->addConnection(connect);
 }
 bool SynthBase::loadFromValueTree(const juce::ValueTree& state)
 {

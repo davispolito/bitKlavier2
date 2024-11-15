@@ -145,7 +145,7 @@ namespace bitklavier {
           midiInputNode   = processorGraph->addNode (std::make_unique<AudioGraphIOProcessor> (AudioGraphIOProcessor::midiInputNode),getNextUID());
           midiOutputNode  = processorGraph->addNode (std::make_unique<AudioGraphIOProcessor> (AudioGraphIOProcessor::midiOutputNode),getNextUID());
 
-          connectAudioNodes();
+          //connectAudioNodes();
           connectMidiNodes();
       }
 
