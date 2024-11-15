@@ -330,9 +330,9 @@ void BKSynthesiser::startVoice (BKSamplerVoice* const voice,
                             params.decayParam->getCurrentValue() * 0.001f,
                             params.sustainParam->getCurrentValue(),
                             params.releaseParam->getCurrentValue() * 0.001f,
-                            params.attackPowerParam->getCurrentValue(),
-                            params.decayPowerParam->getCurrentValue(),
-                            params.releasePowerParam->getCurrentValue()});
+                            static_cast<float>(params.attackPowerParam->getCurrentValue() * -1.),
+                            static_cast<float>(params.decayPowerParam->getCurrentValue() * -1.),
+                            static_cast<float>(params.releasePowerParam->getCurrentValue() * -1.)});
         voice->setGain(juce::Decibels::decibelsToGain (synthGain.getCurrentValue()));
         voice->currentlyPlayingNote = midiNoteNumber;
         voice->currentPlayingMidiChannel = midiChannel;
