@@ -44,7 +44,8 @@ FullInterface::FullInterface(SynthGuiData* synth_data) : SynthSection("full_inte
    main_ = std::make_unique<MainSection>(data->tree.getChildWithName(IDs::PIANO), data->um, open_gl_, data);
    addSubSection(main_.get());
    main_->addListener(this);
-  valueTreeDebugger  = new ValueTreeDebugger(data->tree);
+  valueTreeDebugger  = new
+          ValueTreeDebugger(data->tree);
 
 //   inspectButton = std::make_unique<OpenGlToggleButton>("Inspect the UI");
 //   addAndMakeVisible(inspectButton.get());
