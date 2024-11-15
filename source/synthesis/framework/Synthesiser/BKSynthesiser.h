@@ -6,6 +6,7 @@
 #define BITKLAVIER2_BKBKSynthesiser_H
 #include <juce_core/juce_core.h>
 #include "Sample.h"
+#include "EnvParams.h"
 //==============================================================================
 /**
     Base class for a musical device that can play sounds.
@@ -39,7 +40,7 @@ class BKSynthesiser
                 /** Creates a new BKSynthesiser.
                     You'll need to add some sounds and voices before it'll make any sound.
                 */
-                BKSynthesiser();
+                BKSynthesiser(EnvParams&, chowdsp::GainDBParameter&);
 
                 /** Destructor. */
                 virtual ~BKSynthesiser();
@@ -297,15 +298,15 @@ class BKSynthesiser
                  */
                 void isPedalSynth(bool mode) { pedalSynth = mode; }
 
-                void setSynthGain(float g) {
-                    synthGain = g;
-                }
+//                void setSynthGain(chowds) {
+//                    synthGain = g;
+//                }
 
                 void updateMidiNoteOffsets(juce::Array<float> newOffsets) {
                     midiNoteTranspositions = newOffsets;
                 }
 
-                BKADSR::Parameters globalADSR;
+                //BKADSR::Parameters globalADSR;
 protected:
                 //==============================================================================
                 /** This is used to control access to the rendering callback and the note trigger methods. */
@@ -384,7 +385,7 @@ private:
                 bool keyReleaseSynth = false;           // by default, synths play on keyPress (noteOn), not the opposite!
                 bool pedalSynth = false;                // for sustain pedal sounds; will ignore noteOn messages
                 bool sustainPedalAlreadyDown = false;   // to avoid re-triggering of pedalDown sounds
-
+                EnvParams& params;
                 /**
                  * midiNoteTranspositions is an arrays of tuning offsets, in MidiNoteCents (.01 = 1 cent)
                  *      - these offsets are set by currentTransposition controls in Direct, Nostalgic, and Synchronic
@@ -408,7 +409,7 @@ private:
                 template <typename floatType>
                 void processNextBlock (juce::AudioBuffer<floatType>&, const juce::MidiBuffer&, int startSample, int numSamples);
 
-                float synthGain = 1.0; //global gain for this synth
+                chowdsp::GainDBParameter& synthGain; //= 1.0; //global gain for this synth
 
                 JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (BKSynthesiser)
         };
