@@ -35,7 +35,7 @@ struct DirectParams : chowdsp::ParamHolder
         juce::ParameterID { "gain", 100 },
         "Gain",
         juce::NormalisableRange { rangeStart, rangeEnd, 0.0f, skewFactor, false },
-        -6.0f
+        0.0f
     };
 
     // Hammer param
@@ -50,8 +50,8 @@ struct DirectParams : chowdsp::ParamHolder
     chowdsp::GainDBParameter::Ptr releaseResonanceParam {
         juce::ParameterID { "releaseResonance", 100 },
         "Release Resonance",
-        juce::NormalisableRange { rangeStart, rangeEnd, 0.0f, skewFactor, false },
-        -6.0f
+        juce::NormalisableRange { rangeStart, rangeEnd + 24, 0.0f, skewFactor, false },
+        6.0f
     };
 
     // Pedal param
@@ -124,7 +124,6 @@ public:
     void addSoundSet (std::map<juce::String, juce::ReferenceCountedArray<BKSamplerSound<juce::AudioFormatReader>>>* s)
     {
         ptrToSamples = s;
-
     }
 
     void addSoundSet (
@@ -185,8 +184,9 @@ private:
     float releaseResonanceSynthGainMultiplier = 10.; // because these are very soft
     //juce::HashMap<int, juce::Array<float>> transpositionsByNoteOnNumber; // indexed by noteNumber
     juce::Array<float> midiNoteTranspositions;
+    juce::Array<float> getMidiNoteTranspositions();
 
-    juce::HashMap<int, juce::Array<float>> transpositionsByNoteOnNumber; // indexed by noteNumber
+    //juce::HashMap<int, juce::Array<float>> transpositionsByNoteOnNumber; // indexed by noteNumber
     std::map<juce::String, juce::ReferenceCountedArray<BKSamplerSound<juce::AudioFormatReader>>>* ptrToSamples;
 
     chowdsp::ScopedCallbackList adsrCallbacks;

@@ -19,6 +19,11 @@ pedalSynth(new BKSynthesiser(state.params.env,state.params.pedalParam))
         releaseResonanceSynth->addVoice (new BKSamplerVoice());
         pedalSynth->addVoice (new BKSamplerVoice());
     }
+
+//        mainSynth->setSynthGain (0.);
+//        hammerSynth->setSynthGain (-12);
+//        releaseResonanceSynth->setSynthGain (12);
+//        pedalSynth->setSynthGain (-6);
 //
 //<<<<<<< HEAD
 //    // mixer
@@ -158,6 +163,27 @@ bool DirectProcessor::isBusesLayoutSupported (const juce::AudioProcessor::BusesL
     return true;
 }
 
+/*
+ * grabs all the TransposeParams values and compiles them into a single array
+ * the first slider is always represented, so we always have at least on value to return
+ */
+juce::Array<float> DirectProcessor::getMidiNoteTranspositions()
+{
+    juce::Array<float> transps;
+
+    auto paramVals = state.params.transpose.getFloatParams();
+    for (auto const& tp : *paramVals)
+    {
+        if (tp->getCurrentValue() != 0.)
+            transps.addIfNotAlreadyThere(tp->getCurrentValue());
+    }
+
+    // make sure that the first slider is always represented
+    transps.addIfNotAlreadyThere(state.params.transpose.t0->getCurrentValue());
+
+    return transps;
+}
+
 void DirectProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
 {
 #if JUCE_MODULE_AVAILABLE_chowdsp_plugin_state
@@ -165,15 +191,22 @@ void DirectProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::Midi
 #endif
 
     buffer.clear(); // always top of the chain as an instrument source; doesn't take audio in
+    juce::Array<float> updatedTransps = getMidiNoteTranspositions(); // from the Direct transposition slider
 
     if (mainSynth->hasSamples() )
+    {
+        mainSynth->updateMidiNoteTranspositions(updatedTransps);
         mainSynth->renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
+    }
 
     if (hammerSynth->hasSamples())
         hammerSynth->renderNextBlock (buffer, midiMessages, 0, buffer.getNumSamples());
 
     if (releaseResonanceSynth->hasSamples())
+    {
+        releaseResonanceSynth->updateMidiNoteTranspositions(updatedTransps);
         releaseResonanceSynth->renderNextBlock (buffer, midiMessages, 0, buffer.getNumSamples());
+    }
 
     if (pedalSynth->hasSamples())
         pedalSynth->renderNextBlock (buffer, midiMessages, 0, buffer.getNumSamples());

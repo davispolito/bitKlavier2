@@ -740,7 +740,6 @@ public:
 
     void copyAmpEnv(BKADSR::Parameters parameters)
     {
-
         updateAmpEnv(parameters);
     }
 

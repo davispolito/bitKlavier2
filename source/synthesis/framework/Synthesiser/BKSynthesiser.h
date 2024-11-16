@@ -299,11 +299,11 @@ class BKSynthesiser
                  */
                 void isPedalSynth(bool mode) { pedalSynth = mode; }
 
-//                void setSynthGain(chowds) {
-//                    synthGain = g;
-//                }
+                void setSynthGain(float g) {
+                    synthGain.setParameterValue(g);
+                }
 
-                void updateMidiNoteOffsets(juce::Array<float> newOffsets) {
+                void updateMidiNoteTranspositions(juce::Array<float> newOffsets) {
                     midiNoteTranspositions = newOffsets;
                 }
 
@@ -391,7 +391,7 @@ private:
                 bool keyReleaseSynth = false;           // by default, synths play on keyPress (noteOn), not the opposite!
                 bool pedalSynth = false;                // for sustain pedal sounds; will ignore noteOn messages
                 bool sustainPedalAlreadyDown = false;   // to avoid re-triggering of pedalDown sounds
-                EnvParams& params;
+                EnvParams& adsrParams;
                 /**
                  * midiNoteTranspositions is an arrays of tuning offsets, in MidiNoteCents (.01 = 1 cent)
                  *      - these offsets are set by currentTransposition controls in Direct, Nostalgic, and Synchronic

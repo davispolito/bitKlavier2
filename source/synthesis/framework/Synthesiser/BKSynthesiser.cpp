@@ -4,7 +4,7 @@
 
 #include "BKSynthesiser.h"
 //==============================================================================
-BKSynthesiser::BKSynthesiser(EnvParams &params, chowdsp::GainDBParameter& gain) : params(params), synthGain(gain)
+BKSynthesiser::BKSynthesiser(EnvParams &params, chowdsp::GainDBParameter& gain) : adsrParams (params), synthGain(gain)
 {
     for (int i = 0; i < juce::numElementsInArray (lastPitchWheelValues); ++i)
         lastPitchWheelValues[i] = 0x2000;
@@ -326,13 +326,13 @@ void BKSynthesiser::startVoice (BKSamplerVoice* const voice,
         if (voice->currentlyPlayingSound != nullptr)
             voice->stopNote (0.0f, false);
 
-        voice->copyAmpEnv( {params.attackParam->getCurrentValue() * 0.001f,
-                            params.decayParam->getCurrentValue() * 0.001f,
-                            params.sustainParam->getCurrentValue(),
-                            params.releaseParam->getCurrentValue() * 0.001f,
-                            static_cast<float>(params.attackPowerParam->getCurrentValue() * -1.),
-                            static_cast<float>(params.decayPowerParam->getCurrentValue() * -1.),
-                            static_cast<float>(params.releasePowerParam->getCurrentValue() * -1.)});
+        voice->copyAmpEnv( { adsrParams.attackParam->getCurrentValue() * 0.001f,
+            adsrParams.decayParam->getCurrentValue() * 0.001f,
+            adsrParams.sustainParam->getCurrentValue(),
+            adsrParams.releaseParam->getCurrentValue() * 0.001f,
+                            static_cast<float>(adsrParams.attackPowerParam->getCurrentValue() * -1.),
+                            static_cast<float>(adsrParams.decayPowerParam->getCurrentValue() * -1.),
+                            static_cast<float>(adsrParams.releasePowerParam->getCurrentValue() * -1.)});
         voice->setGain(juce::Decibels::decibelsToGain (synthGain.getCurrentValue()));
         voice->currentlyPlayingNote = midiNoteNumber;
         voice->currentPlayingMidiChannel = midiChannel;
