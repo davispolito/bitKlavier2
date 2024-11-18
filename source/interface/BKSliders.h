@@ -30,7 +30,6 @@ public:
 
     ~BKStackedSlider()
     {
-        /*
         topSlider->setLookAndFeel(nullptr);
 
         for(int i=0; i<numSliders; i++)
@@ -41,7 +40,6 @@ public:
                 newSlider->setLookAndFeel(nullptr);
             }
         }
-         */
     };
 
     void sliderValueChanged (juce::Slider *slider) override;

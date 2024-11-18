@@ -462,8 +462,18 @@ void SynthSection::destroyOpenGlComponent(OpenGlComponent & open_gl_component, O
 //    new_logical_end->get()->destroy(open_gl);
 //
 //
-    open_gl_components_.erase(new_logical_end,open_gl_components_.end());
-
+ auto component = new_logical_end->get();
+    component->destroy(open_gl);
+    juce::MessageManager::callAsync (
+            [new_logical_end,this]()
+            {
+//                if (auto* comp = safeComp.getComponent())
+//                    comp->redoImage();
+//                //comp->repaint (cableBounds);
+                open_gl_components_.erase(new_logical_end,open_gl_components_.end());
+            });
+//    open_gl_components_.erase(new_logical_end,open_gl_components_.end());
+//
 
 }
 

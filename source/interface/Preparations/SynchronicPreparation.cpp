@@ -99,7 +99,7 @@ void SynchronicPreparation::SynchronicPopup::renderOpenGlComponents(OpenGlWrappe
 /*************************************************************************************************/
 /*                     NESTED CLASS: SynchronicPopup, inherits from PreparationPopup                 */
 /*************************************************************************************************/
-SynchronicPreparation::SynchronicPopup::SynchronicPopup(SynchronicProcessor& _proc, OpenGlWrapper &open_gl):  proc(_proc), PreparationPopup(_open_gl)
+SynchronicPreparation::SynchronicPopup::SynchronicPopup(SynchronicProcessor& _proc, OpenGlWrapper &open_gl):  proc(_proc), PreparationPopup(open_gl)
 {
     auto& _params = proc.getState().params;
 }

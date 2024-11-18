@@ -129,7 +129,7 @@ private:
         DirectProcessor& proc;
 
 
-        DirectParametersView view;
+        std::unique_ptr<DirectParametersView> view;
 //        // Parameter sliders for the Direct Popup
 //        std::unique_ptr<SynthSlider> gainSlider;
 //        std::unique_ptr<SynthSlider> hammerSlider;

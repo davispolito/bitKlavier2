@@ -95,7 +95,7 @@ void BlendronicPreparation::BlendronicPopup::renderOpenGlComponents(OpenGlWrappe
 /*************************************************************************************************/
 /*                     NESTED CLASS: BlendronicPopup, inherits from PreparationPopup                 */
 /*************************************************************************************************/
-BlendronicPreparation::BlendronicPopup::BlendronicPopup(BlendronicProcessor& _proc, OpenGlWrapper &open_gl):  proc(_proc), PreparationPopup(_open_gl)
+BlendronicPreparation::BlendronicPopup::BlendronicPopup(BlendronicProcessor& _proc, OpenGlWrapper &open_gl):  proc(_proc), PreparationPopup(open_gl)
 {
     auto& _params = proc.getState().params;
 }

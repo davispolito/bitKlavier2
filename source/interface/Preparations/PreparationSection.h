@@ -237,7 +237,7 @@ public:
     class PreparationPopup : public SynthSection
     {
     public:
-        PreparationPopup (OpenGlWrapper &open_gl) : SynthSection("prep_popup"), _open_gl(open_gl)
+        PreparationPopup (OpenGlWrapper &open_gl) : SynthSection("prep_popup", &open_gl)
         {
 
         }
@@ -245,7 +245,6 @@ public:
         void initOpenGlComponents(OpenGlWrapper &open_gl){}
 
         void resized(){}
-        OpenGlWrapper &_open_gl;
     private:
 
     };
@@ -354,9 +353,10 @@ public:
 //juce::AudioProcessor _proc;
     virtual juce::AudioProcessor* getProcessor(){}
     virtual std::unique_ptr<juce::AudioProcessor> getProcessorPtr(){}
+    std::shared_ptr<PreparationPopup> popup_view;
 //std::shared_ptr<juce::AudioProcessor> _proc;
 protected:
-    std::shared_ptr<PreparationPopup> popup_view;
+
 
     int portSize = 16;
 private:
