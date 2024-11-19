@@ -166,6 +166,9 @@ bool DirectProcessor::isBusesLayoutSupported (const juce::AudioProcessor::BusesL
 /*
  * grabs all the TransposeParams values and compiles them into a single array
  * the first slider is always represented, so we always have at least on value to return
+ *
+ * these operate at the synthesizer level, not the voice level, so need to be passed here
+ * and not just looked at by individual voices in the synth
  */
 juce::Array<float> DirectProcessor::getMidiNoteTranspositions()
 {

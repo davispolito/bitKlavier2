@@ -127,8 +127,7 @@ namespace bitklavier {
                 int editor_width = getLocalBounds().getWidth();
                 int knob_y2 = section_height - widget_margin;
                 juce::Rectangle<int> knobs_area = getDividedAreaBuffered(getLocalBounds(), 3, 0, widget_margin);
-                placeKnobsInArea(getLocalBounds(),
-                comps) ;
+                placeKnobsInArea(getLocalBounds(), comps) ;
 
 
             }
@@ -136,11 +135,12 @@ namespace bitklavier {
              {
                 return name;
              }
+
              std::vector<std::unique_ptr<juce::Component>> comps;
-            SynthSection &parent;
-            juce::String name;
-            juce::Grid grid;
-            juce::Label label;
+             SynthSection &parent;
+             juce::String name;
+             juce::Grid grid;
+             juce::Label label;
         };
         std::unique_ptr<SynthSection> createEditorSection(chowdsp::ParamHolder &params, chowdsp::ParameterListeners& listeners, SynthSection &parent) {
             if (auto *envParams = dynamic_cast<EnvParams*>(&params))
