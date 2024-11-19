@@ -104,6 +104,10 @@ public:
     juce::ComponentDragger myDragger;
     juce::ComponentBoundsConstrainer constrainer;
 
+    void setPrep(PreparationSection * prep_)
+    {
+        prep = prep_;
+    }
 private:
 
     std::shared_ptr<OpenGlBorder> _border;
@@ -113,6 +117,7 @@ private:
     std::shared_ptr<OpenGlQuad> border_;
     std::shared_ptr<OpenGlBackground> background_;
     std::shared_ptr<SynthSection> prep_view;
+    PreparationSection* prep;
     juce::Image background_image_;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PreparationPopup)
 };

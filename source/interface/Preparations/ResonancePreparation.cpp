@@ -95,7 +95,7 @@ void ResonancePreparation::ResonancePopup::renderOpenGlComponents(OpenGlWrapper&
 /*************************************************************************************************/
 /*                     NESTED CLASS: ResonancePopup, inherits from PreparationPopup                 */
 /*************************************************************************************************/
-ResonancePreparation::ResonancePopup::ResonancePopup(ResonanceProcessor& _proc, OpenGlWrapper &open_gl):  proc(_proc), PreparationPopup(_open_gl)
+ResonancePreparation::ResonancePopup::ResonancePopup(ResonanceProcessor& _proc, OpenGlWrapper &open_gl):  proc(_proc), PreparationPopup(open_gl)
 {
     auto& _params = proc.getState().params;
 }

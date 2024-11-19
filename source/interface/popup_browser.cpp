@@ -1423,14 +1423,20 @@ PreparationPopup::PreparationPopup() : SynthSection("prep_popup"),
     //_border->setBorderThickness(juce::BorderSize<int>(20));
     //borderDrawer = std::make_unique<OpenGlAutoImageComponent<juce::ResizableBorderComponent>>()
 }
-void PreparationPopup::setContent(std::shared_ptr<SynthSection> prep)
+void PreparationPopup::setContent(std::shared_ptr<SynthSection> prep_pop)
 {
+    if(prep != nullptr)
+    {
+        //auto* parent = findParentComponentOfClass<SynthGuiInterface>();
+        //prep->popup_view->destroyOpenGlComponents(*parent->getOpenGlWrapper());
+        //removeSubSection(prep->popup_view.get());
+    }
     if(prep_view.get() != nullptr )
     {
         removeSubSection(prep_view.get());
     }
     prep_view.reset();
-    prep_view = prep;
+    prep_view = prep_pop;
     addSubSection(prep_view.get());
     Skin default_skin;
 
@@ -1447,7 +1453,14 @@ void PreparationPopup::buttonClicked(juce::Button *clicked_button)
     {
         setVisible(false);
         removeSubSection(prep_view.get());
-        prep_view.reset();
+        prep->popup_view.reset();
+//        auto *interface = findParentComponentOfClass<SynthGuiInterface>();
+//        interface->getOpenGlWrapper()->context.
+//
+       prep_view->reset();
+
+
+
         // this might be a race condition on the opengl thread. Might want to pass to opengl thread for destruction?
         /// to do
         // reset Preparation Section shared_ptr as well

@@ -50,7 +50,7 @@ public:
         addOpenGlComponent(transpositionSlider->getImageComponent());
 
     }
-    //std::unique_ptr<EnvelopeSection> envelope;
+//    std::unique_ptr<EnvelopeSection> envelope;
     std::unique_ptr<OpenGlTranspositionSlider> transpositionSlider;
     void resized() override;
     chowdsp::ScopedCallbackList transposeCallbacks;

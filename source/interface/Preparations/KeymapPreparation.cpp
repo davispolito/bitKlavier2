@@ -58,7 +58,7 @@ std::unique_ptr<juce::AudioProcessor> KeymapPreparation::getProcessorPtr()
 
 
 KeymapPreparation::KeymapPopup::KeymapPopup(KeymapProcessor& _proc, OpenGlWrapper &open_gl):  proc(_proc), opengl(open_gl),
-PreparationPopup(_open_gl)
+PreparationPopup(open_gl)
  {
 
     auto &_params = proc.getState().params;

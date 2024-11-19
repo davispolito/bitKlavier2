@@ -51,25 +51,25 @@ namespace bitklavier {
         class SliderParameterComponent : public juce::Component {
         public:
             SliderParameterComponent(chowdsp::FloatParameter &param, chowdsp::ParameterListeners& listeners, SynthSection &parent)
-                    : slider(param.paramID), attachment(param, listeners, slider, nullptr) {
+                    : slider(std::make_shared<SynthSlider>(param.paramID)), attachment(param, listeners, *slider, nullptr) {
                 setLookAndFeel(DefaultLookAndFeel::instance());
-                slider.setScrollWheelEnabled(false);
-                addAndMakeVisible(slider);
-                parent.addSlider(&slider, false);
-                slider.parentHierarchyChanged();
-                slider.setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
-                _ASSERT(slider.getSectionParent() != nullptr);
+                slider->setScrollWheelEnabled(false);
+                addAndMakeVisible(*slider);
+                parent.addSlider(slider.get(), false);
+                slider->parentHierarchyChanged();
+                slider->setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
+                _ASSERT(slider->getSectionParent() != nullptr);
                 DBG("create slider for " + param.paramID + "with parent " + parent.getName());
             }
 
             void resized() override {
                 auto area = getBoundsInParent();
-                slider.setBounds(area);
-                slider.redoImage();
+                slider->setBounds(area);
+                slider->redoImage();
             }
 
         private:
-            SynthSlider slider;
+            std::shared_ptr<SynthSlider> slider;
             //juce::Slider slider { juce::Slider::LinearHorizontal, juce::Slider::TextEntryBoxPosition::TextBoxRight };
             chowdsp::SliderAttachment attachment;
 
@@ -89,14 +89,14 @@ namespace bitklavier {
 
         struct ParameterGroupItem : public SynthSection {
             ParameterGroupItem(chowdsp::ParamHolder &params, chowdsp::ParameterListeners& listeners, SynthSection &parent)
-                    : name(params.getName()), parent(parent), label(name,name), SynthSection(params.getName()) {
+                    : name(params.getName()), parent(parent),  SynthSection(params.getName()) {
                 setLookAndFeel(DefaultLookAndFeel::instance());
                 params.doForAllParameterContainers(
                         [this, &listeners](auto &paramVec) {
                             for (auto &param: paramVec)
                             {
                                 comps.push_back(createParameterComp(listeners, param,*this));
-                                //addAndMakeVisible(comps.back());
+//                                addAndMakeVisible(comps.back());
                             }
 
                         },
@@ -137,14 +137,21 @@ namespace bitklavier {
              }
 
              std::vector<std::unique_ptr<juce::Component>> comps;
+//<<<<<<< HEAD
              SynthSection &parent;
              juce::String name;
              juce::Grid grid;
              juce::Label label;
+//=======
+            //SynthSection &parent;
+            //juce::String name;
+
+//>>>>>>> main
         };
         std::unique_ptr<SynthSection> createEditorSection(chowdsp::ParamHolder &params, chowdsp::ParameterListeners& listeners, SynthSection &parent) {
             if (auto *envParams = dynamic_cast<EnvParams*>(&params))
 //            if(params.getName() == "ENV")
+
                 return std::make_unique<EnvelopeSection>("ENV", "ENV",*envParams,listeners, parent);//std::make_unique<BooleanParameterComponent>(*boolParam, listeners);
             //
             //            if (auto *choiceParam = dynamic_cast<chowdsp::ChoiceParameter *> (&parameter))
@@ -158,21 +165,21 @@ namespace bitklavier {
     } // namespace parameters_view_detail
 
 //==============================================================================
-    struct ParametersView::Pimpl {
-        Pimpl(chowdsp::ParamHolder &params, chowdsp::ParameterListeners& listeners,SynthSection& parent)
-                :   groupItem(params, listeners, parent){
-            //const auto numIndents = getNumIndents(groupItem);
-            //const auto width = 400 + view.getIndentSize() * numIndents;
-
-            //view.setSize(width, 600);
-            //view.setDefaultOpenness(true);
-            //view.setRootItemVisible(false);
-
-        }
-
-        parameters_view_detail::ParameterGroupItem groupItem;
-        juce::Grid parameterGrid;
-    };
+//    struct ParametersView::Pimpl {
+//        Pimpl(chowdsp::ParamHolder &params, chowdsp::ParameterListeners& listeners,SynthSection& parent)
+//                :   groupItem(params, listeners, parent){
+//            //const auto numIndents = getNumIndents(groupItem);
+//            //const auto width = 400 + view.getIndentSize() * numIndents;
+//
+//            //view.setSize(width, 600);
+//            //view.setDefaultOpenness(true);
+//            //view.setRootItemVisible(false);
+//
+//        }
+//
+//        parameters_view_detail::ParameterGroupItem groupItem;
+//        juce::Grid parameterGrid;
+//    };
 
 //==============================================================================
     ParametersView::ParametersView(chowdsp::PluginState &pluginState, chowdsp::ParamHolder &params, OpenGlWrapper *open_gl)
@@ -181,7 +188,7 @@ namespace bitklavier {
     }
 
     ParametersView::ParametersView(chowdsp::ParameterListeners& paramListeners, chowdsp::ParamHolder& params, OpenGlWrapper *open_gl)
-            :  SynthSection(params.getName(), open_gl), pimpl(std::make_unique<Pimpl>(params, paramListeners, *this)){
+            :  SynthSection(params.getName(), open_gl) /*pimpl(std::make_unique<Pimpl>(params, paramListeners, *this))*/{
 //        auto *viewport = pimpl->view.getViewport();
         params.doForAllParameterContainers(
                 [this, &paramListeners](auto &paramVec) {
@@ -196,7 +203,11 @@ namespace bitklavier {
                     DBG("add group item");
 
                     DBG("paramholder name" + paramHolder.getName());
-                   addSubSection(parameters_view_detail::createEditorSection(paramHolder,paramListeners,*this).release());
+                    auto section  = parameters_view_detail::createEditorSection(paramHolder,paramListeners,*this);
+                    addSubSection(section.get());
+                    paramHolderComps.push_back(std::move(section));
+
+                  // addSubSection();
                 });
         setLookAndFeel(DefaultLookAndFeel::instance());
         setOpaque(true);
@@ -206,7 +217,9 @@ namespace bitklavier {
 //                juce::jlimit(125, 700, viewport->getViewedComponent()->getHeight()));
     }
 
-    ParametersView::~ParametersView() = default;
+    ParametersView::~ParametersView() {
+    comps.clear();
+}
 
     void ParametersView::paint(juce::Graphics &g) {
         g.fillAll(getLookAndFeel().findColour(juce::ResizableWindow::backgroundColourId));

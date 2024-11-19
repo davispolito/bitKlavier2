@@ -39,8 +39,8 @@ std::shared_ptr<SynthSection> DirectPreparation::getPrepPopup()
 {
     DBG("prep popup");
     if(popup_view) {
-//        popup_view->destroyOpenGlComponents(_open_gl);
-//        popup_view->reset();
+        popup_view->destroyOpenGlComponents(_open_gl);
+        popup_view->reset();
         return popup_view;
     }
     popup_view = std::make_shared<DirectPopup>(proc, _open_gl);
@@ -94,14 +94,14 @@ void DirectPreparation::paintBackground(juce::Graphics &g)  {
 /*************************************************************************************************/
 /*                     NESTED CLASS: DirectPopup, inherits from PreparationPopup                 */
 /*************************************************************************************************/
-DirectPreparation::DirectPopup::DirectPopup(DirectProcessor& _proc, OpenGlWrapper &open_gl):  proc(_proc), PreparationPopup(_open_gl), view(proc.getState(), proc.getState().params, &open_gl)
+DirectPreparation::DirectPopup::DirectPopup(DirectProcessor& _proc, OpenGlWrapper &open_gl):  proc(_proc), PreparationPopup(open_gl), view(std::make_unique<DirectParametersView>(proc.getState(), proc.getState().params, &open_gl))
 {
 
     auto& _params = proc.getState().params;
     setSkinOverride (Skin::kDirect);
     Skin default_skin;
-    view.setSkinValues(default_skin, false);
-    addSubSection(&view);
+    view->setSkinValues(default_skin, false);
+    addSubSection(view.get());
 //    view.init_();
 
 
@@ -114,11 +114,17 @@ DirectPreparation::DirectPopup::~DirectPopup()
 {
     //TODO
     //constructor sends destroy message to opengl thread
+
+    if ((juce::OpenGLContext::getCurrentContext() == nullptr)) {
+        open_gl->context.executeOnGLThread([this](juce::OpenGLContext &openGLContext) {
+            destroyOpenGlComponents(*this->open_gl);
+        }, true);
+    }
 }
 
 void DirectPreparation::DirectPopup::initOpenGlComponents(OpenGlWrapper &open_gl) {
 
-    view.initOpenGlComponents(open_gl);
+    view->initOpenGlComponents(open_gl);
 }
 
 // DISPLAY SLIDERS ON-SCREEN
@@ -131,7 +137,7 @@ void DirectPreparation::DirectPopup::resized() {
     int widget_margin = findValue(Skin::kWidgetMargin);
     int section_height = getHeight();
     int section_width = getWidth();
-    view.setBounds(getLocalBounds());
+    view->setBounds(getLocalBounds());
 
 //    // Relatively defines slider size
     int sliderWidth = (section_width - (4 * widget_margin))  / 3;

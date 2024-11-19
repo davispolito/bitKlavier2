@@ -89,7 +89,7 @@ HeaderSection::HeaderSection() : SynthSection("header_section"), tab_offset_(0),
     sampleSelectText = std::make_shared<PlainTextComponent>("Sample Select Text", "---");
     addOpenGlComponent(sampleSelectText);
     //parent->sampleLoadManager->loadSamples(selection, true);
-    sampleSelectText->setText(string_constants::cBKSampleLoadTypes[currentSampleType]);
+   // sampleSelectText->setText(string_constants::cBKSampleLoadTypes[currentSampleType]);
 
     saveButton = std::make_unique<OpenGlTextButton>("header_save");
     addOpenGlComponent(saveButton->getGlComponent());

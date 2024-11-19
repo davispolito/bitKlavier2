@@ -32,8 +32,6 @@ namespace bitklavier {
             paintChildrenBackgrounds(g);
         }
     private:
-        struct Pimpl;
-        std::unique_ptr<Pimpl> pimpl;
     protected:
         //chowdsp::PluginState& pluginState;
         std::vector<std::unique_ptr<juce::Component>> comps;

@@ -92,7 +92,7 @@ void NostalgicPreparation::NostalgicPopup::renderOpenGlComponents(OpenGlWrapper&
 /*************************************************************************************************/
 /*                     NESTED CLASS: NostalgicPopup, inherits from PreparationPopup                 */
 /*************************************************************************************************/
-NostalgicPreparation::NostalgicPopup::NostalgicPopup(NostalgicProcessor& _proc, OpenGlWrapper &open_gl):  proc(_proc), PreparationPopup(_open_gl)
+NostalgicPreparation::NostalgicPopup::NostalgicPopup(NostalgicProcessor& _proc, OpenGlWrapper &open_gl):  proc(_proc), PreparationPopup(open_gl)
 {
     auto& _params = proc.getState().params;
 }

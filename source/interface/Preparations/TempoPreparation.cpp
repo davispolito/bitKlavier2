@@ -103,7 +103,7 @@ void TempoPreparation::TempoPopup::renderOpenGlComponents(OpenGlWrapper& open_gl
 /*************************************************************************************************/
 /*                     NESTED CLASS: TempoPopup, inherits from PreparationPopup                 */
 /*************************************************************************************************/
-TempoPreparation::TempoPopup::TempoPopup(TempoProcessor& _proc, OpenGlWrapper &open_gl):  proc(_proc), PreparationPopup(_open_gl)
+TempoPreparation::TempoPopup::TempoPopup(TempoProcessor& _proc, OpenGlWrapper &open_gl):  proc(_proc), PreparationPopup(open_gl)
 {
     auto& _params = proc.getState().params;
 }

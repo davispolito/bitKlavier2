@@ -349,7 +349,9 @@ void FullInterface::popupDisplay(juce::Component* source, const std::string& tex
 void FullInterface::prepDisplay(PreparationSection* prep)
 {
     DBG("*********SETTING CONTENT***************");
+
     prep_popup->setContent(prep->getPrepPopup());
+    prep_popup->setPrep(prep);
     DBG("*********CONTEN SET***************");
     prep_popup->setVisible(true);
 }
@@ -431,9 +433,10 @@ void FullInterface::openGLContextClosing() {
    background_.destroy(open_gl_);
     removeSubSection(main_.get());
     removeSubSection(header_.get());
+    removeSubSection(prep_popup.get());
    main_ = nullptr;
    header_ = nullptr;
-
+    prep_popup = nullptr;
    destroyOpenGlComponents(open_gl_);
 
    open_gl_.shaders = nullptr;

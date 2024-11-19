@@ -100,7 +100,7 @@ void TuningPreparation::TuningPopup::renderOpenGlComponents(OpenGlWrapper& open_
 /*************************************************************************************************/
 /*                     NESTED CLASS: TuningPopup, inherits from PreparationPopup                 */
 /*************************************************************************************************/
-TuningPreparation::TuningPopup::TuningPopup(TuningProcessor& _proc, OpenGlWrapper &open_gl):  proc(_proc), PreparationPopup(_open_gl)
+TuningPreparation::TuningPopup::TuningPopup(TuningProcessor& _proc, OpenGlWrapper &open_gl):  proc(_proc), PreparationPopup(open_gl)
 {
     auto& _params = proc.getState().params;
 }
