@@ -137,16 +137,11 @@ namespace bitklavier {
              }
 
              std::vector<std::unique_ptr<juce::Component>> comps;
-//<<<<<<< HEAD
              SynthSection &parent;
              juce::String name;
              juce::Grid grid;
              juce::Label label;
-//=======
-            //SynthSection &parent;
-            //juce::String name;
 
-//>>>>>>> main
         };
         std::unique_ptr<SynthSection> createEditorSection(chowdsp::ParamHolder &params, chowdsp::ParameterListeners& listeners, SynthSection &parent) {
             if (auto *envParams = dynamic_cast<EnvParams*>(&params))
