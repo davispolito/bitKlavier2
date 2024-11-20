@@ -669,6 +669,7 @@ void SynthSection::paintJointControl(juce::Graphics& g, int x, int y, int width,
 
 void SynthSection::placeKnobsInArea(juce::Rectangle<int> area, std::vector<std::unique_ptr<juce::Component>>& knobs) {
   int widget_margin = findValue(Skin::kWidgetMargin);
+  //kKnobSectionHeight
   float component_width = (area.getWidth() - (knobs.size() + 1) * widget_margin) / (1.0f * knobs.size());
 
   int y = area.getY();

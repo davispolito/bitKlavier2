@@ -178,11 +178,11 @@ EnvelopeSection::~EnvelopeSection() { }
 void EnvelopeSection::paintBackground(juce::Graphics& g) {
   setLabelFont(g);
   drawLabelForComponent(g, TRANS("DELAY"), delay_.get());
-  drawLabelForComponent(g, TRANS("ATTACK"), attack_.get());
+  drawLabelForComponent(g, TRANS("Attack"), attack_.get());
   drawLabelForComponent(g, TRANS("HOLD"), hold_.get());
-  drawLabelForComponent(g, TRANS("DECAY"), decay_.get());
-  drawLabelForComponent(g, TRANS("SUSTAIN"), sustain_.get());
-  drawLabelForComponent(g, TRANS("RELEASE"), release_.get());
+  drawLabelForComponent(g, TRANS("Decay"), decay_.get());
+  drawLabelForComponent(g, TRANS("Sustain"), sustain_.get());
+  drawLabelForComponent(g, TRANS("Release"), release_.get());
 
   paintKnobShadows(g);
   paintChildrenBackgrounds(g);

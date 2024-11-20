@@ -32,7 +32,7 @@ struct DirectParams : chowdsp::ParamHolder
 
     // juce::Gain param
     chowdsp::GainDBParameter::Ptr gainParam {
-        juce::ParameterID { "gain", 100 },
+        juce::ParameterID { "Gain", 100 },
         "Gain",
         juce::NormalisableRange { rangeStart, rangeEnd, 0.0f, skewFactor, false },
         0.0f
@@ -40,7 +40,7 @@ struct DirectParams : chowdsp::ParamHolder
 
     // Hammer param
     chowdsp::GainDBParameter::Ptr hammerParam {
-        juce::ParameterID { "hammer", 100 },
+        juce::ParameterID { "Hammers", 100 },
         "Hammer",
         juce::NormalisableRange { rangeStart, rangeEnd, 0.0f, skewFactor, false },
         -6.0f
@@ -48,7 +48,7 @@ struct DirectParams : chowdsp::ParamHolder
 
     // Resonance param
     chowdsp::GainDBParameter::Ptr releaseResonanceParam {
-        juce::ParameterID { "releaseResonance", 100 },
+        juce::ParameterID { "Ring", 100 },
         "Release Resonance",
         juce::NormalisableRange { rangeStart, rangeEnd + 24, 0.0f, skewFactor, false },
         6.0f
@@ -56,7 +56,7 @@ struct DirectParams : chowdsp::ParamHolder
 
     // Pedal param
     chowdsp::GainDBParameter::Ptr pedalParam {
-        juce::ParameterID { "pedal", 100 },
+        juce::ParameterID { "Pedal", 100 },
         "Pedal",
         juce::NormalisableRange { rangeStart, rangeEnd, 0.0f, skewFactor, false },
         -6.0f
