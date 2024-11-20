@@ -27,10 +27,10 @@ struct DirectParams : chowdsp::ParamHolder
     {
         //add (gainParam, hammerParam, releaseResonanceParam, pedalParam, velocityParam, attackParam, decayParam, sustainParam, releaseParam, transpositionsParam);
         //add (gainParam, hammerParam, releaseResonanceParam, pedalParam, velocityParam, attackParam, decayParam, sustainParam, releaseParam);
-        add (gainParam, hammerParam, releaseResonanceParam, pedalParam, env, transpose);
+        add (gainParam, hammerParam, releaseResonanceParam, pedalParam, blendronicSend, env, transpose);
     }
 
-    // juce::Gain param
+    // Gain param
     chowdsp::GainDBParameter::Ptr gainParam {
         juce::ParameterID { "Gain", 100 },
         "Gain",
@@ -62,6 +62,14 @@ struct DirectParams : chowdsp::ParamHolder
         -6.0f
     };
 
+    // Gain param
+    chowdsp::GainDBParameter::Ptr blendronicSend {
+        juce::ParameterID { "Blendronic", 100 },
+        "Blendronic Send",
+        juce::NormalisableRange { rangeStart, rangeEnd, 0.0f, skewFactor, false },
+        0.0f
+    };
+
     // Velocity param
     chowdsp::FloatParameter::Ptr velocityParam {
         juce::ParameterID { "Velocity", 100 },
@@ -74,6 +82,8 @@ struct DirectParams : chowdsp::ParamHolder
 
     // ADSR params
     EnvParams env;
+
+    // Transposition slider (holds up to 12 transposition values)
     TransposeParams transpose;
 
 
