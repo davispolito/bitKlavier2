@@ -21,9 +21,8 @@ void DirectParametersView::resized()
     //envelope_->setBounds(widget_margin, widget_margin, getWidth() - 2 * widget_margin, envelope_height);
 
     juce::Rectangle<int> knobs_area(title_width, knob_y, area_width, knob_section_height);
+    knobs_area.setSize(knobs_area.getWidth() * getSizeRatio(), knobs_area.getHeight() * getSizeRatio());
     placeKnobsInArea(knobs_area, comps);
-
-
 
     //placeKnobsInArea(getLocalBounds(), comps);
     for(auto section: sub_sections_)
@@ -32,10 +31,8 @@ void DirectParametersView::resized()
             section->setBounds(title_width, knob_section_height, area_width, knob_section_height * 4);
     }
 
-    //transpositionSlider->setBounds(0, 200, 400, 200);
     transpositionSlider->setBounds(title_width, 0, area_width, knob_section_height);
-    //envelope->setBounds(0,400, 400, 200);
-
+    transpose_uses_tuning_->setBounds(area_width - title_width, 0, 20, knob_section_height);
 
     SynthSection::resized();
 }

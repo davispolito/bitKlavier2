@@ -27,7 +27,7 @@ struct DirectParams : chowdsp::ParamHolder
     {
         //add (gainParam, hammerParam, releaseResonanceParam, pedalParam, velocityParam, attackParam, decayParam, sustainParam, releaseParam, transpositionsParam);
         //add (gainParam, hammerParam, releaseResonanceParam, pedalParam, velocityParam, attackParam, decayParam, sustainParam, releaseParam);
-        add (gainParam, hammerParam, releaseResonanceParam, pedalParam, blendronicSend, env, transpose);
+        add (gainParam, hammerParam, releaseResonanceParam, pedalParam, blendronicSend, transpositionUsesTuning, env, transpose);
     }
 
     // Gain param
@@ -78,6 +78,13 @@ struct DirectParams : chowdsp::ParamHolder
         127.0f,
         &chowdsp::ParamUtils::floatValToString,
         &chowdsp::ParamUtils::stringToFloatVal
+    };
+
+    // Transposition Uses Tuning param
+    chowdsp::BoolParameter::Ptr transpositionUsesTuning {
+        juce::ParameterID { "UseTuning", 100 },
+        "TranspositionUsesTuning",
+        false
     };
 
     // ADSR params

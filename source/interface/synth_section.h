@@ -379,13 +379,11 @@ class SynthSection : public juce::Component, public juce::Slider::Listener,
 
     virtual int getPixelMultiple() const;
 
-
     std::vector<SynthSection*> sub_sections_;
     std::vector<std::shared_ptr<OpenGlComponent>> open_gl_components_;
     OpenGlBackground* background_;
     std::map<std::string, SynthSlider*> slider_lookup_;
     std::map<std::string, juce::Button*> button_lookup_;
-
 
     std::map<std::string, SynthSlider*> all_sliders_;
     std::vector<juce::Component*> all_sliders_v;

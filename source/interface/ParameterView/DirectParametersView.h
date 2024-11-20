@@ -8,6 +8,7 @@
 #include "envelope_section.h"
 #include "TransposeParams.h"
 #include "OpenGlTranspositionSlider.h"
+
 class DirectParametersView : public bitklavier::ParametersView
 {
 public:
@@ -43,17 +44,23 @@ public:
                         });
                     }
                     DBG("paramholder name" + paramHolder.getName());
+                    transpose_uses_tuning_ = std::make_unique<SynthButton>("transpositionUsesTuning"); // how to attach these to chowdsps_params? and listeners
                     //addSubSection(parameters_view_detail::createEditorSection(paramHolder,paramListeners,*this).release());
                 });
+
         addAndMakeVisible(*transpositionSlider);
-        //transpositionSlider->setValue(1., juce::dontSendNotification);
         addOpenGlComponent(transpositionSlider->getImageComponent());
+
+        addAndMakeVisible(*transpose_uses_tuning_);
+        addOpenGlComponent(transpose_uses_tuning_->getGlComponent());
 
     }
 //    std::unique_ptr<EnvelopeSection> envelope;
     std::unique_ptr<OpenGlTranspositionSlider> transpositionSlider;
     void resized() override;
     chowdsp::ScopedCallbackList transposeCallbacks;
+
+    std::unique_ptr<SynthButton> transpose_uses_tuning_;
 
 };
 
