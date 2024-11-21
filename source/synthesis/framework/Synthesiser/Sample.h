@@ -629,6 +629,7 @@ public:
     virtual void startNote (int midiNoteNumber,
                             float velocity,
                             float transposition,
+                            bool tune_transpositions,
                             BKSamplerSound<juce::AudioFormatReader> * _sound,
                             int currentPitchWheelPosition)
     {
@@ -636,6 +637,7 @@ public:
         currentlyPlayingSound = _sound;
         currentlyPlayingNote = midiNoteNumber;
         currentTransposition = transposition;
+        tuneTranspositions = tune_transpositions;
 
         // this will adjust the loudness of this layer according to velocity, based on the
         //      dB difference between this layer and the layer below

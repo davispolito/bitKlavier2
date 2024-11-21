@@ -187,6 +187,7 @@ juce::Array<float> DirectProcessor::getMidiNoteTranspositions()
     return transps;
 }
 
+
 void DirectProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
 {
 #if JUCE_MODULE_AVAILABLE_chowdsp_plugin_state
@@ -196,9 +197,11 @@ void DirectProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::Midi
     buffer.clear(); // always top of the chain as an instrument source; doesn't take audio in
     juce::Array<float> updatedTransps = getMidiNoteTranspositions(); // from the Direct transposition slider
 
+    bool useTuningForTranspositions = state.params.transpositionUsesTuning->get();
+
     if (mainSynth->hasSamples() )
     {
-        mainSynth->updateMidiNoteTranspositions(updatedTransps);
+        mainSynth->updateMidiNoteTranspositions(updatedTransps, useTuningForTranspositions);
         mainSynth->renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
     }
 
@@ -207,7 +210,7 @@ void DirectProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::Midi
 
     if (releaseResonanceSynth->hasSamples())
     {
-        releaseResonanceSynth->updateMidiNoteTranspositions(updatedTransps);
+        releaseResonanceSynth->updateMidiNoteTranspositions(updatedTransps, useTuningForTranspositions);
         releaseResonanceSynth->renderNextBlock (buffer, midiMessages, 0, buffer.getNumSamples());
     }
 

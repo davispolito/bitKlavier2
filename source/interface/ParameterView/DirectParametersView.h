@@ -44,9 +44,10 @@ public:
                         });
                     }
                     DBG("paramholder name" + paramHolder.getName());
-                    transpose_uses_tuning_ = std::make_unique<SynthButton>("transpositionUsesTuning"); // how to attach these to chowdsps_params? and listeners
                     //addSubSection(parameters_view_detail::createEditorSection(paramHolder,paramListeners,*this).release());
                 });
+
+        transpose_uses_tuning_ = std::make_unique<SynthButton>("TranspositionUsesTuning"); // how to attach these to chowdsps_params? and listeners
 
         addAndMakeVisible(*transpositionSlider);
         addOpenGlComponent(transpositionSlider->getImageComponent());
