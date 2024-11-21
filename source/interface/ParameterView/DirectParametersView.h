@@ -47,13 +47,12 @@ public:
                     //addSubSection(parameters_view_detail::createEditorSection(paramHolder,paramListeners,*this).release());
                 });
 
-        transpose_uses_tuning_ = std::make_unique<SynthButton>("TranspositionUsesTuning"); // how to attach these to chowdsps_params? and listeners
 
         addAndMakeVisible(*transpositionSlider);
         addOpenGlComponent(transpositionSlider->getImageComponent());
 
-        addAndMakeVisible(*transpose_uses_tuning_);
-        addOpenGlComponent(transpose_uses_tuning_->getGlComponent());
+//        addAndMakeVisible(*transpose_uses_tuning_);
+//        addOpenGlComponent(transpose_uses_tuning_->getGlComponent());
 
     }
 //    std::unique_ptr<EnvelopeSection> envelope;
@@ -61,7 +60,6 @@ public:
     void resized() override;
     chowdsp::ScopedCallbackList transposeCallbacks;
 
-    std::unique_ptr<SynthButton> transpose_uses_tuning_;
 
 };
 

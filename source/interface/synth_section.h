@@ -345,14 +345,15 @@ class SynthSection : public juce::Component, public juce::Slider::Listener,
     void addSlider(SynthSlider* slider, bool show = true, bool listen = true);
     OpenGlWrapper *open_gl;
     float getDisplayScale() const;
+    void addOpenGlComponent(std::shared_ptr<OpenGlComponent> open_gl_component, bool to_beginning = false, bool makeVisible = true);
+    void addButton(OpenGlToggleButton* button, bool show = true);
   protected:
     void setSliderHasHzAlternateDisplay(SynthSlider* slider);
     void setSidewaysHeading(bool sideways) { sideways_heading_ = sideways; }
     void addToggleButton(juce::ToggleButton* button, bool show);
-    void addButton(OpenGlToggleButton* button, bool show = true);
+
     void addButton(OpenGlShapeButton* button, bool show = true);
 
-    void addOpenGlComponent(std::shared_ptr<OpenGlComponent> open_gl_component, bool to_beginning = false, bool makeVisible = true);
 
     void addBackgroundComponent(OpenGlBackground* open_gl_component, bool to_beginning = false);
     void setActivator(SynthButton* activator);

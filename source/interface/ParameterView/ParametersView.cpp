@@ -10,19 +10,22 @@ namespace bitklavier {
         //==============================================================================
         class BooleanParameterComponent : public juce::Component {
         public:
-            BooleanParameterComponent(chowdsp::BoolParameter &param, chowdsp::ParameterListeners& listeners)
-                    : attachment(param, listeners, button, nullptr) {
-                addAndMakeVisible(button);
+            BooleanParameterComponent(chowdsp::BoolParameter &param, chowdsp::ParameterListeners& listeners, SynthSection &parent)
+                    : button(std::make_shared<OpenGlToggleButton>(param.paramID)), attachment(param, listeners, *button, nullptr) {
+
+                setLookAndFeel(DefaultLookAndFeel::instance());
+                parent.addButton(button.get());
+                //addAndMakeVisible(*button);
             }
 
             void resized() override {
-                auto area = getLocalBounds();
-                area.removeFromLeft(8);
-                button.setBounds(area.reduced(0, 10));
+                auto area = getBoundsInParent();
+                //area.removeFromLeft(8);
+                button->setBounds(area);
             }
 
         private:
-            juce::ToggleButton button;
+            std::shared_ptr<OpenGlToggleButton> button;
             chowdsp::ButtonAttachment attachment;
 
             JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (BooleanParameterComponent)
@@ -77,7 +80,7 @@ namespace bitklavier {
         };
         std::unique_ptr<juce::Component> createParameterComp(chowdsp::ParameterListeners& listeners, juce::RangedAudioParameter &parameter, SynthSection& parent) {
             if (auto *boolParam = dynamic_cast<chowdsp::BoolParameter *> (&parameter))
-                return std::make_unique<BooleanParameterComponent>(*boolParam, listeners);
+                return std::make_unique<BooleanParameterComponent>(*boolParam, listeners,parent);
 
             if (auto *choiceParam = dynamic_cast<chowdsp::ChoiceParameter *> (&parameter))
                 return std::make_unique<ChoiceParameterComponent>(*choiceParam, listeners);
