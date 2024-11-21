@@ -303,8 +303,10 @@ class BKSynthesiser
                     synthGain.setParameterValue(g);
                 }
 
-                void updateMidiNoteTranspositions(juce::Array<float> newOffsets) {
+                // add bool for "use tuning"
+                void updateMidiNoteTranspositions(juce::Array<float> newOffsets, bool tune_transpositions) {
                     midiNoteTranspositions = newOffsets;
+                    tuneTranspositions = tune_transpositions;
                 }
 
 //<<<<<<< HEAD
@@ -411,6 +413,7 @@ private:
                  * the "un-transposed" midiNoteNumber is the midi note played by the performer, and used for voice tracking
                  */
                 juce::Array<float> midiNoteTranspositions = { 0.}; // needs to be set via UI, for additional transpositions
+                bool tuneTranspositions = false;
                 juce::Array<juce::Array<BKSamplerVoice*>> playingVoicesByNote; // Array of current voices playing for a particular midiNoteNumber
                 template <typename floatType>
                 void processNextBlock (juce::AudioBuffer<floatType>&, const juce::MidiBuffer&, int startSample, int numSamples);

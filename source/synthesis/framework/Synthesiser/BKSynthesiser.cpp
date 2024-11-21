@@ -313,6 +313,11 @@ void BKSynthesiser::startVoice (BKSamplerVoice* const voice,
                                 const float transposition)
 {
 
+    if(tuneTranspositions)
+        DBG("tuneTranspositions = true");
+    else
+        DBG("tuneTranspositions = false");
+
     /**
      * save this voice, since it might be one of several associated with this midiNoteNumber
      * and we will need to be able to stop it on noteOff(midiNoteNumber)
@@ -342,7 +347,7 @@ void BKSynthesiser::startVoice (BKSamplerVoice* const voice,
         voice->setSostenutoPedalDown (false);
         voice->setSustainPedalDown (sustainPedalsDown[midiChannel]);
 
-        voice->startNote (midiNoteNumber, velocity, transposition, sound,
+        voice->startNote (midiNoteNumber, velocity, transposition, tuneTranspositions, sound, // tuneTranspositions here
                           lastPitchWheelValues [midiChannel - 1]);
     }
 }
