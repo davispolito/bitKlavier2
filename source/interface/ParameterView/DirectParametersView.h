@@ -20,12 +20,7 @@ public:
         auto& listeners = pluginState.getParameterListeners();
         params.doForAllParameterContainers(
                 [this,&listeners](auto &paramVec) {
-//                    DBG("----paramvecdreictparamview----");
-//                    for (auto &param: paramVec)
-//                    {
-////                        comps.push_back(parameters_view_detail::createParameterComp(paramListeners, param,*this));
-////                        DBG("add" + param->paramID);
-//                    }
+
                 },
                 [this, &listeners, &pluginState](auto &paramHolder) {
                     DBG("xdirectparamview");
@@ -50,12 +45,17 @@ public:
 
         addAndMakeVisible(*transpositionSlider);
         addOpenGlComponent(transpositionSlider->getImageComponent());
+        // Using std::find_if
+        auto it = std::find_if(comps.begin(), comps.end(),
+                               [](const std::unique_ptr<juce::Component>& p) { return p->getName() == "UseTuning"; });
 
-//        addAndMakeVisible(*transpose_uses_tuning_);
-//        addOpenGlComponent(transpose_uses_tuning_->getGlComponent());
+        _ASSERT(it != comps.end());
+        transpose_uses_tuning = std::move(*it);
+        comps.erase(it);
 
     }
 //    std::unique_ptr<EnvelopeSection> envelope;
+    std::unique_ptr<juce::Component> transpose_uses_tuning;
     std::unique_ptr<OpenGlTranspositionSlider> transpositionSlider;
     void resized() override;
     chowdsp::ScopedCallbackList transposeCallbacks;
