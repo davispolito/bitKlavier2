@@ -12,10 +12,9 @@ namespace bitklavier {
         public:
             BooleanParameterComponent(chowdsp::BoolParameter &param, chowdsp::ParameterListeners& listeners, SynthSection &parent)
                     : button(std::make_shared<OpenGlToggleButton>(param.paramID)), attachment(param, listeners, *button, nullptr) {
-
+                setName(param.paramID);
                 setLookAndFeel(DefaultLookAndFeel::instance());
                 parent.addButton(button.get());
-                //addAndMakeVisible(*button);
             }
 
             void resized() override {
@@ -35,6 +34,7 @@ namespace bitklavier {
         public:
             ChoiceParameterComponent(chowdsp::ChoiceParameter &param, chowdsp::ParameterListeners& listeners)
                     : attachment(param, listeners, box, nullptr) {
+                setName(param.paramID);
                 addAndMakeVisible(box);
             }
 
@@ -55,6 +55,7 @@ namespace bitklavier {
         public:
             SliderParameterComponent(chowdsp::FloatParameter &param, chowdsp::ParameterListeners& listeners, SynthSection &parent)
                     : slider(std::make_shared<SynthSlider>(param.paramID)), attachment(param, listeners, *slider, nullptr) {
+                setName(param.paramID);
                 setLookAndFeel(DefaultLookAndFeel::instance());
                 slider->setScrollWheelEnabled(false);
                 addAndMakeVisible(*slider);
