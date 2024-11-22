@@ -28,14 +28,10 @@ void DirectParametersView::resized()
         if(section->getName() == "ENV")
             section->setBounds(title_width, knob_section_height, area_width, knob_section_height * 4);
     }
-    for (auto& knob : comps)
-    {
-        if(knob->getName() == "UseTuning")
-        {
-            knob->setBounds(area_width - title_width, 0, 20, knob_section_height);
-        }
-    }
+
+     transpose_uses_tuning->setBounds(area_width - title_width, 0, 100, knob_section_height);
     transpositionSlider->setBounds(title_width, 0, area_width, knob_section_height);
+
 
     SynthSection::resized();
 }
