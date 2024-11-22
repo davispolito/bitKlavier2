@@ -680,7 +680,7 @@ void SynthSection::placeKnobsInArea(juce::Rectangle<int> area, std::vector<std::
 
     int left = std::round(x);
     int right = std::round(x + component_width);
-    DBG("knob " + juce::String(left));
+    //DBG("knob " + juce::String(left));
     if (knob)
       knob->setBounds(left, y, right - left, height);
     x += component_width + widget_margin;

@@ -32,6 +32,7 @@ void DirectParametersView::resized()
     }
     for (auto& knob : comps)
     {
+        DBG("knob name = " + knob->getDescription());
         if(knob->getName() == "UseTuning")
         {
             knob->setBounds(area_width - title_width, 0, 20, knob_section_height);
