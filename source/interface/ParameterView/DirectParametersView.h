@@ -26,7 +26,7 @@ public:
                     DBG("xdirectparamview");
                     if(auto *transposeParam = dynamic_cast<TransposeParams*>(&paramHolder)) {
                         transpositionSlider = std::make_unique<OpenGlTranspositionSlider>(transposeParam, listeners);
-                       transposeParam->doForAllParameters([this, &pluginState] (auto& param, size_t indexInParamHolder)
+                        transposeParam->doForAllParameters([this, &pluginState] (auto& param, size_t indexInParamHolder)
                         {
                             transposeCallbacks += { pluginState.addParameterListener(param,
                                    chowdsp::ParameterListenerThread::MessageThread,
@@ -45,17 +45,21 @@ public:
 
         addAndMakeVisible(*transpositionSlider);
         addOpenGlComponent(transpositionSlider->getImageComponent());
-        // Using std::find_if
-        auto it = std::find_if(comps.begin(), comps.end(),
-                               [](const std::unique_ptr<juce::Component>& p) { return p->getName() == "UseTuning"; });
+
+        // extract special components from vector of general components
+        auto it = std::find_if(
+            comps.begin(),
+            comps.end(),
+            [](const std::unique_ptr<juce::Component>& p) { return p->getName() == "UseTuning"; }
+            );
 
         _ASSERT(it != comps.end());
         transpose_uses_tuning = std::move(*it);
         comps.erase(it);
-
     }
 //    std::unique_ptr<EnvelopeSection> envelope;
     std::unique_ptr<juce::Component> transpose_uses_tuning;
+    //std::unique_ptr<SynthButton> transpose_uses_tuning;
     std::unique_ptr<OpenGlTranspositionSlider> transpositionSlider;
     void resized() override;
     chowdsp::ScopedCallbackList transposeCallbacks;

@@ -83,7 +83,7 @@ struct DirectParams : chowdsp::ParamHolder
     // Transposition Uses Tuning param
     chowdsp::BoolParameter::Ptr transpositionUsesTuning {
         juce::ParameterID { "UseTuning", 100 },
-        "TranspositionUsesTuning",
+        "Use Tuning",
         false
     };
 

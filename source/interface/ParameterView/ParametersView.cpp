@@ -21,9 +21,12 @@ namespace bitklavier {
                 auto area = getBoundsInParent();
                 //area.removeFromLeft(8);
                 button->setBounds(area);
+                button->isAlwaysOnTop();
+                button->toFront(false);
             }
 
         private:
+            //std::shared_ptr<OpenGlToggleButton> button;
             std::shared_ptr<OpenGlToggleButton> button;
             chowdsp::ButtonAttachment attachment;
 

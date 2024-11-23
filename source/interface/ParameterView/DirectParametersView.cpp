@@ -29,8 +29,17 @@ void DirectParametersView::resized()
             section->setBounds(title_width, knob_section_height, area_width, knob_section_height * 4);
     }
 
-     transpose_uses_tuning->setBounds(area_width - title_width, 0 + knob_section_height * 0.5, 100, knob_section_height * 0.5);
     transpositionSlider->setBounds(title_width, 0, area_width, knob_section_height);
+
+    int toggle_width = 100. * getSizeRatio(); // not sure if this is the best place to do this scaling
+    // also, how is the text within the toggle scaled? need to look at Vital i suppose.
+    int toggle_height = transpositionSlider->getHeight() * 0.5 * getSizeRatio();
+    transpose_uses_tuning->setBounds(
+        transpositionSlider->getRight() - toggle_width,
+        transpositionSlider->getY() + toggle_height,
+        toggle_width,
+        toggle_height);
+    transpose_uses_tuning->toFront(false); // can't seem to keep this button on top; not responsive while sitting on top of transpositionSlider
 
 
     SynthSection::resized();
