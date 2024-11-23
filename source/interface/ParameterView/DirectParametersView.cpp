@@ -29,7 +29,7 @@ void DirectParametersView::resized()
             section->setBounds(title_width, knob_section_height, area_width, knob_section_height * 4);
     }
 
-     transpose_uses_tuning->setBounds(area_width - title_width, 0, 100, knob_section_height);
+     transpose_uses_tuning->setBounds(area_width - title_width, 0 + knob_section_height * 0.5, 100, knob_section_height * 0.5);
     transpositionSlider->setBounds(title_width, 0, area_width, knob_section_height);
 
 
