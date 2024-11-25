@@ -44,7 +44,7 @@ std::shared_ptr<SynthSection> DirectPreparation::getPrepPopup()
         return popup_view;
     }
     popup_view = std::make_shared<DirectPopup>(proc, _open_gl);
-    popup_view->initOpenGlComponents(_open_gl);
+    //popup_view->initOpenGlComponents(_open_gl);
     return popup_view;
 }
 

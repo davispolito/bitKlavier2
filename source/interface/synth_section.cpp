@@ -58,12 +58,12 @@ void SynthSection::reset() {
 
 void SynthSection::resized() {
   juce::Component::resized();
-//  if (off_overlay_) {
-//    off_overlay_->setBounds(getLocalBounds());
-//    off_overlay_->setColor(findColour(Skin:kBackground, true).withMultipliedAlpha(0.8f));
-//  }
-//  if (activator_)
-//    activator_->setBounds(getPowerButtonBounds());
+  if (off_overlay_) {
+    off_overlay_->setBounds(getLocalBounds());
+    off_overlay_->setColor(findColour(Skin::kBackground, true).withMultipliedAlpha(0.8f));
+  }
+  if (activator_)
+    activator_->setBounds(getPowerButtonBounds());
 //  if (preset_selector_) {
 //    preset_selector_->setBounds(getPresetBrowserBounds());
 //    preset_selector_->setRoundAmount(findValue(Skin::kBodyRounding));

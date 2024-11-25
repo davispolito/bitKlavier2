@@ -8,7 +8,7 @@
 #include "ParametersView.h"
 #include "TransposeParams.h"
 #include "envelope_section.h"
-
+#include "StackedSliderSection.h"
 class DirectParametersView : public bitklavier::ParametersView
 {
 public:
@@ -25,7 +25,8 @@ public:
                 [this, &listeners, &pluginState](auto &paramHolder) {
                     DBG("xdirectparamview");
                     if(auto *transposeParam = dynamic_cast<TransposeParams*>(&paramHolder)) {
-                        transpositionSlider = std::make_unique<OpenGlStackedSlider>(transposeParam, listeners);
+                        transpose  = std::make_unique<StackSliderSection>(transposeParam, listeners);
+                        addSubSection(transpose.get());
                         //addAndMakeVisible(transpositionSlider.get());
                     }
                     DBG("paramholder name" + paramHolder.getName());
@@ -33,27 +34,12 @@ public:
                 });
 
 
-        // extract special components from vector of general components
-        auto it = std::find_if(
-            boolean_pairs.begin(),
-            boolean_pairs.end(),
-            [](const std::unique_ptr<bitklavier::parameters_view_detail::BooleanParameterComponent>& p) { return p->button->getName() == "UseTuning"; }
-            );
 
-        _ASSERT(it != boolean_pairs.end());
-        transpose_uses_tuning = std::move(*it);
-
-        transpose_uses_tuning->button->setAlwaysOnTop(true);
-        addAndMakeVisible(transpose_uses_tuning->button.get());
-        boolean_pairs.erase(it);
-        addAndMakeVisible(*transpositionSlider);
-        addOpenGlComponent(transpositionSlider->getImageComponent(),true);
 
 
     }
 
-    std::unique_ptr<bitklavier::parameters_view_detail::BooleanParameterComponent> transpose_uses_tuning;
-    std::unique_ptr<OpenGlStackedSlider> transpositionSlider;
+    std::unique_ptr<StackSliderSection> transpose;
     chowdsp::ScopedCallbackList transposeCallbacks;
 
 

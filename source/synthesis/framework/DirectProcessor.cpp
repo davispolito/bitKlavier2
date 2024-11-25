@@ -197,7 +197,7 @@ void DirectProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::Midi
     buffer.clear(); // always top of the chain as an instrument source; doesn't take audio in
     juce::Array<float> updatedTransps = getMidiNoteTranspositions(); // from the Direct transposition slider
 
-    bool useTuningForTranspositions = state.params.transpositionUsesTuning->get();
+    bool useTuningForTranspositions = state.params.transpose.onOff->get();
 
     if (mainSynth->hasSamples() )
     {

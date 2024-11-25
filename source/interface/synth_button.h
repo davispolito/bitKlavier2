@@ -209,7 +209,10 @@ class OpenGlButtonComponent : public OpenGlComponent {
     OpenGlQuad& background() { return background_; }
     PlainTextComponent& text() { return text_; }
     ButtonStyle style() { return style_; }
-
+    bool isInit() override
+    {
+        return text_.isInit();
+    }
   protected:
     ButtonStyle style_;
     juce::Button* button_;
