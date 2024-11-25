@@ -57,13 +57,13 @@ public:
         transpose_uses_tuning = std::move(*it);
         comps.erase(it);
     }
-//    std::unique_ptr<EnvelopeSection> envelope;
+
     std::unique_ptr<juce::Component> transpose_uses_tuning;
-    //std::unique_ptr<SynthButton> transpose_uses_tuning;
     std::unique_ptr<OpenGlTranspositionSlider> transpositionSlider;
-    void resized() override;
     chowdsp::ScopedCallbackList transposeCallbacks;
 
+
+    void resized() override;
 
 };
 
