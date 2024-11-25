@@ -2,29 +2,30 @@
 // Created by Davis Polito on 11/13/24.
 //
 
-#ifndef BITKLAVIER2_OPENGLTRANSPOSITIONSLIDER_H
-#define BITKLAVIER2_OPENGLTRANSPOSITIONSLIDER_H
+#ifndef BITKLAVIER2_OPENGLSTACKEDSLIDER_H
+#define BITKLAVIER2_OPENGLSTACKEDSLIDER_H
 #include "BKSliders.h"
+#include "TransposeParams.h"
 #include "open_gl_component.h"
 #include "juce_data_structures/juce_data_structures.h"
+
 /************************************************************************************/
-/*                              CLASS: OpenGlSlider                                 */
+/*                         CLASS: OpenGlStackedSlider                         */
 /************************************************************************************/
 
-class OpenGlTranspositionSlider : public OpenGlAutoImageComponent<BKStackedSlider>
+class OpenGlStackedSlider : public OpenGlAutoImageComponent<BKStackedSlider>
 {
 public:
-    OpenGlTranspositionSlider(TransposeParams *params, chowdsp::ParameterListeners& listeners) :
+    OpenGlStackedSlider (TransposeParams *params, chowdsp::ParameterListeners& listeners) :
             OpenGlAutoImageComponent<BKStackedSlider>(
-                    "Transpositions",   // slider name
+                    "StackedSlider",    // slider name
                     -12,                // min
                     12,                 // max
                     -12,                // default min
                     12,                 // default max
                     0,                  // default val
                     0.01)               // increment
-    //-12, 12, -12, 12, 0, 0.01
-    {             // increment
+    {
         image_component_ = std::make_shared<OpenGlImageComponent>();
         setLookAndFeel(DefaultLookAndFeel::instance());
         image_component_->setComponent(this);
@@ -37,7 +38,7 @@ public:
 
     }
 
-    OpenGlTranspositionSlider() :
+    OpenGlStackedSlider() :
             OpenGlAutoImageComponent<BKStackedSlider>(
                     "Transpositions",    // slider name
                     -12,                 // min
@@ -46,7 +47,7 @@ public:
                     12,                  // default max
                     0,                   // default val
                     0.01)                // increment
-    {             // increment
+    {
         image_component_ = std::make_shared<OpenGlImageComponent>();
         setLookAndFeel(DefaultLookAndFeel::instance());
         image_component_->setComponent(this);
@@ -86,4 +87,4 @@ public:
     std::vector<std::unique_ptr<chowdsp::SliderAttachment>> attachmentVec;
 };
 
-#endif //BITKLAVIER2_OPENGLTRANSPOSITIONSLIDER_H
+#endif //BITKLAVIER2_OPENGLSTACKEDSLIDER_H

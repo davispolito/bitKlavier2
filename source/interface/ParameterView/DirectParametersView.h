@@ -4,10 +4,10 @@
 
 #ifndef BITKLAVIER2_DIRECTPARAMETERSVIEW_H
 #define BITKLAVIER2_DIRECTPARAMETERSVIEW_H
+#include "OpenGlStackedSlider.h"
 #include "ParametersView.h"
-#include "envelope_section.h"
 #include "TransposeParams.h"
-#include "OpenGlTranspositionSlider.h"
+#include "envelope_section.h"
 
 class DirectParametersView : public bitklavier::ParametersView
 {
@@ -25,7 +25,7 @@ public:
                 [this, &listeners, &pluginState](auto &paramHolder) {
                     DBG("xdirectparamview");
                     if(auto *transposeParam = dynamic_cast<TransposeParams*>(&paramHolder)) {
-                        transpositionSlider = std::make_unique<OpenGlTranspositionSlider>(transposeParam, listeners);
+                        transpositionSlider = std::make_unique<OpenGlStackedSlider>(transposeParam, listeners);
                         transposeParam->doForAllParameters([this, &pluginState] (auto& param, size_t indexInParamHolder)
                         {
                             transposeCallbacks += { pluginState.addParameterListener(param,
@@ -59,7 +59,7 @@ public:
     }
 
     std::unique_ptr<juce::Component> transpose_uses_tuning;
-    std::unique_ptr<OpenGlTranspositionSlider> transpositionSlider;
+    std::unique_ptr<OpenGlStackedSlider> transpositionSlider;
     chowdsp::ScopedCallbackList transposeCallbacks;
 
 

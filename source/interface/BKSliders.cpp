@@ -565,12 +565,12 @@ void BKStackedSlider::resized ()
 // ********************************************************************************************* //
 
 BKRangeSlider::BKRangeSlider (juce::String name, double min, double max, double defmin, double defmax, double increment):
-                                                                                                                           sliderName(name),
-                                                                                                                           sliderMin(min),
-                                                                                                                           sliderMax(max),
-                                                                                                                           sliderDefaultMin(defmin),
-                                                                                                                           sliderDefaultMax(defmax),
-                                                                                                                           sliderIncrement(increment)
+                               sliderName(name),
+                               sliderMin(min),
+                               sliderMax(max),
+                               sliderDefaultMin(defmin),
+                               sliderDefaultMax(defmax),
+                               sliderIncrement(increment)
 {
 
     justifyRight = true;
