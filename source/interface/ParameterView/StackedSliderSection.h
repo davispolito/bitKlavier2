@@ -28,6 +28,7 @@ public:
 
         if (off_overlay_)
             off_overlay_->setVisible(!active);
+            off_overlay_->setInterceptsMouseClicks(!active, false);
 
         active_ = active;
         //transpositionSlider->
@@ -43,8 +44,20 @@ public:
     }
     void resized() override
     {
-        SynthSection::resized();
+//        SynthSection::resized();
+        juce::Component::resized();
+
+        if (activator_)
+            activator_->setBounds(getPowerButtonBounds());
+//  if (preset_selector_) {
+//    preset_selector_->setBounds(getPresetBrowserBounds());
+//    preset_selector_->setRoundAmount(findValue(Skin::kBodyRounding));
+//  }
         transpositionSlider->setBounds(activator_->getRight() + findValue(Skin::kWidgetMargin), 0, getLocalBounds().getWidth() - activator_->getWidth(), getLocalBounds().getHeight());
+        if (off_overlay_) {
+            off_overlay_->setBounds(transpositionSlider->getBounds());
+            off_overlay_->setColor(findColour(Skin::kBackground, true).withMultipliedAlpha(0.8f));
+        }
     }
     std::unique_ptr<SynthButton> on_;
     chowdsp::ButtonAttachment on_attachment;
