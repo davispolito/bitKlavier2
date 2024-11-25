@@ -1463,7 +1463,9 @@ void PreparationPopup::buttonClicked(juce::Button *clicked_button)
 
         // this might be a race condition on the opengl thread. Might want to pass to opengl thread for destruction?
         /// to do
-        // reset Preparation Section shared_ptr as well
+        // reset Preparation Sectioon shared_ptr as well
+        auto paren_ = findParentComponentOfClass<FullInterface>();
+        paren_->redoBackground();
     }
 
 }

@@ -20,9 +20,16 @@ public:
         on_->getGlComponent()->setAlwaysOnTop(true);
         on_->toFront(false);
     }
+    //overrwrite so that it doesn't call repaintchildbackground on the FullInterface
     void setActive(bool active) override
     {
-        SynthSection::setActive(active);
+        if (active_ == active)
+            return;
+
+        if (off_overlay_)
+            off_overlay_->setVisible(!active);
+
+        active_ = active;
         //transpositionSlider->
     }
     void paintBackground(juce::Graphics &g)
