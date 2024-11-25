@@ -36,8 +36,8 @@ public:
     }
     void resized() override
     {
-        transpositionSlider->setBounds(getLocalBounds().reduced(0.1,0.1));
         SynthSection::resized();
+        transpositionSlider->setBounds(activator_->getRight() + findValue(Skin::kWidgetMargin), 0, getLocalBounds().getWidth() - activator_->getWidth(), getLocalBounds().getHeight());
     }
     std::unique_ptr<SynthButton> on_;
     chowdsp::ButtonAttachment on_attachment;
