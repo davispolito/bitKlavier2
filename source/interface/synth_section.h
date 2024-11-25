@@ -29,6 +29,13 @@
 #include <map>
 #include <set>
 
+namespace bitklavier
+{
+    namespace parameters_view_detail
+    {
+        class SliderParameterComponent;
+    }
+}
 
 
 class ModulationButton;
@@ -347,6 +354,7 @@ class SynthSection : public juce::Component, public juce::Slider::Listener,
     float getDisplayScale() const;
     void addOpenGlComponent(std::shared_ptr<OpenGlComponent> open_gl_component, bool to_beginning = false, bool makeVisible = true);
     void addButton(OpenGlToggleButton* button, bool show = true);
+   void  placeKnobsInArea(juce::Rectangle<int> area, std::vector<std::unique_ptr<bitklavier::parameters_view_detail::SliderParameterComponent>>& knobs);
   protected:
     void setSliderHasHzAlternateDisplay(SynthSlider* slider);
     void setSidewaysHeading(bool sideways) { sideways_heading_ = sideways; }

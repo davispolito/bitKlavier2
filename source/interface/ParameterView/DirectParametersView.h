@@ -15,8 +15,8 @@ public:
     DirectParametersView(chowdsp::PluginState& pluginState, chowdsp::ParamHolder& params, OpenGlWrapper *open_gl) :
                                                                                                                      bitklavier::ParametersView(pluginState,params,open_gl)
     {
-        //envelope = std::make_unique<EnvelopeSection>("ENV", "err");
-        //addSubSection(envelope.get());
+//        envelope = std::make_unique<EnvelopeSection>("ENV", "err");
+//        addSubSection(envelope.get());
         auto& listeners = pluginState.getParameterListeners();
         params.doForAllParameterContainers(
                 [this,&listeners](auto &paramVec) {
@@ -26,39 +26,33 @@ public:
                     DBG("xdirectparamview");
                     if(auto *transposeParam = dynamic_cast<TransposeParams*>(&paramHolder)) {
                         transpositionSlider = std::make_unique<OpenGlStackedSlider>(transposeParam, listeners);
-                        transposeParam->doForAllParameters([this, &pluginState] (auto& param, size_t indexInParamHolder)
-                        {
-                            transposeCallbacks += { pluginState.addParameterListener(param,
-                                   chowdsp::ParameterListenerThread::MessageThread,
-                                   [this] {
-
-
-                                       DBG ("transposeslider" + this->getName());
-
-                                   })};
-                        });
+                        //addAndMakeVisible(transpositionSlider.get());
                     }
                     DBG("paramholder name" + paramHolder.getName());
                     //addSubSection(parameters_view_detail::createEditorSection(paramHolder,paramListeners,*this).release());
                 });
 
 
-        addAndMakeVisible(*transpositionSlider);
-        addOpenGlComponent(transpositionSlider->getImageComponent());
-
         // extract special components from vector of general components
         auto it = std::find_if(
-            comps.begin(),
-            comps.end(),
-            [](const std::unique_ptr<juce::Component>& p) { return p->getName() == "UseTuning"; }
+            boolean_pairs.begin(),
+            boolean_pairs.end(),
+            [](const std::unique_ptr<bitklavier::parameters_view_detail::BooleanParameterComponent>& p) { return p->button->getName() == "UseTuning"; }
             );
 
-        _ASSERT(it != comps.end());
+        _ASSERT(it != boolean_pairs.end());
         transpose_uses_tuning = std::move(*it);
-        comps.erase(it);
+
+        transpose_uses_tuning->button->setAlwaysOnTop(true);
+        addAndMakeVisible(transpose_uses_tuning->button.get());
+        boolean_pairs.erase(it);
+        addAndMakeVisible(*transpositionSlider);
+        addOpenGlComponent(transpositionSlider->getImageComponent(),true);
+
+
     }
 
-    std::unique_ptr<juce::Component> transpose_uses_tuning;
+    std::unique_ptr<bitklavier::parameters_view_detail::BooleanParameterComponent> transpose_uses_tuning;
     std::unique_ptr<OpenGlStackedSlider> transpositionSlider;
     chowdsp::ScopedCallbackList transposeCallbacks;
 

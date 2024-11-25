@@ -26,6 +26,7 @@ public:
                     0,                  // default val
                     0.01)               // increment
     {
+        BKStackedSlider::setName(params->getName());
         image_component_ = std::make_shared<OpenGlImageComponent>();
         setLookAndFeel(DefaultLookAndFeel::instance());
         image_component_->setComponent(this);

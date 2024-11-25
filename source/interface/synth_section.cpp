@@ -22,7 +22,7 @@
 #include "open_gl_component.h"
 #include "synth_gui_interface.h"
 #include "synth_slider.h"
-
+#include "ParameterView/ParametersView.h"
 SynthSection::SynthSection(const juce::String& name) : juce::Component(name), parent_(nullptr), activator_(nullptr),
                                                  preset_selector_(nullptr), preset_selector_half_width_(false),
                                                  skin_override_(Skin::kNone), size_ratio_(1.0f),
@@ -543,6 +543,8 @@ void SynthSection::addSlider(SynthSlider* slider, bool show, bool listen) {
 }
 
 void SynthSection::addSubSection(SynthSection* sub_section, bool show) {
+    if(sub_section == nullptr)
+        return;
   sub_section->setParent(this);
 
   if (show)
@@ -685,6 +687,26 @@ void SynthSection::placeKnobsInArea(juce::Rectangle<int> area, std::vector<std::
       knob->setBounds(left, y, right - left, height);
     x += component_width + widget_margin;
   }
+}
+
+void SynthSection::placeKnobsInArea(juce::Rectangle<int> area, std::vector<std::unique_ptr<bitklavier::parameters_view_detail::SliderParameterComponent>>& knobs) {
+    int widget_margin = findValue(Skin::kWidgetMargin);
+    //kKnobSectionHeight
+    float component_width = (area.getWidth() - (knobs.size() + 1) * widget_margin) / (1.0f * knobs.size());
+
+    int y = area.getY();
+    //int height = area.getHeight() - widget_margin;
+    int height = std::min<int>(area.getHeight(),component_width) - widget_margin;
+    float x = area.getX() + widget_margin;
+    for (const auto& knob : knobs) {
+
+        int left = std::round(x);
+        int right = std::round(x + component_width);
+        //DBG("knob " + juce::String(left));
+        if (knob)
+            knob->slider->setBounds(left, y, right - left, height);
+        x += component_width + widget_margin;
+    }
 }
 
 void SynthSection::lockCriticalSection() {

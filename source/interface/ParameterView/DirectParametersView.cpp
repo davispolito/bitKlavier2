@@ -21,7 +21,7 @@ void DirectParametersView::resized()
 
     juce::Rectangle<int> knobs_area(title_width, knob_y, area_width, knob_section_height);
     knobs_area.setSize(knobs_area.getWidth() * getSizeRatio(), knobs_area.getHeight() * getSizeRatio());
-    placeKnobsInArea(knobs_area, comps);
+    placeKnobsInArea(knobs_area, slider_pairs);
 
     for(auto section: sub_sections_)
     {
@@ -34,12 +34,17 @@ void DirectParametersView::resized()
     int toggle_width = 100. * getSizeRatio(); // not sure if this is the best place to do this scaling
     // also, how is the text within the toggle scaled? need to look at Vital i suppose.
     int toggle_height = transpositionSlider->getHeight() * 0.5 * getSizeRatio();
-    transpose_uses_tuning->setBounds(
+    transpose_uses_tuning->button->setBounds(
         transpositionSlider->getRight() - toggle_width,
         transpositionSlider->getY() + toggle_height,
         toggle_width,
         toggle_height);
-    transpose_uses_tuning->toFront(false); // can't seem to keep this button on top; not responsive while sitting on top of transpositionSlider
+//    transpose_uses_tuning->button->setBounds(
+//           200,
+//            350,
+//            toggle_width,
+//            toggle_height);
+   // transpose_uses_tuning->toFront(false); // can't seem to keep this button on top; not responsive while sitting on top of transpositionSlider
 
 
     SynthSection::resized();

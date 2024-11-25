@@ -632,7 +632,7 @@ BKRangeSlider::BKRangeSlider (juce::String name, double min, double max, double 
     displaySlider->setRange(min, max, increment);
     displaySlider->setSliderStyle(juce::Slider::SliderStyle::LinearBar);
     displaySlider->setLookAndFeel(&displaySliderLookAndFeel);
-    displaySlider->setInterceptsMouseClicks(false, false);
+    //displaySlider->setInterceptsMouseClicks(false, false);
     addAndMakeVisible(*displaySlider);
 
 #if JUCE_IOS
