@@ -4,22 +4,15 @@
 
 #include "BKSynthesiser.h"
 //==============================================================================
-BKSynthesiser::BKSynthesiser(EnvParams &params, chowdsp::GainDBParameter& gain) : adsrParams (params), synthGain(gain)
+BKSynthesiser::BKSynthesiser(EnvParams &params, chowdsp::GainDBParameter& gain, chowdsp::FloatParameter& minVel, chowdsp::FloatParameter& maxVel) :
+                             adsrParams (params), synthGain(gain), velocityMin(minVel), velocityMax(maxVel)
 {
     for (int i = 0; i < juce::numElementsInArray (lastPitchWheelValues); ++i)
         lastPitchWheelValues[i] = 0x2000;
 
-//    // init ADSR
-//    globalADSR.attack = 0.005f;
-//    globalADSR.decay = 0.0f;
-//    globalADSR.sustain = 1.0f;
-//    globalADSR.release = 0.1f;
-
     // init hash of currently playing notes
     for (int i = 0; i<=128; i++)
-    {
         playingVoicesByNote.insert(0, {  });
-    }
 
 }
 
@@ -198,7 +191,6 @@ void BKSynthesiser::renderVoices (juce::AudioBuffer<float>& buffer, int startSam
 void BKSynthesiser::handleMidiEvent (const juce::MidiMessage& m)
 {
     const int channel = m.getChannel();
-
     /**
      * regarding keyReleaseSynths:
      * in most cases, this operates as expected
@@ -258,6 +250,13 @@ void BKSynthesiser::noteOn (const int midiChannel,
                           const float velocity)
 {
     const juce::ScopedLock sl (lock);
+
+    // velocity filtering; note the different behavior if Min>Max, allowing the extremes through
+    if (velocityMax > velocityMin) {
+        if ((velocity < velocityMin) || (velocity > velocityMax)) return;
+    } else {
+        if ((velocity < velocityMin) & (velocity > velocityMax)) return;
+    }
 
     /**
      * moved this out of the loop below because it was messing up voice handling with multiple transpositions

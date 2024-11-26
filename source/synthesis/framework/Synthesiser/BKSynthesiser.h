@@ -40,7 +40,7 @@ class BKSynthesiser
                 /** Creates a new BKSynthesiser.
                     You'll need to add some sounds and voices before it'll make any sound.
                 */
-                BKSynthesiser(EnvParams&, chowdsp::GainDBParameter&);
+                BKSynthesiser(EnvParams&, chowdsp::GainDBParameter&, chowdsp::FloatParameter&, chowdsp::FloatParameter&);
 
                 /** Destructor. */
                 virtual ~BKSynthesiser();
@@ -309,12 +309,8 @@ class BKSynthesiser
                     tuneTranspositions = tune_transpositions;
                 }
 
-//<<<<<<< HEAD
-//
-//                BKADSR::Parameters globalADSR;
-//=======
-//                //BKADSR::Parameters globalADSR;
-//>>>>>>> feature/adsropt
+
+
 protected:
                 //==============================================================================
                 /** This is used to control access to the rendering callback and the note trigger methods. */
@@ -394,6 +390,9 @@ private:
                 bool pedalSynth = false;                // for sustain pedal sounds; will ignore noteOn messages
                 bool sustainPedalAlreadyDown = false;   // to avoid re-triggering of pedalDown sounds
                 EnvParams& adsrParams;
+
+                int velocityMin = 30, velocityMax = 90;   // velocity filtering
+
                 /**
                  * midiNoteTranspositions is an arrays of tuning offsets, in MidiNoteCents (.01 = 1 cent)
                  *      - these offsets are set by currentTransposition controls in Direct, Nostalgic, and Synchronic
@@ -412,7 +411,7 @@ private:
                  *
                  * the "un-transposed" midiNoteNumber is the midi note played by the performer, and used for voice tracking
                  */
-                juce::Array<float> midiNoteTranspositions = { 0.}; // needs to be set via UI, for additional transpositions
+                juce::Array<float> midiNoteTranspositions = { 0. }; // needs to be set via UI, for additional transpositions
                 bool tuneTranspositions = false;
                 juce::Array<juce::Array<BKSamplerVoice*>> playingVoicesByNote; // Array of current voices playing for a particular midiNoteNumber
                 template <typename floatType>

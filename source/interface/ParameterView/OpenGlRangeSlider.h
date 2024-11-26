@@ -27,7 +27,8 @@ public:
         setLookAndFeel(DefaultLookAndFeel::instance());
         image_component_->setComponent(this);
 
-
+        auto ptrMin = std::make_unique<chowdsp::SliderAttachment>(*paramsMin,listeners,minSlider,nullptr);
+        auto ptrMax = std::make_unique<chowdsp::SliderAttachment>(*paramsMax,listeners,maxSlider,nullptr);
 
 //        minSlider.setMinAndMaxValues(paramsMin->getNormalisableRange().start, paramsMin->getNormalisableRange().end);
 //        maxSlider.setMinAndMaxValues(paramsMax->getNormalisableRange().start, paramsMax->getNormalisableRange().end);

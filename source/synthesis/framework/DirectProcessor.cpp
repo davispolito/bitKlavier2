@@ -7,10 +7,10 @@
 #include "common.h"
 #include <chowdsp_serialization/chowdsp_serialization.h>
 DirectProcessor::DirectProcessor (const juce::ValueTree& v) : PluginBase (v, nullptr, directBusLayout()),
-mainSynth(new BKSynthesiser(state.params.env, state.params.gainParam)),
-hammerSynth(new BKSynthesiser(state.params.env,state.params.hammerParam)),
-releaseResonanceSynth(new BKSynthesiser(state.params.env,state.params.releaseResonanceParam)),
-pedalSynth(new BKSynthesiser(state.params.env,state.params.pedalParam))
+mainSynth(new BKSynthesiser(state.params.env, state.params.gainParam, state.params.velocityParamMin, state.params.velocityParamMax)),
+hammerSynth(new BKSynthesiser(state.params.env, state.params.gainParam, state.params.velocityParamMin, state.params.velocityParamMax)),
+releaseResonanceSynth(new BKSynthesiser(state.params.env, state.params.gainParam, state.params.velocityParamMin, state.params.velocityParamMax)),
+pedalSynth(new BKSynthesiser(state.params.env, state.params.gainParam, state.params.velocityParamMin, state.params.velocityParamMax))
 {
     for (int i = 0; i < 300; i++)
     {
