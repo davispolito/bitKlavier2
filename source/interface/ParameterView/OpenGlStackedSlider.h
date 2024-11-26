@@ -4,10 +4,8 @@
 
 #ifndef BITKLAVIER2_OPENGLSTACKEDSLIDER_H
 #define BITKLAVIER2_OPENGLSTACKEDSLIDER_H
-#include "BKSliders.h"
-#include "TransposeParams.h"
-#include "open_gl_component.h"
-#include "juce_data_structures/juce_data_structures.h"
+
+#include "OpenGlBKSliders.h"
 
 /************************************************************************************/
 /*                         CLASS: OpenGlStackedSlider                         */
@@ -87,5 +85,7 @@ public:
     }
     std::vector<std::unique_ptr<chowdsp::SliderAttachment>> attachmentVec;
 };
+
+
 
 #endif //BITKLAVIER2_OPENGLSTACKEDSLIDER_H

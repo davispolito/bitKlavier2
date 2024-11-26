@@ -5,10 +5,7 @@
 #ifndef BITKLAVIER2_OPENGLRANGESLIDER_H
 #define BITKLAVIER2_OPENGLRANGESLIDER_H
 
-#include "BKSliders.h"
-#include "TransposeParams.h" // redo this for Range slider
-#include "open_gl_component.h"
-#include "juce_data_structures/juce_data_structures.h"
+#include "OpenGlBKSliders.h"
 
 /************************************************************************************/
 /*                              CLASS: OpenGlRangeSlider                            */
@@ -17,18 +14,26 @@
 class OpenGlRangeSlider : public OpenGlAutoImageComponent<BKRangeSlider>
 {
 public:
-    OpenGlRangeSlider(TransposeParams *params, chowdsp::ParameterListeners& listeners) :
+    OpenGlRangeSlider(chowdsp::FloatParameter *paramsMin, chowdsp::FloatParameter *paramsMax, chowdsp::ParameterListeners& listeners) :
                           OpenGlAutoImageComponent<BKRangeSlider>(
                               "Range",  // slider name
-                              0,        // min
-                              127,      // max
-                              0,        // default min
-                              127,      // default max
-                              1)        // increment
+                             paramsMin->getNormalisableRange().start,     // min
+                             paramsMax->getNormalisableRange().end,      // max
+                                    0,        // default min
+                                127,      // default max
+                                1)        // increment
     {
         image_component_ = std::make_shared<OpenGlImageComponent>();
         setLookAndFeel(DefaultLookAndFeel::instance());
         image_component_->setComponent(this);
+
+
+
+//        minSlider.setMinAndMaxValues(paramsMin->getNormalisableRange().start, paramsMin->getNormalisableRange().end);
+//        maxSlider.setMinAndMaxValues(paramsMax->getNormalisableRange().start, paramsMax->getNormalisableRange().end);
+
+//        setMinValue(paramsMin->getNormalisableRange().start, juce::dontSendNotification);
+//        setMaxValue(paramsMax->getNormalisableRange().end, juce::dontSendNotification);
 
 //        int i = 0;
 //        for(auto slider : dataSliders) {
@@ -51,6 +56,7 @@ public:
         image_component_ = std::make_shared<OpenGlImageComponent>();
         setLookAndFeel(DefaultLookAndFeel::instance());
         image_component_->setComponent(this);
+
     }
 
     virtual void resized() override

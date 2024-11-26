@@ -5,8 +5,9 @@
 #ifndef BITKLAVIER2_DIRECTPARAMETERSVIEW_H
 #define BITKLAVIER2_DIRECTPARAMETERSVIEW_H
 #include "OpenGlStackedSlider.h"
+#include "OpenGlRangeSlider.h"
 #include "ParametersView.h"
-#include "TransposeParams.h"
+//#include "TransposeParams.h"
 #include "envelope_section.h"
 
 class DirectParametersView : public bitklavier::ParametersView
@@ -19,18 +20,17 @@ public:
 //        addSubSection(envelope.get());
         auto& listeners = pluginState.getParameterListeners();
         params.doForAllParameterContainers(
-                [this,&listeners](auto &paramVec) {
-
-                },
-                [this, &listeners, &pluginState](auto &paramHolder) {
-                    DBG("xdirectparamview");
-                    if(auto *transposeParam = dynamic_cast<TransposeParams*>(&paramHolder)) {
-                        transpositionSlider = std::make_unique<OpenGlStackedSlider>(transposeParam, listeners);
-                        //addAndMakeVisible(transpositionSlider.get());
-                    }
-                    DBG("paramholder name" + paramHolder.getName());
-                    //addSubSection(parameters_view_detail::createEditorSection(paramHolder,paramListeners,*this).release());
-                });
+            [this,&listeners](auto &paramVec) {},
+            [this, &listeners, &pluginState](auto &paramHolder) {
+                                DBG("xdirectparamview");
+                                if(auto *transposeParam = dynamic_cast<TransposeParams*>(&paramHolder)) {
+                                    transpositionSlider = std::make_unique<OpenGlStackedSlider>(transposeParam, listeners);
+                                    //addAndMakeVisible(transpositionSlider.get());
+                                }
+                            DBG("paramholder name" + paramHolder.getName());
+                            //addSubSection(parameters_view_detail::createEditorSection(paramHolder,paramListeners,*this).release());
+            }
+            );
 
 
         // extract special components from vector of general components
@@ -55,6 +55,8 @@ public:
     std::unique_ptr<bitklavier::parameters_view_detail::BooleanParameterComponent> transpose_uses_tuning;
     std::unique_ptr<OpenGlStackedSlider> transpositionSlider;
     chowdsp::ScopedCallbackList transposeCallbacks;
+
+    std::unique_ptr<OpenGlRangeSlider> velocityRangeSlider;
 
 
     void resized() override;

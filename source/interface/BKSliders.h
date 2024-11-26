@@ -99,8 +99,8 @@ public:
     void removeMyListener(Listener* listener)  { listeners.remove(listener);   }
 
     juce::OwnedArray<juce::Slider> dataSliders;  //displays data, user controls with topSlider
-private:
 
+private:
     chowdsp::SliderAttachment attachment;
 
     std::unique_ptr<juce::Slider> topSlider; //user interacts with this
@@ -156,9 +156,6 @@ class BKRangeSlider :
     public juce::Component,
     public juce::Slider::Listener,
     public juce::TextEditor::Listener
-#if JUCE_IOS
-    , public WantsBigOne
-#endif
 {
 public:
     BKRangeSlider(juce::String sliderName, double min, double max, double defmin, double defmax, double increment);

@@ -70,10 +70,20 @@ struct DirectParams : chowdsp::ParamHolder
         0.0f
     };
 
-    // Velocity param
-    chowdsp::FloatParameter::Ptr velocityParam {
-        juce::ParameterID { "Velocity", 100 },
-        "Velocity",
+    // Velocity Min param
+    chowdsp::FloatParameter::Ptr velocityParamMin {
+        juce::ParameterID { "VelocityMin", 100 },
+        "Velocity Min",
+        chowdsp::ParamUtils::createNormalisableRange (0.0f, 127.0f, 63.f), // FIX
+        0.0f,
+        &chowdsp::ParamUtils::floatValToString,
+        &chowdsp::ParamUtils::stringToFloatVal
+    };
+
+    // Velocity Max param
+    chowdsp::FloatParameter::Ptr velocityParamMax {
+        juce::ParameterID { "VelocityMax", 100 },
+        "Velocity Max",
         chowdsp::ParamUtils::createNormalisableRange (0.0f, 127.0f, 63.f), // FIX
         127.0f,
         &chowdsp::ParamUtils::floatValToString,
