@@ -305,7 +305,6 @@ class BKSynthesiser
                     synthGain.setParameterValue(g);
                 }
 
-                // add bool for "use tuning"
                 void updateMidiNoteTranspositions(juce::Array<float> newOffsets, bool tune_transpositions) {
                     midiNoteTranspositions = newOffsets;
                     tuneTranspositions = tune_transpositions;

@@ -16,12 +16,12 @@ class OpenGL_RangeSlider : public OpenGlAutoImageComponent<BKRangeSlider>
 public:
     OpenGL_RangeSlider (RangeSliderParams *params, chowdsp::ParameterListeners& listeners) :
                           OpenGlAutoImageComponent<BKRangeSlider>(
-                              "Range",  // slider name
-                                    0,     // min
-                                128,      // max
-                                0,        // default min
-                                128,      // default max
-                                1)        // increment
+                                "Range",
+                                0,
+                                128,
+                                0,
+                                128,
+                                1)
     {
         image_component_ = std::make_shared<OpenGlImageComponent>();
         setLookAndFeel(DefaultLookAndFeel::instance());
