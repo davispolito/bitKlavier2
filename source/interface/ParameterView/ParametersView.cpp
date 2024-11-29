@@ -18,7 +18,7 @@ namespace bitklavier {
      slider->parentHierarchyChanged();
      slider->setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
      _ASSERT(slider->getSectionParent() != nullptr);
-     DBG("create slider for " + param.paramID + "with parent " + parent.getName());
+     DBG("SliderParameterComponent: create slider for " + param.paramID + " with parent " + parent.getName());
  }
     std::unique_ptr<SynthSection> parameters_view_detail::createEditorSection(chowdsp::ParamHolder &params, chowdsp::ParameterListeners& listeners, SynthSection &parent)
 {
@@ -31,40 +31,30 @@ namespace bitklavier {
  }
 //==============================================================================
     ParametersView::ParametersView(chowdsp::PluginState &pluginState, chowdsp::ParamHolder &params, OpenGlWrapper *open_gl)
-            : ParametersView (pluginState.getParameterListeners(), params, open_gl) {
-
-    }
+            : ParametersView (pluginState.getParameterListeners(), params, open_gl) {}
 
     ParametersView::ParametersView(chowdsp::ParameterListeners& paramListeners, chowdsp::ParamHolder& params, OpenGlWrapper *open_gl)
-            :  SynthSection(params.getName(), open_gl) {
+            :  SynthSection(params.getName(), open_gl)
+    {
         params.doForAllParameterContainers(
-                [this, &paramListeners](auto &paramVec) {
-                    DBG("----paramvec----");
-                    for (auto &param: paramVec)
-                    {
-                        createParameterComp(paramListeners, param,*this);
-//
-//
-                    }
-                },
-                [this, &paramListeners](auto &paramHolder) {
-                    DBG("add group item");
+            [this, &paramListeners](auto &paramVec)
+            {
+                DBG("----paramvec----");
+                for (auto &param : paramVec)
+                    createParameterComp(paramListeners, param,*this);
+            },
+            [this, &paramListeners](auto &paramHolder) {
+                DBG("ParametersView: paramholder name " + paramHolder.getName());
+                auto section  = parameters_view_detail::createEditorSection(paramHolder,paramListeners,*this);
+                addSubSection(section.get());
+                paramHolderComps.push_back(std::move(section));
+            });
 
-                    DBG("paramholder name" + paramHolder.getName());
-                    auto section  = parameters_view_detail::createEditorSection(paramHolder,paramListeners,*this);
-
-                    addSubSection(section.get());
-                    paramHolderComps.push_back(std::move(section));
-
-                  // addSubSection();
-                });
         setLookAndFeel(DefaultLookAndFeel::instance());
         setOpaque(true);
     }
 
-    ParametersView::~ParametersView() {
-//    comps.clear();
-}
+    ParametersView::~ParametersView(){}
 
     void ParametersView::paint(juce::Graphics &g) {
         g.fillAll(getLookAndFeel().findColour(juce::ResizableWindow::backgroundColourId));

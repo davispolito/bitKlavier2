@@ -6,19 +6,14 @@
 #define BITKLAVIER2_TRANSPOSEPARAMS_H
 #include <PreparationStateImpl.h>
 #include <chowdsp_plugin_utils/chowdsp_plugin_utils.h>
+
 struct TransposeParams : chowdsp::ParamHolder
 {
-    TransposeParams() : chowdsp::ParamHolder("TRANSPOSE")
+    TransposeParams() : chowdsp::ParamHolder("Transpositions")
     {
         add(t0,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11);
     }
-//    std::vector<chowdsp::FloatParameter::Ptr> transposeVec = {chowdsp::FloatParameter::Ptr initialparam(
-//    chowdsp::SemitonesParameter::Ptr initialparam {
-//            juce::ParameterID{"t0", 100},
-//            "t0",
-//            chowdsp::ParamUtils::createNormalisableRange(-12.0f,12.0f,0.0f), // FIX
-//           0.0f
-//    };
+
     chowdsp::SemitonesParameter::Ptr t0{juce::ParameterID{"t0", 100},
                                          "t0",
                                          chowdsp::ParamUtils::createNormalisableRange(-12.0f, 12.0f, 0.0f),

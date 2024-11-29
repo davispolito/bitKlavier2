@@ -52,6 +52,7 @@ namespace bitklavier {
 //        void initOpenGlComponents(OpenGlWrapper &open_gl) override;
 //        void renderOpenGlComponents(OpenGlWrapper& open_gl, bool animate) override;
         void init_();
+
         /** Returns nullptr if no component is found for the given parameter */
         [[nodiscard]] juce::Component* getComponentForParameter (const juce::RangedAudioParameter&);
         void paintBackground(juce::Graphics& g) override
@@ -65,19 +66,18 @@ namespace bitklavier {
             }
             paintChildrenBackgrounds(g);
         }
+
     private:
-        void createParameterComp(chowdsp::ParameterListeners& listeners, juce::RangedAudioParameter &parameter, SynthSection& parent) {
+        void createParameterComp(chowdsp::ParameterListeners& listeners, juce::RangedAudioParameter &parameter, SynthSection& parent)
+        {
             if (auto *boolParam = dynamic_cast<chowdsp::BoolParameter *> (&parameter))
                 boolean_pairs.push_back(std::make_unique<parameters_view_detail::BooleanParameterComponent>(*boolParam, listeners,*this));
-
 
             if (auto *sliderParam = dynamic_cast<chowdsp::FloatParameter *> (&parameter))
                 slider_pairs.push_back(std::make_unique<parameters_view_detail::SliderParameterComponent>(*sliderParam, listeners,*this));
         }
+
     protected:
-        //chowdsp::PluginState& pluginState;
-//        std::vector<std::pair<std::shared_ptr<SynthSlider>,chowdsp::SliderAttachment >> slider_pairs;
-//        std::vector<std::pair<std::shared_ptr<SynthButton>,chowdsp::ButtonAttachment >> button_pairs;
         std::vector<std::unique_ptr<parameters_view_detail::SliderParameterComponent>> slider_pairs;
         std::vector<std::unique_ptr<parameters_view_detail::BooleanParameterComponent>> boolean_pairs;
         std::vector<std::unique_ptr<SynthSection>> paramHolderComps;

@@ -14,23 +14,28 @@ class DirectParametersView : public bitklavier::ParametersView
 {
 public:
     DirectParametersView(chowdsp::PluginState& pluginState, chowdsp::ParamHolder& params, OpenGlWrapper *open_gl) :
-                                                                                                                     bitklavier::ParametersView(pluginState,params,open_gl)
+                         bitklavier::ParametersView(pluginState,params,open_gl)
     {
 //        envelope = std::make_unique<EnvelopeSection>("ENV", "err");
 //        addSubSection(envelope.get());
         auto& listeners = pluginState.getParameterListeners();
-        params.doForAllParameterContainers(
+        params.doForAllParameterContainers (
             [this,&listeners](auto &paramVec) {},
-            [this, &listeners, &pluginState](auto &paramHolder) {
-                                DBG("xdirectparamview");
-                                if(auto *transposeParam = dynamic_cast<TransposeParams*>(&paramHolder)) {
-                                    transpositionSlider = std::make_unique<OpenGlStackedSlider>(transposeParam, listeners);
-                                    //addAndMakeVisible(transpositionSlider.get());
-                                }
-                            DBG("paramholder name" + paramHolder.getName());
-                            //addSubSection(parameters_view_detail::createEditorSection(paramHolder,paramListeners,*this).release());
+            [this, &listeners, &pluginState](auto &paramHolder)
+            {
+                if(auto *transposeParam = dynamic_cast<TransposeParams*>(&paramHolder))
+                {
+                    transpositionSlider = std::make_unique<OpenGlStackedSlider>(transposeParam, listeners);
+                }
+
+                if(auto *velRangeParams = dynamic_cast<RangeSliderParams*>(&paramHolder))
+                {
+                    velocityRangeSlider = std::make_unique<OpenGlRangeSlider>(velRangeParams, listeners);
+                }
+
+                DBG("DirectParametersView: paramholder name " + paramHolder.getName());
             }
-            );
+        );
 
 
         // extract special components from vector of general components
@@ -46,9 +51,12 @@ public:
         transpose_uses_tuning->button->setAlwaysOnTop(true);
         addAndMakeVisible(transpose_uses_tuning->button.get());
         boolean_pairs.erase(it);
+
         addAndMakeVisible(*transpositionSlider);
         addOpenGlComponent(transpositionSlider->getImageComponent(),true);
 
+        addAndMakeVisible(*velocityRangeSlider);
+        addOpenGlComponent(velocityRangeSlider->getImageComponent(), true);
 
     }
 

@@ -7,6 +7,8 @@
 #include <juce_core/juce_core.h>
 #include "Sample.h"
 #include "EnvParams.h"
+#include "RangeSliderParams.h"
+
 //==============================================================================
 /**
     Base class for a musical device that can play sounds.
@@ -40,7 +42,7 @@ class BKSynthesiser
                 /** Creates a new BKSynthesiser.
                     You'll need to add some sounds and voices before it'll make any sound.
                 */
-                BKSynthesiser(EnvParams&, chowdsp::GainDBParameter&, chowdsp::FloatParameter&, chowdsp::FloatParameter&);
+                BKSynthesiser(EnvParams&, chowdsp::GainDBParameter&, RangeSliderParams&);
 
                 /** Destructor. */
                 virtual ~BKSynthesiser();
@@ -390,8 +392,9 @@ private:
                 bool pedalSynth = false;                // for sustain pedal sounds; will ignore noteOn messages
                 bool sustainPedalAlreadyDown = false;   // to avoid re-triggering of pedalDown sounds
                 EnvParams& adsrParams;
+                RangeSliderParams& velocityRangeParams;
 
-                int velocityMin = 30, velocityMax = 90;   // velocity filtering
+                int velocityMin = 0, velocityMax = 128;   // velocity filtering
 
                 /**
                  * midiNoteTranspositions is an arrays of tuning offsets, in MidiNoteCents (.01 = 1 cent)

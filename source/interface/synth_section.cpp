@@ -527,44 +527,45 @@ void SynthSection::addButton(OpenGlShapeButton* button, bool show) {
 
 
 void SynthSection::addSlider(SynthSlider* slider, bool show, bool listen) {
-    DBG("adding slider from " + this->getName() + " with name "+ slider->getName());
-  slider_lookup_[slider->getName().toStdString()] = slider;
-  all_sliders_[slider->getName().toStdString()] = slider;
-  all_sliders_v.push_back(slider);
-//  if (listen)
-//    slider->addListener(this);
-  if (show)
-    addAndMakeVisible(slider);
-  else
+
+    DBG("SynthSection::addSlider: adding slider from " + this->getName() + " with name "+ slider->getName());
+
+    slider_lookup_[slider->getName().toStdString()] = slider;
+    all_sliders_[slider->getName().toStdString()] = slider;
+    all_sliders_v.push_back(slider);
+
+    if (show)
+        addAndMakeVisible(slider);
+    else
       addChildComponent(slider);
- addOpenGlComponent(slider->getImageComponent());
- addOpenGlComponent(slider->getQuadComponent());
- addOpenGlComponent(slider->getTextEditorComponent());
+
+    addOpenGlComponent(slider->getImageComponent());
+    addOpenGlComponent(slider->getQuadComponent());
+    addOpenGlComponent(slider->getTextEditorComponent());
 }
 
 void SynthSection::addSubSection(SynthSection* sub_section, bool show) {
     if(sub_section == nullptr)
         return;
-  sub_section->setParent(this);
+    sub_section->setParent(this);
 
-  if (show)
-    addAndMakeVisible(sub_section);
+    if (show)
+        addAndMakeVisible(sub_section);
 
-  sub_sections_.push_back(sub_section);
+    sub_sections_.push_back(sub_section);
 
-  std::map<std::string, SynthSlider*> sub_sliders = sub_section->getAllSliders();
-  all_sliders_.insert(sub_sliders.begin(), sub_sliders.end());
+    std::map<std::string, SynthSlider*> sub_sliders = sub_section->getAllSliders();
+    all_sliders_.insert(sub_sliders.begin(), sub_sliders.end());
 
-  std::map<std::string, juce::ToggleButton*> sub_buttons = sub_section->getAllButtons();
-  all_buttons_.insert(sub_buttons.begin(), sub_buttons.end());
-
+    std::map<std::string, juce::ToggleButton*> sub_buttons = sub_section->getAllButtons();
+    all_buttons_.insert(sub_buttons.begin(), sub_buttons.end());
 
 }
 
 void SynthSection::removeSubSection(SynthSection* section) {
-  auto location = std::find(sub_sections_.begin(), sub_sections_.end(), section);
-  if (location != sub_sections_.end())
-    sub_sections_.erase(location);
+    auto location = std::find(sub_sections_.begin(), sub_sections_.end(), section);
+    if (location != sub_sections_.end())
+        sub_sections_.erase(location);
 }
 
 void SynthSection::setScrollWheelEnabled(bool enabled) {
@@ -581,22 +582,22 @@ void SynthSection::addBackgroundComponent(OpenGlBackground *open_gl_component, b
 
 }
 void SynthSection::addOpenGlComponent(std::shared_ptr<OpenGlComponent> open_gl_component, bool to_beginning, bool makeVisible ) {
-  if (open_gl_component == nullptr)
-    return;
+    if (open_gl_component == nullptr)
+        return;
   
-  _ASSERT(std::find(open_gl_components_.begin(), open_gl_components_.end(),
+    _ASSERT(std::find(open_gl_components_.begin(), open_gl_components_.end(),
                          open_gl_component) == open_gl_components_.end());
 
-  open_gl_component->setParent(this);
+    open_gl_component->setParent(this);
     if (makeVisible)
         addAndMakeVisible(open_gl_component.get());
     else
         addChildComponent(open_gl_component.get());
-  if (to_beginning)
-    open_gl_components_.insert(open_gl_components_.begin(), std::move(open_gl_component));
-  else
-    open_gl_components_.push_back(std::move(open_gl_component));
 
+    if (to_beginning)
+        open_gl_components_.insert(open_gl_components_.begin(), std::move(open_gl_component));
+    else
+        open_gl_components_.push_back(std::move(open_gl_component));
 }
 
 

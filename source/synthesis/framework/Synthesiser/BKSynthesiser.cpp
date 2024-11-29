@@ -4,8 +4,11 @@
 
 #include "BKSynthesiser.h"
 //==============================================================================
-BKSynthesiser::BKSynthesiser(EnvParams &params, chowdsp::GainDBParameter& gain, chowdsp::FloatParameter& minVel, chowdsp::FloatParameter& maxVel) :
-                             adsrParams (params), synthGain(gain), velocityMin(minVel), velocityMax(maxVel)
+BKSynthesiser::BKSynthesiser(
+    EnvParams &params,
+    chowdsp::GainDBParameter &gain,
+    RangeSliderParams &velRange) :
+         adsrParams (params), synthGain(gain), velocityRangeParams(velRange)
 {
     for (int i = 0; i < juce::numElementsInArray (lastPitchWheelValues); ++i)
         lastPitchWheelValues[i] = 0x2000;
@@ -251,7 +254,16 @@ void BKSynthesiser::noteOn (const int midiChannel,
 {
     const juce::ScopedLock sl (lock);
 
-    // velocity filtering; note the different behavior if Min>Max, allowing the extremes through
+    /**
+     *  velocity filtering; note the different behavior if Min>Max, allowing the extremes through
+     */
+
+    velocityMin = velocityRangeParams.velocityParamMin->getCurrentValue();
+    velocityMax = velocityRangeParams.velocityParamMax->getCurrentValue();
+
+    DBG("noteOn: velocityMin = " + juce::String(velocityMin));
+    DBG("noteOn: velocityMax = " + juce::String(velocityMax));
+
     if (velocityMax > velocityMin) {
         if ((velocity < velocityMin) || (velocity > velocityMax)) return;
     } else {

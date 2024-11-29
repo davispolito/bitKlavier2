@@ -14,45 +14,34 @@
 class OpenGlRangeSlider : public OpenGlAutoImageComponent<BKRangeSlider>
 {
 public:
-    OpenGlRangeSlider(chowdsp::FloatParameter *paramsMin, chowdsp::FloatParameter *paramsMax, chowdsp::ParameterListeners& listeners) :
+    OpenGlRangeSlider(RangeSliderParams *params, chowdsp::ParameterListeners& listeners) :
                           OpenGlAutoImageComponent<BKRangeSlider>(
                               "Range",  // slider name
-                             paramsMin->getNormalisableRange().start,     // min
-                             paramsMax->getNormalisableRange().end,      // max
-                                    0,        // default min
-                                127,      // default max
+                                    0,     // min
+                                128,      // max
+                                0,        // default min
+                                128,      // default max
                                 1)        // increment
     {
         image_component_ = std::make_shared<OpenGlImageComponent>();
         setLookAndFeel(DefaultLookAndFeel::instance());
         image_component_->setComponent(this);
 
-        auto ptrMin = std::make_unique<chowdsp::SliderAttachment>(*paramsMin,listeners,minSlider,nullptr);
-        auto ptrMax = std::make_unique<chowdsp::SliderAttachment>(*paramsMax,listeners,maxSlider,nullptr);
+        auto ptrMin = std::make_unique<chowdsp::SliderAttachment>(*(*params->getFloatParams())[0],listeners,minSlider,nullptr);
+        auto ptrMax = std::make_unique<chowdsp::SliderAttachment>(*(*params->getFloatParams())[1],listeners,maxSlider,nullptr);
 
-//        minSlider.setMinAndMaxValues(paramsMin->getNormalisableRange().start, paramsMin->getNormalisableRange().end);
-//        maxSlider.setMinAndMaxValues(paramsMax->getNormalisableRange().start, paramsMax->getNormalisableRange().end);
-
-//        setMinValue(paramsMin->getNormalisableRange().start, juce::dontSendNotification);
-//        setMaxValue(paramsMax->getNormalisableRange().end, juce::dontSendNotification);
-
-//        int i = 0;
-//        for(auto slider : dataSliders) {
-//            //chowdsp::SemitonesParameter::Ptr param = params->addNewSliderParam();
-//            auto ptr = std::make_unique<chowdsp::SliderAttachment>(*(*params->getFloatParams())[i++].get(),listeners,*slider,nullptr);
-//            attachmentVec.emplace_back(std::move(ptr));
-        //}
-
+        attachmentVec.emplace_back(std::move(ptrMin));
+        attachmentVec.emplace_back(std::move(ptrMax));
     }
 
     OpenGlRangeSlider() :
                           OpenGlAutoImageComponent<BKRangeSlider>(
-                              "Range",  // slider name
-                              0,        // min
-                              127,      // max
-                              0,        // default min
-                              127,      // default max
-                              1)        // increment
+                              "Range",
+                              0,
+                              127,
+                              0,
+                              127,
+                              1)
     {
         image_component_ = std::make_shared<OpenGlImageComponent>();
         setLookAndFeel(DefaultLookAndFeel::instance());

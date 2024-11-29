@@ -39,13 +39,12 @@ void DirectParametersView::resized()
         transpositionSlider->getY() + toggle_height,
         toggle_width,
         toggle_height);
-//    transpose_uses_tuning->button->setBounds(
-//           200,
-//            350,
-//            toggle_width,
-//            toggle_height);
-   // transpose_uses_tuning->toFront(false); // can't seem to keep this button on top; not responsive while sitting on top of transpositionSlider
 
+    velocityRangeSlider->setBounds(
+        title_width,
+        knobs_area.getY() - knobs_area.getHeight(),
+        knobs_area.getWidth(),
+        knobs_area.getHeight() );
 
     SynthSection::resized();
 }

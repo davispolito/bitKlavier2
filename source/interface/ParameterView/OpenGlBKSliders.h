@@ -7,6 +7,7 @@
 
 #include "BKSliders.h"
 #include "TransposeParams.h" // redo this for Range slider
+#include "RangeSliderParams.h"
 #include "open_gl_component.h"
 #include "juce_data_structures/juce_data_structures.h"
 

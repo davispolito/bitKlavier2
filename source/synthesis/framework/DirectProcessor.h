@@ -13,8 +13,10 @@
 #include <chowdsp_sources/chowdsp_sources.h>
 #include "EnvParams.h"
 #include "TransposeParams.h"
+#include "RangeSliderParams.h"
 #include "buffer_debugger.h"
 #include "Identifiers.h"
+
 struct DirectParams : chowdsp::ParamHolder
 {
     // gain slider params, for all gain-type knobs
@@ -23,11 +25,17 @@ struct DirectParams : chowdsp::ParamHolder
     float skewFactor = 2.0f;
 
     // Adds the appropriate parameters to the Direct Processor
-    DirectParams() : chowdsp::ParamHolder ("direct")
+    DirectParams() : chowdsp::ParamHolder ("Direct")
     {
-        //add (gainParam, hammerParam, releaseResonanceParam, pedalParam, velocityParam, attackParam, decayParam, sustainParam, releaseParam, transpositionsParam);
-        //add (gainParam, hammerParam, releaseResonanceParam, pedalParam, velocityParam, attackParam, decayParam, sustainParam, releaseParam);
-        add (gainParam, hammerParam, releaseResonanceParam, pedalParam, blendronicSend, transpositionUsesTuning, env, transpose);
+        add (gainParam,
+            hammerParam,
+            releaseResonanceParam,
+            pedalParam,
+            blendronicSend,
+            transpositionUsesTuning,
+            env,
+            transpose,
+            velocityRangeParams);
     }
 
     // Gain param
@@ -70,26 +78,6 @@ struct DirectParams : chowdsp::ParamHolder
         0.0f
     };
 
-    // Velocity Min param
-    chowdsp::FloatParameter::Ptr velocityParamMin {
-        juce::ParameterID { "VelocityMin", 100 },
-        "Velocity Min",
-        chowdsp::ParamUtils::createNormalisableRange (0.0f, 128.0f, 63.f), // FIX
-        0.0f,
-        &chowdsp::ParamUtils::floatValToString,
-        &chowdsp::ParamUtils::stringToFloatVal
-    };
-
-    // Velocity Max param
-    chowdsp::FloatParameter::Ptr velocityParamMax {
-        juce::ParameterID { "VelocityMax", 100 },
-        "Velocity Max",
-        chowdsp::ParamUtils::createNormalisableRange (0.0f, 128.0f, 63.f), // FIX
-        128.0f,
-        &chowdsp::ParamUtils::floatValToString,
-        &chowdsp::ParamUtils::stringToFloatVal
-    };
-
     // Transposition Uses Tuning param
     chowdsp::BoolParameter::Ptr transpositionUsesTuning {
         juce::ParameterID { "UseTuning", 100 },
@@ -103,16 +91,8 @@ struct DirectParams : chowdsp::ParamHolder
     // Transposition slider (holds up to 12 transposition values)
     TransposeParams transpose;
 
-
-    //
-    //
-    //    // Blendronic Send param
-    //    chowdsp::GainDBParameter::Ptr blendronicSendParam {
-    //            juce::ParameterID { "blendronicSend", 100 },
-    //            "BlendronicSend",
-    //            juce::NormalisableRange { -30.0f, 0.0f }, // FIX
-    //            -24.0f
-    //    };
+    // Velocity Range Slider
+    RangeSliderParams velocityRangeParams;
 
     /****************************************************************************************/
 };
@@ -201,22 +181,20 @@ public:
 private:
     //chowdsp::experimental::Directillator<float> oscillator;
     chowdsp::Gain<float> gain;
-    //juce::ADSR::Parameters adsrParams;
     juce::ScopedPointer<BufferDebugger> bufferDebugger;
+
     std::unique_ptr<BKSynthesiser> mainSynth;
     std::unique_ptr<BKSynthesiser> hammerSynth;
     std::unique_ptr<BKSynthesiser> releaseResonanceSynth;
     std::unique_ptr<BKSynthesiser> pedalSynth;
 
     float releaseResonanceSynthGainMultiplier = 10.; // because these are very soft
-    //juce::HashMap<int, juce::Array<float>> transpositionsByNoteOnNumber; // indexed by noteNumber
     juce::Array<float> midiNoteTranspositions;
     juce::Array<float> getMidiNoteTranspositions();
 
-    //juce::HashMap<int, juce::Array<float>> transpositionsByNoteOnNumber; // indexed by noteNumber
     std::map<juce::String, juce::ReferenceCountedArray<BKSamplerSound<juce::AudioFormatReader>>>* ptrToSamples;
 
-    chowdsp::ScopedCallbackList adsrCallbacks;
-    chowdsp::ScopedCallbackList vtCallbacks;
+    chowdsp::ScopedCallbackList adsrCallbacks;  // need this?
+    chowdsp::ScopedCallbackList vtCallbacks;    // need this?
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (DirectProcessor)
 };
