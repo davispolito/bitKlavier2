@@ -81,6 +81,7 @@ public:
         OpenGlAutoImageComponent<BKRangeSlider>::textEditorTextChanged(textEditor);
         redoImage();
     }
+
     std::vector<std::unique_ptr<chowdsp::SliderAttachment>> attachmentVec;
 };
 

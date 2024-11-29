@@ -186,6 +186,7 @@ juce::Array<float> DirectProcessor::getMidiNoteTranspositions()
 
     // make sure that the first slider is always represented
     transps.addIfNotAlreadyThere(state.params.transpose.t0->getCurrentValue());
+    //DBG("DirectProcessor::getMidiNoteTranspositions() t0 = " + juce::String(state.params.transpose.t0->getCurrentValue()));
 
     return transps;
 }
@@ -197,7 +198,7 @@ void DirectProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::Midi
     state.getParameterListeners().callAudioThreadBroadcasters();
 #endif
 
-    //DBG("velocity Max = " + juce::String(state.params.velocityRangeParams.velocityParamMax->get()));
+    DBG("velocity Max = " + juce::String(state.params.velocityRangeParams.velocityParamMax->getCurrentValue()));
 
     buffer.clear(); // always top of the chain as an instrument source; doesn't take audio in
     juce::Array<float> updatedTransps = getMidiNoteTranspositions(); // from the Direct transposition slider

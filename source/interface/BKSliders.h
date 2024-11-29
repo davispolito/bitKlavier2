@@ -11,7 +11,7 @@
 #include "PreparationSection.h"
 #include "BKLookAndFeel.h"
 #include "BKGraphicsConstants.h"
-#include <chowdsp_plugin_state/chowdsp_plugin_state.h>
+//#include <chowdsp_plugin_state/chowdsp_plugin_state.h>
 
 /**
  * BKStacked Slider
@@ -101,7 +101,7 @@ public:
     juce::OwnedArray<juce::Slider> dataSliders;  //displays data, user controls with topSlider
 
 private:
-    chowdsp::SliderAttachment attachment;
+    //chowdsp::SliderAttachment attachment;
 
     std::unique_ptr<juce::Slider> topSlider; //user interacts with this
 
@@ -265,6 +265,8 @@ public:
 
 
 private:
+
+    //chowdsp::SliderAttachment attachment;
 
     double sliderMin, sliderMax;
     double sliderDefaultMin, sliderDefaultMax;

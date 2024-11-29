@@ -82,6 +82,7 @@ public:
         OpenGlAutoImageComponent<BKStackedSlider>::textEditorTextChanged(textEditor);
         redoImage();
     }
+
     std::vector<std::unique_ptr<chowdsp::SliderAttachment>> attachmentVec;
 };
 
