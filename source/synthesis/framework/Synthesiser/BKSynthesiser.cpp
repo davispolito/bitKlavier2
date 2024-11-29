@@ -252,6 +252,8 @@ void BKSynthesiser::noteOn (const int midiChannel,
                           const int midiNoteNumber,
                           const float velocity)
 {
+    DBG("BKSynthesiser::noteOn -- " + juce::String(midiNoteNumber) + " " + juce::String(velocity));
+
     const juce::ScopedLock sl (lock);
 
     /**
@@ -266,7 +268,7 @@ void BKSynthesiser::noteOn (const int midiChannel,
     if (velocityMax > velocityMin) {
         if ((velocity < velocityMin) || (velocity > velocityMax)) return;
     } else {
-        if ((velocity < velocityMin) & (velocity > velocityMax)) return;
+        if ((velocity < velocityMin) && (velocity > velocityMax)) return;
     }
 
     /**
@@ -322,7 +324,6 @@ void BKSynthesiser::startVoice (BKSamplerVoice* const voice,
                                 const float velocity,
                                 const float transposition)
 {
-
     if(tuneTranspositions)
         DBG("tuneTranspositions = true");
     else
@@ -341,13 +342,15 @@ void BKSynthesiser::startVoice (BKSamplerVoice* const voice,
         if (voice->currentlyPlayingSound != nullptr)
             voice->stopNote (0.0f, false);
 
-        voice->copyAmpEnv( { adsrParams.attackParam->getCurrentValue() * 0.001f,
+        voice->copyAmpEnv( {
+            adsrParams.attackParam->getCurrentValue() * 0.001f,
             adsrParams.decayParam->getCurrentValue() * 0.001f,
             adsrParams.sustainParam->getCurrentValue(),
             adsrParams.releaseParam->getCurrentValue() * 0.001f,
-                            static_cast<float>(adsrParams.attackPowerParam->getCurrentValue() * -1.),
-                            static_cast<float>(adsrParams.decayPowerParam->getCurrentValue() * -1.),
-                            static_cast<float>(adsrParams.releasePowerParam->getCurrentValue() * -1.)});
+            static_cast<float>(adsrParams.attackPowerParam->getCurrentValue() * -1.),
+            static_cast<float>(adsrParams.decayPowerParam->getCurrentValue() * -1.),
+            static_cast<float>(adsrParams.releasePowerParam->getCurrentValue() * -1.)
+        });
         voice->setGain(juce::Decibels::decibelsToGain (synthGain.getCurrentValue()));
         voice->currentlyPlayingNote = midiNoteNumber;
         voice->currentPlayingMidiChannel = midiChannel;

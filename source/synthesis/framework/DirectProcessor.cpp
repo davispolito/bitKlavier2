@@ -6,11 +6,12 @@
 #include "Synthesiser/Sample.h"
 #include "common.h"
 #include <chowdsp_serialization/chowdsp_serialization.h>
-DirectProcessor::DirectProcessor (const juce::ValueTree& v) : PluginBase (v, nullptr, directBusLayout()),
-mainSynth(new BKSynthesiser(state.params.env, state.params.gainParam, state.params.velocityRangeParams)),
-hammerSynth(new BKSynthesiser(state.params.env, state.params.gainParam, state.params.velocityRangeParams)),
-releaseResonanceSynth(new BKSynthesiser(state.params.env, state.params.gainParam, state.params.velocityRangeParams)),
-pedalSynth(new BKSynthesiser(state.params.env, state.params.gainParam, state.params.velocityRangeParams))
+DirectProcessor::DirectProcessor (const juce::ValueTree& v) :
+    PluginBase (v, nullptr, directBusLayout()),
+    mainSynth(new BKSynthesiser(state.params.env, state.params.gainParam, state.params.velocityRangeParams)),
+    hammerSynth(new BKSynthesiser(state.params.env, state.params.gainParam, state.params.velocityRangeParams)),
+    releaseResonanceSynth(new BKSynthesiser(state.params.env, state.params.gainParam, state.params.velocityRangeParams)),
+    pedalSynth(new BKSynthesiser(state.params.env, state.params.gainParam, state.params.velocityRangeParams))
 {
     for (int i = 0; i < 300; i++)
     {
@@ -122,7 +123,9 @@ pedalSynth(new BKSynthesiser(state.params.env, state.params.gainParam, state.par
     // these synths play their stuff on noteOff rather than noteOn
     hammerSynth->isKeyReleaseSynth (true);
     releaseResonanceSynth->isKeyReleaseSynth (true);
+
     pedalSynth->isPedalSynth (true);
+
     bufferDebugger = new BufferDebugger();
 
 }
@@ -194,6 +197,8 @@ void DirectProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::Midi
     state.getParameterListeners().callAudioThreadBroadcasters();
 #endif
 
+    //DBG("velocity Max = " + juce::String(state.params.velocityRangeParams.velocityParamMax->get()));
+
     buffer.clear(); // always top of the chain as an instrument source; doesn't take audio in
     juce::Array<float> updatedTransps = getMidiNoteTranspositions(); // from the Direct transposition slider
 
@@ -206,7 +211,9 @@ void DirectProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::Midi
     }
 
     if (hammerSynth->hasSamples())
+    {
         hammerSynth->renderNextBlock (buffer, midiMessages, 0, buffer.getNumSamples());
+    }
 
     if (releaseResonanceSynth->hasSamples())
     {
@@ -215,9 +222,11 @@ void DirectProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::Midi
     }
 
     if (pedalSynth->hasSamples())
+    {
         pedalSynth->renderNextBlock (buffer, midiMessages, 0, buffer.getNumSamples());
+    }
 
-//DBG ("attack: " + juce::String (state.params.env.attackParam->get()));
+    //DBG ("attack: " + juce::String (state.params.env.attackParam->get()));
     //juce::dsp::AudioBlock<float> block(buffer);
     //melatonin::printSparkline(buffer);
     bufferDebugger->capture("direct", buffer.getReadPointer(0), buffer.getNumSamples(), -1.f, 1.f);

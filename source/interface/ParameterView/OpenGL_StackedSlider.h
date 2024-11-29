@@ -15,14 +15,14 @@ class OpenGL_StackedSlider : public OpenGlAutoImageComponent<BKStackedSlider>
 {
 public:
     OpenGL_StackedSlider (TransposeParams *params, chowdsp::ParameterListeners& listeners) :
-            OpenGlAutoImageComponent<BKStackedSlider>(
-                    "StackedSlider",    // slider name
-                    -12,                // min
-                    12,                 // max
-                    -12,                // default min
-                    12,                 // default max
-                    0,                  // default val
-                    0.01)               // increment
+                            OpenGlAutoImageComponent<BKStackedSlider>(
+                                    "StackedSlider",
+                                    -12,
+                                    12,
+                                    -12,
+                                    12,
+                                    0,
+                                    0.01)
     {
         BKStackedSlider::setName(params->getName());
         image_component_ = std::make_shared<OpenGlImageComponent>();
@@ -34,18 +34,17 @@ public:
             auto ptr = std::make_unique<chowdsp::SliderAttachment>(*(*params->getFloatParams())[i++].get(),listeners,*slider,nullptr);
             attachmentVec.emplace_back(std::move(ptr));
         }
-
     }
 
     OpenGL_StackedSlider() :
             OpenGlAutoImageComponent<BKStackedSlider>(
-                    "Transpositions",    // slider name
-                    -12,                 // min
-                    12,                  // max
-                    -12,                 // default min
-                    12,                  // default max
-                    0,                   // default val
-                    0.01)                // increment
+                    "Transpositions",
+                    -12,
+                    12,
+                    -12,
+                    12,
+                    0,
+                    0.01)
     {
         image_component_ = std::make_shared<OpenGlImageComponent>();
         setLookAndFeel(DefaultLookAndFeel::instance());

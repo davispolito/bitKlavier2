@@ -23,12 +23,13 @@ public:
                                 128,
                                 1)
     {
+        BKRangeSlider::setName(params->getName());
         image_component_ = std::make_shared<OpenGlImageComponent>();
         setLookAndFeel(DefaultLookAndFeel::instance());
         image_component_->setComponent(this);
 
-        auto ptrMin = std::make_unique<chowdsp::SliderAttachment>(*(*params->getFloatParams())[0],listeners,minSlider,nullptr);
-        auto ptrMax = std::make_unique<chowdsp::SliderAttachment>(*(*params->getFloatParams())[1],listeners,maxSlider,nullptr);
+        auto ptrMin = std::make_unique<chowdsp::SliderAttachment>(*(*params->getFloatParams())[0].get(),listeners,minSlider,nullptr);
+        auto ptrMax = std::make_unique<chowdsp::SliderAttachment>(*(*params->getFloatParams())[1].get(),listeners,maxSlider,nullptr);
 
         attachmentVec.emplace_back(std::move(ptrMin));
         attachmentVec.emplace_back(std::move(ptrMax));

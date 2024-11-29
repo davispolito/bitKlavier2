@@ -113,14 +113,11 @@ public juce::ValueTree::Listener
 {
 public:
     DirectProcessor (const juce::ValueTree& v);
-    ~DirectProcessor()
-    {
+    ~DirectProcessor(){}
 
-    }
     void prepareToPlay (double sampleRate, int samplesPerBlock) override;
     void releaseResources() override {}
     void processAudioBlock (juce::AudioBuffer<float>& buffer) override {};
-
     void processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages) override;
 
     bool acceptsMidi() const override
@@ -188,13 +185,13 @@ private:
     std::unique_ptr<BKSynthesiser> releaseResonanceSynth;
     std::unique_ptr<BKSynthesiser> pedalSynth;
 
-    float releaseResonanceSynthGainMultiplier = 10.; // because these are very soft
+    //float releaseResonanceSynthGainMultiplier = 10.; // because these are very soft
     juce::Array<float> midiNoteTranspositions;
     juce::Array<float> getMidiNoteTranspositions();
 
     std::map<juce::String, juce::ReferenceCountedArray<BKSamplerSound<juce::AudioFormatReader>>>* ptrToSamples;
 
-    chowdsp::ScopedCallbackList adsrCallbacks;  // need this?
-    chowdsp::ScopedCallbackList vtCallbacks;    // need this?
+    //chowdsp::ScopedCallbackList adsrCallbacks;  // need this?
+    //chowdsp::ScopedCallbackList vtCallbacks;    // need this?
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (DirectProcessor)
 };

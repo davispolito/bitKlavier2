@@ -82,19 +82,19 @@ namespace bitklavier
     void PreparationStateImpl<ParameterState, NonParameterState, Serializer>::deserialize (const juce::MemoryBlock& data)
     {
         callOnMainThread (
-                [this, data]
-                {
-                    chowdsp::Serialization::deserialize<Serializer> (data, *this);
+            [this, data]
+            {
+                chowdsp::Serialization::deserialize<Serializer> (data, *this);
 
-                    params.applyVersionStreaming (pluginStateVersion);
-                    if (nonParams.versionStreamingCallback != nullptr)
-                        nonParams.versionStreamingCallback (pluginStateVersion);
+                params.applyVersionStreaming (pluginStateVersion);
+                if (nonParams.versionStreamingCallback != nullptr)
+                    nonParams.versionStreamingCallback (pluginStateVersion);
 
-                    getParameterListeners().updateBroadcastersFromMessageThread();
+                getParameterListeners().updateBroadcastersFromMessageThread();
 
-                    if (undoManager != nullptr)
-                        undoManager->clearUndoHistory();
-                });
+                if (undoManager != nullptr)
+                    undoManager->clearUndoHistory();
+            });
     }
 
 /** Serializer */

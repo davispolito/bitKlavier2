@@ -64,7 +64,7 @@ public:
 
     std::unique_ptr<bitklavier::parameters_view_detail::BooleanParameterComponent> transpose_uses_tuning;
     std::unique_ptr<OpenGL_StackedSlider> transpositionSlider;
-    chowdsp::ScopedCallbackList transposeCallbacks; // need this?
+    //chowdsp::ScopedCallbackList transposeCallbacks; // need this?
 
     std::unique_ptr<OpenGL_RangeSlider> velocityRangeSlider;
 
