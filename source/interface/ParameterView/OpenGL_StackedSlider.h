@@ -2,19 +2,19 @@
 // Created by Davis Polito on 11/13/24.
 //
 
-#ifndef BITKLAVIER2_OPENGLSTACKEDSLIDER_H
-#define BITKLAVIER2_OPENGLSTACKEDSLIDER_H
+#ifndef BITKLAVIER2_OPENGL_STACKEDSLIDER_H
+#define BITKLAVIER2_OPENGL_STACKEDSLIDER_H
 
-#include "OpenGlBKSliders.h"
+#include "OpenGL_BKSliders.h"
 
 /************************************************************************************/
-/*                         CLASS: OpenGlStackedSlider                         */
+/*                         CLASS: OpenGL_StackedSlider                         */
 /************************************************************************************/
 
-class OpenGlStackedSlider : public OpenGlAutoImageComponent<BKStackedSlider>
+class OpenGL_StackedSlider : public OpenGlAutoImageComponent<BKStackedSlider>
 {
 public:
-    OpenGlStackedSlider (TransposeParams *params, chowdsp::ParameterListeners& listeners) :
+    OpenGL_StackedSlider (TransposeParams *params, chowdsp::ParameterListeners& listeners) :
             OpenGlAutoImageComponent<BKStackedSlider>(
                     "StackedSlider",    // slider name
                     -12,                // min
@@ -37,7 +37,7 @@ public:
 
     }
 
-    OpenGlStackedSlider() :
+    OpenGL_StackedSlider() :
             OpenGlAutoImageComponent<BKStackedSlider>(
                     "Transpositions",    // slider name
                     -12,                 // min
@@ -88,4 +88,4 @@ public:
 
 
 
-#endif //BITKLAVIER2_OPENGLSTACKEDSLIDER_H
+#endif //BITKLAVIER2_OPENGL_STACKEDSLIDER_H

@@ -4,10 +4,9 @@
 
 #ifndef BITKLAVIER2_DIRECTPARAMETERSVIEW_H
 #define BITKLAVIER2_DIRECTPARAMETERSVIEW_H
-#include "OpenGlStackedSlider.h"
-#include "OpenGlRangeSlider.h"
+#include "OpenGL_RangeSlider.h"
+#include "OpenGL_StackedSlider.h"
 #include "ParametersView.h"
-//#include "TransposeParams.h"
 #include "envelope_section.h"
 
 class DirectParametersView : public bitklavier::ParametersView
@@ -25,18 +24,22 @@ public:
             {
                 if(auto *transposeParam = dynamic_cast<TransposeParams*>(&paramHolder))
                 {
-                    transpositionSlider = std::make_unique<OpenGlStackedSlider>(transposeParam, listeners);
+                    transpositionSlider = std::make_unique<OpenGL_StackedSlider>(transposeParam, listeners);
                 }
 
                 if(auto *velRangeParams = dynamic_cast<RangeSliderParams*>(&paramHolder))
                 {
-                    velocityRangeSlider = std::make_unique<OpenGlRangeSlider>(velRangeParams, listeners);
+                    velocityRangeSlider = std::make_unique<OpenGL_RangeSlider>(velRangeParams, listeners);
                 }
 
                 DBG("DirectParametersView: paramholder name " + paramHolder.getName());
+
+                /**
+                 * i'm not clear why some things are here, while others (like ENV) are in ParametersView
+                 * ???
+                 */
             }
         );
-
 
         // extract special components from vector of general components
         auto it = std::find_if(
@@ -47,7 +50,6 @@ public:
 
         _ASSERT(it != boolean_pairs.end());
         transpose_uses_tuning = std::move(*it);
-
         transpose_uses_tuning->button->setAlwaysOnTop(true);
         addAndMakeVisible(transpose_uses_tuning->button.get());
         boolean_pairs.erase(it);
@@ -61,11 +63,10 @@ public:
     }
 
     std::unique_ptr<bitklavier::parameters_view_detail::BooleanParameterComponent> transpose_uses_tuning;
-    std::unique_ptr<OpenGlStackedSlider> transpositionSlider;
-    chowdsp::ScopedCallbackList transposeCallbacks;
+    std::unique_ptr<OpenGL_StackedSlider> transpositionSlider;
+    chowdsp::ScopedCallbackList transposeCallbacks; // need this?
 
-    std::unique_ptr<OpenGlRangeSlider> velocityRangeSlider;
-
+    std::unique_ptr<OpenGL_RangeSlider> velocityRangeSlider;
 
     void resized() override;
 

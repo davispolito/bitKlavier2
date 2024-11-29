@@ -2,19 +2,19 @@
 // Created by Dan Trueman on 11/25/24.
 //
 
-#ifndef BITKLAVIER2_OPENGLRANGESLIDER_H
-#define BITKLAVIER2_OPENGLRANGESLIDER_H
+#ifndef BITKLAVIER2_OPENGL_RANGESLIDER_H
+#define BITKLAVIER2_OPENGL_RANGESLIDER_H
 
-#include "OpenGlBKSliders.h"
+#include "OpenGL_BKSliders.h"
 
 /************************************************************************************/
-/*                              CLASS: OpenGlRangeSlider                            */
+/*                              CLASS: OpenGL_RangeSlider                            */
 /************************************************************************************/
 
-class OpenGlRangeSlider : public OpenGlAutoImageComponent<BKRangeSlider>
+class OpenGL_RangeSlider : public OpenGlAutoImageComponent<BKRangeSlider>
 {
 public:
-    OpenGlRangeSlider(RangeSliderParams *params, chowdsp::ParameterListeners& listeners) :
+    OpenGL_RangeSlider (RangeSliderParams *params, chowdsp::ParameterListeners& listeners) :
                           OpenGlAutoImageComponent<BKRangeSlider>(
                               "Range",  // slider name
                                     0,     // min
@@ -34,7 +34,7 @@ public:
         attachmentVec.emplace_back(std::move(ptrMax));
     }
 
-    OpenGlRangeSlider() :
+    OpenGL_RangeSlider() :
                           OpenGlAutoImageComponent<BKRangeSlider>(
                               "Range",
                               0,
@@ -83,4 +83,4 @@ public:
     std::vector<std::unique_ptr<chowdsp::SliderAttachment>> attachmentVec;
 };
 
-#endif //BITKLAVIER2_OPENGLRANGESLIDER_H
+#endif //BITKLAVIER2_OPENGL_RANGESLIDER_H
