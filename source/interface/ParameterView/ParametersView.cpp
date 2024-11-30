@@ -21,38 +21,54 @@ namespace bitklavier
          DBG("SliderParameterComponent: create slider for " + param.paramID + " with parent " + parent.getName());
     }
 
-    std::unique_ptr<SynthSection> parameters_view_detail::createEditorSection(
+    std::unique_ptr<SynthSection> parameters_view_detail::createEditorSection (
                     chowdsp::ParamHolder &params,
                     chowdsp::ParameterListeners& listeners,
                     SynthSection &parent)
     {
          if (auto *envParams = dynamic_cast<EnvParams*>(&params))
-             return std::make_unique<EnvelopeSection>("ENV", "ENV",*envParams,listeners, parent);//std::make_unique<BooleanParameterComponent>(*boolParam, listeners);
+             return std::make_unique<EnvelopeSection>("ENV", "ENV",*envParams,listeners, parent);
 
          return {};
     }
 
     //==============================================================================
-    ParametersView::ParametersView(chowdsp::PluginState &pluginState, chowdsp::ParamHolder &params, OpenGlWrapper *open_gl)
-            : ParametersView (pluginState.getParameterListeners(), params, open_gl)
+    ParametersView::ParametersView (
+        chowdsp::PluginState &pluginState,
+        chowdsp::ParamHolder &params,
+        OpenGlWrapper *open_gl)
+            : ParametersView (
+              pluginState.getParameterListeners(),
+              params,
+              open_gl)
     {}
 
-    ParametersView::ParametersView(chowdsp::ParameterListeners& paramListeners, chowdsp::ParamHolder& params, OpenGlWrapper *open_gl)
-            :  SynthSection(params.getName(), open_gl)
+    ParametersView::ParametersView (
+        chowdsp::ParameterListeners& paramListeners,
+        chowdsp::ParamHolder& params,
+        OpenGlWrapper *open_gl)
+            :  SynthSection(
+              params.getName(),
+              open_gl)
     {
-        params.doForAllParameterContainers(
+        params.doForAllParameterContainers (
             [this, &paramListeners](auto &paramVec)
             {
                 DBG("----paramvec----");
                 for (auto &param : paramVec)
                     createParameterComp(paramListeners, param,*this);
             },
-            [this, &paramListeners](auto &paramHolder) {
+            [this, &paramListeners](auto &paramHolder)
+            {
                 DBG("ParametersView: paramholder name " + paramHolder.getName());
-                auto section  = parameters_view_detail::createEditorSection(paramHolder,paramListeners,*this);
+                auto section= parameters_view_detail::createEditorSection (
+                    paramHolder,
+                    paramListeners,
+                    *this);
                 addSubSection(section.get());
                 paramHolderComps.push_back(std::move(section));
-            });
+            }
+        );
 
         setLookAndFeel(DefaultLookAndFeel::instance());
         setOpaque(true);

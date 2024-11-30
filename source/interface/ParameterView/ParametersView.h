@@ -11,10 +11,19 @@ namespace bitklavier {
         struct BooleanParameterComponent
         {
         public:
-            BooleanParameterComponent(chowdsp::BoolParameter &param, chowdsp::ParameterListeners& listeners, SynthSection &parent)
-                    : button(std::make_shared<SynthButton>(param.paramID)), attachment(param, listeners, *button, nullptr) {
+            BooleanParameterComponent (
+                chowdsp::BoolParameter &param,
+                chowdsp::ParameterListeners& listeners,
+                SynthSection &parent) :
+                    button(std::make_shared<SynthButton>(param.paramID)),
+                    attachment (
+                                param,
+                                listeners,
+                                *button,
+                                nullptr
+                                )
+            {
                 parent.addButton(button.get());
-
             }
 
             std::shared_ptr<SynthButton> button;
@@ -26,7 +35,10 @@ namespace bitklavier {
 
         struct SliderParameterComponent
         {
-            SliderParameterComponent(chowdsp::FloatParameter &param, chowdsp::ParameterListeners& listeners, SynthSection &parent);
+            SliderParameterComponent (
+                chowdsp::FloatParameter &param,
+                chowdsp::ParameterListeners& listeners,
+                SynthSection &parent);
 
             std::shared_ptr<SynthSlider> slider;
             chowdsp::SliderAttachment attachment;
@@ -34,7 +46,11 @@ namespace bitklavier {
             JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SliderParameterComponent)
         };
 
-        std::unique_ptr<SynthSection> createEditorSection(chowdsp::ParamHolder &params, chowdsp::ParameterListeners& listeners, SynthSection &parent);
+        std::unique_ptr<SynthSection> createEditorSection (
+            chowdsp::ParamHolder &params,
+            chowdsp::ParameterListeners& listeners,
+            SynthSection &parent);
+
     } // namespace parameters_view_detail
 
 
@@ -47,11 +63,11 @@ namespace bitklavier {
         ~ParametersView() override;
 
         void paint(juce::Graphics &) override;
-
         void resized() override;
+
 //        void initOpenGlComponents(OpenGlWrapper &open_gl) override;
 //        void renderOpenGlComponents(OpenGlWrapper& open_gl, bool animate) override;
-        void init_();
+//        void init_();
 
         /** Returns nullptr if no component is found for the given parameter */
         [[nodiscard]] juce::Component* getComponentForParameter (const juce::RangedAudioParameter&);
@@ -68,7 +84,10 @@ namespace bitklavier {
         }
 
     private:
-        void createParameterComp(chowdsp::ParameterListeners& listeners, juce::RangedAudioParameter &parameter, SynthSection& parent)
+        void createParameterComp(
+            chowdsp::ParameterListeners& listeners,
+            juce::RangedAudioParameter &parameter,
+            SynthSection& parent)
         {
             if (auto *boolParam = dynamic_cast<chowdsp::BoolParameter *> (&parameter))
                 boolean_pairs.push_back(std::make_unique<parameters_view_detail::BooleanParameterComponent>(*boolParam, listeners,*this));
