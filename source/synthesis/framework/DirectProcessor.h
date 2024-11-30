@@ -158,7 +158,8 @@ public:
         juce::String b  = t.getProperty(IDs::hammerSampleSet, "");
         juce::String c  = t.getProperty(IDs::releaseResonanceSampleSet, "");
         juce::String d  = t.getProperty(IDs::pedalSampleSet, "");
-        addSoundSet (&(*ptrToSamples)[a],
+        addSoundSet (
+                &(*ptrToSamples)[a],
                 &(*ptrToSamples)[b],
                 &(*ptrToSamples)[c],
                 &(*ptrToSamples)[d]);

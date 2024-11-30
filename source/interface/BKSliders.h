@@ -74,11 +74,25 @@ public:
     void addSlider(juce::NotificationType newnotify);
 
     inline juce::String getText(void) { return editValsTextField->getText(); }
-    inline void setText(juce::String text) { editValsTextField->setText(text, juce::dontSendNotification); }
 
-    void setName(juce::String newName)    { sliderName = newName; showName.setText(sliderName, juce::dontSendNotification); }
-    juce::String getName()                { return sliderName; }
-    void setTooltip(juce::String newTip)  { topSlider->setTooltip(newTip); showName.setTooltip(newTip); }
+    inline void setText(juce::String text)
+    {
+        editValsTextField->setText(text, juce::dontSendNotification);
+    }
+
+    void setName(juce::String newName)
+    {
+        sliderName = newName;
+        showName.setText(sliderName, juce::dontSendNotification);
+    }
+
+    juce::String getName() { return sliderName; }
+
+    void setTooltip(juce::String newTip)
+    {
+        topSlider->setTooltip(newTip);
+        showName.setTooltip(newTip);
+    }
 
     void resized() override;
 
@@ -87,9 +101,9 @@ public:
 
     class Listener
     {
-    public:
-        virtual ~Listener() {};
-        virtual void BKStackedSliderValueChanged(juce::String name, juce::Array<float> val) = 0; //rewrite all this to pass "this" and check by slider ref instead of name?
+        public:
+            virtual ~Listener() {};
+            virtual void BKStackedSliderValueChanged(juce::String name, juce::Array<float> val) = 0; //rewrite all this to pass "this" and check by slider ref instead of name?
     };
 
     juce::ListenerList<Listener> listeners;
@@ -180,12 +194,21 @@ public:
     juce::TextEditor minValueTF;
     juce::TextEditor maxValueTF;
 
-    void setName(juce::String newName)    { sliderName = newName; showName.setText(sliderName, juce::dontSendNotification); }
-    juce::String getName()                { return sliderName; }
-    void setToolTipString(juce::String newTip) {  showName.setTooltip(newTip);
+    void setName(juce::String newName)
+    {
+        sliderName = newName;
+        showName.setText(sliderName, juce::dontSendNotification);
+    }
+
+    juce::String getName() { return sliderName; }
+
+    void setToolTipString(juce::String newTip)
+    {
+        showName.setTooltip(newTip);
         invisibleSlider.setTooltip(newTip);
         minValueTF.setTooltip(newTip);
-        maxValueTF.setTooltip(newTip); }
+        maxValueTF.setTooltip(newTip);
+    }
 
     void setMinValue(double newval, juce::NotificationType notify);
     void setMaxValue(double newval, juce::NotificationType notify);
@@ -250,11 +273,9 @@ public:
 
     class Listener
     {
-
-    public:
-        virtual ~Listener() {};
-
-        virtual void BKRangeSliderValueChanged(juce::String name, double min, double max) = 0;
+        public:
+            virtual ~Listener() {};
+            virtual void BKRangeSliderValueChanged(juce::String name, double min, double max) = 0;
     };
 
     juce::ListenerList<Listener> listeners;

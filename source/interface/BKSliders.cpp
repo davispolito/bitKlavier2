@@ -704,6 +704,7 @@ void BKRangeSlider::sliderValueChanged (juce::Slider *slider)
                         setMaxValue(minSlider.getValue(), juce::dontSendNotification);
             }
 
+            //DBG("BKRangeSlider::sliderValueChanged: " + juce::String(minSlider.getValue()) + " " + juce::String(maxSlider.getValue()));
             listeners.call(&BKRangeSlider::Listener::BKRangeSliderValueChanged,
                 getName(),
                 minSlider.getValue(),
