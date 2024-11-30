@@ -8,7 +8,7 @@
 #include "OpenGL_BKSliders.h"
 
 /************************************************************************************/
-/*                         CLASS: OpenGL_StackedSlider                         */
+/*                          CLASS: OpenGL_StackedSlider                             */
 /************************************************************************************/
 
 class OpenGL_StackedSlider : public OpenGlAutoImageComponent<BKStackedSlider>

@@ -8,7 +8,7 @@
 #include "OpenGL_BKSliders.h"
 
 /************************************************************************************/
-/*                              CLASS: OpenGL_RangeSlider                            */
+/*                           CLASS: OpenGL_RangeSlider                              */
 /************************************************************************************/
 
 class OpenGL_RangeSlider : public OpenGlAutoImageComponent<BKRangeSlider>

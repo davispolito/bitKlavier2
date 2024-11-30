@@ -47,10 +47,12 @@ public:
 
         // extract special components from vector of general components
         auto it = std::find_if(
-            boolean_pairs.begin(),
-            boolean_pairs.end(),
-            [](const std::unique_ptr<bitklavier::parameters_view_detail::BooleanParameterComponent>& p) { return p->button->getName() == "UseTuning"; }
-            );
+                            boolean_pairs.begin(),
+                            boolean_pairs.end(),
+                            [](const std::unique_ptr<bitklavier::parameters_view_detail::BooleanParameterComponent>& p)
+                            {
+                                return p->button->getName() == "UseTuning";
+                            });
 
         _ASSERT(it != boolean_pairs.end());
         transpose_uses_tuning = std::move(*it);
@@ -68,7 +70,6 @@ public:
 
     std::unique_ptr<bitklavier::parameters_view_detail::BooleanParameterComponent> transpose_uses_tuning;
     std::unique_ptr<OpenGL_StackedSlider> transpositionSlider;
-    //chowdsp::ScopedCallbackList transposeCallbacks; // need this?
 
     std::unique_ptr<OpenGL_RangeSlider> velocityRangeSlider;
 
