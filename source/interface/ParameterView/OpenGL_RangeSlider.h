@@ -53,29 +53,33 @@ public:
     virtual void resized() override
     {
         OpenGlAutoImageComponent<BKRangeSlider>::resized();
-        // if (isShowing())
         redoImage();
     }
+
     virtual void mouseDrag(const juce::MouseEvent &e) override
     {
         OpenGlAutoImageComponent<BKRangeSlider>::mouseDrag(e);
         redoImage();
     }
+
     void textEditorReturnKeyPressed(juce::TextEditor& textEditor) override
     {
         OpenGlAutoImageComponent<BKRangeSlider>::textEditorReturnKeyPressed(textEditor);
         redoImage();
     }
+
     void textEditorFocusLost(juce::TextEditor& textEditor) override
     {
         OpenGlAutoImageComponent<BKRangeSlider>::textEditorFocusLost(textEditor);
         redoImage();
     }
+
     void textEditorEscapeKeyPressed (juce::TextEditor& textEditor) override
     {
         OpenGlAutoImageComponent<BKRangeSlider>::textEditorEscapeKeyPressed(textEditor);
         redoImage();
     }
+
     void textEditorTextChanged(juce::TextEditor& textEditor) override
     {
         OpenGlAutoImageComponent<BKRangeSlider>::textEditorTextChanged(textEditor);

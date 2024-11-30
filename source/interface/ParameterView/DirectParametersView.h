@@ -12,8 +12,12 @@
 class DirectParametersView : public bitklavier::ParametersView
 {
 public:
-    DirectParametersView(chowdsp::PluginState& pluginState, chowdsp::ParamHolder& params, OpenGlWrapper *open_gl) :
-                         bitklavier::ParametersView(pluginState,params,open_gl)
+    DirectParametersView (
+        chowdsp::PluginState& pluginState,
+        chowdsp::ParamHolder& params,
+        OpenGlWrapper *open_gl) : bitklavier::ParametersView (
+                                      pluginState,
+                                      params,open_gl)
     {
 //        envelope = std::make_unique<EnvelopeSection>("ENV", "err");
 //        addSubSection(envelope.get());

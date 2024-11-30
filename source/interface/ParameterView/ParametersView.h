@@ -5,10 +5,10 @@
 struct OpenGlWrapper;
 
 namespace bitklavier {
-    namespace parameters_view_detail {
-
-        //==============================================================================
-        struct BooleanParameterComponent  {
+    namespace parameters_view_detail
+    {
+        struct BooleanParameterComponent
+        {
         public:
             BooleanParameterComponent(chowdsp::BoolParameter &param, chowdsp::ParameterListeners& listeners, SynthSection &parent)
                     : button(std::make_shared<SynthButton>(param.paramID)), attachment(param, listeners, *button, nullptr) {
@@ -23,8 +23,8 @@ namespace bitklavier {
         };
 
 
-
-        struct SliderParameterComponent {
+        struct SliderParameterComponent
+        {
             SliderParameterComponent(chowdsp::FloatParameter &param, chowdsp::ParameterListeners& listeners, SynthSection &parent);
 
             std::shared_ptr<SynthSlider> slider;
@@ -33,14 +33,13 @@ namespace bitklavier {
             JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SliderParameterComponent)
         };
 
-
-
         std::unique_ptr<SynthSection> createEditorSection(chowdsp::ParamHolder &params, chowdsp::ParameterListeners& listeners, SynthSection &parent);
     } // namespace parameters_view_detail
 
 
     /** Clone of juce::GenericAudioProcessorEditor, but usable as a generic component */
-    class  ParametersView : public SynthSection {
+    class  ParametersView : public SynthSection
+    {
     public:
         ParametersView (chowdsp::PluginState& pluginState, chowdsp::ParamHolder& params, OpenGlWrapper *open_gl);
         ParametersView (chowdsp::ParameterListeners& paramListeners, chowdsp::ParamHolder& params, OpenGlWrapper *open_gl);
@@ -84,26 +83,4 @@ namespace bitklavier {
         JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ParametersView)
     };
 
-///** Clone of juce::GenericAudioProcessorEditor. */
-//    class ParametersViewEditor : public juce::AudioProcessorEditor {
-//    public:
-//        ParametersViewEditor(juce::AudioProcessor &proc, chowdsp::PluginState &pluginState,
-//                             chowdsp::ParamHolder &params)
-//                : juce::AudioProcessorEditor(proc),
-//                  view(pluginState, params, ) {
-//            setResizable(true, false);
-//            setSize(view.getWidth(), view.getHeight());
-//
-//            addAndMakeVisible(view);
-//        }
-//
-//        void resized() override {
-//            view.setBounds(getLocalBounds());
-//        }
-//
-//    private:
-//        ParametersView view;
-//
-//        JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ParametersViewEditor)
-//    };
-}//namespace bitilavier
+}   //namespace bitklavier

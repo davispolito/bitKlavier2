@@ -75,6 +75,9 @@ juce::Array<float> BKstringToFloatArray(juce::String s)
     return arr;
 }
 
+// ******************************************************************************************************************** //
+// ************************************************  BKStackedSlider ************************************************** //
+// ******************************************************************************************************************** //
 
 BKStackedSlider::BKStackedSlider(
     juce::String sliderName,
@@ -145,8 +148,6 @@ BKStackedSlider::BKStackedSlider(
 
     topSliderLookAndFeel.setColour(juce::Slider::thumbColourId, juce::Colour::greyLevel (0.8f).contrasting().withAlpha (0.0f));
     stackedSliderLookAndFeel.setColour(juce::Slider::thumbColourId, juce::Colours::goldenrod.withMultipliedAlpha(0.95));
-
-    //attachment = std::make_unique<chowdsp::SliderAttachment>(params.delayParam, listeners, *delay_, nullptr);
 
 }
 
@@ -561,7 +562,7 @@ void BKStackedSlider::resized ()
 }
 
 // ********************************************************************************************* //
-// ************************  BKRangeSlider ***************************************************** //
+// **********************************  BKRangeSlider ******************************************* //
 // ********************************************************************************************* //
 
 BKRangeSlider::BKRangeSlider (juce::String name, double min, double max, double defmin, double defmax, double increment):

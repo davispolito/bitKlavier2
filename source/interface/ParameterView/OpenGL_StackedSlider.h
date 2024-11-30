@@ -54,29 +54,33 @@ public:
     virtual void resized() override
     {
         OpenGlAutoImageComponent<BKStackedSlider>::resized();
-        // if (isShowing())
         redoImage();
     }
+
     virtual void mouseDrag(const juce::MouseEvent &e) override
     {
         OpenGlAutoImageComponent<BKStackedSlider>::mouseDrag(e);
         redoImage();
     }
+
     void textEditorReturnKeyPressed(juce::TextEditor& textEditor) override
     {
         OpenGlAutoImageComponent<BKStackedSlider>::textEditorReturnKeyPressed(textEditor);
         redoImage();
     }
+
     void textEditorFocusLost(juce::TextEditor& textEditor) override
     {
         OpenGlAutoImageComponent<BKStackedSlider>::textEditorFocusLost(textEditor);
         redoImage();
     }
+
     void textEditorEscapeKeyPressed (juce::TextEditor& textEditor) override
     {
         OpenGlAutoImageComponent<BKStackedSlider>::textEditorEscapeKeyPressed(textEditor);
         redoImage();
     }
+
     void textEditorTextChanged(juce::TextEditor& textEditor) override
     {
         OpenGlAutoImageComponent<BKStackedSlider>::textEditorTextChanged(textEditor);

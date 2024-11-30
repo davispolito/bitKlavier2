@@ -100,12 +100,7 @@ struct DirectParams : chowdsp::ParamHolder
 struct DirectNonParameterState : chowdsp::NonParamState
 {
     DirectNonParameterState()
-    {
-        //addStateValues ({ /*,&isSelected*/});
-    }
-
-    //chowdsp::StateValue<juce::Point<int>> prepPoint { "prep_point", { 300, 500 } };
-    //chowdsp::StateValue<bool> isSelected { "selected", true };
+    {}
 };
 
 class DirectProcessor : public bitklavier::PluginBase<bitklavier::PreparationStateImpl<DirectParams, DirectNonParameterState, chowdsp::XMLSerializer>>,
@@ -176,7 +171,6 @@ public:
     void valueTreeRedirected        (juce::ValueTree&)                    {}
 
 private:
-    //chowdsp::experimental::Directillator<float> oscillator;
     chowdsp::Gain<float> gain;
     juce::ScopedPointer<BufferDebugger> bufferDebugger;
 
@@ -185,13 +179,10 @@ private:
     std::unique_ptr<BKSynthesiser> releaseResonanceSynth;
     std::unique_ptr<BKSynthesiser> pedalSynth;
 
-    //float releaseResonanceSynthGainMultiplier = 10.; // because these are very soft
     juce::Array<float> midiNoteTranspositions;
     juce::Array<float> getMidiNoteTranspositions();
 
     std::map<juce::String, juce::ReferenceCountedArray<BKSamplerSound<juce::AudioFormatReader>>>* ptrToSamples;
 
-    //chowdsp::ScopedCallbackList adsrCallbacks;  // need this?
-    //chowdsp::ScopedCallbackList vtCallbacks;    // need this?
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (DirectProcessor)
 };

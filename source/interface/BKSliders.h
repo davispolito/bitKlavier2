@@ -5,13 +5,14 @@
 #ifndef BITKLAVIER2_BKSLIDERS_H
 #define BITKLAVIER2_BKSLIDERS_H
 
-#endif //BITKLAVIER2_BKSLIDERS_H
-
 #include "FullInterface.h"
 #include "PreparationSection.h"
 #include "BKLookAndFeel.h"
 #include "BKGraphicsConstants.h"
-//#include <chowdsp_plugin_state/chowdsp_plugin_state.h>
+
+// ******************************************************************************************************************** //
+// ************************************************  BKStackedSlider ************************************************** //
+// ******************************************************************************************************************** //
 
 /**
  * BKStacked Slider
@@ -86,11 +87,8 @@ public:
 
     class Listener
     {
-
     public:
-
         virtual ~Listener() {};
-
         virtual void BKStackedSliderValueChanged(juce::String name, juce::Array<float> val) = 0; //rewrite all this to pass "this" and check by slider ref instead of name?
     };
 
@@ -265,9 +263,6 @@ public:
 
 
 private:
-
-    //chowdsp::SliderAttachment attachment;
-
     double sliderMin, sliderMax;
     double sliderDefaultMin, sliderDefaultMax;
     double sliderIncrement;
@@ -285,3 +280,5 @@ private:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (BKRangeSlider)
 
 };
+
+#endif //BITKLAVIER2_BKSLIDERS_H
