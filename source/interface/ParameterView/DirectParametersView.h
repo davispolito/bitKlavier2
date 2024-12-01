@@ -24,7 +24,7 @@ public:
 //        addSubSection(envelope.get());
         auto& listeners = pluginState.getParameterListeners();
         params.doForAllParameterContainers (
-            [this,&listeners](auto &paramVec) {},
+            [this, &listeners](auto &paramVec) {},
             [this, &listeners, &pluginState](auto &paramHolder)
             {
                 if(auto *transposeParam = dynamic_cast<TransposeParams*>(&paramHolder))

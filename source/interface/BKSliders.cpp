@@ -200,9 +200,9 @@ void BKStackedSlider::addSlider(juce::NotificationType newnotify)
     setTo(sliderVals, newnotify);
     topSlider->setValue(topSlider->proportionOfLengthToValue((double)clickedPosition / getWidth()), juce::dontSendNotification);
 
-    listeners.call(&BKStackedSlider::Listener::BKStackedSliderValueChanged,
-        getName(),
-        getAllActiveValues());
+//    listeners.call(&BKStackedSlider::Listener::BKStackedSliderValueChanged,
+//        getName(),
+//        getAllActiveValues());
 }
 
 void BKStackedSlider::setTo(juce::Array<float> newvals, juce::NotificationType newnotify)
@@ -307,10 +307,9 @@ void BKStackedSlider::mouseUp(const juce::MouseEvent& e)
 {
     DBG("BKStackedSlider::mouseUp");
 
-    listeners.call(&BKStackedSlider::Listener::BKStackedSliderValueChanged,
-        getName(),
-        getAllActiveValues());
-
+//    listeners.call(&BKStackedSlider::Listener::BKStackedSliderValueChanged,
+//        getName(),
+//        getAllActiveValues());
 }
 
 void BKStackedSlider::mouseMove(const juce::MouseEvent& e)
@@ -364,9 +363,9 @@ void BKStackedSlider::textEditorReturnKeyPressed(juce::TextEditor& textEditor)
         clickedSlider = 0;
         resized();
 
-        listeners.call(&BKStackedSlider::Listener::BKStackedSliderValueChanged,
-            getName(),
-            getAllActiveValues());
+//        listeners.call(&BKStackedSlider::Listener::BKStackedSliderValueChanged,
+//            getName(),
+//            getAllActiveValues());
 
     }
 }
@@ -404,7 +403,6 @@ void BKStackedSlider::textEditorTextChanged(juce::TextEditor& textEditor)
 
 void BKStackedSlider::resetRanges()
 {
-
     double sliderMinTemp = sliderMinDefault;
     double sliderMaxTemp = sliderMaxDefault;
 
@@ -688,7 +686,8 @@ void BKRangeSlider::sliderValueChanged (juce::Slider *slider)
         {
             if(!clickedOnMinSlider)
             {
-                maxSlider.setValue(invisibleSlider.getValue(), juce::dontSendNotification);
+                //maxSlider.setValue(invisibleSlider.getValue(), juce::dontSendNotification);
+                maxSlider.setValue(invisibleSlider.getValue(), juce::sendNotification);
                 maxValueTF.setText(juce::String(maxSlider.getValue()), juce::dontSendNotification);
                 if(isMinAlwaysLessThanMax)
                     if(maxSlider.getValue() < minSlider.getValue())
@@ -697,18 +696,19 @@ void BKRangeSlider::sliderValueChanged (juce::Slider *slider)
             }
             else
             {
-                minSlider.setValue(invisibleSlider.getValue(), juce::dontSendNotification);
+                //minSlider.setValue(invisibleSlider.getValue(), juce::dontSendNotification);
+                minSlider.setValue(invisibleSlider.getValue(), juce::sendNotification);
                 minValueTF.setText(juce::String(minSlider.getValue()), juce::dontSendNotification);
                 if(isMinAlwaysLessThanMax)
                     if(minSlider.getValue() > maxSlider.getValue())
                         setMaxValue(minSlider.getValue(), juce::dontSendNotification);
             }
 
-            //DBG("BKRangeSlider::sliderValueChanged: " + juce::String(minSlider.getValue()) + " " + juce::String(maxSlider.getValue()));
-            listeners.call(&BKRangeSlider::Listener::BKRangeSliderValueChanged,
-                getName(),
-                minSlider.getValue(),
-                maxSlider.getValue());
+//            DBG("BKRangeSlider::sliderValueChanged: " + getName() + " " + juce::String(minSlider.getValue()) + " " + juce::String(maxSlider.getValue()));
+//            listeners.call(&BKRangeSlider::Listener::BKRangeSliderValueChanged,
+//                getName(),
+//                minSlider.getValue(),
+//                maxSlider.getValue());
         }
     }
 }
@@ -757,6 +757,7 @@ void BKRangeSlider::sliderDragEnded(juce::Slider *slider)
     unfocusAllComponents();
 }
 
+
 void BKRangeSlider::textEditorReturnKeyPressed(juce::TextEditor& textEditor)
 {
     double newval = textEditor.getText().getDoubleValue();
@@ -783,10 +784,11 @@ void BKRangeSlider::textEditorReturnKeyPressed(juce::TextEditor& textEditor)
 
     unfocusAllComponents();
 
-    listeners.call(&BKRangeSlider::Listener::BKRangeSliderValueChanged,
-        getName(),
-        minSlider.getValue(),
-        maxSlider.getValue());
+//    DBG("BKRangeSlider::textEditorReturnKeyPressed: " + getName() + " " + juce::String(minSlider.getValue()) + " " + juce::String(maxSlider.getValue()));
+//    listeners.call(&BKRangeSlider::Listener::BKRangeSliderValueChanged,
+//        getName(),
+//        minSlider.getValue(),
+//        maxSlider.getValue());
 }
 
 void BKRangeSlider::textEditorTextChanged(juce::TextEditor& textEditor)
@@ -844,7 +846,6 @@ void BKRangeSlider::rescaleMinSlider()
         maxSlider.setRange(sliderMin, maxSlider.getMaximum(), sliderIncrement);
         minSlider.setRange(sliderMin, maxSlider.getMaximum(), sliderIncrement);
         invisibleSlider.setRange(sliderMin, maxSlider.getMaximum(), sliderIncrement);
-
     }
 }
 

@@ -99,16 +99,16 @@ public:
     void setDim(float newAlpha);
     void setBright();
 
-    class Listener
-    {
-        public:
-            virtual ~Listener() {};
-            virtual void BKStackedSliderValueChanged(juce::String name, juce::Array<float> val) = 0; //rewrite all this to pass "this" and check by slider ref instead of name?
-    };
-
-    juce::ListenerList<Listener> listeners;
-    void addMyListener(Listener* listener)     { listeners.add(listener);      }
-    void removeMyListener(Listener* listener)  { listeners.remove(listener);   }
+//    class Listener
+//    {
+//        public:
+//            virtual ~Listener() {};
+//            virtual void BKStackedSliderValueChanged(juce::String name, juce::Array<float> val) = 0; //rewrite all this to pass "this" and check by slider ref instead of name?
+//    };
+//
+//    juce::ListenerList<Listener> listeners;
+//    void addMyListener(Listener* listener)     { listeners.add(listener);      }
+//    void removeMyListener(Listener* listener)  { listeners.remove(listener);   }
 
     juce::OwnedArray<juce::Slider> dataSliders;  //displays data, user controls with topSlider
 
@@ -271,16 +271,16 @@ public:
     void setDim(float newAlpha);
     void setBright();
 
-    class Listener
-    {
-        public:
-            virtual ~Listener() {};
-            virtual void BKRangeSliderValueChanged(juce::String name, double min, double max) = 0;
-    };
-
-    juce::ListenerList<Listener> listeners;
-    void addMyListener(Listener* listener)     { listeners.add(listener);      }
-    void removeMyListener(Listener* listener)  { listeners.remove(listener);   }
+//    class Listener
+//    {
+//        public:
+//            virtual ~Listener() {};
+//            virtual void BKRangeSliderValueChanged(juce::String name, double min, double max) = 0;
+//    };
+//
+//    juce::ListenerList<Listener> listeners;
+//    void addMyListener(Listener* listener)     { listeners.add(listener);      }
+//    void removeMyListener(Listener* listener)  { listeners.remove(listener);   }
 
 
 private:

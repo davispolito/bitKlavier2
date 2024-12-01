@@ -18,7 +18,7 @@ struct RangeSliderParams : chowdsp::ParamHolder
     // Velocity Min param
     chowdsp::FloatParameter::Ptr velocityParamMin {
         juce::ParameterID { "VelocityMin", 100 },
-        "Velocity Min",
+        "VelocityMin",
         chowdsp::ParamUtils::createNormalisableRange (0.0f, 128.0f, 63.f),
         0.0f,
         &chowdsp::ParamUtils::floatValToString,
@@ -28,7 +28,7 @@ struct RangeSliderParams : chowdsp::ParamHolder
     // Velocity Max param
     chowdsp::FloatParameter::Ptr velocityParamMax {
         juce::ParameterID { "VelocityMax", 100 },
-        "Velocity Max",
+        "VelocityMax",
         chowdsp::ParamUtils::createNormalisableRange (0.0f, 128.0f, 63.f),
         128.0f,
         &chowdsp::ParamUtils::floatValToString,

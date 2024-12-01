@@ -47,7 +47,6 @@ public:
         image_component_ = std::make_shared<OpenGlImageComponent>();
         setLookAndFeel(DefaultLookAndFeel::instance());
         image_component_->setComponent(this);
-
     }
 
     virtual void resized() override
