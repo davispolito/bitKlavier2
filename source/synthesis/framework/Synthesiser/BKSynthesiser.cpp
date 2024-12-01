@@ -324,10 +324,6 @@ void BKSynthesiser::startVoice (BKSamplerVoice* const voice,
                                 const float velocity,
                                 const float transposition)
 {
-    if(tuneTranspositions)
-        DBG("tuneTranspositions = true");
-    else
-        DBG("tuneTranspositions = false");
 
     /**
      * save this voice, since it might be one of several associated with this midiNoteNumber

@@ -393,7 +393,7 @@ private:
                 EnvParams& adsrParams;
                 RangeSliderParams& velocityRangeParams;
 
-                int velocityMin = 0, velocityMax = 128;   // velocity filtering
+                float velocityMin = 0., velocityMax = 128.;   // velocity filtering
 
                 /**
                  * midiNoteTranspositions is an arrays of tuning offsets, in MidiNoteCents (.01 = 1 cent)

@@ -10,9 +10,9 @@
 DirectProcessor::DirectProcessor (const juce::ValueTree& v) :
     PluginBase (v, nullptr, directBusLayout()),
     mainSynth(new BKSynthesiser(state.params.env, state.params.gainParam, state.params.velocityRangeParams)),
-    hammerSynth(new BKSynthesiser(state.params.env, state.params.gainParam, state.params.velocityRangeParams)),
-    releaseResonanceSynth(new BKSynthesiser(state.params.env, state.params.gainParam, state.params.velocityRangeParams)),
-    pedalSynth(new BKSynthesiser(state.params.env, state.params.gainParam, state.params.velocityRangeParams))
+    hammerSynth(new BKSynthesiser(state.params.env, state.params.hammerParam, state.params.velocityRangeParams)),
+    releaseResonanceSynth(new BKSynthesiser(state.params.env, state.params.releaseResonanceParam, state.params.velocityRangeParams)),
+    pedalSynth(new BKSynthesiser(state.params.env, state.params.pedalParam, state.params.velocityRangeParams))
 {
     for (int i = 0; i < 300; i++)
     {
