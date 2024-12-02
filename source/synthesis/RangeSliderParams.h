@@ -12,7 +12,7 @@ struct RangeSliderParams : chowdsp::ParamHolder
 {
     RangeSliderParams() : chowdsp::ParamHolder("SliderRange")
     {
-        add(velocityParamMin, velocityParamMax);
+        add(velocityParamMin, velocityParamMax, displayVelocity);
     }
 
     // Velocity Min param
@@ -31,6 +31,16 @@ struct RangeSliderParams : chowdsp::ParamHolder
         "VelocityMax",
         chowdsp::ParamUtils::createNormalisableRange (0.0f, 128.0f, 63.f),
         128.0f,
+        &chowdsp::ParamUtils::floatValToString,
+        &chowdsp::ParamUtils::stringToFloatVal
+    };
+
+    // Blue Display Slider for showing most recent noteOn velocity
+    chowdsp::FloatParameter::Ptr displayVelocity {
+        juce::ParameterID { "DisplayVelocity", 100 },
+        "DisplayVelocity",
+        chowdsp::ParamUtils::createNormalisableRange (0.0f, 128.0f, 63.f),
+        0.0f,
         &chowdsp::ParamUtils::floatValToString,
         &chowdsp::ParamUtils::stringToFloatVal
     };

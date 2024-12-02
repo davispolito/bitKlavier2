@@ -30,9 +30,12 @@ public:
 
         auto ptrMin = std::make_unique<chowdsp::SliderAttachment>(*(*params->getFloatParams())[0].get(),listeners,minSlider,nullptr);
         auto ptrMax = std::make_unique<chowdsp::SliderAttachment>(*(*params->getFloatParams())[1].get(),listeners,maxSlider,nullptr);
+        auto ptrDisplay = std::make_unique<chowdsp::SliderAttachment>(*(*params->getFloatParams())[2].get(),listeners, *displaySlider.get(),nullptr);
 
         attachmentVec.emplace_back(std::move(ptrMin));
         attachmentVec.emplace_back(std::move(ptrMax));
+        attachmentVec.emplace_back(std::move(ptrDisplay));
+
     }
 
     OpenGL_RangeSlider() :
