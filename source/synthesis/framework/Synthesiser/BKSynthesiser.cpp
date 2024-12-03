@@ -259,7 +259,8 @@ void BKSynthesiser::noteOn (const int midiChannel,
     /**
      *  velocity filtering; note the different behavior if Min>Max, allowing the extremes through
      */
-    velocityRangeParams.displayVelocity->setValueNotifyingHost(velocity);
+    if (velocity > 0) // ignore noteOff messages that are sent as noteOn with velocity 0
+        velocityRangeParams.displayVelocity->setValueNotifyingHost(velocity);
     velocityMin = velocityRangeParams.velocityParamMin->getCurrentValue();
     velocityMax = velocityRangeParams.velocityParamMax->getCurrentValue();
     if (velocityMax > velocityMin) {
