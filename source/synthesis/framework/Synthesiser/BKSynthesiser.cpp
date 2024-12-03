@@ -257,10 +257,14 @@ void BKSynthesiser::noteOn (const int midiChannel,
     const juce::ScopedLock sl (lock);
 
     /**
-     *  velocity filtering; note the different behavior if Min>Max, allowing the extremes through
+     * velocity display
      */
     if (velocity > 0. && !keyReleaseSynth) // ignore noteOff messages that are sent as noteOn with velocity 0
-        velocityRangeParams.displayVelocity->setValueNotifyingHost(velocity/127.);
+        velocityRangeParams.displayVelocity->setParameterValue(velocity);
+
+    /**
+     *  velocity filtering; note the different behavior if Min>Max, allowing the extremes through
+     */
     velocityMin = velocityRangeParams.velocityParamMin->getCurrentValue();
     velocityMax = velocityRangeParams.velocityParamMax->getCurrentValue();
     if (velocityMax > velocityMin) {
@@ -278,7 +282,6 @@ void BKSynthesiser::noteOn (const int midiChannel,
     for (auto* voice : voices)
         if (voice->getCurrentlyPlayingNote() == midiNoteNumber && voice->isPlayingChannel (midiChannel))
             stopVoice (voice, 1.0f, true);
-
 
     /**
      * a midiNoteNumber, reflective of what key the player plays, might result in multiple notes being played

@@ -36,8 +36,7 @@ public:
                 chowdsp::ParameterListenerThread::MessageThread,
                 [this]{
                     resized();
-                    DBG("vector ptr adsfasdf");
-        });
+            });
         attachmentVec.emplace_back(std::move(ptrMin));
         attachmentVec.emplace_back(std::move(ptrMax));
         attachmentVec.emplace_back(std::move(ptrDisplay));
