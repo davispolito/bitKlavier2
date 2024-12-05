@@ -13,7 +13,7 @@ BKSynthesiser::BKSynthesiser(
     for (int i = 0; i < juce::numElementsInArray (lastPitchWheelValues); ++i)
         lastPitchWheelValues[i] = 0x2000;
 
-    // init hash of currently playing notes
+    // init array of currently playing notes
     for (int i = 0; i<=128; i++)
         playingVoicesByNote.insert(0, {  });
 
@@ -267,11 +267,8 @@ void BKSynthesiser::noteOn (const int midiChannel,
      */
     velocityMin = velocityRangeParams.velocityParamMin->getCurrentValue();
     velocityMax = velocityRangeParams.velocityParamMax->getCurrentValue();
-    if (velocityMax > velocityMin) {
-        if ((velocity < velocityMin) || (velocity > velocityMax)) return;
-    } else {
-        if ((velocity < velocityMin) && (velocity > velocityMax)) return;
-    }
+    if (velocityMax > velocityMin) if ((velocity < velocityMin) || (velocity > velocityMax)) return;
+    else if ((velocity < velocityMin) && (velocity > velocityMax)) return;
 
     /**
      * moved this out of the loop below because it was messing up voice handling with multiple transpositions
