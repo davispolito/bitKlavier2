@@ -4,6 +4,10 @@
 
 #include "DirectParametersView.h"
 
+DirectParametersView::~DirectParametersView()
+{
+    stopTimer();
+}
 
 void DirectParametersView::resized()
 {

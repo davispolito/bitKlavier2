@@ -38,11 +38,6 @@ public:
                 }
 
                 DBG("DirectParametersView: paramholder name " + paramHolder.getName());
-
-                /**
-                 * i'm not clear why some things are here, while others (like ENV) are in ParametersView
-                 * ???
-                 */
             }
         );
 
@@ -67,13 +62,14 @@ public:
         addAndMakeVisible(*velocityRangeSlider);
         addOpenGlComponent(velocityRangeSlider->getImageComponent(), true);
 
-        startTimer(10);
+        startTimer(10); // do we need to call stopTimer somewhere? should stop automatically when this window is closed?
     }
 
     std::unique_ptr<bitklavier::parameters_view_detail::BooleanParameterComponent> transpose_uses_tuning;
     std::unique_ptr<OpenGL_StackedSlider> transpositionSlider;
     std::unique_ptr<OpenGL_RangeSlider> velocityRangeSlider;
 
+    ~DirectParametersView() override;
     void resized() override;
     void timerCallback() override;
 

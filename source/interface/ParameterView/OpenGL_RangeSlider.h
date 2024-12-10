@@ -96,8 +96,11 @@ public:
 
     void updateDisplayValue()
     {
-        displaySlider->setValue(t_params->displayVal, juce::dontSendNotification);
-        resized();
+        if (displaySlider->getValue() != t_params->displayVal)
+        {
+            displaySlider->setValue (t_params->displayVal, juce::dontSendNotification);
+            resized();
+        }
     }
 
     //chowdsp::ScopedCallback visualizerCallback;
