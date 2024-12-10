@@ -9,7 +9,7 @@
 #include "ParametersView.h"
 #include "envelope_section.h"
 
-class DirectParametersView : public bitklavier::ParametersView
+class DirectParametersView : public bitklavier::ParametersView, public juce::Timer
 {
 public:
     DirectParametersView (
@@ -67,14 +67,15 @@ public:
         addAndMakeVisible(*velocityRangeSlider);
         addOpenGlComponent(velocityRangeSlider->getImageComponent(), true);
 
+        startTimer(10);
     }
 
     std::unique_ptr<bitklavier::parameters_view_detail::BooleanParameterComponent> transpose_uses_tuning;
     std::unique_ptr<OpenGL_StackedSlider> transpositionSlider;
-
     std::unique_ptr<OpenGL_RangeSlider> velocityRangeSlider;
 
     void resized() override;
+    void timerCallback() override;
 
 };
 

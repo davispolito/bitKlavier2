@@ -48,3 +48,8 @@ void DirectParametersView::resized()
 
     SynthSection::resized();
 }
+
+void DirectParametersView::timerCallback()
+{
+    velocityRangeSlider->updateDisplayValue();
+}

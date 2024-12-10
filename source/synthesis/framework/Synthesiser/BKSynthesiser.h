@@ -52,10 +52,10 @@ class BKSynthesiser
                 void clearVoices();
 
                 /** Returns the number of voices that have been added. */
-                int getNumVoices() const noexcept                               { return voices.size(); }
+                int getNumVoices() const noexcept { return voices.size(); }
 
                 /** Returns one of the voices that have been added. */
-                 BKSamplerVoice* getVoice (int index) const;
+                BKSamplerVoice* getVoice (int index) const;
 
                 /** Adds a new voice to the mainSynth.
             
@@ -79,7 +79,7 @@ class BKSynthesiser
                 int getNumSounds() const noexcept                               { return sounds->size(); }
 
                 /** Returns one of the sounds. */
-                BKSamplerSound<juce::AudioFormatReader>::Ptr getSound (int index) const noexcept       { return (*sounds)[index]; }
+                BKSamplerSound<juce::AudioFormatReader>::Ptr getSound (int index) const noexcept { return (*sounds)[index]; }
 
                 /** Adds a new sound to the BKSynthesiser.
             
@@ -103,7 +103,7 @@ class BKSynthesiser
                 /** Returns true if note-stealing is enabled.
                     @see setNoteStealingEnabled
                 */
-                bool isNoteStealingEnabled() const noexcept                     { return shouldStealNotes; }
+                bool isNoteStealingEnabled() const noexcept { return shouldStealNotes; }
 
                 //==============================================================================
                 /** Triggers a note-on event.
@@ -416,6 +416,7 @@ private:
                 juce::Array<float> midiNoteTranspositions = { 0. }; // needs to be set via UI, for additional transpositions
                 bool tuneTranspositions = false;
                 juce::Array<juce::Array<BKSamplerVoice*>> playingVoicesByNote; // Array of current voices playing for a particular midiNoteNumber
+
                 template <typename floatType>
                 void processNextBlock (juce::AudioBuffer<floatType>&, const juce::MidiBuffer&, int startSample, int numSamples);
 

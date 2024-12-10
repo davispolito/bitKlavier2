@@ -30,17 +30,18 @@ public:
 
         auto ptrMin = std::make_unique<chowdsp::SliderAttachment>(*(*params->getFloatParams())[0].get(),listeners,minSlider,nullptr);
         auto ptrMax = std::make_unique<chowdsp::SliderAttachment>(*(*params->getFloatParams())[1].get(),listeners,maxSlider,nullptr);
-        auto ptrDisplay = std::make_unique<chowdsp::SliderAttachment>(*(*params->getFloatParams())[2].get(),listeners, *displaySlider.get(),nullptr);
-        visualizerCallback = listeners.addParameterListener(
-                params->displayVelocity,
-                chowdsp::ParameterListenerThread::MessageThread,
-                [this]{
-                    resized();
-            });
+        //auto ptrDisplay = std::make_unique<chowdsp::SliderAttachment>(*(*params->getFloatParams())[2].get(),listeners, *displaySlider.get(),nullptr);
+//        visualizerCallback = listeners.addParameterListener(
+//                params->displayVelocity,
+//                chowdsp::ParameterListenerThread::MessageThread,
+//                [this]{
+//                    resized();
+//            });
         attachmentVec.emplace_back(std::move(ptrMin));
         attachmentVec.emplace_back(std::move(ptrMax));
-        attachmentVec.emplace_back(std::move(ptrDisplay));
+       // attachmentVec.emplace_back(std::move(ptrDisplay));
 
+        t_params = params;
     }
 
     OpenGL_RangeSlider() :
@@ -92,8 +93,17 @@ public:
         OpenGlAutoImageComponent<BKRangeSlider>::textEditorTextChanged(textEditor);
         redoImage();
     }
-    chowdsp::ScopedCallback visualizerCallback;
+
+    void updateDisplayValue()
+    {
+        displaySlider->setValue(t_params->displayVal, juce::dontSendNotification);
+        resized();
+    }
+
+    //chowdsp::ScopedCallback visualizerCallback;
     std::vector<std::unique_ptr<chowdsp::SliderAttachment>> attachmentVec;
+
+    RangeSliderParams *t_params;
 };
 
 #endif //BITKLAVIER2_OPENGL_RANGESLIDER_H

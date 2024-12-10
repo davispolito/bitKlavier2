@@ -260,10 +260,14 @@ void BKSynthesiser::noteOn (const int midiChannel,
      * velocity display
      */
     if (velocity > 0. && !keyReleaseSynth) // ignore noteOff messages that are sent as noteOn with velocity 0
-        velocityRangeParams.displayVelocity->setParameterValue(velocity);
+    {
+        //velocityRangeParams.displayVelocity->setParameterValue(velocity);
+        velocityRangeParams.displayVal = velocity;
+        DBG("velocityRangeParams.displayVal = " + juce::String(velocity));
+    }
 
     /**
-     *  velocity filtering; note the different behavior if Min>Max, allowing the extremes through
+     * velocity filtering; note the different behavior if Min>Max, allowing the extremes through
      */
     velocityMin = velocityRangeParams.velocityParamMin->getCurrentValue();
     velocityMax = velocityRangeParams.velocityParamMax->getCurrentValue();
