@@ -67,11 +67,21 @@ namespace bitklavier
                     *this);
                 addSubSection(section.get());
                 paramHolderComps.push_back(std::move(section));
+
+                if(auto *velRangeParams = dynamic_cast<RangeSliderParams*>(&paramHolder))
+                {
+                    DBG("ParametersView::ParametersView making velocityRangeSlider");
+                    velocityRangeSlider = std::make_unique<OpenGL_RangeSlider>(velRangeParams, paramListeners);
+                }
             }
+
         );
 
         setLookAndFeel(DefaultLookAndFeel::instance());
         setOpaque(true);
+
+        addAndMakeVisible(*velocityRangeSlider);
+        addOpenGlComponent(velocityRangeSlider->getImageComponent(), true);
     }
 
     ParametersView::~ParametersView(){}
@@ -81,12 +91,31 @@ namespace bitklavier
         g.fillAll(getLookAndFeel().findColour(juce::ResizableWindow::backgroundColourId));
     }
 
-    void ParametersView::resized()
-    {
-        DBG("--------" + getName() + "View -------------");
-        DBG("bounds x:" + juce::String(getLocalBounds().getX()) + " y:" + juce::String(getLocalBounds().getY()) + " width: " + juce::String(getLocalBounds().getWidth()) + " height: " + juce::String(getLocalBounds().getHeight()));
-        //pimpl->groupItem.setBounds(getLocalBounds());
-        placeKnobsInArea(getLocalBounds(), slider_pairs);
-    }
+    void ParametersView::resized(){}
+//    void ParametersView::resized()
+//    {
+//        DBG("--------" + getName() + "View -------------");
+//        DBG("bounds x:" + juce::String(getLocalBounds().getX()) + " y:" + juce::String(getLocalBounds().getY()) + " width: " + juce::String(getLocalBounds().getWidth()) + " height: " + juce::String(getLocalBounds().getHeight()));
+//        //pimpl->groupItem.setBounds(getLocalBounds());
+//        placeKnobsInArea(getLocalBounds(), slider_pairs);
+//
+//        int knob_section_height = getKnobSectionHeight();
+//        int title_width = getTitleWidth();
+//        int area_width = getWidth() - 2 * title_width;
+//        int area_height = getHeight();
+//
+//        juce::Rectangle<int> knobs_area(title_width, area_height - knob_section_height, area_width, knob_section_height);
+//        knobs_area.setSize(knobs_area.getWidth() * getSizeRatio(), knobs_area.getHeight() * getSizeRatio());
+//
+//        velocityRangeSlider->setBounds(
+//            title_width,
+//            knobs_area.getY() - knobs_area.getHeight(),
+//            knobs_area.getWidth(),
+//            knobs_area.getHeight() );
+//
+//        velocityRangeSlider->setBounds(knobs_area);
+//
+//        SynthSection::resized();
+//    }
 
 }   //namespace bitklavier

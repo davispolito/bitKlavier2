@@ -2,6 +2,7 @@
 
 #include <chowdsp_plugin_state/chowdsp_plugin_state.h>
 #include "synth_section.h"
+#include "OpenGL_RangeSlider.h"
 
 struct OpenGlWrapper;
 
@@ -99,7 +100,10 @@ namespace bitklavier {
     protected:
         std::vector<std::unique_ptr<parameters_view_detail::SliderParameterComponent>> slider_pairs;
         std::vector<std::unique_ptr<parameters_view_detail::BooleanParameterComponent>> boolean_pairs;
+        std::unique_ptr<OpenGL_RangeSlider> velocityRangeSlider;
+
         std::vector<std::unique_ptr<SynthSection>> paramHolderComps;
+
         JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ParametersView)
     };
 
