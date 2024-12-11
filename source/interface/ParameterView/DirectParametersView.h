@@ -4,12 +4,11 @@
 
 #ifndef BITKLAVIER2_DIRECTPARAMETERSVIEW_H
 #define BITKLAVIER2_DIRECTPARAMETERSVIEW_H
-#include "OpenGL_RangeSlider.h"
 #include "OpenGL_StackedSlider.h"
 #include "ParametersView.h"
 #include "envelope_section.h"
 
-class DirectParametersView : public bitklavier::ParametersView
+class DirectParametersView : public bitklavier::ParametersView, public juce::Timer
 {
 public:
     DirectParametersView (
@@ -32,17 +31,12 @@ public:
                     transpositionSlider = std::make_unique<OpenGL_StackedSlider>(transposeParam, listeners);
                 }
 
-                if(auto *velRangeParams = dynamic_cast<RangeSliderParams*>(&paramHolder))
-                {
-                    velocityRangeSlider = std::make_unique<OpenGL_RangeSlider>(velRangeParams, listeners);
-                }
+//                if(auto *velRangeParams = dynamic_cast<RangeSliderParams*>(&paramHolder))
+//                {
+//                    velocityRangeSlider = std::make_unique<OpenGL_RangeSlider>(velRangeParams, listeners);
+//                }
 
                 DBG("DirectParametersView: paramholder name " + paramHolder.getName());
-
-                /**
-                 * i'm not clear why some things are here, while others (like ENV) are in ParametersView
-                 * ???
-                 */
             }
         );
 
@@ -64,17 +58,19 @@ public:
         addAndMakeVisible(*transpositionSlider);
         addOpenGlComponent(transpositionSlider->getImageComponent(),true);
 
-        addAndMakeVisible(*velocityRangeSlider);
-        addOpenGlComponent(velocityRangeSlider->getImageComponent(), true);
+//        addAndMakeVisible(*velocityRangeSlider);
+//        addOpenGlComponent(velocityRangeSlider->getImageComponent(), true);
 
+        startTimer(10); // do we need to call stopTimer somewhere? should stop automatically when this window is closed?
     }
 
     std::unique_ptr<bitklavier::parameters_view_detail::BooleanParameterComponent> transpose_uses_tuning;
     std::unique_ptr<OpenGL_StackedSlider> transpositionSlider;
+    //std::unique_ptr<OpenGL_RangeSlider> velocityRangeSlider;
 
-    std::unique_ptr<OpenGL_RangeSlider> velocityRangeSlider;
-
+    ~DirectParametersView() override;
     void resized() override;
+    void timerCallback() override;
 
 };
 

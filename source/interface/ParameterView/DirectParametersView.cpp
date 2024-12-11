@@ -4,6 +4,10 @@
 
 #include "DirectParametersView.h"
 
+DirectParametersView::~DirectParametersView()
+{
+    stopTimer();
+}
 
 void DirectParametersView::resized()
 {
@@ -47,4 +51,9 @@ void DirectParametersView::resized()
         knobs_area.getHeight() );
 
     SynthSection::resized();
+}
+
+void DirectParametersView::timerCallback()
+{
+    velocityRangeSlider->updateDisplayValue();
 }
