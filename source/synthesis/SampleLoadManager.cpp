@@ -26,7 +26,7 @@ SampleLoadManager::SampleLoadManager (UserPreferences& preferences, SynthBase* s
             allPitches.add (noteOctave);
         }
     }
-    synth_->getValueTree().addChild(t,1,nullptr);
+    synth_->getValueTree().addChild(t,-1,nullptr);
 
 }
 

@@ -40,7 +40,7 @@ FullInterface::FullInterface(SynthGuiData* synth_data) : SynthSection("full_inte
    juce::ValueTree t(IDs::PIANO);
    t.setProperty(IDs::name, "default", nullptr);
 
-   data->tree.addChild(t, -1, nullptr);
+   data->tree.addChild(t, 0, nullptr);
    main_ = std::make_unique<MainSection>(data->tree.getChildWithName(IDs::PIANO), data->um, open_gl_, data);
    addSubSection(main_.get());
    main_->addListener(this);

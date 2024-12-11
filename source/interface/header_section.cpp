@@ -337,6 +337,7 @@ void HeaderSection::buttonClicked(juce::Button* clicked_button) {
         SynthGuiInterface* interface = findParentComponentOfClass<SynthGuiInterface>();
         interface->getSynth()->getValueTree().getChild(0).setProperty("sync", 1, nullptr);
         juce::String mystr = (interface->getSynth()->getValueTree().toXmlString());
+        DBG(mystr);
         auto xml = interface->getSynth()->getValueTree().createXml();
         juce::XmlElement xml_ = *xml;
         filechooser = std::make_unique<juce::FileChooser>("Export the gallery", juce::File(), juce::String("*.") + bitklavier::kPresetExtension,true);

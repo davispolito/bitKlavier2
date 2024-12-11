@@ -41,7 +41,7 @@ public:
 
     bool isSuitableType (const juce::ValueTree& v) const override
     {
-        return v.hasType (IDs::PREPARATION);
+        return v.hasType (IDs::PREPARATION) || v.hasType(IDs::PIANO);
     }
 
     PreparationSection* createNewObject(const juce::ValueTree& v) override;
