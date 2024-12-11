@@ -352,7 +352,7 @@ void FullInterface::prepDisplay(PreparationSection* prep)
 
     prep_popup->setContent(prep->getPrepPopup());
     prep_popup->setPrep(prep);
-    DBG("*********CONTEN SET***************");
+    DBG("*********CONTENT SET***************");
     prep_popup->setVisible(true);
 }
 

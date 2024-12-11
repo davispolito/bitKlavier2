@@ -4,7 +4,7 @@
 #include "synth_section.h"
 #include "OpenGL_RangeSlider.h"
 
-struct OpenGlWrapper;
+//struct OpenGlWrapper;
 
 namespace bitklavier {
     namespace parameters_view_detail
