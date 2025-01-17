@@ -1,8 +1,8 @@
 name:  Documentation Change
 description: File a change required to Documentation.
 title: "[Doc]: "
-labels: ["documenation"]
-projects: ["document"]
+labels: ["documentation"]
+
 assignees:
   - davispolito
 body:
