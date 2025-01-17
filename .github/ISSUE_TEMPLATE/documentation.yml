@@ -6,9 +6,6 @@ labels: ["documentation"]
 assignees:
   - davispolito
 body:
-  - type: markdown
-
-
   - type: textarea
     id: what-update
     attributes:
