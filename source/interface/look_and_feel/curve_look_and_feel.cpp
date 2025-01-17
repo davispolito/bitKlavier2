@@ -21,14 +21,14 @@
 #include "poly_utils.h"
 
 #include "synth_slider.h"
-force_inline bitklavier::mono_float powerScale(bitklavier::mono_float value, bitklavier::mono_float power) {
-    static constexpr bitklavier::mono_float kMinPower = 0.01f;
+force_inline bitklavier::float powerScale(bitklavier::float value, bitklavier::float power) {
+    static constexpr bitklavier::float kMinPower = 0.01f;
 
     if (fabsf(power) < kMinPower)
         return value;
 
-    bitklavier::mono_float numerator = exp(power * value) - 1.0f;
-    bitklavier::mono_float denominator = exp(power) - 1.0f;
+    bitklavier::float numerator = exp(power * value) - 1.0f;
+    bitklavier::float denominator = exp(power) - 1.0f;
     return numerator / denominator;
 }
 CurveLookAndFeel::CurveLookAndFeel() { }

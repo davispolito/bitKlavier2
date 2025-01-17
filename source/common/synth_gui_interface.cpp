@@ -36,12 +36,12 @@ SynthGuiData::SynthGuiData(SynthBase* synth_base) : synth(synth_base),
 SynthGuiInterface::SynthGuiInterface(SynthBase* mainSynth, bool use_gui) : synth_(mainSynth) { }
 SynthGuiInterface::~SynthGuiInterface() { }
 void SynthGuiInterface::updateFullGui() { }
-void SynthGuiInterface::updateGuiControl(const std::string& name, bitklavier::mono_float value) { }
-bitklavier::mono_float SynthGuiInterface::getControlValue(const std::string& name) { return 0.0f; }
+void SynthGuiInterface::updateGuiControl(const std::string& name, bitklavier::float value) { }
+bitklavier::float SynthGuiInterface::getControlValue(const std::string& name) { return 0.0f; }
 void SynthGuiInterface::connectModulation(std::string source, std::string destination) { }
 void SynthGuiInterface::connectModulation(bitklavier::ModulationConnection* connection) { }
 void SynthGuiInterface::setModulationValues(const std::string& source, const std::string& destination,
-                                            bitklavier::mono_float amount, bool bipolar, bool stereo, bool bypass) { }
+                                            bitklavier::float amount, bool bipolar, bool stereo, bool bypass) { }
 void SynthGuiInterface::disconnectModulation(std::string source, std::string destination) { }
 void SynthGuiInterface::disconnectModulation(bitklavier::ModulationConnection* connection) { }
 void SynthGuiInterface::setFocus() { }
@@ -81,7 +81,7 @@ void SynthGuiInterface::updateFullGui() {
     return &gui_->open_gl_;
 }
 
-void SynthGuiInterface::updateGuiControl(const std::string& name, bitklavier::mono_float value) {
+void SynthGuiInterface::updateGuiControl(const std::string& name, bitklavier::float value) {
     if (gui_ == nullptr)
         return;
 

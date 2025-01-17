@@ -25,7 +25,7 @@ namespace bitklavier {
   namespace utils {
     int RandomGenerator::next_seed_ = 0;
 
-    mono_float encodeOrderToFloat(int* order, int size) {
+    float encodeOrderToFloat(int* order, int size) {
       // Max array size you can encode in 32 bits.
       _ASSERT(size <= kMaxOrderLength);
 
@@ -43,7 +43,7 @@ namespace bitklavier {
       return code;
     }
 
-    void decodeFloatToOrder(int* order, mono_float float_code, int size) {
+    void decodeFloatToOrder(int* order, float float_code, int size) {
       // Max array size you can encode in 32 bits.
       _ASSERT(size <= kMaxOrderLength);
 

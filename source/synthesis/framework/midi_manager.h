@@ -93,9 +93,9 @@ class MidiManager : public juce::MidiInputCallback, public tracktion::engine::Va
     class Listener {
       public:
         virtual ~Listener() { }
-        virtual void valueChangedThroughMidi(const std::string& name, bitklavier::mono_float value) = 0;
-        virtual void pitchWheelMidiChanged(bitklavier::mono_float value) = 0;
-        virtual void modWheelMidiChanged(bitklavier::mono_float value) = 0;
+        virtual void valueChangedThroughMidi(const std::string& name, bitklavier::float value) = 0;
+        virtual void pitchWheelMidiChanged(bitklavier::float value) = 0;
+        virtual void modWheelMidiChanged(bitklavier::float value) = 0;
         virtual void presetChangedThroughMidi(juce::File preset) = 0;
     };
 
@@ -128,7 +128,7 @@ class MidiManager : public juce::MidiInputCallback, public tracktion::engine::Va
     void armMidiLearn(std::string name);
     void cancelMidiLearn();
     void clearMidiLearn(const std::string& name);
-    void midiInput(int control, bitklavier::mono_float value);
+    void midiInput(int control, bitklavier::float value);
     void processMidiMessage(const juce::MidiMessage &midi_message, int sample_position = 0);
     bool isMidiMapped(const std::string& name) const;
 

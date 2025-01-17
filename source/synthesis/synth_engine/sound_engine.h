@@ -15,7 +15,6 @@
  */
 
 #pragma once
-#include "../framework/note_handler.h"
 #include <juce_audio_processors/juce_audio_processors.h>
 
 
@@ -24,7 +23,7 @@ namespace bitklavier {
 
     using AudioGraphIOProcessor = juce::AudioProcessorGraph::AudioGraphIOProcessor;
     using Node = juce::AudioProcessorGraph::Node;
-  class SoundEngine : public NoteHandler {
+  class SoundEngine   {
     public:
       static constexpr int kDefaultOversamplingAmount = 2;
       static constexpr int kDefaultSampleRate = 44100;
@@ -32,41 +31,20 @@ namespace bitklavier {
       SoundEngine();
       virtual ~SoundEngine();
 
-//      void init() override;
-      void processWithInput(const mono_float* audio_in, int num_samples) {
-          //_ASSERT(num_samples <= output()->buffer_size);
 
-          juce::FloatVectorOperations::disableDenormalisedNumberSupport();
-
-
-
-
-
-
-      }
       void process(int num_samples, juce::AudioSampleBuffer& buffer);
 
-      void releaseResources()
-      {processorGraph->releaseResources();}
-      void resetEngine()
-      {
-          prepareToPlay(curr_sample_rate, buffer_size);
-      }
+      void releaseResources() {processorGraph->releaseResources();}
+      void resetEngine() { prepareToPlay(curr_sample_rate, buffer_size);}
       void prepareToPlay(double sampleRate, int samplesPerBlock)
       {
           setSampleRate(sampleRate);
-          // DBG("setting sample rate to: " + juce::String(sampleRate));
           setBufferSize(samplesPerBlock);
-
           processorGraph->prepareToPlay (sampleRate, samplesPerBlock);
           initialiseGraph();
       }
 
-      //void correctToTime(double seconds) override;
-      int getDefaultSampleRate()
-      {
-          return kDefaultSampleRate;
-      }
+      int getDefaultSampleRate() { return kDefaultSampleRate; }
 
       int getSampleRate()
       {
@@ -88,49 +66,6 @@ namespace bitklavier {
           return buffer_size;
       }
 
-      int getNumPressedNotes();
-
-      int getNumActiveVoices();
-
-      mono_float getLastActiveNote() const;
-
-      void allSoundsOff() override;
-      void allNotesOff(int sample) override;
-      void allNotesOff(int sample, int channel) override;
-      void allNotesOffRange(int sample, int from_channel, int to_channel);
-
-      void noteOn(int note, mono_float velocity, int sample, int channel) override;
-      void noteOff(int note, mono_float lift, int sample, int channel) override;
-      void setModWheel(mono_float value, int channel);
-      void setModWheelAllChannels(mono_float value);
-      void setPitchWheel(mono_float value, int channel);
-      void setZonedPitchWheel(mono_float value, int from_channel, int to_channel);
-
-
-      //void setBpm(mono_float bpm);
-      void setAftertouch(mono_float note, mono_float value, int sample, int channel);
-      void setChannelAftertouch(int channel, mono_float value, int sample);
-      void setChannelRangeAftertouch(int from_channel, int to_channel, mono_float value, int sample);
-      void setChannelSlide(int channel, mono_float value, int sample);
-      void setChannelRangeSlide(int from_channel, int to_channel, mono_float value, int sample);
-
-      void sustainOn(int channel);
-      void sustainOff(int sample, int channel);
-      void sostenutoOn(int channel);
-      void sostenutoOff(int sample, int channel);
-
-      void sustainOnRange(int from_channel, int to_channel);
-      void sustainOffRange(int sample, int from_channel, int to_channel);
-      void sostenutoOnRange(int from_channel, int to_channel);
-      void sostenutoOffRange(int sample, int from_channel, int to_channel);
-      force_inline int getOversamplingAmount() const { return last_oversampling_amount_; }
-      void connectAudioNodes()
-      {
-//          for (int channel = 0; channel < 2; ++channel)
-//              mainProcessor->addConnection ({ { audioInputNode->nodeID,  channel },
-//                                              { audioOutputNode->nodeID, channel } });
-      }
-
       void connectMidiNodes()
       {
           processorGraph->addConnection ({ { midiInputNode->nodeID,  juce::AudioProcessorGraph::midiChannelIndex },
@@ -140,12 +75,10 @@ namespace bitklavier {
       {
           processorGraph->clear();
           lastUID = juce::AudioProcessorGraph::NodeID(0);
-          //audioInputNode  = mainProcessor->addNode (std::make_unique<AudioGraphIOProcessor> (AudioGraphIOProcessor::audioInputNode));
           audioOutputNode = processorGraph->addNode (std::make_unique<AudioGraphIOProcessor> (AudioGraphIOProcessor::audioOutputNode),getNextUID());
           midiInputNode   = processorGraph->addNode (std::make_unique<AudioGraphIOProcessor> (AudioGraphIOProcessor::midiInputNode),getNextUID());
           midiOutputNode  = processorGraph->addNode (std::make_unique<AudioGraphIOProcessor> (AudioGraphIOProcessor::midiOutputNode),getNextUID());
 
-          //connectAudioNodes();
           connectMidiNodes();
       }
 
@@ -169,12 +102,6 @@ namespace bitklavier {
           auto processor = node->getProcessor();
           if (processor->getTotalNumOutputChannels() > 0)
           {
-//              auto busses =processor->getBusesLayout();
-//              auto channelset = busses.outputBuses;
-//              for (auto channels : channelset)
-//              {
-//                  channels.getChannelIndexForType()
-//              }
               processorGraph->addConnection({{node->nodeID,0 }, {audioOutputNode->nodeID, 0}});
               processorGraph->addConnection({{node->nodeID,1 }, {audioOutputNode->nodeID, 1}});
           }
@@ -194,11 +121,7 @@ namespace bitklavier {
       int last_sample_rate_;
       int buffer_size;
       int curr_sample_rate;
-//      juce::Value* oversampling_;
-//      juce::Value* bps_;
-//      juce::Value* legato_;
-//      Decimator* decimator_;
-//      PeakMeter* peak_meter_;
+
 
 
       JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(SoundEngine)

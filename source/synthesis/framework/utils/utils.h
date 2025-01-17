@@ -29,10 +29,10 @@
   namespace bitklavier::utils {
 
 
-    constexpr mono_float kDbGainConversionMult = 20.0f;
+    constexpr float kDbGainConversionMult = 20.0f;
     constexpr int kMaxOrderLength = 10;
-    constexpr mono_float kLogOf2 = 0.69314718056f;
-    constexpr mono_float kInvLogOf2 = 1.44269504089f;
+    constexpr float kLogOf2 = 0.69314718056f;
+    constexpr float kInvLogOf2 = 1.44269504089f;
 
     constexpr int factorial(int value) {
       int result = 1;
@@ -44,18 +44,18 @@
 
     typedef union {
       int i;
-      mono_float f;
+      float f;
     } int_float;
 
     class RandomGenerator {
       public:
         static int next_seed_;
           
-        RandomGenerator(mono_float min, mono_float max) : engine_(next_seed_++), distribution_(min, max) { }
+        RandomGenerator(float min, float max) : engine_(next_seed_++), distribution_(min, max) { }
         RandomGenerator(const RandomGenerator& other) :
             engine_(next_seed_++), distribution_(other.distribution_.min(), other.distribution_.max()) { }
 
-        force_inline mono_float next() {
+        force_inline float next() {
           return distribution_(engine_);
         }
 
@@ -69,7 +69,7 @@
 //        force_inline poly_float polyVoiceNext() {
 //          poly_float result;
 //          for (int i = 0; i < poly_float::kSize; i += 2) {
-//            mono_float value = next();
+//            float value = next();
 //            result.set(i, value);
 //            result.set(i + 1, value);
 //          }
@@ -91,32 +91,32 @@
 
       private:
         std::mt19937 engine_;
-        std::uniform_real_distribution<mono_float> distribution_;
+        std::uniform_real_distribution<float> distribution_;
 
         JUCE_LEAK_DETECTOR(RandomGenerator)
     };
 
-    force_inline mono_float intToFloatBits(int i) {
+    force_inline float intToFloatBits(int i) {
       int_float convert;
       convert.i = i;
       return convert.f;
     }
 
-    force_inline int floatToIntBits(mono_float f) {
+    force_inline int floatToIntBits(float f) {
       int_float convert;
       convert.f = f;
       return convert.i;
     }
 
-    force_inline mono_float min(mono_float one, mono_float two) {
+    force_inline float min(float one, float two) {
       return fmin(one, two);
     }
 
-    force_inline mono_float max(mono_float one, mono_float two) {
+    force_inline float max(float one, float two) {
       return fmax(one, two);
     }
 
-    force_inline mono_float clamp(mono_float value, mono_float min, mono_float max) {
+    force_inline float clamp(float value, float min, float max) {
       return fmin(max, fmax(value, min));
     }
 
@@ -137,15 +137,15 @@
       return t * (to - from) + from;
     }
 
-    force_inline mono_float interpolate(mono_float from, mono_float to, mono_float t) {
+    force_inline float interpolate(float from, float to, float t) {
       return from + t * (to - from);
     }
     
-    force_inline mono_float mod(double value, double* divisor) {
+    force_inline float mod(double value, double* divisor) {
       return modf(value, divisor);
     }
 
-    force_inline mono_float mod(float value, float* divisor) {
+    force_inline float mod(float value, float* divisor) {
       return modff(value, divisor);
     }
 
@@ -169,51 +169,51 @@
     #endif
     }
 
-    force_inline bool closeToZero(mono_float value) {
+    force_inline bool closeToZero(float value) {
       return value <= kEpsilon && value >= -kEpsilon;
     }
 
-    force_inline mono_float magnitudeToDb(mono_float magnitude) {
+    force_inline float magnitudeToDb(float magnitude) {
       return kDbGainConversionMult * log10f(magnitude);
     }
 
-    force_inline mono_float dbToMagnitude(mono_float decibels) {
+    force_inline float dbToMagnitude(float decibels) {
       return powf(10.0f, decibels / kDbGainConversionMult);
     }
 
-    force_inline mono_float centsToRatio(mono_float cents) {
+    force_inline float centsToRatio(float cents) {
       return powf(2.0f, cents / kCentsPerOctave);
     }
 
-    force_inline mono_float noteOffsetToRatio(mono_float cents) {
+    force_inline float noteOffsetToRatio(float cents) {
       return powf(2.0f, cents / kNotesPerOctave);
     }
 
-    force_inline mono_float ratioToMidiTranspose(mono_float ratio) {
+    force_inline float ratioToMidiTranspose(float ratio) {
       return logf(ratio) * (kInvLogOf2 * kNotesPerOctave);
     }
 
-    force_inline mono_float midiCentsToFrequency(mono_float cents) {
+    force_inline float midiCentsToFrequency(float cents) {
       return kMidi0Frequency * centsToRatio(cents);
     }
 
-    force_inline mono_float midiNoteToFrequency(mono_float note) {
+    force_inline float midiNoteToFrequency(float note) {
       return midiCentsToFrequency(note * kCentsPerNote);
     }
 
-    force_inline mono_float frequencyToMidiNote(mono_float frequency) {
+    force_inline float frequencyToMidiNote(float frequency) {
       return kNotesPerOctave * logf(frequency / kMidi0Frequency) * kInvLogOf2;
     }
 
-    force_inline mono_float frequencyToMidiCents(mono_float frequency) {
+    force_inline float frequencyToMidiCents(float frequency) {
       return kCentsPerNote * frequencyToMidiNote(frequency);
     }
 
-    force_inline int nextPowerOfTwo(mono_float value) {
+    force_inline int nextPowerOfTwo(float value) {
       return roundf(powf(2.0f, ceilf(logf(value) * kInvLogOf2)));
     }
 
-    force_inline bool isSilent(const mono_float* buffer, int length) {
+    force_inline bool isSilent(const float* buffer, int length) {
       for (int i = 0; i < length; ++i) {
         if (!closeToZero(buffer[i]))
           return false;
@@ -221,24 +221,24 @@
       return true;
     }
 
-    force_inline mono_float rms(const mono_float* buffer, int num) {
-      mono_float square_total = 0.0f;
+    force_inline float rms(const float* buffer, int num) {
+      float square_total = 0.0f;
       for (int i = 0; i < num; ++i)
         square_total += buffer[i] * buffer[i];
 
       return sqrtf(square_total / num);
     }
 
-    force_inline mono_float inversePowerScale(mono_float t) {
+    force_inline float inversePowerScale(float t) {
       return 2.0f * logf((-t + 1.0f) / t);
     }
 
-    force_inline mono_float inverseFltScale(mono_float t) {
+    force_inline float inverseFltScale(float t) {
       return (t - 1.0f) / t;
     }
 
-    mono_float encodeOrderToFloat(int* order, int size);
-    void decodeFloatToOrder(int* order, mono_float float_code, int size);
+    float encodeOrderToFloat(int* order, int size);
+    void decodeFloatToOrder(int* order, float float_code, int size);
     void floatToPcmData(int16_t* pcm_data, const float* float_data, int size);
     void complexToPcmData(int16_t* pcm_data, const std::complex<float>* complex_data, int size);
     void pcmToFloatData(float* float_data, const int16_t* pcm_data, int size);

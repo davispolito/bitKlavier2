@@ -25,7 +25,11 @@ build structure
 
 ### third_party
 
-thjir
+this folder is third party libraries that are included without the `juce_add_submodule` command.
+The usual way these libraries are added is with
+[add_subdirectory](https://cmake.org/cmake/help/latest/command/add_subdirectory.html) 
+in our [CMakeLists.txt](CMakeLists.txt) file. `add_subdirectory` works by searching 
+the directory listed for its own `CMakeLists.txt` to determine how to build the library.
 
 - juce-toys
   - using the juce_lldb_xcode.py file to make juce::string and juce::component
@@ -43,5 +47,7 @@ thjir
   - we were previouisly linking against this whole library as a submodule
   but after various headaches from using it [davispolito](https://github.com/davispolito) 
   decided to just grab the utility files we wanted and put them here
+- chowdsp
+  - more to come
     
   

@@ -46,21 +46,21 @@
 #include "melatonin_audio_sparklines/melatonin_audio_sparklines.h"
 namespace bitklavier {
 
-    typedef float mono_float;
+    typedef float float;
 
-    constexpr mono_float kPi = 3.1415926535897932384626433832795f;
-    constexpr mono_float kSqrt2 = 1.414213562373095048801688724209698f;
-    constexpr mono_float kEpsilon = 1e-16f;
+    constexpr float kPi = 3.1415926535897932384626433832795f;
+    constexpr float kSqrt2 = 1.414213562373095048801688724209698f;
+    constexpr float kEpsilon = 1e-16f;
     constexpr int kMaxBufferSize = 128;
     constexpr int kMaxOversample = 8;
     constexpr int kDefaultSampleRate = 44100;
-    constexpr mono_float kMinNyquistMult = 0.45351473923f;
+    constexpr float kMinNyquistMult = 0.45351473923f;
     constexpr int kMaxSampleRate = 192000;
     constexpr int kMidiSize = 128;
     constexpr int kMidiTrackCenter = 60;
 
-    constexpr mono_float kMidi0Frequency = 8.1757989156f;
-    constexpr mono_float kDbfsIncrease = 6.0f;
+    constexpr float kMidi0Frequency = 8.1757989156f;
+    constexpr float kDbfsIncrease = 6.0f;
     constexpr int kDegreesPerCycle = 360;
     constexpr int kMsPerSec = 1000;
     constexpr int kNotesPerOctave = 12;
@@ -68,7 +68,7 @@ namespace bitklavier {
     constexpr int kCentsPerOctave = kNotesPerOctave * kCentsPerNote;
 
     constexpr int kPpq = 960; // Pulses per quarter note.
-    constexpr mono_float kVoiceKillTime = 0.05f;
+    constexpr float kVoiceKillTime = 0.05f;
     constexpr int kNumChannels = 2;
     constexpr int kNumMidiChannels = 16;
     constexpr int kFirstMidiChannel = 0;

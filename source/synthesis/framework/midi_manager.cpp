@@ -22,7 +22,7 @@ namespace {
   constexpr float kHighResolutionMax = (1 << (2 * kMidiControlBits)) - 1.0f;
   constexpr float kControlMax = (1 << kMidiControlBits) - 1.0f;
 
-  force_inline bitklavier::mono_float toHighResolutionValue(int msb, int lsb) {
+  force_inline bitklavier::float toHighResolutionValue(int msb, int lsb) {
     if (lsb < 0)
       return msb / kControlMax;
 
@@ -77,7 +77,7 @@ void MidiManager::cancelMidiLearn() {
 //  }
 //}
 
-void MidiManager::midiInput(int midi_id, bitklavier::mono_float value) {
+void MidiManager::midiInput(int midi_id, bitklavier::float value) {
 //  if (armed_value_) {
 //    midi_learn_map_[midi_id][armed_value_->name] = armed_value_;
 //    armed_value_ = nullptr;
@@ -89,9 +89,9 @@ void MidiManager::midiInput(int midi_id, bitklavier::mono_float value) {
 //  if (midi_learn_map_.count(midi_id)) {
 //    for (auto& control : midi_learn_map_[midi_id]) {
 //      const bitklavier::ValueDetails* details = control.second;
-//      bitklavier::mono_float percent = value / kControlMax;
-//      bitklavier::mono_float range = details->max - details->min;
-//      bitklavier::mono_float translated = percent * range + details->min;
+//      bitklavier::float percent = value / kControlMax;
+//      bitklavier::float range = details->max - details->min;
+//      bitklavier::float translated = percent * range + details->min;
 //
 //      if (details->value_scale == bitklavier::ValueDetails::kIndexed)
 //        translated = std::round(translated);
@@ -178,8 +178,8 @@ void MidiManager::processSostenuto(const juce::MidiMessage& midi_message, int sa
 }
 
 void MidiManager::processPitchBend(const juce::MidiMessage& midi_message, int sample_position, int channel) {
-  bitklavier::mono_float percent = midi_message.getPitchWheelValue() / kHighResolutionMax;
-  bitklavier::mono_float value = 2 * percent - 1.0f;
+  bitklavier::float percent = midi_message.getPitchWheelValue() / kHighResolutionMax;
+  bitklavier::float value = 2 * percent - 1.0f;
 
   if (isMpeChannelMasterLowerZone(channel)) {
     //engine_->setZonedPitchWheel(value, lowerMasterChannel(), lowerMasterChannel() + 1);
@@ -200,7 +200,7 @@ void MidiManager::processPitchBend(const juce::MidiMessage& midi_message, int sa
 }
 
 void MidiManager::processPressure(const juce::MidiMessage& midi_message, int sample_position, int channel) {
-  bitklavier::mono_float value = toHighResolutionValue(msb_pressure_values_[channel], lsb_pressure_values_[channel]);
+  bitklavier::float value = toHighResolutionValue(msb_pressure_values_[channel], lsb_pressure_values_[channel]);
  // if (isMpeChannelMasterLowerZone(channel))
     //engine_->setChannelRangeAftertouch(lowerZoneStartChannel(), lowerZoneEndChannel(), value, 0);
  // else if (isMpeChannelMasterUpperZone(channel))
@@ -210,7 +210,7 @@ void MidiManager::processPressure(const juce::MidiMessage& midi_message, int sam
 }
 
 void MidiManager::processSlide(const juce::MidiMessage& midi_message, int sample_position, int channel) {
-  bitklavier::mono_float value = toHighResolutionValue(msb_slide_values_[channel], lsb_slide_values_[channel]);
+  bitklavier::float value = toHighResolutionValue(msb_slide_values_[channel], lsb_slide_values_[channel]);
   //if (isMpeChannelMasterLowerZone(channel))
     //engine_->setChannelRangeSlide(value, lowerZoneStartChannel(), lowerZoneEndChannel(), 0);
   //else if (isMpeChannelMasterUpperZone(channel))
@@ -245,13 +245,13 @@ void MidiManager::processMidiMessage(const juce::MidiMessage& midi_message, int 
       return;
     }
     case kNoteOff: {
-      bitklavier::mono_float velocity = midi_message.getVelocity() / kControlMax;
+      bitklavier::float velocity = midi_message.getVelocity() / kControlMax;
       //engine_->noteOff(midi_message.getNoteNumber(), velocity, sample_position, channel);
       return;
     }
     case kAftertouch: {
       int note = midi_message.getNoteNumber();
-      bitklavier::mono_float value = midi_message.getAfterTouchValue() / kControlMax;
+      bitklavier::float value = midi_message.getAfterTouchValue() / kControlMax;
       //engine_->setAftertouch(note, value, sample_position, channel);
       return;
     }
@@ -293,7 +293,7 @@ void MidiManager::processMidiMessage(const juce::MidiMessage& midi_message, int 
         case kSoftPedalOn: // TODO
           break;
         case kModWheel: {
-          bitklavier::mono_float percent = (1.0f * midi_message.getControllerValue()) / kControlMax;
+          bitklavier::float percent = (1.0f * midi_message.getControllerValue()) / kControlMax;
           //engine_->setModWheel(percent, channel);
           listener_->modWheelMidiChanged(percent);
           break;

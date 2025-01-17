@@ -31,19 +31,9 @@ SynthBase::SynthBase(juce::AudioDeviceManager * deviceManager) : expired_(false)
 
   engine_ = std::make_unique<bitklavier::SoundEngine>();
 
-
-
-
-
-
   keyboard_state_ = std::make_unique<juce::MidiKeyboardState>();
   juce::ValueTree v;
   midi_manager_ = std::make_unique<MidiManager>( keyboard_state_.get(),manager, v ,this);
-
-
-
-
-
 
   Startup::doStartupChecks();
   tree = juce::ValueTree(IDs::GALLERY);
@@ -55,37 +45,21 @@ SynthBase::~SynthBase() {
   tree.removeListener(this);
 }
 
-//void SynthBase::valueChanged(const std::string& name, bitklavier::mono_float value) {
-//
-//}
-//
-//void SynthBase::valueChangedInternal(const std::string& name, bitklavier::mono_float value) {
-//  valueChanged(name, value);
-//  setValueNotifyHost(name, value);
-//}
-
-//void SynthBase::valueChangedThroughMidi(const std::string& name, bitklavier::mono_float value) {
-//
-//  ValueChangedCallback* callback = new ValueChangedCallback(self_reference_, name, value);
-//  setValueNotifyHost(name, value);
-//  callback->post();
-//}
-
-void SynthBase::pitchWheelMidiChanged(bitklavier::mono_float value) {
+void SynthBase::pitchWheelMidiChanged(bitklavier::float value) {
   ValueChangedCallback* callback = new ValueChangedCallback(self_reference_, "pitch_wheel", value);
   callback->post();
 }
 
-void SynthBase::modWheelMidiChanged(bitklavier::mono_float value) {
+void SynthBase::modWheelMidiChanged(bitklavier::float value) {
   ValueChangedCallback* callback = new ValueChangedCallback(self_reference_, "mod_wheel", value);
   callback->post();
 }
 
-void SynthBase::pitchWheelGuiChanged(bitklavier::mono_float value) {
+void SynthBase::pitchWheelGuiChanged(bitklavier::float value) {
   engine_->setZonedPitchWheel(value, 0, bitklavier::kNumMidiChannels - 1);
 }
 
-void SynthBase::modWheelGuiChanged(bitklavier::mono_float value) {
+void SynthBase::modWheelGuiChanged(bitklavier::float value) {
   engine_->setModWheelAllChannels(value);
 }
 
@@ -96,51 +70,15 @@ void SynthBase::presetChangedThroughMidi(juce::File preset) {
     gui_interface->notifyFresh();
   }
 }
-//
-//void SynthBase::valueChangedExternal(const std::string& name, bitklavier::mono_float value) {
-//  valueChanged(name, value);
-//  if (name == "mod_wheel")
-//    engine_->setModWheelAllChannels(value);
-//  else if (name == "pitch_wheel")
-//    engine_->setZonedPitchWheel(value, 0, bitklavier::kNumMidiChannels - 1);
-//
-//  ValueChangedCallback* callback = new ValueChangedCallback(self_reference_, name, value);
-//  callback->post();
-//}
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 void SynthBase::initEngine()
 {
   checkOversampling();
 }
 
-
-
-
-
-
-
-
-
-
-
-
 void SynthBase::setMpeEnabled(bool enabled) {
   midi_manager_->setMpeEnabled(enabled);
 }
-
 
 juce::AudioProcessorGraph::Node::Ptr SynthBase::addProcessor(std::unique_ptr<juce::AudioProcessor> processor , juce::AudioProcessorGraph::NodeID id)
 {
@@ -203,35 +141,6 @@ bool SynthBase::loadFromFile(juce::File preset, std::string& error) {
 
     return true;
 }
-bool SynthBase::saveToFile(juce::File preset) {
-    preset = preset.withFileExtension(juce::String(bitklavier::kPresetExtension));
-
-    juce::File parent = preset.getParentDirectory();
-    if (!parent.exists()) {
-        if (!parent.createDirectory().wasOk() || !parent.hasWriteAccess())
-            return false;
-    }
-
-    setPresetName(preset.getFileNameWithoutExtension());
-
-    SynthGuiInterface* gui_interface = getGuiInterface();
-    if (gui_interface)
-        gui_interface->notifyFresh();
-
-//    if (preset.replaceWithText(saveToJson().dump())) {
-//        active_file_ = preset;
-//        return true;
-//    }
-    return false;
-}
-
-bool SynthBase::saveToActiveFile() {
-    if (!active_file_.exists() || !active_file_.hasWriteAccess())
-        return false;
-
-    return saveToFile(active_file_);
-}
-
 
 void SynthBase::processAudio(juce::AudioSampleBuffer* buffer, int channels, int samples, int offset) {
   if (expired_)
@@ -257,7 +166,7 @@ void SynthBase::processAudioAndMidi(juce::AudioBuffer<float>& audio_buffer, juce
 
 
 }
-void SynthBase::processAudioWithInput(juce::AudioSampleBuffer* buffer, const bitklavier::mono_float* input_buffer,
+void SynthBase::processAudioWithInput(juce::AudioSampleBuffer* buffer, const bitklavier::float* input_buffer,
                                       int channels, int samples, int offset) {
   if (expired_)
     return;
@@ -267,7 +176,7 @@ void SynthBase::processAudioWithInput(juce::AudioSampleBuffer* buffer, const bit
 }
 
 void SynthBase::writeAudio(juce::AudioSampleBuffer* buffer, int channels, int samples, int offset) {
-  //const bitklavier::mono_float* engine_output = (const bitklavier::mono_float*)engine_->output(0)->buffer;
+  //const bitklavier::float* engine_output = (const bitklavier::float*)engine_->output(0)->buffer;
   /* get output of engine here */
   for (int channel = 0; channel < channels; ++channel) {
     float* channel_data = buffer->getWritePointer(channel, offset);
@@ -295,26 +204,9 @@ void SynthBase::processKeyboardEvents(juce::MidiBuffer& buffer, int num_samples)
 }
 
 
-//void SynthBase::cancelMidiLearn() {
-//  midi_manager_->cancelMidiLearn();
-//}
-//
-//void SynthBase::clearMidiLearn(const std::string& name) {
-//  midi_manager_->clearMidiLearn(name);
-//}
-
-void SynthBase::valueChanged(const std::string& name, bitklavier::mono_float value) {
-//  controls_[name]->set(value);
-}
 
 
 
-void SynthBase::valueChangedThroughMidi(const std::string& name, bitklavier::mono_float value) {
-//  controls_[name]->set(value);
-//  ValueChangedCallback* callback = new ValueChangedCallback(self_reference_, name, value);
-//  setValueNotifyHost(name, value);
-//  callback->post();
-}
 
 int SynthBase::getSampleRate() {
   return engine_->getSampleRate();
@@ -323,45 +215,6 @@ int SynthBase::getSampleRate() {
 bool SynthBase::isMidiMapped(const std::string& name) {
   return midi_manager_->isMidiMapped(name);
 }
-
-void SynthBase::setAuthor(const juce::String& author) {
-  save_info_["author"] = author;
-}
-
-void SynthBase::setComments(const juce::String& comments) {
-  save_info_["comments"] = comments;
-}
-
-void SynthBase::setStyle(const juce::String& style) {
-  save_info_["style"] = style;
-}
-
-void SynthBase::setPresetName(const juce::String& preset_name) {
-  save_info_["preset_name"] = preset_name;
-}
-
-void SynthBase::setMacroName(int index, const juce::String& macro_name) {
-  save_info_["macro" + std::to_string(index + 1)] = macro_name;
-}
-
-juce::String SynthBase::getAuthor() {
-  return save_info_["author"];
-}
-
-juce::String SynthBase::getComments() {
-  return save_info_["comments"];
-}
-
-juce::String SynthBase::getStyle() {
-  return save_info_["style"];
-}
-
-juce::String SynthBase::getPresetName() {
-  return save_info_["preset_name"];
-}
-
-
-
 
 
 
@@ -374,17 +227,6 @@ void SynthBase::notifyOversamplingChanged() {
 
 void SynthBase::checkOversampling() {
   return engine_->checkOversampling();
-}
-
-void SynthBase::ValueChangedCallback::messageCallback() {
-  if (auto synth_base = listener.lock()) {
-    SynthGuiInterface* gui_interface = (*synth_base)->getGuiInterface();
-    if (gui_interface) {
-      gui_interface->updateGuiControl(control_name, value);
-      if (control_name != "pitch_wheel")
-        gui_interface->notifyChange();
-    }
-  }
 }
 
 juce::ValueTree& SynthBase::getValueTree()

@@ -40,15 +40,15 @@ class SynthBase : public MidiManager::Listener, public juce::ValueTree::Listener
 //                               juce::ReferenceCountedArray<BKSamplerSound<juce::AudioFormatReader>>* r, // release samples
 //                               juce::ReferenceCountedArray<BKSamplerSound<juce::AudioFormatReader>>* p);
 
-    void valueChanged(const std::string& name, bitklavier::mono_float value);
-    void valueChangedThroughMidi(const std::string& name, bitklavier::mono_float value) override;
-    void pitchWheelMidiChanged(bitklavier::mono_float value) override;
-    void modWheelMidiChanged(bitklavier::mono_float value) override;
-    void pitchWheelGuiChanged(bitklavier::mono_float value);
-    void modWheelGuiChanged(bitklavier::mono_float value);
+    void valueChanged(const std::string& name, bitklavier::float value);
+    void valueChangedThroughMidi(const std::string& name, bitklavier::float value) override;
+    void pitchWheelMidiChanged(bitklavier::float value) override;
+    void modWheelMidiChanged(bitklavier::float value) override;
+    void pitchWheelGuiChanged(bitklavier::float value);
+    void modWheelGuiChanged(bitklavier::float value);
     void presetChangedThroughMidi(juce::File preset) override;
-//    void valueChangedExternal(const std::string& name, bitklavier::mono_float value);
-//    void valueChangedInternal(const std::string& name, bitklavier::mono_float value);
+//    void valueChangedExternal(const std::string& name, bitklavier::float value);
+//    void valueChangedInternal(const std::string& name, bitklavier::float value);
 
 
     bool isModSourceEnabled(const std::string& source);
@@ -67,7 +67,7 @@ class SynthBase : public MidiManager::Listener, public juce::ValueTree::Listener
 
     void setMpeEnabled(bool enabled);
 
-    virtual void setValueNotifyHost(const std::string& name, bitklavier::mono_float value) { }
+    virtual void setValueNotifyHost(const std::string& name, bitklavier::float value) { }
 
 //    void armMidiLearn(const std::string& name);
 //    void cancelMidiLearn();
@@ -95,14 +95,14 @@ class SynthBase : public MidiManager::Listener, public juce::ValueTree::Listener
     virtual void pauseProcessing(bool pause) = 0;
 
     struct ValueChangedCallback : public juce::CallbackMessage {
-      ValueChangedCallback(std::shared_ptr<SynthBase*> listener, std::string name, bitklavier::mono_float val) :
+      ValueChangedCallback(std::shared_ptr<SynthBase*> listener, std::string name, bitklavier::float val) :
           listener(listener), control_name(std::move(name)), value(val) { }
 
       void messageCallback() override;
 
       std::weak_ptr<SynthBase*> listener;
       std::string control_name;
-      bitklavier::mono_float value;
+      bitklavier::float value;
     };
     juce::AudioDeviceManager* manager;
 
@@ -124,23 +124,17 @@ class SynthBase : public MidiManager::Listener, public juce::ValueTree::Listener
     juce::ValueTree tree;
     juce::UndoManager um;
     virtual SynthGuiInterface* getGuiInterface() = 0;
-//    juce::OwnedArray<juce::ReferenceCountedArray<BKSamplerSound<juce::AudioFormatReader>>> mainPianoSoundSet;
-//    juce::OwnedArray<juce::ReferenceCountedArray<BKSamplerSound<juce::AudioFormatReader>>> resonanceReleaseSoundSet;
-//    juce::OwnedArray<juce::ReferenceCountedArray<BKSamplerSound<juce::AudioFormatReader>>> hammerReleaseSoundSet;
-//    juce::OwnedArray<juce::ReferenceCountedArray<BKSamplerSound<juce::AudioFormatReader>>> emptySoundSet;
-//    juce::OwnedArray<juce::ReferenceCountedArray<BKSamplerSound<juce::AudioFormatReader>>> pedalReleaseSoundSet;
 
     bool loadFromValueTree(const juce::ValueTree& state);
 
 
     void processAudio(juce::AudioSampleBuffer* buffer, int channels, int samples, int offset);
     void processAudioAndMidi(juce::AudioBuffer<float>& audio_buffer, juce::MidiBuffer& midi_buffer); // , int channels, int samples, int offset, int start_sample = 0, int end_sample = 0);
-    void processAudioWithInput(juce::AudioSampleBuffer* buffer, const bitklavier::mono_float* input_buffer,
+    void processAudioWithInput(juce::AudioSampleBuffer* buffer, const bitklavier::float* input_buffer,
                                int channels, int samples, int offset);
     void writeAudio(juce::AudioSampleBuffer* buffer, int channels, int samples, int offset);
     void processMidi(juce::MidiBuffer& buffer, int start_sample = 0, int end_sample = 0);
     void processKeyboardEvents(juce::MidiBuffer& buffer, int num_samples);
-    //void processModulationChanges();
 
     std::unique_ptr<bitklavier::SoundEngine> engine_;
     std::unique_ptr<MidiManager> midi_manager_;
@@ -152,7 +146,6 @@ class SynthBase : public MidiManager::Listener, public juce::ValueTree::Listener
 
     bool expired_;
 
-    std::map<std::string, juce::String> save_info_;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(SynthBase)
 };
