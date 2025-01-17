@@ -4,9 +4,9 @@
 
 #ifndef BITKLAVIER2_CONSTRUCTIONSITE_H
 #define BITKLAVIER2_CONSTRUCTIONSITE_H
-#include "Preparations/PreparationSection.h"
+#include "PreparationSection.h"
 #include "PreparationSelector.h"
-#include "Cable/CableView.h"
+#include "CableView.h"
 #include "templates/Factory.h"
 #include "common.h"
 class SynthGuiInterface;

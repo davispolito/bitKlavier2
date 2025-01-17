@@ -908,7 +908,7 @@ void SynthSection::showPopupSelector(juce::Component* source, juce::Point<int> p
 
 
 
-//void SynthSection::setValue(const std::string& name, bitklavier::float value, NotificationType notification) {
+//void SynthSection::setValue(const std::string& name, float value, NotificationType notification) {
 ////  if (all_sliders_.count(name)) {
 ////    all_sliders_[name]->setValue(value, notification);
 ////    if (notification == dontSendNotification)

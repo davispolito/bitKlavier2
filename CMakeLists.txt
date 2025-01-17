@@ -112,21 +112,36 @@ include(Assets)
 
 # MacOS only: Cleans up folder and target organization on Xcode.
 include(XcodePrettify)
-include_directories(source/common)
-include_directories(source/interface/look_and_feel)
-include_directories(source/interface)
-include_directories(source/interface/Preparations)
-include_directories(source/interface/BKitems)
-include_directories(source/synthesis)
-include_directories(source/synthesis/framework/Synthesiser)
-include_directories(source/synthesis/framework)
-include_directories(source/synthesis/lookups)
-include_directories(source/synthesis/synth_engine)
+target_include_directories(SharedCode
+        INTERFACE
+        source/common
+
+        #synthesis includes
+        source/synthesis/sound_engine
+        source/synthesis
+        source/synthesis/framework
+        source/synthesis/framework/Processors
+        source/synthesis/framework/ParamHolders
+        source/synthesis/framework/Synthesiser
+        #interface includes
+        source/interface
+        source/interface/components
+        source/interface/components/BKitems
+        source/interface/components/Cable
+        source/interface/components/opengl
+        source/interface/sections
+        source/interface/Preparations
+        source/interface/ParameterView
+        source/interface/look_and_feel
+)
+
 
 #we were previously linking against the entire tracktion_engine and including
 # via git submodules. this was a source of many headaches and we only use a small
 # portion of the library so i moved the useful files here and removed the submodule
-include_directories(third_party/tracktion_engine)
+target_include_directories(SharedCode
+        INTERFACE
+        third_party/tracktion_engine)
 
 
 # This is where you can set preprocessor definitions for JUCE and your plugin

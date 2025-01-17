@@ -46,7 +46,6 @@
 #include "melatonin_audio_sparklines/melatonin_audio_sparklines.h"
 namespace bitklavier {
 
-    typedef float float;
 
     constexpr float kPi = 3.1415926535897932384626433832795f;
     constexpr float kSqrt2 = 1.414213562373095048801688724209698f;

@@ -18,7 +18,7 @@
 
 #include "open_gl_component.h"
 #include "look_and_feel/shaders.h"
-#include "../synthesis/framework/utils.h"
+#include "utils.h"
 using namespace  juce;
 namespace {
   constexpr int kNumPositions = 16;

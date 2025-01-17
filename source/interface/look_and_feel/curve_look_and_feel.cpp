@@ -18,17 +18,16 @@
 
 #include "skin.h"
 #include "fonts.h"
-#include "poly_utils.h"
-
+#include "common.h"
 #include "synth_slider.h"
-force_inline bitklavier::float powerScale(bitklavier::float value, bitklavier::float power) {
-    static constexpr bitklavier::float kMinPower = 0.01f;
+force_inline float powerScale(float value, float power) {
+    static constexpr float kMinPower = 0.01f;
 
     if (fabsf(power) < kMinPower)
         return value;
 
-    bitklavier::float numerator = exp(power * value) - 1.0f;
-    bitklavier::float denominator = exp(power) - 1.0f;
+    float numerator = exp(power * value) - 1.0f;
+    float denominator = exp(power) - 1.0f;
     return numerator / denominator;
 }
 CurveLookAndFeel::CurveLookAndFeel() { }

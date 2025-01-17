@@ -64,7 +64,6 @@ EnvelopeEditor::EnvelopeEditor(
     addAndMakeVisible(times_[i].get());
   }
 
-  enableBackwardBoost(false);
   parent_ = nullptr;
   delay_hover_ = false;
   attack_hover_ = false;
@@ -348,27 +347,27 @@ float EnvelopeEditor::getSliderReleaseX() {
 }
 
 inline float EnvelopeEditor::getDelayTime(int index) {
- // bitklavier::poly_float delays = getOutputsTotal(delay_outputs_, delay_slider_->getValue());
+ // float delays = getOutputsTotal(delay_outputs_, delay_slider_->getValue());
   return delay_slider_->getValue() * .001f;///AdjustedValue(std::max<float>(0.0f, delays[index]));
 }
 
 inline float EnvelopeEditor::getAttackTime(int index) {
-  //bitklavier::poly_float attacks = getOutputsTotal(attack_outputs_, attack_slider_->getValue());
+  //float attacks = getOutputsTotal(attack_outputs_, attack_slider_->getValue());
   return attack_slider_->getValue() * .001f;//getAdjustedValue(std::max<float>(0.0f, attacks[index]));
 }
 
 inline float EnvelopeEditor::getHoldTime(int index) {
- // bitklavier::poly_float holds = getOutputsTotal(hold_outputs_, hold_slider_->getValue());
+ // float holds = getOutputsTotal(hold_outputs_, hold_slider_->getValue());
   return hold_slider_->getValue() * .001f;//getAdjustedValue(std::max<float>(0.0f, holds[index]));
 }
 
 inline float EnvelopeEditor::getDecayTime(int index) {
- // bitklavier::poly_float decays = getOutputsTotal(decay_outputs_, decay_slider_->getValue());
+ // float decays = getOutputsTotal(decay_outputs_, decay_slider_->getValue());
   return decay_slider_->getValue() * .001f;//getAdjustedValue(std::max<float>(0.0f, decays[index]));
 }
 
 inline float EnvelopeEditor::getReleaseTime(int index) {
-//  bitklavier::poly_float releases = getOutputsTotal(release_outputs_, release_slider_->getValue());
+//  float releases = getOutputsTotal(release_outputs_, release_slider_->getValue());
   return release_slider_->getValue() * .001f;//getAdjustedValue(std::max<float>(0.0f, releases[index]));
 }
 
@@ -404,7 +403,7 @@ float EnvelopeEditor::getSustainY(int index) {
   if (index < 0)
     return getSliderSustainY();
 
-  //bitklavier::poly_float sustains = getOutputsTotal(sustain_outputs_, sustain_slider_->getValue());
+  //float sustains = getOutputsTotal(sustain_outputs_, sustain_slider_->getValue());
   float percent = sustain_slider_->getValue() / sustain_slider_->getRange().getLength();
   percent = bitklavier::utils::clamp(percent, 0.0f, 1.0f);
   return getHeight() * (1.0f - percent);
@@ -647,7 +646,7 @@ void EnvelopeEditor::setReleasePowerSlider(SynthSlider* release_power_slider) {
 }
 
 //inline float EnvelopeEditor::getOutputsTotal()
-////    std::pair<bitklavier::Output*, bitklavier::Output*> outputs, bitklavier::poly_float default_value) {
+////    std::pair<bitklavier::Output*, bitklavier::Output*> outputs, float default_value) {
 ////  if (!animate_ || !outputs.first->owner->enabled())
 ////    return default_value;
 ////  if (num_voices_readout_ == nullptr || num_voices_readout_->value()[0] <= 0.0f)
@@ -781,16 +780,14 @@ void EnvelopeEditor::render(OpenGlWrapper& open_gl, bool animate) {
 
   setLineWidth(findValue(Skin::kWidgetLineWidth));
   setFillCenter(findValue(Skin::kWidgetFillCenter));
-  //bitklavier::poly_float input_phase = envelope_phase_->value();
+  //float input_phase = envelope_phase_->value();
   float input_phase = 1.0f;
-  bitklavier::poly_mask off_mask = bitklavier::poly_float::equal(input_phase, bitklavier::kVoiceKill);
   float phase_length = bitklavier::kVoiceKill - bitklavier::kVoiceOn;
   float phase = (input_phase - bitklavier::kVoiceOn) * (1.0f / phase_length);
   //phase = bitklavier::utils::maskLoad(phase, 1.0f, off_mask);
   // phase = 1.0f; //bitklavier::utils::min(phase, 1.0f);
 
-  bitklavier::poly_mask reset_mask = bitklavier::poly_float::greaterThan(last_phase_, phase);
-  bitklavier::poly_float backup_phase = 1.0f;//getBackupPhase(phase);
+  float backup_phase = 1.0f;//getBackupPhase(phase);
   last_phase_ = 1.0f;// bitklavier::utils::maskLoad(last_phase_, backup_phase, reset_mask);
 
   if (!animate_)
@@ -807,49 +804,46 @@ void EnvelopeEditor::render(OpenGlWrapper& open_gl, bool animate) {
   juce::Colour envelope_graph_fill_stereo = fill_right_color_;
   juce::Colour envelope_graph_fill_stereo_fade = envelope_graph_fill_stereo.withMultipliedAlpha(1.0f - fill_fade);
 
-  if (animating) {
-    decayBoosts(kTailDecay);
-
-    float release_point = (bitklavier::kVoiceOff - bitklavier::kVoiceOn) / phase_length;
-    bitklavier::poly_mask released_mask = bitklavier::poly_float::greaterThan(phase, release_point);
-    released_mask = released_mask & bitklavier::poly_float::lessThan(last_phase_, release_point) & ~reset_mask;
-    //last_phase_ = bitklavier::utils::maskLoad(last_phase_, release_point, released_mask);
-
-    last_phase_ = bitklavier::utils::max(last_phase_, 0.0f);
-   // if (!envelope_phase_->isClearValue(input_phase))
-    //  boostRange(last_phase_, phase, 0, kTailDecay);
-    last_phase_ = phase;
-
-    setFill(true);
-    setBoostAmount(findValue(Skin::kWidgetLineBoost));
-    setFillBoostAmount(findValue(Skin::kWidgetFillBoost));
-    resetEnvelopeLine(1);
-    setIndex(1);
-    setColor(line_right_color_);
-    setFillColors(envelope_graph_fill_stereo_fade, envelope_graph_fill_stereo);
-    drawLines(open_gl, false);
-
-    resetEnvelopeLine(0);
-    setIndex(0);
-    setColor(line_left_color_);
-    setFillColors(envelope_graph_fill_fade, envelope_graph_fill);
-    drawLines(open_gl, anyBoostValue());
-
-    setFill(false);
+//  if (animating) {
+//   // decayBoosts(kTailDecay);
+//
+//    float release_point = (bitklavier::kVoiceOff - bitklavier::kVoiceOn) / phase_length;
+//    //last_phase_ = bitklavier::utils::maskLoad(last_phase_, release_point, released_mask);
+//
+//    last_phase_ = bitklavier::utils::max(last_phase_, 0.0f);
+//   // if (!envelope_phase_->isClearValue(input_phase))
+//    //  boostRange(last_phase_, phase, 0, kTailDecay);
+//    last_phase_ = phase;
+//
+//    setFill(true);
+//    setBoostAmount(findValue(Skin::kWidgetLineBoost));
+//    setFillBoostAmount(findValue(Skin::kWidgetFillBoost));
+//    resetEnvelopeLine(1);
+//    setIndex(1);
+//    setColor(line_right_color_);
+//    setFillColors(envelope_graph_fill_stereo_fade, envelope_graph_fill_stereo);
+//    drawLines(open_gl, false);
+//
+//    resetEnvelopeLine(0);
+//    setIndex(0);
+//    setColor(line_left_color_);
+//    setFillColors(envelope_graph_fill_fade, envelope_graph_fill);
+//    drawLines(open_gl, anyBoostValue());
+//
+//    setFill(false);
+//    setBoostAmount(0.0f);
+//    setFillBoostAmount(0.0f);
+//    resetEnvelopeLine(-1);
+//    setColor(line_center_color_);
+//    drawLines(open_gl, anyBoostValue());
+//
+//    setViewPort(open_gl);
+//    drawPosition(open_gl, 1);
+//    drawPosition(open_gl, 0);
+//  }
+//  else {
     setBoostAmount(0.0f);
     setFillBoostAmount(0.0f);
-    resetEnvelopeLine(-1);
-    setColor(line_center_color_);
-    drawLines(open_gl, anyBoostValue());
-
-    setViewPort(open_gl);
-    drawPosition(open_gl, 1);
-    drawPosition(open_gl, 0);
-  }
-  else {
-    setBoostAmount(0.0f);
-    setFillBoostAmount(0.0f);
-    decayBoosts(0.0f);
     resetEnvelopeLine(-1);
 
     setFill(true);
@@ -864,7 +858,7 @@ void EnvelopeEditor::render(OpenGlWrapper& open_gl, bool animate) {
     setFill(false);
     setColor(line_center_color_);
     drawLines(open_gl, anyBoostValue());
-  }
+//  }
 
   point_circles_.setColor(line_center_color_);
   point_circles_.setAltColor(background_color_);

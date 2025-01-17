@@ -16,7 +16,7 @@
 
 #include "open_gl_multi_quad.h"
 
-#include "../synthesis/framework/common.h"
+#include "common.h"
 #include "look_and_feel/shaders.h"
 
 // OpenGlMultiQuad::OpenGlMultiQuad(int max_quads, Shaders::FragmentShader shader) :

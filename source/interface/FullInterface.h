@@ -7,11 +7,11 @@
 
 
 //#include "open_gl_background.h"
-#include "header_section.h"
-#include "main_section.h"
-#include "synth_section.h"
+#include "sections/header_section.h"
+#include "sections/main_section.h"
+#include "sections/synth_section.h"
 #include "melatonin_inspector/melatonin_inspector.h"
-#include "popup_browser.h"
+#include "sections/popup_browser.h"
 #include "valuetree_utils/value_tree_debugger.h"
 //#include "buffer_debugger.h"
 

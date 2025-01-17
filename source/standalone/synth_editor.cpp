@@ -22,7 +22,7 @@
 
 #include "default_look_and_feel.h"
 #include "FullInterface.h"
-#include "../synthesis/synth_engine/sound_engine.h"
+#include "sound_engine.h"
 
 #include "startup.h"
 #include "utils.h"

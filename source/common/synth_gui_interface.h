@@ -47,8 +47,8 @@ class SynthGuiInterface {
     virtual juce::AudioDeviceManager* getAudioDeviceManager() { return nullptr; }
     SynthBase* getSynth() { return synth_; }
     virtual void updateFullGui();
-    virtual void updateGuiControl(const std::string& name, bitklavier::float value);
-    bitklavier::float getControlValue(const std::string& name);
+    virtual void updateGuiControl(const std::string& name, float value);
+    float getControlValue(const std::string& name);
 
 
     void setFocus();

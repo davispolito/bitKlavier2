@@ -28,32 +28,14 @@ class SynthGuiInterface;
 template<typename T>
 class BKSamplerSound;
 
-class SynthBase : public MidiManager::Listener, public juce::ValueTree::Listener {
+class SynthBase :  public juce::ValueTree::Listener {
   public:
     static constexpr float kOutputWindowMinNote = 16.0f;
     static constexpr float kOutputWindowMaxNote = 128.0f;
 
     SynthBase(juce::AudioDeviceManager* ={});
     virtual ~SynthBase();
-//    void updateMainSoundSets( juce::ReferenceCountedArray<BKSamplerSound<juce::AudioFormatReader>>* s, // main samples
-//                               juce::ReferenceCountedArray<BKSamplerSound<juce::AudioFormatReader>>* h, // hammer samples
-//                               juce::ReferenceCountedArray<BKSamplerSound<juce::AudioFormatReader>>* r, // release samples
-//                               juce::ReferenceCountedArray<BKSamplerSound<juce::AudioFormatReader>>* p);
 
-    void valueChanged(const std::string& name, bitklavier::float value);
-    void valueChangedThroughMidi(const std::string& name, bitklavier::float value) override;
-    void pitchWheelMidiChanged(bitklavier::float value) override;
-    void modWheelMidiChanged(bitklavier::float value) override;
-    void pitchWheelGuiChanged(bitklavier::float value);
-    void modWheelGuiChanged(bitklavier::float value);
-    void presetChangedThroughMidi(juce::File preset) override;
-//    void valueChangedExternal(const std::string& name, bitklavier::float value);
-//    void valueChangedInternal(const std::string& name, bitklavier::float value);
-
-
-    bool isModSourceEnabled(const std::string& source);
-    int getNumModulations(const std::string& destination);
-    int getConnectionIndex(const std::string& source, const std::string& destination);
 
 
    bool loadFromFile(juce::File preset, std::string& error) ;
@@ -67,24 +49,9 @@ class SynthBase : public MidiManager::Listener, public juce::ValueTree::Listener
 
     void setMpeEnabled(bool enabled);
 
-    virtual void setValueNotifyHost(const std::string& name, bitklavier::float value) { }
+    virtual void setValueNotifyHost(const std::string& name, float value) { }
 
-//    void armMidiLearn(const std::string& name);
-//    void cancelMidiLearn();
-//    void clearMidiLearn(const std::string& name);
     bool isMidiMapped(const std::string& name);
-
-    void setAuthor(const juce::String& author);
-    void setComments(const juce::String& comments);
-    void setStyle(const juce::String& comments);
-    void setPresetName(const juce::String& preset_name);
-    void setMacroName(int index, const juce::String& macro_name);
-    juce::String getAuthor();
-    juce::String getComments();
-    juce::String getStyle();
-    juce::String getPresetName();
-    juce::String getMacroName(int index);
-
 
     bitklavier::SoundEngine* getEngine() { return engine_.get(); }
     juce::MidiKeyboardState* getKeyboardState() { return keyboard_state_.get(); }
@@ -95,14 +62,14 @@ class SynthBase : public MidiManager::Listener, public juce::ValueTree::Listener
     virtual void pauseProcessing(bool pause) = 0;
 
     struct ValueChangedCallback : public juce::CallbackMessage {
-      ValueChangedCallback(std::shared_ptr<SynthBase*> listener, std::string name, bitklavier::float val) :
+      ValueChangedCallback(std::shared_ptr<SynthBase*> listener, std::string name, float val) :
           listener(listener), control_name(std::move(name)), value(val) { }
 
       void messageCallback() override;
 
       std::weak_ptr<SynthBase*> listener;
       std::string control_name;
-      bitklavier::float value;
+      float value;
     };
     juce::AudioDeviceManager* manager;
 
@@ -130,7 +97,7 @@ class SynthBase : public MidiManager::Listener, public juce::ValueTree::Listener
 
     void processAudio(juce::AudioSampleBuffer* buffer, int channels, int samples, int offset);
     void processAudioAndMidi(juce::AudioBuffer<float>& audio_buffer, juce::MidiBuffer& midi_buffer); // , int channels, int samples, int offset, int start_sample = 0, int end_sample = 0);
-    void processAudioWithInput(juce::AudioSampleBuffer* buffer, const bitklavier::float* input_buffer,
+    void processAudioWithInput(juce::AudioSampleBuffer* buffer, const float* input_buffer,
                                int channels, int samples, int offset);
     void writeAudio(juce::AudioSampleBuffer* buffer, int channels, int samples, int offset);
     void processMidi(juce::MidiBuffer& buffer, int start_sample = 0, int end_sample = 0);

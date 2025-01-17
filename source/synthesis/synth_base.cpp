@@ -19,7 +19,7 @@
 #include "melatonin_audio_sparklines/melatonin_audio_sparklines.h"
 
 #include "startup.h"
-#include "../synthesis/synth_engine/sound_engine.h"
+#include "sound_engine.h"
 
 #include "Identifiers.h"
 #include "Synthesiser/Sample.h"
@@ -33,7 +33,7 @@ SynthBase::SynthBase(juce::AudioDeviceManager * deviceManager) : expired_(false)
 
   keyboard_state_ = std::make_unique<juce::MidiKeyboardState>();
   juce::ValueTree v;
-  midi_manager_ = std::make_unique<MidiManager>( keyboard_state_.get(),manager, v ,this);
+  midi_manager_ = std::make_unique<MidiManager>( keyboard_state_.get(),manager, v );
 
   Startup::doStartupChecks();
   tree = juce::ValueTree(IDs::GALLERY);
@@ -45,31 +45,25 @@ SynthBase::~SynthBase() {
   tree.removeListener(this);
 }
 
-void SynthBase::pitchWheelMidiChanged(bitklavier::float value) {
-  ValueChangedCallback* callback = new ValueChangedCallback(self_reference_, "pitch_wheel", value);
-  callback->post();
-}
-
-void SynthBase::modWheelMidiChanged(bitklavier::float value) {
-  ValueChangedCallback* callback = new ValueChangedCallback(self_reference_, "mod_wheel", value);
-  callback->post();
-}
-
-void SynthBase::pitchWheelGuiChanged(bitklavier::float value) {
-  engine_->setZonedPitchWheel(value, 0, bitklavier::kNumMidiChannels - 1);
-}
-
-void SynthBase::modWheelGuiChanged(bitklavier::float value) {
-  engine_->setModWheelAllChannels(value);
-}
-
-void SynthBase::presetChangedThroughMidi(juce::File preset) {
-  SynthGuiInterface* gui_interface = getGuiInterface();
-  if (gui_interface) {
-    gui_interface->updateFullGui();
-    gui_interface->notifyFresh();
-  }
-}
+//void SynthBase::pitchWheelMidiChanged(float value) {
+//  ValueChangedCallback* callback = new ValueChangedCallback(self_reference_, "pitch_wheel", value);
+//  callback->post();
+//}
+//
+//void SynthBase::modWheelMidiChanged(float value) {
+//  ValueChangedCallback* callback = new ValueChangedCallback(self_reference_, "mod_wheel", value);
+//  callback->post();
+//}
+//
+//
+//
+//void SynthBase::presetChangedThroughMidi(juce::File preset) {
+//  SynthGuiInterface* gui_interface = getGuiInterface();
+//  if (gui_interface) {
+//    gui_interface->updateFullGui();
+//    gui_interface->notifyFresh();
+//  }
+//}
 
 void SynthBase::initEngine()
 {
@@ -98,7 +92,7 @@ void SynthBase::addConnection(juce::AudioProcessorGraph::Connection &connect)
 bool SynthBase::loadFromValueTree(const juce::ValueTree& state)
 {
     pauseProcessing(true);
-    engine_->allSoundsOff();
+    //engine_->allSoundsOff();
     tree.copyPropertiesAndChildrenFrom(state, nullptr);
 
     pauseProcessing(false);
@@ -166,23 +160,23 @@ void SynthBase::processAudioAndMidi(juce::AudioBuffer<float>& audio_buffer, juce
 
 
 }
-void SynthBase::processAudioWithInput(juce::AudioSampleBuffer* buffer, const bitklavier::float* input_buffer,
-                                      int channels, int samples, int offset) {
-  if (expired_)
-    return;
-
-  engine_->processWithInput(input_buffer, samples);
-  writeAudio(buffer, channels, samples, offset);
-}
+//void SynthBase::processAudioWithInput(juce::AudioSampleBuffer* buffer, const float* input_buffer,
+//                                      int channels, int samples, int offset) {
+//  if (expired_)
+//    return;
+//
+//  //engine_->processWithInput(input_buffer, samples);
+//  writeAudio(buffer, channels, samples, offset);
+//}
 
 void SynthBase::writeAudio(juce::AudioSampleBuffer* buffer, int channels, int samples, int offset) {
-  //const bitklavier::float* engine_output = (const bitklavier::float*)engine_->output(0)->buffer;
+  //const float* engine_output = (const float*)engine_->output(0)->buffer;
   /* get output of engine here */
   for (int channel = 0; channel < channels; ++channel) {
     float* channel_data = buffer->getWritePointer(channel, offset);
     //this line actually sends audio to the JUCE AudioSamplerBuffer to get audio out of the plugin
     for (int i = 0; i < samples; ++i) {
-      //channel_data[i] = engine_output[bitklavier::poly_float::kSize * i + channel];
+      //channel_data[i] = engine_output[float::kSize * i + channel];
       _ASSERT(std::isfinite(channel_data[i]));
     }
   }
@@ -220,13 +214,13 @@ bool SynthBase::isMidiMapped(const std::string& name) {
 
 void SynthBase::notifyOversamplingChanged() {
   pauseProcessing(true);
-  engine_->allSoundsOff();
+  //engine_->allSoundsOff();
   checkOversampling();
   pauseProcessing(false);
 }
 
 void SynthBase::checkOversampling() {
-  return engine_->checkOversampling();
+  //return engine_->checkOversampling();
 }
 
 juce::ValueTree& SynthBase::getValueTree()

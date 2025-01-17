@@ -17,7 +17,7 @@
 #include "open_gl_line_renderer.h"
 
 #include "look_and_feel/shaders.h"
-#include "../synthesis/framework/utils.h"
+#include "utils.h"
 
 namespace {
   constexpr float kLoopWidth = 2.001f;
@@ -191,23 +191,23 @@ void OpenGlLineRenderer::boostRange(float* boosts, float start, float end, int b
   boosts[end_index + buffer_vertices] = std::max(end_value, progress * progress);
 }
 
-void OpenGlLineRenderer::boostRange(bitklavier::poly_float start, bitklavier::poly_float end,
-                                    int buffer_vertices, bitklavier::poly_float min) {
-  boostLeftRange(start[0], end[0], buffer_vertices, min[0]);
-  boostRightRange(start[1], end[1], buffer_vertices, min[1]);
-}
-
-void OpenGlLineRenderer::decayBoosts(bitklavier::poly_float mult) {
-  bool any_boost = false;
-  for (int i = 0; i < num_points_; ++i) {
-    boost_left_[i] *= mult[0];
-    boost_right_[i] *= mult[1];
-    any_boost = any_boost || boost_left_[i] || boost_right_[i];
-  }
-  
-  any_boost_value_ = any_boost;
-}
-
+//void OpenGlLineRenderer::boostRange(float start, float end,
+//                                    int buffer_vertices, float min) {
+//  boostLeftRange(start[0], end[0], buffer_vertices, min[0]);
+//  boostRightRange(start[1], end[1], buffer_vertices, min[1]);
+//}
+//
+//void OpenGlLineRenderer::decayBoosts(float mult) {
+//  bool any_boost = false;
+//  for (int i = 0; i < num_points_; ++i) {
+//    boost_left_[i] *= mult[0];
+//    boost_right_[i] *= mult[1];
+//    any_boost = any_boost || boost_left_[i] || boost_right_[i];
+//  }
+//
+//  any_boost_value_ = any_boost;
+//}
+//
 void OpenGlLineRenderer::setFillVertices(bool left) {
   float* boosts = left ? boost_left_.get() : boost_right_.get();
   float x_adjust = 2.0f / getWidth();

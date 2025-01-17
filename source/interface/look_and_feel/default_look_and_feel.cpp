@@ -19,7 +19,7 @@
 #include "fonts.h"
 #include "paths.h"
 
-#include "../synth_section.h"
+#include "synth_section.h"
 
 DefaultLookAndFeel::DefaultLookAndFeel() {
   setColour(juce::PopupMenu::backgroundColourId, juce::Colour(0xff111111));

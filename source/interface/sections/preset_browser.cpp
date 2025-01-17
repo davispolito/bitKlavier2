@@ -18,14 +18,11 @@
 
 #include "skin.h"
 #include "fonts.h"
-//#include "load_save.h"
 #include "paths.h"
 #include "synth_gui_interface.h"
 #include "open_gl_component.h"
 #include "open_gl_image.h"
 #include "synth_section.h"
-//#include "synth_strings.h"
-//#include "text_look_and_feel.h"
 
 namespace {
   template<class Comparator>
@@ -884,16 +881,7 @@ bool PresetBrowser::loadFromFile(juce::File& preset) {
   std::string error;
   if (synth->loadFromFile(preset, error)) {
     setPresetInfo(preset);
-    synth->setPresetName(preset.getFileNameWithoutExtension());
-    synth->setAuthor(author_);
 
-    juce::String comments = parent->getSynth()->getComments();
-    int comments_font_size = kCommentsFontHeight * size_ratio_;
-    if (comments_) {
-      comments_->setText(comments);
-      comments_->setFont(Fonts::instance()->proportional_light().withPointHeight(comments_font_size));
-      comments_->redoImage();
-    }
     return true;
   }
   return false;
@@ -909,16 +897,6 @@ void PresetBrowser::loadPresetInfo() {
   lighten = background.overlaidWith(lighten);
   juce::Colour regular_text = findColour(Skin::kBodyText, true);
 
-  juce::String preset = parent->getSynth()->getPresetName();
-  if (preset.isEmpty()) {
-    preset_text_->setText("Preset name");
-    preset_text_->setColor(lighten);
-  }
-  else
-  {
-    preset_text_->setText (preset);
-    preset_text_->setColor (regular_text);
-  }
 }
 
 void PresetBrowser::setPresetInfo(juce::File& preset) {

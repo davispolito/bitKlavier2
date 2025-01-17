@@ -15,8 +15,6 @@
 */
 
 #include "FullInterface.h"
-#include "test_section.h"
-//#include "default_look_and_feel.h"
 #include "text_look_and_feel.h"
 #include "Identifiers.h"
 #include "about_section.h"

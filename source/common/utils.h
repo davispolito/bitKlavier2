@@ -59,32 +59,6 @@
           return distribution_(engine_);
         }
 
-//        force_inline poly_float polyNext() {
-//          poly_float result;
-//          for (int i = 0; i < poly_float::kSize; ++i)
-//            result.set(i, next());
-//          return result;
-//        }
-//
-//        force_inline poly_float polyVoiceNext() {
-//          poly_float result;
-//          for (int i = 0; i < poly_float::kSize; i += 2) {
-//            float value = next();
-//            result.set(i, value);
-//            result.set(i + 1, value);
-//          }
-//          return result;
-//        }
-//
-//        force_inline poly_float polyNext(poly_mask mask) {
-//          poly_float result = 0.0f;
-//          for (int i = 0; i < poly_float::kSize; ++i) {
-//            if (mask[i])
-//              result.set(i, next());
-//          }
-//          return result;
-//        }
-
         force_inline void seed(int new_seed) {
           engine_.seed(new_seed);
         }

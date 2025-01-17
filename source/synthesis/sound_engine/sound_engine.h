@@ -109,7 +109,6 @@ namespace bitklavier {
           return node;
       }
 
-      void checkOversampling();
       std::vector<std::shared_ptr<juce::AudioProcessor>> processors;
       std::unique_ptr<juce::AudioProcessorGraph>  processorGraph;
       Node::Ptr audioOutputNode;

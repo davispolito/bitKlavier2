@@ -59,14 +59,14 @@ namespace bitklavier {
     {
         proc->processBlock(buffer, midimessages);
     }
-    if (getNumActiveVoices() == 0)
-    {
-      //      CircularQueue<ModulationConnectionProcessor*>& connections = voice_handler_->enabledModulationConnection();
-      //      for (ModulationConnectionProcessor* modulation : connections) {
-      //        if (!modulation->isInputSourcePolyphonic())
-      //          modulation->process(num_samples);
-      //      }
-    }
+//    if (getNumActiveVoices() == 0)
+//    {
+//      //      CircularQueue<ModulationConnectionProcessor*>& connections = voice_handler_->enabledModulationConnection();
+//      //      for (ModulationConnectionProcessor* modulation : connections) {
+//      //        if (!modulation->isInputSourcePolyphonic())
+//      //          modulation->process(num_samples);
+//      //      }
+//    }
   }
 
 

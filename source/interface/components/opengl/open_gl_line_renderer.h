@@ -18,8 +18,7 @@
 
 
 
-#include "../synthesis/framework/common.h"
-#include "../synthesis/framework/poly_values.h"
+#include "common.h"
 #include "open_gl_component.h"
 #include "open_gl_multi_quad.h"
 
@@ -89,9 +88,6 @@ class OpenGlLineRenderer : public OpenGlComponent {
     void boostLeftRange(float start, float end, int buffer_vertices, float min);
     void boostRightRange(float start, float end, int buffer_vertices, float min);
     void boostRange(float* boosts, float start, float end, int buffer_vertices, float min);
-    void boostRange(bitklavier::poly_float start, bitklavier::poly_float end, int buffer_vertices, bitklavier::poly_float min);
-    void decayBoosts(bitklavier::poly_float mult);
-    void enableBackwardBoost(bool enable) { enable_backward_boost_ = enable; }
 
     force_inline int numPoints() const { return num_points_; }
     force_inline juce::Colour color() const { return color_; }

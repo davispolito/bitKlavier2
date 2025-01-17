@@ -17,8 +17,8 @@
 #include "skin.h"
 #include "BinaryData.h"
 #include "default_look_and_feel.h"
-#include "../FullInterface.h"
-#include "../synth_section.h"
+#include "FullInterface.h"
+#include "synth_section.h"
 
 namespace {
     const std::string kOverrideNames[Skin::kNumSectionOverrides] = {
