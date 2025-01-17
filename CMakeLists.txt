@@ -1,6 +1,4 @@
-# 3.24.1 is bundled in Visual Studio 2022 v17.4
-# 3.24.1 is also bundled in CLion as of 2023
-cmake_minimum_required(VERSION 3.24.1)
+cmake_minimum_required(VERSION 3.25)
 # Typically you don't care so much for a third party library's tests to be
 # run from your own project's code.
 set(JSON_BuildTests OFF CACHE INTERNAL "")
@@ -9,8 +7,12 @@ set(JSON_BuildTests OFF CACHE INTERNAL "")
 # This tells cmake we have goodies in the /cmake folder
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 include (PamplejuceVersion)
+include(CPM)
 add_compile_options(-w)
-
+# Configures universal binaries and decides which version of macOS to support
+include(PamplejuceMacOS)
+# Couple tweaks that IMO should be JUCE defaults
+include(JUCEDefaults)
 # Change me!
 # This is the internal name of the project and the name of JUCE's shared code "target"
 # Note: This cannot have spaces (it may be 2023, but you can't have it all!)
@@ -38,11 +40,6 @@ set(FORMATS Standalone AU VST3 AUv3)
 # For simplicity, the name of the CMake project is also the name of the target
 project(${PROJECT_NAME} VERSION ${CURRENT_VERSION})
 
-# Configures universal binaries in CI
-include(PamplejuceMacOS)
-
-# Couple tweaks that IMO should be JUCE defaults
-include(JUCEDefaults)
 
 # JUCE is setup as a submodule in the /JUCE folder
 # Locally, you must run `git submodule update --init --recursive` once
@@ -50,15 +47,14 @@ include(JUCEDefaults)
 # On Github Actions, this is done as a part of actions/checkout
 add_subdirectory(JUCE)
 # Link to any other modules you added (with juce_add_module) here!
-juce_add_module(third_party/tracktion_engine/modules/tracktion_engine)
+message("-- Adding juce modules")
 juce_add_module(modules/melatonin_audio_sparklines)
-# Add any other modules you want modules here, before the juce_add_plugin call
 
+# Add any other modules you want modules here, before the juce_add_plugin call
+message("-- Adding external libraries" )
 add_subdirectory(third_party/chowdsp_utils)
-#add_subdirectory(third_party/readerwriterqueue)
-#add_subdirectory(third_party/tracktion_engine)
 # This adds the melatonin inspector module
-add_subdirectory (modules/melatonin_inspector)
+add_subdirectory (third_party/melatonin_inspector)
 # If you only include this third party in PRIVATE source files, you do not
 # need to install it when your main project gets installed.
 # set(JSON_Install OFF CACHE INTERNAL "")
@@ -96,11 +92,12 @@ juce_add_plugin("${PROJECT_NAME}"
 # This lets us use our code in both the JUCE targets and our Test target
 # Without running into ODR violations
 add_library(SharedCode INTERFACE
-)
+        )
+# Enable fast math, C++20 and a few other target defaults
+include(SharedCodeDefaults)
 
-# C++20, please
 # Use cxx_std_23 for C++23 (as of CMake v 3.20)
-target_compile_features(SharedCode INTERFACE cxx_std_20)
+target_compile_features(SharedCode INTERFACE cxx_std_23)
 
 # Manually list all .h and .cpp files for the plugin
 # If you are like me, you'll use globs for your sanity.
@@ -125,20 +122,14 @@ include_directories(source/synthesis/framework/Synthesiser)
 include_directories(source/synthesis/framework)
 include_directories(source/synthesis/lookups)
 include_directories(source/synthesis/synth_engine)
-include_directories(third_party/tracktion_engine/modules/tracktion_engine)
+
+#we were previously linking against the entire tracktion_engine and including
+# via git submodules. this was a source of many headaches and we only use a small
+# portion of the library so i moved the useful files here and removed the submodule
+include_directories(third_party/tracktion_engine)
+
+
 # This is where you can set preprocessor definitions for JUCE and your plugin
-set(JUCE_DEPENDENCIES
-        chowdsp::chowdsp_plugin_base
-        chowdsp::chowdsp_plugin_state
-        chowdsp::chowdsp_sources
-        chowdsp::chowdsp_plugin_utils
-        chowdsp::chowdsp_gui
-        chowdsp::chowdsp_dsp_utils
-        chowdsp::chowdsp_data_structures
-        juce::juce_audio_utils
-        juce::juce_dsp
-       #juce::juce_open_gl
-)
 target_compile_definitions(SharedCode
     INTERFACE
         #JUCE_USE_CUSTOM_PLUGIN_STANDALONE_ENTRYPOINT=1
@@ -163,39 +154,43 @@ target_compile_definitions(SharedCode
 
 
 
-
-#juce_add_module(third_party/chowdsp_utils/modules/gui/chowdsp_gui)
-#juce_add_modules(chowdsp_utils)
-#juce_add_module(third_party/chowdsp_utils/modules/plugin/chowdsp_plugin_state)
-#juce_add_module(third_party/chowdsp_utils/modules/dsp/chowdsp_sources)
-#juce_add_module(third_party/chowdsp_utils/modules/plugin/chowdsp_plugin_utils)
+# Link to any other modules you added (with juce_add_module) here!
 # Usually JUCE modules must have PRIVATE visibility
 # See https://github.com/juce-framework/JUCE/blob/master/docs/CMake%20API.md#juce_add_module
 # However, with bitKlavier2, you'll link modules to SharedCode with INTERFACE visibility
 # This allows the JUCE plugin targets and the Tests target to link against it
+set(CHOWDSP_DEPENDENCIES
+        chowdsp::chowdsp_plugin_base
+        chowdsp::chowdsp_plugin_state
+        chowdsp::chowdsp_sources
+        chowdsp::chowdsp_plugin_utils
+        chowdsp::chowdsp_gui
+        chowdsp::chowdsp_dsp_utils
+        chowdsp::chowdsp_data_structures
+)
+set(JUCE_DEPENDENCIES
+        juce_audio_utils
+        juce_audio_processors
+        juce_dsp
+        juce_gui_basics
+        juce_gui_extra
+        juce_opengl
+        juce::juce_recommended_config_flags
+        juce::juce_recommended_lto_flags
+        juce::juce_recommended_warning_flags
+
+)
 target_link_libraries(SharedCode
     INTERFACE
     Assets
 
-        ${JUCE_DEPENDENCIES}
+    ${CHOWDSP_DEPENDENCIES}
+    ${JUCE_DEPENDENCIES}
+    melatonin_audio_sparklines
     melatonin_inspector
-    juce_audio_utils
-    juce_audio_processors
-    juce_dsp
-    juce_gui_basics
-    juce_gui_extra
-        juce_opengl
-        #chowdsp_utils
-    juce::juce_recommended_config_flags
-    juce::juce_recommended_lto_flags
-    juce::juce_recommended_warning_flags
+)
 
-        #tracktion::engine
-        )
 
-#message(WARNING "The JUCE HEADERS WILL BE GENERATED FOR ${PROJECT_NAME} at ${CMAKE_BINARY_DIR}")
-#juce_generate_juce_header(${PROJECT_NAME})
-#include_directories(${CMAKE_BINARY_DIR}/${PROJECT_NAME}_artefacts/JuceLibraryCode)
 include (FetchContent)
 
 FetchContent_Declare (melatonin_perfetto

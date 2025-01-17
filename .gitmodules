@@ -4,7 +4,7 @@
 	branch = master
 	update = merge
 [submodule "modules/melatonin_inspector"]
-	path = modules/melatonin_inspector
+	path = third_party/melatonin_inspector
 	url = https://github.com/sudara/melatonin_inspector.git
 	branch = main
 	update = merge
@@ -18,12 +18,6 @@
 	url = git@github.com:davispolito/chowdsp_utilsPrinceton.git
 	branch = bitklavier
 	update = merge
-[submodule "third_party/tracktion_engine"]
-	path = third_party/tracktion_engine
-	url = git@github.com:Tracktion/tracktion_engine.git
-	branch = develop
-    ignore = untracked
-    update = merge
 [submodule "third_party/sfzq"]
 	path = third_party/sfzq
 	url = git@github.com:stevefolta/sfzq.git

@@ -7,7 +7,7 @@
 
 #include <juce_core/juce_core.h>
 #include <juce_data_structures/juce_data_structures.h>
-#include <tracktion_engine.h>
+#include "tracktion_ValueTreeUtilities.h"
 #include "Identifiers.h"
 struct UserPreferences : private tracktion::engine::ValueTreeAllEventListener
 {

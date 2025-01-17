@@ -4,9 +4,10 @@
 
 #ifndef BITKLAVIER2_PREPARATIONSECTION_H
 #define BITKLAVIER2_PREPARATIONSECTION_H
-#include "tracktion_engine.h"
-
 #include "valuetree_utils/VariantConverters.h"
+#include <juce_data_structures/juce_data_structures.h>
+#include <juce_audio_formats/juce_audio_formats.h>
+#include "tracktion_ValueTreeUtilities.h"
 #include "synth_section.h"
 #include "draggable_component.h"
 #include "common.h"

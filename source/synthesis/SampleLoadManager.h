@@ -7,6 +7,7 @@
 
 #include "UserPreferences.h"
 #include "utils.h"
+#include <juce_audio_formats/juce_audio_formats.h>
 #include <juce_events/juce_events.h>
 template <typename T>
 class BKSamplerSound;
