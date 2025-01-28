@@ -49,8 +49,7 @@ class SynthGuiInterface {
     virtual void updateFullGui();
     virtual void updateGuiControl(const std::string& name, float value);
     float getControlValue(const std::string& name);
-
-
+   void createProcessor(const juce::ValueTree&);
     void setFocus();
     void notifyChange();
     void notifyFresh();

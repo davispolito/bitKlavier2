@@ -4,7 +4,7 @@
 
 #include "KeymapProcessor.h"
 #include "common.h"
-KeymapProcessor::KeymapProcessor (const juce::ValueTree& v, juce::AudioDeviceManager* manager) : PluginBase (v, nullptr, keymapBusLayout()), _midi (std::make_unique<MidiManager> (&keyboard_state, manager, v))
+KeymapProcessor::KeymapProcessor (const juce::ValueTree& v, juce::AudioDeviceManager* manager) : PluginBase (v), _midi (std::make_unique<MidiManager> (&keyboard_state, manager, v))
 {
     /**
      * user settings
@@ -136,3 +136,5 @@ juce::MidiMessage KeymapProcessor::swapNoteOnNoteOff (juce::MidiMessage inmsg)
 
     return inmsg;
 }
+template<>
+std::string bitklavier::PluginBase<bitklavier::PreparationStateImpl<KeymapParams, KeymapNonParameterState, chowdsp::XMLSerializer>>::name = "keymap";

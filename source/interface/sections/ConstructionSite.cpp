@@ -21,14 +21,14 @@ ConstructionSite::ConstructionSite (juce::ValueTree& v, juce::UndoManager& um, O
     //addAndMakeVisible (cableView);
     data->synth->getEngine()->processorGraph->addChangeListener (this);
     //addMouseListener (&cableView, true);
-    prepFactory.Register (bitklavier::BKPreparationType::PreparationTypeDirect, DirectPreparation::createDirectSection);
-    prepFactory.Register (bitklavier::BKPreparationType::PreparationTypeNostalgic, NostalgicPreparation::createNostalgicSection);
-    prepFactory.Register (bitklavier::BKPreparationType::PreparationTypeKeymap, KeymapPreparation::createKeymapSection);
-    prepFactory.Register (bitklavier::BKPreparationType::PreparationTypeResonance, ResonancePreparation::createResonanceSection);
-    prepFactory.Register (bitklavier::BKPreparationType::PreparationTypeSynchronic, SynchronicPreparation::createSynchronicSection);
-    prepFactory.Register (bitklavier::BKPreparationType::PreparationTypeBlendronic, BlendronicPreparation::createBlendronicSection);
-    prepFactory.Register (bitklavier::BKPreparationType::PreparationTypeTempo, TempoPreparation::createTempoSection);
-    prepFactory.Register (bitklavier::BKPreparationType::PreparationTypeTuning, TuningPreparation::createTuningSection);
+    //prepFactory.Register (bitklavier::BKPreparationType::PreparationTypeDirect, DirectPreparation::createDirectSection);
+//    prepFactory.Register (bitklavier::BKPreparationType::PreparationTypeNostalgic, NostalgicPreparation::createNostalgicSection);
+    //prepFactory.Register (bitklavier::BKPreparationType::PreparationTypeKeymap, KeymapPreparation::createKeymapSection);
+//    prepFactory.Register (bitklavier::BKPreparationType::PreparationTypeResonance, ResonancePreparation::createResonanceSection);
+//    prepFactory.Register (bitklavier::BKPreparationType::PreparationTypeSynchronic, SynchronicPreparation::createSynchronicSection);
+//    prepFactory.Register (bitklavier::BKPreparationType::PreparationTypeBlendronic, BlendronicPreparation::createBlendronicSection);
+//    prepFactory.Register (bitklavier::BKPreparationType::PreparationTypeTempo, TempoPreparation::createTempoSection);
+//    prepFactory.Register (bitklavier::BKPreparationType::PreparationTypeTuning, TuningPreparation::createTuningSection);
     cableView.toBack();
     addSubSection (&cableView);
 }
@@ -80,34 +80,34 @@ PreparationSection* ConstructionSite::createNewObject (const juce::ValueTree& v)
     DBG("createNewObject: func" );
     SynthGuiInterface* parent = findParentComponentOfClass<SynthGuiInterface>();
     //must use auto * so that it doesnt create a copy and call this constructor twice
+    parent->createProcessor(v);
 
+//    auto* s = prepFactory.CreateObject ((int) v.getProperty (IDs::type), v, parent);
+//
+//    DBG("finishobjectcreate");
+//    addSubSection (s);
+//    Skin default_skin;
+//    s->setSkinValues (default_skin, false);
+//    s->setDefaultColor();
+//    s->setSizeRatio (size_ratio_);
+//    s->setCentrePosition (s->x, s->y);
+//    s->setSize (s->width, s->height);
+//
+//
+//    s->addSoundSet(&parent->sampleLoadManager->samplerSoundset);
+//    if(!parent->sampleLoadManager->samplerSoundset.empty())
+//    {
+//        s->addSoundSet (
+//                &parent->sampleLoadManager->samplerSoundset[parent->sampleLoadManager->globalSoundset_name],
+//                &parent->sampleLoadManager->samplerSoundset[parent->sampleLoadManager->globalHammersSoundset_name],
+//                &parent->sampleLoadManager->samplerSoundset[parent->sampleLoadManager->globalReleaseResonanceSoundset_name],
+//                &parent->sampleLoadManager->samplerSoundset[parent->sampleLoadManager->globalPedalsSoundset_name]);
+//    }
+//    s->selectedSet = &(preparationSelector.getLassoSelection());
+//    preparationSelector.getLassoSelection().addChangeListener (s);
+//    s->addListener (&cableView);
 
-    auto* s = prepFactory.CreateObject ((int) v.getProperty (IDs::type), v, parent);
-
-    DBG("finishobjectcreate");
-    addSubSection (s);
-    Skin default_skin;
-    s->setSkinValues (default_skin, false);
-    s->setDefaultColor();
-    s->setSizeRatio (size_ratio_);
-    s->setCentrePosition (s->x, s->y);
-    s->setSize (s->width, s->height);
-
-
-    s->addSoundSet(&parent->sampleLoadManager->samplerSoundset);
-    if(!parent->sampleLoadManager->samplerSoundset.empty())
-    {
-        s->addSoundSet (
-                &parent->sampleLoadManager->samplerSoundset[parent->sampleLoadManager->globalSoundset_name],
-                &parent->sampleLoadManager->samplerSoundset[parent->sampleLoadManager->globalHammersSoundset_name],
-                &parent->sampleLoadManager->samplerSoundset[parent->sampleLoadManager->globalReleaseResonanceSoundset_name],
-                &parent->sampleLoadManager->samplerSoundset[parent->sampleLoadManager->globalPedalsSoundset_name]);
-    }
-    s->selectedSet = &(preparationSelector.getLassoSelection());
-    preparationSelector.getLassoSelection().addChangeListener (s);
-    s->addListener (&cableView);
-
-    return s;
+    return nullptr;
 }
 
 void ConstructionSite::reset()

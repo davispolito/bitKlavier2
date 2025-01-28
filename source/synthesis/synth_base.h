@@ -24,6 +24,8 @@
 #include "midi_manager.h"
 #include <set>
 #include <string>
+#include "PluginBase.h"
+#include "Factory.h"
 class SynthGuiInterface;
 template<typename T>
 class BKSamplerSound;

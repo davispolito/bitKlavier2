@@ -78,7 +78,8 @@ public:
     void processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages) override;
 
     juce::MidiMessage swapNoteOnNoteOff (juce::MidiMessage inmsg);
-
+    const juce::String getName() const override
+    {return "Keymap";}
     bool acceptsMidi() const override
     {
         return false;

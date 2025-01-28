@@ -117,8 +117,8 @@ struct DirectNonParameterState : chowdsp::NonParamState
     //chowdsp::StateValue<juce::Point<int>> prepPoint { "prep_point", { 300, 500 } };
     //chowdsp::StateValue<bool> isSelected { "selected", true };
 };
-
-class DirectProcessor : public bitklavier::PluginBase<bitklavier::PreparationStateImpl<DirectParams, DirectNonParameterState, chowdsp::XMLSerializer>>,
+typedef  bitklavier::PluginBase<bitklavier::PreparationStateImpl<DirectParams, DirectNonParameterState, chowdsp::XMLSerializer>> Direct;
+class DirectProcessor : public Direct, bitklavier::Processor::Registrar<DirectProcessor>
 public juce::ValueTree::Listener
 {
 public:
@@ -171,6 +171,8 @@ public:
             vt.setProperty (param.paramID, chowdsp::ParameterTypeHelpers::getValue (param), nullptr);
         });
     }
+    const juce::String getName() const override
+    {return "Direct";}
     void valueTreePropertyChanged   (juce::ValueTree& t, const juce::Identifier&) {
         juce::String a  = t.getProperty(IDs::mainSampleSet, "");
         juce::String b  = t.getProperty(IDs::hammerSampleSet, "");
@@ -187,7 +189,9 @@ public:
     void valueTreeChildOrderChanged (juce::ValueTree&, int, int)          {}
     void valueTreeParentChanged     (juce::ValueTree&)                    {}
     void valueTreeRedirected        (juce::ValueTree&)                    {}
-
+    //must define this in each Processor in order to be able to find it in the factory create function
+        void processAudioBlock (juce::AudioBuffer<float>& buffer) override {};
+    virtual void releaseResources() = 0;
 private:
     //chowdsp::experimental::Directillator<float> oscillator;
     chowdsp::Gain<float> gain;
@@ -210,3 +214,4 @@ private:
     chowdsp::ScopedCallbackList vtCallbacks;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (DirectProcessor)
 };
+

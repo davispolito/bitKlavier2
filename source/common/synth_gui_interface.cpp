@@ -20,7 +20,7 @@
 #include "UserPreferences.h"
 
 #include "sound_engine.h"
-
+#include "DirectProcessor.h"
 
 SynthGuiData::SynthGuiData(SynthBase* synth_base) : synth(synth_base),
                                                      tree(synth_base->getValueTree()),
@@ -165,5 +165,11 @@ void SynthGuiInterface::setGuiSize(float scale) {
   bounds.setHeight(height);
   gui_->getParentComponent()->setBounds(bounds);
   gui_->redoBackground();
+}
+
+void SynthGuiInterface::createProcessor(const juce::ValueTree &v) {
+     DirectProcessor d(v);
+     auto proc = bitklavier::Processor::create("direct",v);
+     DBG(proc->getName());
 }
 #endif
