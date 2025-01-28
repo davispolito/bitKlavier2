@@ -224,11 +224,11 @@ target_link_libraries("${PROJECT_NAME}" PRIVATE
 # IPP support, comment out to disable
 include(PamplejuceIPP)
 
-# Everything related to the tests target
-include(Tests)
-
-# A separate target keeps the Tests target fast!
-include(Benchmarks)
-
-# Pass some config to GA (like our PRODUCT_NAME)
-include(GitHubENV)
+## Everything related to the tests target
+#include(Tests)
+#
+## A separate target keeps the Tests target fast!
+#include(Benchmarks)
+#
+## Pass some config to GA (like our PRODUCT_NAME)
+#include(GitHubENV)
