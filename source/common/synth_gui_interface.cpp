@@ -169,7 +169,7 @@ void SynthGuiInterface::setGuiSize(float scale) {
 
 void SynthGuiInterface::createProcessor(const juce::ValueTree &v) {
      DirectProcessor d(v);
-     auto proc = bitklavier::Processor::create("direct",v);
-     DBG(proc->getName());
+    getSynth()->addProcessor( bitklavier::Processor::create("DirectProcessor",v)->getAudioProcessorPtr());
+     //DBG(proc->getName());
 }
 #endif

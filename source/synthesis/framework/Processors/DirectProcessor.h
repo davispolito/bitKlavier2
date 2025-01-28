@@ -15,6 +15,7 @@
 #include "TransposeParams.h"
 #include "buffer_debugger.h"
 #include "Identifiers.h"
+#include "Processor.h"
 struct DirectParams : chowdsp::ParamHolder
 {
     // gain slider params, for all gain-type knobs
@@ -118,19 +119,21 @@ struct DirectNonParameterState : chowdsp::NonParamState
     //chowdsp::StateValue<bool> isSelected { "selected", true };
 };
 typedef  bitklavier::PluginBase<bitklavier::PreparationStateImpl<DirectParams, DirectNonParameterState, chowdsp::XMLSerializer>> Direct;
-class DirectProcessor : public Direct, bitklavier::Processor::Registrar<DirectProcessor>
+class DirectProcessor : public Direct, public bitklavier::Processor::Registrar<DirectProcessor>,
 public juce::ValueTree::Listener
 {
 public:
     DirectProcessor (const juce::ValueTree& v);
-    ~DirectProcessor()
+    ~DirectProcessor(
+
+            )
     {
 
     }
     void prepareToPlay (double sampleRate, int samplesPerBlock) override;
     void releaseResources() override {}
     void processAudioBlock (juce::AudioBuffer<float>& buffer) override {};
-
+//    juce::AudioProcessorEditor* createEditor() override { return nullptr; }
     void processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages) override;
 
     bool acceptsMidi() const override
@@ -189,9 +192,13 @@ public:
     void valueTreeChildOrderChanged (juce::ValueTree&, int, int)          {}
     void valueTreeParentChanged     (juce::ValueTree&)                    {}
     void valueTreeRedirected        (juce::ValueTree&)                    {}
-    //must define this in each Processor in order to be able to find it in the factory create function
-        void processAudioBlock (juce::AudioBuffer<float>& buffer) override {};
-    virtual void releaseResources() = 0;
+//    //must define this in each Processor in order to be able to find it in the factory create function
+//        void processAudioBlock (juce::AudioBuffer<float>& buffer) override {};
+//    virtual void releaseResources() = 0;
+   std::unique_ptr<juce::AudioProcessor> getAudioProcessorPtr() override
+    {
+        return std::make_unique<DirectProcessor>(v);
+    }
 private:
     //chowdsp::experimental::Directillator<float> oscillator;
     chowdsp::Gain<float> gain;

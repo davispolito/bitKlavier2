@@ -28,10 +28,10 @@ public:
 
         static bool registerT() {
             //demangle assumes we have acces to run time type info (see -fno-rtti or -frtti) but we dont want to use that since it
-            const auto name = T::name; //demangle(typeid(T).name());
+            const auto name =demangle(typeid(T).name()); ; //T::name; //demangle(typeid(T).name());
             Factory::data()[name] =
                     [](Args... args) -> std::shared_ptr<Base> {
-                        return std::make_shared<T>(std::forward<Args>(args)...);
+                        return std::make_unique<T>(std::forward<Args>(args)...);
                     };
             return true;
         }
@@ -47,10 +47,6 @@ public:
     friend Base;
 private:
 
-    class Key {
-        Key(){};
-        template <class T> friend struct Registrar;
-    };
     using CreateFunction = std::shared_ptr<Base> (*)(Args...);
 
     static auto &data() {
@@ -58,6 +54,11 @@ private:
         return s;
     }
 
+    class Key {
+    public:
+        Key(){};
+        template <class T> friend struct Registrar;
+    };
 };
 
 template <class Base, class... Args>

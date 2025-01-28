@@ -136,5 +136,5 @@ juce::MidiMessage KeymapProcessor::swapNoteOnNoteOff (juce::MidiMessage inmsg)
 
     return inmsg;
 }
-template<>
-std::string bitklavier::PluginBase<bitklavier::PreparationStateImpl<KeymapParams, KeymapNonParameterState, chowdsp::XMLSerializer>>::name = "keymap";
+//template<>
+//std::string bitklavier::PluginBase<bitklavier::PreparationStateImpl<KeymapParams, KeymapNonParameterState, chowdsp::XMLSerializer>>::name = "keymap";

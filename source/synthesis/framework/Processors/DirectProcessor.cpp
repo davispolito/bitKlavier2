@@ -6,7 +6,7 @@
 #include "Synthesiser/Sample.h"
 #include "common.h"
 #include <chowdsp_serialization/chowdsp_serialization.h>
-DirectProcessor::DirectProcessor (const juce::ValueTree& v) : PluginBase (v),
+DirectProcessor::DirectProcessor (const juce::ValueTree& v) : PluginBase (v,nullptr,directBusLayout()),
 mainSynth(new BKSynthesiser(state.params.env, state.params.gainParam)),
 hammerSynth(new BKSynthesiser(state.params.env,state.params.hammerParam)),
 releaseResonanceSynth(new BKSynthesiser(state.params.env,state.params.releaseResonanceParam)),
@@ -223,5 +223,5 @@ void DirectProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::Midi
     //melatonin::printSparkline(buffer);
     bufferDebugger->capture("direct", buffer.getReadPointer(0), buffer.getNumSamples(), -1.f, 1.f);
 }
-template<>
-std::string bitklavier::PluginBase<bitklavier::PreparationStateImpl<DirectParams, DirectNonParameterState, chowdsp::XMLSerializer>>::name = "direct";
+//template<>
+//std::string bitklavier::PluginBase<bitklavier::PreparationStateImpl<DirectParams, DirectNonParameterState, chowdsp::XMLSerializer>>::name = "direct";

@@ -10,30 +10,28 @@
 namespace bitklavier {
 
 
-    class Processor : public juce::AudioProcessor,
-                      public Factory<Processor, const juce::ValueTree &> {
+class Processor : public Factory<Processor, const juce::ValueTree &> {
     public:
-        Processor(Key) : juce::AudioProcessor(){}
+        Processor(Key) {}
 
         virtual ~Processor() = default;
-        virtual const juce::String getName() const;
+        virtual std::unique_ptr<juce::AudioProcessor> getAudioProcessorPtr() =0;
 
-        virtual bool acceptsMidi() const;
-
-        virtual bool producesMidi() const;// override { return false; }
-        virtual bool isMidiEffect() const;// override { return false; }
-
-        virtual double getTailLengthSeconds() const;// override { return 0.0; }
-        virtual bool isBusesLayoutSupported (const juce::AudioProcessor::BusesLayout& layouts) const; //verride {};
-        virtual void prepareToPlay (double sampleRate, int samplesPerBlock);// override {};
-        virtual void processBlock (juce::AudioBuffer<float>&, juce::MidiBuffer&) ; //override{};
-        virtual void processBlock (juce::AudioBuffer<double>&, juce::MidiBuffer&) ;//override {}
-        virtual void processAudioBlock (juce::AudioBuffer<float>&) = 0;
-
-        bool hasEditor() const override
-        {
-            return true;
-        }
+//        virtual const juce::String getName() const;
+//
+//        virtual bool acceptsMidi() const;
+//
+//        virtual bool producesMidi() const;// override { return false; }
+//        virtual bool isMidiEffect() const;// override { return false; }
+//
+//        virtual double getTailLengthSeconds() const;// override { return 0.0; }
+//        virtual bool isBusesLayoutSupported (const juce::AudioProcessor::BusesLayout& layouts) const; //verride {};
+//        virtual void prepareToPlay (double sampleRate, int samplesPerBlock);// override {};
+//        virtual void processBlock (juce::AudioBuffer<float>&, juce::MidiBuffer&) ; //override{};
+//        virtual void processBlock (juce::AudioBuffer<double>&, juce::MidiBuffer&) ;//override {}
+//        virtual void processAudioBlock (juce::AudioBuffer<float>&) = 0;
+//
+//
 
     private:
         //static juce::AudioProcessor::BusesProperties getDefaultBusLayout(){};
