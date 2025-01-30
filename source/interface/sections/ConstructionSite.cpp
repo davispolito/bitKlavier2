@@ -19,7 +19,7 @@ ConstructionSite::ConstructionSite (juce::ValueTree& v, juce::UndoManager& um, O
     setSkinOverride (Skin::kConstructionSite);
     setInterceptsMouseClicks (false, true);
     //addAndMakeVisible (cableView);
-    data->synth->getEngine()->processorGraph->addChangeListener (this);
+    data->synth->getEngine()->addChangeListener (this);
     //addMouseListener (&cableView, true);
     prepFactory.Register (bitklavier::BKPreparationType::PreparationTypeDirect, DirectPreparation::createDirectSection);
     prepFactory.Register (bitklavier::BKPreparationType::PreparationTypeNostalgic, NostalgicPreparation::createNostalgicSection);

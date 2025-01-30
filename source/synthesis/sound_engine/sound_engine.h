@@ -15,7 +15,7 @@
  */
 
 #pragma once
-#include "AudioProcessorGraph.h"
+#include <juce_audio_processors/juce_audio_processors.h>
 
 
 namespace bitklavier {
@@ -31,7 +31,7 @@ namespace bitklavier {
       virtual ~SoundEngine();
 
 
-      void process(int num_samples, juce::AudioSampleBuffer& buffer);
+//      void process(int num_samples, juce::AudioSampleBuffer& buffer);
 
       void releaseResources() {processorGraph->releaseResources();}
       void resetEngine() { prepareToPlay(curr_sample_rate, buffer_size);}
@@ -108,11 +108,32 @@ namespace bitklavier {
           return node;
       }
 
-      std::vector<std::shared_ptr<juce::AudioProcessor>> processors;
-      std::unique_ptr<bitklavier::AudioProcessorGraph>  processorGraph;
-      Node::Ptr audioOutputNode;
-      Node::Ptr midiInputNode;
-      Node::Ptr midiOutputNode;
+
+      void processAudioAndMidi(juce::AudioBuffer<float>& audio_buffer, juce::MidiBuffer& midi_buffer)
+      {
+          processorGraph->processBlock(audio_buffer, midi_buffer);
+      }
+     void setInputsOutputs(int newNumIns, int newNumOuts)
+     {
+          processorGraph->setPlayConfigDetails(newNumIns, newNumOuts, curr_sample_rate, buffer_size);
+     }
+        juce::AudioProcessorGraph::Node * getNodeForId(juce::AudioProcessorGraph::NodeID id)
+     {
+         return processorGraph->getNodeForId(id);
+     }
+     void addConnection(juce::AudioProcessorGraph::Connection& connection)
+     {
+          processorGraph->addConnection(connection);
+     }
+     bool isConnected(juce::AudioProcessorGraph::Connection& connection)
+     {
+          return processorGraph->isConnected(connection);
+     }
+
+     void addChangeListener(juce::ChangeListener* listener)
+     {
+          processorGraph->addChangeListener(listener);
+     }
     private:
       void setOversamplingAmount(int oversampling_amount, int sample_rate);
       int last_oversampling_amount_;
@@ -120,7 +141,11 @@ namespace bitklavier {
       int buffer_size;
       int curr_sample_rate;
 
+        std::unique_ptr<juce::AudioProcessorGraph>  processorGraph;
 
+        Node::Ptr audioOutputNode;
+        Node::Ptr midiInputNode;
+        Node::Ptr midiOutputNode;
 
       JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(SoundEngine)
   };

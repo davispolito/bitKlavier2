@@ -166,4 +166,9 @@ void SynthGuiInterface::setGuiSize(float scale) {
   gui_->getParentComponent()->setBounds(bounds);
   gui_->redoBackground();
 }
+
+bool SynthGuiInterface::isConnected(juce::AudioProcessorGraph::Connection& connection)
+{
+    return synth_->getEngine()->isConnected(connection);
+}
 #endif

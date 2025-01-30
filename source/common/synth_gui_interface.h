@@ -58,14 +58,14 @@ class SynthGuiInterface {
     void externalPresetLoaded(juce::File preset);
     void setGuiSize(float scale);
     bool loadFromFile(juce::File preset, std::string& error);
+    bool isConnected(juce::AudioProcessorGraph::Connection &connection);
     FullInterface* getGui() { return gui_.get(); }
     OpenGlWrapper* getOpenGlWrapper();
     std::shared_ptr<UserPreferencesWrapper> userPreferences;
-    SynthBase* synth_;
     std::unique_ptr<SampleLoadManager> sampleLoadManager ;
   protected:
 
-
+    SynthBase* synth_;
     std::unique_ptr<FullInterface> gui_;
   
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(SynthGuiInterface)

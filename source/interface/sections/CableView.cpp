@@ -291,7 +291,7 @@ void CableView::updateComponents()
     SynthGuiInterface* _parent = findParentComponentOfClass<SynthGuiInterface>();
     for (int i = objects.size(); --i >= 0;)
     {
-        if (! _parent->getSynth()->getEngine()->processorGraph->isConnected (objects.getUnchecked (i)->connection))
+        if (! _parent->isConnected (objects.getUnchecked (i)->connection))
         {
             objects.remove (i);
         }
@@ -300,26 +300,6 @@ void CableView::updateComponents()
     for (auto* cc : objects)
         cc->update();
 
-    for (auto& c : _parent->getSynth()->getEngine()->processorGraph->getConnections())
-    {
-//        if (getComponentForConnection (c) == nullptr)
-//        {
-//            auto source = parent.getChildWithProperty(IDs::nodeID,
-//                                                                juce::VariantConverter<juce::AudioProcessorGraph::NodeID>::toVar(c.source.nodeID));
-//
-//            auto destination = parent.getChildWithProperty(IDs::nodeID,
-//                                                                     juce::VariantConverter<juce::AudioProcessorGraph::NodeID>::toVar(c.destination.nodeID));
-//            if(source.isValid() && destination.isValid())
-//            {
-//                juce::ValueTree connection(IDs::CONNECTION);
-//                connection.setProperty(IDs::src,  juce::VariantConverter<juce::AudioProcessorGraph::NodeID>::toVar(c.source.nodeID), nullptr);
-//                connection.setProperty(IDs::srcIdx, c.source.channelIndex, nullptr);
-//                connection.setProperty(IDs::dest,  juce::VariantConverter<juce::AudioProcessorGraph::NodeID>::toVar(c.destination.nodeID), nullptr);
-//                connection.setProperty(IDs::destIdx, c.destination.channelIndex, nullptr);
-//                parent.appendChild(connection,nullptr);
-//            }
-//        }
-    }
 }
 
 void CableView::dragConnector(const juce::MouseEvent& e)
