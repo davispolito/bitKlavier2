@@ -24,6 +24,7 @@
 #include "midi_manager.h"
 #include <set>
 #include <string>
+#include "ModulationConnection.h"
 class SynthGuiInterface;
 template<typename T>
 class BKSamplerSound;
@@ -60,6 +61,7 @@ class SynthBase :  public juce::ValueTree::Listener {
     void checkOversampling();
     virtual const juce::CriticalSection& getCriticalSection() = 0;
     virtual void pauseProcessing(bool pause) = 0;
+    bitklavier::ModulationConnectionBank& getModulationBank();
 
     struct ValueChangedCallback : public juce::CallbackMessage {
       ValueChangedCallback(std::shared_ptr<SynthBase*> listener, std::string name, float val) :

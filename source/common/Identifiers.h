@@ -56,6 +56,11 @@ namespace IDs
     DECLARE_ID(releaseResonanceSampleSet)
     DECLARE_ID(pedalSampleSet)
 
+    DECLARE_ID(modulationproc)
+    DECLARE_ID(ModulationConnection)
+
+    DECLARE_ID(modAmt)
+    DECLARE_ID(isBipolar)
 }
 
 #undef DECLARE_ID

@@ -42,6 +42,7 @@ public:
         kTuning,
         kTempo,
         kModulation,
+        kModulationDragDrop,
         kNumSectionOverrides
     };
 

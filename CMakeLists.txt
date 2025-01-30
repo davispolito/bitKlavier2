@@ -133,6 +133,7 @@ target_include_directories(SharedCode
         source/interface/Preparations
         source/interface/ParameterView
         source/interface/look_and_feel
+        source/modulation
 )
 
 

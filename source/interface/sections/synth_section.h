@@ -303,8 +303,8 @@ class SynthSection : public juce::Component, public juce::Slider::Listener,
     virtual void buttonClicked(juce::Button* clicked_button) override;
     virtual void guiChanged(SynthButton* button) override;
 
-    std::map<std::string, SynthSlider*> getAllSliders() { return all_sliders_; }
-    std::map<std::string, juce::ToggleButton*> getAllButtons() { return all_buttons_; }
+    virtual std::map<std::string, SynthSlider*> getAllSliders() { return all_sliders_; }
+    virtual std::map<std::string, juce::ToggleButton*> getAllButtons() { return all_buttons_; }
 
     std::vector<juce::Component*> getAllSlidersVec() { return all_sliders_v; }
     float getKnobSectionHeight();

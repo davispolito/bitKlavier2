@@ -195,9 +195,9 @@ class Paths {
       return path;
     }
 
-//    static juce::Path dragDropArrows() {
-//      return fromSvgData((const void*)BinaryData::drag_drop_arrows_svg, BinaryData::drag_drop_arrows_svgSize);
-//    }
+    static juce::Path dragDropArrows() {
+      return fromSvgData((const void*)BinaryData::drag_drop_arrows_svg, BinaryData::drag_drop_arrows_svgSize);
+    }
 
     static juce::Path note() {
       static constexpr float kLeftAdjustment = 1.0f / 32.0f;

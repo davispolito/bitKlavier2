@@ -26,6 +26,7 @@ class juce::AudioDeviceManager { };
 #endif
 
 #include "synth_base.h"
+
 class SampleLoadManager;
 class UserPreferencesWrapper;
 class FullInterface;
@@ -37,7 +38,10 @@ struct SynthGuiData {
   juce::UndoManager& um;
   SynthBase* synth;
 };
-
+namespace bitklavier
+{
+class ModulationConnection;
+}
 
 class SynthGuiInterface {
   public:
@@ -49,6 +53,12 @@ class SynthGuiInterface {
     virtual void updateFullGui();
     virtual void updateGuiControl(const std::string& name, float value);
     float getControlValue(const std::string& name);
+    void tryEnqueueProcessorInitQueue(juce::FixedSizeFunction<64, void()> callback);
+
+    void connectModulation(std::string source, std::string destination);
+    void disconnectModulation(std::string source, std::string destination);
+    void disconnectModulation(bitklavier::ModulationConnection* connection);
+    void notifyModulationsChanged();
 
 
     void setFocus();

@@ -37,7 +37,9 @@ namespace {
             "resonance",
             "tuning",
             "tempo",
-            "modulation"
+            "modulation",
+            "Modulation Drag Drop"
+
     };
 
     const std::string kValueNames[Skin::kNumSkinValueIds] = {
