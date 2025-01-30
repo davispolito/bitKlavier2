@@ -22,7 +22,7 @@ namespace bitklavier {
 
   SoundEngine::SoundEngine() : /*voice_handler_(nullptr),*/
                                 last_oversampling_amount_(-1), last_sample_rate_(-1),
-                                processorGraph(new juce::AudioProcessorGraph())
+                                processorGraph(std::make_unique<bitklavier::AudioProcessorGraph>())
                                 {
 
     processorGraph->clear();

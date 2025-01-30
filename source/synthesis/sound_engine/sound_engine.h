@@ -15,8 +15,7 @@
  */
 
 #pragma once
-#include <juce_audio_processors/juce_audio_processors.h>
-
+#include "AudioProcessorGraph.h"
 
 
 namespace bitklavier {
@@ -110,7 +109,7 @@ namespace bitklavier {
       }
 
       std::vector<std::shared_ptr<juce::AudioProcessor>> processors;
-      std::unique_ptr<juce::AudioProcessorGraph>  processorGraph;
+      std::unique_ptr<bitklavier::AudioProcessorGraph>  processorGraph;
       Node::Ptr audioOutputNode;
       Node::Ptr midiInputNode;
       Node::Ptr midiOutputNode;

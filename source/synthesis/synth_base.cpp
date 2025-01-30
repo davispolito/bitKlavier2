@@ -65,10 +65,7 @@ SynthBase::~SynthBase() {
 //  }
 //}
 
-void SynthBase::initEngine()
-{
-  checkOversampling();
-}
+
 
 void SynthBase::setMpeEnabled(bool enabled) {
   midi_manager_->setMpeEnabled(enabled);
@@ -184,19 +181,6 @@ void SynthBase::writeAudio(juce::AudioSampleBuffer* buffer, int channels, int sa
   //updateMemoryOutput(samples, engine_->output(0)->buffer);
 }
 
-void SynthBase::processMidi(juce::MidiBuffer& midi_messages, int start_sample, int end_sample) {
-  bool process_all = end_sample == 0;
-  for (const juce::MidiMessageMetadata message : midi_messages) {
-    int midi_sample = message.samplePosition;
-    if (process_all || (midi_sample >= start_sample && midi_sample < end_sample))
-      midi_manager_->processMidiMessage(message.getMessage(), midi_sample - start_sample);
-  }
-}
-
-void SynthBase::processKeyboardEvents(juce::MidiBuffer& buffer, int num_samples) {
-  midi_manager_->replaceKeyboardMessages(buffer, num_samples);
-}
-
 
 
 
@@ -211,17 +195,6 @@ bool SynthBase::isMidiMapped(const std::string& name) {
 }
 
 
-
-void SynthBase::notifyOversamplingChanged() {
-  pauseProcessing(true);
-  //engine_->allSoundsOff();
-  checkOversampling();
-  pauseProcessing(false);
-}
-
-void SynthBase::checkOversampling() {
-  //return engine_->checkOversampling();
-}
 
 juce::ValueTree& SynthBase::getValueTree()
 {

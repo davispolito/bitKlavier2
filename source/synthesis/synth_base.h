@@ -43,19 +43,19 @@ class SynthBase :  public juce::ValueTree::Listener {
 
 
 
-    int getSampleRate();
-    void initEngine();
+//    int getSampleRate();
+//    void initEngine();
 
 
     void setMpeEnabled(bool enabled);
 
-    virtual void setValueNotifyHost(const std::string& name, float value) { }
+//    virtual void setValueNotifyHost(const std::string& name, float value) { }
 
     bool isMidiMapped(const std::string& name);
 
     bitklavier::SoundEngine* getEngine() { return engine_.get(); }
     juce::MidiKeyboardState* getKeyboardState() { return keyboard_state_.get(); }
-
+    int getSampleRate();
     void notifyOversamplingChanged();
     void checkOversampling();
     virtual const juce::CriticalSection& getCriticalSection() = 0;

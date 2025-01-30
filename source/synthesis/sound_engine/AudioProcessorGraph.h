@@ -9,9 +9,9 @@
 namespace bitklavier {
     class AudioProcessorGraph : public juce::AudioProcessorGraph {
     public :
-        void getStateInformation(juce::MemoryBlock &) override;
-
-        void setStateInformation(const void *data, int sizeInBytes) override;
+//        void getStateInformation(juce::MemoryBlock &) override;
+//
+//        void setStateInformation(const void *data, int sizeInBytes) override;
     };
 }
 #endif //BITKLAVIER2_AUDIOPROCESSORGRAPH_H
