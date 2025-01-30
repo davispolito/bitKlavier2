@@ -200,7 +200,12 @@
             "Body" : "333333",
             "Widget Primary 1" : "0xffA97C50",
             "Shadow": "0xff000000"
-        }
+        },
+         "modulation": {
+                    "Body" : "333333",
+                    "Widget Primary 1" : "0xffA97C50",
+                    "Shadow": "0xff000000"
+                }
 
     },
     "synth_version": 65541

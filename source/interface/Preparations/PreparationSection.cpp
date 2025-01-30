@@ -36,13 +36,15 @@ PreparationSection::PreparationSection(juce::String name, juce::ValueTree v, Ope
             this->resized();
         });
     }
+
+
+    //get xml for valuetree from audioprocessor
     juce::MemoryBlock data;
     proc->getStateInformation(data);
     auto xml = juce::parseXML(data.toString());
-//auto xml = juce::AudioProcessor::getXmlF(data.getData(), (int)data.getSize());
-    if (!state.getChild(0).isValid())
+
+    if (!state.getChild(0).isValid() && xml != nullptr)
         state.addChild(juce::ValueTree::fromXml(*xml),0,nullptr);
-    DBG(state.toXmlString());
 
 }
 

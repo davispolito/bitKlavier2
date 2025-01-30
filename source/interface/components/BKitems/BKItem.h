@@ -7,6 +7,7 @@
 
 #include "open_gl_image_component.h"
 #include "common.h"
+#include "Paths.h"
 
 class BKItem : /*public DraggableComponent,*/ public juce::Button
 {
@@ -522,6 +523,7 @@ public:
         g.strokePath(layer_1_, juce::PathStrokeType(5, juce::PathStrokeType::mitered));
     }
 };
+
 
 
 #endif //BITKLAVIER2_BKITEM_H

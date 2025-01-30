@@ -41,6 +41,7 @@ public:
         kResonance,
         kTuning,
         kTempo,
+        kModulation,
         kNumSectionOverrides
     };
 

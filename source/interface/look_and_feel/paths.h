@@ -143,55 +143,15 @@ class Paths {
         return arr;
     }
 
-
-//
-//    static juce::Path vitalWord() {
-//      return fromSvgData((const void*)BinaryData::vital_word_svg, BinaryData::vital_word_svgSize);
-//    }
-//
-//    static juce::Path vitalWordRing() {
-//      return fromSvgData((const void*)BinaryData::vital_word_ring_svg, BinaryData::vital_word_ring_svgSize);
-//    }
-//
-//    static juce::Path chorus() {
-//      return fromSvgData((const void*)BinaryData::chorus_svg, BinaryData::chorus_svgSize);
-//    }
-//
-//    static juce::Path compressor() {
-//      return fromSvgData((const void*)BinaryData::compressor_svg, BinaryData::compressor_svgSize);
-//    }
-//
-//    static juce::Path delay() {
-//      return fromSvgData((const void*)BinaryData::delay_svg, BinaryData::delay_svgSize);
-//    }
-//
-//    static juce::Path distortion() {
-//      return fromSvgData((const void*)BinaryData::distortion_svg, BinaryData::distortion_svgSize);
-//    }
-//
-//    static juce::Path equalizer() {
-//      return fromSvgData((const void*)BinaryData::equalizer_svg, BinaryData::equalizer_svgSize);
-//    }
-//
-//    static juce::Path effectsFilter() {
-//      return fromSvgData((const void*)BinaryData::effects_filter_svg, BinaryData::effects_filter_svgSize);
-//    }
-//
-//    static juce::Path flanger() {
-//      return fromSvgData((const void*)BinaryData::flanger_svg, BinaryData::flanger_svgSize);
-//    }
-//
-//    static juce::Path folder() {
-//      return fromSvgData((const void*)BinaryData::folder_svg, BinaryData::folder_svgSize);
-//    }
-//
-//    static juce::Path phaser() {
-//      return fromSvgData((const void*)BinaryData::phaser_svg, BinaryData::phaser_svgSize);
-//    }
-//
-//    static juce::Path reverb() {
-//      return fromSvgData((const void*)BinaryData::reverb_svg, BinaryData::reverb_svgSize);
-//    }
+    static juce::Array<juce::Path> modulationPaths()
+    {
+        juce::Array<juce::Path> arr;
+        arr.add(upTriangle());
+        arr.add(upTriangle());
+        arr.add(upTriangle());
+        arr.add(upTriangle());
+        return arr;
+    }
 
     static juce::Path prev() {
       static const juce::PathStrokeType arrow_stroke(0.1f, juce::PathStrokeType::JointStyle::curved,

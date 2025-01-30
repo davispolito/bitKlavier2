@@ -29,6 +29,7 @@ ConstructionSite::ConstructionSite (juce::ValueTree& v, juce::UndoManager& um, O
     prepFactory.Register (bitklavier::BKPreparationType::PreparationTypeBlendronic, BlendronicPreparation::createBlendronicSection);
     prepFactory.Register (bitklavier::BKPreparationType::PreparationTypeTempo, TempoPreparation::createTempoSection);
     prepFactory.Register (bitklavier::BKPreparationType::PreparationTypeTuning, TuningPreparation::createTuningSection);
+    prepFactory.Register (bitklavier::BKPreparationType::PreparationTypeModulation, ModulationPreparation::createModulationSection);
     cableView.toBack();
     addSubSection (&cableView);
 }
@@ -263,6 +264,16 @@ bool ConstructionSite::keyPressed (const juce::KeyPress& k, juce::Component* c)
         t.setProperty (IDs::y, lastY - 260 / 2, nullptr);
         parent.addChild (t, -1, nullptr);
     }
+
+    else if (k.getTextCharacter() == 'c')
+    {     juce::ValueTree t (IDs::PREPARATION);
+
+        t.setProperty (IDs::type, bitklavier::BKPreparationType::PreparationTypeModulation, nullptr);
+        t.setProperty (IDs::width, 132, nullptr);
+        t.setProperty (IDs::height, 260, nullptr);
+        t.setProperty (IDs::x, lastX - 132 / 2, nullptr);
+        t.setProperty (IDs::y, lastY - 260 / 2, nullptr);
+        parent.addChild (t, -1, nullptr);}
     return true;
 }
 

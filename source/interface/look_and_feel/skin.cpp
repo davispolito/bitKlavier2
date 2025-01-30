@@ -36,7 +36,8 @@ namespace {
             "blendronic",
             "resonance",
             "tuning",
-            "tempo"
+            "tempo",
+            "modulation"
     };
 
     const std::string kValueNames[Skin::kNumSkinValueIds] = {

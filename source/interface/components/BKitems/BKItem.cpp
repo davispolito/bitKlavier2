@@ -40,6 +40,9 @@ namespace
         // Returns the paths for a tempo preparation window
         if (type == bitklavier::BKPreparationType::PreparationTypeTempo)
             return Paths::tempoPaths();
+
+        if (type == bitklavier::BKPreparationType::PreparationTypeModulation)
+            return Paths::modulationPaths();
     }
 }
 

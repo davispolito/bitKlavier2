@@ -12,26 +12,7 @@
 #include "FullInterface.h"
 
 #include "envelope_section.h"
-/*
- * class OpenGlMidiSelector : public OpenGlAutoImageComponent<MidiInputSelectorComponentListBox> {
-public:
-    OpenGlMidiSelector(const juce::ValueTree& v) :
-            OpenGlAutoImageComponent<MidiInputSelectorComponentListBox>(v) {
-        image_component_ = std::make_shared<OpenGlImageComponent>();
-        setLookAndFeel(DefaultLookAndFeel::instance());
-        image_component_->setComponent(this);
-    }
 
-virtual void resized() override {
-    OpenGlAutoImageComponent<MidiInputSelectorComponentListBox>::resized();
-    if (isShowing())
-        redoImage();
-}
-
-private:
-JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(OpenGlMidiSelector)
-};
- */
 
 /************************************************************************************/
 /*             CLASS: DirectPreparation, inherits from PreparationSection           */
@@ -54,14 +35,6 @@ public:
         return new DirectPreparation(std::make_unique<DirectProcessor>(v), v, interface->getGui()->open_gl_);
     }
 
-//    void portClicked(const juce::Point<int>& pos
-//                     ) override
-//    {
-//        for(auto listener : listeners_)
-//        {
-//            listener->portClicked(pos, node);
-//        }
-//    }
     // Public function definitions for the DirectPreparation class, which override functions
     // in the PreparationSection base class
     void addSoundSet(std::map<juce::String, juce::ReferenceCountedArray<BKSamplerSound<juce::AudioFormatReader>>>* s) override
@@ -127,24 +100,7 @@ private:
         // Private function definitions and member variables for the DirectPopup class
         DirectParams* params = nullptr;
         DirectProcessor& proc;
-
-
         std::unique_ptr<DirectParametersView> view;
-//        // Parameter sliders for the Direct Popup
-//        std::unique_ptr<SynthSlider> gainSlider;
-//        std::unique_ptr<SynthSlider> hammerSlider;
-//        std::unique_ptr<SynthSlider> velocitySlider;
-//        std::unique_ptr<SynthSlider> resonanceSlider;
-//        std::unique_ptr<SynthSlider> attackSlider;
-//        std::unique_ptr<SynthSlider> decaySlider;
-//        std::unique_ptr<SynthSlider> sustainSlider;
-//        std::unique_ptr<SynthSlider> releaseSlider;
-////        std::unique_ptr<SynthSlider> transpositionsSlider;
-////        std::unique_ptr<SynthSlider> blendronicSendSlider;
-
-
-        OpenGlImage sliderShadows;
-
     };
 };
 

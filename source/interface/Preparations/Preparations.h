@@ -13,5 +13,7 @@
 #include "Preparations/BlendronicPreparation.h"
 #include "Preparations/TempoPreparation.h"
 #include "Preparations/TuningPreparation.h"
+#include "Preparations/ModulationPreparation.h"
+
 
 #endif //BITKLAVIER2_PREPARATIONS_H

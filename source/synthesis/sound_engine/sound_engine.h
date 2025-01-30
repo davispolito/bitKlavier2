@@ -19,7 +19,7 @@
 
 
 namespace bitklavier {
-
+    class ModulationProcessor;
     using AudioGraphIOProcessor = juce::AudioProcessorGraph::AudioGraphIOProcessor;
     using Node = juce::AudioProcessorGraph::Node;
   class SoundEngine   {
@@ -107,6 +107,9 @@ namespace bitklavier {
 
           return node;
       }
+
+      Node::Ptr addNode(std::unique_ptr<bitklavier::ModulationProcessor> modProcessor, juce::AudioProcessorGraph::NodeID id);
+
 
 
       void processAudioAndMidi(juce::AudioBuffer<float>& audio_buffer, juce::MidiBuffer& midi_buffer)
