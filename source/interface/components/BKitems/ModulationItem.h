@@ -22,9 +22,9 @@ public:
 
         juce::Rectangle<float> bounds = getLocalBounds().toFloat();//.reduced(10).withX(0).withY(0);
 
-//        juce::Rectangle<float> s = bounds.getProportion<float>({0.0f, 0.0f, 0.9f, 0.9f});
-//        s.setCentre(bounds.getCentre());
-//        layer_1_.applyTransform(layer_1_.getTransformToScaleToFit(s,true));
+        juce::Rectangle<float> s = bounds.getProportion<float>({0.0f, 0.0f, 0.9f, 0.9f});
+        s.setCentre(bounds.getCentre());
+        layer_1_.applyTransform(layer_1_.getTransformToScaleToFit(s,true));
         int width = getWidth();
         int height = getHeight();
 
@@ -40,19 +40,7 @@ public:
         // Ascertains the current window size
         juce::Rectangle<float> bounds = getLocalBounds().toFloat();
         // Retrieves and sets the color of each layer
-        // Ascertains the appropriate location for layer_2 based on the preparation
-        // window size
-        float layer_1_x = bounds.getX();// + (bounds.getWidth() / 2 );
-        float layer_1_y = bounds.getY(); //+ (bounds.getHeight() / 8);
-        float layer_1_width = bounds.getWidth();// / 2;
-        float layer_1_height = bounds.getHeight();// * 19 / 30;
-
-        // Transforms layer_2 to fit appropriately in the preparation window
-        layer_1_.applyTransform(layer_1_.getTransformToScaleToFit(layer_1_x,
-                                                                  layer_1_y,
-                                                                  layer_1_width,
-                                                                  layer_1_height,
-                                                                  false));
+//
 
         g.setColour(findColour(Skin::kShadow, true));
         g.drawImageAt(shadow_, 0, 0, true);
@@ -61,6 +49,10 @@ public:
         g.setColour(c);
         g.fillPath(layer_1_);
 
+    }
+    bool hitTest(int x, int y) override
+    {
+        layer_1_.contains(x,y, 0.01);
     }
 };
 #endif //BITKLAVIER2_MODULATIONITEM_H

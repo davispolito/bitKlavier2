@@ -373,9 +373,9 @@ class Paths {
     static juce::Path upTriangle() {
       juce::Path path;
 
-      path.startNewSubPath(0.33f, 0.6f);
-      path.lineTo(0.66f, 0.6f);
-      path.lineTo(0.5f, 0.4f);
+      path.startNewSubPath(0.0f, 1.0f);
+      path.lineTo(1.f, 1.0f);
+      path.lineTo(0.5f, 0.f);
       path.closeSubPath();
 
       path.addLineSegment(juce::Line<float>(0.0f, 0.0f, 0.0f, 0.0f), 0.2f);
