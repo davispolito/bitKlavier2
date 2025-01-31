@@ -25,6 +25,7 @@
 #include <set>
 #include <string>
 #include "ModulationConnection.h"
+#include "circular_queue.h"
 class SynthGuiInterface;
 template<typename T>
 class BKSamplerSound;
@@ -88,7 +89,18 @@ class SynthBase :  public juce::ValueTree::Listener {
     bool saveToActiveFile();
     void clearActiveFile() { active_file_ = juce::File(); }
     juce::File getActiveFile() { return active_file_; }
-  protected:
+
+
+
+    ///modulation functionality
+
+    std::vector<bitklavier::ModulationConnection*> getSourceConnections(const std::string& sourceId) const;
+    std::vector<bitklavier::ModulationConnection*> getDestinationConnections(const std::string& destinationId) const;
+    bitklavier::ModulationConnection* getConnection(const std::string& source, const std::string& destination) const;
+
+    bitklavier::CircularQueue<bitklavier::ModulationConnection*> mod_connections_;
+    int getNumModulations(const std::string& destination);
+protected:
 
     juce::ValueTree tree;
     juce::UndoManager um;

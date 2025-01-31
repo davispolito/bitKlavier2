@@ -22,7 +22,7 @@
 #include "open_gl_component.h"
 #include "synth_gui_interface.h"
 #include "synth_slider.h"
-
+#include "modulation_button.h"
 SynthSection::SynthSection(const juce::String& name) : juce::Component(name), parent_(nullptr), activator_(nullptr),
                                                  preset_selector_(nullptr), preset_selector_half_width_(false),
                                                  skin_override_(Skin::kNone), size_ratio_(1.0f),
@@ -83,7 +83,7 @@ void SynthSection::paintSidewaysHeadingText(juce::Graphics& g) {
   if (activator_)
     height = getHeight() - title_width / 2;
 
-  g.drawText(getName(), juce::Rectangle<int>(0, 0, height, title_width), juce::Justification::centred, false);
+  g.drawText(getComponentID(), juce::Rectangle<int>(0, 0, height, title_width), juce::Justification::centred, false);
   g.restoreState();
 }
 
@@ -95,7 +95,7 @@ void SynthSection::paintHeadingText(juce::Graphics& g) {
 
   g.setColour(findColour(Skin::kHeadingText, true));
   g.setFont(Fonts::instance()->proportional_light().withPointHeight(size_ratio_ * 14.0f));
-  g.drawText(TRANS(getName()), getTitleBounds(), juce::Justification::centred, false);
+  g.drawText(TRANS(getComponentID()), getTitleBounds(), juce::Justification::centred, false);
 }
 
 void SynthSection::paintBackground(juce::Graphics& g) {
@@ -341,7 +341,7 @@ void SynthSection::initOpenGlComponents(OpenGlWrapper& open_gl) {
         open_gl.context.executeOnGLThread([this, &open_gl](juce::OpenGLContext &openGLContext) {
             for (auto &open_gl_component: open_gl_components_) {
                 open_gl_component->init(open_gl);
-                DBG("init " + open_gl_component->getName());
+                DBG("init " + open_gl_component->getComponentID());
             }
 
             for (auto &sub_section: sub_sections_)
@@ -478,14 +478,14 @@ void SynthSection::destroyOpenGlComponent(OpenGlComponent & open_gl_component, O
 }
 
 void SynthSection::sliderValueChanged(juce::Slider* moved_slider) {
-//  std::string name = moved_slider->getName().toStdString();
+//  std::string name = moved_slider->getComponentID().toStdString();
 //  SynthGuiInterface* parent = findParentComponentOfClass<SynthGuiInterface>();
 //  if (parent)
 //    parent->getSynth()->valueChangedInternal(name, moved_slider->getValue());
 }
 
 void SynthSection::buttonClicked(juce::Button *clicked_button) {
-//  std::string name = clicked_button->getName().toStdString();
+//  std::string name = clicked_button->getComponentID().toStdString();
 //  SynthGuiInterface* parent = findParentComponentOfClass<SynthGuiInterface>();
 //  if (parent)
 //    parent->getSynth()->valueChangedInternal(name, clicked_button->getToggleState() ? 1.0 : 0.0);
@@ -507,8 +507,8 @@ void SynthSection::setSliderHasHzAlternateDisplay(SynthSlider* slider) {
 }
 
 void SynthSection::addToggleButton(juce::ToggleButton* button, bool show) {
-  button_lookup_[button->getName().toStdString()] = button;
-  all_buttons_[button->getName().toStdString()] = button;
+  button_lookup_[button->getComponentID().toStdString()] = button;
+  all_buttons_[button->getComponentID().toStdString()] = button;
   button->addListener(this);
   if (show)
     addAndMakeVisible(button);
@@ -527,9 +527,9 @@ void SynthSection::addButton(OpenGlShapeButton* button, bool show) {
 
 
 void SynthSection::addSlider(SynthSlider* slider, bool show, bool listen) {
-    DBG("adding slider from " + this->getName() + " with name "+ slider->getName());
-  slider_lookup_[slider->getName().toStdString()] = slider;
-  all_sliders_[slider->getName().toStdString()] = slider;
+    DBG("adding slider from " + this->getComponentID() + " with name "+ slider->getComponentID());
+  slider_lookup_[slider->getComponentID().toStdString()] = slider;
+  all_sliders_[slider->getComponentID().toStdString()] = slider;
   all_sliders_v.push_back(slider);
 //  if (listen)
 //    slider->addListener(this);
@@ -541,6 +541,15 @@ void SynthSection::addSlider(SynthSlider* slider, bool show, bool listen) {
  addOpenGlComponent(slider->getQuadComponent());
  addOpenGlComponent(slider->getTextEditorComponent());
 }
+
+void SynthSection::addModulationButton(std::shared_ptr<ModulationButton> button, bool show) {
+    button->setComponentID(this->getComponentID().toStdString() + "_" + button->getComponentID().toStdString());
+    modulation_buttons_[button->getComponentID().toStdString()] = button.get();
+    all_modulation_buttons_[button->getComponentID().toStdString()] = button.get();
+    if (show)
+        addOpenGlComponent(std::static_pointer_cast<OpenGlImageComponent>(button));
+}
+
 
 void SynthSection::addSubSection(SynthSection* sub_section, bool show) {
   sub_section->setParent(this);
@@ -556,7 +565,8 @@ void SynthSection::addSubSection(SynthSection* sub_section, bool show) {
   std::map<std::string, juce::ToggleButton*> sub_buttons = sub_section->getAllButtons();
   all_buttons_.insert(sub_buttons.begin(), sub_buttons.end());
 
-
+   std::map<std::string, ModulationButton*> sub_mod_buttons = sub_section->getAllModulationButtons();
+    all_modulation_buttons_.insert(sub_mod_buttons.begin(), sub_mod_buttons.end());
 }
 
 void SynthSection::removeSubSection(SynthSection* section) {

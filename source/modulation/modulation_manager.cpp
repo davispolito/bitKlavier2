@@ -1406,7 +1406,7 @@ void ModulationManager::hoverStarted(SynthSlider* slider) {
   ModulationAmountKnob* amount_knob = dynamic_cast<ModulationAmountKnob*>(slider);
   if (amount_knob)
   {
-      DBG(amount_knob->getName() + juce::String((uint64)(void*)amount_knob));
+      DBG(amount_knob->getName() + juce::String((juce::uint64)(void*)amount_knob));
       showModulationAmountOverlay (amount_knob);
   }
   else

@@ -367,7 +367,10 @@ class OpenGlToggleButton : public juce::ToggleButton {
       juce::ToggleButton::mouseUp(e);
       button_component_->setDown(false);
     }
-
+    bool isInit()
+    {
+        return button_component_->isInit();
+    }
   private:
     bool active_;
     std::shared_ptr<OpenGlButtonComponent> button_component_;

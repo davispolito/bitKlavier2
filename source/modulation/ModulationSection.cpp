@@ -10,7 +10,7 @@ ModulationSection::ModulationSection( const juce::ValueTree &v, bitklavier::Para
 mod_button(new ModulationButton("mod"))
 {
     setComponentID(editor->getName());
-    addModulationButton(mod_button.get() );
+    addModulationButton(mod_button);
     addAndMakeVisible(mod_button.get());
     mod_button->setAlwaysOnTop(true);
     addSubSection(_view.get());

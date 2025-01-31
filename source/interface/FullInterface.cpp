@@ -516,6 +516,14 @@ void FullInterface::showFullScreenSection(SynthSection* full_screen) {
 
 
 
+std::map<std::string, SynthSlider*> FullInterface::getAllSliders(){
+    return main_->getAllSliders();
+}
+
+
+std::map<std::string, ModulationButton*> FullInterface::getAllModulationButtons(){
+    return main_->getAllModulationButtons();
+}
 
 
 

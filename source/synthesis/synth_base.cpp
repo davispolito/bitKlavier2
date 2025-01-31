@@ -205,3 +205,40 @@ juce::UndoManager& SynthBase::getUndoManager()
 {
   return um;
 }
+
+
+//modulations
+
+std::vector<bitklavier::ModulationConnection*> SynthBase::getSourceConnections(const std::string& source)const {
+    std::vector<bitklavier::ModulationConnection*> connections;
+    for (auto& connection : mod_connections_) {
+        if (connection->source_name == source)
+            connections.push_back(connection);
+    }
+    return connections;
+}
+std::vector<bitklavier::ModulationConnection*> SynthBase::getDestinationConnections(const std::string& destination)const {
+    std::vector<bitklavier::ModulationConnection*> connections;
+    for (auto& connection : mod_connections_) {
+        if (connection->destination_name == destination)
+            connections.push_back(connection);
+    }
+    return connections;
+}
+
+bitklavier::ModulationConnection* SynthBase::getConnection(const std::string& source, const std::string& destination) const{
+    for (auto& connection : mod_connections_) {
+        if (connection->source_name == source && connection->destination_name == destination)
+            return connection;
+    }
+    return nullptr;
+}
+
+int SynthBase::getNumModulations(const std::string& destination) {
+    int connections = 0;
+    for (bitklavier::ModulationConnection* connection : mod_connections_) {
+        if (connection->destination_name == destination)
+            connections++;
+    }
+    return connections;
+}

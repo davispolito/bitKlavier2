@@ -305,7 +305,9 @@ class SynthSection : public juce::Component, public juce::Slider::Listener,
 
     virtual std::map<std::string, SynthSlider*> getAllSliders() { return all_sliders_; }
     virtual std::map<std::string, juce::ToggleButton*> getAllButtons() { return all_buttons_; }
-
+    virtual std::map<std::string, ModulationButton*> getAllModulationButtons() {
+        return all_modulation_buttons_;
+    }
     std::vector<juce::Component*> getAllSlidersVec() { return all_sliders_v; }
     float getKnobSectionHeight();
 
@@ -314,7 +316,7 @@ class SynthSection : public juce::Component, public juce::Slider::Listener,
     virtual void animate(bool animate);
 
 
-    void addModulationButton(ModulationButton* button, bool show = true);
+    void addModulationButton(std::shared_ptr<ModulationButton> button, bool show = true);
     void addSubSection(SynthSection* section, bool show = true);
     void removeSubSection(SynthSection* section);
     virtual void setScrollWheelEnabled(bool enabled);
@@ -385,12 +387,13 @@ class SynthSection : public juce::Component, public juce::Slider::Listener,
     OpenGlBackground* background_;
     std::map<std::string, SynthSlider*> slider_lookup_;
     std::map<std::string, juce::Button*> button_lookup_;
+    std::map<std::string, ModulationButton*> modulation_buttons_;
 
     std::map<std::string, SynthSlider*> all_sliders_;
     std::vector<juce::Component*> all_sliders_v;
     std::map<std::string, juce::ToggleButton*> all_buttons_;
     std::map<Skin::ValueId, float> value_lookup_;
-
+    std::map<std::string, ModulationButton*> all_modulation_buttons_;
     const SynthSection* parent_;
     SynthButton* activator_;
     PresetSelector* preset_selector_;
