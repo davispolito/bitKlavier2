@@ -57,6 +57,21 @@ public:
     juce::AudioProcessor* getProcessor() override;
     std::unique_ptr<juce::AudioProcessor> getProcessorPtr() override;
 
+//
+//    void 	itemDragMove (const SourceDetails &dragSourceDetails)
+//    {
+//        DBG("dragmove");
+//    }
+//    void itemDragEnter (const SourceDetails &dragSourceDetails){
+//        DBG("drag in direct");
+//    }
+//    void 	itemDragExit (const SourceDetails &dragSourceDetails)
+//    {
+//
+//    }
+//
+
+
 private:
     // Private member variable for the DirectPreparation class: proc is a pointer to a
     // DirectProcessor Object

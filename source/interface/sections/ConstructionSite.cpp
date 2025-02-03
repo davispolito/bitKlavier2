@@ -12,6 +12,7 @@ ConstructionSite::ConstructionSite (juce::ValueTree& v, juce::UndoManager& um, O
                                                                                                                              undo (um),
                                                                                                                              open_gl (open_gl),
                                                                                                                              cableView (*this),
+                                                                                                                             modulationLineView(*this),
                                                                                                                              preparationSelector (*this)
 {
     setWantsKeyboardFocus (true);
@@ -32,6 +33,7 @@ ConstructionSite::ConstructionSite (juce::ValueTree& v, juce::UndoManager& um, O
     prepFactory.Register (bitklavier::BKPreparationType::PreparationTypeModulation, ModulationPreparation::createModulationSection);
     cableView.toBack();
     addSubSection (&cableView);
+    addSubSection (&modulationLineView);
 }
 void ConstructionSite::valueTreeParentChanged (juce::ValueTree& changed)
 {
@@ -107,7 +109,13 @@ PreparationSection* ConstructionSite::createNewObject (const juce::ValueTree& v)
     s->selectedSet = &(preparationSelector.getLassoSelection());
     preparationSelector.getLassoSelection().addChangeListener (s);
     s->addListener (&cableView);
+    s->addListener (&modulationLineView);
 
+    //only add non modulations to the modulation line view in order to be able to check what is under the mouse that isnt a modprep
+    //this is cheap and hacky. should setup better down the line. possibly using a key modifier
+//    if(dynamic_cast<ModulationPreparation*>(s) == nullptr)
+//        modulationLineView.addAndMakeVisible(s);
+    // so that the component dragging doesnt actually move the componentn
     return s;
 }
 
@@ -158,6 +166,7 @@ void ConstructionSite::resized()
 {
     cableView.setBounds (getLocalBounds());
     cableView.updateCablePositions();
+    modulationLineView.setBounds(getLocalBounds());
     SynthSection::resized();
 }
 
@@ -339,12 +348,9 @@ void ConstructionSite::mouseDown (const juce::MouseEvent& eo)
     if (itemToSelect == nullptr)
     {
         preparationSelector.getLassoSelection().deselectAll();
-        DBG ("mousedown empty space");
+        //DBG ("mousedown empty space");
     }
-    else
-    {
-        DBG ("mousedown on object");
-    }
+
     addChildComponent (selectorLasso);
     selectorLasso.beginLasso (e, &preparationSelector);
     //////Fake drag so the lasso will select anything we click and drag////////
@@ -513,11 +519,12 @@ void ConstructionSite::mouseDown (const juce::MouseEvent& eo)
 void ConstructionSite::mouseUp (const juce::MouseEvent& eo)
 {
     //inLasso = false;
-    DBG ("mouseupconst");
+//    DBG ("mouseupconst");
     selectorLasso.endLasso();
     removeChildComponent (&selectorLasso);
     if (edittingComment)
         return;
+
 
     juce::MouseEvent e = eo.getEventRelativeTo (this);
     cableView.mouseUp (e);
@@ -597,8 +604,8 @@ void ConstructionSite::updateComponents()
         //            }
     }
 
-    for (auto* fc : objects)
-        fc->update();
+//    for (auto* fc : objects)
+//        fc->update();
 
     cableView.updateComponents();
     //        for (auto* f : graph.graph.getNodes())

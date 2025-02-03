@@ -63,17 +63,20 @@ BKItem::BKItem (bitklavier::BKPreparationType type) : juce::Button("bkitem")
 }
 
 
-void BKItem::mouseDown(const juce::MouseEvent& e)
-{
-    getParentComponent()->mouseDown(e);
-}
-
-void BKItem::mouseDrag(const juce::MouseEvent& e)
-{
-    getParentComponent()->mouseDrag(e);
-}
-
-void BKItem::mouseDoubleClick(const juce::MouseEvent& e)
-{
-
-}
+//void BKItem::mouseDown(const juce::MouseEvent& e)
+//{
+//    getParentComponent()->mouseDown(e);
+//}
+//
+//void BKItem::mouseDrag(const juce::MouseEvent& e)
+//{
+//    getParentComponent()->mouseDrag(e);
+//}
+//
+//void BKItem::mouseDoubleClick(const juce::MouseEvent& e)
+//{
+//    getParentComponent()->mouseDoubleClick(e);
+//}
+//void BKItem::mouseUp(const juce::MouseEvent &e) {
+//    getParentComponent()->mouseUp(e);
+//}

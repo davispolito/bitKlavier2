@@ -26,7 +26,7 @@ class SynthGuiInterface;
 /*     CLASS: PreparationSection, inherits from SynthSection and Listener           */
 /************************************************************************************/
 class PreparationSection : public SynthSection, public BKItem::Listener, public BKPort::Listener,  public juce::ChangeListener,
-        public tracktion::engine::ValueTreeObjectList<BKPort>
+public tracktion::engine::ValueTreeObjectList<BKPort>, public juce::DragAndDropTarget
 
 {
 public:
@@ -44,6 +44,8 @@ public:
         virtual void dragConnector(const juce::MouseEvent& e) = 0;
         virtual void endDraggingConnector(const juce::MouseEvent& e) = 0;
         virtual void _update() = 0;
+        virtual void preparationDragged(juce::Component* prep, const juce::MouseEvent& e) {}
+        virtual void preparationDropped(const juce::MouseEvent& e, juce::Point<int> originalComponentPoint) {} ;
     };
 
     void beginConnectorDrag(juce::AudioProcessorGraph::NodeAndChannel source,
@@ -92,7 +94,7 @@ public:
     juce::SelectedItemSet<PreparationSection*> *selectedSet;
     std::unique_ptr<BKItem> item;
     juce::CachedValue<int> x, y, width, height, numIns, numOuts;
-    juce::ComponentDragger myDragger;
+//    juce::ComponentDragger myDragger;
     juce::ComponentBoundsConstrainer constrainer;
 
     BKPort* createNewObject(const juce::ValueTree& v) override;
@@ -114,62 +116,6 @@ public:
     }
 
 
-    void update()
-    {
-//        const juce::AudioProcessorGraph::Node::Ptr f (graph.graph.getNodeForId (pluginID));
-//        jassert (f != nullptr);
-//
-//        auto& processor = *f->getProcessor();
-//
-//        numIns = processor.getTotalNumInputChannels();
-//        if (processor.acceptsMidi())
-//            ++numIns;
-//
-//        numOuts = processor.getTotalNumOutputChannels();
-//        if (processor.producesMidi())
-//            ++numOuts;
-//
-//        int w = 100;
-//        int h = 60;
-//
-//        w = juce::jmax (w, (juce::jmax (numIns, numOuts) + 1) * 20);
-//
-//        const int textWidth = font.getStringWidth (processor.getName());
-//        w = juce::jmax (w, 16 + juce::Colours (textWidth, 300));
-//        if (textWidth > 300)
-//            h = 100;
-//
-//        setSize (w, h);
-//        setName (processor.getName() + formatSuffix);
-//
-//        {
-//            auto p = graph.getNodePosition (pluginID);
-//            setCentreRelative ((float) p.x, (float) p.y);
-//        }
-//
-//        if (numIns != numInputs || numOuts != numOutputs)
-//        {
-//            numInputs = numIns;
-//            numOutputs = numOuts;
-//
-//            pins.clear();
-//
-//            for (int i = 0; i < processor.getTotalNumInputChannels(); ++i)
-//                addAndMakeVisible (pins.add (new PinComponent (panel, { pluginID, i }, true)));
-//
-//            if (processor.acceptsMidi())
-//                addAndMakeVisible (pins.add (new PinComponent (panel, { pluginID, juce::AudioProcessorGraph::midiChannelIndex }, true)));
-//
-//            for (int i = 0; i < processor.getTotalNumOutputChannels(); ++i)
-//                addAndMakeVisible (pins.add (new PinComponent (panel, { pluginID, i }, false)));
-//
-//            if (processor.producesMidi())
-//                addAndMakeVisible (pins.add (new PinComponent (panel, { pluginID, juce::AudioProcessorGraph::midiChannelIndex }, false)));
-//
-//            resized();
-//        }
-    }
-
     void changeListenerCallback(juce::ChangeBroadcaster *source)
     {
        //DBG("changelistener");
@@ -186,6 +132,7 @@ public:
         item->redoImage();
 
     }
+
     // Public function declarations, which override base class (SynthSection) virtual functions
     void paintBackground(juce::Graphics& g) override;
     void resized() override;
@@ -201,26 +148,31 @@ public:
         item->size_ratio = ratio;
     }
 
-    void mouseDown (const juce::MouseEvent& e) override
+    void mouseDown (const juce::MouseEvent& e) override;
+    void mouseEnter(const juce::MouseEvent& e) override
     {
-        DBG(e.getNumberOfClicks());
-            if(e.getNumberOfClicks() == 2)
-            {
-                showPrepPopup(this);
-
-            } else
-            {
-              //  selectedSet->addToSelectionBasedOnModifiers(this, e.mods);
-            }
-            myDragger.startDraggingComponent (this, e);
+                setMouseCursor(juce::MouseCursor::ParentCursor);
+        DBG(" mosue enter -> " + this->getName());
     }
-
     void mouseDrag (const juce::MouseEvent& e) override
     {
-        myDragger.dragComponent (this, e, &constrainer);
+//        myDragger.dragComponent (this, e, &constrainer);
         for (auto listener: listeners_)
         {
             listener->_update();
+            listener->preparationDragged(this, e);
+        }
+        setMouseCursor(juce::MouseCursor::DraggingHandCursor);
+    }
+
+    void mouseUp (const juce::MouseEvent& e) override
+    {
+        setMouseCursor(juce::MouseCursor::ParentCursor);
+        DBG("triggermouseup  " + this->getName());
+        for (auto listener : listeners_)
+        {
+            listener->_update();
+            listener->preparationDropped(e, pointBeforDrag);
         }
     }
 
@@ -230,7 +182,30 @@ public:
         showPrepPopup(this);
     }
 
+    ///drraganddrop for line view and modulator
 
+    bool isInterestedInDragSource(const juce::DragAndDropTarget::SourceDetails &dragSourceDetails) override { return true;}
+    void itemDropped(const SourceDetails& dragSourceDetails) override;
+
+
+    void 	itemDragMove (const SourceDetails &dragSourceDetails)
+    {
+
+        DBG(getName() + "draggemove");
+    }
+    void itemDragEnter (const SourceDetails &dragSourceDetails){
+        DBG(getName() + "drag emter'");
+    }
+    void 	itemDragExit (const SourceDetails &dragSourceDetails)
+    {
+
+        DBG(getName() + "drag exort");
+    }
+
+//    void 	itemDragMove (const SourceDetails &dragSourceDetails)
+//    void itemDragEnter (const SourceDetails &dragSourceDetails)
+//    void 	itemDragExit (const SourceDetails &dragSourceDetails)
+//    bool 	shouldDrawDragImageWhenOver ()
     /************************************************************************************/
     /*            NESTED CLASS: PreparationPopup, inherits from SynthSection            */
     /************************************************************************************/
@@ -356,11 +331,21 @@ public:
     virtual std::unique_ptr<juce::AudioProcessor> getProcessorPtr(){}
     std::shared_ptr<PreparationPopup> popup_view;
 //std::shared_ptr<juce::AudioProcessor> _proc;
+//
+//    void itemDropped (const SourceDetails &dragSourceDetails) override
+//    {
+//        DBG(" dropped" + this->getName());
+//    }
+//    bool isInterestedInDragSource (const SourceDetails &dragSourceDetails) override
+//    {
+//        return true;
+//    }
 protected:
 
 
     int portSize = 16;
 private:
+    juce::Point<int> pointBeforDrag; // e.getEventRelativeTo (componentToDrag).getMouseDownPosition();
     bool isSelected = true;
     juce::AudioProcessor* _proc;
 

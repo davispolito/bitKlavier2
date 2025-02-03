@@ -91,6 +91,7 @@ void BKPort::mouseDrag (const juce::MouseEvent& e)
 
 void BKPort::mouseUp (const juce::MouseEvent& e)
 {
+    DBG("port mosueup)");
     for (auto listener : listeners_)
         listener->endDraggingConnector (e);
 }

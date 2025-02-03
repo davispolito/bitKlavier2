@@ -9,6 +9,7 @@
 #include "CableView.h"
 #include "templates/Factory.h"
 #include "common.h"
+#include "ModulationLineView.h"
 class SynthGuiInterface;
 typedef Loki::Factory<PreparationSection, int,  juce::ValueTree,  SynthGuiInterface*> PreparationFactory;
 class ConstructionSite : public SynthSection,
@@ -88,6 +89,28 @@ public:
     void copyValueTree(const juce::ValueTree& vt){
         parent.copyPropertiesFrom(vt,nullptr);
     }
+    void 	dragOperationStarted (const juce::DragAndDropTarget::SourceDetails &)
+    {
+        DBG("asfd'");
+        //wsetMouseCursor(juce::MouseCursor::DraggingHandCursor);
+    }
+
+    void dragOperationEnded(const juce::DragAndDropTarget::SourceDetails &source)
+    {
+
+        DBG("asfdend'");
+        //setMouseCursor(juce::MouseCursor::ParentCursor);
+        if(!item_dropped_on_prep_) {
+//            source.sourceComponent->setCentrePosition(source.sourceComponent->getX() + source.localPosition.getX(),
+//                                                      source.sourceComponent->getY() + source.localPosition.getY());
+            source.sourceComponent->setCentrePosition(mouse_drag_position_);
+            cableView._update();
+        }
+        item_dropped_on_prep_ = false;
+    }
+    bool    item_dropped_on_prep_ = false;
+
+    juce::Point<int> mouse_drag_position_;
 private:
 
     SynthGuiInterface* _parent;
@@ -98,8 +121,8 @@ private:
     bool edittingComment;
 
     juce::OwnedArray<juce::HashMap<int,int>> pastemap;
-    friend class CableView;
-
+    friend class ModulationLineView;
+    ModulationLineView modulationLineView;
 
 
     bool connect;

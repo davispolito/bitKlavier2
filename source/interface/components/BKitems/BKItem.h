@@ -9,13 +9,14 @@
 #include "common.h"
 #include "Paths.h"
 
-class BKItem : /*public DraggableComponent,*/ public juce::Button
-{
+class BKItem : /*public DraggableComponent,*/ public juce::Button{
 public:
-    BKItem (bitklavier::BKPreparationType type);
-    void mouseDown (const juce::MouseEvent& e) override;
-    void mouseDoubleClick (const juce::MouseEvent& e) override;
-    void mouseDrag(const juce::MouseEvent& e) override;
+
+BKItem (bitklavier::BKPreparationType type);
+//    void mouseDown (const juce::MouseEvent& e) override;
+//    void mouseUp (const juce::MouseEvent& e) override;
+//    void mouseDoubleClick (const juce::MouseEvent& e) override;
+//    void mouseDrag(const juce::MouseEvent& e) override;
 
     // void paint(juce::Graphics& g) override;
     void setIcons (const juce::Path& layer_1, const juce::Path& layer_2, const juce::Path& layer_3)
@@ -69,9 +70,11 @@ public:
     {
         prep_color_ = col;
     }
-
-
-    float size_ratio;
+    bool hitTest(int x, int y) override {
+        layer_1_.contains(x, y);
+    }
+//
+        float size_ratio;
 
 protected:
     //void valueTreePropertyChanged (juce::ValueTree& v, const juce::Identifier& i) override;

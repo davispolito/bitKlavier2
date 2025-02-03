@@ -6,31 +6,35 @@
 #include "synth_gui_interface.h"
 
 #include "FullInterface.h"
-PreparationSection::PreparationSection(juce::String name, juce::ValueTree v, OpenGlWrapper &open_gl, juce::AudioProcessor* proc) : tracktion::engine::ValueTreeObjectList<BKPort>(v), SynthSection(name), state(v), _open_gl(open_gl), _proc(proc)
-{
+#include "ConstructionSite.h"
+
+PreparationSection::PreparationSection(juce::String name, juce::ValueTree v, OpenGlWrapper &open_gl,
+                                       juce::AudioProcessor *proc) : tracktion::engine::ValueTreeObjectList<BKPort>(v),
+                                                                     SynthSection(name), state(v), _open_gl(open_gl),
+                                                                     _proc(proc) {
     //_parent = findParentComponentOfClass<SynthGuiInterface>();
-    x.referTo(v,IDs::x,nullptr);
-    y.referTo(v,IDs::y,nullptr);
-    width.referTo(v,IDs::width,nullptr);
-    height.referTo(v,IDs::height,nullptr);
-    numIns.referTo(v,IDs::numIns,nullptr);
-    numOuts.referTo(v,IDs::numOuts,nullptr);
+    setInterceptsMouseClicks(true,false);
+    x.referTo(v, IDs::x, nullptr);
+    y.referTo(v, IDs::y, nullptr);
+    width.referTo(v, IDs::width, nullptr);
+    height.referTo(v, IDs::height, nullptr);
+    numIns.referTo(v, IDs::numIns, nullptr);
+    numOuts.referTo(v, IDs::numOuts, nullptr);
     //constrainer.setBoundsForComponent(this,getParentComponent()->getLocalBounds() );
     createUuidProperty(state);
-    uuid.referTo(state,IDs::uuid,nullptr);
+    uuid.referTo(state, IDs::uuid, nullptr);
 
     pluginID = juce::VariantConverter<juce::AudioProcessorGraph::NodeID>::fromVar(v.getProperty(IDs::nodeID));
     //pluginID.uid = static_cast<uint32>(int(state.getProperty(IDs::uuid)));
-    constrainer.setMinimumOnscreenAmounts(0xffffff,0xffffff,0xffffff,0xffffff);
+    constrainer.setMinimumOnscreenAmounts(0xffffff, 0xffffff, 0xffffff, 0xffffff);
     rebuildObjects();
-    for(auto object : objects)
-    {
+    for (auto object: objects) {
         open_gl.initOpenGlComp.try_enqueue([this, object, &open_gl] {
 
             object->getImageComponent()->init(open_gl);
 
             juce::MessageManagerLock mm;
-            this->addOpenGlComponent(object->getImageComponent(),false, true);
+            this->addOpenGlComponent(object->getImageComponent(), false, true);
             this->addAndMakeVisible(object);
             object->addListener(this);
             this->resized();
@@ -44,19 +48,17 @@ PreparationSection::PreparationSection(juce::String name, juce::ValueTree v, Ope
     auto xml = juce::parseXML(data.toString());
 
     if (!state.getChild(0).isValid() && xml != nullptr)
-        state.addChild(juce::ValueTree::fromXml(*xml),0,nullptr);
+        state.addChild(juce::ValueTree::fromXml(*xml), 0, nullptr);
 
 }
 
-void PreparationSection::paintBackground(juce::Graphics& g)
-{
+void PreparationSection::paintBackground(juce::Graphics &g) {
 //    g.saveState();
 //    juce::Rectangle<int> bounds = getLocalArea(item.get(), item->getLocalBounds());
 //    g.reduceClipRegion(bounds);
 //    g.setOrigin(bounds.getTopLeft());
 //    //item->paintBackground(g);
-    if(item)
-    {
+    if (item) {
         //item->setColor(findColour (Skin::kWidgetPrimary1, true));
         item->redoImage();
     }
@@ -65,7 +67,23 @@ void PreparationSection::paintBackground(juce::Graphics& g)
 //    g.restoreState();
 }
 
-void PreparationSection:: resized() {
+void PreparationSection::mouseDown(const juce::MouseEvent &e) {
+//        DBG(e.getNumberOfClicks());
+
+    if (e.getNumberOfClicks() == 2) {
+        showPrepPopup(this);
+
+    } else {
+//  selectedSet->addToSelectionBasedOnModifiers(this, e.mods);
+    }
+    pointBeforDrag = this->getPosition();
+    dynamic_cast< ConstructionSite *>(getParentComponent())->startDragging("", this,juce::ScaledImage(),true);
+//            myDragger.startDraggingComponent (this, e);
+}
+void PreparationSection::itemDropped(const juce::DragAndDropTarget::SourceDetails &dragSourceDetails) {
+    dynamic_cast< ConstructionSite *>(getParentComponent())->item_dropped_on_prep_ = true;
+}
+void PreparationSection::resized() {
     juce::Rectangle<float> bounds = getLocalBounds().toFloat();
     int item_padding_y = kItemPaddingY * size_ratio_;
     int item_height = getHeight() - 2 * item_padding_y;
@@ -75,8 +93,7 @@ void PreparationSection:: resized() {
 
     item->setBounds(item_padding_x, item_padding_y, item_width, item_height);
 
-    if (auto *processor = getProcessor())
-    {
+    if (auto *processor = getProcessor()) {
         for (auto *port: objects) {
             const bool isInput = port->isInput;
             auto channelIndex = port->pin.channelIndex;
@@ -89,14 +106,12 @@ void PreparationSection:: resized() {
             auto totalSpaces = static_cast<float> (total) +
                                (static_cast<float> (juce::jmax(0, processor->getBusCount(isInput) - 1)) * 0.5f);
             auto indexPos = static_cast<float> (index) + (static_cast<float> (busIdx) * 0.5f);
-            if( port->pin.isMIDI())
-            {
-                port->setBounds((proportionOfWidth((1.0f + indexPos) / (totalSpaces + 1.0f)) + portSize ) * 0.9,
-                                port->isInput ? floor((getHeight() * 0.9) - portSize / 2):(0 + item_padding_y) ,
+            if (port->pin.isMIDI()) {
+                port->setBounds((proportionOfWidth((1.0f + indexPos) / (totalSpaces + 1.0f)) + portSize) * 0.9,
+                                port->isInput ? floor((getHeight() * 0.9) - portSize / 2) : (0 + item_padding_y),
                                 portSize, portSize);
-            }
-            else {
-                port->setBounds(port->isInput ? floor(item_padding_x + portSize/2 * 0.9) - 1: (getWidth() * 0.9),
+            } else {
+                port->setBounds(port->isInput ? floor(item_padding_x + portSize / 2 * 0.9) - 1 : (getWidth() * 0.9),
                                 proportionOfHeight((1.0f + indexPos) / (totalSpaces + 1.0f)) - portSize / 2,
                                 portSize, portSize);
             }
@@ -105,29 +120,27 @@ void PreparationSection:: resized() {
 
     SynthSection::resized();
 }
-PreparationSection::~PreparationSection()
-{
+
+PreparationSection::~PreparationSection() {
     freeObjects();
 }
 
 BKPort *PreparationSection::createNewObject(const juce::ValueTree &v) {
 
-    return new BKPort( v);
+    return new BKPort(v);
 }
 
 void PreparationSection::deleteObject(BKPort *at) {
-    if ((juce::OpenGLContext::getCurrentContext() == nullptr))
-    {
-        SynthGuiInterface* _parent = findParentComponentOfClass<SynthGuiInterface>();
+    if ((juce::OpenGLContext::getCurrentContext() == nullptr)) {
+        SynthGuiInterface *_parent = findParentComponentOfClass<SynthGuiInterface>();
 
         //this might cause bugs when adding deletion of a prepartion and dynamic port adding and delting
-        at->setVisible (false);
-        _parent->getOpenGlWrapper()->context.executeOnGLThread ([this, &at] (juce::OpenGLContext& openGLContext) {
-                                               //this->destroyOpenGlComponent()
-                                           },
-                                           false);
-    }
-    else
+        at->setVisible(false);
+        _parent->getOpenGlWrapper()->context.executeOnGLThread([this, &at](juce::OpenGLContext &openGLContext) {
+                                                                   //this->destroyOpenGlComponent()
+                                                               },
+                                                               false);
+    } else
         delete at;
 
 }
@@ -136,14 +149,14 @@ void PreparationSection::reset() {
     SynthSection::reset();
 }
 
-void PreparationSection::newObjectAdded(BKPort * object) {
+void PreparationSection::newObjectAdded(BKPort *object) {
 
-    SynthGuiInterface* parent = findParentComponentOfClass<SynthGuiInterface>();
+    SynthGuiInterface *parent = findParentComponentOfClass<SynthGuiInterface>();
     parent->getGui()->open_gl_.initOpenGlComp.try_enqueue([this, object] {
-        SynthGuiInterface* _parent = findParentComponentOfClass<SynthGuiInterface>();
+        SynthGuiInterface *_parent = findParentComponentOfClass<SynthGuiInterface>();
         object->getImageComponent()->init(_parent->getGui()->open_gl_);
         juce::MessageManagerLock mm;
-        this->addOpenGlComponent(object->getImageComponent(),false, true);
+        this->addOpenGlComponent(object->getImageComponent(), false, true);
         this->addAndMakeVisible(object);
         object->addListener(this);
         this->resized();
