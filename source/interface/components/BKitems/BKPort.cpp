@@ -56,13 +56,11 @@ image_component_(new OpenGlImageComponent())
 //    {
 //        listener->portClicked(getBounds().getCentre());
 //    }
-//    DBG("Pdown");
 //}
 //
 //void BKPort::mouseEnter(const juce::MouseEvent& e)
 //{
 //    //getParentComponent()->mouseDown(e);
-////    DBG("Popraat");
 //}
 
 
@@ -91,7 +89,6 @@ void BKPort::mouseDrag (const juce::MouseEvent& e)
 
 void BKPort::mouseUp (const juce::MouseEvent& e)
 {
-    DBG("port mosueup)");
     for (auto listener : listeners_)
         listener->endDraggingConnector (e);
 }

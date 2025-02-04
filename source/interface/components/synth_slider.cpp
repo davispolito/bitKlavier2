@@ -605,12 +605,8 @@ void SynthSlider::drawShadow(juce::Graphics &g) {
 
 void SynthSlider::drawRotaryShadow(juce::Graphics &g) {
     juce::Colour shadow_color = findColour(Skin::kShadow, true);
-    DBG("drawshadow ----" + getName() + "-----");
 
 
-    DBG("component x" + juce::String(getX()));
-    DBG("componoent y" + juce::String(getY()));
-    DBG("scale" + juce::String(parent_->getDisplayScale()));
     int width = getWidth() *parent_->getDisplayScale();
     int height = getHeight() *parent_->getDisplayScale();
     int x = getX() * parent_->getDisplayScale();

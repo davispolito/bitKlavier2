@@ -91,14 +91,12 @@ public:
     }
     void 	dragOperationStarted (const juce::DragAndDropTarget::SourceDetails &)
     {
-        DBG("asfd'");
         //wsetMouseCursor(juce::MouseCursor::DraggingHandCursor);
     }
 
     void dragOperationEnded(const juce::DragAndDropTarget::SourceDetails &source)
     {
 
-        DBG("asfdend'");
         //setMouseCursor(juce::MouseCursor::ParentCursor);
         if(!item_dropped_on_prep_) {
 //            source.sourceComponent->setCentrePosition(source.sourceComponent->getX() + source.localPosition.getX(),

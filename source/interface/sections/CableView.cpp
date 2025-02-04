@@ -106,8 +106,6 @@ void CableView::mouseExit (const juce::MouseEvent&)
 void CableView::mouseDown (const juce::MouseEvent& e)
 {
 
-    DBG("cabledowns");
-    DBG(currentPort.getX());
     if (!e.mods.isCommandDown() || e.mods.isPopupMenu() || e.eventComponent == nullptr)
         return; // not a valid mouse event
 
@@ -144,7 +142,6 @@ void CableView::mouseUp (const juce::MouseEvent& e)
         auto* cable = objects.getLast();
         // not being connected... trash the latest cable
         {
-            DBG("delete cable");
         }
         isDraggingCable = false;
     }
@@ -216,14 +213,6 @@ void CableView::valueTreeRedirected (juce::ValueTree&)
 } // may need to add handling if this is hit
 
 void CableView::newObjectAdded(Cable *c) {
-    ////IS THIS THREAD SAFE? IDK
-    //        parent->getSynth()->processorInitQueue.try_enqueue([this, &connection]
-//                                                           {
-//                                                               SynthGuiInterface* parent = findParentComponentOfClass<SynthGuiInterface>();
-//                                                               parent->getSynth()->addConnection(connection);
-//                                                           });
-
-//        graph.graph.addConnection (connection)
     SynthGuiInterface* _parent = findParentComponentOfClass<SynthGuiInterface>();
     _parent->getSynth()->processorInitQueue.try_enqueue([this,c]
                                                        {
@@ -260,7 +249,6 @@ void CableView::updateCablePositions()
 }
 
 Cable* CableView::createNewObject(const juce::ValueTree &v) {
-    DBG("addcable");
     auto* comp = new Cable(&site, *this);
     addChildComponent(comp, 0);
 

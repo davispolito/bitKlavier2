@@ -217,7 +217,6 @@ bool ModulationButton::isInit()
 }
 
 void ModulationButton::mouseDown(const juce::MouseEvent& e) {
-    DBG(getComponentID() + "currmode");
   if (e.mods.isPopupMenu()) {
     if (parent_ == nullptr)
       return;

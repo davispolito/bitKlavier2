@@ -95,11 +95,6 @@ private:
     void itemDropped (const SourceDetails& dragSourceDetails) override
     {
         juce::String received = dragSourceDetails.description.toString();
-        DBG("Items dropped: " + received);
-
-        //juce::Array<int> data = stringToIntArray(received);
-        //BKPreparationType type = (BKPreparationType)data[0];
-        //data.remove(0);
 
         juce::Point<int> where = dragSourceDetails.localPosition;
 

@@ -9,7 +9,11 @@ namespace bitklavier {
 
     class ModulationProcessor : public juce::AudioProcessor {
     public:
-        ModulationProcessor(juce::ValueTree& vt) : juce::AudioProcessor()
+        ModulationProcessor(juce::ValueTree& vt) :
+        juce::AudioProcessor(BusesProperties().withInput("disabled",juce::AudioChannelSet::mono(),false)
+        .withOutput("disabled",juce::AudioChannelSet::mono(),false)
+        .withOutput("Modulation",juce::AudioChannelSet::discreteChannels(1),true)
+        .withInput( "Modulation",juce::AudioChannelSet::discreteChannels(1),true))
         {
 
         }
@@ -42,7 +46,7 @@ namespace bitklavier {
 
         void processBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer &midiMessages) override
         {
-
+DBG("mod");
         }
 
         juce::AudioProcessorEditor * createEditor() override

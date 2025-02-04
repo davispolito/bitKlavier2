@@ -112,11 +112,6 @@ class OpenGlSlider : public juce::Slider {
 ////            }
 ////
 ////            g.setColour(body);
-//////            DBG("x: " + juce::String(center_x- body_radius));
-//////            DBG("y: " + juce::String(center_y- body_radius));
-//////            DBG("body radius: " + juce::String(body_radius));
-//////            DBG("knob size scale " + juce::String(knob_size_scale_));
-//////            DBG("knob body size" + juce::String(findValue(Skin::kKnobBodySize)));
 ////            juce::Rectangle<float> ellipse(10 - 1.5f*body_radius ,10 - 1.5f*body_radius, 1.5f*body_radius,1.5f*body_radius);
 ////            //ellipse.setCentre(getWidth() / 2.0f, getHeight()/2);
 ////            //juce::Rectangle<float> ellipse(0, 0,  2.0f * body_radius, 2.0f * body_radius);

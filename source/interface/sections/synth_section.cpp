@@ -341,7 +341,6 @@ void SynthSection::initOpenGlComponents(OpenGlWrapper& open_gl) {
         open_gl.context.executeOnGLThread([this, &open_gl](juce::OpenGLContext &openGLContext) {
             for (auto &open_gl_component: open_gl_components_) {
                 open_gl_component->init(open_gl);
-                DBG("init " + open_gl_component->getComponentID());
             }
 
             for (auto &sub_section: sub_sections_)
@@ -355,7 +354,6 @@ void SynthSection::initOpenGlComponents(OpenGlWrapper& open_gl) {
         }, true);
     } else
     {
-        DBG("sent: init parameters execute on gl");
         for (auto& open_gl_component : open_gl_components_)
             open_gl_component->init(open_gl);
 
@@ -429,9 +427,7 @@ void SynthSection::destroyOpenGlComponents(OpenGlWrapper& open_gl) {
 
             if(background_)
                 background_->destroy(open_gl);
-            DBG("finished openglexercuted");
             GLenum gl =  juce::gl::glGetError();
-            DBG(juce::String(gl));
 
         }, false);
     } else
@@ -445,7 +441,6 @@ void SynthSection::destroyOpenGlComponents(OpenGlWrapper& open_gl) {
         if(background_)
             background_->destroy(open_gl);
     }
-    DBG("openglcomponents destroyed");
 }
 
 void SynthSection::destroyOpenGlComponent(OpenGlComponent & open_gl_component, OpenGlWrapper& open_gl)
@@ -527,7 +522,6 @@ void SynthSection::addButton(OpenGlShapeButton* button, bool show) {
 
 
 void SynthSection::addSlider(SynthSlider* slider, bool show, bool listen) {
-    DBG("adding slider from " + this->getComponentID() + " with name "+ slider->getComponentID());
   slider_lookup_[slider->getComponentID().toStdString()] = slider;
   all_sliders_[slider->getComponentID().toStdString()] = slider;
   all_sliders_v.push_back(slider);
@@ -932,7 +926,6 @@ void SynthSection::showPopupSelector(juce::Component* source, juce::Point<int> p
 
 void SynthSection::showPrepPopup(PreparationSection* prep)
 {
-    DBG("show prep popup");
     FullInterface* parent = findParentComponentOfClass<FullInterface>();
     if (parent)
         parent->prepDisplay(prep);

@@ -988,7 +988,6 @@ void ModulationManager::modulationDraggedToComponent(juce::Component* component,
 
       setVisibleMeterBounds();
       makeModulationsVisible(slider, true);
-      DBG("modconnecte4d");
     }
     else
       modulationsChanged(name);

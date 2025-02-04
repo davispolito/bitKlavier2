@@ -19,6 +19,8 @@ void ModulationLineView::renderOpenGlComponents(OpenGlWrapper &open_gl, bool ani
         line->render(open_gl,false);
     }
 }
+
+//probably want to move this to construction site leaving here for now
 void ModulationLineView::preparationDragged(juce::Component *comp, const juce::MouseEvent &e) {
     current_source_ = comp;
     mouse_drag_position_ = getLocalPoint(current_source_, e.getPosition());
@@ -29,13 +31,22 @@ void ModulationLineView::preparationDropped(const juce::MouseEvent& e, juce::Poi
 {
     mouse_drag_position_ = getLocalPoint(current_source_, e.getPosition());
     auto comp =  getComponentAt(mouse_drag_position_.x, mouse_drag_position_.y);
-    DBG(juce::String(e.getPosition().getX()) + " " + juce::String(e.getPosition().getY()));
     if(comp)
     {
 
         DBG(comp->getName());
     }
     site.mouse_drag_position_ = mouse_drag_position_;
+}
+
+
+void ModulationLineView::modulationDropped(const juce::ValueTree &source, const juce::ValueTree &destination)
+{
+    auto sourceId =juce::VariantConverter<juce::AudioProcessorGraph::NodeID>::fromVar(source.getProperty(IDs::nodeID,-1));
+    auto destId =juce::VariantConverter<juce::AudioProcessorGraph::NodeID>::fromVar( destination.getProperty(IDs::nodeID,-1));
+
+    auto* parent = findParentComponentOfClass<SynthGuiInterface>();
+    parent->addModulationNodeConnection(sourceId, destId);
 }
 void ModulationLineView::_update()
 {

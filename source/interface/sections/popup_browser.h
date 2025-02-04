@@ -87,7 +87,6 @@ public:
 
     void mouseDown (const juce::MouseEvent& e) override
     {
-        DBG(e.getNumberOfClicks());
 //        if(e.getNumberOfClicks() == 2)
 //        {
 //            showPrepPopup(this);

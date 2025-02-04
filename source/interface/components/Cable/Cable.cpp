@@ -163,7 +163,6 @@ void Cable::drawCable (juce::Graphics& g, juce::Point<float> start, juce::Point<
 {
     drawCableShadow (g, cableThickness);
 
-//DBG("drawcable");
     g.setGradientFill (juce::ColourGradient { startColour, start, endColour, end, false });
     {
         juce::ScopedLock sl (pathCrit);

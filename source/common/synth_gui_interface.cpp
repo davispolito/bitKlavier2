@@ -171,4 +171,19 @@ bool SynthGuiInterface::isConnected(juce::AudioProcessorGraph::Connection& conne
 {
     return synth_->getEngine()->isConnected(connection);
 }
+
+void SynthGuiInterface::addProcessor(PreparationSection *object) {
+    getSynth()->processorInitQueue.try_enqueue ([this, object] {
+        if(auto listener = dynamic_cast<juce::ValueTree::Listener*>(object->getProcessor()))
+            sampleLoadManager->t.addListener(listener);
+        object->setNodeInfo (getSynth()->addProcessor (std::move (object->getProcessorPtr()), object->pluginID));
+    });
+}
+
+void SynthGuiInterface::addModulationNodeConnection(juce::AudioProcessorGraph::NodeID source,
+                                                    juce::AudioProcessorGraph::NodeID destination) {
+    getSynth()->processorInitQueue.try_enqueue ([this, source, destination] {
+        synth_->addModulationConnection(source, destination);
+    });
+}
 #endif

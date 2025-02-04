@@ -49,7 +49,6 @@ void ConstructionSite::valueTreeRedirected (juce::ValueTree&)
 
     //    for (auto object : objects)
     //    {
-    //        DBG("bo");
     //        object->destroyOpenGlComponents(interface->getGui()->open_gl_);
     //        this->removeSubSection(object);
     //    }
@@ -80,14 +79,12 @@ void ConstructionSite::deleteObject (PreparationSection* at)
 
 PreparationSection* ConstructionSite::createNewObject (const juce::ValueTree& v)
 {
-    DBG("createNewObject: func" );
     SynthGuiInterface* parent = findParentComponentOfClass<SynthGuiInterface>();
     //must use auto * so that it doesnt create a copy and call this constructor twice
 
 
     auto* s = prepFactory.CreateObject ((int) v.getProperty (IDs::type), v, parent);
 
-    DBG("finishobjectcreate");
     addSubSection (s);
     Skin default_skin;
     s->setSkinValues (default_skin, false);
@@ -138,16 +135,7 @@ void ConstructionSite::reset()
 void ConstructionSite::newObjectAdded (PreparationSection* object)
 {
     SynthGuiInterface* parent = findParentComponentOfClass<SynthGuiInterface>();
-    parent->getSynth()->processorInitQueue.try_enqueue ([this, object] {
-        SynthGuiInterface* _parent = findParentComponentOfClass<SynthGuiInterface>();
-        if(auto listener = dynamic_cast<juce::ValueTree::Listener*>(object->getProcessor()))
-            _parent->sampleLoadManager->t.addListener(listener);
-        object->setNodeInfo (_parent->getSynth()->addProcessor (std::move (object->getProcessorPtr()), object->pluginID));
-
-        //changelistener callback is causing timing errors here.
-
-        //last_proc.reset();
-    });
+    parent->addProcessor(object);
 }
 
 ConstructionSite::~ConstructionSite (void)
@@ -188,10 +176,7 @@ bool ConstructionSite::keyPressed (const juce::KeyPress& k, juce::Component* c)
         t.setProperty (IDs::height, 132, nullptr);
         t.setProperty (IDs::x, lastX - 260 / 2, nullptr);
         t.setProperty (IDs::y, lastY - 132 / 2, nullptr);
-        // DBG("Position" + juce::String(lastX) + " " + juce::String(lastY));
-        DBG("createNewObject: " );
         parent.addChild (t, -1, nullptr);
-        //DBG("place" + juce::String(lastX) + " " + juce::String(lastY));
     }
     else if (code == 78) // N nostalgic
     {
@@ -214,9 +199,7 @@ bool ConstructionSite::keyPressed (const juce::KeyPress& k, juce::Component* c)
         t.setProperty (IDs::height, 76, nullptr);
         t.setProperty (IDs::x, lastX - 114 / 2, nullptr);
         t.setProperty (IDs::y, lastY - 76 / 2, nullptr);
-        // DBG("Position" + juce::String(lastX) + " " + juce::String(lastY));
         parent.addChild (t, -1, nullptr);
-        //DBG("place" + juce::String(lastX) + " " + juce::String(lastY));
     }
     else if (code == 82) // R resonance
     {

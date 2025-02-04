@@ -7,9 +7,6 @@
 
 void DirectParametersView::resized()
 {
-    DBG("--------" + getName() + "View -------------");
-    DBG("bounds x:" + juce::String(getLocalBounds().getX()) + " y:" + juce::String(getLocalBounds().getY()) + " width: " + juce::String(getLocalBounds().getWidth()) + " height: " + juce::String(getLocalBounds().getHeight()));
-    //pimpl->groupItem.setBounds(getLocalBounds());
 
     int knob_section_height = getKnobSectionHeight();
     int knob_y = getHeight() - knob_section_height;

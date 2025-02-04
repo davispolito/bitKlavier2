@@ -86,6 +86,7 @@ void SynthBase::addConnection(juce::AudioProcessorGraph::Connection &connect)
 {
     engine_->addConnection(connect);
 }
+
 bool SynthBase::loadFromValueTree(const juce::ValueTree& state)
 {
     pauseProcessing(true);
@@ -93,14 +94,12 @@ bool SynthBase::loadFromValueTree(const juce::ValueTree& state)
     tree.copyPropertiesAndChildrenFrom(state, nullptr);
 
     pauseProcessing(false);
-    DBG("unpause processing");
     if (tree.isValid())
         return true;
     return false;
 }
 
 bool SynthBase::loadFromFile(juce::File preset, std::string& error) {
-    DBG("laoding from file");
     if (!preset.exists())
         return false;
 
@@ -165,7 +164,17 @@ void SynthBase::processAudioAndMidi(juce::AudioBuffer<float>& audio_buffer, juce
 //  //engine_->processWithInput(input_buffer, samples);
 //  writeAudio(buffer, channels, samples, offset);
 //}
+void SynthBase::addModulationConnection(juce::AudioProcessorGraph::NodeID source, juce::AudioProcessorGraph::NodeID dest) {
+   auto* sourceNode = getNodeForId(source);
+   auto* destNode   = getNodeForId(dest);
+   destNode->getProcessor()->getBus(true,1)->enable(true); //should always be modulation bus
+    sourceNode->getProcessor()->getBus(false,1)->enable(true); //should always be modulation bus
+   auto dest_index = destNode->getProcessor()->getChannelIndexInProcessBlockBuffer(true,1,0);
+    auto source_index = sourceNode->getProcessor()->getChannelIndexInProcessBlockBuffer(false,1,0);
 
+   juce::AudioProcessorGraph::Connection connection {{source, source_index}, {dest, dest_index}};
+   engine_->addConnection(connection);
+}
 void SynthBase::writeAudio(juce::AudioSampleBuffer* buffer, int channels, int samples, int offset) {
   //const float* engine_output = (const float*)engine_->output(0)->buffer;
   /* get output of engine here */

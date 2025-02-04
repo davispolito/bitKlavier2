@@ -23,7 +23,6 @@ public:
 
                 },
                 [this, &listeners, &pluginState](auto &paramHolder) {
-                    DBG("xdirectparamview");
                     if(auto *transposeParam = dynamic_cast<TransposeParams*>(&paramHolder)) {
                         transpositionSlider = std::make_unique<OpenGlTranspositionSlider>(transposeParam, listeners);
                        transposeParam->doForAllParameters([this, &pluginState] (auto& param, size_t indexInParamHolder)
@@ -32,14 +31,9 @@ public:
                                    chowdsp::ParameterListenerThread::MessageThread,
                                    [this] {
 
-
-                                       DBG ("transposeslider" + this->getName());
-
                                    })};
                         });
                     }
-                    DBG("paramholder name" + paramHolder.getName());
-                    //addSubSection(parameters_view_detail::createEditorSection(paramHolder,paramListeners,*this).release());
                 });
 
 

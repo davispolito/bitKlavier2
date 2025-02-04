@@ -323,7 +323,6 @@ void HeaderSection::buttonClicked(juce::Button* clicked_button) {
 //            std::string name = ProjectInfo::projectName;
 //            error = "There was an error open the preset. " + error;
             //juce::AlertWindow::showMessageBoxAsync(MessageBoxIconType::WarningIcon, "PRESET ERROR, ""Error opening preset", error);
-            DBG("errrrrr");
             DBG(error);
         }
 //        else

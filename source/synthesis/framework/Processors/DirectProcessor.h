@@ -159,7 +159,9 @@ public:
     juce::AudioProcessor::BusesProperties directBusLayout()
     {
         return BusesProperties()
-            .withOutput ("Output1", juce::AudioChannelSet::stereo(), true);
+            .withOutput ("Output1", juce::AudioChannelSet::stereo(), true)
+                .withInput("input",juce::AudioChannelSet::stereo(),true)
+            .withInput ("Modulation",juce::AudioChannelSet::discreteChannels(1) ,false);
     }
     bool isBusesLayoutSupported (const juce::AudioProcessor::BusesLayout& layouts) const override;
     bool hasEditor() const override { return false; }

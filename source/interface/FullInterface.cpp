@@ -283,9 +283,6 @@ void FullInterface::resized() {
    }
 
    setSizeRatio(ratio);
-   DBG("");
-    DBG( "ratio: " + juce::String(ratio));
-    DBG("display scale" + juce::String(display_scale_));
    int padding = getPadding();
    int voice_padding = findValue(Skin::kLargePadding);
 
@@ -332,9 +329,7 @@ void FullInterface::reset() {
 //   }
 
    SynthSection::reset();
-   DBG("critical opengl");
    repaintSynthesisSection();
-    DBG("critical opengl over");
 }
 
 void FullInterface::popupDisplay(juce::Component* source, const std::string& text,
@@ -346,11 +341,9 @@ void FullInterface::popupDisplay(juce::Component* source, const std::string& tex
 
 void FullInterface::prepDisplay(PreparationSection* prep)
 {
-    DBG("*********SETTING CONTENT***************");
 
     prep_popup->setContent(prep->getPrepPopup());
     prep_popup->setPrep(prep);
-    DBG("*********CONTEN SET***************");
     prep_popup->setVisible(true);
 }
 
@@ -397,18 +390,10 @@ void FullInterface::renderOpenGL() {
        return;
 
    float render_scale = open_gl_.context.getRenderingScale();
-   //DBG(render_scale);
    if (render_scale != last_render_scale_) {
        last_render_scale_ = render_scale;
        juce::MessageManager::callAsync([=] { checkShouldReposition(true); });
    }
-//   if(!open_gl_.init_comp.empty())
-//    {
-//       OpenGlComponent* comp = dynamic_cast<OpenGlComponent*>(open_gl_.init_comp.back());
-//       comp->init(open_gl_);
-//       open_gl_.init_comp.pop_back();
-//
-//    }
 
 
 /// initialize opengl components dynamically

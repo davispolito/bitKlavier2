@@ -50,10 +50,5 @@ void MainSection::resized()
     constructionSite_->setBounds(large_padding, 0, getDisplayScale() * width + 1500,getDisplayScale() * height + 1500);
     //constructionPort.setBounds(large_padding, 0,getDisplayScale()* width, getDisplayScale() * height);
     //constructionPort.setBounds(large_padding, 0,width, height);
-    DBG (":");
-    DBG("main section");
-    DBG("display scale" + juce::String(getDisplayScale()));
-    DBG("width" + juce::String(getWidth()));
-    DBG("height" + juce::String(getHeight()));
     SynthSection::resized();
 }

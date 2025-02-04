@@ -58,18 +58,6 @@ public:
     std::unique_ptr<juce::AudioProcessor> getProcessorPtr() override;
 
 //
-//    void 	itemDragMove (const SourceDetails &dragSourceDetails)
-//    {
-//        DBG("dragmove");
-//    }
-//    void itemDragEnter (const SourceDetails &dragSourceDetails){
-//        DBG("drag in direct");
-//    }
-//    void 	itemDragExit (const SourceDetails &dragSourceDetails)
-//    {
-//
-//    }
-//
 
 
 private:

@@ -161,7 +161,6 @@ namespace bitklavier {
               state (*this, um),
               v(v)
     {
-                  DBG(v.toXmlString());
                   if(v.getChild(0).isValid())
                     chowdsp::Serialization::deserialize<chowdsp::XMLSerializer>(v.createXml(),state);
     }

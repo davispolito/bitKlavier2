@@ -28,6 +28,7 @@ public:
     void endDraggingConnector(const juce::MouseEvent& e) override {}
     void preparationDropped(const juce::MouseEvent& e, juce::Point<int>) override;
     void preparationDragged(juce::Component*, const juce::MouseEvent&e) override;
+    void modulationDropped(const juce::ValueTree& source, const juce::ValueTree& dest) override;
     void _update() override;
 };
 

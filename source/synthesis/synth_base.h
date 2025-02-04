@@ -89,7 +89,7 @@ class SynthBase :  public juce::ValueTree::Listener {
     bool saveToActiveFile();
     void clearActiveFile() { active_file_ = juce::File(); }
     juce::File getActiveFile() { return active_file_; }
-
+    void addModulationConnection(juce::AudioProcessorGraph::NodeID, juce::AudioProcessorGraph::NodeID);
 
 
     ///modulation functionality

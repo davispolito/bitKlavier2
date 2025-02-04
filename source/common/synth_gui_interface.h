@@ -32,6 +32,7 @@ class UserPreferencesWrapper;
 class FullInterface;
 struct OpenGlWrapper;
 
+class PreparationSection;
 struct SynthGuiData {
   SynthGuiData(SynthBase* synth_base);
   juce::ValueTree& tree;
@@ -42,7 +43,6 @@ namespace bitklavier
 {
 class ModulationConnection;
 }
-
 class SynthGuiInterface {
   public:
     SynthGuiInterface(SynthBase* synth, bool use_gui = true);
@@ -60,7 +60,8 @@ class SynthGuiInterface {
     void disconnectModulation(bitklavier::ModulationConnection* connection);
     void notifyModulationsChanged();
 
-
+    void  addProcessor(PreparationSection* );
+    void  addModulationNodeConnection(juce::AudioProcessorGraph::NodeID source, juce::AudioProcessorGraph::NodeID destination);
     void setFocus();
     void notifyChange();
     void notifyFresh();

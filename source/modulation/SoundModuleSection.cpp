@@ -77,8 +77,6 @@ void SoundModuleSection::setEffectPositions() {
     int y = 0;
 
     juce::Point<int> position = viewport_.getViewPosition();
-    DBG("position viewport: x: " + juce::String(position.getX()) + "y: " + juce::String(position.getY()));
-    DBG("shadwo width: " + juce::String(shadow_width));
     for(auto& section : objects)
     {
         section->setBounds(shadow_width, y, effect_width, effect_height);

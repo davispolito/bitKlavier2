@@ -69,7 +69,6 @@ void BlendronicPreparation::BlendronicPopup::renderOpenGlComponents(OpenGlWrappe
         if (open_gl_component->isVisible() && !open_gl_component->isAlwaysOnTop()) {
             open_gl_component->render(open_gl, animate);
             GLenum gl =  juce::gl::glGetError();
-            //DBG(juce::String(gl));
             _ASSERT(gl == juce::gl::GL_NO_ERROR);
         }
     }

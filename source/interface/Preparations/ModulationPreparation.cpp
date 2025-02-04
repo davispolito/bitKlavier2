@@ -29,12 +29,10 @@ ModulationPreparation::ModulationPreparation (std::unique_ptr<bitklavier::Modula
     setSkinOverride (Skin::kModulation);
     juce::MemoryBlock data;
 
-    DBG("add processor params");
 }
 
 std::shared_ptr<SynthSection> ModulationPreparation::getPrepPopup()
 {
-    DBG("prep popup");
     if(popup_view) {
         popup_view->destroyOpenGlComponents(_open_gl);
         popup_view->reset();

@@ -49,11 +49,6 @@ public:
 
     void paintBackground(juce::Graphics &g)
     {
-//        DBG("paintbackground");
-//        for(auto cable : cables)
-//        {
-//            cable->paint(g);
-//        }
     }
 
     Cable* getComponentForConnection (const juce::AudioProcessorGraph::Connection& conn) const

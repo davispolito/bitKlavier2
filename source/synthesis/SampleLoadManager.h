@@ -156,7 +156,6 @@ public:
         thisSampleType = sampleType;
         velocityLayers = numLayers;
         thisMidiRange = newMidiRange;
-        DBG("job created");
     };
     ~SampleLoadJob()
     {loadManager->triggerAsyncUpdate();}

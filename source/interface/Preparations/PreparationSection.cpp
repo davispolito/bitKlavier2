@@ -68,7 +68,6 @@ void PreparationSection::paintBackground(juce::Graphics &g) {
 }
 
 void PreparationSection::mouseDown(const juce::MouseEvent &e) {
-//        DBG(e.getNumberOfClicks());
 
     if (e.getNumberOfClicks() == 2) {
         showPrepPopup(this);
@@ -77,11 +76,18 @@ void PreparationSection::mouseDown(const juce::MouseEvent &e) {
 //  selectedSet->addToSelectionBasedOnModifiers(this, e.mods);
     }
     pointBeforDrag = this->getPosition();
-    dynamic_cast< ConstructionSite *>(getParentComponent())->startDragging("", this,juce::ScaledImage(),true);
+    dynamic_cast< ConstructionSite *>(getParentComponent())->startDragging(state.toXmlString(), this,juce::ScaledImage(),true);
 //            myDragger.startDraggingComponent (this, e);
 }
 void PreparationSection::itemDropped(const juce::DragAndDropTarget::SourceDetails &dragSourceDetails) {
     dynamic_cast< ConstructionSite *>(getParentComponent())->item_dropped_on_prep_ = true;
+    auto dropped_tree = juce::ValueTree::fromXml(dragSourceDetails.description);
+    //should switch to strings for type names
+    if (static_cast<int>(dropped_tree.getProperty(IDs::type)) == bitklavier::BKPreparationType::PreparationTypeModulation)
+    {
+        for(auto listener: listeners_)
+            listener->modulationDropped(dropped_tree, state);
+    }
 }
 void PreparationSection::resized() {
     juce::Rectangle<float> bounds = getLocalBounds().toFloat();

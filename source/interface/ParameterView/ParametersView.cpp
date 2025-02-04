@@ -63,7 +63,6 @@ namespace bitklavier {
                 slider->parentHierarchyChanged();
                 slider->setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
                 _ASSERT(slider->getSectionParent() != nullptr);
-                DBG("create slider for " + param.paramID + "with parent " + parent.getName());
             }
 
             void resized() override {
@@ -105,7 +104,6 @@ namespace bitklavier {
 
                         },
                         [this, &listeners](auto &paramHolder) {
-                            DBG("add group item");
                             addSubSection(std::make_unique<ParameterGroupItem>(paramHolder,listeners, *this).release());
                         });
 
@@ -117,16 +115,6 @@ namespace bitklavier {
                 int widget_margin = findValue(Skin::kWidgetMargin);
                 int title_width = getTitleWidth();
                 int section_height = getKnobSectionHeight();
-                DBG("--------ogroupitem"  + name +" View -------------");
-                DBG("bounds x:" + juce::String(getLocalBounds().getX()) + " y:" + juce::String(getLocalBounds().getY()) + " width: " + juce::String(getLocalBounds().getWidth()) + " height: " + juce::String(getLocalBounds().getHeight()));
-//        pimpl->view.setBounds(getLocalBounds());
-//                juce::Rectangle<int> bounds = getLocalBounds().withLeft(title_width);
-//                int i = 0;
-//                for(auto section : sub_sections_)
-//                {
-//                    juce::Rectangle<int> section_area = getDividedAreaBuffered(bounds, sub_sections_.size(), i++, widget_margin);
-//                    section->setBounds(section_area);
-//                }
                 int editor_x = getLocalBounds().getX();
                 int editor_width = getLocalBounds().getWidth();
                 int knob_y2 = section_height - widget_margin;
@@ -191,17 +179,13 @@ namespace bitklavier {
 //        auto *viewport = pimpl->view.getViewport();
         params.doForAllParameterContainers(
                 [this, &paramListeners](auto &paramVec) {
-                    DBG("----paramvec----");
                     for (auto &param: paramVec)
                     {
                         comps.push_back(parameters_view_detail::createParameterComp(paramListeners, param,*this));
-                        DBG("add" + param->paramID);
                     }
                 },
                 [this, &paramListeners](auto &paramHolder) {
-                    DBG("add group item");
 
-                    DBG("paramholder name" + paramHolder.getName());
                     auto section  = parameters_view_detail::createEditorSection(paramHolder,paramListeners,*this);
                     addSubSection(section.get());
                     paramHolderComps.push_back(std::move(section));
@@ -225,24 +209,7 @@ namespace bitklavier {
     }
 
     void ParametersView::resized() {
-        DBG("--------" + getName() + "View -------------");
-        DBG("bounds x:" + juce::String(getLocalBounds().getX()) + " y:" + juce::String(getLocalBounds().getY()) + " width: " + juce::String(getLocalBounds().getWidth()) + " height: " + juce::String(getLocalBounds().getHeight()));
-        //pimpl->groupItem.setBounds(getLocalBounds());
         placeKnobsInArea(getLocalBounds(), comps);
-//        SynthSection::resized();
-//        juce::Grid g;
-//
-//        placeKnobsInArea(getLocalBounds(),
-//                         getAllSlidersVec());
-//        for(auto slider : getAllSlidersVec())
-//        {
-//            DBG("setslider" + slider->getName());
-//        }
-//        for (auto subsection: sub_sections_)
-//        {
-//            g.items.add(juce::GridItem(subsection));
-//        }
-//        g.performLayout(getLocalBounds());
     }
 
 

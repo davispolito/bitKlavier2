@@ -99,7 +99,7 @@ namespace bitklavier {
               node = processorGraph->addNode(std::move(newProcessor), getNextUID());
 
           auto processor = node->getProcessor();
-          if (processor->getTotalNumOutputChannels() > 0)
+          if (processor->getMainBusNumOutputChannels() > 0)
           {
               processorGraph->addConnection({{node->nodeID,0 }, {audioOutputNode->nodeID, 0}});
               processorGraph->addConnection({{node->nodeID,1 }, {audioOutputNode->nodeID, 1}});
@@ -114,6 +114,7 @@ namespace bitklavier {
 
       void processAudioAndMidi(juce::AudioBuffer<float>& audio_buffer, juce::MidiBuffer& midi_buffer)
       {
+          DBG("begin:)");
           processorGraph->processBlock(audio_buffer, midi_buffer);
       }
      void setInputsOutputs(int newNumIns, int newNumOuts)

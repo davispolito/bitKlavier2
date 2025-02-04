@@ -245,9 +245,6 @@ template<typename T>
 void ModulesInterface<T>::setScrollBarRange() {
     scroll_bar_->setRangeLimits(0.0, container_->getHeight());
     scroll_bar_->setCurrentRange(scroll_bar_->getCurrentRangeStart(), viewport_.getHeight(),juce::dontSendNotification);
-    //DBG("container height: " + juce::String(container_->getHeight()));
-    //DBG("viewport height: " + juce::String(viewport_.getHeight()));
-    //DBG("scrollbar range: " + juce::String(scroll_bar_->getCurrentRangeStart()) );
 }
 
 template<typename T>

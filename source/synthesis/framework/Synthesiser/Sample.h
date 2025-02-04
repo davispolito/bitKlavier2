@@ -243,31 +243,14 @@ public:
         setCentreFrequencyInHz(mtof(rootMidiNote));
         dBFSLevel = sample->getRMS();
 
-        // Print the standard values
-        //DBG("soundName: " + soundName);
-        //DBG("Sample Pointer: " + juce::String((uintptr_t)sample.get()));
-        //DBG("rootMidiNote: " + juce::String(rootMidiNote));
-        //DBG("transpose: " + juce::String(transpose));
-        //DBG("numLayers: " + juce::String(numLayers));
-        //DBG("layerId: " + juce::String(layerId));
-        //DBG("dbfsLevel: " + juce::String(dBFSLevel));
-        //DBG("dbfsBelow: " + juce::String(dBFSBelow));
 
         // Print the highest bit and bit count for midiNotes
         int midiNotesHighestBit = midiNotes.getHighestBit();
         int midiNotesBitCount = midiNotes.countNumberOfSetBits();
-        //DBG("midiNotes Highest Bit: " + juce::String(midiNotesHighestBit));
-        //DBG("midiNotes Bit Count: " + juce::String(midiNotesBitCount));
 
         // Print the highest bit and bit count for midiVelocities
         //int midiVelocitiesHighestBit = midiVelocities.getHighestBit();
         //int midiVelocitiesBitCount = midiVelocities.countNumberOfSetBits();
-
-        //DBG("midiVelocities Highest Bit: " + juce::String(midiVelocitiesHighestBit));
-        //DBG("midiVelocities Bit Count: " + juce::String(midiVelocitiesBitCount));
-        //DBG("min Velocity " + juce::String(minVelocity()));
-        //DBG("max Velocity " + juce::String(maxVelocity()));
-
 
 
     }

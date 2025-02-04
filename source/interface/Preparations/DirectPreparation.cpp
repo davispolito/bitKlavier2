@@ -26,12 +26,10 @@ DirectPreparation::DirectPreparation (std::unique_ptr<DirectProcessor> p,
     setSkinOverride (Skin::kDirect);
     juce::MemoryBlock data;
 
-    DBG("add processor params");
 }
 
 std::shared_ptr<SynthSection> DirectPreparation::getPrepPopup()
 {
-    DBG("prep popup");
     if(popup_view) {
         popup_view->destroyOpenGlComponents(_open_gl);
         popup_view->reset();
