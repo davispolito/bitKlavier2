@@ -23,10 +23,10 @@ void ModulationLineView::renderOpenGlComponents(OpenGlWrapper &open_gl, bool ani
 
 //    if(!line_->isInit())
 //        line_->init(open_gl);
-    line_->render(open_gl, animate);
-    GLenum gl =  juce::gl::glGetError();
-    //DBG(juce::String(gl));
-    _ASSERT(gl == juce::gl::GL_NO_ERROR);
+//    line_->render(open_gl, animate);
+//    GLenum gl =  juce::gl::glGetError();
+//    //DBG(juce::String(gl));
+//    _ASSERT(gl == juce::gl::GL_NO_ERROR);
   for (auto line : objects)
   {
 //      if(!line->line->isInit())
@@ -34,9 +34,9 @@ void ModulationLineView::renderOpenGlComponents(OpenGlWrapper &open_gl, bool ani
 
 
       line->line->render(open_gl, animate);
-      gl =  juce::gl::glGetError();
+//      gl =  juce::gl::glGetError();
       //DBG(juce::String(gl));
-      _ASSERT(gl == juce::gl::GL_NO_ERROR);
+//      _ASSERT(gl == juce::gl::GL_NO_ERROR);
   }
 }
 

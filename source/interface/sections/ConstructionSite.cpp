@@ -7,6 +7,7 @@
 #include "SampleLoadManager.h"
 #include "sound_engine.h"
 #include "synth_gui_interface.h"
+#include "open_gl_line.h"
 ConstructionSite::ConstructionSite (juce::ValueTree& v, juce::UndoManager& um, OpenGlWrapper& open_gl, SynthGuiData* data) : SynthSection ("Construction Site"),
                                                                                                                              tracktion::engine::ValueTreeObjectList<PreparationSection> (v),
                                                                                                                              undo (um),
@@ -14,6 +15,7 @@ ConstructionSite::ConstructionSite (juce::ValueTree& v, juce::UndoManager& um, O
                                                                                                                              cableView (*this),
                                                                                                                              modulationLineView(*this),
                                                                                                                              preparationSelector (*this)
+                                                                                                                             //_line(std::make_shared<OpenGlLine>(nullptr,nullptr,nullptr))
 {
     setWantsKeyboardFocus (true);
     addKeyListener (this);
@@ -35,6 +37,7 @@ ConstructionSite::ConstructionSite (juce::ValueTree& v, juce::UndoManager& um, O
     addSubSection (&cableView);
     addSubSection (&modulationLineView);
     modulationLineView.setAlwaysOnTop(true);
+//    addOpenGlComponent(_line);
 }
 void ConstructionSite::valueTreeParentChanged (juce::ValueTree& changed)
 {
@@ -153,9 +156,18 @@ void ConstructionSite::paintBackground (juce::Graphics& g)
 
 void ConstructionSite::resized()
 {
+    // Get the current local bounds of this component
+    auto bounds = getLocalBounds();
+
+    // Debug log the bounds
+    DBG("Local Bounds: " + bounds.toString());
+
     cableView.setBounds (getLocalBounds());
     cableView.updateCablePositions();
     modulationLineView.setBounds(getLocalBounds());
+
+   // _line->setBounds(get);
+
     SynthSection::resized();
 }
 

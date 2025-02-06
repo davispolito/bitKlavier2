@@ -10,6 +10,7 @@
 #include "ModulationLineView.h"
 #include "templates/Factory.h"
 #include "common.h"
+class OpenGlLine;
 class SynthGuiInterface;
 typedef Loki::Factory<PreparationSection, int,  juce::ValueTree,  SynthGuiInterface*> PreparationFactory;
 class ConstructionSite : public SynthSection,
@@ -114,7 +115,7 @@ private:
     SynthGuiInterface* _parent;
 
 
-
+   std::shared_ptr<OpenGlLine> _line;
 
     bool edittingComment;
 
