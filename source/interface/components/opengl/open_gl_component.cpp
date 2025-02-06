@@ -59,11 +59,11 @@ OpenGlComponent::~OpenGlComponent() {
 bool OpenGlComponent::setViewPort(juce::Component* component, juce::Rectangle<int> bounds, OpenGlWrapper& open_gl) {
 
     FullInterface* top_level = component->findParentComponentOfClass<FullInterface>();
-    juce::String componentName = component != nullptr ? component->getName() : "Unnamed Component";
-    juce::String highlightedName = "------------ " + componentName + " ------------";
-
-    // Add debug prints for individual components of glViewport
-    DBG(highlightedName); // Highlight the component name
+//    juce::String componentName = component != nullptr ? component->getName() : "Unnamed Component";
+//    juce::String highlightedName = "------------ " + componentName + " ------------";
+//
+//    // Add debug prints for individual components of glViewport
+//    DBG(highlightedName); // Highlight the component name
 
   if(top_level == nullptr)
       return false;
@@ -79,25 +79,25 @@ bool OpenGlComponent::setViewPort(juce::Component* component, juce::Rectangle<in
   juce::Rectangle<int> global_bounds = getGlobalBounds(component, bounds);
   juce::Rectangle<int> visible_bounds = getGlobalVisibleBounds(component, bounds);
     float comp_scale = Component::getApproximateScaleFactorForComponent(component);
-    // Add debug prints for individual components of glViewport
-    DBG("scale: " + juce::String(scale));
-    DBG("resize_scale: " + juce::String(resize_scale));
-    DBG("render_scale: " + juce::String(render_scale));
-    DBG("gl_scale: " + juce::String(gl_scale));
-    DBG("top_level_bounds: " + top_level_bounds.toString());
-    DBG("global_bounds: " + global_bounds.toString());
-    DBG("visible_bounds: " + visible_bounds.toString());
-
+//    // Add debug prints for individual components of glViewport
+//    DBG("scale: " + juce::String(scale));
+//    DBG("resize_scale: " + juce::String(resize_scale));
+//    DBG("render_scale: " + juce::String(render_scale));
+//    DBG("gl_scale: " + juce::String(gl_scale));
+//    DBG("top_level_bounds: " + top_level_bounds.toString());
+//    DBG("global_bounds: " + global_bounds.toString());
+//    DBG("visible_bounds: " + visible_bounds.toString());
+//
     int viewportX = gl_scale * scale * global_bounds.getX();
     int viewportY = std::ceil(scale * render_scale * top_level_bounds.getHeight()) - gl_scale * scale * global_bounds.getBottom();
     int viewportWidth = scale * gl_scale * global_bounds.getWidth();
     int viewportHeight = scale * gl_scale * global_bounds.getHeight();
 
-    // Print the final calculated values
-    DBG("glViewport X: " + juce::String(viewportX));
-    DBG("glViewport Y: " + juce::String(viewportY));
-    DBG("glViewport Width: " + juce::String(viewportWidth));
-    DBG("glViewport Height: " + juce::String(viewportHeight));
+//    // Print the final calculated values
+//    DBG("glViewport X: " + juce::String(viewportX));
+//    DBG("glViewport Y: " + juce::String(viewportY));
+//    DBG("glViewport Width: " + juce::String(viewportWidth));
+//    DBG("glViewport Height: " + juce::String(viewportHeight));
 
     // Call glViewport with the calculated values
     juce::gl::glViewport(viewportX, viewportY, viewportWidth, viewportHeight);

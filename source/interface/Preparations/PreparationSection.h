@@ -253,7 +253,7 @@ public:
 
         auto &processor = *this->node->getProcessor();
         //check if main audio input bus is enabled
-        if (getProcessor()->getBus(true, 0)->isEnabled()) {
+        if (getProcessor()->getBus(true, 0) != nullptr && getProcessor()->getBus(true, 0)->isEnabled()) {
             for (int i = 0; i < processor.getMainBusNumInputChannels(); ++i) {
 
                 juce::ValueTree v{IDs::PORT};
@@ -278,7 +278,7 @@ public:
         }
 
         //check if main audio output bus is enabled
-        if (getProcessor()->getBus(false, 0)->isEnabled()) {
+        if (getProcessor()->getBus(false, 0) != nullptr && getProcessor()->getBus(false, 0)->isEnabled()) {
             for (int i = 0; i < processor.getTotalNumOutputChannels(); ++i) {
 
                     juce::ValueTree v{IDs::PORT};

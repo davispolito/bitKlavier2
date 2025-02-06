@@ -16,43 +16,37 @@ class ModulationLine : public juce::Component {
 public:
     ModulationLine(ConstructionSite *site, ModulationLineView* lineView,const juce::ValueTree& state);
 
-    juce::AudioProcessorGraph::Connection connection{{{}, 0},
-                                                     {{}, 0}};
+//    juce::AudioProcessorGraph::Connection connection{{{}, 0},
+//                                                     {{}, 0}};
 
-    void update() {
-        juce::Point<float> p1, p2;
-        getPoints(p1, p2);
+    void update();
 
-//        if (lastInputPos != p1 || lastOutputPos != p2)
-        resizeToFit();
-    }
-
-    void dragStart(juce::Point<float> pos) {
+    void dragStart(juce::Point<int> pos) {
         lastInputPos = pos;
-        resizeToFit();
+//        resizeToFit();
     }
 
-    void dragEnd(juce::Point<float> pos) {
+    void dragEnd(juce::Point<int> pos) {
         lastOutputPos = pos;
-        resizeToFit();
+//        resizeToFit();
 
     }
 
-    void resizeToFit() {
-        juce::Point<float> p1, p2;
-        getPoints(p1, p2);
+//    void resizeToFit() {
+//        juce::Point<float> p1, p2;
+//        getPoints(p1, p2);
+//
+//        auto newBounds = juce::Rectangle<float>(p1, p2).expanded(4.0f).getSmallestIntegerContainer();
+//
+//        if (newBounds != getBounds())
+//            setBounds(newBounds);
+//        else
+//            resized();
+//
+//        repaint();
+//    }
 
-        auto newBounds = juce::Rectangle<float>(p1, p2).expanded(4.0f).getSmallestIntegerContainer();
-
-        if (newBounds != getBounds())
-            setBounds(newBounds);
-        else
-            resized();
-
-        repaint();
-    }
-
-    void getPoints(juce::Point<float> &p1, juce::Point<float> &p2) const;
+    void getPoints(juce::Point<int> &p1, juce::Point<int> &p2) const;
 
       juce::ValueTree state;
 
@@ -61,12 +55,12 @@ public:
 
 
 private:
-    using AtomicPoint = std::atomic<juce::Point<float>>;
+    using AtomicPoint = std::atomic<juce::Point<int>>;
     static_assert(AtomicPoint::is_always_lock_free, "Atomic point needs to be lock free!");
     AtomicPoint startPoint{};
     AtomicPoint endPoint{};
     std::atomic<float> scaleFactor = 1.0f;
-    juce::Point<float> lastInputPos, lastOutputPos;
+    juce::Point<int> lastInputPos, lastOutputPos;
 
     ConstructionSite *site;
     ModulationLineView *lineView;

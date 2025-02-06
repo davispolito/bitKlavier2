@@ -12,3 +12,27 @@ ModulationLine::ModulationLine(ConstructionSite *site, ModulationLineView *lineV
                                         site->getComponentForPlugin(juce::VariantConverter<juce::AudioProcessorGraph::NodeID>::fromVar(state.getProperty(IDs::dest))),
                                         lineView);
 }
+void ModulationLine::getPoints (juce::Point<int>& p1, juce::Point<int>& p2) const
+{
+    p1 = lastInputPos;
+    p2 = lastOutputPos;
+
+    if (auto* src = site->getComponentForPlugin ((juce::VariantConverter<juce::AudioProcessorGraph::NodeID>::fromVar(state.getProperty(IDs::src)))))
+        p1 = src->getBounds().getCentre();
+
+    if (auto* dest = site->getComponentForPlugin ((juce::VariantConverter<juce::AudioProcessorGraph::NodeID>::fromVar(state.getProperty(IDs::dest)))))
+        p2 = dest->getBounds().getCentre();
+}
+
+
+void ModulationLine::update()
+{
+
+        juce::Point<int> p1, p2;
+        getPoints(p1, p2);
+
+        if (lastInputPos != p1 || lastOutputPos != p2)
+            line->resized();
+//        resizeToFit();
+
+}

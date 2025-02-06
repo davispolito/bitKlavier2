@@ -104,6 +104,7 @@ public:
 //                                                      source.sourceComponent->getY() + source.localPosition.getY());
             source.sourceComponent->setCentrePosition(mouse_drag_position_);
             cableView._update();
+            modulationLineView._update();
         }
         item_dropped_on_prep_ = false;
     }

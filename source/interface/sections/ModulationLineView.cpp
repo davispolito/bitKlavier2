@@ -85,7 +85,10 @@ void ModulationLineView::resized()
 }
 void ModulationLineView::_update()
 {
-
+   for(auto line: objects)
+   {
+       line->update();
+   }
 }
 
 ModulationLine* ModulationLineView::createNewObject(const juce::ValueTree &v) {
