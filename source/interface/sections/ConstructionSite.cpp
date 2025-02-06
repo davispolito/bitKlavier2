@@ -33,10 +33,13 @@ ConstructionSite::ConstructionSite (juce::ValueTree& v, juce::UndoManager& um, O
     prepFactory.Register (bitklavier::BKPreparationType::PreparationTypeTempo, TempoPreparation::createTempoSection);
     prepFactory.Register (bitklavier::BKPreparationType::PreparationTypeTuning, TuningPreparation::createTuningSection);
     prepFactory.Register (bitklavier::BKPreparationType::PreparationTypeModulation, ModulationPreparation::createModulationSection);
-    cableView.toBack();
+//    cableView.toBack();
+    cableView.setAlwaysOnTop(true);
     addSubSection (&cableView);
+    cableView.setAlwaysOnTop(true);
     addSubSection (&modulationLineView);
-    modulationLineView.setAlwaysOnTop(true);
+    modulationLineView.setAlwaysOnTop(false);
+//    modulationLineView.setAlwaysOnTop(true);
 //    addOpenGlComponent(_line);
 }
 void ConstructionSite::valueTreeParentChanged (juce::ValueTree& changed)

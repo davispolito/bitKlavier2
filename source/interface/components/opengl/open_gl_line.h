@@ -9,68 +9,134 @@
 class OpenGlLine : public OpenGlComponent
 {
 public:
+//    OpenGlLine(juce::Component* start_component, juce::Component* end_component, juce::Component* target,
+//               Shaders::FragmentShader shader = Shaders::kBlackFragment) :
+//               OpenGlComponent("line"), active_(true), start_component_(start_component), end_component_(end_component),
+//               target_component_(target),fragment_shader_(shader)
+//    {
+//        data_ = std::make_unique<float[]>(4);
+//        indices_ = std::make_unique<int[]>(2);
+//        vertex_buffer_ = 0;
+//        indices_[0] = 0;
+//        indices_[1] = 1;
+//        data_[0] = static_cast<float>(start_component->getX() )/ static_cast<float>(target_component_->getWidth());
+//        data_[1] =1.0f -   static_cast<float>(start_component->getY())/  static_cast<float>(target_component_->getHeight()) ;
+//        data_[2] =  static_cast<float>(end_component->getX())/  static_cast<float>(target_component_->getWidth());
+//        data_[3] = 1.0f -  static_cast<float>(end_component->getY())/  static_cast<float>(target_component_->getHeight());
+//// Debugging data at construction
+////
+////        float vertices[] = {
+////                -0.5f, 0.0f, 0.25f, 0.0f
+////
+////        };
+////        float vertices[] = {
+////                -1.0f, -1.0f, // Bottom-left of clip space
+////                1.0f,  1.0f , // Top-right of clip space
+////                0.5f, 0.5,
+////        };
+//
+////        float triangleVertices[] = {
+////                1.f, 1.f,  // top right  corner
+////                -0.5f,-0.5f // Bottomleft corner
+//////               , 0.0f,0.0f,
+////        };
+////        data_.reset(triangleVertices);
+//// Compute centroid (average x and y)
+////y        float centroidX = 0.0f, centroidY = 0.0f;
+////        for (int i = 0; i < 6; i += 2) { // Step by 2 because we want (x, y) pairs
+////            centroidX += triangleVertices[i];     // Sum up all x values
+////            centroidY += triangleVertices[i + 1]; // Sum up all y values
+////        }
+////        centroidX /= 3; // Divide by number of vertices (3)
+////        centroidY /= 3; // Divide by number of vertices (3)
+////
+////// Adjust each vertex position to center the triangle at (0, 0)
+////        for (int i = 0; i < 6; i += 2) {
+////            triangleVertices[i]     -= centroidX; // Subtract centroid x from each x
+////            triangleVertices[i + 1] -= centroidY; // Subtract centroid y from each y
+////        }
+//
+//// Copy the vertex data into 'data_' using memcpy
+////        memcpy(data_.get(), triangleVertices, sizeof(triangleVertices));
+//
+//
+//        DBG("Indices: " + juce::String(indices_[0]) + ", " + juce::String(indices_[1]));
+//        DBG("Vertex Data: X1 = " + juce::String(data_[0]) + ", Y1 = " + juce::String(data_[1])
+//            + ", X2 = " + juce::String(data_[2]) + ", Y2 = " + juce::String(data_[3]));
+//
+////        DBG("Start Component Position: (" + juce::String(start_component->getX()) + ", "
+////            + juce::String(start_component->getY()) + ")");
+////        DBG("End Component Position: (" + juce::String(end_component->getX()) + ", "
+//////            + juce::String(end_component->getY()) + ")");
+////        DBG("Target Component Size: (" + juce::String(target_component_->getWidth()) + ", "
+////            + juce::String(target_component_->getHeight()) + ")");
+//
+//    }
     OpenGlLine(juce::Component* start_component, juce::Component* end_component, juce::Component* target,
                Shaders::FragmentShader shader = Shaders::kBlackFragment) :
-               OpenGlComponent("line"), active_(true), start_component_(start_component), end_component_(end_component),
-               target_component_(target),fragment_shader_(shader)
-    {
+            OpenGlComponent("line"),
+            active_(true),
+            start_component_(start_component),
+            end_component_(end_component),
+            target_component_(target),
+            fragment_shader_(shader) {
+
+        // Check that components are valid
+        if (!start_component_ || !end_component_ || !target_component_) {
+            DBG("Error: Invalid components supplied to OpenGlLine");
+            return;
+        }
+
+        // Utility lambda to calculate clip-space coordinates
+        auto getClipSpaceCoordinates = [](juce::Component* component, juce::Component* target) -> juce::Point<float> {
+            if (!component || !target) {
+                jassertfalse; // Shouldn't happen in a working system
+                return {0.0f, 0.0f};
+            }
+
+            // Get the position of the component relative to its parent (target)
+            juce::Point<int> localPosition = component->getBounds().getCentre();
+
+            // Normalize the coordinates to the range [0, 1]
+            float normX = static_cast<float>(localPosition.getX()) / static_cast<float>(target->getWidth());
+            float normY = static_cast<float>(localPosition.getY()) / static_cast<float>(target->getHeight());
+
+            // Map normalized coordinates to OpenGL clip space [-1, 1]
+            float clipX = normX * 2.0f - 1.0f;
+            float clipY = 1.0f - normY * 2.0f; // Flip Y-axis for OpenGL clip space
+
+            return {clipX, clipY};
+        };
+
+        // Calculate the clip-space coordinates for the start and end components
+        juce::Point<float> startClip = getClipSpaceCoordinates(start_component_, target_component_);
+        juce::Point<float> endClip = getClipSpaceCoordinates(end_component_, target_component_);
+
+        // Debug outputs to verify the calculated coordinates
+        DBG("------------ OpenGlLine Created ------------");
+        DBG("Start Component Clip Space Coordinates: (" + juce::String(startClip.getX()) +
+            ", " + juce::String(startClip.getY()) + ")");
+        DBG("End Component Clip Space Coordinates: (" + juce::String(endClip.getX()) +
+            ", " + juce::String(endClip.getY()) + ")");
+        DBG("-------------------------------------------");
+
+        // Store the data in the vertex buffer format (clip-space coordinates)
         data_ = std::make_unique<float[]>(4);
+        data_[0] = startClip.getX();
+        data_[1] = startClip.getY();
+        data_[2] = endClip.getX();
+        data_[3] = endClip.getY();
+
+        // Set default indices for drawing the line
         indices_ = std::make_unique<int[]>(2);
-        vertex_buffer_ = 0;
         indices_[0] = 0;
         indices_[1] = 1;
-        data_[0] = static_cast<float>(start_component->getX() )/ static_cast<float>(target_component_->getWidth());
-        data_[1] =1.0f -   static_cast<float>(start_component->getY())/  static_cast<float>(target_component_->getHeight()) ;
-        data_[2] =  static_cast<float>(end_component->getX())/  static_cast<float>(target_component_->getWidth());
-        data_[3] = 1.0f -  static_cast<float>(end_component->getY())/  static_cast<float>(target_component_->getHeight());
-// Debugging data at construction
-//
-//        float vertices[] = {
-//                -0.5f, 0.0f, 0.25f, 0.0f
-//
-//        };
-//        float vertices[] = {
-//                -1.0f, -1.0f, // Bottom-left of clip space
-//                1.0f,  1.0f , // Top-right of clip space
-//                0.5f, 0.5,
-//        };
 
-//        float triangleVertices[] = {
-//                1.f, 1.f,  // top right  corner
-//                -0.5f,-0.5f // Bottomleft corner
-////               , 0.0f,0.0f,
-//        };
-//        data_.reset(triangleVertices);
-// Compute centroid (average x and y)
-//y        float centroidX = 0.0f, centroidY = 0.0f;
-//        for (int i = 0; i < 6; i += 2) { // Step by 2 because we want (x, y) pairs
-//            centroidX += triangleVertices[i];     // Sum up all x values
-//            centroidY += triangleVertices[i + 1]; // Sum up all y values
-//        }
-//        centroidX /= 3; // Divide by number of vertices (3)
-//        centroidY /= 3; // Divide by number of vertices (3)
-//
-//// Adjust each vertex position to center the triangle at (0, 0)
-//        for (int i = 0; i < 6; i += 2) {
-//            triangleVertices[i]     -= centroidX; // Subtract centroid x from each x
-//            triangleVertices[i + 1] -= centroidY; // Subtract centroid y from each y
-//        }
+        vertex_buffer_ = 0;
 
-// Copy the vertex data into 'data_' using memcpy
-//        memcpy(data_.get(), triangleVertices, sizeof(triangleVertices));
-
-
-        DBG("Indices: " + juce::String(indices_[0]) + ", " + juce::String(indices_[1]));
-        DBG("Vertex Data: X1 = " + juce::String(data_[0]) + ", Y1 = " + juce::String(data_[1])
-            + ", X2 = " + juce::String(data_[2]) + ", Y2 = " + juce::String(data_[3]));
-
-//        DBG("Start Component Position: (" + juce::String(start_component->getX()) + ", "
-//            + juce::String(start_component->getY()) + ")");
-//        DBG("End Component Position: (" + juce::String(end_component->getX()) + ", "
-////            + juce::String(end_component->getY()) + ")");
-//        DBG("Target Component Size: (" + juce::String(target_component_->getWidth()) + ", "
-//            + juce::String(target_component_->getHeight()) + ")");
-
+        // Debugging additional information
+        DBG("Line Vertex Data: X1 = " + juce::String(data_[0]) + ", Y1 = " + juce::String(data_[1]) +
+            ", X2 = " + juce::String(data_[2]) + ", Y2 = " + juce::String(data_[3]));
     }
     void paint(juce::Graphics &g) override
     {
@@ -136,7 +202,7 @@ public:
 //         i = i + 1;
 //       if (i > component->getHeight())
 //           i = component->getHeight() * -1;
-        juce::gl::glViewport(20, 0, component->getWidth(), component->getHeight());
+//        juce::gl::glViewport(20, 0, component->getWidth(), component->getHeight());
 
 DBG(i);
         if (shader_ == nullptr)

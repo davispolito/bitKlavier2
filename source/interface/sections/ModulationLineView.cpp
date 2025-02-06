@@ -6,11 +6,11 @@
 #include "ConstructionSite.h"
 #include "open_gl_line.h"
 ModulationLineView::ModulationLineView(ConstructionSite &site) : SynthSection("modlineview"), site(site),
-tracktion::engine::ValueTreeObjectList<ModulationLine>(site.getState()), line_(std::make_shared<OpenGlLine>(nullptr, nullptr, this))
+tracktion::engine::ValueTreeObjectList<ModulationLine>(site.getState())//, line_(std::make_shared<OpenGlLine>(nullptr, nullptr, this))
 {
     setInterceptsMouseClicks(false, false);
     setAlwaysOnTop(true);
-    addAndMakeVisible(line_.get());
+//    addAndMakeVisible(line_.get());
 
 }
 
@@ -77,7 +77,7 @@ void ModulationLineView::modulationDropped(const juce::ValueTree &source, const 
 }
 void ModulationLineView::resized()
 {
-    line_->setBounds(getLocalBounds());
+//    line_->setBounds(getLocalBounds());
     for(auto line: objects)
     {
         line->setBounds(getLocalBounds());
