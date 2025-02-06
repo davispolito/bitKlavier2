@@ -47,6 +47,7 @@ class Shaders {
       kFillVertex,
       kBarHorizontalVertex,
       kBarVerticalVertex,
+      kSimpleLineVertex,
       kNumVertexShaders
     };
 
@@ -72,6 +73,7 @@ class Shaders {
       kLineFragment,
       kFillFragment,
       kBarFragment,
+      kBlackFragment,
       kNumFragmentShaders
     };
 

@@ -34,6 +34,7 @@ ConstructionSite::ConstructionSite (juce::ValueTree& v, juce::UndoManager& um, O
     cableView.toBack();
     addSubSection (&cableView);
     addSubSection (&modulationLineView);
+    modulationLineView.setAlwaysOnTop(true);
 }
 void ConstructionSite::valueTreeParentChanged (juce::ValueTree& changed)
 {

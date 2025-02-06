@@ -180,9 +180,9 @@ void CableView::endDraggingConnector (const juce::MouseEvent& e)
 
             connection.destination = pin->pin;
         }
-//// this doesnt feel threadsafe but putting it in the processorqueue breaks.
 
         juce::ValueTree _connection(IDs::CONNECTION);
+        _connection.setProperty(IDs::isMod, 0, nullptr);
         _connection.setProperty(IDs::src,  juce::VariantConverter<juce::AudioProcessorGraph::NodeID>::toVar(connection.source.nodeID), nullptr);
         _connection.setProperty(IDs::srcIdx, connection.source.channelIndex, nullptr);
         _connection.setProperty(IDs::dest,  juce::VariantConverter<juce::AudioProcessorGraph::NodeID>::toVar(connection.destination.nodeID), nullptr);

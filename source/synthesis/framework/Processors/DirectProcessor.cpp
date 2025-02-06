@@ -96,7 +96,6 @@ void DirectProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::Midi
 #if JUCE_MODULE_AVAILABLE_chowdsp_plugin_state
     state.getParameterListeners().callAudioThreadBroadcasters();
 #endif
-DBG("dir");
     auto modBus = getBus(true,1);
     auto index = modBus->getChannelIndexInProcessBlockBuffer(0);
 

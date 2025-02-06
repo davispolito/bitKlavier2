@@ -948,6 +948,21 @@ namespace {
       "    gl_Position.w = 1.0;\n"
       "}\n";
 
+
+  const char *kSimpleLineVertexShader =
+          "attribute " MEDIUMP " vec4 position;\n"
+          "\n"
+          "void main() {\n"
+          "    gl_Position = position;\n"
+
+          "}\n";
+
+  const char* kBlackFragmentShader =
+
+            "uniform " MEDIUMP " vec4 color;\n"
+            "void main() {\n"
+            "    gl_FragColor = vec4(0.0,0.0,0.0,1.0);\n"
+            "}\n";
   inline juce::String translateFragmentShader(const juce::String& code) {
   #if OPENGL_ES
     return juce::String("#version 300 es\n") + "out mediump vec4 fragColor;\n" +
@@ -1028,6 +1043,8 @@ const char* Shaders::getVertexShader(VertexShader shader) {
       return kBarHorizontalVertexShader;
     case kBarVerticalVertex:
       return kBarVerticalVertexShader;
+      case kSimpleLineVertex:
+          return kSimpleLineVertexShader;
     default:
       _ASSERT(false);
       return nullptr;
@@ -1078,6 +1095,8 @@ const char* Shaders::getFragmentShader(FragmentShader shader) {
       return kLinearModulationFragmentShader;
     case kModulationKnobFragment:
       return kModulationKnobFragmentShader;
+      case kBlackFragment:
+          return kBlackFragmentShader;
     default:
       _ASSERT(false);
       return nullptr;

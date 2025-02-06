@@ -44,6 +44,8 @@ namespace IDs
     DECLARE_ID (PORT)
     DECLARE_ID (chIdx)
 
+    DECLARE_ID(MODCONNECTION)
+
     DECLARE_ID (assignment)
 
     DECLARE_ID (uuid)
@@ -61,6 +63,7 @@ namespace IDs
 
     DECLARE_ID(modAmt)
     DECLARE_ID(isBipolar)
+    DECLARE_ID(isMod)
 }
 
 #undef DECLARE_ID

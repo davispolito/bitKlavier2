@@ -7,9 +7,9 @@
 #include "PreparationSection.h"
 #include "PreparationSelector.h"
 #include "CableView.h"
+#include "ModulationLineView.h"
 #include "templates/Factory.h"
 #include "common.h"
-#include "ModulationLineView.h"
 class SynthGuiInterface;
 typedef Loki::Factory<PreparationSection, int,  juce::ValueTree,  SynthGuiInterface*> PreparationFactory;
 class ConstructionSite : public SynthSection,

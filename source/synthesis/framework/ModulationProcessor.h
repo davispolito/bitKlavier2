@@ -46,7 +46,6 @@ namespace bitklavier {
 
         void processBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer &midiMessages) override
         {
-DBG("mod");
         }
 
         juce::AudioProcessorEditor * createEditor() override
