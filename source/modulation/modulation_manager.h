@@ -27,7 +27,7 @@
 #include "synth_slider.h"
 #include <tracktion_ValueTreeUtilities.h>
 #include <set>
-#include "SoundModuleSection.h"
+#include "ModulationModuleSection.h"
 class ExpandModulationButton;
 class ModulationMatrix;
 class ModulationMeter;

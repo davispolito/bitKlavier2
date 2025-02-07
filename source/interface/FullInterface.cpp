@@ -19,6 +19,7 @@
 #include "Identifiers.h"
 #include "about_section.h"
 #include "synth_slider.h"
+#include "modulation_manager.h"
 FullInterface::FullInterface(SynthGuiData* synth_data) : SynthSection("full_interface"), width_(0), resized_width_(0),
                                                          last_render_scale_(0.0f), display_scale_(1.0f),
                                                          pixel_multiple_(1),unsupported_(false), animate_(true),
@@ -38,12 +39,20 @@ FullInterface::FullInterface(SynthGuiData* synth_data) : SynthSection("full_inte
    juce::ValueTree t(IDs::PIANO);
    t.setProperty(IDs::name, "default", nullptr);
 
+
    data->tree.addChild(t, -1, nullptr);
    main_ = std::make_unique<MainSection>(data->tree.getChildWithName(IDs::PIANO), data->um, open_gl_, data);
    addSubSection(main_.get());
    main_->addListener(this);
   valueTreeDebugger  = new
           ValueTreeDebugger(data->tree);
+    modulation_manager = std::make_unique<ModulationManager>(t, synth_data->synth);
+    modulation_manager->setOpaque(false);
+    modulation_manager->setAlwaysOnTop(true);
+    modulation_manager->setModulationAmounts();
+    modulation_manager->setVisibleMeterBounds();
+    modulation_manager->hideUnusedHoverModulations();
+    modulation_manager->toFront(false);
 
 //   inspectButton = std::make_unique<OpenGlToggleButton>("Inspect the UI");
 //   addAndMakeVisible(inspectButton.get());
@@ -93,6 +102,7 @@ FullInterface::FullInterface(SynthGuiData* synth_data) : SynthSection("full_inte
     addSubSection(about_section_.get(), false);
     addChildComponent(about_section_.get());
 
+    addSubSection(modulation_manager.get());
 
     about_section_->toFront(true);
    setOpaque(true);
@@ -267,6 +277,7 @@ void FullInterface::resized() {
    int width = std::ceil(getWidth() * display_scale_);
    int height = std::ceil(getHeight() * display_scale_);
    juce::Rectangle<int> bounds(0, 0, width, height);
+   modulation_manager->setBounds(bounds);
 
    float width_ratio = getWidth() / (1.0f * bitklavier::kDefaultWindowWidth);
    float ratio = width_ratio * display_scale_;
@@ -382,6 +393,7 @@ void FullInterface::newOpenGLContextCreated() {
 
    background_.init(open_gl_);
    initOpenGlComponents(open_gl_);
+   modulation_manager->renderMeters(open_gl_,animate_);
    //main_.setContext(open_gl_);
 }
 
@@ -510,7 +522,11 @@ std::map<std::string, ModulationButton*> FullInterface::getAllModulationButtons(
     return main_->getAllModulationButtons();
 }
 
-
+void FullInterface::modulationChanged()
+{
+    if (modulation_manager)
+        modulation_manager->reset();
+}
 
 
 

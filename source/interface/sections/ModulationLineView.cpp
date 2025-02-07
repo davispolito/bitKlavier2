@@ -6,7 +6,7 @@
 #include "ConstructionSite.h"
 #include "open_gl_line.h"
 ModulationLineView::ModulationLineView(ConstructionSite &site) : SynthSection("modlineview"), site(site),
-tracktion::engine::ValueTreeObjectList<ModulationLine>(site.getState())//, line_(std::make_shared<OpenGlLine>(nullptr, nullptr, this))
+tracktion::engine::ValueTreeObjectList<ModulationLine>(site.getState()),current_source_(nullptr)//, line_(std::make_shared<OpenGlLine>(nullptr, nullptr, this))
 {
     setInterceptsMouseClicks(false, false);
     setAlwaysOnTop(true);
@@ -49,6 +49,8 @@ void ModulationLineView::preparationDragged(juce::Component *comp, const juce::M
 }
 void ModulationLineView::preparationDropped(const juce::MouseEvent& e, juce::Point<int>)
 {
+    if(current_source_ == nullptr)
+        return;
     mouse_drag_position_ = getLocalPoint(current_source_, e.getPosition());
     auto comp =  getComponentAt(mouse_drag_position_.x, mouse_drag_position_.y);
     if(comp)

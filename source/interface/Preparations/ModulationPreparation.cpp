@@ -9,6 +9,7 @@
 #include "BKitems/BKItem.h"
 #include "synth_slider.h"
 #include "ModulationItem.h"
+#include "ModulationModuleSection.h"
 // Definition for the ModulationPreparation constructor.  It takes three parameters: a pointer to
 // a Modulation Processor p, a juce::ValueTree v, and a reference to an OpenGlWrapper object.  Initializes
 // the base class members and private ModulationPreparation member proc with an initialization list.
@@ -38,7 +39,7 @@ std::shared_ptr<SynthSection> ModulationPreparation::getPrepPopup()
         popup_view->reset();
         return popup_view;
     }
-    popup_view = std::make_shared<ModulationPopup>(proc, _open_gl);
+    popup_view = std::make_shared<ModulationPopup>(*this,proc, _open_gl);
     popup_view->initOpenGlComponents(_open_gl);
     return popup_view;
 }
@@ -72,14 +73,16 @@ void ModulationPreparation::paintBackground(juce::Graphics &g)  {
 /*************************************************************************************************/
 /*                     NESTED CLASS: ModulationPopup, inherits from PreparationPopup                 */
 /*************************************************************************************************/
-ModulationPreparation::ModulationPopup::ModulationPopup(bitklavier::ModulationProcessor& _proc, OpenGlWrapper &open_gl):  proc(_proc), PreparationPopup(open_gl)
+ModulationPreparation::ModulationPopup::ModulationPopup(ModulationPreparation& prep,bitklavier::ModulationProcessor& _proc, OpenGlWrapper &open_gl):  proc(_proc),
+PreparationPopup(open_gl),
+view(std::make_unique<ModulationModuleSection>(prep.state, findParentComponentOfClass<SynthGuiInterface>()->getGui()->modulation_manager.get()))
 {
 
 //    auto& _params = proc.getState().params;
     setSkinOverride (Skin::kModulation);
     Skin default_skin;
-//    view->setSkinValues(default_skin, false);
-//    addSubSection(view.get());
+    view->setSkinValues(default_skin, false);
+    addSubSection(view.get());
 
 }
 

@@ -87,28 +87,25 @@ void SynthGuiInterface::updateGuiControl(const std::string& name, float value) {
 
 //  gui_->setValue(name, value, NotificationType::dontSendNotification);
 }
-//void SynthGuiInterface::notifyModulationsChanged() {
-//  gui_->modulationChanged();
-//}
+void SynthGuiInterface::notifyModulationsChanged() {
+  gui_->modulationChanged();
+}
 
-//void SynthGuiInterface::notifyModulationValueChanged(int index) {
-//  gui_->modulationValueChanged(index);
-//}
-//
-//void SynthGuiInterface::connectModulation(std::string source, std::string destination) {
+void SynthGuiInterface::connectModulation(std::string source, std::string destination) {
 //  bool created = synth_->connectModulation(source, destination);
 //  if (created)
 //    initModulationValues(source, destination);
 //  notifyModulationsChanged();
-//}
+}
+void SynthGuiInterface::disconnectModulation(std::string source, std::string destination) {
+   // synth_->disconnectModulation(source, destination);
+    notifyModulationsChanged();
+}
 
-//void SynthGuiInterface::connectModulation(bitklavier::ModulationConnection* connection) {
-//  synth_->connecotModulation(connection);
-//  notifyModulationsChanged();
-//}
-
-
-
+void SynthGuiInterface::disconnectModulation(bitklavier::ModulationConnection* connection) {
+   // synth_->disconnectModulation(connection);
+    notifyModulationsChanged();
+}
 
 bool SynthGuiInterface::loadFromFile(juce::File preset, std::string &error) {
     return getSynth()->loadFromFile(preset,error);

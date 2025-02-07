@@ -19,7 +19,7 @@
 
 #include "envelope_section.h"
 
-
+class ModulationModuleSection;
 /************************************************************************************/
 /*             CLASS: ModulationPreparation, inherits from PreparationSection           */
 /************************************************************************************/
@@ -66,7 +66,7 @@ private:
 
         // Constructor method that takes two arguments: a smart pointer to a ModulationProcessor,
         // and a reference to an OpenGlWrapper
-        ModulationPopup (bitklavier::ModulationProcessor& proc, OpenGlWrapper& open_gl);
+        ModulationPopup (ModulationPreparation &,bitklavier::ModulationProcessor& proc, OpenGlWrapper& open_gl);
 
         // Public function definitions for the class, which override the base class methods for
         // initializing, rendering, resizing, and painting OpenGl components
@@ -94,8 +94,9 @@ private:
         // Private function definitions and member variables for the ModulationPopup class
 //        ModulationParams* params = nullptr;
         bitklavier::ModulationProcessor& proc;
-//        std::unique_ptr<bitklavier::ModulationParametersView> view;
+        std::unique_ptr<ModulationModuleSection> view;
     };
+    friend class ModulationPopup;
 };
 
 

@@ -69,7 +69,8 @@ void DirectPreparation::paintBackground(juce::Graphics &g)  {
 /*************************************************************************************************/
 /*                     NESTED CLASS: DirectPopup, inherits from PreparationPopup                 */
 /*************************************************************************************************/
-DirectPreparation::DirectPopup::DirectPopup(DirectProcessor& _proc, OpenGlWrapper &open_gl):  proc(_proc), PreparationPopup(open_gl), view(std::make_unique<DirectParametersView>(proc.getState(), proc.getState().params, &open_gl))
+DirectPreparation::DirectPopup::DirectPopup(DirectProcessor& _proc, OpenGlWrapper &open_gl):  proc(_proc), PreparationPopup(open_gl),
+view(std::make_unique<DirectParametersView>(proc.getState(), proc.getState().params, &open_gl))
 {
 
     auto& _params = proc.getState().params;

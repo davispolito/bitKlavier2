@@ -7,7 +7,7 @@
 #include "synth_gui_interface.h"
 #include "ModulationSection.h"
 #include "modulation_manager.h"
-SoundModuleSection::SoundModuleSection(juce::ValueTree &v, ModulationManager *m) : ModulesInterface<ModulationSection>(v)
+ModulationModuleSection::ModulationModuleSection(juce::ValueTree &v, ModulationManager *m) : ModulesInterface<ModulationSection>(v)
 {
     scroll_bar_ = std::make_unique<OpenGlScrollBar>();
     scroll_bar_->setShrinkLeft(true);
@@ -19,12 +19,12 @@ SoundModuleSection::SoundModuleSection(juce::ValueTree &v, ModulationManager *m)
     addListener(m);
 }
 
-SoundModuleSection::~SoundModuleSection()
+ModulationModuleSection::~ModulationModuleSection()
 {
     freeObjects();
 }
 
-void SoundModuleSection::handlePopupResult(int result) {
+void ModulationModuleSection::handlePopupResult(int result) {
 
     //std::vector<vital::ModulationConnection*> connections = getConnections();
     if (result == 1 )
@@ -62,7 +62,7 @@ void SoundModuleSection::handlePopupResult(int result) {
 }
 
 
-void SoundModuleSection::setEffectPositions() {
+void ModulationModuleSection::setEffectPositions() {
     if (getWidth() <= 0 || getHeight() <= 0)
         return;
 
@@ -93,7 +93,7 @@ void SoundModuleSection::setEffectPositions() {
     setScrollBarRange();
     repaintBackground();
 }
-PopupItems SoundModuleSection::createPopupMenu()
+PopupItems ModulationModuleSection::createPopupMenu()
 {
     PopupItems options;
     options.addItem(1, "add osc" );
@@ -101,7 +101,7 @@ PopupItems SoundModuleSection::createPopupMenu()
     return options;
 }
 
-ModulationSection* SoundModuleSection::createNewObject (const juce::ValueTree& v)
+ModulationSection* ModulationModuleSection::createNewObject (const juce::ValueTree& v)
 
 {
     auto parent = findParentComponentOfClass<SynthGuiInterface>();
@@ -129,13 +129,13 @@ ModulationSection* SoundModuleSection::createNewObject (const juce::ValueTree& v
     return nullptr;
 }
 
-void SoundModuleSection::deleteObject (ModulationSection* at)
+void ModulationModuleSection::deleteObject (ModulationSection* at)
 {
     auto parent = findParentComponentOfClass<SynthGuiInterface>();
     at->destroyOpenGlComponents(*parent->getOpenGlWrapper());
     delete at;
 }
-std::map<std::string, SynthSlider*> SoundModuleSection::getAllSliders()
+std::map<std::string, SynthSlider*> ModulationModuleSection::getAllSliders()
 {
     return container_->getAllSliders();
 }

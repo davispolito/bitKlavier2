@@ -251,3 +251,7 @@ int SynthBase::getNumModulations(const std::string& destination) {
     }
     return connections;
 }
+
+bitklavier::ModulationConnectionBank& SynthBase::getModulationBank() {
+    return engine_->getModulationBank();
+}

@@ -8,11 +8,11 @@
 class ModulationSection;
 class ProcessorBase;
 class ModulationManager;
-class SoundModuleSection : public ModulesInterface<ModulationSection>
+class ModulationModuleSection : public ModulesInterface<ModulationSection>
 {
 public:
-    explicit SoundModuleSection(juce::ValueTree &, ModulationManager* m);
-    virtual ~SoundModuleSection();
+    explicit ModulationModuleSection(juce::ValueTree &, ModulationManager* m);
+    virtual ~ModulationModuleSection();
     ModulationSection* createNewObject(const juce::ValueTree& v) override;
     void deleteObject (ModulationSection* at) override;
 

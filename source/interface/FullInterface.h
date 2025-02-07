@@ -20,6 +20,7 @@ class AboutSection;
 struct SynthGuiData;
 class HeaderSection;
 class MainSection;
+class ModulationManager;
 namespace bitklavier{
     constexpr int kMinWindowWidth = 350;
     constexpr int kMinWindowHeight = 205;
@@ -92,6 +93,7 @@ public :
     SynthSection* full_screen_section_;
     std::unique_ptr<AboutSection> about_section_;
     std::unique_ptr<MainSection> main_;
+    std::unique_ptr<ModulationManager> modulation_manager;
     std::unique_ptr<HeaderSection> header_;
     //juce::OpenGLContext open_gl_context_;
     std::unique_ptr<Shaders> shaders_;
@@ -107,6 +109,8 @@ public :
     juce::ScopedPointer<ValueTreeDebugger> valueTreeDebugger;
     std::map<std::string, SynthSlider*> getAllSliders() override;
     std::map<std::string, ModulationButton*> getAllModulationButtons() override;
+    void modulationChanged();
+
 private :
 
 

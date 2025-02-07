@@ -17,7 +17,7 @@
 #pragma once
 #include <juce_audio_processors/juce_audio_processors.h>
 
-
+#include "ModulationConnection.h"
 namespace bitklavier {
     class ModulationProcessor;
     using AudioGraphIOProcessor = juce::AudioProcessorGraph::AudioGraphIOProcessor;
@@ -112,6 +112,7 @@ namespace bitklavier {
 
 
 
+        ModulationConnectionBank& getModulationBank() { return modulation_bank_; }
       void processAudioAndMidi(juce::AudioBuffer<float>& audio_buffer, juce::MidiBuffer& midi_buffer)
       {
           processorGraph->processBlock(audio_buffer, midi_buffer);
@@ -149,7 +150,7 @@ namespace bitklavier {
         Node::Ptr audioOutputNode;
         Node::Ptr midiInputNode;
         Node::Ptr midiOutputNode;
-
+        ModulationConnectionBank modulation_bank_;
       JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(SoundEngine)
   };
 } // namespace vital
