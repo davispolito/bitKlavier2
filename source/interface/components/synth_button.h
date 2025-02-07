@@ -163,7 +163,10 @@ class OpenGlButtonComponent : public OpenGlComponent {
 
       setColors();
     }
-  
+    bool isInit()
+    {
+        return background_.isInit() && text_.isInit();
+    }
     void setColors();
 
     void renderTextButton(OpenGlWrapper& open_gl, bool animate);

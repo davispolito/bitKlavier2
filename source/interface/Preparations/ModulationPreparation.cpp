@@ -75,7 +75,7 @@ void ModulationPreparation::paintBackground(juce::Graphics &g)  {
 /*************************************************************************************************/
 ModulationPreparation::ModulationPopup::ModulationPopup(ModulationPreparation& prep,bitklavier::ModulationProcessor& _proc, OpenGlWrapper &open_gl):  proc(_proc),
 PreparationPopup(open_gl),
-view(std::make_unique<ModulationModuleSection>(prep.state, findParentComponentOfClass<SynthGuiInterface>()->getGui()->modulation_manager.get()))
+view(std::make_unique<ModulationModuleSection>(prep.state, prep.findParentComponentOfClass<SynthGuiInterface>()->getGui()->modulation_manager.get()))
 {
 
 //    auto& _params = proc.getState().params;
@@ -107,7 +107,7 @@ void ModulationPreparation::ModulationPopup::resized() {
     int widget_margin = findValue(Skin::kWidgetMargin);
     int section_height = getHeight();
     int section_width = getWidth();
-//    view->setBounds(getLocalBounds());
+    view->setBounds(getLocalBounds());
 
     SynthSection::resized();
 

@@ -215,6 +215,8 @@ void ModulesInterface<T>::renderOpenGlComponents(OpenGlWrapper& open_gl, bool an
     //    double display_scale = Desktop::getInstance().getDisplays().getDisplayForRect(top_level->getScreenBounds())->scale;
     //    return 1;//
     // display_scale;// * (1.0f * global_bounds.getWidth()) / getWidth();
+    if (background_.shader() == nullptr)
+        background_.init(open_gl);
     OpenGlComponent::setViewPort(&viewport_, open_gl);
 
     float image_width = background_.getImageWidth(); //bitklavier::utils::nextPowerOfTwo(background_.getImageWidth());
