@@ -346,9 +346,9 @@ class ModulationManager : public SynthSection,
     std::map<std::string, std::unique_ptr<ModulationMeter>> meter_lookup_;
     std::map<int, int> aux_connections_from_to_;
     std::map<int, int> aux_connections_to_from_;
-    std::unique_ptr<ModulationAmountKnob> modulation_amount_sliders_[64];
-    std::unique_ptr<ModulationAmountKnob> modulation_hover_sliders_[64];
-    std::unique_ptr<ModulationAmountKnob> selected_modulation_sliders_[64];
+    std::unique_ptr<ModulationAmountKnob> modulation_amount_sliders_[bitklavier::kMaxModulationConnections];
+    std::unique_ptr<ModulationAmountKnob> modulation_hover_sliders_[bitklavier::kMaxModulationConnections];
+    std::unique_ptr<ModulationAmountKnob> selected_modulation_sliders_[bitklavier::kMaxModulationConnections];
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(ModulationManager)
 };
